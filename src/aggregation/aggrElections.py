@@ -110,6 +110,84 @@ class AggrElections:
 
       return recommendedItemIDs[:topK]
 
+    # methodsResultDict:{String:pd.Series(rating:float[], itemID:int[])},
+    # methodsParamsDF:pd.DataFrame[numberOfVotes:int], topK:int
+    # differencAmplificatorExponent : int / float
+    def aggrRandomizedElectionsRun(self, methodsResultDict, methodsParamsDF, differenceAmplificatorExponent, topK=20):
+
+        if sorted([mI for mI in methodsParamsDF.index]) != sorted([mI for mI in methodsResultDict.keys()]):
+            raise ValueError("Arguments methodsResultDict and methodsParamsDF have to define the same methods.")
+
+        if np.prod([len(methodsResultDict.get(mI)) for mI in methodsResultDict]) == 0:
+            raise ValueError("Argument methodsParamsDF contains in ome method an empty list of items.")
+
+        if topK < 0:
+            raise ValueError("Argument topK must be positive value.")
+
+        candidatesOfMethods = np.asarray([cI.keys() for cI in methodsResultDict.values()])
+        uniqueCandidatesI = list(set(np.concatenate(candidatesOfMethods)))
+        # print("UniqueCandidatesI: ", uniqueCandidatesI)
+
+        # numbers of elected candidates of parties
+        electedOfPartyDictI = {mI: 1 for mI in methodsParamsDF.index}
+        # print("ElectedForPartyI: ", electedOfPartyDictI)
+
+        # votes number of parties
+        votesOfPartiesDictI = {mI: methodsParamsDF.votes.loc[mI] for mI in methodsParamsDF.index}
+        # print("VotesOfPartiesDictI: ", votesOfPartiesDictI)
+
+        recommendedItemIDs = []
+
+        for iIndex in range(0, topK):
+            # print("iIndex: ", iIndex)
+
+            if len(uniqueCandidatesI) == 0:
+                return recommendedItemIDs[:topK]
+
+            # coumputing of votes of remaining candidates
+            actVotesOfCandidatesDictI = {}
+            for candidateIDJ in uniqueCandidatesI:
+                votesOfCandidateJ = 0
+                for parityIDK in methodsParamsDF.index:
+                    partyAffiliationOfCandidateKJ = methodsResultDict[parityIDK].get(candidateIDJ, 0)
+                    votesOfPartyK = votesOfPartiesDictI.get(parityIDK)
+                    votesOfCandidateJ += partyAffiliationOfCandidateKJ * votesOfPartyK
+                actVotesOfCandidatesDictI[candidateIDJ] = votesOfCandidateJ ** differenceAmplificatorExponent
+            # print(actVotesOfCandidatesDictI)
+
+            # ROULETTE SELECTION (selecting random candidate according vote distribution)
+            # compute sum of all votes
+            voteSum = sum(actVotesOfCandidatesDictI.values())
+
+            # random number in range <0, voteSum)
+            rnd = random.randrange(0, voteSum, 1)
+
+            # find random candidate
+            for candidate in actVotesOfCandidatesDictI.keys():
+                if (rnd < actVotesOfCandidatesDictI[candidate]):
+                    selectedCandidateI = candidate
+                    break
+                rnd -= actVotesOfCandidatesDictI[candidate]
+
+            # add new selected candidate in results
+            recommendedItemIDs.append(selectedCandidateI);
+
+            # removing elected candidate from list of candidates
+            uniqueCandidatesI.remove(selectedCandidateI)
+
+            # updating number of elected candidates of parties
+            electedOfPartyDictI = {
+                partyIDI: electedOfPartyDictI[partyIDI] + methodsResultDict[partyIDI].get(selectedCandidateI, 0) for
+                partyIDI in electedOfPartyDictI.keys()}
+            # print("DevotionOfPartyDictI: ", devotionOfPartyDictI)
+
+            # updating number of votes of parties
+            votesOfPartiesDictI = {partyI: methodsParamsDF.votes.loc[partyI] / electedOfPartyDictI.get(partyI) for
+                partyI in methodsParamsDF.index}
+            # print("VotesOfPartiesDictI: ", votesOfPartiesDictI)
+
+        return recommendedItemIDs[:topK]
+
 
     # methodsResultDict:{String:pd.Series(rating:float[], itemID:int[])},
     # methodsParamsDF:pd.DataFrame[numberOfVotes:int], topK:int
