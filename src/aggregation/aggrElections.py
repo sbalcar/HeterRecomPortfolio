@@ -160,7 +160,7 @@ class AggrElections:
             voteSum = sum(actVotesOfCandidatesDictI.values())
 
             # random number in range <0, voteSum)
-            rnd = random.randrange(0, voteSum, 1)
+            rnd = random.randrange(0, (int)(voteSum), 1)
 
             # find random candidate
             for candidate in actVotesOfCandidatesDictI.keys():
@@ -238,9 +238,15 @@ if __name__== "__main__":
 
   #print(methodsParamsDF)
 
+  args = Arguments([Argument("arg1", 0)])
+  aggregator = AggrElections(args)
 
-  #itemIDs = aggrElectionsRun(methodsResultDict, methodsParamsDF, N)
-  itemIDs = aggrElectionsRunWithResponsibility(methodsResultDict, methodsParamsDF, N)
+  print("aggrElectionsRun:")
+  print(aggregator.aggrElectionsRun(methodsResultDict, methodsParamsDF, N))
 
-  print(itemIDs)
+  print("aggrRandomizedElectionsRun:")
+  print(aggregator.aggrRandomizedElectionsRun(methodsResultDict, methodsParamsDF, 5, N))
+
+  #print("aggrElectionsRunWithResponsibility:")
+  #print(aggregator.aggrElectionsRunWithResponsibility(methodsResultDict, methodsParamsDF, N))
 
