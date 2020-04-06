@@ -24,7 +24,12 @@ def randomDatetime(start, end):
   return start + datetime.timedelta(seconds=randomSecond)
 
 
-def penalizeIfRecentlyRecommended(database, userID, itemID, score, maxFinalPenalty, minTimeDiff, maxTimeDiff, minSinglePenalty, maxSinglePenalty):
+def penalizeIfRecentlyRecommended(database, userID, itemID, score,
+                                  maxFinalPenalty = 0.8,
+                                  minTimeDiff = 2*60*60, # 2 hours
+                                  maxTimeDiff = 7*24*60*60, # 7 days
+                                  minSinglePenalty= 0.01,
+                                  maxSinglePenalty=0.15):
   '''
   reduces given score based on how many times has the item already been recommended to the user in the last week.
   :param database: database with all previous recommendations
@@ -203,4 +208,4 @@ class Database:
 
 db = Database("test.db")
 
-print(penalizeIfRecentlyRecommended(db, 71, 4443, 85, 0.8, 24*60*60, 15*24*60*60, 0.01, 0.12))
+print(penalizeIfRecentlyRecommended(db, 71, 4443, 85, 0.8))
