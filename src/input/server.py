@@ -24,26 +24,28 @@ def randomDatetime(start, end):
   return start + datetime.timedelta(seconds=randomSecond)
 
 
-def penalizeIfRecentlyRecommended(database, userID, itemID, score, previouslyRecommendedPenalty = 0.12):
+def penalizeIfRecentlyRecommended(database, userID, itemID, score, maxFinalPenalty, minTimeDiff, maxTimeDiff, minSinglePenalty, maxSinglePenalty):
   '''
   reduces given score based on how many times has the item already been recommended to the user in the last week.
   :param database: database with all previous recommendations
   :param userID: id of the user we're recommending to
   :param itemID: item id
   :param score: the score to adjust
-  :param previouslyRecommendedPenalty: the base penalty that gets added for every previous recommendation (0.1 = 10%)
+  :param maxFinalPenalty: maximal penalty given to an item
+  :param minTimeDiff: single recommendation penalty starts to decrease after this age (seconds)
+  :param maxTimeDiff: single recommendation penalty remains minimal after this age (seconds)
+  :param minSinglePenalty: minimal single recommendation penalty
+  :param maxSinglePenalty: maximal single recommendation penalty
   :return: penalized score
   '''
 
   recommendationCount = database.getInteractionCount(userID) # not used in this version
   previousRecommendations = database.getPreviousRecommendations(userID, itemID)
   penalty = 0
-  penaltyDecay = [1, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2] # indexed by age in days
   for recommendation in previousRecommendations:
-    assert (recommendation[6] <= 8)
-    penalty += previouslyRecommendedPenalty * penaltyDecay[int(recommendation[6])] # previousRecommendations[6] = recommendation age
+    penalty += getPenaltyLinear(recommendation[6], minTimeDiff, maxTimeDiff, minSinglePenalty, maxSinglePenalty)
 
-  return score - score * min(penalty, 0.8)
+  return score - score * min(penalty, maxFinalPenalty)
 
 
 def getPenaltyLinear(timeDiff, minTimeDiff, maxTimeDiff, minPenalty, maxPenalty):
@@ -61,7 +63,7 @@ def getPenaltyLinear(timeDiff, minTimeDiff, maxTimeDiff, minPenalty, maxPenalty)
   :param maxPenalty: maximal penalty given (for timeDiff <= minTimeDiff)
   :return: computed penalty
   '''
-  m = (minPenalty - maxPenalty) / (maxTimeDiff, minTimeDiff)
+  m = (minPenalty - maxPenalty) / (maxTimeDiff - minTimeDiff)
   c = maxPenalty - (m * maxTimeDiff)
 
   return (m * timeDiff) + c
@@ -125,7 +127,7 @@ class Database:
     connection = sqlite3.connect(self.databaseName)
     cursor = connection.cursor()
 
-    cursor.execute("SELECT *, round(julianday('now') - julianday(Timestamp)) FROM RecommendedItems WHERE UserID=? AND ItemID=? AND RecommenderID = 3 AND Timestamp >= date('now','-7 day')",(userID, itemID))
+    cursor.execute("SELECT *, round((julianday('now') - julianday(Timestamp)) * 86400) FROM RecommendedItems WHERE UserID=? AND ItemID=? AND RecommenderID = 3",(userID, itemID))
     previousRecommendations = cursor.fetchall()
 
     connection.commit()
@@ -201,4 +203,4 @@ class Database:
 
 db = Database("test.db")
 
-print(penalizeIfRecentlyRecommended(db, 71, 4443, 85, 0.12))
+print(penalizeIfRecentlyRecommended(db, 71, 4443, 85, 0.8, 24*60*60, 15*24*60*60, 0.01, 0.12))
