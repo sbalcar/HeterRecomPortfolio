@@ -46,6 +46,27 @@ def penalizeIfRecentlyRecommended(database, userID, itemID, score, previouslyRec
   return score - score * min(penalty, 0.8)
 
 
+def getPenaltyLinear(timeDiff, minTimeDiff, maxTimeDiff, minPenalty, maxPenalty):
+  '''
+  computes linear penalty based on a line equation
+  y = m*x + c   ~   penalty = m*timeDiff + c
+
+  the line is defined by two points:
+  (minTimeDiff, maxPenalty), (maxTimeDiff, minPenalty)
+
+  :param timeDiff: time since the recommendation (in seconds)
+  :param minTimeDiff: penalty starts to decrease after this time
+  :param maxTimeDiff: penalty remains minimal after this time
+  :param minPenalty: minimal penalty given (for timeDiff >= maxTimeDiff)
+  :param maxPenalty: maximal penalty given (for timeDiff <= minTimeDiff)
+  :return: computed penalty
+  '''
+  m = (minPenalty - maxPenalty) / (maxTimeDiff, minTimeDiff)
+  c = maxPenalty - (m * maxTimeDiff)
+
+  return (m * timeDiff) + c
+
+
 class Database:
   def __init__(self, dbName):
     self.databaseName = dbName
