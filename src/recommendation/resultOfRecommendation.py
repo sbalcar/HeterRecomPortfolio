@@ -1,11 +1,12 @@
 #!/usr/bin/python3
 
+from typing import List
+
 import pandas as pd
 
 class ResultOfRecommendation:
 
-   # itemIDs:list<int>, ratings:list<float>
-   def __init__(self, itemIDs, ratings):
+   def __init__(self, itemIDs:List[int], ratings:List[float]):
       if type(itemIDs) is not list :
          raise ValueError("Argument itemIDs is not type list.")
       if type(ratings) is not list :
@@ -23,8 +24,8 @@ class ResultOfRecommendation:
       if len(itemIDs) != len(ratings):
          raise ValueError("Arguments itemIDs (list) and ratings (list) are not the same length.")
 
-      self._itemIDs = itemIDs;
-      self._ratings = ratings;
+      self._itemIDs:list[int] = itemIDs
+      self._ratings:list[float] = ratings
 
 
    def exportAsSeries(self):

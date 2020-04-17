@@ -10,19 +10,21 @@ from configuration.argument import Argument #class
 from recommendation.resultOfRecommendation import ResultOfRecommendation #class
 from recommendation.resultsOfRecommendations import ResultsOfRecommendations #class
 
+from evaluationOfRecommender.evaluationOfRecommenders import EvaluationOfRecommenders
 
-class AggrBanditTS:
+from aggregation.aaggregation import AAgregation
 
-    # arguments:Arguments
-    def __init__(self, arguments):
+
+class AggrBanditTS(AAgregation):
+
+    def __init__(self, arguments:Arguments):
 
        if type(arguments) is not Arguments:
           raise ValueError("Argument arguments is not type Arguments.")
 
-       self._arguments = arguments;
+       self._arguments:Arguments = arguments
 
-    # resultsOfRecommendations:ResultsOfRecommendations, evaluationOfRecommenders:EvaluationOfRecommenders, numberOfItems:int
-    def run(self, resultsOfRecommendations, evaluationOfRecommenders, numberOfItems=20):
+    def run(self, resultsOfRecommendations:ResultsOfRecommendations, evaluationOfRecommenders:EvaluationOfRecommenders, numberOfItems:int=20):
 
         if type(resultsOfRecommendations) is not ResultsOfRecommendations:
              raise ValueError("Argument resultsOfRecommendations is not type ResultsOfRecommendations.")

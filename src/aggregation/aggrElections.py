@@ -5,6 +5,9 @@ import numpy as np
 import pandas as pd
 
 from numpy.random import beta
+from typing import List
+
+from pandas.core.frame import DataFrame #class
 
 from configuration.arguments import Arguments #class
 from configuration.argument import Argument #class
@@ -12,11 +15,14 @@ from configuration.argument import Argument #class
 from recommendation.resultOfRecommendation import ResultOfRecommendation #class
 from recommendation.resultsOfRecommendations import ResultsOfRecommendations #class
 
+from aggregation.aaggregation import AAgregation #class
 
-class AggrElections:
+from evaluationOfRecommender.evaluationOfRecommenders import EvaluationOfRecommenders #class
 
-    # arguments:Arguments
-    def __init__(self, arguments):
+
+class AggrElections(AAgregation):
+
+    def __init__(self, arguments:Arguments):
 
        if type(arguments) is not Arguments:
           raise ValueError("Argument arguments is not type Arguments.")
@@ -24,27 +30,44 @@ class AggrElections:
        self._arguments = arguments;
 
 
-    # resultsOfRecommendations:ResultsOfRecommendations, evaluationOfRecommenders:EvaluationOfRecommenders, numberOfItems:int
-    def run(self, resultsOfRecommendations, evaluationOfRecommenders, numberOfItems=20):
+    # userDef:DataFrame<(methodID, votes)>
+    def run(self, resultsOfRecommendations:ResultsOfRecommendations, userDef:DataFrame, numberOfItems:int=20):
 
         if type(resultsOfRecommendations) is not ResultsOfRecommendations:
              raise ValueError("Argument resultsOfRecommendations is not type ResultsOfRecommendations.")
 
+        if type(userDef) is not DataFrame:
+             raise ValueError("Argument userDef isn't type DataFrame.")
+
         if type(numberOfItems) is not int:
-             raise ValueError("Argument numberOfItems is not type int.")
+             raise ValueError("Argument numberOfItems isn't type int.")
 
         methodsResultDict = resultsOfRecommendations.exportAsDictionaryOfSeries()
         #print(methodsResultDict)
 
-        methodsParamsDF = evaluationOfRecommenders.exportAsParamsDF()
-        #print(methodsParamsDF)
+        return self.aggrElectionsRun(methodsResultDict, userDef, topK=numberOfItems)
 
-        return self.aggrElectionsRun(methodsResultDict, methodsParamsDF, topK=numberOfItems)
+
+#    def __run(self, resultsOfRecommendations:ResultsOfRecommendations, evaluationOfRecommenders:EvaluationOfRecommenders, numberOfItems:int=20):
+#
+#        if type(resultsOfRecommendations) is not ResultsOfRecommendations:
+#             raise ValueError("Argument resultsOfRecommendations is not type ResultsOfRecommendations.")
+#
+#        if type(numberOfItems) is not int:
+#             raise ValueError("Argument numberOfItems is not type int.")
+#
+#        methodsResultDict = resultsOfRecommendations.exportAsDictionaryOfSeries()
+#        #print(methodsResultDict)
+#
+#        methodsParamsDF = evaluationOfRecommenders.exportAsParamsDF()
+#        #print(methodsParamsDF)
+#
+#        return self.aggrElectionsRun(methodsResultDict, methodsParamsDF, topK=numberOfItems)
 
 
     # methodsResultDict:{String:pd.Series(rating:float[], itemID:int[])},
     # methodsParamsDF:pd.DataFrame[numberOfVotes:int], topK:int
-    def aggrElectionsRun(self, methodsResultDict, methodsParamsDF, topK = 20):
+    def aggrElectionsRun(self, methodsResultDict, methodsParamsDF:DataFrame, topK:int = 20):
 
       if sorted([mI for mI in methodsParamsDF.index]) != sorted([mI for mI in methodsResultDict.keys()]):
         raise ValueError("Arguments methodsResultDict and methodsParamsDF have to define the same methods.")
@@ -108,12 +131,13 @@ class AggrElections:
         votesOfPartiesDictI = {partyI:methodsParamsDF.votes.loc[partyI] / electedOfPartyDictI.get(partyI)  for partyI in methodsParamsDF.index}
         #print("VotesOfPartiesDictI: ", votesOfPartiesDictI)
 
+      # list<int>
       return recommendedItemIDs[:topK]
 
 
-    # methodsResultDict:{String:pd.Series(rating:float[], itemID:int[])},
-    # methodsParamsDF:pd.DataFrame[numberOfVotes:int], topK:int
-    def aggrElectionsRunWithResponsibility(self, methodsResultDict, methodsParamsDF, topK = 20):
+    # methodsResultDict:{String:Series(rating:float[], itemID:int[])},
+    # methodsParamsDF:DataFrame<(methodID:str, votes:int)>, topK:int
+    def runWithResponsibility(self, methodsResultDict, methodsParamsDF, topK=20):
       
       # recommendedItemIDs:int[]
       recommendedItemIDs = self.aggrElectionsRun(methodsResultDict, methodsParamsDF, topK)
@@ -131,9 +155,10 @@ class AggrElections:
          candidateOfdevotionOfPartiesDictDict[candidateIDI] = devotionOfParitiesDict
       #print(candidateOfdevotionOfPartiesDictDict)
 
-      # selectedCandidate:[itemID:{methodID:responsibility,...},...]
+      # selectedCandidate:list<(itemID:int, Series<(rating:int, methodID:str)>)>
       selectedCandidate = [(candidateI, candidateOfdevotionOfPartiesDictDict[candidateI]) for candidateI in recommendedItemIDs]
 
+      # list<(itemID:int, Series<(rating:int, methodID:str)>)>
       return selectedCandidate
 
 

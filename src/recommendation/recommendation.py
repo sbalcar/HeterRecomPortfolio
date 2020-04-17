@@ -1,5 +1,7 @@
 #!/usr/bin/python3
 
+from typing import List
+
 import numpy as np
 
 from recommendation.resultOfRecommendation import ResultOfRecommendation #class
@@ -7,8 +9,7 @@ from recommendation.resultOfRecommendation import ResultOfRecommendation #class
 
 class Recommendation:
 
-   # itemIDs:Int[]
-   def __init__(self, itemIDs):
+   def __init__(self, itemIDs:List[int]):
         
        if itemIDs == None :
            raise ValueError("Argument itemIDs can't be None.")

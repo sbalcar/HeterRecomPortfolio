@@ -1,11 +1,13 @@
 #!/usr/bin/python3
 
+from typing import List
+
 import random
 
 from configuration.arguments import Arguments #class
 from configuration.argument import Argument #class
 
-from recommender.arecommender import ARecommender #class
+from recommender.aRecommender import ARecommender #class
 
 from recommendation.recommendation import Recommendation #class
 from recommendation.resultOfRecommendation import ResultOfRecommendation #class
@@ -13,19 +15,19 @@ from recommendation.resultOfRecommendation import ResultOfRecommendation #class
 
 class RecommenderDummyRedirector(ARecommender):
 
-   # arguments:Argument[]
-   def __init__(self, arguments):
+   ARG_RESULT:str = "RESULT"
+
+   def __init__(self, arguments:List[Argument]):
 
        if type(arguments) is not Arguments:
           raise ValueError("Argument arguments is not type Arguments.")
 
-       self._arguments = arguments;
+       self._arguments:List[Argument] = arguments;
 
-   # topK:int
-   def recommend(self, numberOfItems=20):
 
-      # result:ResultOfRecommendation
-      result = self._arguments.exportArgumentValue("RESULT")
+   def recommend(self, numberOfItems:int=20):
 
-      # ResultOfRecommendation
-      return result;
+       result:ResultOfRecommendation = self._arguments.exportArgumentValue(self.ARG_RESULT)
+
+       # ResultOfRecommendation
+       return result;

@@ -3,7 +3,7 @@
 from configuration.arguments import Arguments #class
 from configuration.argument import Argument #class
 
-from recommender.recommenderDescription import RecommenderDescription #class
+from recommender.description.recommenderDescription import RecommenderDescription #class
 
 from recommendation.resultOfRecommendation import ResultOfRecommendation #class
 
@@ -24,23 +24,19 @@ from evaluationOfRecommender.evaluationOfRecommenders import EvaluationOfRecomme
 class Input:
     def input01():
 
-        # resultOfMeth1:ResultOfRecommendation
-        resultOfMeth1 = ResultOfRecommendation([32,2,8,1,4], [0.2,0.1,0.3,0.3,0.1])
-        resultOfMeth2 = ResultOfRecommendation([1,5,32,6,7], [0.1,0.1,0.2,0.3,0.3])
-        resultOfMeth3 = ResultOfRecommendation([7,2,77,64,12], [0.3,0.1,0.2,0.3,0.1])
+        resultOfMeth1:ResultOfRecommendation = ResultOfRecommendation([32,2,8,1,4], [0.2,0.1,0.3,0.3,0.1])
+        resultOfMeth2:ResultOfRecommendation = ResultOfRecommendation([1,5,32,6,7], [0.1,0.1,0.2,0.3,0.3])
+        resultOfMeth3:ResultOfRecommendation = ResultOfRecommendation([7,2,77,64,12], [0.3,0.1,0.2,0.3,0.1])
 
-        # recomm1:RecommenderDescription
-        recomm1 = RecommenderDescription(RecommenderDummyRedirector, Arguments([Argument("RESULT", resultOfMeth1)]));
-        recomm2 = RecommenderDescription(RecommenderDummyRedirector, Arguments([Argument("RESULT", resultOfMeth2)]));
-        recomm3 = RecommenderDescription(RecommenderDummyRedirector, Arguments([Argument("RESULT", resultOfMeth3)]));
+        recomm1:RecommenderDescription = RecommenderDescription(RecommenderDummyRedirector, Arguments([Argument("RESULT", resultOfMeth1)]));
+        recomm2:RecommenderDescription = RecommenderDescription(RecommenderDummyRedirector, Arguments([Argument("RESULT", resultOfMeth2)]));
+        recomm3:RecommenderDescription = RecommenderDescription(RecommenderDummyRedirector, Arguments([Argument("RESULT", resultOfMeth3)]));
 
-        aggr = AggregationDescription(AggrElections, Arguments([]));
+        aggr:AggregationDescription = AggregationDescription(AggrElections, Arguments([]));
 
-        # portfolioDescr:PortfolioDescription
-        portfolioDescr = PortfolioDescription(["metoda1", "metoda2", "metoda3"], [recomm1, recomm2, recomm3], aggr)
+        portfolioDescr:PortfolioDescription = PortfolioDescription(["metoda1", "metoda2", "metoda3"], [recomm1, recomm2, recomm3], aggr)
 
-        # evaluationOfRecommenders:EvaluationOfRecommenders
-        evaluationOfRecommenders = EvaluationOfRecommenders()
+        evaluationOfRecommenders:EvaluationOfRecommenders = EvaluationOfRecommenders()
         evaluationOfRecommenders.addArg('metoda1', Argument("votes", 100))
         evaluationOfRecommenders.addArg('metoda2', Argument("votes", 80))
         evaluationOfRecommenders.addArg('metoda3', Argument("votes", 60))

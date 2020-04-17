@@ -1,39 +1,30 @@
 #!/usr/bin/python3
 
-import numpy as np
 import pandas as pd
 
 from configuration.arguments import Arguments #class
 from configuration.argument import Argument #class
 
-from recommender.recommenderDescription import RecommenderDescription #class
-
-from portfolio.portfolioDescription import PortfolioDescription #class
-
 
 class EvaluationOfRecommenders:
 
    def __init__(self):
-      # _ids:list<st>
-      self._ids = []
-      # _arguments:list<Arguments>
-      self._arguments = []
+      self._ids:list[str] = []
+      self._arguments:list[Arguments]= []
 
-   # recommenderID:str, argument:Argument
-   def addArg(self, recommenderID, argument):
+   def addArg(self, recommenderID:str, argument:Argument):
 
       if type(recommenderID) is not str :
          raise ValueError("Argument recommenderID is not type str.")
 
-      #print(type(argument))
       if type(argument) is not Argument :
          raise ValueError("Argument argument is not type Argument.")
 
       self._ids.append(recommenderID)
       self._arguments.append(Arguments([argument]))
 
-   # recommenderID:str, arguments:Arguments
-   def add(self, recommenderID, arguments):
+
+   def add(self, recommenderID:str, arguments:Arguments):
 
       if type(recommenderID) is not str :
          raise ValueError("Argument recommenderID is not type str.")
@@ -47,7 +38,7 @@ class EvaluationOfRecommenders:
    def exportAsParamsDF(self):
 
       if len(self._arguments) == 0:
-         methodsParamsDF = pd.DataFrame(methodsParamsData, columns=["methodID"])
+         methodsParamsDF = pd.DataFrame([], columns=["methodID"])
          methodsParamsDF.set_index("methodID", inplace=True)
          
          return methodsParamsDF;

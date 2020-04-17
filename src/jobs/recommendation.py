@@ -9,6 +9,7 @@ from configuration.argument import Argument #class
 from input.input import Input #class
 
 from portfolio.portfolio import Portfolio #class
+from portfolio.portfolioDescription import PortfolioDescription #class
 
 from aggregation.aggregationDescription import AggregationDescription #class
 
@@ -23,17 +24,15 @@ from evaluationOfRecommender.evaluationOfRecommenders import EvaluationOfRecomme
 def recommendation():
 
   # number of recommended items
-  numberOfItems = 20
+  numberOfItems:int = 20
   print(numberOfItems)
 
-  # (PortfolioDescription, EvaluationOfRecommenders)
+  portfolioDescr:PortfolioDescription
+  evaluationOfRecommenders:EvaluationOfRecommenders
   portfolioDescr, evaluationOfRecommenders = Input.input01()
   portfolioDescr, evaluationOfRecommenders = Input.input02()
 
-  #portfolio:Portfolio
-  portfolio = Portfolio(portfolioDescr)
+  portfolio:Portfolio = Portfolio(portfolioDescr)
 
-  # itemIDs:list<int>
-  itemIDs = portfolio.run(evaluationOfRecommenders, numberOfItems)
+  itemIDs:list[int] = portfolio.run(evaluationOfRecommenders, numberOfItems)
   print(itemIDs)
-

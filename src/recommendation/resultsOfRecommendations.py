@@ -1,11 +1,13 @@
 #!/usr/bin/python3
 
+from typing import List
+
 from recommendation.resultOfRecommendation import ResultOfRecommendation #class
 
 class ResultsOfRecommendations:
 
-   # recommenderIDs:list<str>, resultOfRecommendation:list<ResultOfRecommendation>
-   def __init__(self, recommenderIDs=[], resultsOfRecommendations=[]):
+   def __init__(self, recommenderIDs:List[str]=[], resultsOfRecommendations:List[ResultOfRecommendation]=[]):
+
       if type(recommenderIDs) is not list:
          raise ValueError("Argument recommenderIDs is not type list.")
       if type(resultsOfRecommendations) is not list:
@@ -24,12 +26,11 @@ class ResultsOfRecommendations:
       if len(recommenderIDs) != len(resultsOfRecommendations):
          raise ValueError("Arguments recommenderIDs (list) and resultsOfRecommendations (list) are not the same length.")
 
-      self._recommenderIDs = recommenderIDs;
-      self._resultsOfRecommendations = resultsOfRecommendations;
+      self._recommenderIDs:list[str] = recommenderIDs;
+      self._resultsOfRecommendations:list[ResultOfRecommendation] = resultsOfRecommendations;
 
 
-   # recommenderID:str, resultOfRecommendation:ResultOfRecommendation
-   def add(self, recommenderID, resultOfRecommendation):
+   def add(self, recommenderID:str, resultOfRecommendation:ResultOfRecommendation):
       if type(recommenderID) is not str:
          raise ValueError("Argument recommenderID is not type str.")
       if type(resultOfRecommendation) is not ResultOfRecommendation:

@@ -2,7 +2,7 @@
 
 import random
 
-from recommender.arecommender import ARecommender #class
+from recommender.aRecommender import ARecommender #class
 
 from recommendation.recommendation import Recommendation #class
 from recommendation.resultOfRecommendation import ResultOfRecommendation #class
@@ -10,13 +10,11 @@ from recommendation.resultOfRecommendation import ResultOfRecommendation #class
 
 class RecommenderDummyRandom(ARecommender):
 
-   # topK:int
-   def recommend(self, numberOfItems=20):
+   def recommend(self, numberOfItems:int=20):
       items = list(range(numberOfItems))
       random.shuffle(items)
 
-      # recomm:Recommendation
-      recomm = Recommendation(items)
+      recomm:Recommendation = Recommendation(items)
 
       # ResultOfRecommendation
       return recomm.exportAsResultOfRecommendation()

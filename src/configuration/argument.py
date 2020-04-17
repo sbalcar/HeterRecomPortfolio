@@ -3,7 +3,7 @@
 class Argument:
 
     # name:String, value:?
-    def __init__(self, name, value):
+    def __init__(self, name:str, value):
 
         if name == None :
            raise ValueError("Argument name can't be None.")

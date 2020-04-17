@@ -1,12 +1,13 @@
 #!/usr/bin/python3
 
+from typing import List
+
 from configuration.argument import Argument #class
 
 
 class Arguments:
 
-    # arguments:Argument[]
-    def __init__(self, arguments):
+    def __init__(self, arguments:List[Argument]):
  
         if type(arguments) is not list :
             raise ValueError("Type of argument arguments is not list.")
@@ -18,8 +19,7 @@ class Arguments:
 
         self._arguments = arguments;
 
-    # name:str
-    def exportArgument(self, name):
+    def exportArgument(self, name:str):
 
         if type(name) is not str :
             raise ValueError("Type of argument name is not str.")
@@ -31,8 +31,7 @@ class Arguments:
 
         return None;
 
-    # name:str
-    def exportArgumentValue(self, name):
+    def exportArgumentValue(self, name:str):
         # arg:Argument
         arg = self.exportArgument(name)
         

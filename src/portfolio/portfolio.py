@@ -1,81 +1,72 @@
 #!/usr/bin/python3
 
-from configuration.arguments import Arguments #class
-from configuration.argument import Argument #class
+from pandas.core.frame import DataFrame #class
+from pandas.core.series import Series #class
 
-from recommender.recommenderDescription import RecommenderDescription #class
+from typing import List
 
-from portfolio.portfolioDescription import PortfolioDescription #class
+from aggregation.aaggregation import AAgregation #class
+
+from recommender.description.recommenderDescription import RecommenderDescription #class
+from recommender.aRecommender import ARecommender #class
 
 from recommendation.resultOfRecommendation import ResultOfRecommendation #class
 from recommendation.resultsOfRecommendations import ResultsOfRecommendations #class
 
 from aggregation.aggregationDescription import AggregationDescription #class
 
-from aggregation.aggrElections import AggrElections #class
+from evaluationOfRecommender.evaluationOfRecommenders import EvaluationOfRecommenders
 
 
 class Portfolio:
 
-   # portfolioDescr:PortfolioDescription
-   def __init__(self, portfolioDescr):
+   def __init__(self, recommIDs:List[str], recommenders:List[ARecommender], agregation:AAgregation):
 
-      if type(portfolioDescr) is not PortfolioDescription :
-         raise ValueError("Argument portfolioDescr is not type PortfolioDescription.")
+      for recommIdI in recommIDs:
+          if not type(recommIdI) is str:
+              raise ValueError("Argument recommIDs don't contains type str.")
+      if type(recommenders) is not list :
+         raise ValueError("Argument recommenders isn't type list.")
+      for recommenderI in recommenders:
+          if not isinstance(recommenderI, ARecommender):
+              raise ValueError("Argument recommenders don't contains type ARecommender.")
+      if not isinstance(agregation, AAgregation) :
+         raise ValueError("Argument agregation isn't type AAgregation.")
 
-      # _portfolioDescr:PortfolioDescription
-      self._portfolioDescr = portfolioDescr;
+      self._recommIDs:List[str] = recommIDs
+      self._recommenders:List[ARecommender] = recommenders
+      self._aggregation:AAgregation = agregation
 
+   def getRecommIDs(self):
+       return self._recommIDs
 
-      # recommDescrs:RecommenderDescription[]
-      recommDescrs = self._portfolioDescr.getRecommendersDescriptions();
+   def train(self, trainDF:DataFrame):
 
-      # _recommenders:Recommender[]
-      self._recommenders = []
+       recommenderI:ARecommender
+       for recommenderI in self._recommenders:
+           recommenderI.train(trainDF)
 
-      # recommDescrI:RecommenderDescription
-      for recommDescrI in recommDescrs:
-          # recommenderI:Recommender
-          recommenderI = recommDescrI.exportRecommender()
-          self._recommenders.append(recommenderI);
+   # userDef:DataFrame<(methodID, votes)>
+   def test(self, userDef:DataFrame, itemID:int, numberOfItems:int):
 
+       resultsOfRecommendations:ResultsOfRecommendations = ResultsOfRecommendations([], [])
 
-      # aggrDescr:AggregationDescription
-      aggrDescr = self._portfolioDescr.getAggregationDescription();
+       recommIndexI: int
+       for recommIndexI in range(len(self._recommenders)):
+           recommIDI: str = self._recommIDs[recommIndexI]
+           recommI: ARecommender = self._recommenders[recommIndexI]
 
-      # _aggregation:Aggregation
-      self._aggregation = aggrDescr.exportAggregation()
+           resultOfRecommendationI: ResultOfRecommendation = recommI.recommend(numberOfItems)
+           resultsOfRecommendations.add(recommIDI, resultOfRecommendationI)
 
+       #aggregatedItemIDs:List[int] = self._aggregation.run(resultsOfRecommendations, userDef, numberOfItems)
 
-   # evaluationOfRecommenders:EvaluationOfRecommenders, numberOfItems:int
-   def run(self, evaluationOfRecommenders, numberOfItems):
+       methodsResultDict:dict = resultsOfRecommendations.exportAsDictionaryOfSeries()
+       #print(methodsResultDict)
 
-      # resultsOfRecommendations:ResultsOfRecommendations
-      resultsOfRecommendations = ResultsOfRecommendations();
+       aggregatedItemIDsWithResponsibility:list = self._aggregation.runWithResponsibility(methodsResultDict, userDef, topK=numberOfItems)
+       #print(aggregatedItemIDsWithResponsibility)
 
-      # recommIndexI:int
-      for recommIndexI in range(len(self._recommenders)):
-
-          # recommenderI:Recommender
-          recommenderI = self._recommenders[recommIndexI]
-
-          # recommIDI:str
-          recommIDI = self._portfolioDescr.getRecommendersIDs()[recommIndexI]
-
-          # resultOfRecommendationI:ResultOfRecommendation
-          resultOfRecommendationI = recommenderI.recommend(numberOfItems)
-
-          resultsOfRecommendations.add(recommIDI, resultOfRecommendationI);
-
-
-      # aggrDescr:AggregationDescription
-      #aggrDescr = AggregationDescription(AggrElections, Arguments([]))
-      aggrDescr = self._portfolioDescr.getAggregationDescription()
-      aggr = aggrDescr.exportAggregation()
-
-      # items:list<int>
-      itemIDs = aggr.run(resultsOfRecommendations, evaluationOfRecommenders, numberOfItems)
-      
-      # list<int> 
-      return itemIDs
+       # list<int>
+       return aggregatedItemIDsWithResponsibility
 
