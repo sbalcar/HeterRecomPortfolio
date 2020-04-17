@@ -14,7 +14,7 @@ from portfolio.portfolioDescription import PortfolioDescription #class
 
 from aggregation.aggregationDescription import AggregationDescription #class
 
-from aggregation.aggrElections import AggrElections #class
+from aggregation.aggrDHont import AggrDHont #class
 from aggregation.aggrBanditTS import AggrBanditTS #class
 
 
@@ -32,7 +32,7 @@ class Input:
         recomm2:RecommenderDescription = RecommenderDescription(RecommenderDummyRedirector, Arguments([Argument("RESULT", resultOfMeth2)]));
         recomm3:RecommenderDescription = RecommenderDescription(RecommenderDummyRedirector, Arguments([Argument("RESULT", resultOfMeth3)]));
 
-        aggr:AggregationDescription = AggregationDescription(AggrElections, Arguments([]));
+        aggr:AggregationDescription = AggregationDescription(AggrDHont, Arguments([]));
 
         portfolioDescr:PortfolioDescription = PortfolioDescription(["metoda1", "metoda2", "metoda3"], [recomm1, recomm2, recomm3], aggr)
 
@@ -85,7 +85,7 @@ class Input:
 
         recomm1 = RecommenderDescription(RecommenderDummyRandom, Arguments([]));
 
-        aggr = AggregationDescription(AggrElections, Arguments([]));
+        aggr = AggregationDescription(AggrDHont, Arguments([]));
 
         portfolioDesr = PortfolioDescription(["metoda1", "metoda2", "metoda3"], [recomm1, recomm1, recomm1], aggr)
 

@@ -4,7 +4,7 @@ from typing import List
 
 from pandas.core.series import Series #class
 
-from aggregation.aggrElections import AggrElections #class
+from aggregation.aggrDHont import AggrDHont #class
 
 from configuration.arguments import Arguments #class
 
@@ -41,7 +41,7 @@ def test01():
     methodsParamsDF.set_index("methodID", inplace=True)
     #print(methodsParamsDF)
 
-    aggr:AggrElections = AggrElections(Arguments([]))
+    aggr:AggrDHont = AggrDHont(Arguments([]))
     #itemIDs:int = aggr.run(methodsResultDict, methodsParamsDF, N)
     #print(itemIDs)
     itemIDs:List[tuple] = aggr.runWithResponsibility(methodsResultDict, methodsParamsDF, N)
@@ -69,7 +69,7 @@ def test02():
     methodsParamsDF.set_index("methodID", inplace=True)
     #print(methodsParamsDF)
 
-    aggr:AggrElections = AggrElections(Arguments([]))
+    aggr:AggrDHont = AggrDHont(Arguments([]))
     #itemIDs:int = aggr.run(methodsResultDict, methodsParamsDF, N)
     #print(itemIDs)
     itemIDs:List[tuple] = aggr.runWithResponsibility(methodsResultDict, methodsParamsDF, N)

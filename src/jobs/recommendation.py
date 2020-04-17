@@ -13,7 +13,7 @@ from portfolio.portfolioDescription import PortfolioDescription #class
 
 from aggregation.aggregationDescription import AggregationDescription #class
 
-from aggregation.aggrElections import AggrElections #class
+from aggregation.aggrDHont import AggrDHont #class
 
 from recommendation.resultOfRecommendation import ResultOfRecommendation #class
 from recommendation.resultsOfRecommendations import ResultsOfRecommendations #class

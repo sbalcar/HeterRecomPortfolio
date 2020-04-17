@@ -20,7 +20,7 @@ from aggregation.aaggregation import AAgregation #class
 from evaluationOfRecommender.evaluationOfRecommenders import EvaluationOfRecommenders #class
 
 
-class AggrElections(AAgregation):
+class AggrDHont(AAgregation):
 
     def __init__(self, arguments:Arguments):
 
@@ -264,7 +264,7 @@ if __name__== "__main__":
   #print(methodsParamsDF)
 
   args = Arguments([Argument("arg1", 0)])
-  aggregator = AggrElections(args)
+  aggregator = AggrDHont(args)
 
   print("aggrElectionsRun:")
   print(aggregator.aggrElectionsRun(methodsResultDict, methodsParamsDF, N))

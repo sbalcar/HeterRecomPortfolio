@@ -25,7 +25,7 @@ from portfolio.portfolioDescription import PortfolioDescription #class
 from portfolio.portfolio import Portfolio #class
 
 from aggregation.aggregationDescription import AggregationDescription #class
-from aggregation.aggrElections import AggrElections #class
+from aggregation.aggrDHont import AggrDHont #class
 
 from recommendation.resultOfRecommendation import ResultOfRecommendation #class
 
@@ -58,7 +58,7 @@ def simulationOfPortfolio():
     rDescDummyRedirector: RecommenderDescription = RecommenderDescription(RecommenderDummyRedirector,
                             Arguments([Argument(RecommenderDummyRedirector.ARG_RESULT, ResultOfRecommendation(list(range(1, 21)),[0.05] * 20))]))
 
-    aggregationDesc: AggregationDescription = AggregationDescription(AggrElections, Arguments([]))
+    aggregationDesc: AggregationDescription = AggregationDescription(AggrDHont, Arguments([]))
 
     portfolioDesc: PortfolioDescription = PortfolioDescription(
             ["RecommenderTheMostPopular", "RecommenderDummyRedirector"],
