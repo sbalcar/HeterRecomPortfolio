@@ -40,11 +40,11 @@ class Portfolio:
    def getRecommIDs(self):
        return self._recommIDs
 
-   def train(self, trainDF:DataFrame):
+   def train(self, historyDF:DataFrame, ratingsDF:DataFrame, usersDF:DataFrame, itemsDF:DataFrame):
 
        recommenderI:ARecommender
        for recommenderI in self._recommenders:
-           recommenderI.train(trainDF)
+           recommenderI.train(historyDF, ratingsDF, usersDF, itemsDF)
 
    # userDef:DataFrame<(methodID, votes)>
    def test(self, userDef:DataFrame, itemID:int, numberOfItems:int):
@@ -56,7 +56,7 @@ class Portfolio:
            recommIDI: str = self._recommIDs[recommIndexI]
            recommI: ARecommender = self._recommenders[recommIndexI]
 
-           resultOfRecommendationI: ResultOfRecommendation = recommI.recommend(numberOfItems)
+           resultOfRecommendationI: ResultOfRecommendation = recommI.recommendToItem(itemID, numberOfItems)
            resultsOfRecommendations.add(recommIDI, resultOfRecommendationI)
 
        #aggregatedItemIDs:List[int] = self._aggregation.run(resultsOfRecommendations, userDef, numberOfItems)
@@ -64,7 +64,7 @@ class Portfolio:
        methodsResultDict:dict = resultsOfRecommendations.exportAsDictionaryOfSeries()
        #print(methodsResultDict)
 
-       aggregatedItemIDsWithResponsibility:list = self._aggregation.runWithResponsibility(methodsResultDict, userDef, topK=numberOfItems)
+       aggregatedItemIDsWithResponsibility:list = self._aggregation.runWithResponsibility(methodsResultDict, userDef, numberOfItems=numberOfItems)
        #print(aggregatedItemIDsWithResponsibility)
 
        # list<int>

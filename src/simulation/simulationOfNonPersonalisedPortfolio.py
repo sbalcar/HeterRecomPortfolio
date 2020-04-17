@@ -88,11 +88,13 @@ class SimulationOfNonPersonalisedPortfolio:
 
 
     # portfolioDesc:PortfolioDescription, trainDF:DataFrame, testDF:DataFrame, repetition:int
-    def __simulateDataset(self, portfolioDesc:PortfolioDescription, trainDF:DataFrame, testDF:DataFrame):
+    def __simulateDataset(self, portfolioDesc:PortfolioDescription, trainRatingsDF:DataFrame, testRatingsDF:DataFrame):
+
+        historyDF:DataFrame = None
 
         # train model
         portfolio:Portfolio = portfolioDesc.exportPortfolio()
-        portfolio.train(trainDF)
+        portfolio.train(historyDF, trainRatingsDF, self._usersDF, self._itemsDF)
 
         # methods parametes
         methodsParamsData = [[rIdI, 0] for rIdI in portfolio.getRecommIDs()]
@@ -102,14 +104,14 @@ class SimulationOfNonPersonalisedPortfolio:
         counterI:int = 0
 
         rIndexI:int
-        for (currentIndexI, nextIndexI) in zip(list(testDF.index[1:]), list(testDF.index)[:-1]):
+        for (currentIndexI, nextIndexI) in zip(list(testRatingsDF.index[1:]), list(testRatingsDF.index)[:-1]):
 
             counterI += 1
             if counterI  % 100 == 0:
-                print("RatingI: " + str(counterI) + " / " + str(testDF.shape[0]))
+                print("RatingI: " + str(counterI) + " / " + str(testRatingsDF.shape[0]))
 
-            currentItemI:int = testDF.loc[currentIndexI][Ratings.COL_MOVIEID]
-            nextItemI:int = testDF.loc[nextIndexI][Ratings.COL_MOVIEID]
+            currentItemI:int = testRatingsDF.loc[currentIndexI][Ratings.COL_MOVIEID]
+            nextItemI:int = testRatingsDF.loc[nextIndexI][Ratings.COL_MOVIEID]
 
             for repetitionI in range(self._repetitionOfRecommendation):
 

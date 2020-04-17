@@ -4,8 +4,8 @@ from pandas.core.frame import DataFrame #class
 
 class ARecommender:
 
-    def train(self, trainDF:DataFrame):
+    def train(self, historyDF:DataFrame, ratingsDF:DataFrame, usersDF:DataFrame, itemsDF:DataFrame):
         pass
 
-    def recommend(self, numberOfItems:int):
+    def recommendToItem(self, itemID:int, numberOfItems:int):
         pass

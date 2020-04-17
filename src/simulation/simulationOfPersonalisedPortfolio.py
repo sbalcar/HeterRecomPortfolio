@@ -87,18 +87,21 @@ class SimulationOfPersonalisedPortfolio:
 
 
     # userIDs:int, portfolioDesc:PortfolioDescription, trainDF:DataFrame, testDF:DataFrame, repetition:int
-    def __simulateUsers(self, userIDs:int, portfolioDesc:PortfolioDescription, trainDF:DataFrame, testDF:DataFrame, repetition:int=1):
+    def __simulateUsers(self, userIDs:int, portfolioDesc:PortfolioDescription, trainRatingsDF:DataFrame,
+                        testRatingsDF:DataFrame, repetition:int=1):
+
+        historyDF:DataFrame = None
 
         # train model
         portfolio:Portfolio = portfolioDesc.exportPortfolio()
-        portfolio.train(trainDF)
+        portfolio.train(historyDF, trainRatingsDF, self._usersDF, self._itemsDF)
 
         userIdI:int
         for userIdI in userIDs:
             #print("UserID " + str(userIdI))
 
             # select ratings of userIDI
-            testRatingsUserIDF:DataFrame = testDF.loc[testDF[Ratings.COL_USERID == userIdI]]
+            testRatingsUserIDF:DataFrame = testRatingsDF.loc[testRatingsDF[Ratings.COL_USERID == userIdI]]
 
             # test model
             self.__simulateUser(userIdI, portfolio, testRatingsUserIDF)

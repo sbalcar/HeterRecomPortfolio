@@ -25,12 +25,12 @@ class RecommenderTheMostPopular(ARecommender):
         self._arguments:List[Argument] = arguments
 
     # ratingsSum:Dataframe<(userId:int, movieId:int, ratings:int, timestamp:int)>
-    def train(self, trainRatingsDF:DataFrame):
-        if type(trainRatingsDF) is not DataFrame:
+    def train(self, historyDF:DataFrame, ratingsDF:DataFrame, usersDF:DataFrame, itemsDF:DataFrame):
+        if type(ratingsDF) is not DataFrame:
             raise ValueError("Argument trainRatingsDF is not type DataFrame.")
 
         # ratingsSum:Dataframe<(userId:int, movieId:int, ratings:int, timestamp:int)>
-        ratings5DF:DataFrame = trainRatingsDF.loc[trainRatingsDF[Ratings.COL_RATING] >= 4]
+        ratings5DF:DataFrame = ratingsDF.loc[ratingsDF[Ratings.COL_RATING] >= 4]
 
         # ratingsSum:Dataframe<(movieId:int, ratings:int)>
         ratings5SumDF:DataFrame = DataFrame(ratings5DF.groupby(Ratings.COL_MOVIEID)[Ratings.COL_RATING].count())
@@ -42,7 +42,7 @@ class RecommenderTheMostPopular(ARecommender):
         self._sortedAscRatings5CountDF:DataFrame = sortedAscRatings5CountDF
 
 
-    def recommend(self, numberOfItems:int):
+    def recommendToItem(self, itemID:int, numberOfItems:int):
 
         # ratings:Dataframe<(movieId:int, ratings:int)>
         ratings:DataFrame = self._sortedAscRatings5CountDF.head(numberOfItems)

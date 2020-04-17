@@ -1,5 +1,7 @@
 #!/usr/bin/python3
 
+from pandas.core.frame import DataFrame #class
+
 from typing import List
 
 import random
@@ -24,8 +26,10 @@ class RecommenderDummyRedirector(ARecommender):
 
        self._arguments:List[Argument] = arguments;
 
+   def train(self, historyDF:DataFrame, ratingsDF:DataFrame, usersDF:DataFrame, itemsDF:DataFrame):
+       pass
 
-   def recommend(self, numberOfItems:int=20):
+   def recommendToItem(self, itemID:int, numberOfItems:int=20):
 
        result:ResultOfRecommendation = self._arguments.exportArgumentValue(self.ARG_RESULT)
 
