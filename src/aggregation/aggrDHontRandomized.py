@@ -19,6 +19,7 @@ from aggregation.aaggregation import AAgregation  # class
 
 from evaluationOfRecommender.evaluationOfRecommenders import EvaluationOfRecommenders  # class
 
+from aggregation.tools.responsibilityDHont import countDHontResponsibility #function
 
 class AggrDHontRandomized(AAgregation):
 
@@ -48,9 +49,9 @@ class AggrDHontRandomized(AAgregation):
 
 
     # methodsResultDict:{String:pd.Series(rating:float[], itemID:int[])},
-    # methodsParamsDF:pd.DataFrame[numberOfVotes:int], topK:int
+    # methodsParamsDF:pd.DataFrame[numberOfVotes:int], numberOfItems:int
     # differencAmplificatorExponent : int / float
-    def aggrRandomizedElectionsRun(self, methodsResultDict, methodsParamsDF, differenceAmplificatorExponent, topK=20):
+    def aggrRandomizedElectionsRun(self, methodsResultDict:dict, methodsParamsDF:DataFrame, differenceAmplificatorExponent:float, numberOfItems:int=20):
 
         if sorted([mI for mI in methodsParamsDF.index]) != sorted([mI for mI in methodsResultDict.keys()]):
             raise ValueError("Arguments methodsResultDict and methodsParamsDF have to define the same methods.")
@@ -58,7 +59,7 @@ class AggrDHontRandomized(AAgregation):
         if np.prod([len(methodsResultDict.get(mI)) for mI in methodsResultDict]) == 0:
             raise ValueError("Argument methodsParamsDF contains in ome method an empty list of items.")
 
-        if topK < 0:
+        if numberOfItems < 0:
             raise ValueError("Argument topK must be positive value.")
 
         candidatesOfMethods = np.asarray([cI.keys() for cI in methodsResultDict.values()])
@@ -75,11 +76,11 @@ class AggrDHontRandomized(AAgregation):
 
         recommendedItemIDs = []
 
-        for iIndex in range(0, topK):
+        for iIndex in range(0, numberOfItems):
             # print("iIndex: ", iIndex)
 
             if len(uniqueCandidatesI) == 0:
-                return recommendedItemIDs[:topK]
+                return recommendedItemIDs[:numberOfItems]
 
             # coumputing of votes of remaining candidates
             actVotesOfCandidatesDictI = {}
@@ -123,34 +124,19 @@ class AggrDHontRandomized(AAgregation):
                                    partyI in methodsParamsDF.index}
             # print("VotesOfPartiesDictI: ", votesOfPartiesDictI)
 
-        return recommendedItemIDs[:topK]
+        return recommendedItemIDs[:numberOfItems]
+
 
     # methodsResultDict:{String:Series(rating:float[], itemID:int[])},
     # methodsParamsDF:DataFrame<(methodID:str, votes:int)>, topK:int
-    def runWithResponsibility(self, methodsResultDict, methodsParamsDF, topK=20):
+    def runWithResponsibility(self, methodsResultDict:dict, methodsParamsDF:DataFrame, numberOfItems:int=20):
 
-        # recommendedItemIDs:int[]
-        recommendedItemIDs = self.aggrElectionsRun(methodsResultDict, methodsParamsDF, topK)
-        votesOfPartiesDictI = {mI: methodsParamsDF.votes.loc[mI] for mI in methodsParamsDF.index}
+        aggregatedItemIDs:List[int] = self.aggrElectionsRun(methodsResultDict, methodsParamsDF, numberOfItems)
 
-        candidatesOfMethods = np.asarray([cI.keys() for cI in methodsResultDict.values()])
-        uniqueCandidatesI = list(set(np.concatenate(candidatesOfMethods)))
-
-        candidateOfdevotionOfPartiesDictDict = {}
-        for candidateIDI in recommendedItemIDs:
-            # for candidateIDI in uniqueCandidatesI:
-            devotionOfParitiesDict = {}
-            for parityIDJ in methodsParamsDF.index:
-                devotionOfParitiesDict[parityIDJ] = methodsResultDict[parityIDJ].get(candidateIDI, 0) * \
-                                                    votesOfPartiesDictI[parityIDJ]
-            candidateOfdevotionOfPartiesDictDict[candidateIDI] = devotionOfParitiesDict
-        # print(candidateOfdevotionOfPartiesDictDict)
-
-        # selectedCandidate:list<(itemID:int, Series<(rating:int, methodID:str)>)>
-        selectedCandidate = [(candidateI, candidateOfdevotionOfPartiesDictDict[candidateI]) for candidateI in
-                             recommendedItemIDs]
+        itemsWithResposibilityOfRecommenders:List = countDHontResponsibility(
+            aggregatedItemIDs, methodsResultDict, methodsParamsDF, numberOfItems)
 
         # list<(itemID:int, Series<(rating:int, methodID:str)>)>
-        return selectedCandidate
+        return itemsWithResposibilityOfRecommenders
 
 
