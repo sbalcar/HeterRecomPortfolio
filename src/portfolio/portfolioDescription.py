@@ -13,7 +13,10 @@ from portfolio.portfolio import Portfolio #class
 
 class PortfolioDescription:
 
-    def __init__(self, recommIDs:List[str], recommDescrs:List[RecommenderDescription], aggrDescr:List[AggregationDescription]):
+    def __init__(self, portfolioID:str, recommIDs:List[str], recommDescrs:List[RecommenderDescription], aggrDescr:List[AggregationDescription]):
+       if type(portfolioID) is not str:
+          raise ValueError("Type of portfolioID recommIDs is not str.")
+       self._portfolioID:str = portfolioID
 
        if type(recommIDs) is not list:
           raise ValueError("Type of argument recommIDs is not list.")
@@ -36,7 +39,9 @@ class PortfolioDescription:
        self._recommDescrs:list[RecommenderDescription] = recommDescrs;
        self._aggrDescr:AggregationDescription = aggrDescr;
 
-   
+    def getPortfolioID(self):
+       return self._portfolioID
+
     def getRecommendersIDs(self):
        return self._recommIDs
 

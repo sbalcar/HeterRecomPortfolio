@@ -57,18 +57,15 @@ class SimulationOfNonPersonalisedPortfolio:
         self._numberOfItems:int = numberOfItems
 
 
-    def run(self, portfolioDesc:PortfolioDescription):
-
-        if type(portfolioDesc) is not PortfolioDescription:
-            raise ValueError("Argument portfolioDesc is not type PortfolioDescription.")
-
+    def run(self, portfolioDescs:List[PortfolioDescription], historyModels:List[pd.DataFrame]):
+        if type(portfolioDescs) is not list:
+            raise ValueError("Argument portfolioDescs isn't type list.")
+        for portfolioDescI in portfolioDescs:
+            if type(portfolioDescI) is not PortfolioDescription:
+               raise ValueError("Argument portfolioDescs don't contain PortfolioDescription.")
 
         ratingsSortedDF:DataFrame = self._ratingsDF.sort_values(by=Ratings.COL_TIMESTAMP)
         numberOfRatings:int = ratingsSortedDF.shape[0]
-
-        userIDs:List[int] = self._usersDF[Users.COL_USERID].tolist()
-        #userIDs:List[int] = [1]
-
 
         # dataset division setting
         #divisionDatasetPercentualSizes:List[int] = [50, 60, 70, 80, 90]
@@ -84,22 +81,30 @@ class SimulationOfNonPersonalisedPortfolio:
             testSize:int = (int)(numberOfRatings * testDatasetPercentualSize / 100)
             testDFI:DataFrame = ratingsSortedDF[trainSize:(trainSize + testSize)]
 
-            self.__simulateDataset(portfolioDesc, trainDFI, testDFI)
+            self.__runPortfolioDesc(portfolioDescs, historyModels, trainDFI, testDFI)
 
 
-    # portfolioDesc:PortfolioDescription, trainDF:DataFrame, testDF:DataFrame, repetition:int
-    def __simulateDataset(self, portfolioDesc:PortfolioDescription, trainRatingsDF:DataFrame, testRatingsDF:DataFrame):
+    def __runPortfolioDesc(self, portfolioDescs:List[PortfolioDescription], historyModels:List[pd.DataFrame],
+                           trainRatingsDF:DataFrame, testRatingsDF:DataFrame):
 
         historyDF:DataFrame = None
 
-        # train model
-        portfolio:Portfolio = portfolioDesc.exportPortfolio()
-        portfolio.train(historyDF, trainRatingsDF, self._usersDF, self._itemsDF)
+        portfolios:List[Portfolio] = []
 
-        # methods parametes
-        methodsParamsData = [[rIdI, 0] for rIdI in portfolio.getRecommIDs()]
-        methodsParamsDF = pd.DataFrame(methodsParamsData, columns=["methodID", "votes"])
-        methodsParamsDF.set_index("methodID", inplace=True)
+        portfolioDescI:PortfolioDescription
+        for portfolioDescI in portfolioDescs:
+
+            print("Training mode: " + str(portfolioDescI.getPortfolioID()))
+
+            # train portfolio model
+            portfolioI: Portfolio = portfolioDescI.exportPortfolio()
+            portfolioI.train(historyDF, trainRatingsDF, self._usersDF, self._itemsDF)
+            portfolios.append(portfolioI)
+
+        self.__iterateOverDataset(portfolios, historyModels, testRatingsDF)
+
+
+    def __iterateOverDataset(self, portfolios:List[Portfolio], historyModels:List[pd.DataFrame], testRatingsDF:DataFrame):
 
         counterI:int = 0
 
@@ -113,17 +118,25 @@ class SimulationOfNonPersonalisedPortfolio:
             currentItemI:int = testRatingsDF.loc[currentIndexI][Ratings.COL_MOVIEID]
             nextItemI:int = testRatingsDF.loc[nextIndexI][Ratings.COL_MOVIEID]
 
+            repetitionI:int
             for repetitionI in range(self._repetitionOfRecommendation):
+                self.__simulateRecommendations(portfolios, historyModels, currentItemI, nextItemI)
 
-                self.__simulateRecommendation(portfolio, currentItemI, nextItemI, methodsParamsDF)
+
+    def __simulateRecommendations(self, portfolios:List[Portfolio], historyModels:List[pd.DataFrame], currentItem:int, nextItem:int):
+
+        portfolioI:Portfolio
+        historyModelI:pd.DataFrame
+        for portfolioI, historyModelI in zip(portfolios, historyModels):
+           self.__simulateRecommendation(portfolioI, historyModelI, currentItem, nextItem)
 
 
-    def __simulateRecommendation(self, portfolio:Portfolio, currentItem:int, nextItem:int, methodsParamsDF:DataFrame):
+    def __simulateRecommendation(self, portfolio:Portfolio, historyModel:pd.DataFrame, currentItem:int, nextItem:int):
 
         # aggregatedItemIDsWithResponsibility:list<(itemID:int, Series<(rating:int, methodID:str)>)>
         aggregatedItemIDsWithResponsibility: List[tuple[int, Series[int, str]]] = portfolio.test(
-            methodsParamsDF, currentItem, numberOfItems=self._numberOfItems)
+            historyModel, currentItem, numberOfItems=self._numberOfItems)
 
-        SimplePositiveFeedback.evaluate(aggregatedItemIDsWithResponsibility, nextItem, methodsParamsDF)
+        SimplePositiveFeedback.evaluate(aggregatedItemIDsWithResponsibility, nextItem, historyModel)
 
 

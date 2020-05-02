@@ -61,13 +61,18 @@ def simulationOfPortfolio():
     aggregationDesc: AggregationDescription = AggregationDescription(AggrDHont, Arguments([]))
 
     portfolioDesc: PortfolioDescription = PortfolioDescription(
+            "DHont",
             ["RecommenderTheMostPopular", "RecommenderDummyRedirector"],
             [rDescTheMostPopular, rDescDummyRedirector],
             aggregationDesc)
 
+    # methods parametes
+    methodsParamsData = [[rIdI, 0] for rIdI in portfolioDesc.getRecommendersIDs()]
+    methodsParamsDF = pd.DataFrame(methodsParamsData, columns=["methodID", "votes"])
+    methodsParamsDF.set_index("methodID", inplace=True)
 
     # simulation of portfolio
     #simulation:SimulationOfPersonalisedPortfolio = SimulationOfPersonalisedPortfolio(
     simulation:SimulationOfNonPersonalisedPortfolio = SimulationOfNonPersonalisedPortfolio(
             ratingsDF, usersDF, itemsDF, repetitionOfRecommendation=1, numberOfItems=20)
-    simulation.run(portfolioDesc)
+    simulation.run([portfolioDesc], [methodsParamsDF])
