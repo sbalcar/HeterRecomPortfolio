@@ -13,6 +13,7 @@ from recommender.aRecommender import ARecommender #class
 
 from recommendation.recommendation import Recommendation #class
 from recommendation.resultOfRecommendation import ResultOfRecommendation #class
+from history.aHistory import AHistory #class
 
 
 class RecommenderDummyRedirector(ARecommender):
@@ -26,10 +27,10 @@ class RecommenderDummyRedirector(ARecommender):
 
        self._arguments:List[Argument] = arguments;
 
-   def train(self, historyDF:DataFrame, ratingsDF:DataFrame, usersDF:DataFrame, itemsDF:DataFrame):
+   def train(self, ratingTrainsDF:DataFrame, usersDF:DataFrame, itemsDF:DataFrame):
        pass
 
-   def recommendToItem(self, itemID:int, numberOfItems:int=20):
+   def recommendToItem(self, itemID:int, ratingsTestDF:DataFrame, history:AHistory, numberOfItems:int=20):
 
        result:ResultOfRecommendation = self._arguments.exportArgumentValue(self.ARG_RESULT)
 

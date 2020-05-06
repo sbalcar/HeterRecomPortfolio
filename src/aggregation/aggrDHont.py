@@ -6,6 +6,7 @@ import pandas as pd
 
 from numpy.random import beta
 from typing import List
+#from pandas.Series
 
 from pandas.core.frame import DataFrame #class
 
@@ -52,31 +53,38 @@ class AggrDHont(AAgregation):
 
     # methodsResultDict:{String:pd.Series(rating:float[], itemID:int[])},
     # methodsParamsDF:pd.DataFrame[numberOfVotes:int], topK:int
-    def aggrElectionsRun(self, methodsResultDict, methodsParamsDF:DataFrame, topK:int = 20):
+    def aggrElectionsRun(self, methodsResultDict:dict, methodsParamsDF:DataFrame, topK:int = 20):
+
+      # testing types of parameters
+      if type(methodsResultDict) is not dict:
+          raise ValueError("Type of methodsResultDict is not dict.")
+      if type(methodsParamsDF) is not DataFrame:
+          raise ValueError("Type of methodsParamsDF is not DataFrame.")
+      if type(topK) is not int:
+          raise ValueError("Type of topK is not int.")
 
       if sorted([mI for mI in methodsParamsDF.index]) != sorted([mI for mI in methodsResultDict.keys()]):
         raise ValueError("Arguments methodsResultDict and methodsParamsDF have to define the same methods.")
-
       if np.prod([len(methodsResultDict.get(mI)) for mI in methodsResultDict]) == 0:
         raise ValueError("Argument methodsParamsDF contains in ome method an empty list of items.")
-
-      if topK < 0 :
+      if topK < 0:
         raise ValueError("Argument topK must be positive value.")
 
-      candidatesOfMethods = np.asarray([cI.keys() for cI in methodsResultDict.values()])
-      uniqueCandidatesI = list(set(np.concatenate(candidatesOfMethods)))
+      candidatesOfMethods:np.asarray[str] = np.asarray([cI.keys() for cI in methodsResultDict.values()])
+      uniqueCandidatesI:List[int] = list(set(np.concatenate(candidatesOfMethods)))
       #print("UniqueCandidatesI: ", uniqueCandidatesI)
 
       # numbers of elected candidates of parties
-      electedOfPartyDictI = {mI:1 for mI in methodsParamsDF.index}
+      electedOfPartyDictI:dict[str,int] = {mI:1 for mI in methodsParamsDF.index}
       #print("ElectedForPartyI: ", electedOfPartyDictI)
 
       # votes number of parties
-      votesOfPartiesDictI = {mI:methodsParamsDF.votes.loc[mI] for mI in methodsParamsDF.index}
+      votesOfPartiesDictI:dict[str,float] = {mI:methodsParamsDF.votes.loc[mI] for mI in methodsParamsDF.index}
       #print("VotesOfPartiesDictI: ", votesOfPartiesDictI)
 
-      recommendedItemIDs = []
+      recommendedItemIDs:List[int] = []
 
+      iIndex:int
       for iIndex in range(0, topK):
         #print("iIndex: ", iIndex)
 
@@ -84,22 +92,24 @@ class AggrDHont(AAgregation):
             return recommendedItemIDs[:topK]
 
         # coumputing of votes of remaining candidates
-        actVotesOfCandidatesDictI = {}
+        actVotesOfCandidatesDictI:dict[int,int] = {}
+        candidateIDJ:int
         for candidateIDJ in uniqueCandidatesI:
-           votesOfCandidateJ = 0
+           votesOfCandidateJ:int = 0
+           parityIDK:str
            for parityIDK in methodsParamsDF.index:
-              partyAffiliationOfCandidateKJ = methodsResultDict[parityIDK].get(candidateIDJ, 0)
-              votesOfPartyK = votesOfPartiesDictI.get(parityIDK)
+              partyAffiliationOfCandidateKJ:float = methodsResultDict[parityIDK].get(candidateIDJ, 0)
+              votesOfPartyK:int = votesOfPartiesDictI.get(parityIDK)
               votesOfCandidateJ += partyAffiliationOfCandidateKJ * votesOfPartyK
            actVotesOfCandidatesDictI[candidateIDJ] = votesOfCandidateJ
         #print(actVotesOfCandidatesDictI)
 
         # get the highest number of votes of remaining candidates
-        maxVotes = max(actVotesOfCandidatesDictI.values())
+        maxVotes:float = max(actVotesOfCandidatesDictI.values())
         #print("MaxVotes: ", maxVotes)
 
         # select candidate with highest number of votes
-        selectedCandidateI = [votOfCandI for votOfCandI in actVotesOfCandidatesDictI.keys() if actVotesOfCandidatesDictI[votOfCandI] == maxVotes][0]
+        selectedCandidateI:int = [votOfCandI for votOfCandI in actVotesOfCandidatesDictI.keys() if actVotesOfCandidatesDictI[votOfCandI] == maxVotes][0]
         #print("SelectedCandidateI: ", selectedCandidateI)
 
         # add new selected candidate in results
@@ -126,7 +136,7 @@ class AggrDHont(AAgregation):
 
         aggregatedItemIDs:List[int] = self.aggrElectionsRun(methodsResultDict, methodsParamsDF, numberOfItems)
 
-        itemsWithResposibilityOfRecommenders:List = countDHontResponsibility(
+        itemsWithResposibilityOfRecommenders:List[int,np.Series[int,str]] = countDHontResponsibility(
             aggregatedItemIDs, methodsResultDict, methodsParamsDF, numberOfItems)
 
         # list<(itemID:int, Series<(rating:int, methodID:str)>)>

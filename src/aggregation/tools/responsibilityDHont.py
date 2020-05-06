@@ -24,22 +24,28 @@ from evaluationOfRecommender.evaluationOfRecommenders import EvaluationOfRecomme
 # methodsParamsDF:DataFrame<(methodID:str, votes:int)>, topK:int
 def countDHontResponsibility(aggregatedItemIDs:List[int], methodsResultDict:dict, methodsParamsDF:DataFrame, numberOfItems:int=20):
 
-    votesOfPartiesDictI = {mI :methodsParamsDF.votes.loc[mI] for mI in methodsParamsDF.index}
+    #sumOfAllVotes:int = sum(methodsParamsDF["votes"].values)
 
-    candidatesOfMethods = np.asarray([cI.keys() for cI in methodsResultDict.values()])
-    uniqueCandidatesI = list(set(np.concatenate(candidatesOfMethods)))
+    votesOfPartiesDictI:dict[str,int] = {mI:methodsParamsDF.votes.loc[mI] for mI in methodsParamsDF.index}
 
-    candidateOfdevotionOfPartiesDictDict = {}
+    candidatesOfMethods:np.asarray[str] = np.asarray([cI.keys() for cI in methodsResultDict.values()])
+    uniqueCandidatesI:List[str] = list(set(np.concatenate(candidatesOfMethods)))
+
+    candidateOfdevotionOfPartiesDictDict:dict = {}
+
+    candidateIDI:int
     for candidateIDI in aggregatedItemIDs:
         # for candidateIDI in uniqueCandidatesI:
-        devotionOfParitiesDict = {}
+        devotionOfParitiesDict:dict = {}
+
+        parityIDJ:str
         for parityIDJ in methodsParamsDF.index:
             devotionOfParitiesDict[parityIDJ] = methodsResultDict[parityIDJ].get(candidateIDI, 0)  * votesOfPartiesDictI[parityIDJ]
         candidateOfdevotionOfPartiesDictDict[candidateIDI] = devotionOfParitiesDict
     # print(candidateOfdevotionOfPartiesDictDict)
 
     # selectedCandidate:list<(itemID:int, Series<(rating:int, methodID:str)>)>
-    selectedCandidate = [(candidateI, candidateOfdevotionOfPartiesDictDict[candidateI]) for candidateI in aggregatedItemIDs]
+    selectedCandidate:List[int, pd.Series[str,int]] = [(candidateI, candidateOfdevotionOfPartiesDictDict[candidateI]) for candidateI in aggregatedItemIDs]
 
     # list<(itemID:int, Series<(rating:int, methodID:str)>)>
     return selectedCandidate[:numberOfItems]

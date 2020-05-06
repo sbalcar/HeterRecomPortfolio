@@ -10,7 +10,7 @@ from configuration.arguments import Arguments #class
 
 from recommendation.resultOfRecommendation import ResultOfRecommendation #class
 
-from simulation.evaluationTool.simplePositiveFeedback import SimplePositiveFeedback #class
+from simulation.evaluationTool.evalToolHitIncrementOfResponsibility import EvalToolHitIncrementOfResponsibility #class
 
 import numpy as np
 import pandas as pd
@@ -27,7 +27,7 @@ def test01():
     N = 120
 
     # method results, items=[1,2,4,5,6,7,8,12,32,64,77]
-    methodsResultDict = {
+    methodsResultDict:dict[str,pd.Series] = {
           "metoda1":pd.Series([0.2,0.1,0.3,0.3,0.1],[32,2,8,1,4],name="rating"),
           "metoda2":pd.Series([0.1,0.1,0.2,0.3,0.3],[1,5,32,6,7],name="rating"),
           "metoda3":pd.Series([0.3,0.1,0.2,0.3,0.1],[7,2,77,64,12],name="rating")
@@ -60,28 +60,27 @@ def test02():
           "metoda1":pd.Series([0.2,0.2,0.2,0.2,0.2],[1,3,5,7,9],name="rating"),
           "metoda2":pd.Series([0.2,0.2,0.2,0.2,0.2],[2,4,6,8,10],name="rating"),
           }
-    #print(methodsResultDict)
-
 
     # methods parametes
     methodsParamsData = [['metoda1',0], ['metoda2',0]]
     methodsParamsDF = pd.DataFrame(methodsParamsData, columns=["methodID","votes"])
     methodsParamsDF.set_index("methodID", inplace=True)
-    #print(methodsParamsDF)
 
     aggr:AggrDHont = AggrDHont(Arguments([]))
-    #itemIDs:int = aggr.run(methodsResultDict, methodsParamsDF, N)
-    #print(itemIDs)
-    itemIDs:List[tuple] = aggr.runWithResponsibility(methodsResultDict, methodsParamsDF, N)
+    ##itemIDs:int = aggr.run(methodsResultDict, methodsParamsDF, N)
+    itemIDs:int = aggr.aggrElectionsRun(methodsResultDict, methodsParamsDF, N)
+    #itemIDs:List[tuple] = aggr.runWithResponsibility(methodsResultDict, methodsParamsDF, N)
     print(itemIDs)
+
 
 def main():
     print("D'Hondt algorithm")
 
-    test01()
+    #test01()
     # [(7, {'metoda1': 0, 'metoda2': 24.0, 'metoda3': 18.0}), (1, {'metoda1': 30.0, 'metoda2': 8.0, 'metoda3': 0}), (32, {'metoda1': 20.0, 'metoda2': 16.0, 'metoda3': 0}), (8, {'metoda1': 30.0, 'metoda2': 0, 'metoda3': 0}), (6, {'metoda1': 0, 'metoda2': 24.0, 'metoda3': 0}), (64, {'metoda1': 0, 'metoda2': 0, 'metoda3': 18.0}), (2, {'metoda1': 10.0, 'metoda2': 0, 'metoda3': 6.0}), (77, {'metoda1': 0, 'metoda2': 0, 'metoda3': 12.0}), (4, {'metoda1': 10.0, 'metoda2': 0, 'metoda3': 0}), (5, {'metoda1': 0, 'metoda2': 8.0, 'metoda3': 0}), (12, {'metoda1': 0, 'metoda2': 0, 'metoda3': 6.0})]
 
-    #test02()
+    test02()
+    # [(1, {'metoda1': 0.5, 'metoda2': 0.5}), (2, {'metoda1': 0, 'metoda2': 0.0}), (3, {'metoda1': 0.0, 'metoda2': 0}), (4, {'metoda1': 0, 'metoda2': 0.0}), (5, {'metoda1': 0.0, 'metoda2': 0}), (6, {'metoda1': 0, 'metoda2': 0.0}), (7, {'metoda1': 0.0, 'metoda2': 0}), (8, {'metoda1': 0, 'metoda2': 0.0}), (9, {'metoda1': 0.0, 'metoda2': 0}), (10, {'metoda1': 0, 'metoda2': 0.0})]
 
 
 if __name__ == "__main__":

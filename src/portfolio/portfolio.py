@@ -17,6 +17,7 @@ from aggregation.aggregationDescription import AggregationDescription #class
 
 from evaluationOfRecommender.evaluationOfRecommenders import EvaluationOfRecommenders
 
+from history.aHistory import AHistory #class
 
 class Portfolio:
 
@@ -25,12 +26,12 @@ class Portfolio:
       for recommIdI in recommIDs:
           if not type(recommIdI) is str:
               raise ValueError("Argument recommIDs don't contains type str.")
-      if type(recommenders) is not list :
+      if type(recommenders) is not list:
          raise ValueError("Argument recommenders isn't type list.")
       for recommenderI in recommenders:
           if not isinstance(recommenderI, ARecommender):
               raise ValueError("Argument recommenders don't contains type ARecommender.")
-      if not isinstance(agregation, AAgregation) :
+      if not isinstance(agregation, AAgregation):
          raise ValueError("Argument agregation isn't type AAgregation.")
 
       self._recommIDs:List[str] = recommIDs
@@ -40,14 +41,14 @@ class Portfolio:
    def getRecommIDs(self):
        return self._recommIDs
 
-   def train(self, historyDF:DataFrame, ratingsDF:DataFrame, usersDF:DataFrame, itemsDF:DataFrame):
+   def train(self, ratingsDF:DataFrame, usersDF:DataFrame, itemsDF:DataFrame):
 
        recommenderI:ARecommender
        for recommenderI in self._recommenders:
-           recommenderI.train(historyDF, ratingsDF, usersDF, itemsDF)
+           recommenderI.train(ratingsDF, usersDF, itemsDF)
 
-   # userDef:DataFrame<(methodID, votes)>
-   def test(self, userDef:DataFrame, itemID:int, numberOfItems:int):
+   # portFolioModel:DataFrame<(methodID, votes)>
+   def test(self, portFolioModel:DataFrame, itemID:int, testRatingsDF:DataFrame, history:AHistory, numberOfItems:int):
 
        resultsOfRecommendations:ResultsOfRecommendations = ResultsOfRecommendations([], [])
 
@@ -56,7 +57,7 @@ class Portfolio:
            recommIDI: str = self._recommIDs[recommIndexI]
            recommI: ARecommender = self._recommenders[recommIndexI]
 
-           resultOfRecommendationI: ResultOfRecommendation = recommI.recommendToItem(itemID, numberOfItems)
+           resultOfRecommendationI: ResultOfRecommendation = recommI.recommendToItem(itemID, testRatingsDF, history, numberOfItems)
            resultsOfRecommendations.add(recommIDI, resultOfRecommendationI)
 
        #aggregatedItemIDs:List[int] = self._aggregation.run(resultsOfRecommendations, userDef, numberOfItems)
@@ -64,7 +65,8 @@ class Portfolio:
        methodsResultDict:dict = resultsOfRecommendations.exportAsDictionaryOfSeries()
        #print(methodsResultDict)
 
-       aggregatedItemIDsWithResponsibility:list = self._aggregation.runWithResponsibility(methodsResultDict, userDef, numberOfItems=numberOfItems)
+       aggregatedItemIDsWithResponsibility:list = self._aggregation.runWithResponsibility(
+           methodsResultDict, portFolioModel, numberOfItems=numberOfItems)
        #print(aggregatedItemIDsWithResponsibility)
 
        # list<int>

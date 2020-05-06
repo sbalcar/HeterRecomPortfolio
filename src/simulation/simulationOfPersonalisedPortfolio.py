@@ -24,7 +24,7 @@ from aggregation.aggrDHont import AggrDHont #class
 
 from recommendation.resultOfRecommendation import ResultOfRecommendation #class
 
-from simulation.evaluationTool.simplePositiveFeedback import SimplePositiveFeedback #class
+from simulation.evaluationTool.evalToolHitIncrementOfResponsibility import EvalToolHitIncrementOfResponsibility #class
 
 import numpy as np
 import pandas as pd
@@ -142,5 +142,5 @@ class SimulationOfPersonalisedPortfolio:
         aggregatedItemIDsWithResponsibility: List[tuple[int, Series[int, str]]] = portfolio.test(
             methodsParamsDF, currentItem, numberOfItems=self._numberOfItems)
 
-        SimplePositiveFeedback.evaluate(aggregatedItemIDsWithResponsibility, nextItem, methodsParamsDF)
+        EvalToolHitIncrementOfResponsibility.evaluate(aggregatedItemIDsWithResponsibility, nextItem, methodsParamsDF)
 

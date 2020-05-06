@@ -15,7 +15,7 @@ class PortfolioDescription:
 
     def __init__(self, portfolioID:str, recommIDs:List[str], recommDescrs:List[RecommenderDescription], aggrDescr:List[AggregationDescription]):
        if type(portfolioID) is not str:
-          raise ValueError("Type of portfolioID recommIDs is not str.")
+          raise ValueError("Type of portfolioID is not str.")
        self._portfolioID:str = portfolioID
 
        if type(recommIDs) is not list:

@@ -37,6 +37,12 @@ from pandas.core.frame import DataFrame #class
 from simulation.simulationOfPersonalisedPortfolio import SimulationOfPersonalisedPortfolio #class
 from simulation.simulationOfNonPersonalisedPortfolio import SimulationOfNonPersonalisedPortfolio #class
 
+from simulation.evaluationTool.evalToolHit1 import EvalToolHit1 #class
+from simulation.evaluationTool.evalToolHitIncrementOfResponsibility import EvalToolHitIncrementOfResponsibility #class
+
+from history.aHistory import AHistory #class
+from history.historyDF import HistoryDF #class
+
 
 def simulationOfPortfolio():
 
@@ -67,12 +73,18 @@ def simulationOfPortfolio():
             aggregationDesc)
 
     # methods parametes
-    methodsParamsData = [[rIdI, 0] for rIdI in portfolioDesc.getRecommendersIDs()]
-    methodsParamsDF = pd.DataFrame(methodsParamsData, columns=["methodID", "votes"])
-    methodsParamsDF.set_index("methodID", inplace=True)
+    portFolioModelData:List[str,float] = [[rIdI, 1] for rIdI in portfolioDesc.getRecommendersIDs()]
+    portFolioModelDF = pd.DataFrame(portFolioModelData, columns=["methodID", "votes"])
+    portFolioModelDF.set_index("methodID", inplace=True)
+
+    history:AHistory = HistoryDF()
 
     # simulation of portfolio
     #simulation:SimulationOfPersonalisedPortfolio = SimulationOfPersonalisedPortfolio(
     simulation:SimulationOfNonPersonalisedPortfolio = SimulationOfNonPersonalisedPortfolio(
-            ratingsDF, usersDF, itemsDF, repetitionOfRecommendation=1, numberOfItems=20)
-    simulation.run([portfolioDesc], [methodsParamsDF])
+            #ratingsDF, usersDF, itemsDF, EvaluationHitIncrementOfResponsibility, repetitionOfRecommendation=1, numberOfItems=20)
+            ratingsDF, usersDF, itemsDF, EvalToolHit1, repetitionOfRecommendation = 1, numberOfItems = 20)
+
+    evaluations:List[dict] = simulation.run([portfolioDesc], [portFolioModelDF], [history])
+
+    print("Evaluations: " + str(evaluations))

@@ -2,6 +2,8 @@
 
 from typing import List
 
+from simulation.evaluationTool.aEvalTool import AEvalTool #class
+
 from pandas.core.series import Series #class
 
 from recommender.description.recommenderDescription import RecommenderDescription #class
@@ -32,23 +34,32 @@ from pandas.core.frame import DataFrame #class
 import os
 
 
-class SimplePositiveFeedback:
+class EvalToolHit1(AEvalTool):
 
     @staticmethod
-    def evaluate(aggregatedItemIDsWithResponsibility:List, nextItem:int, methodsParamsDF:DataFrame):
-        #print("recommendation " + str(aggregatedItemIDsWithResponsibility))
-        #print("nextItem " + str(nextItem))
+    def evaluate(aggregatedItemIDsWithResponsibility:List, nextItem:int, methodsParamsDF:DataFrame, evaluationDict:dict):
+        #print("aggregatedItemIDsWithResponsibility")
+        #print(aggregatedItemIDsWithResponsibility)
+
+        #print("methodsParamsDF")
+        #print(methodsParamsDF)
 
         aggrItemIDsWithRespDF:DataFrame = DataFrame(aggregatedItemIDsWithResponsibility, columns=["itemId", "responsibility"])
         aggrItemIDsWithRespDF.set_index("itemId", inplace=True)
+        #print("aggrItemIDsWithRespDF")
         #print(aggrItemIDsWithRespDF)
 
         if nextItem in aggrItemIDsWithRespDF.index:
+            print("HOP")
+            print("nextItem: " + str(nextItem))
 
-            #responsibility:dict[methodID:str, votes:int]
-            responsibility:dict[str, int] = aggrItemIDsWithRespDF.loc[nextItem]["responsibility"]
-            print(responsibility)
+            evaluationDict[AEvalTool.CTR] = evaluationDict.get(AEvalTool.CTR, 0) + 1
+
+            #responsibilityDict:dict[methodID:str, votes:int]
+            responsibilityDict:dict[str,int] = aggrItemIDsWithRespDF.loc[nextItem]["responsibility"]
 
             # increment user definition
-            for methodIdI in responsibility.keys():
-                methodsParamsDF.loc[methodIdI] += responsibility[methodIdI]
+            for methodIdI in responsibilityDict.keys():
+                if responsibilityDict[methodIdI] > 0:
+                   methodsParamsDF.loc[methodIdI] += 1
+            print(methodsParamsDF)
