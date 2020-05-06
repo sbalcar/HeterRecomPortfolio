@@ -6,9 +6,6 @@ from typing import List
 
 import random
 
-from configuration.arguments import Arguments #class
-from configuration.argument import Argument #class
-
 from recommender.aRecommender import ARecommender #class
 
 from recommendation.recommendation import Recommendation #class
@@ -20,19 +17,18 @@ class RecommenderDummyRedirector(ARecommender):
 
    ARG_RESULT:str = "RESULT"
 
-   def __init__(self, arguments:List[Argument]):
+   def __init__(self, argumentsDict: dict):
+       if type(argumentsDict) is not dict:
+           raise ValueError("Argument argumentsDict is not type dict.")
 
-       if type(arguments) is not Arguments:
-          raise ValueError("Argument arguments is not type Arguments.")
-
-       self._arguments:List[Argument] = arguments;
+       self._argumentsDict: dict = argumentsDict
 
    def train(self, ratingTrainsDF:DataFrame, usersDF:DataFrame, itemsDF:DataFrame):
        pass
 
    def recommendToItem(self, itemID:int, ratingsTestDF:DataFrame, history:AHistory, numberOfItems:int=20):
 
-       result:ResultOfRecommendation = self._arguments.exportArgumentValue(self.ARG_RESULT)
+       result:ResultOfRecommendation = self._argumentsDict[self.ARG_RESULT]
 
        # ResultOfRecommendation
-       return result;
+       return result

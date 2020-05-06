@@ -2,35 +2,20 @@
 
 import pandas as pd
 
-from configuration.arguments import Arguments #class
-from configuration.argument import Argument #class
-
 
 class EvaluationOfRecommenders:
 
    def __init__(self):
       self._ids:list[str] = []
-      self._arguments:list[Arguments]= []
+      self._arguments = []
 
-   def addArg(self, recommenderID:str, argument:Argument):
+   def addArg(self, recommenderID:str, argument):
+      pass
 
-      if type(recommenderID) is not str :
-         raise ValueError("Argument recommenderID is not type str.")
-
-      if type(argument) is not Argument :
-         raise ValueError("Argument argument is not type Argument.")
-
-      self._ids.append(recommenderID)
-      self._arguments.append(Arguments([argument]))
-
-
-   def add(self, recommenderID:str, arguments:Arguments):
+   def add(self, recommenderID:str, arguments):
 
       if type(recommenderID) is not str :
          raise ValueError("Argument recommenderID is not type str.")
-
-      if type(arguments) is not Arguments :
-         raise ValueError("Argument arguments is not type Arguments.")
 
       self._ids.append(recommenderID)
       self._arguments.append(arguments)

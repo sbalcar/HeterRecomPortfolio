@@ -9,9 +9,6 @@ from typing import List
 
 from pandas.core.frame import DataFrame  # class
 
-from configuration.arguments import Arguments  # class
-from configuration.argument import Argument  # class
-
 from recommendation.resultOfRecommendation import ResultOfRecommendation  # class
 from recommendation.resultsOfRecommendations import ResultsOfRecommendations  # class
 

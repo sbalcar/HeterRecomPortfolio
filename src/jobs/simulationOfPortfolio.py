@@ -11,9 +11,6 @@ from recommender.aRecommender import ARecommender #class
 from recommender.recommenderTheMostPopular import RecommenderTheMostPopular #class
 from recommender.dummy.recommenderDummyRedirector import RecommenderDummyRedirector #class
 
-from configuration.arguments import Arguments #class
-from configuration.argument import Argument #class
-
 from datasets.ratings import Ratings #class
 from datasets.rating import Rating #class
 
@@ -60,11 +57,11 @@ def simulationOfPortfolio():
     #itemsDF: DataFrame = Items.readFromFileMl10M100K()
 
     # portfolio definiton
-    rDescTheMostPopular: RecommenderDescription = RecommenderDescription(RecommenderTheMostPopular, Arguments([]))
+    rDescTheMostPopular: RecommenderDescription = RecommenderDescription(RecommenderTheMostPopular, {})
     rDescDummyRedirector: RecommenderDescription = RecommenderDescription(RecommenderDummyRedirector,
-                            Arguments([Argument(RecommenderDummyRedirector.ARG_RESULT, ResultOfRecommendation(list(range(1, 21)),[0.05] * 20))]))
+                            {RecommenderDummyRedirector.ARG_RESULT: ResultOfRecommendation(list(range(1, 21)),[0.05] * 20)} )
 
-    aggregationDesc: AggregationDescription = AggregationDescription(AggrDHont, Arguments([]))
+    aggregationDesc: AggregationDescription = AggregationDescription(AggrDHont, {})
 
     portfolioDesc: PortfolioDescription = PortfolioDescription(
             "DHont",

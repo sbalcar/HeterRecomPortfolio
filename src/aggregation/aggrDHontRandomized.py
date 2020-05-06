@@ -25,10 +25,11 @@ class AggrDHontRandomized(AAgregation):
 
     def __init__(self, arguments: Arguments):
 
-        if type(arguments) is not Arguments:
-            raise ValueError("Argument arguments is not type Arguments.")
+        def __init__(self, argumentsDict: dict):
+            if type(argumentsDict) is not dict:
+                raise ValueError("Argument argumentsDict is not type dict.")
 
-        self._arguments = arguments;
+            self._argumentsDict = argumentsDict
 
     # userDef:DataFrame<(methodID, votes)>
     def run(self, resultsOfRecommendations: ResultsOfRecommendations, userDef: DataFrame, numberOfItems: int = 20):

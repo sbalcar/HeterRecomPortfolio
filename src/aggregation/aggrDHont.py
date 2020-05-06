@@ -10,9 +10,6 @@ from typing import List
 
 from pandas.core.frame import DataFrame #class
 
-from configuration.arguments import Arguments #class
-from configuration.argument import Argument #class
-
 from recommendation.resultOfRecommendation import ResultOfRecommendation #class
 from recommendation.resultsOfRecommendations import ResultsOfRecommendations #class
 
@@ -25,12 +22,12 @@ from evaluationOfRecommender.evaluationOfRecommenders import EvaluationOfRecomme
 
 class AggrDHont(AAgregation):
 
-    def __init__(self, arguments:Arguments):
+    def __init__(self, argumentsDict:dict):
 
-       if type(arguments) is not Arguments:
-          raise ValueError("Argument arguments is not type Arguments.")
+       if type(argumentsDict) is not dict:
+          raise ValueError("Argument argumentsDict is not type dict.")
 
-       self._arguments = arguments;
+       self._argumentsDict = argumentsDict
 
 
     # userDef:DataFrame<(methodID, votes)>

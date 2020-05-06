@@ -17,12 +17,12 @@ from aggregation.aaggregation import AAgregation
 
 class AggrBanditTS(AAgregation):
 
-    def __init__(self, arguments:Arguments):
+    def __init__(self, argumentsDict:dict):
 
-       if type(arguments) is not Arguments:
-          raise ValueError("Argument arguments is not type Arguments.")
+       if type(argumentsDict) is not dict:
+          raise ValueError("Argument argumentsDict is not type dict.")
 
-       self._arguments:Arguments = arguments
+       self._argumentsDict = argumentsDict
 
     def run(self, resultsOfRecommendations:ResultsOfRecommendations, evaluationOfRecommenders:EvaluationOfRecommenders, numberOfItems:int=20):
 
@@ -55,8 +55,8 @@ class AggrBanditTS(AAgregation):
         raise ValueError("Argument topK must be positive value.")
 
 
-      methodsResultDictI = methodsResultDict;
-      methodsParamsDFI = methodsParamsDF;
+      methodsResultDictI = methodsResultDict
+      methodsParamsDFI = methodsParamsDF
 
       recommendedItemIDs = []
 
@@ -66,7 +66,7 @@ class AggrBanditTS(AAgregation):
         #print(methodsParamsDFI)
 
         if len([mI for mI in methodsResultDictI]) == 0:
-          return recommendedItemIDs[:topK];
+          return recommendedItemIDs[:topK]
 
         methodProbabilitiesDicI = {}
 

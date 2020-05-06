@@ -1,17 +1,16 @@
 #!/usr/bin/python3
 
-from configuration.arguments import Arguments #class
 
 class AggregationDescription:
 
-    # aggregationClass:Class, arguments:Arguments
-    def __init__(self, aggregationClass, arguments:Arguments):
+    # aggregationClass:Class, argumentsDict:dict
+    def __init__(self, aggregationClass, argumentsDict:dict):
 
-        if type(arguments) is not Arguments :
+        if type(argumentsDict) is not dict :
            raise ValueError("Argument arguments is not type Arguments")
 
         self._aggregationClass = aggregationClass;
-        self._arguments:Arguments = arguments
+        self._argumentsDict:dict = argumentsDict
 
     def exportAggregation(self):
-        return self._aggregationClass(self._arguments);
+        return self._aggregationClass(self._argumentsDict);

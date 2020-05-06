@@ -1,21 +1,18 @@
 #!/usr/bin/python3
 
-from configuration.arguments import Arguments #class
-from configuration.argument import Argument #class
-
 
 class RecommenderDescription:
 
-    # recommenderClass:Class, arguments:Arguments
-    def __init__(self, recommenderClass, arguments:Arguments):
+    # recommenderClass:Class, argumentsDict:dict
+    def __init__(self, recommenderClass, argumentsDict:dict):
 
-        if type(arguments) is not Arguments :
-           raise ValueError("Argument")
+        if type(argumentsDict) is not dict :
+            raise ValueError("Argument argumentsDict isn't type dict.")
 
         self._recommenderClass = recommenderClass
-        self._arguments:Arguments = arguments
+        self._argumentsDict:dict = argumentsDict
 
 
     def exportRecommender(self):
-        return self._recommenderClass(self._arguments)
+        return self._recommenderClass(self._argumentsDict)
 

@@ -6,9 +6,6 @@ from typing import List
 
 import random
 
-from configuration.arguments import Arguments #class
-from configuration.argument import Argument #class
-
 from recommender.aRecommender import ARecommender #class
 
 from recommendation.recommendation import Recommendation #class
@@ -19,11 +16,11 @@ from history.aHistory import AHistory #class
 
 class RecommenderTheMostPopular(ARecommender):
 
-    def __init__(self, arguments: List[Argument]):
-        if type(arguments) is not Arguments:
-            raise ValueError("Argument arguments is not type Arguments.")
+    def __init__(self, argumentsDict:dict):
+        if type(argumentsDict) is not dict:
+            raise ValueError("Argument argumentsDict is not type dict.")
 
-        self._arguments:List[Argument] = arguments
+        self._argumentsDict:dict = argumentsDict
 
     # ratingsSum:Dataframe<(userId:int, movieId:int, ratings:int, timestamp:int)>
     def train(self, ratingsTrainDF:DataFrame, usersDF:DataFrame, itemsDF:DataFrame):

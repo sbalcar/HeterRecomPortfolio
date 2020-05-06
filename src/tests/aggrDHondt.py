@@ -6,8 +6,6 @@ from pandas.core.series import Series #class
 
 from aggregation.aggrDHont import AggrDHont #class
 
-from configuration.arguments import Arguments #class
-
 from recommendation.resultOfRecommendation import ResultOfRecommendation #class
 
 from simulation.evaluationTool.evalToolHitIncrementOfResponsibility import EvalToolHitIncrementOfResponsibility #class
@@ -41,7 +39,7 @@ def test01():
     methodsParamsDF.set_index("methodID", inplace=True)
     #print(methodsParamsDF)
 
-    aggr:AggrDHont = AggrDHont(Arguments([]))
+    aggr:AggrDHont = AggrDHont({})
     #itemIDs:int = aggr.run(methodsResultDict, methodsParamsDF, N)
     #print(itemIDs)
     itemIDs:List[tuple] = aggr.runWithResponsibility(methodsResultDict, methodsParamsDF, N)
@@ -66,7 +64,7 @@ def test02():
     methodsParamsDF = pd.DataFrame(methodsParamsData, columns=["methodID","votes"])
     methodsParamsDF.set_index("methodID", inplace=True)
 
-    aggr:AggrDHont = AggrDHont(Arguments([]))
+    aggr:AggrDHont = AggrDHont({})
     ##itemIDs:int = aggr.run(methodsResultDict, methodsParamsDF, N)
     itemIDs:int = aggr.aggrElectionsRun(methodsResultDict, methodsParamsDF, N)
     #itemIDs:List[tuple] = aggr.runWithResponsibility(methodsResultDict, methodsParamsDF, N)
