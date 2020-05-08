@@ -2,20 +2,9 @@
 
 from typing import List
 
-from pandas.core.series import Series #class
-
 from aggregation.aggrDHont import AggrDHont #class
 
-from recommendation.resultOfRecommendation import ResultOfRecommendation #class
-
-from simulation.evaluationTool.evalToolHitIncrementOfResponsibility import EvalToolHitIncrementOfResponsibility #class
-
-import numpy as np
 import pandas as pd
-
-from pandas.core.frame import DataFrame #class
-
-import os
 
 
 def test01():

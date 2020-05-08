@@ -40,6 +40,10 @@ class RecommenderTheMostPopular(ARecommender):
         self._sortedAscRatings5CountDF:DataFrame = sortedAscRatings5CountDF
 
 
+    def update(self, ratingsUpdateDF:DataFrame):
+        pass
+
+
     def recommendToItem(self, itemID:int, ratingsTestDF:DataFrame, history:AHistory, numberOfItems:int=20):
 
         # ratings:Dataframe<(movieId:int, ratings:int)>

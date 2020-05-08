@@ -1,28 +1,24 @@
 #!/usr/bin/python3
 
 from pandas.core.frame import DataFrame #class
-from pandas.core.series import Series #class
 
 from typing import List
 
-from aggregation.aaggregation import AAgregation #class
+from aggregation.aAggregation import AAgregation #class
 
-from recommender.description.recommenderDescription import RecommenderDescription #class
 from recommender.aRecommender import ARecommender #class
 
 from recommendation.resultOfRecommendation import ResultOfRecommendation #class
 from recommendation.resultsOfRecommendations import ResultsOfRecommendations #class
 
-from aggregation.aggregationDescription import AggregationDescription #class
-
-from evaluationOfRecommender.evaluationOfRecommenders import EvaluationOfRecommenders
-
 from history.aHistory import AHistory #class
+from portfolio.aPortfolio import APortfolio #class
 
-class Portfolio:
+class Portfolio1Aggr(APortfolio):
 
    def __init__(self, recommIDs:List[str], recommenders:List[ARecommender], agregation:AAgregation):
-
+      if type(recommIDs) is not list:
+         raise ValueError("Argument recommIDs isn't type list.")
       for recommIdI in recommIDs:
           if not type(recommIdI) is str:
               raise ValueError("Argument recommIDs don't contains type str.")
@@ -42,13 +38,28 @@ class Portfolio:
        return self._recommIDs
 
    def train(self, ratingsDF:DataFrame, usersDF:DataFrame, itemsDF:DataFrame):
+       if type(ratingsDF) is not DataFrame:
+           raise ValueError("Argument ratingsDF isn't type DataFrame.")
+       if type(usersDF) is not DataFrame:
+           raise ValueError("Argument usersDF isn't type DataFrame.")
+       if type(itemsDF) is not DataFrame:
+           raise ValueError("Argument ratingsUpdateDF isn't type DataFrame.")
 
        recommenderI:ARecommender
        for recommenderI in self._recommenders:
            recommenderI.train(ratingsDF, usersDF, itemsDF)
 
+   def update(self, ratingsUpdateDF:DataFrame):
+       if type(ratingsUpdateDF) is not DataFrame:
+           raise ValueError("Argument ratingsUpdateDF isn't type DataFrame.")
+
+       recommenderI:ARecommender
+       for recommenderI in self._recommenders:
+           recommenderI.update(ratingsUpdateDF)
+
+
    # portFolioModel:DataFrame<(methodID, votes)>
-   def test(self, portFolioModel:DataFrame, itemID:int, testRatingsDF:DataFrame, history:AHistory, numberOfItems:int):
+   def recommendToItem(self, portFolioModel:DataFrame, itemID:int, testRatingsDF:DataFrame, history:AHistory, numberOfItems:int):
 
        resultsOfRecommendations:ResultsOfRecommendations = ResultsOfRecommendations([], [])
 

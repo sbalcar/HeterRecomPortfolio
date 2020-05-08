@@ -10,9 +10,9 @@ from recommendation.resultOfRecommendation import ResultOfRecommendation #class
 from recommender.dummy.recommenderDummyRedirector import RecommenderDummyRedirector #class
 from recommender.dummy.recommenderDummyRandom import RecommenderDummyRandom #class
 
-from portfolio.portfolioDescription import PortfolioDescription #class
+from portfolioDescription.portfolio1AggrDescription import Portfolio1AggrDescription #class
 
-from aggregation.aggregationDescription import AggregationDescription #class
+from aggregationDescription.aggregationDescription import AggregationDescription #class
 
 from aggregation.aggrDHont import AggrDHont #class
 from aggregation.aggrBanditTS import AggrBanditTS #class
@@ -34,7 +34,7 @@ class Input:
 
         aggr:AggregationDescription = AggregationDescription(AggrDHont, Arguments([]));
 
-        portfolioDescr:PortfolioDescription = PortfolioDescription(["metoda1", "metoda2", "metoda3"], [recomm1, recomm2, recomm3], aggr)
+        portfolioDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(["metoda1", "metoda2", "metoda3"], [recomm1, recomm2, recomm3], aggr)
 
         evaluationOfRecommenders:EvaluationOfRecommenders = EvaluationOfRecommenders()
         evaluationOfRecommenders.addArg('metoda1', Argument("votes", 100))
@@ -61,7 +61,7 @@ class Input:
         aggr = AggregationDescription(AggrBanditTS, Arguments([]));
 
         # portfolioDescr:PortfolioDescription
-        portfolioDescr = PortfolioDescription(["metoda1", "metoda2", "metoda3"], [recomm1, recomm2, recomm3], aggr)
+        portfolioDescr = Portfolio1AggrDescription(["metoda1", "metoda2", "metoda3"], [recomm1, recomm2, recomm3], aggr)
 
         # a1:list<Argument>
         a1 = [Argument("r", 5), Argument("n", 10), Argument("alpha0", 1), Argument("beta0", 1)]
@@ -87,7 +87,7 @@ class Input:
 
         aggr = AggregationDescription(AggrDHont, Arguments([]));
 
-        portfolioDesr = PortfolioDescription(["metoda1", "metoda2", "metoda3"], [recomm1, recomm1, recomm1], aggr)
+        portfolioDesr = Portfolio1AggrDescription(["metoda1", "metoda2", "metoda3"], [recomm1, recomm1, recomm1], aggr)
 
         # portfolioDesr:PortfolioDescription
         return portfolioDesr;

@@ -1,18 +1,25 @@
+#!/usr/bin/python3
+
+from typing import List
+
 import random
 import numpy as np
 import pandas as pd
 
 from numpy.random import beta
+from typing import List
 
-from configuration.arguments import Arguments #class
-from configuration.argument import Argument #class
+from aggregation.tools.responsibilityDHont import countDHontResponsibility #function
 
 from recommendation.resultOfRecommendation import ResultOfRecommendation #class
 from recommendation.resultsOfRecommendations import ResultsOfRecommendations #class
 
 from evaluationOfRecommender.evaluationOfRecommenders import EvaluationOfRecommenders
 
-from aggregation.aaggregation import AAgregation
+from aggregation.aAggregation import AAgregation
+
+from pandas.core.frame import DataFrame #class
+from pandas.core.series import Series #class
 
 
 class AggrBanditTS(AAgregation):
@@ -43,10 +50,10 @@ class AggrBanditTS(AAgregation):
 
     # methodsResultDict:{String:pd.Series(rating:float[], itemID:int[])},
     # methodsParamsDF:pd.DataFrame[methodID:String, r:int, n:int, alpha0:int, beta0:int], topK:int
-    def aggrBanditTSRun(self, methodsResultDict, methodsParamsDF, topK=20):
+    def aggrBanditTSRun(self, methodsResultDict:dict, methodsParamsDF:DataFrame, topK=20):
 
       if sorted([mI for mI in methodsParamsDF.index]) != sorted([mI for mI in methodsResultDict.keys()]):
-        raise ValueError("Arguments methodsResultDict and methodsParamsDF have to define the same methods.")
+          raise ValueError("Arguments methodsResultDict and methodsParamsDF have to define the same methods.")
 
       if np.prod([len(methodsResultDict.get(mI)) for mI in methodsResultDict]) == 0:
         raise ValueError("Argument methodsParamsDF contains in ome method an empty list of items.")
@@ -55,10 +62,10 @@ class AggrBanditTS(AAgregation):
         raise ValueError("Argument topK must be positive value.")
 
 
-      methodsResultDictI = methodsResultDict
-      methodsParamsDFI = methodsParamsDF
+      methodsResultDictI:dict = methodsResultDict
+      methodsParamsDFI:DataFrame = methodsParamsDF
 
-      recommendedItemIDs = []
+      recommendedItemIDs:List[tuple(int,str)] = []
 
       for iIndex in range(0, topK):
         #print("iIndex: ", iIndex)
@@ -68,7 +75,7 @@ class AggrBanditTS(AAgregation):
         if len([mI for mI in methodsResultDictI]) == 0:
           return recommendedItemIDs[:topK]
 
-        methodProbabilitiesDicI = {}
+        methodProbabilitiesDicI:dict = {}
 
         # computing probabilities of methods
         for mIndex in methodsParamsDFI.index:
@@ -80,18 +87,18 @@ class AggrBanditTS(AAgregation):
         #print(methodProbabilitiesDicI)
 
         # get max probability of method prpabilities
-        maxPorbablJ = max(methodProbabilitiesDicI.values())
+        maxPorbablJ:float = max(methodProbabilitiesDicI.values())
         #print("MaxPorbablJ: ", maxPorbablJ)
 
         # selecting method with highest probability
-        theBestMethodID = random.choice([aI for aI in methodProbabilitiesDicI.keys() if methodProbabilitiesDicI[aI] == maxPorbablJ])
+        theBestMethodID:str = random.choice([aI for aI in methodProbabilitiesDicI.keys() if methodProbabilitiesDicI[aI] == maxPorbablJ])
     
         # extractiion results of selected method (method with highest probability)
-        resultsOfMethodI = methodsResultDictI.get(theBestMethodID)
+        resultsOfMethodI:Series = methodsResultDictI.get(theBestMethodID)
         #print(resultsOfMethodI)
     
         # select next item (itemID)
-        selectedItemI = self.exportRouletteWheelRatedItem(resultsOfMethodI)
+        selectedItemI:int = self.exportRouletteWheelRatedItem(resultsOfMethodI)
         #selectedItemI = self.exportRandomItem(resultsOfMethodI)
         #selectedItemI = self.exportTheMostRatedItem(resultsOfMethodI)
     
@@ -127,15 +134,15 @@ class AggrBanditTS(AAgregation):
       #return method.idxmax()
 
     # resultOfMethod:pd.Series([raitings],[itemIDs])
-    def exportTheFirstItem(self, resultOfMethod):
+    def exportTheFirstItem(self, resultOfMethod:Series):
       return resultOfMethod.index[0]
 
     # resultOfMethod:pd.Series([raitings],[itemIDs])
-    def exportRandomItem(self, resultOfMethod):
+    def exportRandomItem(self, resultOfMethod:Series):
       return random.choice(resultOfMethod.index)
 
     # resultOfMethod:pd.Series([raitings],[itemIDs])
-    def exportRouletteWheelRatedItem(self, resultOfMethod):
+    def exportRouletteWheelRatedItem(self, resultOfMethod:Series):
         # weighted random choice
         pick = random.uniform(0, sum(resultOfMethod.values))
         current = 0
@@ -145,3 +152,10 @@ class AggrBanditTS(AAgregation):
               return itemIDI
 
 
+
+
+    # methodsResultDict:{String:Series(rating:float[], itemID:int[])},
+    # methodsParamsDF:DataFrame<(methodID:str, votes:int)>, topK:int
+    def runWithResponsibility(self, methodsResultDict:dict, methodsParamsDF:DataFrame, numberOfItems:int=20):
+
+        return self.aggrBanditTSRun(methodsResultDict, methodsParamsDF, numberOfItems)

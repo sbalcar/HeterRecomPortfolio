@@ -4,34 +4,18 @@ from typing import List
 
 from pandas.core.series import Series #class
 
-from recommender.description.recommenderDescription import RecommenderDescription #class
-
-from recommender.aRecommender import ARecommender #class
-
-from recommender.recommenderTheMostPopular import RecommenderTheMostPopular #class
-from recommender.dummy.recommenderDummyRedirector import RecommenderDummyRedirector #class
-
 from datasets.ratings import Ratings #class
-from datasets.rating import Rating #class
 
 from datasets.users import Users #class
 
-from portfolio.portfolioDescription import PortfolioDescription #class
-from portfolio.portfolio import Portfolio #class
+from portfolioDescription.portfolio1AggrDescription import Portfolio1AggrDescription #class
+from portfolio.portfolio1Aggr import Portfolio1Aggr #class
 
-from aggregation.aggregationDescription import AggregationDescription #class
-from aggregation.aggrDHont import AggrDHont #class
+from evaluationTool.dHont.eToolDHontHitIncrementOfResponsibility import EToolDHontHitIncrementOfResponsibility #class
 
-from recommendation.resultOfRecommendation import ResultOfRecommendation #class
-
-from simulation.evaluationTool.evalToolHitIncrementOfResponsibility import EvalToolHitIncrementOfResponsibility #class
-
-import numpy as np
 import pandas as pd
 
 from pandas.core.frame import DataFrame #class
-
-import os
 
 
 class SimulationOfPersonalisedPortfolio:
@@ -57,9 +41,9 @@ class SimulationOfPersonalisedPortfolio:
         self._numberOfItems:int = numberOfItems
 
 
-    def run(self, portfolioDesc:PortfolioDescription):
+    def run(self, portfolioDesc:Portfolio1AggrDescription):
 
-        if type(portfolioDesc) is not PortfolioDescription:
+        if type(portfolioDesc) is not Portfolio1AggrDescription:
             raise ValueError("Argument portfolioDesc is not type PortfolioDescription.")
 
 
@@ -87,13 +71,13 @@ class SimulationOfPersonalisedPortfolio:
 
 
     # userIDs:int, portfolioDesc:PortfolioDescription, trainDF:DataFrame, testDF:DataFrame, repetition:int
-    def __simulateUsers(self, userIDs:int, portfolioDesc:PortfolioDescription, trainRatingsDF:DataFrame,
+    def __simulateUsers(self, userIDs:int, portfolioDesc:Portfolio1AggrDescription, trainRatingsDF:DataFrame,
                         testRatingsDF:DataFrame, repetition:int=1):
 
         historyDF:DataFrame = None
 
         # train model
-        portfolio:Portfolio = portfolioDesc.exportPortfolio()
+        portfolio:Portfolio1Aggr = portfolioDesc.exportPortfolio()
         portfolio.train(historyDF, trainRatingsDF, self._usersDF, self._itemsDF)
 
         userIdI:int
@@ -109,7 +93,7 @@ class SimulationOfPersonalisedPortfolio:
 
 
     # userID:int, portfolio, testDF, repetition:int
-    def __simulateUser(self, userID:int, portfolio:Portfolio, testDF:DataFrame):
+    def __simulateUser(self, userID:int, portfolio:Portfolio1Aggr, testDF:DataFrame):
         #print("UserID " + str(userID))
 
         recommIDs:List[str] = portfolio.getRecommIDs()
@@ -136,11 +120,11 @@ class SimulationOfPersonalisedPortfolio:
                 self.__simulateRecommendation(portfolio, currentItemI, nextItemI, methodsParamsDF)
 
 
-    def __simulateRecommendation(self, portfolio:Portfolio, currentItem:int, nextItem:int, methodsParamsDF:DataFrame):
+    def __simulateRecommendation(self, portfolio:Portfolio1Aggr, currentItem:int, nextItem:int, methodsParamsDF:DataFrame):
 
         # aggregatedItemIDsWithResponsibility:list<(itemID:int, Series<(rating:int, methodID:str)>)>
         aggregatedItemIDsWithResponsibility: List[tuple[int, Series[int, str]]] = portfolio.test(
             methodsParamsDF, currentItem, numberOfItems=self._numberOfItems)
 
-        EvalToolHitIncrementOfResponsibility.evaluate(aggregatedItemIDsWithResponsibility, nextItem, methodsParamsDF)
+        EToolDHontHitIncrementOfResponsibility.evaluate(aggregatedItemIDsWithResponsibility, nextItem, methodsParamsDF)
 

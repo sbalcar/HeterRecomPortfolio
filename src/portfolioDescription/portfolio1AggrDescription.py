@@ -6,12 +6,12 @@ from recommender.aRecommender import ARecommender #class
 
 from recommender.description.recommenderDescription import RecommenderDescription #class
 
-from aggregation.aggregationDescription import AggregationDescription #class
+from aggregationDescription.aggregationDescription import AggregationDescription #class
 
-from portfolio.portfolio import Portfolio #class
+from portfolio.portfolio1Aggr import Portfolio1Aggr #class
+from portfolioDescription.aPortfolioDescription import APortfolioDescription #class
 
-
-class PortfolioDescription:
+class Portfolio1AggrDescription(APortfolioDescription):
 
     def __init__(self, portfolioID:str, recommIDs:List[str], recommDescrs:List[RecommenderDescription], aggrDescr:List[AggregationDescription]):
        if type(portfolioID) is not str:
@@ -65,4 +65,4 @@ class PortfolioDescription:
        # aggregation:Aggregation
        aggregation = self._aggrDescr.exportAggregation()
 
-       return Portfolio(self._recommIDs, recommenders, aggregation)
+       return Portfolio1Aggr(self._recommIDs, recommenders, aggregation)

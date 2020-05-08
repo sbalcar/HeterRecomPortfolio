@@ -15,7 +15,7 @@ from configuration.argument import Argument  # class
 from recommendation.resultOfRecommendation import ResultOfRecommendation  # class
 from recommendation.resultsOfRecommendations import ResultsOfRecommendations  # class
 
-from aggregation.aaggregation import AAgregation  # class
+from aggregation.aAggregation import AAgregation  # class
 
 from evaluationOfRecommender.evaluationOfRecommenders import EvaluationOfRecommenders  # class
 

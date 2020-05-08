@@ -15,7 +15,7 @@ from recommendation.resultsOfRecommendations import ResultsOfRecommendations #cl
 
 from aggregation.tools.responsibilityDHont import countDHontResponsibility #function
 
-from aggregation.aaggregation import AAgregation #class
+from aggregation.aAggregation import AAgregation #class
 
 from evaluationOfRecommender.evaluationOfRecommenders import EvaluationOfRecommenders #class
 

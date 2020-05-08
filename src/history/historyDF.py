@@ -2,38 +2,9 @@
 
 from typing import List
 
-from pandas.core.series import Series #class
-
-from recommender.description.recommenderDescription import RecommenderDescription #class
-
-from recommender.aRecommender import ARecommender #class
-
-from recommender.recommenderTheMostPopular import RecommenderTheMostPopular #class
-from recommender.dummy.recommenderDummyRedirector import RecommenderDummyRedirector #class
-
-from datasets.ratings import Ratings #class
-from datasets.rating import Rating #class
-
-from datasets.users import Users #class
-
-from portfolio.portfolioDescription import PortfolioDescription #class
-from portfolio.portfolio import Portfolio #class
-
-from aggregation.aggregationDescription import AggregationDescription #class
-from aggregation.aggrDHont import AggrDHont #class
-
-from recommendation.resultOfRecommendation import ResultOfRecommendation #class
-
-from simulation.evaluationTool.evalToolHitIncrementOfResponsibility import EvalToolHitIncrementOfResponsibility #class
-
-import numpy as np
 import pandas as pd
 
-from pandas.core.frame import DataFrame #class
-
 from history.aHistory import AHistory #class
-
-import os
 
 
 class HistoryDF(AHistory):
