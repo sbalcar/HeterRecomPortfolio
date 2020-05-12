@@ -4,7 +4,7 @@ from typing import List
 
 from recommender.aRecommender import ARecommender #class
 
-from recommender.description.recommenderDescription import RecommenderDescription #class
+from recommenderDescription.recommenderDescription import RecommenderDescription #class
 
 from aggregationDescription.aggregationDescription import AggregationDescription #class
 
@@ -59,7 +59,7 @@ class Portfolio1AggrDescription(APortfolioDescription):
 
        recommDescrI: RecommenderDescription
        for recommDescrI in self._recommDescrs:
-          recommenderI: ARecommender = recommDescrI.exportRecommender()
+          recommenderI:ARecommender = recommDescrI.exportRecommender()
           recommenders.append(recommenderI)
 
        # aggregation:Aggregation

@@ -12,18 +12,18 @@ from history.aHistory import AHistory #class
 
 class APortfolio:
 
-    def __init__(self, recommIDs: List[str], recommenders: List[ARecommender], agregation: AAgregation):
+    def __init__(self, recommIDs: List[str], recommenders: List[ARecommender], agregation:AAgregation):
         raise Exception("APortfolio is abstract class, can't be instanced")
 
     def getRecommIDs(self):
-        pass
+        assert False, "this needs to be overridden"
 
-    def train(self, ratingsDF: DataFrame, usersDF: DataFrame, itemsDF: DataFrame):
-        pass
+    def train(self, ratingsDF:DataFrame, usersDF:DataFrame, itemsDF:DataFrame):
+        assert False, "this needs to be overridden"
 
-    def update(self, ratingsUpdateDF: DataFrame):
-        pass
+    def update(self, ratingsUpdateDF:DataFrame):
+        assert False, "this needs to be overridden"
 
     # portFolioModel:DataFrame<(methodID, votes)>
     def recommendToItem(self, portFolioModel:DataFrame, itemID:int, testRatingsDF:DataFrame, history:AHistory, numberOfItems:int):
-        pass
+        assert False, "this needs to be overridden"

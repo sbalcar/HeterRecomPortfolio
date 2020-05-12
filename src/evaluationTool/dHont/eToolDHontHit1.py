@@ -12,17 +12,22 @@ import numpy as np
 class EToolDHontHit1(AEvalTool):
 
     @staticmethod
-    def evaluate(aggregatedItemIDsWithResponsibility:List, nextItem:int, pModelDF:DataFrame, evaluationDict:dict):
+    def evaluate(rItemIDs:List[int], aggregatedItemIDsWithResponsibility:List, nextItemID:int,
+                 pModelDF:DataFrame, evaluationDict:dict):
+        if type(rItemIDs) is not list:
+            raise ValueError("Argument rItemIDs isn't type list.")
+        for itemIDI in rItemIDs:
+            if type(itemIDI) is not int:
+                raise ValueError("Argument itemIDI don't contain int.")
         if type(aggregatedItemIDsWithResponsibility) is not list:
             raise ValueError("Argument aggregatedItemIDsWithResponsibility isn't type list.")
 
-        if type(nextItem) is not int and type(nextItem) is not np.int64:
+        if type(nextItemID) is not int and type(nextItemID) is not np.int64:
             raise ValueError("Argument nextItem isn't type int.")
 
         if type(pModelDF) is not DataFrame:
             raise ValueError("Argument pModelDF isn't type DataFrame.")
         if list(pModelDF.columns) != ['votes']:
-            print(pModelDF.columns)
             raise ValueError("Argument pModelDF doen't contain rights columns.")
 
         if type(evaluationDict) is not dict:
@@ -33,14 +38,14 @@ class EToolDHontHit1(AEvalTool):
         aggrItemIDsWithRespDF.set_index("itemId", inplace=True)
 
 
-        if nextItem in aggrItemIDsWithRespDF.index:
+        if nextItemID in aggrItemIDsWithRespDF.index:
             print("HOP")
-            print("nextItem: " + str(nextItem))
+            print("nextItemID: " + str(nextItemID))
 
-            evaluationDict[AEvalTool.CTR] = evaluationDict.get(AEvalTool.CTR, 0) + 1
+            evaluationDict[AEvalTool.CLICKS] = evaluationDict.get(AEvalTool.CLICKS, 0) + 1
 
             #responsibilityDict:dict[methodID:str, votes:int]
-            responsibilityDict:dict[str,int] = aggrItemIDsWithRespDF.loc[nextItem]["responsibility"]
+            responsibilityDict:dict[str,int] = aggrItemIDsWithRespDF.loc[nextItemID]["responsibility"]
 
             # increment portfolio model
             for methodIdI in responsibilityDict.keys():

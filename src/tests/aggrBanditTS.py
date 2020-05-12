@@ -32,7 +32,7 @@ def test01():
     aggr:AggrBanditTS = AggrBanditTS({})
 
     # itemIDs:List[tuple] = aggr.runWithResponsibility(methodsResultDict, methodsParamsDF, N)
-    itemIDs:List[tuple] = aggr.aggrBanditTSRun(methodsResultDict, methodsParamsDF, N)
+    itemIDs:List[tuple] = aggr.run(methodsResultDict, methodsParamsDF, N)
     print(itemIDs)
 
 

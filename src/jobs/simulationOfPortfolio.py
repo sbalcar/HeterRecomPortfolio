@@ -2,7 +2,7 @@
 
 from typing import List
 
-from recommender.description.recommenderDescription import RecommenderDescription #class
+from recommenderDescription.recommenderDescription import RecommenderDescription #class
 
 from recommender.recommenderTheMostPopular import RecommenderTheMostPopular #class
 from recommender.dummy.recommenderDummyRedirector import RecommenderDummyRedirector #class
@@ -13,13 +13,12 @@ from datasets.users import Users #class
 
 from datasets.items import Items #class
 
+from portfolioDescription.portfolio1MethDescription import Portfolio1MethDescription #class
 from portfolioDescription.portfolio1AggrDescription import Portfolio1AggrDescription #class
 
 from aggregationDescription.aggregationDescription import AggregationDescription #class
 from aggregation.aggrDHont import AggrDHont #class
 from aggregation.aggrBanditTS import AggrBanditTS #class
-
-from recommendation.resultOfRecommendation import ResultOfRecommendation #class
 
 import pandas as pd
 
@@ -27,16 +26,19 @@ from pandas.core.frame import DataFrame #class
 
 from simulation.simulationOfNonPersonalisedPortfolio import SimulationOfNonPersonalisedPortfolio #class
 
-from evaluationTool.dHont.eToolDHontHit1 import EToolDHontHit1 #class
-
 from history.aHistory import AHistory #class
 from history.historyDF import HistoryDF #class
+
 from portfolioDescription.aPortfolioDescription import APortfolioDescription #class
 
-from evaluationTool.banditTS.eToolBanditTSHit1 import EToolBanditTSHit1 #class
-from evaluationTool.dHont.eToolDHontHit1 import EToolDHontHit1 #class
+from evaluationTool.singleMethod.eToolSingleMethod import EToolSingleMethod #class
 from evaluationTool.dHont.eToolDHontHitIncrementOfResponsibility import EToolDHontHitIncrementOfResponsibility #class
+from evaluationTool.dHont.eToolDHontHit1 import EToolDHontHit1 #class
+from evaluationTool.banditTS.eToolBanditTSHit1 import EToolBanditTSHit1 #class
 
+from userBehaviourDescription.userBehaviourDescription import UserBehaviourDescription #class
+from userBehaviourDescription.userBehaviourDescription import observationalStaticProbabilityFnc #function
+from userBehaviourDescription.userBehaviourDescription import observationalLinearProbabilityFnc #function
 
 
 def simulationOfPortfolio():
@@ -54,10 +56,16 @@ def simulationOfPortfolio():
     #usersDF: DataFrame = Users.readFromFileMl10M100K()
     #itemsDF: DataFrame = Items.readFromFileMl10M100K()
 
+    numberOfItems:int = 20
+
+    #uBehaviourDesc:UserBehaviourDescription = UserBehaviourDescription(observationalStaticProbabilityFnc, [0.5])
+    uBehaviourDesc:UserBehaviourDescription = UserBehaviourDescription(observationalLinearProbabilityFnc, [0.1, 0.9])
+
     # portfolio definiton
     rDescTheMostPopular:RecommenderDescription = RecommenderDescription(RecommenderTheMostPopular, {})
     rDescDummyRedirector:RecommenderDescription = RecommenderDescription(RecommenderDummyRedirector,
-                            {RecommenderDummyRedirector.ARG_RESULT: ResultOfRecommendation(list(range(1, 21)),[0.05] * 20)} )
+                            {RecommenderDummyRedirector.ARG_RESULT:pd.Series([0.05]*20, list(range(1, 21)), name="rating")} )
+
     rIDs:List[str] = ["RecommenderTheMostPopular", "RecommenderDummyRedirector"]
     rDescs:List[RecommenderDescription] = [rDescTheMostPopular, rDescDummyRedirector]
 
@@ -65,7 +73,8 @@ def simulationOfPortfolio():
     aDescBanditTS:AggregationDescription = AggregationDescription(AggrBanditTS, {})
 
 
-    # DHont
+
+    # DHont Portfolio description
     pDescDHont:APortfolioDescription = Portfolio1AggrDescription(
             "DHont", rIDs, rDescs, aDescDHont)
 
@@ -76,7 +85,8 @@ def simulationOfPortfolio():
     historyDHont:AHistory = HistoryDF()
 
 
-    # BanditTS
+
+    # BanditTS Portfolio description
     pDescBanditTS:APortfolioDescription = Portfolio1AggrDescription(
             "BanditTS", rIDs, rDescs, aDescBanditTS)
 
@@ -87,14 +97,28 @@ def simulationOfPortfolio():
     historyBanditTS:AHistory = HistoryDF()
 
 
+
+    # TheMostPopular Portfolio description
+    pDescTheMostPopular:APortfolioDescription = Portfolio1MethDescription("theMostPopular", "theMostPopular", rDescTheMostPopular)
+
+    modelTheMostPopularDF:DataFrame = pd.DataFrame()
+
+    historyTheMostPopular:AHistory = HistoryDF()
+
+
+
     # simulation of portfolio
     #simulation:SimulationOfPersonalisedPortfolio = SimulationOfPersonalisedPortfolio(
     simulation:SimulationOfNonPersonalisedPortfolio = SimulationOfNonPersonalisedPortfolio(
-            ratingsDF, usersDF, itemsDF, repetitionOfRecommendation=1, numberOfItems = 20)
+            ratingsDF, usersDF, itemsDF, uBehaviourDesc, repetitionOfRecommendation=1, numberOfItems=numberOfItems)
 
+    #evaluations:List[dict] = simulation.run([pDescTheMostPopular], [modelTheMostPopularDF], [EToolSingleMethod], [historyTheMostPopular])
     #evaluations:List[dict] = simulation.run([pDescDHont], [modelDHontDF], [EToolDHontHitIncrementOfResponsibility], [historyDHont])
-    #evaluations:List[dict] = simulation.run([pDescBanditTS], [modelBanditTSDF], [EToolBanditTSHit1], [historyBanditTS])
-    evaluations:List[dict] = simulation.run([pDescDHont, pDescBanditTS], [modelDHontDF, modelBanditTSDF], [EToolDHontHit1, EToolBanditTSHit1], [historyDHont, historyBanditTS])
+    evaluations:List[dict] = simulation.run([pDescBanditTS], [modelBanditTSDF], [EToolBanditTSHit1], [historyBanditTS])
+    #evaluations:List[dict] = simulation.run([pDescDHont, pDescBanditTS], [modelDHontDF, modelBanditTSDF], [EToolDHontHit1, EToolBanditTSHit1], [historyDHont, historyBanditTS])
 
 
     print("Evaluations: " + str(evaluations))
+
+    #print(historyTheMostPopular.print())
+    print(historyBanditTS.print())

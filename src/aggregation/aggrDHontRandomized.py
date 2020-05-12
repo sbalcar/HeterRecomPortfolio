@@ -9,70 +9,56 @@ from typing import List
 
 from pandas.core.frame import DataFrame  # class
 
-from configuration.arguments import Arguments  # class
-from configuration.argument import Argument  # class
-
-from recommendation.resultOfRecommendation import ResultOfRecommendation  # class
-from recommendation.resultsOfRecommendations import ResultsOfRecommendations  # class
-
 from aggregation.aAggregation import AAgregation  # class
-
-from evaluationOfRecommender.evaluationOfRecommenders import EvaluationOfRecommenders  # class
 
 from aggregation.tools.responsibilityDHont import countDHontResponsibility #function
 
 class AggrDHontRandomized(AAgregation):
 
-    def __init__(self, arguments: Arguments):
+    def __init__(self, argumentsDict:dict):
 
-        def __init__(self, argumentsDict: dict):
-            if type(argumentsDict) is not dict:
-                raise ValueError("Argument argumentsDict is not type dict.")
+       if type(argumentsDict) is not dict:
+          raise ValueError("Argument argumentsDict is not type dict.")
 
-            self._argumentsDict = argumentsDict
-
-    # userDef:DataFrame<(methodID, votes)>
-    def run(self, resultsOfRecommendations: ResultsOfRecommendations, userDef: DataFrame, numberOfItems: int = 20):
-
-        if type(resultsOfRecommendations) is not ResultsOfRecommendations:
-            raise ValueError("Argument resultsOfRecommendations is not type ResultsOfRecommendations.")
-
-        if type(userDef) is not DataFrame:
-            raise ValueError("Argument userDef isn't type DataFrame.")
-
-        if type(numberOfItems) is not int:
-            raise ValueError("Argument numberOfItems isn't type int.")
-
-        methodsResultDict = resultsOfRecommendations.exportAsDictionaryOfSeries()
-        # print(methodsResultDict)
-
-        return self.aggrRandomizedElectionsRun(methodsResultDict, userDef, topK=numberOfItems)
+       self._argumentsDict = argumentsDict
 
 
     # methodsResultDict:{String:pd.Series(rating:float[], itemID:int[])},
-    # methodsParamsDF:pd.DataFrame[numberOfVotes:int], numberOfItems:int
+    # modelDF:pd.DataFrame[numberOfVotes:int], numberOfItems:int
     # differencAmplificatorExponent : int / float
-    def aggrRandomizedElectionsRun(self, methodsResultDict:dict, methodsParamsDF:DataFrame, differenceAmplificatorExponent:float, numberOfItems:int=20):
+    def run(self, methodsResultDict:dict, modelDF:DataFrame, differenceAmplificatorExponent:float, numberOfItems:int=20):
 
-        if sorted([mI for mI in methodsParamsDF.index]) != sorted([mI for mI in methodsResultDict.keys()]):
+        # testing types of parameters
+        if type(methodsResultDict) is not dict:
+            raise ValueError("Type of methodsResultDict is not dict.")
+
+        if type(modelDF) is not DataFrame:
+            raise ValueError("Type of methodsParamsDF is not DataFrame.")
+        if list(modelDF.columns) != ['votes']:
+            raise ValueError("Argument methodsParamsDF doen't contain rights columns.")
+
+        if type(numberOfItems) is not int:
+            raise ValueError("Type of numberOfItems is not int.")
+
+        if sorted([mI for mI in modelDF.index]) != sorted([mI for mI in methodsResultDict.keys()]):
             raise ValueError("Arguments methodsResultDict and methodsParamsDF have to define the same methods.")
-
-        if np.prod([len(methodsResultDict.get(mI)) for mI in methodsResultDict]) == 0:
-            raise ValueError("Argument methodsParamsDF contains in ome method an empty list of items.")
-
+        for mI in methodsResultDict.keys():
+            if modelDF.loc[mI] is None:
+                raise ValueError("Argument modelDF contains in ome method an empty list of items.")
         if numberOfItems < 0:
-            raise ValueError("Argument topK must be positive value.")
+            raise ValueError("Argument numberOfItems must be positive value.")
+
 
         candidatesOfMethods = np.asarray([cI.keys() for cI in methodsResultDict.values()])
         uniqueCandidatesI = list(set(np.concatenate(candidatesOfMethods)))
         # print("UniqueCandidatesI: ", uniqueCandidatesI)
 
         # numbers of elected candidates of parties
-        electedOfPartyDictI = {mI: 1 for mI in methodsParamsDF.index}
+        electedOfPartyDictI = {mI: 1 for mI in modelDF.index}
         # print("ElectedForPartyI: ", electedOfPartyDictI)
 
         # votes number of parties
-        votesOfPartiesDictI = {mI: methodsParamsDF.votes.loc[mI] for mI in methodsParamsDF.index}
+        votesOfPartiesDictI = {mI: modelDF.votes.loc[mI] for mI in modelDF.index}
         # print("VotesOfPartiesDictI: ", votesOfPartiesDictI)
 
         recommendedItemIDs = []
@@ -87,7 +73,7 @@ class AggrDHontRandomized(AAgregation):
             actVotesOfCandidatesDictI = {}
             for candidateIDJ in uniqueCandidatesI:
                 votesOfCandidateJ = 0
-                for parityIDK in methodsParamsDF.index:
+                for parityIDK in modelDF.index:
                     partyAffiliationOfCandidateKJ = methodsResultDict[parityIDK].get(candidateIDJ, 0)
                     votesOfPartyK = votesOfPartiesDictI.get(parityIDK)
                     votesOfCandidateJ += partyAffiliationOfCandidateKJ * votesOfPartyK
@@ -121,21 +107,43 @@ class AggrDHontRandomized(AAgregation):
             # print("DevotionOfPartyDictI: ", devotionOfPartyDictI)
 
             # updating number of votes of parties
-            votesOfPartiesDictI = {partyI: methodsParamsDF.votes.loc[partyI] / electedOfPartyDictI.get(partyI) for
-                                   partyI in methodsParamsDF.index}
+            votesOfPartiesDictI = {partyI: modelDF.votes.loc[partyI] / electedOfPartyDictI.get(partyI) for
+                                   partyI in modelDF.index}
             # print("VotesOfPartiesDictI: ", votesOfPartiesDictI)
 
         return recommendedItemIDs[:numberOfItems]
 
 
     # methodsResultDict:{String:Series(rating:float[], itemID:int[])},
-    # methodsParamsDF:DataFrame<(methodID:str, votes:int)>, topK:int
-    def runWithResponsibility(self, methodsResultDict:dict, methodsParamsDF:DataFrame, numberOfItems:int=20):
+    # modelDF:DataFrame<(methodID:str, votes:int)>, numberOfItems:int
+    def runWithResponsibility(self, methodsResultDict:dict, modelDF:DataFrame, numberOfItems:int=20):
 
-        aggregatedItemIDs:List[int] = self.aggrElectionsRun(methodsResultDict, methodsParamsDF, numberOfItems)
+        # testing types of parameters
+        if type(methodsResultDict) is not dict:
+            raise ValueError("Type of methodsResultDict is not dict.")
+        for methI in methodsResultDict.values():
+            if type(methI) is not pd.Series:
+                raise ValueError("Type of methodsParamsDF doen't contain Series.")
+        if type(modelDF) is not DataFrame:
+            raise ValueError("Type of methodsParamsDF is not DataFrame.")
+        if list(modelDF.columns) != ['votes']:
+            raise ValueError("Argument methodsParamsDF doen't contain rights columns.")
+        if type(numberOfItems) is not int:
+            raise ValueError("Type of numberOfItems is not int.")
+
+        if sorted([mI for mI in modelDF.index]) != sorted([mI for mI in methodsResultDict.keys()]):
+            raise ValueError("Arguments methodsResultDict and methodsParamsDF have to define the same methods.")
+        for mI in methodsResultDict.keys():
+            if modelDF.loc[mI] is None:
+                raise ValueError("Argument modelDF contains in ome method an empty list of items.")
+        if numberOfItems < 0:
+            raise ValueError("Argument numberOfItems must be positive value.")
+
+
+        aggregatedItemIDs:List[int] = self.run(methodsResultDict, modelDF, numberOfItems)
 
         itemsWithResposibilityOfRecommenders:List = countDHontResponsibility(
-            aggregatedItemIDs, methodsResultDict, methodsParamsDF, numberOfItems)
+            aggregatedItemIDs, methodsResultDict, modelDF, numberOfItems)
 
         # list<(itemID:int, Series<(rating:int, methodID:str)>)>
         return itemsWithResposibilityOfRecommenders

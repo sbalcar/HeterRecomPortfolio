@@ -8,9 +8,6 @@ from aggregation.aAggregation import AAgregation #class
 
 from recommender.aRecommender import ARecommender #class
 
-from recommendation.resultOfRecommendation import ResultOfRecommendation #class
-from recommendation.resultsOfRecommendations import ResultsOfRecommendations #class
-
 from history.aHistory import AHistory #class
 from portfolio.aPortfolio import APortfolio #class
 
@@ -19,14 +16,17 @@ class Portfolio1Aggr(APortfolio):
    def __init__(self, recommIDs:List[str], recommenders:List[ARecommender], agregation:AAgregation):
       if type(recommIDs) is not list:
          raise ValueError("Argument recommIDs isn't type list.")
+
       for recommIdI in recommIDs:
           if not type(recommIdI) is str:
               raise ValueError("Argument recommIDs don't contains type str.")
+
       if type(recommenders) is not list:
          raise ValueError("Argument recommenders isn't type list.")
       for recommenderI in recommenders:
           if not isinstance(recommenderI, ARecommender):
               raise ValueError("Argument recommenders don't contains type ARecommender.")
+
       if not isinstance(agregation, AAgregation):
          raise ValueError("Argument agregation isn't type AAgregation.")
 
@@ -59,27 +59,23 @@ class Portfolio1Aggr(APortfolio):
 
 
    # portFolioModel:DataFrame<(methodID, votes)>
-   def recommendToItem(self, portFolioModel:DataFrame, itemID:int, testRatingsDF:DataFrame, history:AHistory, numberOfItems:int):
+   def recommendToItem(self, portFolioModel:DataFrame, itemID:int, ratingsTestDF:DataFrame, history:AHistory, numberOfItems:int):
 
-       resultsOfRecommendations:ResultsOfRecommendations = ResultsOfRecommendations([], [])
+       resultsOfRecommendations:dict = {}
 
        recommIndexI: int
        for recommIndexI in range(len(self._recommenders)):
            recommIDI: str = self._recommIDs[recommIndexI]
-           recommI: ARecommender = self._recommenders[recommIndexI]
+           recommI:ARecommender = self._recommenders[recommIndexI]
 
-           resultOfRecommendationI: ResultOfRecommendation = recommI.recommendToItem(itemID, testRatingsDF, history, numberOfItems)
-           resultsOfRecommendations.add(recommIDI, resultOfRecommendationI)
+           resultOfRecommendationI:List[int] = recommI.recommendToItem(itemID, ratingsTestDF, history, numberOfItems=numberOfItems)
+           resultsOfRecommendations[recommIDI] = resultOfRecommendationI
 
-       #aggregatedItemIDs:List[int] = self._aggregation.run(resultsOfRecommendations, userDef, numberOfItems)
-
-       methodsResultDict:dict = resultsOfRecommendations.exportAsDictionaryOfSeries()
-       #print(methodsResultDict)
-
-       aggregatedItemIDsWithResponsibility:list = self._aggregation.runWithResponsibility(
-           methodsResultDict, portFolioModel, numberOfItems=numberOfItems)
+       aggItemIDsWithResponsibility:List = self._aggregation.runWithResponsibility(
+           resultsOfRecommendations, portFolioModel, numberOfItems=numberOfItems)
        #print(aggregatedItemIDsWithResponsibility)
 
-       # list<int>
-       return aggregatedItemIDsWithResponsibility
+       aggItemIDs:List[int] = list(map(lambda rs: rs[0], aggItemIDsWithResponsibility))
 
+       # list<int>
+       return (aggItemIDs, aggItemIDsWithResponsibility)

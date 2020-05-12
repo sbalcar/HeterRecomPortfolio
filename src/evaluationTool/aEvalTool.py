@@ -7,8 +7,8 @@ from pandas.core.frame import DataFrame #class
 
 class AEvalTool:
 
-    CTR = "ctr"
+    CLICKS = "clicks"
 
     @staticmethod
-    def evaluate(aggregatedItemIDsWithResponsibility:List, nextItem:int, methodsParamsDF:DataFrame, evaluationDict:dict):
-        pass
+    def evaluate(rItemIDs:List[int], aggregatedItemIDsWithResponsibility:List, nextItem:int, methodsParamsDF:DataFrame, evaluationDict:dict):
+        assert False, "this needs to be overridden"

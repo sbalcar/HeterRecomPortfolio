@@ -6,9 +6,10 @@ from pandas.core.frame import DataFrame #class
 from typing import List
 from recommender.aRecommender import ARecommender #class
 
-from recommendation.recommendation import Recommendation #class
-from recommendation.resultOfRecommendation import ResultOfRecommendation #class
 from history.aHistory import AHistory #class
+
+import pandas as pd #class
+
 
 class RecommenderDummyRandom(ARecommender):
 
@@ -18,17 +19,16 @@ class RecommenderDummyRandom(ARecommender):
 
         self._argumentsDict:dict = argumentsDict
 
-   def train(self, ratingsTrainDF:DataFrame, usersDF:DataFrame, itemsDF:DataFrame):
+    def train(self, ratingsTrainDF:DataFrame, usersDF:DataFrame, itemsDF:DataFrame):
         pass
 
-   def update(self, ratingsUpdateDF:DataFrame):
+    def update(self, ratingsUpdateDF:DataFrame):
         pass
 
-   def recommendToItem(self, itemID:int, ratingsTestDF:DataFrame, history:AHistory, numberOfItems:int=20):
-        items = list(range(numberOfItems))
-        random.shuffle(items)
+    def recommendToItem(self, itemID:int, ratingsTestDF:DataFrame, history:AHistory, numberOfItems:int=20):
+        items:List[int] = list(range(numberOfItems))
+        #random.shuffle(items)
 
-        recomm:Recommendation = Recommendation(items)
+        ratings:List[float] = [1.0/len(items) for itemI in items]
 
-        # ResultOfRecommendation
-        return recomm.exportAsResultOfRecommendation()
+        return pd.Series(ratings,items,name="rating")

@@ -8,11 +8,10 @@ import random
 
 from recommender.aRecommender import ARecommender #class
 
-from recommendation.recommendation import Recommendation #class
-from recommendation.resultOfRecommendation import ResultOfRecommendation #class
-
 from datasets.ratings import Ratings #class
 from history.aHistory import AHistory #class
+
+import pandas as pd
 
 class RecommenderTheMostPopular(ARecommender):
 
@@ -47,10 +46,9 @@ class RecommenderTheMostPopular(ARecommender):
     def recommendToItem(self, itemID:int, ratingsTestDF:DataFrame, history:AHistory, numberOfItems:int=20):
 
         # ratings:Dataframe<(movieId:int, ratings:int)>
-        ratings:DataFrame = self._sortedAscRatings5CountDF.head(numberOfItems)
+        ratingsDF:DataFrame = self._sortedAscRatings5CountDF.head(numberOfItems)
 
-        movieIDs:List[int] = list(ratings.index)
-        numberOfEvaluators:List[float] = [float(r) for r in ratings[Ratings.COL_RATING]]
-        numberOfEvaluators:List[float] = [float(0.05) for r in ratings[Ratings.COL_RATING]]
+        items:List[int] = list(ratingsDF.index)
+        ratings:List[float] = [1.0/len(items) for itemI in items]
 
-        return ResultOfRecommendation(movieIDs, numberOfEvaluators)
+        return pd.Series(ratings,items,name="rating")

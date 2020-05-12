@@ -1,12 +1,12 @@
 #!/usr/bin/python3
 
 from typing import List
-from typing import ClassVar
 
 from pandas.core.series import Series #class
 
 from datasets.ratings import Ratings #class
 
+from portfolioDescription.aPortfolioDescription import APortfolioDescription #class
 from portfolioDescription.portfolio1AggrDescription import Portfolio1AggrDescription #class
 from portfolio.portfolio1Aggr import Portfolio1Aggr #class
 
@@ -15,12 +15,16 @@ import pandas as pd
 from pandas.core.frame import DataFrame #class
 
 from history.aHistory import AHistory #class
-from  evaluationTool.aEvalTool import AEvalTool #class
+from evaluationTool.aEvalTool import AEvalTool #class
+
+from simulation.userBehaviourSimulator.userBehaviourSimulator import UserBehaviourSimulator #class
+from userBehaviourDescription.userBehaviourDescription import UserBehaviourDescription #class
+
 
 class SimulationOfNonPersonalisedPortfolio:
 
     def __init__(self, ratingsDF:DataFrame, usersDF:DataFrame, itemsDF:DataFrame,
-                 repetitionOfRecommendation:int=1, numberOfItems:int=20):
+                 uBehaviourDesc:UserBehaviourDescription, repetitionOfRecommendation:int=1, numberOfItems:int=20):
 
         if type(ratingsDF) is not DataFrame:
             raise ValueError("Argument ratingsDF isn't type DataFrame.")
@@ -28,6 +32,8 @@ class SimulationOfNonPersonalisedPortfolio:
             raise ValueError("Argument usersDF isn't type DataFrame.")
         if type(itemsDF) is not DataFrame:
             raise ValueError("Argument itemsDF isn't type DataFrame.")
+        if type(uBehaviourDesc) is not UserBehaviourDescription:
+            raise ValueError("Argument uBehaviourDesc isn't type UserBehaviourDescription.")
 
         if type(repetitionOfRecommendation) is not int:
             raise ValueError("Argument repetitionOfRecommendation isn't type int.")
@@ -38,17 +44,20 @@ class SimulationOfNonPersonalisedPortfolio:
         self._usersDF:DataFrame = usersDF
         self._itemsDF:DataFrame = itemsDF
 
+        self._uBehaviourDesc = uBehaviourDesc
+
         self._repetitionOfRecommendation:int = repetitionOfRecommendation
         self._numberOfItems:int = numberOfItems
 
 
-    def run(self, portfolioDescs:List[Portfolio1AggrDescription], portFolioModels:List[pd.DataFrame],
+    def run(self, portfolioDescs:List[APortfolioDescription], portFolioModels:List[pd.DataFrame],
             evaluatonTools:List, histories:List[AHistory]):
         if type(portfolioDescs) is not list:
             raise ValueError("Argument portfolioDescs isn't type list.")
         for portfolioDescI in portfolioDescs:
-            if type(portfolioDescI) is not Portfolio1AggrDescription:
-               raise ValueError("Argument portfolioDescs don't contain PortfolioDescription.")
+            if not isinstance(portfolioDescI, APortfolioDescription):
+                print(type(portfolioDescI))
+                raise ValueError("Argument portfolioDescs don't contain PortfolioDescription.")
 
         if type(portFolioModels) is not list:
             raise ValueError("Argument portFolioModels isn't type list.")
@@ -116,7 +125,8 @@ class SimulationOfNonPersonalisedPortfolio:
 
         counterI:int = 0
 
-        rIndexI:int
+        currentIndexI:int
+        nextIndexI:int
         for (currentIndexI, nextIndexI) in zip(list(testRatingsDF.index[1:]), list(testRatingsDF.index)[:-1]):
 
             counterI += 1
@@ -147,21 +157,33 @@ class SimulationOfNonPersonalisedPortfolio:
                                   evaluatonTools:[AEvalTool], testRatingsDF:DataFrame, histories:List[AHistory],
                                   evaluations:List[dict], currentItem:int, nextItem:int):
 
+        uObservation:List[bool] = UserBehaviourSimulator().simulate(self._uBehaviourDesc, self._numberOfItems)
+
         portfolioI:Portfolio1Aggr
         portFolioModelI:pd.DataFrame
         historyI:pd.DataFrame
         for portfolioI, portFolioModelI, evaluatonToolI, historyI, evaluationI in zip(portfolios, portFolioModels, evaluatonTools, histories, evaluations):
             self.__simulateRecommendation(portfolioI, portFolioModelI, evaluatonToolI, testRatingsDF, historyI,
-                                          evaluationI, currentItem, nextItem)
+                                          evaluationI, uObservation, currentItem, nextItem)
 
 
     def __simulateRecommendation(self, portfolio:Portfolio1Aggr, portFolioModel:pd.DataFrame, evaluatonTool:AEvalTool,
-                                 testRatingsDF:DataFrame, history:AHistory, evaluation:dict, currentItemID:int, nextItem:int):
+                                 testRatingsDF:DataFrame, history:AHistory, evaluation:dict, uObservation:List[bool],
+                                 currentItemID:int, nextItem:int):
 
         # aggregatedItemIDsWithResponsibility:list<(itemID:int, Series<(rating:int, methodID:str)>)>
-        aggregatedItemIDsWithResponsibility: List[tuple[int, Series[int, str]]] = portfolio.recommendToItem(
+
+        rItemIDs:List[int]
+        rItemIDsWithResponsibility:List[tuple[int, Series[int, str]]]
+        rItemIDs, rItemIDsWithResponsibility = portfolio.recommendToItem(
             portFolioModel, currentItemID, testRatingsDF, history, numberOfItems=self._numberOfItems)
 
-        #history.addRecommendation(currentItemID, aggregatedItemIDsWithResponsibility)
+        # save log of history
+        history.addRecommendation(currentItemID, rItemIDs, uObservation)
 
-        evaluatonTool.evaluate(aggregatedItemIDsWithResponsibility, nextItem, portFolioModel, evaluation)
+        value:float = history.getValue(currentItemID, self._uBehaviourDesc, numberOfItems=self._numberOfItems)
+        #print("value: " + str(value))
+        #history.print()
+
+        # evaluation
+        evaluatonTool.evaluate(rItemIDs, rItemIDsWithResponsibility, nextItem, portFolioModel, evaluation)

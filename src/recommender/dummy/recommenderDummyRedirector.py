@@ -8,10 +8,9 @@ import random
 
 from recommender.aRecommender import ARecommender #class
 
-from recommendation.recommendation import Recommendation #class
-from recommendation.resultOfRecommendation import ResultOfRecommendation #class
 from history.aHistory import AHistory #class
 
+import pandas as pd
 
 class RecommenderDummyRedirector(ARecommender):
 
@@ -29,9 +28,10 @@ class RecommenderDummyRedirector(ARecommender):
    def update(self, ratingsUpdateDF:DataFrame):
         pass
 
+
    def recommendToItem(self, itemID:int, ratingsTestDF:DataFrame, history:AHistory, numberOfItems:int=20):
 
-        result:ResultOfRecommendation = self._argumentsDict[self.ARG_RESULT]
+        result:pd.Series = self._argumentsDict[self.ARG_RESULT]
 
-        # ResultOfRecommendation
-        return result
+        # pd.Series
+        return result.copy()

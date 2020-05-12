@@ -3,7 +3,7 @@
 from configuration.arguments import Arguments #class
 from configuration.argument import Argument #class
 
-from recommender.description.recommenderDescription import RecommenderDescription #class
+from recommenderDescription.recommenderDescription import RecommenderDescription #class
 
 from recommendation.resultOfRecommendation import ResultOfRecommendation #class
 

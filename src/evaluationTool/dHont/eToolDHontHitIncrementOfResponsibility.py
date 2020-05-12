@@ -12,11 +12,16 @@ import numpy as np
 class EToolDHontHitIncrementOfResponsibility(AEvalTool):
 
     @staticmethod
-    def evaluate(aggregatedItemIDsWithResponsibility:List, nextItem:int, pModelDF:DataFrame, evaluationDict:dict):
+    def evaluate(rItemIDs:List[int], aggregatedItemIDsWithResponsibility:List, nextItemID:int, pModelDF:DataFrame, evaluationDict:dict):
+        if type(rItemIDs) is not list:
+            raise ValueError("Argument rItemIDs isn't type list.")
+        for itemIDI in rItemIDs:
+            if type(itemIDI) is not int and type(itemIDI) is not np.int64:
+                raise ValueError("Argument itemIDI don't contain int.")
         if type(aggregatedItemIDsWithResponsibility) is not list:
             raise ValueError("Argument aggregatedItemIDsWithResponsibility isn't type list.")
 
-        if type(nextItem) is not int and type(nextItem) is not np.int64:
+        if type(nextItemID) is not int and type(nextItemID) is not np.int64:
             raise ValueError("Argument nextItem isn't type int.")
 
         if type(pModelDF) is not DataFrame:
@@ -31,15 +36,15 @@ class EToolDHontHitIncrementOfResponsibility(AEvalTool):
         aggrItemIDsWithRespDF:DataFrame = DataFrame(aggregatedItemIDsWithResponsibility, columns=["itemId", "responsibility"])
         aggrItemIDsWithRespDF.set_index("itemId", inplace=True)
 
-        if nextItem in aggrItemIDsWithRespDF.index:
+        if nextItemID in aggrItemIDsWithRespDF.index:
             print("HOP")
-            print("nextItem: " + str(nextItem))
+            print("nextItemID: " + str(nextItemID))
 
-            evaluationDict[AEvalTool.CTR] = evaluationDict.get(AEvalTool.CTR, 0) + 1
+            evaluationDict[AEvalTool.CLICKS] = evaluationDict.get(AEvalTool.CLICKS, 0) + 1
             #print(evaluationDict)
 
             #responsibility:dict[methodID:str, votes:int]
-            responsibility:dict[str, int] = aggrItemIDsWithRespDF.loc[nextItem]["responsibility"]
+            responsibility:dict[str, int] = aggrItemIDsWithRespDF.loc[nextItemID]["responsibility"]
 
             # increment user definition
             for methodIdI in responsibility.keys():

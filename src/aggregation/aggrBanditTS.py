@@ -9,13 +9,6 @@ import pandas as pd
 from numpy.random import beta
 from typing import List
 
-from aggregation.tools.responsibilityDHont import countDHontResponsibility #function
-
-from recommendation.resultOfRecommendation import ResultOfRecommendation #class
-from recommendation.resultsOfRecommendations import ResultsOfRecommendations #class
-
-from evaluationOfRecommender.evaluationOfRecommenders import EvaluationOfRecommenders
-
 from aggregation.aAggregation import AAgregation
 
 from pandas.core.frame import DataFrame #class
@@ -25,55 +18,36 @@ from pandas.core.series import Series #class
 class AggrBanditTS(AAgregation):
 
     def __init__(self, argumentsDict:dict):
-
        if type(argumentsDict) is not dict:
           raise ValueError("Argument argumentsDict is not type dict.")
 
        self._argumentsDict = argumentsDict
 
-    def run(self, resultsOfRecommendations:ResultsOfRecommendations, evaluationOfRecommenders:EvaluationOfRecommenders, numberOfItems:int=20):
-
-        if type(resultsOfRecommendations) is not ResultsOfRecommendations:
-             raise ValueError("Argument resultsOfRecommendations is not type ResultsOfRecommendations.")
-
-        if type(numberOfItems) is not int:
-             raise ValueError("Argument numberOfItems is not type int.")
-
-        methodsResultDict = resultsOfRecommendations.exportAsDictionaryOfSeries()
-        #print(methodsResultDict)
-
-        methodsParamsDF = evaluationOfRecommenders.exportAsParamsDF()
-        #print(methodsParamsDF)
-
-        return self.aggrBanditTSRun(methodsResultDict, methodsParamsDF, topK=numberOfItems)
-
-
     # methodsResultDict:{String:pd.Series(rating:float[], itemID:int[])},
-    # methodsParamsDF:pd.DataFrame[methodID:String, r:int, n:int, alpha0:int, beta0:int], topK:int
-    def aggrBanditTSRun(self, methodsResultDict:dict, methodsParamsDF:DataFrame, topK=20):
+    # modelDF:pd.DataFrame[methodID:String, r:int, n:int, alpha0:int, beta0:int], numberOfItems:int
+    def run(self, methodsResultDict:dict, modelDF:DataFrame, numberOfItems=20):
 
-      if sorted([mI for mI in methodsParamsDF.index]) != sorted([mI for mI in methodsResultDict.keys()]):
+      if sorted([mI for mI in modelDF.index]) != sorted([mI for mI in methodsResultDict.keys()]):
           raise ValueError("Arguments methodsResultDict and methodsParamsDF have to define the same methods.")
-
-      if np.prod([len(methodsResultDict.get(mI)) for mI in methodsResultDict]) == 0:
-        raise ValueError("Argument methodsParamsDF contains in ome method an empty list of items.")
-
-      if topK < 0 :
-        raise ValueError("Argument topK must be positive value.")
+      for methIdI in methodsResultDict.keys():
+          if modelDF.loc[methIdI] is None:
+              raise ValueError("Argument methodsParamsDF contains in ome method an empty list of items.")
+      if numberOfItems < 0 :
+          raise ValueError("Argument numberOfItems can't contain negative value.")
 
 
       methodsResultDictI:dict = methodsResultDict
-      methodsParamsDFI:DataFrame = methodsParamsDF
+      methodsParamsDFI:DataFrame = modelDF
 
       recommendedItemIDs:List[tuple(int,str)] = []
 
-      for iIndex in range(0, topK):
+      for iIndex in range(0, numberOfItems):
         #print("iIndex: ", iIndex)
         #print(methodsResultDictI)
         #print(methodsParamsDFI)
 
         if len([mI for mI in methodsResultDictI]) == 0:
-          return recommendedItemIDs[:topK]
+          return recommendedItemIDs[:numberOfItems]
 
         methodProbabilitiesDicI:dict = {}
 
@@ -98,9 +72,9 @@ class AggrBanditTS(AAgregation):
         #print(resultsOfMethodI)
     
         # select next item (itemID)
-        selectedItemI:int = self.exportRouletteWheelRatedItem(resultsOfMethodI)
-        #selectedItemI = self.exportRandomItem(resultsOfMethodI)
-        #selectedItemI = self.exportTheMostRatedItem(resultsOfMethodI)
+        selectedItemI:int = self.__exportRouletteWheelRatedItem(resultsOfMethodI)
+        #selectedItemI = self.__exportRandomItem(resultsOfMethodI)
+        #selectedItemI = self.__exportTheMostRatedItem(resultsOfMethodI)
     
         #print("SelectedItemI: ", selectedItemI)
     
@@ -124,25 +98,25 @@ class AggrBanditTS(AAgregation):
 
         # removing methods definition with the empty list of items
         for meI in methodEmptyI: methodsResultDictI.pop(meI)
-      return recommendedItemIDs[:topK]
+      return recommendedItemIDs[:numberOfItems]
 
 
     # resultOfMethod:pd.Series([raitings],[itemIDs])
-    def exportTheMostRatedItem(self, resultOfMethod):
+    def __exportTheMostRatedItem(self, resultOfMethod):
       maxValue = max(resultOfMethod.values)
       return resultOfMethod[resultOfMethod == maxValue].index[0]
       #return method.idxmax()
 
     # resultOfMethod:pd.Series([raitings],[itemIDs])
-    def exportTheFirstItem(self, resultOfMethod:Series):
+    def __exportTheFirstItem(self, resultOfMethod:Series):
       return resultOfMethod.index[0]
 
     # resultOfMethod:pd.Series([raitings],[itemIDs])
-    def exportRandomItem(self, resultOfMethod:Series):
+    def __exportRandomItem(self, resultOfMethod:Series):
       return random.choice(resultOfMethod.index)
 
     # resultOfMethod:pd.Series([raitings],[itemIDs])
-    def exportRouletteWheelRatedItem(self, resultOfMethod:Series):
+    def __exportRouletteWheelRatedItem(self, resultOfMethod:Series):
         # weighted random choice
         pick = random.uniform(0, sum(resultOfMethod.values))
         current = 0
@@ -155,7 +129,7 @@ class AggrBanditTS(AAgregation):
 
 
     # methodsResultDict:{String:Series(rating:float[], itemID:int[])},
-    # methodsParamsDF:DataFrame<(methodID:str, votes:int)>, topK:int
-    def runWithResponsibility(self, methodsResultDict:dict, methodsParamsDF:DataFrame, numberOfItems:int=20):
+    # modelDF:DataFrame<(methodID:str, votes:int)>, numberOfItems:int
+    def runWithResponsibility(self, methodsResultDict:dict, modelDF:DataFrame, numberOfItems:int=20):
 
-        return self.aggrBanditTSRun(methodsResultDict, methodsParamsDF, numberOfItems)
+        return self.run(methodsResultDict, modelDF, numberOfItems)
