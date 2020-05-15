@@ -13,7 +13,6 @@ from userBehaviourDescription.userBehaviourDescription import UserBehaviourDescr
 class HistoryDF(AHistory):
 
     ITEM_ID = "itemID"
-    #POSITION_IN_RECOMMENDATION = "positionInRecommendation"
     RECOMMENDED_IDS = "recommendedIds"
     USER_BEHAVIOUR = "userBehaviourSimulator"
 
@@ -29,12 +28,13 @@ class HistoryDF(AHistory):
         self._historyDF = self._historyDF.append(new_row, ignore_index=True)
 
 
-    def getValue(self, itemID:int, uBehaviourDesc:UserBehaviourDescription, numberOfItems:int):
+    def getIgnoringValue(self, itemID:int, uBehaviourDesc:UserBehaviourDescription, numberOfItems:int=20, lengthOfHistory:int=20):
 
         probabilities:List[float] = uBehaviourDesc.getProbabilityOfBehavior(numberOfItems=numberOfItems)
+        #print("probabilities: " + str(probabilities))
 
-        def a(i):
-            rowI:Series = self._historyDF.iloc[i]
+        def valueOfIgnoring(historyIndex:int):
+            rowI:Series = self._historyDF.iloc[historyIndex]
             itemIDs:List[int] = rowI[self.RECOMMENDED_IDS]
 
             if itemID not in itemIDs:
@@ -43,7 +43,7 @@ class HistoryDF(AHistory):
             indexI:int = itemIDs.index(itemID)
             return probabilities[indexI]
 
-        return sum(map(a, range(len(self._historyDF.index))))
+        return sum(map(valueOfIgnoring, range(len(self._historyDF.index))))
 
 
     def print(self):

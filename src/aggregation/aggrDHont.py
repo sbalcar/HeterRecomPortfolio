@@ -6,24 +6,33 @@ import pandas as pd
 
 from numpy.random import beta
 from typing import List
-#from pandas.Series
 
 from pandas.core.frame import DataFrame #class
-
-from aggregation.tools.responsibilityDHont import countDHontResponsibility #function
+from pandas.core.series import Series #class
 
 from aggregation.aAggregation import AAgregation #class
+from aggregation.tools.responsibilityDHont import countDHontResponsibility #function
+from aggregation.operators.rouletteWheelSelector import RouletteWheelSelector #class
 
+from history.aHistory import AHistory #class
+from abc import ABC, abstractmethod
+
+from userBehaviourDescription.userBehaviourDescription import UserBehaviourDescription #class
 
 class AggrDHont(AAgregation):
 
-    def __init__(self, argumentsDict:dict):
+    ARG_SELECTORFNC:str = "selectorFnc"
 
-       if type(argumentsDict) is not dict:
-          raise ValueError("Argument argumentsDict is not type dict.")
+    def __init__(self, uBehaviourDesc:UserBehaviourDescription, history:AHistory, argumentsDict:dict):
+        if not isinstance(history, AHistory):
+            raise ValueError("Argument history isn't type AHistory.")
+        if type(argumentsDict) is not dict:
+            raise ValueError("Argument argumentsDict isn't type dict.")
 
-       self._argumentsDict = argumentsDict
-
+        self._uBehaviourDesc:UserBehaviourDescription = uBehaviourDesc
+        self._history = history
+        self._selectorFnc = argumentsDict[self.ARG_SELECTORFNC][0]
+        self._selectorArg = argumentsDict[self.ARG_SELECTORFNC][1]
 
     # methodsResultDict:{String:pd.Series(rating:float[], itemID:int[])},
     # modelDF:pd.DataFrame[numberOfVotes:int], numberOfItems:int
@@ -31,15 +40,13 @@ class AggrDHont(AAgregation):
 
       # testing types of parameters
       if type(methodsResultDict) is not dict:
-          raise ValueError("Type of methodsResultDict is not dict.")
-
+          raise ValueError("Type of methodsResultDict isn't dict.")
       if type(modelDF) is not DataFrame:
-          raise ValueError("Type of methodsParamsDF is not DataFrame.")
+          raise ValueError("Type of methodsParamsDF isn't DataFrame.")
       if list(modelDF.columns) != ['votes']:
           raise ValueError("Argument methodsParamsDF doen't contain rights columns.")
-
       if type(numberOfItems) is not int:
-          raise ValueError("Type of numberOfItems is not int.")
+          raise ValueError("Type of numberOfItems isn't int.")
 
       if sorted([mI for mI in modelDF.index]) != sorted([mI for mI in methodsResultDict.keys()]):
         raise ValueError("Arguments methodsResultDict and methodsParamsDF have to define the same methods.")
@@ -83,13 +90,9 @@ class AggrDHont(AAgregation):
            actVotesOfCandidatesDictI[candidateIDJ] = votesOfCandidateJ
         #print(actVotesOfCandidatesDictI)
 
-        # get the highest number of votes of remaining candidates
-        maxVotes:float = max(actVotesOfCandidatesDictI.values())
-        #print("MaxVotes: ", maxVotes)
-
         # select candidate with highest number of votes
-        selectedCandidateI:int = [votOfCandI for votOfCandI in actVotesOfCandidatesDictI.keys() if actVotesOfCandidatesDictI[votOfCandI] == maxVotes][0]
-        #print("SelectedCandidateI: ", selectedCandidateI)
+        #selectedCandidateI:int = AggrDHont.selectorOfTheMostVotedItem(actVotesOfCandidatesDictI)
+        selectedCandidateI:int = self._selectorFnc(actVotesOfCandidatesDictI, *self._selectorArg)
 
         # add new selected candidate in results
         recommendedItemIDs.append(selectedCandidateI);
@@ -98,11 +101,11 @@ class AggrDHont(AAgregation):
         uniqueCandidatesI.remove(selectedCandidateI)
 
         # updating number of elected candidates of parties
-        electedOfPartyDictI = {partyIDI:electedOfPartyDictI[partyIDI] + methodsResultDict[partyIDI].get(selectedCandidateI, 0) for partyIDI in electedOfPartyDictI.keys()}
+        electedOfPartyDictI:dict = {partyIDI:electedOfPartyDictI[partyIDI] + methodsResultDict[partyIDI].get(selectedCandidateI, 0) for partyIDI in electedOfPartyDictI.keys()}
         #print("DevotionOfPartyDictI: ", devotionOfPartyDictI)
 
         # updating number of votes of parties
-        votesOfPartiesDictI = {partyI: modelDF.votes.loc[partyI] / electedOfPartyDictI.get(partyI) for partyI in modelDF.index}
+        votesOfPartiesDictI:dict = {partyI: modelDF.votes.loc[partyI] / electedOfPartyDictI.get(partyI) for partyI in modelDF.index}
         #print("VotesOfPartiesDictI: ", votesOfPartiesDictI)
 
       # list<int>
@@ -115,16 +118,16 @@ class AggrDHont(AAgregation):
 
         # testing types of parameters
         if type(methodsResultDict) is not dict:
-            raise ValueError("Type of methodsResultDict is not dict.")
+            raise ValueError("Type of methodsResultDict isn't dict.")
         for methI in methodsResultDict.values():
             if type(methI) is not pd.Series:
                 raise ValueError("Type of methodsParamsDF doen't contain Series.")
         if type(modelDF) is not DataFrame:
-            raise ValueError("Type of methodsParamsDF is not DataFrame.")
+            raise ValueError("Type of methodsParamsDF isn't DataFrame.")
         if list(modelDF.columns) != ['votes']:
             raise ValueError("Argument methodsParamsDF doen't contain rights columns.")
         if type(numberOfItems) is not int:
-            raise ValueError("Type of numberOfItems is not int.")
+            raise ValueError("Type of numberOfItems isn't int.")
 
         if sorted([mI for mI in modelDF.index]) != sorted([mI for mI in methodsResultDict.keys()]):
             raise ValueError("Arguments methodsResultDict and methodsParamsDF have to define the same methods.")
@@ -142,3 +145,38 @@ class AggrDHont(AAgregation):
 
         # list<(itemID:int, Series<(rating:int, methodID:str)>)>
         return itemsWithResposibilityOfRecommenders
+
+
+
+
+    # selectors definition
+
+    # resultOfMethod:dict([itemIDs],[raitings])
+    @staticmethod
+    def selectorOfRouletteWheelRatedItem(votesOfCandidatesDict:dict):
+        votesOfCandidatesSer:Series = Series(votesOfCandidatesDict, index=votesOfCandidatesDict.keys())
+        return RouletteWheelSelector.run(votesOfCandidatesSer)
+
+
+    # resultOfMethod:dict([itemIDs],[raitings])
+    @staticmethod
+    def selectorOfRouletteWheelExpRatedItem(votesOfCandidatesDict:dict, exp:int):
+        vcDict:dict = dict(map(lambda mIdJ:(mIdJ, votesOfCandidatesDict[mIdJ] ** exp), votesOfCandidatesDict.keys()))
+
+        votesOfCandidatesSer:Series = Series(vcDict, index=vcDict.keys())
+        return RouletteWheelSelector.run(votesOfCandidatesSer)
+
+
+    # resultOfMethod:dict([itemIDs],[raitings])
+    @staticmethod
+    def selectorOfTheMostVotedItem(votesOfCandidatesDict:dict):
+
+        # get the highest number of votes of remaining candidates
+        maxVotes:float = max(votesOfCandidatesDict.values())
+        # print("MaxVotes: ", maxVotes)
+
+        # select candidate with highest number of votes
+        selectedCandidateI:int = [votesOfCandI for votesOfCandI in votesOfCandidatesDict.keys() if
+                                  votesOfCandidatesDict[votesOfCandI] == maxVotes][0]
+        # print("SelectedCandidateI: ", selectedCandidateI)
+        return selectedCandidateI

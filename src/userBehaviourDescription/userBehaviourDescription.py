@@ -11,7 +11,7 @@ def observationalStaticProbabilityFnc(probability: float, numberOfItems: int):
     return [probability] * numberOfItems
 
 
-def observationalLinearProbabilityFnc(minProbability: float, maxProbability: float, numberOfItems: int):
+def observationalLinearProbabilityFnc(minProbability: float, maxProbability: float, numberOfItems:int):
     if minProbability < 0.0 or minProbability > 1.0:
         raise ValueError("Argument minProbability not in range <0.0, 1.0>.")
     if maxProbability < 0.0 or maxProbability > 1.0:
@@ -21,9 +21,11 @@ def observationalLinearProbabilityFnc(minProbability: float, maxProbability: flo
     if numberOfItems < 0:
         raise ValueError("Argument numberOfItems can't contain negative value.")
 
-    diff: float = (maxProbability - minProbability) / (numberOfItems - 1)
-    return [minProbability + indexI * diff for indexI in range(numberOfItems)]
+    diff:float = (maxProbability - minProbability) / (numberOfItems - 1)
+    probabilities:List[float] = [minProbability + indexI * diff for indexI in range(numberOfItems)]
+    probabilities.reverse()
 
+    return probabilities
 
 class UserBehaviourDescription:
 

@@ -10,30 +10,33 @@ from aggregationDescription.aggregationDescription import AggregationDescription
 
 from portfolio.portfolio1Aggr import Portfolio1Aggr #class
 from portfolioDescription.aPortfolioDescription import APortfolioDescription #class
+from history.aHistory import AHistory #class
+
+from userBehaviourDescription.userBehaviourDescription import UserBehaviourDescription #class
 
 class Portfolio1AggrDescription(APortfolioDescription):
 
     def __init__(self, portfolioID:str, recommIDs:List[str], recommDescrs:List[RecommenderDescription], aggrDescr:List[AggregationDescription]):
        if type(portfolioID) is not str:
-          raise ValueError("Type of portfolioID is not str.")
+          raise ValueError("Type of portfolioID isn't str.")
        self._portfolioID:str = portfolioID
 
        if type(recommIDs) is not list:
-          raise ValueError("Type of argument recommIDs is not list.")
+          raise ValueError("Type of argument recommIDs isn't list.")
        recommIDI:str
        for recommIDI in recommIDs:
           if type(recommIDI) is not str:
              raise ValueError("Argument recommIDs don't contains str.")
 
        if type(recommDescrs) is not list:
-          raise ValueError("Type of argument recommDescrs is not list.")
+          raise ValueError("Type of argument recommDescrs isn't list.")
        recommDescrI:RecommenderDescription
        for recommDescrI in recommDescrs:
           if type(recommDescrI) is not RecommenderDescription:
              raise ValueError("Argument recommDescrs don't contains RecommenderDescription.")
 
        if type(aggrDescr) is not AggregationDescription :
-          raise ValueError("Type of argument aggrDescr is not AggregationDescription.")
+          raise ValueError("Type of argument aggrDescr isn't AggregationDescription.")
 
        self._recommIDs:list[str] = recommIDs;
        self._recommDescrs:list[RecommenderDescription] = recommDescrs;
@@ -53,7 +56,11 @@ class Portfolio1AggrDescription(APortfolioDescription):
 
 
 
-    def exportPortfolio(self):
+    def exportPortfolio(self, uBehaviourDesc:UserBehaviourDescription, history:AHistory):
+       if type(uBehaviourDesc) is not UserBehaviourDescription:
+          raise ValueError("Type of argument uBehaviourDesc isn't UserBehaviourDescription.")
+       if not isinstance(history, AHistory):
+          raise ValueError("Type of argument history isn't AHistory.")
 
        recommenders: List[ARecommender] = []
 
@@ -63,6 +70,6 @@ class Portfolio1AggrDescription(APortfolioDescription):
           recommenders.append(recommenderI)
 
        # aggregation:Aggregation
-       aggregation = self._aggrDescr.exportAggregation()
+       aggregation = self._aggrDescr.exportAggregation(uBehaviourDesc, history)
 
        return Portfolio1Aggr(self._recommIDs, recommenders, aggregation)

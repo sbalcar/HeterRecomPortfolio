@@ -105,12 +105,13 @@ class SimulationOfNonPersonalisedPortfolio:
         portfolios:List[Portfolio1Aggr] = []
 
         portfolioDescI:Portfolio1AggrDescription
-        for portfolioDescI in portfolioDescs:
+        historyI:AHistory
+        for portfolioDescI, historyI in zip(portfolioDescs, histories):
 
             print("Training mode: " + str(portfolioDescI.getPortfolioID()))
 
             # train portfolio model
-            portfolioI: Portfolio1Aggr = portfolioDescI.exportPortfolio()
+            portfolioI: Portfolio1Aggr = portfolioDescI.exportPortfolio(self._uBehaviourDesc, historyI)
             portfolioI.train(trainRatingsDF, self._usersDF, self._itemsDF)
             portfolios.append(portfolioI)
 
@@ -171,8 +172,6 @@ class SimulationOfNonPersonalisedPortfolio:
                                  testRatingsDF:DataFrame, history:AHistory, evaluation:dict, uObservation:List[bool],
                                  currentItemID:int, nextItem:int):
 
-        # aggregatedItemIDsWithResponsibility:list<(itemID:int, Series<(rating:int, methodID:str)>)>
-
         rItemIDs:List[int]
         rItemIDsWithResponsibility:List[tuple[int, Series[int, str]]]
         rItemIDs, rItemIDsWithResponsibility = portfolio.recommendToItem(
@@ -180,10 +179,6 @@ class SimulationOfNonPersonalisedPortfolio:
 
         # save log of history
         history.addRecommendation(currentItemID, rItemIDs, uObservation)
-
-        value:float = history.getValue(currentItemID, self._uBehaviourDesc, numberOfItems=self._numberOfItems)
-        #print("value: " + str(value))
-        #history.print()
 
         # evaluation
         evaluatonTool.evaluate(rItemIDs, rItemIDsWithResponsibility, nextItem, portFolioModel, evaluation)

@@ -69,8 +69,8 @@ def simulationOfPortfolio():
     rIDs:List[str] = ["RecommenderTheMostPopular", "RecommenderDummyRedirector"]
     rDescs:List[RecommenderDescription] = [rDescTheMostPopular, rDescDummyRedirector]
 
-    aDescDHont:AggregationDescription = AggregationDescription(AggrDHont, {})
-    aDescBanditTS:AggregationDescription = AggregationDescription(AggrBanditTS, {})
+    aDescDHont:AggregationDescription = AggregationDescription(AggrDHont, {AggrDHont.ARG_SELECTORFNC:(AggrDHont.selectorOfRouletteWheelRatedItem,[])})
+    aDescBanditTS:AggregationDescription = AggregationDescription(AggrBanditTS, {AggrBanditTS.ARG_SELECTORFNC:(AggrBanditTS.selectorOfRouletteWheelRatedItem,[])})
 
 
 
@@ -114,8 +114,8 @@ def simulationOfPortfolio():
 
     #evaluations:List[dict] = simulation.run([pDescTheMostPopular], [modelTheMostPopularDF], [EToolSingleMethod], [historyTheMostPopular])
     #evaluations:List[dict] = simulation.run([pDescDHont], [modelDHontDF], [EToolDHontHitIncrementOfResponsibility], [historyDHont])
-    evaluations:List[dict] = simulation.run([pDescBanditTS], [modelBanditTSDF], [EToolBanditTSHit1], [historyBanditTS])
-    #evaluations:List[dict] = simulation.run([pDescDHont, pDescBanditTS], [modelDHontDF, modelBanditTSDF], [EToolDHontHit1, EToolBanditTSHit1], [historyDHont, historyBanditTS])
+    #evaluations:List[dict] = simulation.run([pDescBanditTS], [modelBanditTSDF], [EToolBanditTSHit1], [historyBanditTS])
+    evaluations:List[dict] = simulation.run([pDescDHont, pDescBanditTS], [modelDHontDF, modelBanditTSDF], [EToolDHontHit1, EToolBanditTSHit1], [historyDHont, historyBanditTS])
 
 
     print("Evaluations: " + str(evaluations))
