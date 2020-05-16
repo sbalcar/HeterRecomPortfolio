@@ -34,7 +34,10 @@ class EToolBanditTSHit1(AEvalTool):
         if type(evaluationDict) is not dict:
             raise ValueError("Argument evaluationDict isn't type dict.")
 
-        pModelDF['n'] += 1
+        # increment by the number of objects
+        for itemIdI,methodIdI in aggregatedItemIDsWithResponsibility:
+            pModelDF.loc[methodIdI]['n'] += 1
+
 
         for itemI, methodI in aggregatedItemIDsWithResponsibility:
             if itemI == nextItemID:
@@ -45,3 +48,5 @@ class EToolBanditTSHit1(AEvalTool):
 
                 rowI:Series = pModelDF.loc[methodI]
                 rowI['r'] += 1
+                print(pModelDF)
+
