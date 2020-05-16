@@ -11,8 +11,6 @@ from datasets.users import Users #class
 from portfolioDescription.portfolio1AggrDescription import Portfolio1AggrDescription #class
 from portfolio.portfolio1Aggr import Portfolio1Aggr #class
 
-from evaluationTool.dHont.eToolDHontHitIncrementOfResponsibility import EToolDHontHitIncrementOfResponsibility #class
-
 import pandas as pd
 
 from pandas.core.frame import DataFrame #class

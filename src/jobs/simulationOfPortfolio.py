@@ -32,7 +32,6 @@ from history.historyDF import HistoryDF #class
 from portfolioDescription.aPortfolioDescription import APortfolioDescription #class
 
 from evaluationTool.singleMethod.eToolSingleMethod import EToolSingleMethod #class
-from evaluationTool.dHont.eToolDHontHitIncrementOfResponsibility import EToolDHontHitIncrementOfResponsibility #class
 from evaluationTool.dHont.eToolDHontHit1 import EToolDHontHit1 #class
 from evaluationTool.banditTS.eToolBanditTSHit1 import EToolBanditTSHit1 #class
 

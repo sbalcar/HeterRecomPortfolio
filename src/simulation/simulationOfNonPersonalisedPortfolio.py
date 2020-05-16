@@ -11,6 +11,7 @@ from portfolioDescription.portfolio1AggrDescription import Portfolio1AggrDescrip
 from portfolio.portfolio1Aggr import Portfolio1Aggr #class
 
 import pandas as pd
+import numpy as np
 
 from pandas.core.frame import DataFrame #class
 
@@ -158,7 +159,10 @@ class SimulationOfNonPersonalisedPortfolio:
                                   evaluatonTools:[AEvalTool], testRatingsDF:DataFrame, histories:List[AHistory],
                                   evaluations:List[dict], currentItem:int, nextItem:int):
 
-        uObservation:List[float] = UserBehaviourSimulator().simulate(self._uBehaviourDesc, self._numberOfItems)
+        uProbOfObservGenerated:List[float] = UserBehaviourSimulator().simulate(self._uBehaviourDesc, self._numberOfItems)
+        #print("uProbOfObservGenerated: " + str(uProbOfObservGenerated))
+
+        uObservation:List[bool] = list(map(lambda x, y: x > y, uProbOfObservGenerated, np.random.uniform(low=0.0, high=1.0, size=self._numberOfItems)))
         #print("uObservation: " + str(uObservation))
 
         portfolioI:Portfolio1Aggr
@@ -166,20 +170,29 @@ class SimulationOfNonPersonalisedPortfolio:
         historyI:pd.DataFrame
         for portfolioI, portFolioModelI, evaluatonToolI, historyI, evaluationI in zip(portfolios, portFolioModels, evaluatonTools, histories, evaluations):
             self.__simulateRecommendation(portfolioI, portFolioModelI, evaluatonToolI, testRatingsDF, historyI,
-                                          evaluationI, uObservation, currentItem, nextItem)
+                                          evaluationI, uProbOfObservGenerated, uObservation, currentItem, nextItem)
 
 
-    def __simulateRecommendation(self, portfolio:Portfolio1Aggr, portFolioModel:pd.DataFrame, evaluatonTool:AEvalTool,
-                                 testRatingsDF:DataFrame, history:AHistory, evaluation:dict, uObservation:List[float],
-                                 currentItemID:int, nextItem:int):
+    def __simulateRecommendation(self, portfolio:Portfolio1Aggr, portfolioModel:pd.DataFrame, evaluatonTool:AEvalTool, testRatingsDF:DataFrame,
+                                 history:AHistory, evaluation:dict, uProbOfObserv:List[float], uObservation:List[bool], currentItemID:int, nextItemID:int):
 
         rItemIDs:List[int]
         rItemIDsWithResponsibility:List[tuple[int, Series[int, str]]]
         rItemIDs, rItemIDsWithResponsibility = portfolio.recommendToItem(
-            portFolioModel, currentItemID, testRatingsDF, history, numberOfItems=self._numberOfItems)
+            portfolioModel, currentItemID, testRatingsDF, history, numberOfItems=self._numberOfItems)
+
+        if not nextItemID in rItemIDs:
+            return
 
         # save log of history
-        history.addRecommendation(currentItemID, rItemIDs, uObservation)
+        history.addRecommendation(currentItemID, rItemIDs, uProbOfObserv)
 
-        # evaluation
-        evaluatonTool.evaluate(rItemIDs, rItemIDsWithResponsibility, nextItem, portFolioModel, evaluation)
+        index:int = rItemIDs.index(nextItemID)
+        probOfObserv:float = uProbOfObserv[index]
+        wasObserved:bool = uObservation[index]
+        clickedItemID:int = nextItemID
+
+        if wasObserved:
+            evaluatonTool.click(rItemIDsWithResponsibility, clickedItemID, probOfObserv, portfolioModel, evaluation)
+        else:
+            evaluatonTool.ignore(rItemIDsWithResponsibility, portfolioModel, evaluation)
