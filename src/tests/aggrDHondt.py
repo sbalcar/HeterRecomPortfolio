@@ -20,8 +20,6 @@ def test01():
     # number of recommended items
     N = 120
 
-    uBehaviourDesc:UserBehaviourDescription = UserBehaviourDescription(observationalLinearProbabilityFnc, [0.1, 0.9])
-
     # method results, items=[1,2,4,5,6,7,8,12,32,64,77]
     methodsResultDict:dict[str,pd.Series] = {
           "metoda1":pd.Series([0.2,0.1,0.3,0.3,0.1],[32,2,8,1,4],name="rating"),
@@ -37,7 +35,7 @@ def test01():
     methodsParamsDF.set_index("methodID", inplace=True)
     #print(methodsParamsDF)
 
-    aggr:AggrDHont = AggrDHont(uBehaviourDesc, HistoryDF(), {AggrDHont.ARG_SELECTORFNC:(AggrDHont.selectorOfTheMostVotedItem,[])})
+    aggr:AggrDHont = AggrDHont(HistoryDF(), {AggrDHont.ARG_SELECTORFNC:(AggrDHont.selectorOfTheMostVotedItem,[])})
     #itemIDs:int = aggr.run(methodsResultDict, methodsParamsDF, N)
     #print(itemIDs)
     itemIDs:List[tuple] = aggr.runWithResponsibility(methodsResultDict, methodsParamsDF, N)
@@ -51,8 +49,6 @@ def test02():
     # number of recommended items
     N = 120
 
-    uBehaviourDesc:UserBehaviourDescription = UserBehaviourDescription(observationalLinearProbabilityFnc, [0.1, 0.9])
-
     # method results, items=[1,2,3,4,5,6,7,8,9,10]
     methodsResultDict = {
           "metoda1":pd.Series([0.2,0.2,0.2,0.2,0.2],[1,3,5,7,9],name="rating"),
@@ -65,10 +61,10 @@ def test02():
     methodsParamsDF:DataFrame = pd.DataFrame(methodsParamsData, columns=["methodID","votes"])
     methodsParamsDF.set_index("methodID", inplace=True)
 
-    #aggr:AggrDHont = AggrDHont(uBehaviourDesc, HistoryDF(), {AggrDHont.ARG_SELECTORFNC:(AggrDHont.selectorOfTheMostVotedItem,[])})
-    #aggr:AggrDHont = AggrDHont(uBehaviourDesc, HistoryDF(), {AggrDHont.ARG_SELECTORFNC:(AggrDHont.selectorOfRouletteWheelRatedItem,[])})
-    aggr:AggrDHont = AggrDHont(uBehaviourDesc, HistoryDF(), {AggrDHont.ARG_SELECTORFNC:(AggrDHont.selectorOfRouletteWheelExpRatedItem,[1])})
-    aggr:AggrDHont = AggrDHontNegativeImplFeedback(uBehaviourDesc, HistoryDF(), {AggrDHontNegativeImplFeedback.ARG_SELECTORFNC:(AggrDHontNegativeImplFeedback.selectorOfRouletteWheelExpRatedItem,[1])})
+    #aggr:AggrDHont = AggrDHont(HistoryDF(), {AggrDHont.ARG_SELECTORFNC:(AggrDHont.selectorOfTheMostVotedItem,[])})
+    #aggr:AggrDHont = AggrDHont(HistoryDF(), {AggrDHont.ARG_SELECTORFNC:(AggrDHont.selectorOfRouletteWheelRatedItem,[])})
+    #aggr:AggrDHont = AggrDHont(HistoryDF(), {AggrDHont.ARG_SELECTORFNC:(AggrDHont.selectorOfRouletteWheelExpRatedItem,[1])})
+    aggr:AggrDHont = AggrDHontNegativeImplFeedback(HistoryDF(), {AggrDHontNegativeImplFeedback.ARG_SELECTORFNC:(AggrDHontNegativeImplFeedback.selectorOfRouletteWheelExpRatedItem,[1])})
 
     ##itemIDs:int = aggr.run(methodsResultDict, methodsParamsDF, N)
     itemIDs:int = aggr.run(methodsResultDict, methodsParamsDF, N)

@@ -158,7 +158,8 @@ class SimulationOfNonPersonalisedPortfolio:
                                   evaluatonTools:[AEvalTool], testRatingsDF:DataFrame, histories:List[AHistory],
                                   evaluations:List[dict], currentItem:int, nextItem:int):
 
-        uObservation:List[bool] = UserBehaviourSimulator().simulate(self._uBehaviourDesc, self._numberOfItems)
+        uObservation:List[float] = UserBehaviourSimulator().simulate(self._uBehaviourDesc, self._numberOfItems)
+        #print("uObservation: " + str(uObservation))
 
         portfolioI:Portfolio1Aggr
         portFolioModelI:pd.DataFrame
@@ -169,7 +170,7 @@ class SimulationOfNonPersonalisedPortfolio:
 
 
     def __simulateRecommendation(self, portfolio:Portfolio1Aggr, portFolioModel:pd.DataFrame, evaluatonTool:AEvalTool,
-                                 testRatingsDF:DataFrame, history:AHistory, evaluation:dict, uObservation:List[bool],
+                                 testRatingsDF:DataFrame, history:AHistory, evaluation:dict, uObservation:List[float],
                                  currentItemID:int, nextItem:int):
 
         rItemIDs:List[int]

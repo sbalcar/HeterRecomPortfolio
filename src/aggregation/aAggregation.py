@@ -11,7 +11,7 @@ from userBehaviourDescription.userBehaviourDescription import UserBehaviourDescr
 class AAgregation(ABC):
 
     @abstractmethod
-    def __init__(self, uBehaviourDesc:UserBehaviourDescription, aHistory:AHistory, argumentsDict:dict):
+    def __init__(self, aHistory:AHistory, argumentsDict:dict):
        raise Exception("AAgregation is abstract class, can't be instanced")
 
     # userDef:DataFrame<(methodID:str, votes:int)>

@@ -23,8 +23,6 @@ def test01():
     # number of recommended items
     N = 120
 
-    uBehaviourDesc:UserBehaviourDescription = UserBehaviourDescription(observationalLinearProbabilityFnc, [0.1, 0.9])
-
     # method results, items=[1,2,4,5,6,7,8,12,32,64,77]
     methodsResultDict:dict = {
         "metoda1": pd.Series([0.2, 0.1, 0.3, 0.3, 0.1], [32, 2, 8, 1, 4], name="rating"),
@@ -39,7 +37,7 @@ def test01():
     methodsParamsDF.set_index("methodID", inplace=True)
     # print(methodsParamsDF)
 
-    aggr:AggrBanditTS = AggrBanditTS(uBehaviourDesc, HistoryDF(), {AggrBanditTS.ARG_SELECTORFNC:(AggrBanditTS.selectorOfRouletteWheelRatedItem,[])})
+    aggr:AggrBanditTS = AggrBanditTS(HistoryDF(), {AggrBanditTS.ARG_SELECTORFNC:(AggrBanditTS.selectorOfRouletteWheelRatedItem,[])})
 
     #itemIDs:List[tuple] = aggr.runWithResponsibility(methodsResultDict, methodsParamsDF, N)
     itemIDs:List[tuple] = aggr.run(methodsResultDict, methodsParamsDF, N)

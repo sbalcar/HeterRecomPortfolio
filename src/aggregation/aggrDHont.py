@@ -23,13 +23,12 @@ class AggrDHont(AAgregation):
 
     ARG_SELECTORFNC:str = "selectorFnc"
 
-    def __init__(self, uBehaviourDesc:UserBehaviourDescription, history:AHistory, argumentsDict:dict):
+    def __init__(self, history:AHistory, argumentsDict:dict):
         if not isinstance(history, AHistory):
             raise ValueError("Argument history isn't type AHistory.")
         if type(argumentsDict) is not dict:
             raise ValueError("Argument argumentsDict isn't type dict.")
 
-        self._uBehaviourDesc:UserBehaviourDescription = uBehaviourDesc
         self._history = history
         self._selectorFnc = argumentsDict[self.ARG_SELECTORFNC][0]
         self._selectorArg = argumentsDict[self.ARG_SELECTORFNC][1]

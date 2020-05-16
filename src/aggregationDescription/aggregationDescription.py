@@ -14,10 +14,8 @@ class AggregationDescription:
         self._aggregationClass = aggregationClass;
         self._argumentsDict:dict = argumentsDict
 
-    def exportAggregation(self, uBehaviourDesc:UserBehaviourDescription, history:AHistory):
-        if type(uBehaviourDesc) is not UserBehaviourDescription :
-           raise ValueError("Argument uBehaviourDesc isn't type UserBehaviourDescription")
+    def exportAggregation(self, history:AHistory):
         if not isinstance(history, AHistory):
            raise ValueError("Argument history isn't type AHistory")
 
-        return self._aggregationClass(uBehaviourDesc, history, self._argumentsDict);
+        return self._aggregationClass(history, self._argumentsDict);

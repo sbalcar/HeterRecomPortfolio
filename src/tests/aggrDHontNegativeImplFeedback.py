@@ -41,15 +41,15 @@ def test01():
     #print(methodsParamsDF)
 
     historyDF:AHistory = HistoryDF()
-    historyDF.addRecommendation(1, [7], [True])
-    historyDF.addRecommendation(1, [7], [True])
-    historyDF.addRecommendation(1, [7], [True])
+    historyDF.addRecommendation(1, [7], [0.9])
+    historyDF.addRecommendation(1, [7], [0.9])
+    historyDF.addRecommendation(1, [7], [0.9])
     historyDF.print()
 
-    ignoringValue:float = historyDF.getIgnoringValue(7, uBehaviourDesc, numberOfItems=N, lengthOfHistory=3)
-    print("IgnoringValue: " + str(ignoringValue))
+    ignoringValue:float = historyDF.getIgnoringValue(7, numberOfItems=N, lengthOfHistory=3)
+    #print("IgnoringValue: " + str(ignoringValue))
 
-    aggr:AggrDHont = AggrDHontNegativeImplFeedback(uBehaviourDesc, historyDF, {AggrDHontNegativeImplFeedback.ARG_SELECTORFNC:(AggrDHontNegativeImplFeedback.selectorOfTheMostVotedItem,[])})
+    aggr:AggrDHont = AggrDHontNegativeImplFeedback(historyDF, {AggrDHontNegativeImplFeedback.ARG_SELECTORFNC:(AggrDHontNegativeImplFeedback.selectorOfTheMostVotedItem,[])})
 
     itemIDs:List[tuple] = aggr.runWithResponsibility(methodsResultDict, methodsParamsDF, N)
     print(itemIDs)

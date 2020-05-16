@@ -25,13 +25,12 @@ class AggrDHontNegativeImplFeedback(AggrDHont):
 
     ARG_SELECTORFNC:str = "selectorFnc"
 
-    def __init__(self, uBehaviourDesc:UserBehaviourDescription, history:AHistory, argumentsDict:dict):
+    def __init__(self, history:AHistory, argumentsDict:dict):
         if not isinstance(history, AHistory):
             raise ValueError("Argument history isn't type AHistory.")
         if type(argumentsDict) is not dict:
             raise ValueError("Argument argumentsDict isn't type dict.")
 
-        self._uBehaviourDesc:UserBehaviourDescription = uBehaviourDesc
         self._history = history
         self._selectorFnc = argumentsDict[self.ARG_SELECTORFNC][0]
         self._selectorArg = argumentsDict[self.ARG_SELECTORFNC][1]
@@ -61,7 +60,7 @@ class AggrDHontNegativeImplFeedback(AggrDHont):
             raise ValueError("Argument numberOfItems must be positive value.")
 
         methodsResultNewDict:List[int,np.Series[int,str]] =\
-            NegativeImplicitFeedback.transformResultsOfMethods(methodsResultDict, self._uBehaviourDesc, self._history, numberOfItems=numberOfItems, argumentsDict=self.argumentsDict)
+            NegativeImplicitFeedback.transformResultsOfMethods(methodsResultDict, self._history, numberOfItems=numberOfItems, argumentsDict=self.argumentsDict)
 
         itemsWithResposibilityOfRecommenders:List[int,np.Series[int,str]] =\
             super().run(methodsResultNewDict, modelDF, numberOfItems=numberOfItems)
@@ -97,7 +96,7 @@ class AggrDHontNegativeImplFeedback(AggrDHont):
 
 
         methodsResultNewDict:List[int,np.Series[int,str]] =\
-            NegativeImplicitFeedback.transformResultsOfMethods(methodsResultDict, self._uBehaviourDesc, self._history, numberOfItems=numberOfItems, argumentsDict=self.argumentsDict)
+            NegativeImplicitFeedback.transformResultsOfMethods(methodsResultDict, self._history, numberOfItems=numberOfItems, argumentsDict=self.argumentsDict)
 
         itemsWithResposibilityOfRecommenders:List[int,np.Series[int,str]] =\
             super().runWithResponsibility(methodsResultNewDict, modelDF, numberOfItems=numberOfItems)

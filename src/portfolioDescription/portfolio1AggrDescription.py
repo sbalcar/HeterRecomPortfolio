@@ -62,14 +62,14 @@ class Portfolio1AggrDescription(APortfolioDescription):
        if not isinstance(history, AHistory):
           raise ValueError("Type of argument history isn't AHistory.")
 
-       recommenders: List[ARecommender] = []
+       recommenders:List[ARecommender] = []
 
-       recommDescrI: RecommenderDescription
+       recommDescrI:RecommenderDescription
        for recommDescrI in self._recommDescrs:
           recommenderI:ARecommender = recommDescrI.exportRecommender()
           recommenders.append(recommenderI)
 
        # aggregation:Aggregation
-       aggregation = self._aggrDescr.exportAggregation(uBehaviourDesc, history)
+       aggregation = self._aggrDescr.exportAggregation(history)
 
        return Portfolio1Aggr(self._recommIDs, recommenders, aggregation)
