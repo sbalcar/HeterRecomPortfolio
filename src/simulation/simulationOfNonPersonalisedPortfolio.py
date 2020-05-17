@@ -10,6 +10,8 @@ from portfolioDescription.aPortfolioDescription import APortfolioDescription #cl
 from portfolioDescription.portfolio1AggrDescription import Portfolio1AggrDescription #class
 from portfolio.portfolio1Aggr import Portfolio1Aggr #class
 
+from portfolio.aPortfolio import APortfolio #class
+
 import pandas as pd
 import numpy as np
 
@@ -120,7 +122,7 @@ class SimulationOfNonPersonalisedPortfolio:
         return self.__iterateOverDataset(portfolios, portFolioModels, evaluatonTools, histories, testRatingsDF)
 
 
-    def __iterateOverDataset(self, portfolios:List[Portfolio1Aggr], portFolioModels:List[pd.DataFrame],
+    def __iterateOverDataset(self, portfolios:List[APortfolio], portFolioModels:List[pd.DataFrame],
                              evaluatonTools:[AEvalTool], histories:List[AHistory], testRatingsDF:DataFrame):
 
         evaluations:List[dict] = [{} for i in range(len(portfolios))]
@@ -138,6 +140,7 @@ class SimulationOfNonPersonalisedPortfolio:
             if counterI == 1000:
                 return evaluations
 ## TODO ######
+
             currentItemIdI:int = testRatingsDF.loc[currentIndexI][Ratings.COL_MOVIEID]
             nextItemIdI:int = testRatingsDF.loc[nextIndexI][Ratings.COL_MOVIEID]
             nextItemRatingI:int = testRatingsDF.loc[nextIndexI][Ratings.COL_RATING]
@@ -149,7 +152,7 @@ class SimulationOfNonPersonalisedPortfolio:
             for repetitionI in range(self._repetitionOfRecommendation):
                 self.__simulateRecommendations(portfolios, portFolioModels, evaluatonTools, testRatingsDF,
                                                histories, evaluations, currentItemIdI, nextItemIdI)
-            # TODO
+            portfolioI:APortfolio
             for portfolioI in portfolios:
                 portfolioI.update(pd.DataFrame(testRatingsDF.loc[nextIndexI]))
 
@@ -175,24 +178,32 @@ class SimulationOfNonPersonalisedPortfolio:
 
     def __simulateRecommendation(self, portfolio:Portfolio1Aggr, portfolioModel:pd.DataFrame, evaluatonTool:AEvalTool, testRatingsDF:DataFrame,
                                  history:AHistory, evaluation:dict, uProbOfObserv:List[float], uObservation:List[bool], currentItemID:int, nextItemID:int):
+        # TODO: userID =
+        userID:int = 0
 
         rItemIDs:List[int]
         rItemIDsWithResponsibility:List[tuple[int, Series[int, str]]]
         rItemIDs, rItemIDsWithResponsibility = portfolio.recommendToItem(
-            portfolioModel, currentItemID, testRatingsDF, history, numberOfItems=self._numberOfItems)
+            portfolioModel, currentItemID, testRatingsDF, history, userID, numberOfItems=self._numberOfItems)
 
         if not nextItemID in rItemIDs:
             return
 
-        # save log of history
-        history.addRecommendation(currentItemID, rItemIDs, uProbOfObserv)
-
         index:int = rItemIDs.index(nextItemID)
         probOfObserv:float = uProbOfObserv[index]
         wasObserved:bool = uObservation[index]
-        clickedItemID:int = nextItemID
+
 
         if wasObserved:
+            clickedItemID: int = nextItemID
+
             evaluatonTool.click(rItemIDsWithResponsibility, clickedItemID, probOfObserv, portfolioModel, evaluation)
+
+            # save log of history
+            history.insertRecommendations(userID, rItemIDs, uProbOfObserv, clickedItemID)
+
         else:
             evaluatonTool.ignore(rItemIDsWithResponsibility, portfolioModel, evaluation)
+
+            # save log of history
+            history.insertRecommendations(userID, rItemIDs, uProbOfObserv, None)

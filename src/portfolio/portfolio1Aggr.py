@@ -59,7 +59,7 @@ class Portfolio1Aggr(APortfolio):
 
 
    # portFolioModel:DataFrame<(methodID, votes)>
-   def recommendToItem(self, portFolioModel:DataFrame, itemID:int, ratingsTestDF:DataFrame, history:AHistory, numberOfItems:int):
+   def recommendToItem(self, portFolioModel:DataFrame, itemID:int, ratingsTestDF:DataFrame, history:AHistory, userID:int, numberOfItems:int):
 
        resultsOfRecommendations:dict = {}
 
@@ -72,7 +72,7 @@ class Portfolio1Aggr(APortfolio):
            resultsOfRecommendations[recommIDI] = resultOfRecommendationI
 
        aggItemIDsWithResponsibility:List = self._aggregation.runWithResponsibility(
-           resultsOfRecommendations, portFolioModel, numberOfItems=numberOfItems)
+           resultsOfRecommendations, portFolioModel, userID, numberOfItems=numberOfItems)
        #print(aggregatedItemIDsWithResponsibility)
 
        aggItemIDs:List[int] = list(map(lambda rs: rs[0], aggItemIDsWithResponsibility))

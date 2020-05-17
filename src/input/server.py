@@ -32,7 +32,7 @@ def penalizeIfRecentlyRecommended(previousRecommendations, itemID, score,
                                   maxSinglePenalty=0.15):
   '''
   reduces given score based on how many times has the item already been recommended to the user in the last week.
-  :param previousRecommendations: array of previous recommendations made to our user. Output of getPreviousRecommendations
+  :param previousRecommendations: array of previous recommendations made to our user. Output of getPreviousRecomOfUser
   :param itemID: item id
   :param score: the score to adjust
   :param maxFinalPenalty: maximal penalty given to an item

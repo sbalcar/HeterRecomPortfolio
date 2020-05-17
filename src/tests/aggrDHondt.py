@@ -7,7 +7,7 @@ from aggregation.aggrDHont import AggrDHont #class
 from aggregation.aggrDHontNegativeImplFeedback import AggrDHontNegativeImplFeedback #class
 
 import pandas as pd
-from history.historyDF import HistoryDF #class
+from history.historyDFa import HistoryDF #class
 
 from userBehaviourDescription.userBehaviourDescription import UserBehaviourDescription #class
 from userBehaviourDescription.userBehaviourDescription import observationalStaticProbabilityFnc #function

@@ -9,6 +9,7 @@ from aggregation.aggrDHontNegativeImplFeedback import AggrDHontNegativeImplFeedb
 import pandas as pd
 from history.aHistory import AHistory #class
 from history.historyDF import HistoryDF #class
+from history.historySQLite import HistorySQLite #class
 
 from userBehaviourDescription.userBehaviourDescription import UserBehaviourDescription #class
 from userBehaviourDescription.userBehaviourDescription import observationalStaticProbabilityFnc #function
@@ -40,18 +41,21 @@ def test01():
     methodsParamsDF.set_index("methodID", inplace=True)
     #print(methodsParamsDF)
 
-    historyDF:AHistory = HistoryDF()
-    historyDF.addRecommendation(1, [7], [0.9])
-    historyDF.addRecommendation(1, [7], [0.9])
-    historyDF.addRecommendation(1, [7], [0.9])
+    userID:int = 0
+    itemID:int = 7
+
+    historyDF:AHistory = HistoryDF("test01")
+    historyDF.insertRecommendation(userID, itemID, 1, 0.9, True)
+    historyDF.insertRecommendation(userID, itemID, 1, 0.9, True)
+    historyDF.insertRecommendation(userID, itemID, 1, 0.9, True)
     historyDF.print()
 
-    ignoringValue:float = historyDF.getIgnoringValue(7, numberOfItems=N, lengthOfHistory=3)
-    #print("IgnoringValue: " + str(ignoringValue))
+    ignoringValue:float = historyDF.getIgnoringValue(userID, itemID, limit=3)
+    print("IgnoringValue: " + str(ignoringValue))
 
     aggr:AggrDHont = AggrDHontNegativeImplFeedback(historyDF, {AggrDHontNegativeImplFeedback.ARG_SELECTORFNC:(AggrDHontNegativeImplFeedback.selectorOfTheMostVotedItem,[])})
 
-    itemIDs:List[tuple] = aggr.runWithResponsibility(methodsResultDict, methodsParamsDF, N)
+    itemIDs:List[tuple] = aggr.runWithResponsibility(methodsResultDict, methodsParamsDF, userID, N)
     print(itemIDs)
 
 

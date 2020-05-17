@@ -8,7 +8,7 @@ from pandas.core.series import Series #class
 from aggregation.aggrBanditTS import AggrBanditTS #class
 
 import pandas as pd
-from history.historyDF import HistoryDF #class
+from history.historyDFa import HistoryDF #class
 
 from userBehaviourDescription.userBehaviourDescription import UserBehaviourDescription #class
 from userBehaviourDescription.userBehaviourDescription import observationalStaticProbabilityFnc #function

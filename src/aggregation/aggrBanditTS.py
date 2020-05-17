@@ -38,7 +38,7 @@ class AggrBanditTS(AAgregation):
 
     # methodsResultDict:{String:pd.Series(rating:float[], itemID:int[])},
     # modelDF:pd.DataFrame[methodID:String, r:int, n:int, alpha0:int, beta0:int], numberOfItems:int
-    def run(self, methodsResultDict:dict, modelDF:DataFrame, numberOfItems=20):
+    def run(self, methodsResultDict:dict, modelDF:DataFrame, userID:int, numberOfItems=20):
         if type(methodsResultDict) is not dict:
             raise ValueError("Argument methodsResultDict isn't type dict.")
         if type(modelDF) is not DataFrame:
@@ -53,7 +53,7 @@ class AggrBanditTS(AAgregation):
 
     # methodsResultDict:{String:Series(rating:float[], itemID:int[])},
     # modelDF:DataFrame<(methodID:str, votes:int)>, numberOfItems:int
-    def runWithResponsibility(self, methodsResultDict:dict, modelDF:DataFrame, numberOfItems:int=20):
+    def runWithResponsibility(self, methodsResultDict:dict, modelDF:DataFrame, userID:int, numberOfItems:int=20):
         if type(methodsResultDict) is not dict:
             raise ValueError("Argument methodsResultDict isn't type dict.")
         if type(modelDF) is not DataFrame:

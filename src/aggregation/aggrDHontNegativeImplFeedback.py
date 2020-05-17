@@ -39,7 +39,7 @@ class AggrDHontNegativeImplFeedback(AggrDHont):
 
     # methodsResultDict:{String:pd.Series(rating:float[], itemID:int[])},
     # modelDF:pd.DataFrame[numberOfVotes:int], numberOfItems:int
-    def run(self, methodsResultDict:dict, modelDF:DataFrame, numberOfItems:int=20):
+    def run(self, methodsResultDict:dict, modelDF:DataFrame, userID:int, numberOfItems:int=20):
 
         # testing types of parameters
         if type(methodsResultDict) is not dict:
@@ -60,10 +60,10 @@ class AggrDHontNegativeImplFeedback(AggrDHont):
             raise ValueError("Argument numberOfItems must be positive value.")
 
         methodsResultNewDict:List[int,np.Series[int,str]] =\
-            NegativeImplicitFeedback.transformResultsOfMethods(methodsResultDict, self._history, numberOfItems=numberOfItems, argumentsDict=self.argumentsDict)
+            NegativeImplicitFeedback.transformResultsOfMethods(methodsResultDict, self._history, userID, numberOfItems=numberOfItems, argumentsDict=self.argumentsDict)
 
         itemsWithResposibilityOfRecommenders:List[int,np.Series[int,str]] =\
-            super().run(methodsResultNewDict, modelDF, numberOfItems=numberOfItems)
+            super().run(methodsResultNewDict, modelDF, userID, numberOfItems=numberOfItems)
 
         # list<(itemID:int, Series<(rating:int, methodID:str)>)>
         return itemsWithResposibilityOfRecommenders
@@ -71,7 +71,7 @@ class AggrDHontNegativeImplFeedback(AggrDHont):
 
     # methodsResultDict:{String:Series(rating:float[], itemID:int[])},
     # modelDF:DataFrame<(methodID:str, votes:int)>, numberOfItems:int
-    def runWithResponsibility(self, methodsResultDict:dict, modelDF:DataFrame, numberOfItems:int=20):
+    def runWithResponsibility(self, methodsResultDict:dict, modelDF:DataFrame, userID:int, numberOfItems:int=20):
 
         # testing types of parameters
         if type(methodsResultDict) is not dict:
@@ -96,10 +96,10 @@ class AggrDHontNegativeImplFeedback(AggrDHont):
 
 
         methodsResultNewDict:List[int,np.Series[int,str]] =\
-            NegativeImplicitFeedback.transformResultsOfMethods(methodsResultDict, self._history, numberOfItems=numberOfItems, argumentsDict=self.argumentsDict)
+            NegativeImplicitFeedback.transformResultsOfMethods(methodsResultDict, self._history, userID, numberOfItems=numberOfItems, argumentsDict=self.argumentsDict)
 
         itemsWithResposibilityOfRecommenders:List[int,np.Series[int,str]] =\
-            super().runWithResponsibility(methodsResultNewDict, modelDF, numberOfItems=numberOfItems)
+            super().runWithResponsibility(methodsResultNewDict, modelDF, userID, numberOfItems=numberOfItems)
 
         # list<(itemID:int, Series<(rating:int, methodID:str)>)>
         return itemsWithResposibilityOfRecommenders

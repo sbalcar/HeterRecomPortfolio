@@ -1,7 +1,10 @@
 #!/usr/bin/python3
 
+import datetime
+
 from typing import List
 from pandas.core.series import Series #class
+from pandas.core.frame import DataFrame #class
 
 import pandas as pd
 
@@ -12,37 +15,51 @@ from userBehaviourDescription.userBehaviourDescription import UserBehaviourDescr
 
 class HistoryDF(AHistory):
 
+    USER_ID = "userID"
     ITEM_ID = "itemID"
-    RECOMMENDED_IDS = "recommendedIds"
-    PROBS_OF_OBSERVATION = "probabilityOfObservation"
+    POSITION = "position"
+    OBSERVATION = "observation"
+    CLICKED = "clicked"
+    TIMESTAMP = "timestamp"
 
-    def __init__(self):
+
+    def __init__(self, dbName:str):
+
+        self.dbName:str = dbName
 
         historyData:pd.DataFrame = []
-        self._historyDF:pd.DataFrame = pd.DataFrame(historyData, columns=[self.ITEM_ID, self.RECOMMENDED_IDS, self.PROBS_OF_OBSERVATION])
+        self._historyDF:pd.DataFrame = pd.DataFrame(historyData, columns=[
+            self.USER_ID, self.ITEM_ID, self.POSITION, self.OBSERVATION, self.CLICKED, self.TIMESTAMP])
 
 
-    def addRecommendation(self, itemID:int, recommendedItemIDs:List[int], uObservation:List[bool]):
+    def insertRecommendation(self, userID:int, itemID:int, position:int, uObservation:float, clicked:bool, timestamp=datetime.datetime.now()):
 
-        new_row:pd.Series = pd.Series({self.ITEM_ID:itemID, self.RECOMMENDED_IDS:recommendedItemIDs, self.PROBS_OF_OBSERVATION:uObservation})
+        new_row:dict = {self.USER_ID:userID, self.ITEM_ID:itemID, self.POSITION:position, self.OBSERVATION:uObservation, self.CLICKED:clicked, self.TIMESTAMP:timestamp}
+
         self._historyDF = self._historyDF.append(new_row, ignore_index=True)
 
 
-    def getIgnoringValue(self, itemID:int, numberOfItems:int=20, lengthOfHistory:int=20):
+    def getPreviousRecomOfUser(self, userID:int, limit:int=100):
 
-        def valueOfIgnoring(historyIndex:int):
-            rowI:Series = self._historyDF.iloc[historyIndex]
+        uDF:DataFrame = self._historyDF[self._historyDF[self.USER_ID] == userID]
 
-            itemIDs:List[int] = rowI[self.RECOMMENDED_IDS]
-            probsOfObserv:List[float] = rowI[self.PROBS_OF_OBSERVATION]
+        result:List[tuple] = []
+        for indexI, rowI  in uDF.tail(limit).iterrows():
+            result.append((indexI, rowI[self.USER_ID], rowI[self.ITEM_ID], rowI[self.POSITION], rowI[self.OBSERVATION], rowI[self.CLICKED], rowI[self.TIMESTAMP]))
 
-            if itemID not in itemIDs:
-                return 0.0
+        return result
 
-            indexI:int = itemIDs.index(itemID)
-            return probsOfObserv[indexI]
+    def getPreviousRecomOfUserAndItem(self, userID:int, itemID:int, limit:int=100):
 
-        return sum(map(valueOfIgnoring, range(len(self._historyDF.index))))
+        uDF:DataFrame = self._historyDF[self._historyDF[self.USER_ID] == userID]
+        uiDF:DataFrame = uDF[uDF[self.ITEM_ID] == itemID]
+
+        result: List[tuple] = []
+        for indexI, rowI in uiDF.tail(limit).iterrows():
+            result.append((indexI, rowI[self.USER_ID], rowI[self.ITEM_ID], rowI[self.POSITION], rowI[self.OBSERVATION],
+                           rowI[self.CLICKED], rowI[self.TIMESTAMP]))
+
+        return result
 
 
     def print(self):

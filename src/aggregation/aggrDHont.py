@@ -35,7 +35,7 @@ class AggrDHont(AAgregation):
 
     # methodsResultDict:{String:pd.Series(rating:float[], itemID:int[])},
     # modelDF:pd.DataFrame[numberOfVotes:int], numberOfItems:int
-    def run(self, methodsResultDict:dict, modelDF:DataFrame, numberOfItems:int = 20):
+    def run(self, methodsResultDict:dict, modelDF:DataFrame, userID:int, numberOfItems:int = 20):
 
       # testing types of parameters
       if type(methodsResultDict) is not dict:
@@ -113,7 +113,7 @@ class AggrDHont(AAgregation):
 
     # methodsResultDict:{String:Series(rating:float[], itemID:int[])},
     # modelDF:DataFrame<(methodID:str, votes:int)>, numberOfItems:int
-    def runWithResponsibility(self, methodsResultDict:dict, modelDF:DataFrame, numberOfItems:int=20):
+    def runWithResponsibility(self, methodsResultDict:dict, modelDF:DataFrame, userID:int, numberOfItems:int=20):
 
         # testing types of parameters
         if type(methodsResultDict) is not dict:

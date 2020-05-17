@@ -81,7 +81,7 @@ def simulationOfPortfolio():
     modelDHontDF:DataFrame = pd.DataFrame(modelDHontData, columns=["methodID", "votes"])
     modelDHontDF.set_index("methodID", inplace=True)
 
-    historyDHont:AHistory = HistoryDF()
+    historyDHont:AHistory = HistoryDF("DHont")
 
 
 
@@ -93,7 +93,7 @@ def simulationOfPortfolio():
     modelBanditTSDF:DataFrame = pd.DataFrame(modelBanditTSData, columns=["methodID", "r", "n", "alpha0", "beta0"])
     modelBanditTSDF.set_index("methodID", inplace=True)
 
-    historyBanditTS:AHistory = HistoryDF()
+    historyBanditTS:AHistory = HistoryDF("BanditTS")
 
 
 
@@ -102,7 +102,7 @@ def simulationOfPortfolio():
 
     modelTheMostPopularDF:DataFrame = pd.DataFrame()
 
-    historyTheMostPopular:AHistory = HistoryDF()
+    historyTheMostPopular:AHistory = HistoryDF("TheMostPopular")
 
 
 

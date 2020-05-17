@@ -16,7 +16,7 @@ class AAgregation(ABC):
 
     # userDef:DataFrame<(methodID:str, votes:int)>
     @abstractmethod
-    def runWithResponsibility(self, methodsResultDict, userDef:DataFrame, numberOfItems:float=20):
+    def runWithResponsibility(self, methodsResultDict, userDef:DataFrame, userID:int, numberOfItems:float=20):
         assert False, "this needs to be overridden"
     # return list<(itemID:int, Series<(rating:int, methodID:str)>)>
 
