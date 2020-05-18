@@ -25,6 +25,7 @@ import pandas as pd
 from pandas.core.frame import DataFrame #class
 
 from simulation.simulationOfNonPersonalisedPortfolio import SimulationOfNonPersonalisedPortfolio #class
+from simulation.simulationOfPersonalisedPortfolio import SimulationOfPersonalisedPortfolio #class
 
 from history.aHistory import AHistory #class
 from history.historyDF import HistoryDF #class
@@ -107,8 +108,8 @@ def simulationOfPortfolio():
 
 
     # simulation of portfolio
-    #simulation:SimulationOfPersonalisedPortfolio = SimulationOfPersonalisedPortfolio(
-    simulation:SimulationOfNonPersonalisedPortfolio = SimulationOfNonPersonalisedPortfolio(
+    simulation:SimulationOfPersonalisedPortfolio = SimulationOfPersonalisedPortfolio(
+    #simulation:SimulationOfNonPersonalisedPortfolio = SimulationOfNonPersonalisedPortfolio(
             ratingsDF, usersDF, itemsDF, uBehaviourDesc, repetitionOfRecommendation=1, numberOfItems=numberOfItems)
 
     #evaluations:List[dict] = simulation.run([pDescTheMostPopular], [modelTheMostPopularDF], [EToolSingleMethod], [historyTheMostPopular])

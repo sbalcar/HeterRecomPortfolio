@@ -68,7 +68,7 @@ class Portfolio1Aggr(APortfolio):
            recommIDI: str = self._recommIDs[recommIndexI]
            recommI:ARecommender = self._recommenders[recommIndexI]
 
-           resultOfRecommendationI:List[int] = recommI.recommendToItem(itemID, ratingsTestDF, history, numberOfItems=numberOfItems)
+           resultOfRecommendationI:List[int] = recommI.recommend(itemID, ratingsTestDF, history, numberOfItems=numberOfItems)
            resultsOfRecommendations[recommIDI] = resultOfRecommendationI
 
        aggItemIDsWithResponsibility:List = self._aggregation.runWithResponsibility(

@@ -43,7 +43,7 @@ class RecommenderTheMostPopular(ARecommender):
         pass
 
 
-    def recommendToItem(self, itemID:int, ratingsTestDF:DataFrame, history:AHistory, numberOfItems:int=20):
+    def recommend(self, itemID:int, ratingsTestDF:DataFrame, history:AHistory, numberOfItems:int=20):
 
         # ratings:Dataframe<(movieId:int, ratings:int)>
         ratingsDF:DataFrame = self._sortedAscRatings5CountDF.head(numberOfItems)

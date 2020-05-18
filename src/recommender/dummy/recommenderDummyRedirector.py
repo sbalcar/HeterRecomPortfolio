@@ -29,7 +29,7 @@ class RecommenderDummyRedirector(ARecommender):
         pass
 
 
-   def recommendToItem(self, itemID:int, ratingsTestDF:DataFrame, history:AHistory, numberOfItems:int=20):
+   def recommend(self, itemID:int, ratingsTestDF:DataFrame, history:AHistory, numberOfItems:int=20):
 
         result:pd.Series = self._argumentsDict[self.ARG_RESULT]
 

@@ -22,6 +22,6 @@ class ARecommender(ABC):
         assert False, "this needs to be overridden"
 
     @abstractmethod
-    def recommendToItem(self, itemID:int, ratingsTestDF:DataFrame, history:AHistory, numberOfItems:int):
+    def recommend(self, itemID:int, ratingsTestDF:DataFrame, history:AHistory, numberOfItems:int):
         assert False, "this needs to be overridden"
 

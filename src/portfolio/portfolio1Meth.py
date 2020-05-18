@@ -44,7 +44,7 @@ class Portfolio1Meth(APortfolio):
 
    def recommendToItem(self, portFolioModel:DataFrame, itemID:int, testRatingsDF:DataFrame, history:AHistory, numberOfItems:int):
 
-        recomItemIDsWithResponsibility:Series = self._recommender.recommendToItem(itemID, testRatingsDF, history, numberOfItems)
+        recomItemIDsWithResponsibility:Series = self._recommender.recommend(itemID, testRatingsDF, history, numberOfItems)
 
         recomItemIDs:List[int] = list(recomItemIDsWithResponsibility.index)
 

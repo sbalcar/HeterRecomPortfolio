@@ -25,7 +25,7 @@ class RecommenderDummyRandom(ARecommender):
     def update(self, ratingsUpdateDF:DataFrame):
         pass
 
-    def recommendToItem(self, itemID:int, ratingsTestDF:DataFrame, history:AHistory, numberOfItems:int=20):
+    def recommend(self, itemID:int, ratingsTestDF:DataFrame, history:AHistory, numberOfItems:int=20):
         items:List[int] = list(range(numberOfItems))
         #random.shuffle(items)
 
