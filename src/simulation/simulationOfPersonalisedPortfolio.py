@@ -174,7 +174,8 @@ class SimulationOfPersonalisedPortfolio:
                                   evaluatonTools:[AEvalTool], testRatingsDF:DataFrame, histories:List[AHistory],
                                   evaluations:List[dict], userID:int, currentItem:int, nextItem:int):
 
-        uProbOfObservGenerated:List[float] = UserBehaviourSimulator().simulate(self._uBehaviourDesc, self._numberOfItems)
+        uProbOfObservGenerated:List[float] = UserBehaviourSimulator().simulateStaticProb(self._uBehaviourDesc,
+                                                                                         self._numberOfItems)
         #print("uProbOfObservGenerated: " + str(uProbOfObservGenerated))
 
         uObservation:List[bool] = list(map(lambda x, y: x > y, uProbOfObservGenerated, np.random.uniform(low=0.0, high=1.0, size=self._numberOfItems)))

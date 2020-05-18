@@ -9,7 +9,15 @@ from userBehaviourDescription.userBehaviourDescription import UserBehaviourDescr
 
 class UserBehaviourSimulator:
 
-    def simulate(self, uBehaviourDesc:UserBehaviourDescription, numberOfItems:int):
+    def simulateStaticProb(self, uBehaviourDesc:UserBehaviourDescription, numberOfItems:int):
+
+        maxProbOfObserv:List[float] = uBehaviourDesc.getProbabilityOfBehavior(numberOfItems)
+        #print("maxProbOfObserv: " + str(maxProbOfObserv))
+
+        return maxProbOfObserv
+
+
+    def simulateRandomizedProb(self, uBehaviourDesc:UserBehaviourDescription, numberOfItems:int):
 
         maxProbOfObserv:List[float] = uBehaviourDesc.getProbabilityOfBehavior(numberOfItems)
         #print("maxProbOfObserv: " + str(maxProbOfObserv))
