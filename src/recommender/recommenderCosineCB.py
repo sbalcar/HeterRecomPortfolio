@@ -22,7 +22,6 @@ class RecommenderCosineCB(ARecommender):
 
     # ratingsSum:Dataframe<(userId:int, movieId:int, ratings:int, timestamp:int)>
     def __init__(self, argumentsDict:dict):
-
         if type(argumentsDict) is not dict:
             raise ValueError("Argument argumentsDict is not type dict.")
 

@@ -4,15 +4,13 @@ import os
 import time
 from typing import List
 
-from datasets.configuration import Configuration #class
-
 from pandas.core.frame import DataFrame #class
 from pandas.core.series import Series #class
 
 from datasets.ratings import Ratings #class
 
 from recommender.aRecommender import ARecommender #class
-from recommender.recommenderCosineCB import RecommenderCosineCB #class
+from recommender.recommenderW2V import RecommenderW2V #class
 
 import pandas as pd
 from history.historySQLite import HistorySQLite #class
@@ -22,19 +20,20 @@ from userBehaviourDescription.userBehaviourDescription import UserBehaviourDescr
 from userBehaviourDescription.userBehaviourDescription import observationalStaticProbabilityFnc #function
 from userBehaviourDescription.userBehaviourDescription import observationalLinearProbabilityFnc #function
 
+from recommender.recommenderCosineCB import RecommenderCosineCB #class
+
 def test01():
     print("Test 01")
     os.chdir("..")
 
-    print("Running RecommenderCosineCB:")
-
-    cbDataPath:str = Configuration.cbDataFileWithPath
+    print("Running RecommenderW2V:")
 
     ratingsDF:DataFrame = Ratings.readFromFileMl100k()
 
+    #ratingsDF:DataFrame = Ratings.readFromFileMl100k()
     ratingsDFTrain:DataFrame = ratingsDF.iloc[0:50000]
 
-    rec:ARecommender = RecommenderCosineCB({RecommenderCosineCB.ARG_CB_DATA_PATH:cbDataPath})
+    rec:ARecommender = RecommenderW2V({RecommenderW2V.ARG_TRAIN_VARIANT:"posneg"})
     rec.train(pd.DataFrame(), ratingsDFTrain, pd.DataFrame(), pd.DataFrame())
 
     ratingsDFUpdate:DataFrame = ratingsDF.iloc[50003:50004]
