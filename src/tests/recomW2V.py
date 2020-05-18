@@ -28,9 +28,8 @@ def test01():
 
     print("Running RecommenderW2V:")
 
-    ratingsDF:DataFrame = Ratings.readFromFileMl100k()
+    ratingsDF: DataFrame = Ratings.readFromFileMl1m()
 
-    #ratingsDF:DataFrame = Ratings.readFromFileMl100k()
     ratingsDFTrain:DataFrame = ratingsDF.iloc[0:50000]
 
     rec:ARecommender = RecommenderW2V({RecommenderW2V.ARG_TRAIN_VARIANT:"posneg"})
@@ -41,8 +40,8 @@ def test01():
 
     print(len(rec.userProfiles[331]))
 
-    #r:Series = rec.recommend(331, 50, "max")
-    #print(r)
+    r:Series = rec.recommend(331, 50, "max")
+    print(r)
 
     r:Series =rec.recommend(10000, 50, "mean")
     print(r)

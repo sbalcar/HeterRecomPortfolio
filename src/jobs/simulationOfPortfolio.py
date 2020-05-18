@@ -4,7 +4,7 @@ from typing import List
 
 from recommenderDescription.recommenderDescription import RecommenderDescription #class
 
-from recommender.recommenderTheMostPopular import RecommenderTheMostPopular #class
+from recommender.dummy.recommenderTheMostPopular import RecommenderTheMostPopular #class
 from recommender.dummy.recommenderDummyRedirector import RecommenderDummyRedirector #class
 
 from datasets.ratings import Ratings #class
@@ -24,7 +24,6 @@ import pandas as pd
 
 from pandas.core.frame import DataFrame #class
 
-from simulation.simulationOfNonPersonalisedPortfolio import SimulationOfNonPersonalisedPortfolio #class
 from simulation.simulationOfPersonalisedPortfolio import SimulationOfPersonalisedPortfolio #class
 
 from history.aHistory import AHistory #class
@@ -32,12 +31,10 @@ from history.historyDF import HistoryDF #class
 
 from portfolioDescription.aPortfolioDescription import APortfolioDescription #class
 
-from evaluationTool.singleMethod.eToolSingleMethod import EToolSingleMethod #class
 from evaluationTool.dHont.eToolDHontHit1 import EToolDHontHit1 #class
 from evaluationTool.banditTS.eToolBanditTSHit1 import EToolBanditTSHit1 #class
 
 from userBehaviourDescription.userBehaviourDescription import UserBehaviourDescription #class
-from userBehaviourDescription.userBehaviourDescription import observationalStaticProbabilityFnc #function
 from userBehaviourDescription.userBehaviourDescription import observationalLinearProbabilityFnc #function
 
 

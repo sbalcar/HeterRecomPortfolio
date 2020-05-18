@@ -28,9 +28,11 @@ def test01():
 
     print("Running RecommenderCosineCB:")
 
-    cbDataPath:str = Configuration.cbDataFileWithPath
+    cbDataPath:str = Configuration.cbDataFileWithPathTFIDF
 
-    ratingsDF:DataFrame = Ratings.readFromFileMl100k()
+    #ratingsDF:DataFrame = Ratings.readFromFileMl100k()
+    ratingsDF: DataFrame = Ratings.readFromFileMl1m()
+
 
     ratingsDFTrain:DataFrame = ratingsDF.iloc[0:50000]
 
@@ -42,8 +44,8 @@ def test01():
 
     print(len(rec.userProfiles[331]))
 
-    #r:Series = rec.recommend(331, 50, "max")
-    #print(r)
+    r:Series = rec.recommend(331, 50, "max")
+    print(r)
 
     r:Series =rec.recommend(10000, 50, "mean")
     print(r)

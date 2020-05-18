@@ -4,6 +4,11 @@ import os
 
 class Configuration:
 
-    dataPath:str = ".." + os.sep + "data"
+    dataDirectory:str = ".." + os.sep + "data"
 
-    cbDataFileWithPath:str = dataPath + os.sep + "cbDataOHE.txt"
+    cbDataFileWithPathTFIDF:str = dataDirectory + os.sep + "cbDataTFIDF.txt"
+    cbDataFileWithPathOHE:str = dataDirectory + os.sep + "cbDataOHE.txt"
+
+
+
+    modelDirectory:str =  ".." + os.sep + "models"

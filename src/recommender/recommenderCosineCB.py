@@ -20,7 +20,6 @@ class RecommenderCosineCB(ARecommender):
 
     ARG_CB_DATA_PATH:str = "cbDataPath"
 
-    # ratingsSum:Dataframe<(userId:int, movieId:int, ratings:int, timestamp:int)>
     def __init__(self, argumentsDict:dict):
         if type(argumentsDict) is not dict:
             raise ValueError("Argument argumentsDict is not type dict.")
@@ -46,7 +45,7 @@ class RecommenderCosineCB(ARecommender):
         userProfileDF = self.ratingsGroupDF.aggregate(lambda x: list(x))
         self.userProfiles = userProfileDF.to_dict()
 
-    def update(self, ratingsUpdateDF: pd.DataFrame):
+    def update(self, ratingsUpdateDF:DataFrame):
         # ratingsUpdateDF has only one row
         row = ratingsUpdateDF.iloc[0]
         rating = row[Ratings.COL_RATING]
@@ -87,8 +86,8 @@ class RecommenderCosineCB(ARecommender):
 
         return ([], [], "")
 
-    #def recommend(self, userID: int, numberOfItems: int, userProfileStrategy):
-    def recommend(self, userID:int, numberOfItems: int, userProfileStrategy):
+    #def recommend(self, userID:int, numberOfItems:int, userProfileStrategy):
+    def recommend(self, userID:int, numberOfItems:int, userProfileStrategy):
         userTrainData = self.userProfiles.get(userID, [])
         objectIDs, weights, aggregation = self.resolveUserProfile(userProfileStrategy, userTrainData)
         simList = []

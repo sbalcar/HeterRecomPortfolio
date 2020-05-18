@@ -25,22 +25,17 @@ def word2vecRun(window_size = 3, embedding_size = 64, texts = []):
     from recommender.w2v.text_helpers import text_to_numbers #function
     from recommender.w2v.text_helpers import generate_batch_data #function
     from tensorflow.python.framework import ops
+    from datasets.configuration import Configuration #class
 
     ops.reset_default_graph()
-
-    os.chdir(os.path.dirname(os.path.realpath(__file__)))
-    # Make a saving directory if it doesn't exist
-    data_folder_name = 'data'
-    if not os.path.exists(data_folder_name):
-        os.makedirs(data_folder_name)
 
     # Start a graph session
     sess = tf.Session()
 
     # Declare model parameters
-    batch_size = 32
-    vocabulary_size = 10000
-    generations = 200000
+    batch_size:int = 32
+    vocabulary_size:int = 10000
+    generations:int = 200000
     model_learning_rate = 0.01
 
     #embedding_size = 64   # Word embedding size
@@ -51,8 +46,8 @@ def word2vecRun(window_size = 3, embedding_size = 64, texts = []):
     #window_size = 3       # How many words to consider to the left.
     # Add checkpoints to training
     save_embeddings_every = 50000
-    print_valid_every = 50000
-    print_loss_every = 10000 
+    print_valid_every:int = 50000
+    print_loss_every:int = 10000
 
     # Declare stop words
     #stops = stopwords.words('english')
@@ -149,6 +144,8 @@ def word2vecRun(window_size = 3, embedding_size = 64, texts = []):
 
 
     final_embeddings = sess.run(embeddings)
-    embeddingsFname = "embeds/embed_word2vec_"+str(window_size)+"_"+str(embedding_size)+".csv"
+    print(os.getcwd())
+
+    embeddingsFname = Configuration.modelDirectory + os.sep +"embed_word2vec_"+str(window_size)+"_"+str(embedding_size)+".csv"
     np.savetxt(embeddingsFname, final_embeddings, fmt="%.6e")
     return(final_embeddings, word_dictionary_rev, word_dictionary)
