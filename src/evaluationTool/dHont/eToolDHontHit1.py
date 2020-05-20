@@ -10,10 +10,15 @@ import numpy as np
 
 
 class EToolDHontHit1(AEvalTool):
+    # TODO: maybe store learning rates to a database?
+    learningRateClicks = 0.01
+    learningRateViews = 0.01 / 500
+    maxVotesConst = 0.99
+    minVotesConst = 0.01
 
     @staticmethod
-    def click(rItemIDsWithResponsibility:List, clickedItemID:int, probability:float, portfolioModel:DataFrame,
-              evaluationDict:dict):
+    def click(rItemIDsWithResponsibility: List, clickedItemID: int, probability: float, portfolioModel: DataFrame,
+              evaluationDict: dict):
         if type(rItemIDsWithResponsibility) is not list:
             raise ValueError("Argument rItemIDsWithResponsibility isn't type list.")
         if type(clickedItemID) is not int and type(clickedItemID) is not np.int64:
@@ -27,8 +32,7 @@ class EToolDHontHit1(AEvalTool):
         if type(evaluationDict) is not dict:
             raise ValueError("Argument evaluationDict isn't type dict.")
 
-
-        aggrItemIDsWithRespDF:DataFrame = DataFrame(rItemIDsWithResponsibility, columns=["itemId", "responsibility"])
+        aggrItemIDsWithRespDF: DataFrame = DataFrame(rItemIDsWithResponsibility, columns=["itemId", "responsibility"])
         aggrItemIDsWithRespDF.set_index("itemId", inplace=True)
 
         print("HOP")
@@ -36,17 +40,36 @@ class EToolDHontHit1(AEvalTool):
 
         evaluationDict[AEvalTool.CLICKS] = evaluationDict.get(AEvalTool.CLICKS, 0) + 1
 
-        #responsibilityDict:dict[methodID:str, votes:float]
-        responsibilityDict:dict[str,float] = aggrItemIDsWithRespDF.loc[clickedItemID]["responsibility"]
+        # responsibilityDict:dict[methodID:str, votes:float]
+        responsibilityDict: dict[str, float] = aggrItemIDsWithRespDF.loc[clickedItemID]["responsibility"]
 
         # increment portfolio model
+        sumMethodsVotes = portfolioModel.sum()
         for methodIdI in responsibilityDict.keys():
-            portfolioModel.loc[methodIdI] += responsibilityDict[methodIdI]
+
+            relevance_this = responsibilityDict[methodIdI]
+            relevance_others = sumMethodsVotes - relevance_this
+            update_step = EToolDHontHit1.learningRateClicks * (relevance_this - relevance_others)
+
+            # elif action == "storeViews":
+            #    update_step = -1 * learningRateViews * (relevance_this - relevance_others)
+            #    pos_step = 0
+
+            portfolioModel.loc[methodIdI] = portfolioModel.loc[methodIdI] + update_step
+
+            # Apply constraints on maximal and minimal volumes of votes
+            if portfolioModel.loc[methodIdI, 'votes'] < EToolDHontHit1.minVotesConst:
+                portfolioModel.loc[methodIdI, 'votes'] = EToolDHontHit1.minVotesConst
+            elif portfolioModel.loc[methodIdI, 'votes'] > EToolDHontHit1.maxVotesConst:
+                portfolioModel.loc[methodIdI, 'votes'] = EToolDHontHit1.maxVotesConst
+
+        # linearly normalizing to unit sum of votes
+        portfolioModel = portfolioModel / portfolioModel.sum()
         print(portfolioModel)
 
 
     @staticmethod
-    def ignore(rItemIDsWithResponsibility:List, portfolioModel:DataFrame, evaluationDict:dict):
+    def ignore(rItemIDsWithResponsibility: List, portfolioModel: DataFrame, evaluationDict: dict):
         if type(rItemIDsWithResponsibility) is not list:
             raise ValueError("Argument rItemIDsWithResponsibility isn't type list.")
         if type(portfolioModel) is not DataFrame:
@@ -56,4 +79,29 @@ class EToolDHontHit1(AEvalTool):
         if type(evaluationDict) is not dict:
             raise ValueError("Argument evaluationDict isn't type dict.")
 
-        pass
+        aggrItemIDsWithRespDF:DataFrame = DataFrame(rItemIDsWithResponsibility, columns=["itemId", "responsibility"])
+        aggrItemIDsWithRespDF.set_index("itemId", inplace=True)
+
+        # responsibilityDict:dict[methodID:str, votes:float]
+        # iterate over all recommended items, penalize their methods
+        for index, responsibilityI in aggrItemIDsWithRespDF.iterrows():
+            responsibilityDict:dict[str,float] = responsibilityI["responsibility"]
+
+            # increment portfolio model
+            sumMethodsVotes:float = portfolioModel.sum()
+            methodIdI:str
+            for methodIdI in responsibilityDict.keys():
+                relevance_this:float = responsibilityDict.get(methodIdI)
+                relevance_others:float = sumMethodsVotes - relevance_this
+                update_step:float = -1 * EToolDHontHit1.learningRateViews * (relevance_this - relevance_others)
+
+                portfolioModel.loc[methodIdI] = portfolioModel.loc[methodIdI] + update_step
+
+                # Apply constraints on maximal and minimal volumes of votes
+                if portfolioModel.loc[methodIdI, 'votes'] < EToolDHontHit1.minVotesConst:
+                    portfolioModel.loc[methodIdI, 'votes'] = EToolDHontHit1.minVotesConst
+                elif portfolioModel.loc[methodIdI, 'votes'] > EToolDHontHit1.maxVotesConst:
+                    portfolioModel.loc[methodIdI, 'votes'] = EToolDHontHit1.maxVotesConst
+
+            # linearly normalizing to unit sum of votes
+            portfolioModel = portfolioModel / portfolioModel.sum()
