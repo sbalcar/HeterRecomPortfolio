@@ -23,6 +23,8 @@ class RecommenderCosineCB(ARecommender):
     ARG_USER_PROFILE_STRATEGY:str = "userProfileStrategy"
 
 
+    DEBUG_MODE = False
+
     def __init__(self, argumentsDict:dict):
         if type(argumentsDict) is not dict:
             raise ValueError("Argument argumentsDict is not type dict.")
@@ -62,7 +64,8 @@ class RecommenderCosineCB(ARecommender):
 
     def resolveUserProfile(self, userProfileStrategy, userTrainData):
         rec = userProfileStrategy
-        print(rec)
+        if self.DEBUG_MODE:
+            print(rec)
         if (len(userTrainData) > 0):
             if (rec == "mean") | (rec == "max"):
                 weights = [1.0] * len(userTrainData)
@@ -84,7 +87,8 @@ class RecommenderCosineCB(ARecommender):
             else:
                 agg = np.mean
 
-            print((userTrainData, weights, agg))
+            if self.DEBUG_MODE:
+                print((userTrainData, weights, agg))
             return (userTrainData, weights, agg)
 
         return ([], [], "")
@@ -107,7 +111,8 @@ class RecommenderCosineCB(ARecommender):
             results = results * weights
             results = aggregation(results, axis=0)
 
-            print(type(results))
+            if self.DEBUG_MODE:
+                print(type(results))
             results.sort_values(ascending=False, inplace=True, ignore_index=False)
             resultList = results.iloc[0:numberOfItems]
 

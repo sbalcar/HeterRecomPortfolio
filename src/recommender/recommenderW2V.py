@@ -23,6 +23,8 @@ class RecommenderW2V(ARecommender):
 
     ARG_USER_PROFILE_STRATEGY:str = "userProfileStrategy"
 
+    DEBUG_MODE = False
+
     # ratingsSum:Dataframe<(userId:int, movieId:int, ratings:int, timestamp:int)>
     def __init__(self, argumentsDict:dict):
         if type(argumentsDict) is not dict:
@@ -53,7 +55,8 @@ class RecommenderW2V(ARecommender):
         t = self.getTrainVariant(ratingsDF)
         t[Ratings.COL_MOVIEID] = t[Ratings.COL_MOVIEID].astype("str")
         t_sequences = t.groupby(Ratings.COL_USERID)[Ratings.COL_MOVIEID].apply(" ".join)
-        print(t_sequences)
+        if self.DEBUG_MODE:
+            print(t_sequences)
         # t_sequences.set_index(Ratings.COL_USERID, inplace=True)
         w2vTrainData = t_sequences.values.tolist()
 
@@ -89,7 +92,8 @@ class RecommenderW2V(ARecommender):
         w2vObjects = [self.dictionary[i] for i in objectIDs if i in self.dictionary]
 
         rec:str = userProfileStrategy
-        print(rec)
+        if self.DEBUG_MODE:
+            print(rec)
         if (len(w2vObjects) > 0):
             if (rec == "mean") | (rec == "max"):
                 weights = [1.0] * len(w2vObjects)
@@ -111,7 +115,8 @@ class RecommenderW2V(ARecommender):
             else:
                 agg = np.mean
 
-            print((w2vObjects, weights, agg))
+            if self.DEBUG_MODE:
+                print((w2vObjects, weights, agg))
             return (w2vObjects, weights, agg)
 
         return ([], [], "")
@@ -136,7 +141,8 @@ class RecommenderW2V(ARecommender):
             results = results * weights
             results = aggregation(results, axis=0)
 
-            print(type(results))
+            if self.DEBUG_MODE:
+                print(type(results))
             # check for a variant with negative preference (only positive objects recommended)
             # approximative solution - might result in less objects
             resultList = (-results).argsort()[0:(numberOfItems * 3)]
