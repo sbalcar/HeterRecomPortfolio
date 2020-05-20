@@ -130,7 +130,7 @@ def simulationOfPortfolio():
     #evaluations: List[dict] = simulation.run([pDescCCB], [modelCCBDF], [EToolSingleMethod], [historyCCB])
     #evaluations: List[dict] = simulation.run([pDescW2V], [modelW2VDF], [EToolSingleMethod], [historyW2V])
     #evaluations:List[dict] = simulation.run([pDescTheMostPopular], [modelTheMostPopularDF], [EToolSingleMethod], [historyTheMostPopular])
-    #evaluations:List[dict] = simulation.run([pDescDHont], [modelDHontDF], [EToolDHontHitIncrementOfResponsibility], [historyDHont])
+    #evaluations:List[dict] = simulation.run([pDescDHont], [modelDHontDF], [EToolDHontHit1], [historyDHont])
     #evaluations:List[dict] = simulation.run([pDescBanditTS], [modelBanditTSDF], [EToolBanditTSHit1], [historyBanditTS])
     evaluations:List[dict] = simulation.run([pDescDHont, pDescBanditTS], [modelDHontDF, modelBanditTSDF], [EToolDHontHit1, EToolBanditTSHit1], [historyDHont, historyBanditTS])
 

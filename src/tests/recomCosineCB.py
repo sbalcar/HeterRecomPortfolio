@@ -46,10 +46,12 @@ def test01():
 
     print("max")
     r:Series = rec.recommend(331, 50, "max")
+    print(type(r))
     print(r)
 
     print("mean")
     r:Series =rec.recommend(10000, 50, "mean")
+    print(type(r))
     print(r)
 
 

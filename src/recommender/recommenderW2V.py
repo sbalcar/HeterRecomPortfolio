@@ -151,6 +151,6 @@ class RecommenderW2V(ARecommender):
             finalScores = results[resultList]
             finalScores = normalize(np.expand_dims(finalScores, axis=0))[0, :]
 
-            return pd.Series(resultingOIDs, finalScores.tolist(), name="rating")
+            return pd.Series(finalScores.tolist(), index=resultingOIDs)
 
-        return pd.Series([], [],name="rating")
+        return pd.Series([], index=[])

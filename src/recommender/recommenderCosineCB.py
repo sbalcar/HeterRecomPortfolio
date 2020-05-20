@@ -118,6 +118,6 @@ class RecommenderCosineCB(ARecommender):
             finalScores = resultList.values
             finalScores = normalize(np.expand_dims(finalScores, axis=0))[0, :]
 
-            return pd.Series(list(resultList.index), finalScores.tolist(),name="rating")
+            return pd.Series(finalScores.tolist(), index=list(resultList.index))
 
-        return pd.Series([], [],name="rating")
+        return pd.Series([], index=[])
