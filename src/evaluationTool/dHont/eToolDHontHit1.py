@@ -36,8 +36,8 @@ class EToolDHontHit1(AEvalTool):
 
         evaluationDict[AEvalTool.CLICKS] = evaluationDict.get(AEvalTool.CLICKS, 0) + 1
 
-        #responsibilityDict:dict[methodID:str, votes:int]
-        responsibilityDict:dict[str,int] = aggrItemIDsWithRespDF.loc[clickedItemID]["responsibility"]
+        #responsibilityDict:dict[methodID:str, votes:float]
+        responsibilityDict:dict[str,float] = aggrItemIDsWithRespDF.loc[clickedItemID]["responsibility"]
 
         # increment portfolio model
         for methodIdI in responsibilityDict.keys():

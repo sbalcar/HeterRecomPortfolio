@@ -7,7 +7,7 @@ from aggregation.aggrDHont import AggrDHont #class
 from aggregation.aggrDHontNegativeImplFeedback import AggrDHontNegativeImplFeedback #class
 
 import pandas as pd
-from history.historyDFa import HistoryDF #class
+from history.historyDF import HistoryDF #class
 
 from userBehaviourDescription.userBehaviourDescription import UserBehaviourDescription #class
 from userBehaviourDescription.userBehaviourDescription import observationalStaticProbabilityFnc #function
@@ -35,7 +35,7 @@ def test01():
     methodsParamsDF.set_index("methodID", inplace=True)
     #print(methodsParamsDF)
 
-    aggr:AggrDHont = AggrDHont(HistoryDF(), {AggrDHont.ARG_SELECTORFNC:(AggrDHont.selectorOfTheMostVotedItem,[])})
+    aggr:AggrDHont = AggrDHont(HistoryDF(""), {AggrDHont.ARG_SELECTORFNC:(AggrDHont.selectorOfTheMostVotedItem,[])})
     #itemIDs:int = aggr.run(methodsResultDict, methodsParamsDF, N)
     #print(itemIDs)
     itemIDs:List[tuple] = aggr.runWithResponsibility(methodsResultDict, methodsParamsDF, N)
@@ -64,7 +64,7 @@ def test02():
     #aggr:AggrDHont = AggrDHont(HistoryDF(), {AggrDHont.ARG_SELECTORFNC:(AggrDHont.selectorOfTheMostVotedItem,[])})
     #aggr:AggrDHont = AggrDHont(HistoryDF(), {AggrDHont.ARG_SELECTORFNC:(AggrDHont.selectorOfRouletteWheelRatedItem,[])})
     #aggr:AggrDHont = AggrDHont(HistoryDF(), {AggrDHont.ARG_SELECTORFNC:(AggrDHont.selectorOfRouletteWheelExpRatedItem,[1])})
-    aggr:AggrDHont = AggrDHontNegativeImplFeedback(HistoryDF(), {AggrDHontNegativeImplFeedback.ARG_SELECTORFNC:(AggrDHontNegativeImplFeedback.selectorOfRouletteWheelExpRatedItem,[1])})
+    aggr:AggrDHont = AggrDHontNegativeImplFeedback(HistoryDF(""), {AggrDHontNegativeImplFeedback.ARG_SELECTORFNC:(AggrDHontNegativeImplFeedback.selectorOfRouletteWheelExpRatedItem,[1])})
 
     ##itemIDs:int = aggr.run(methodsResultDict, methodsParamsDF, N)
     itemIDs:int = aggr.run(methodsResultDict, methodsParamsDF, N)

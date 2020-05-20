@@ -18,7 +18,7 @@ from portfolio.portfolio1Aggr import Portfolio1Aggr #class
 
 from userBehaviourDescription.userBehaviourDescription import UserBehaviourDescription #class
 
-from simulation.userBehaviourSimulator.userBehaviourSimulator import UserBehaviourSimulator #class
+from simulation.tools.userBehaviourSimulator import UserBehaviourSimulator #class
 
 from evaluationTool.aEvalTool import AEvalTool #class
 
@@ -28,7 +28,7 @@ import pandas as pd
 import numpy as np
 
 
-class SimulationOfPersonalisedPortfolio:
+class SimulationPortfoliosRecomToItemSeparatedUsers:
 
     def __init__(self, ratingsDF:DataFrame, usersDF:DataFrame, itemsDF:DataFrame,
                  uBehaviourDesc:UserBehaviourDescription, repetitionOfRecommendation:int=1, numberOfItems:int=20):
@@ -116,7 +116,7 @@ class SimulationOfPersonalisedPortfolio:
         for portfolioDescI, historyI in zip(portfolioDescs, histories):
 
             portfolioI:Portfolio1Aggr = portfolioDescI.exportPortfolio(self._uBehaviourDesc, historyI)
-            portfolioI.train(trainRatingsDF, self._usersDF, self._itemsDF)
+            portfolioI.train(historyI, trainRatingsDF, self._usersDF, self._itemsDF)
             portfolios.append(portfolioI)
 
         userIdI:int
@@ -195,8 +195,8 @@ class SimulationOfPersonalisedPortfolio:
 
         rItemIDs:List[int]
         rItemIDsWithResponsibility:List[tuple[int, Series[int, str]]]
-        rItemIDs, rItemIDsWithResponsibility = portfolio.recommendToItem(
-            portfolioModel, currentItemID, testRatingsDF, history, userID, numberOfItems=self._numberOfItems)
+        rItemIDs, rItemIDsWithResponsibility = portfolio.recommend(
+            userID, portfolioModel, testRatingsDF, history, numberOfItems=self._numberOfItems)
 
         if not nextItemID in rItemIDs:
             return

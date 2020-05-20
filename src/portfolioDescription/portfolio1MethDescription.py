@@ -8,6 +8,11 @@ from portfolio.portfolio1Meth import Portfolio1Meth #class
 
 from portfolioDescription.aPortfolioDescription import APortfolioDescription #class
 
+from history.aHistory import AHistory #class
+
+from userBehaviourDescription.userBehaviourDescription import UserBehaviourDescription #class
+
+
 class Portfolio1MethDescription(APortfolioDescription):
 
     def __init__(self, portfolioID:str, recommID:str, recommDescr:RecommenderDescription):
@@ -25,7 +30,7 @@ class Portfolio1MethDescription(APortfolioDescription):
     def getPortfolioID(self):
         return self._recommID
 
-    def exportPortfolio(self):
+    def exportPortfolio(self, uBehaviourDesc:UserBehaviourDescription, history:AHistory):
 
         recommender:ARecommender = self._recommDescr.exportRecommender()
         return Portfolio1Meth(self._recommID, recommender)

@@ -20,6 +20,9 @@ class RecommenderCosineCB(ARecommender):
 
     ARG_CB_DATA_PATH:str = "cbDataPath"
 
+    ARG_USER_PROFILE_STRATEGY:str = "userProfileStrategy"
+
+
     def __init__(self, argumentsDict:dict):
         if type(argumentsDict) is not dict:
             raise ValueError("Argument argumentsDict is not type dict.")
@@ -86,11 +89,16 @@ class RecommenderCosineCB(ARecommender):
 
         return ([], [], "")
 
-    #def recommend(self, userID:int, numberOfItems:int, userProfileStrategy):
-    def recommend(self, userID:int, numberOfItems:int, userProfileStrategy):
+    #userID: int, ratingsTestDF: DataFrame, history: AHistory, numberOfItems: int = 20
+    def recommend(self, userID:int, numberOfItems:int=20, userProfileStrategy:str="mean"):
+        if type(userID) is not int and type(userID) is not np.int64:
+            raise ValueError("Argument userID isn't type int.")
+        if type(numberOfItems) is not int and type(numberOfItems) is not np.int64:
+            raise ValueError("Argument numberOfItems isn't type int.")
+
         userTrainData = self.userProfiles.get(userID, [])
         objectIDs, weights, aggregation = self.resolveUserProfile(userProfileStrategy, userTrainData)
-        simList = []
+        simList:List = []
 
         # provedu agregaci dle zvolené metody
         if len(objectIDs) > 0:

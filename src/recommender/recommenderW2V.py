@@ -2,29 +2,35 @@
 
 import pandas as pd
 import numpy as np
+
+from typing import List
+
 from recommender.w2v import word2vec
 
 from pandas.core.frame import DataFrame #class
 
 from sklearn.metrics import *
 from sklearn.preprocessing import normalize
-from recommender.aRecommender import ARecommender  # class
+from recommender.aRecommender import ARecommender  #class
 
-from datasets.ratings import Ratings  # class
+from datasets.ratings import Ratings  #class
+from history.aHistory import AHistory #class
 
 
 class RecommenderW2V(ARecommender):
 
     ARG_TRAIN_VARIANT:str = "trainVariant"
 
+    ARG_USER_PROFILE_STRATEGY:str = "userProfileStrategy"
+
     # ratingsSum:Dataframe<(userId:int, movieId:int, ratings:int, timestamp:int)>
-    def __init__(self, argumentsDict):
+    def __init__(self, argumentsDict:dict):
         if type(argumentsDict) is not dict:
             raise ValueError("Argument argumentsDict is not type dict.")
         self._arguments:dict = argumentsDict
 
-        self.trainVariant = self._arguments[self.ARG_TRAIN_VARIANT]
-        self.userProfiles = {}
+        self.trainVariant:str = self._arguments[self.ARG_TRAIN_VARIANT]
+        self.userProfiles:dict = {}
 
     def getTrainVariant(self, trainDF:DataFrame):
         if self.trainVariant == "all":
@@ -32,12 +38,17 @@ class RecommenderW2V(ARecommender):
         elif self.trainVariant == "positive":
             return trainDF.loc[trainDF[Ratings.COL_RATING] >= 4]
         elif self.trainVariant == "posneg":
-            trainDF[Ratings.COL_MOVIEID].loc[trainDF[Ratings.COL_RATING] < 4] = -trainDF[Ratings.COL_MOVIEID]
             return trainDF
 
-    def train(self, historyDF:DataFrame, ratingsDF:DataFrame, usersDF:DataFrame, itemsDF:DataFrame):
+    def train(self, history:AHistory, ratingsDF:DataFrame, usersDF:DataFrame, itemsDF:DataFrame):
+        if not isinstance(history, AHistory):
+            raise ValueError("Argument history isn't type AHistory.")
         if type(ratingsDF) is not DataFrame:
-            raise ValueError("Argument ratingsDF is not type DataFrame.")
+            raise ValueError("Argument ratingsDF isn't type DataFrame.")
+        if type(usersDF) is not DataFrame:
+            raise ValueError("Argument usersDF isn't type DataFrame.")
+        if type(itemsDF) is not DataFrame:
+            raise ValueError("Argument itemsDF isn't type DataFrame.")
 
         t = self.getTrainVariant(ratingsDF)
         t[Ratings.COL_MOVIEID] = t[Ratings.COL_MOVIEID].astype("str")
@@ -46,8 +57,8 @@ class RecommenderW2V(ARecommender):
         # t_sequences.set_index(Ratings.COL_USERID, inplace=True)
         w2vTrainData = t_sequences.values.tolist()
 
-        w = 3
-        e = 64
+        w:int = 3
+        e:int = 64
         model, rev_dict, dictionary = word2vec.word2vecRun(w, e, w2vTrainData)
         dictionary = dict([((int(i), j) if i != "RARE" else (-1, j)) for i, j in dictionary.items()])
         rev_dict = dict(zip(dictionary.values(), dictionary.keys()))
@@ -63,7 +74,7 @@ class RecommenderW2V(ARecommender):
 
     def update(self, ratingsUpdateDF:DataFrame):
         # ratingsUpdateDF has only one row
-        ratingsUpdateDF = self.getTrainVariant(ratingsUpdateDF)
+        ratingsUpdateDF:DataFrame = self.getTrainVariant(ratingsUpdateDF)
         if ratingsUpdateDF.shape[0] > 0:
             row = ratingsUpdateDF.iloc[0]
             rating = row[Ratings.COL_RATING]
@@ -73,11 +84,11 @@ class RecommenderW2V(ARecommender):
             userTrainData.append(objectID)
             self.userProfiles[userID] = userTrainData
 
-    def resolveUserProfile(self, userProfileStrategy, userTrainData):
-        objectIDs = [int(i) for i in userTrainData]
+    def resolveUserProfile(self, userProfileStrategy:str, userTrainData):
+        objectIDs:List[int] = [int(i) for i in userTrainData]
         w2vObjects = [self.dictionary[i] for i in objectIDs if i in self.dictionary]
 
-        rec = userProfileStrategy
+        rec:str = userProfileStrategy
         print(rec)
         if (len(w2vObjects) > 0):
             if (rec == "mean") | (rec == "max"):
@@ -105,10 +116,16 @@ class RecommenderW2V(ARecommender):
 
         return ([], [], "")
 
-    def recommend(self, userID:int, numberOfItems:int, userProfileStrategy:str):
+
+    def recommend(self, userID:int, numberOfItems:int=20, userProfileStrategy:str="max"):
+        if type(userID) is not int and type(userID) is not np.int64:
+            raise ValueError("Argument userID isn't type int.")
+        if type(numberOfItems) is not int and type(numberOfItems) is not np.int64:
+            raise ValueError("Argument numberOfItems isn't type int.")
+
         userTrainData = self.userProfiles.get(userID, [])
         w2vObjects, weights, aggregation = self.resolveUserProfile(userProfileStrategy, userTrainData)
-        simList = []
+        simList:List = []
 
         # provedu agregaci dle zvolené metody
         if len(w2vObjects) > 0:

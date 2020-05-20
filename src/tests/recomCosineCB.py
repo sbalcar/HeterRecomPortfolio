@@ -44,9 +44,11 @@ def test01():
 
     print(len(rec.userProfiles[331]))
 
+    print("max")
     r:Series = rec.recommend(331, 50, "max")
     print(r)
 
+    print("mean")
     r:Series =rec.recommend(10000, 50, "mean")
     print(r)
 

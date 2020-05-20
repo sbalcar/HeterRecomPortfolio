@@ -32,18 +32,21 @@ def test01():
 
     ratingsDFTrain:DataFrame = ratingsDF.iloc[0:50000]
 
-    rec:ARecommender = RecommenderW2V({RecommenderW2V.ARG_TRAIN_VARIANT:"posneg"})
-    rec.train(pd.DataFrame(), ratingsDFTrain, pd.DataFrame(), pd.DataFrame())
+    rec:ARecommender = RecommenderW2V({RecommenderW2V.ARG_TRAIN_VARIANT:"all"})
+    rec.train(HistoryDF("w2v"), ratingsDFTrain, pd.DataFrame(), pd.DataFrame())
 
     ratingsDFUpdate:DataFrame = ratingsDF.iloc[50003:50004]
     rec.update(ratingsDFUpdate)
 
     print(len(rec.userProfiles[331]))
 
+
+    print("max")
     r:Series = rec.recommend(331, 50, "max")
     print(r)
 
-    r:Series =rec.recommend(10000, 50, "mean")
+    print("mean")
+    r:Series = rec.recommend(10000, 50, "mean")
     print(r)
 
 

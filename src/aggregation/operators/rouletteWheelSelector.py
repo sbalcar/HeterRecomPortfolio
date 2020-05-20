@@ -18,5 +18,7 @@ class RouletteWheelSelector(ABC):
         current:float = 0
         for itemIDI in resultOfMethod.index:
             current += resultOfMethod[itemIDI]
+            print("current: " + str(current))
+            print("pick: " + str(pick))
             if current > pick:
               return itemIDI

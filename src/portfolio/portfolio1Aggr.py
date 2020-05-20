@@ -11,6 +11,10 @@ from recommender.aRecommender import ARecommender #class
 from history.aHistory import AHistory #class
 from portfolio.aPortfolio import APortfolio #class
 
+import pandas as pd
+import numpy as np
+
+
 class Portfolio1Aggr(APortfolio):
 
    def __init__(self, recommIDs:List[str], recommenders:List[ARecommender], agregation:AAgregation):
@@ -37,17 +41,19 @@ class Portfolio1Aggr(APortfolio):
    def getRecommIDs(self):
        return self._recommIDs
 
-   def train(self, ratingsDF:DataFrame, usersDF:DataFrame, itemsDF:DataFrame):
-       if type(ratingsDF) is not DataFrame:
-           raise ValueError("Argument ratingsDF isn't type DataFrame.")
-       if type(usersDF) is not DataFrame:
-           raise ValueError("Argument usersDF isn't type DataFrame.")
-       if type(itemsDF) is not DataFrame:
-           raise ValueError("Argument ratingsUpdateDF isn't type DataFrame.")
+   def train(self, history:AHistory, ratingsDF:DataFrame, usersDF:DataFrame, itemsDF:DataFrame):
+        if not isinstance(history, AHistory):
+            raise ValueError("Argument history isn't type AHistory.")
+        if type(ratingsDF) is not DataFrame:
+            raise ValueError("Argument ratingsDF isn't type DataFrame.")
+        if type(usersDF) is not DataFrame:
+            raise ValueError("Argument usersDF isn't type DataFrame.")
+        if type(itemsDF) is not DataFrame:
+            raise ValueError("Argument ratingsUpdateDF isn't type DataFrame.")
 
-       recommenderI:ARecommender
-       for recommenderI in self._recommenders:
-           recommenderI.train(ratingsDF, usersDF, itemsDF)
+        recommenderI:ARecommender
+        for recommenderI in self._recommenders:
+            recommenderI.train(history, ratingsDF, usersDF, itemsDF)
 
    def update(self, ratingsUpdateDF:DataFrame):
        if type(ratingsUpdateDF) is not DataFrame:
@@ -59,7 +65,13 @@ class Portfolio1Aggr(APortfolio):
 
 
    # portFolioModel:DataFrame<(methodID, votes)>
-   def recommendToItem(self, portFolioModel:DataFrame, itemID:int, ratingsTestDF:DataFrame, history:AHistory, userID:int, numberOfItems:int):
+   def recommend(self, userID:int, portFolioModel:DataFrame, numberOfItems:int):
+       if type(userID) is not int and type(userID) is not np.int64:
+           raise ValueError("Argument userID isn't type int.")
+       if type(portFolioModel) is not DataFrame:
+           raise ValueError("Argument portFolioModel isn't type DataFrame.")
+       if type(numberOfItems) is not int:
+           raise ValueError("Argument numberOfItems isn't type int.")
 
        resultsOfRecommendations:dict = {}
 
@@ -68,7 +80,7 @@ class Portfolio1Aggr(APortfolio):
            recommIDI: str = self._recommIDs[recommIndexI]
            recommI:ARecommender = self._recommenders[recommIndexI]
 
-           resultOfRecommendationI:List[int] = recommI.recommend(itemID, ratingsTestDF, history, numberOfItems=numberOfItems)
+           resultOfRecommendationI:List[int] = recommI.recommend(userID, numberOfItems=numberOfItems)
            resultsOfRecommendations[recommIDI] = resultOfRecommendationI
 
        aggItemIDsWithResponsibility:List = self._aggregation.runWithResponsibility(

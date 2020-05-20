@@ -8,7 +8,7 @@ from pandas.core.series import Series #class
 from aggregation.aggrBanditTS import AggrBanditTS #class
 
 import pandas as pd
-from history.historyDFa import HistoryDF #class
+from history.historyDF import HistoryDF #class
 
 from userBehaviourDescription.userBehaviourDescription import UserBehaviourDescription #class
 from userBehaviourDescription.userBehaviourDescription import observationalStaticProbabilityFnc #function
@@ -37,10 +37,10 @@ def test01():
     methodsParamsDF.set_index("methodID", inplace=True)
     # print(methodsParamsDF)
 
-    aggr:AggrBanditTS = AggrBanditTS(HistoryDF(), {AggrBanditTS.ARG_SELECTORFNC:(AggrBanditTS.selectorOfRouletteWheelRatedItem,[])})
+    aggr:AggrBanditTS = AggrBanditTS(HistoryDF(""), {AggrBanditTS.ARG_SELECTORFNC:(AggrBanditTS.selectorOfRouletteWheelRatedItem,[])})
 
-    #itemIDs:List[tuple] = aggr.runWithResponsibility(methodsResultDict, methodsParamsDF, N)
-    itemIDs:List[tuple] = aggr.run(methodsResultDict, methodsParamsDF, N)
+    itemIDs:List[tuple] = aggr.runWithResponsibility(methodsResultDict, methodsParamsDF, N)
+    #itemIDs:List[tuple] = aggr.run(methodsResultDict, methodsParamsDF, N)
     print(itemIDs)
 
 

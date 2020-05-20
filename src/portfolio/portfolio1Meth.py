@@ -1,5 +1,7 @@
 #!/usr/bin/python3
 
+import numpy as np
+
 from typing import List #class
 
 from pandas.core.frame import DataFrame #class
@@ -25,7 +27,9 @@ class Portfolio1Meth(APortfolio):
    def getRecommIDs(self):
         return [self._recommID]
 
-   def train(self, ratingsDF:DataFrame, usersDF:DataFrame, itemsDF:DataFrame):
+   def train(self, history:AHistory, ratingsDF:DataFrame, usersDF:DataFrame, itemsDF:DataFrame):
+        if not isinstance(history, AHistory):
+           raise ValueError("Argument history isn't type AHistory.")
         if type(ratingsDF) is not DataFrame:
             raise ValueError("Argument ratingsDF isn't type DataFrame.")
         if type(usersDF) is not DataFrame:
@@ -33,7 +37,7 @@ class Portfolio1Meth(APortfolio):
         if type(itemsDF) is not DataFrame:
             raise ValueError("Argument ratingsUpdateDF isn't type DataFrame.")
 
-        self._recommender.train(ratingsDF, usersDF, itemsDF)
+        self._recommender.train(history, ratingsDF, usersDF, itemsDF)
 
    def update(self, ratingsUpdateDF:DataFrame):
         if type(ratingsUpdateDF) is not DataFrame:
@@ -42,9 +46,15 @@ class Portfolio1Meth(APortfolio):
         self._recommender.update(ratingsUpdateDF)
 
 
-   def recommendToItem(self, portFolioModel:DataFrame, itemID:int, testRatingsDF:DataFrame, history:AHistory, numberOfItems:int):
+   def recommend(self, userID:int, portFolioModel:DataFrame, numberOfItems:int):
+        if type(userID) is not int and type(userID) is not np.int64:
+            raise ValueError("Argument userID isn't type int.")
+        if type(portFolioModel) is not DataFrame:
+            raise ValueError("Argument portFolioModel isn't type DataFrame.")
+        if type(numberOfItems) is not int:
+            raise ValueError("Argument numberOfItems isn't type int.")
 
-        recomItemIDsWithResponsibility:Series = self._recommender.recommend(itemID, testRatingsDF, history, numberOfItems)
+        recomItemIDsWithResponsibility:Series = self._recommender.recommend(userID, numberOfItems=numberOfItems)
 
         recomItemIDs:List[int] = list(recomItemIDsWithResponsibility.index)
 

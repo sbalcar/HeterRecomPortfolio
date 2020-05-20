@@ -32,5 +32,5 @@ class APortfolio(ABC):
 
     @abstractmethod
     # portFolioModel:DataFrame<(methodID, votes)>
-    def recommendToItem(self, portFolioModel:DataFrame, itemID:int, testRatingsDF:DataFrame, history:AHistory, numberOfItems:int):
+    def recommend(self, userID:int, portFolioModel:DataFrame, testRatingsDF:DataFrame, history:AHistory, numberOfItems:int):
         assert False, "this needs to be overridden"
