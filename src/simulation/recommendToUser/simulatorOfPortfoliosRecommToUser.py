@@ -107,12 +107,6 @@ class SimulationPortfolioToUser:
     def __runPortfolioDesc(self, portfolioDescs:List[Portfolio1AggrDescription], portFolioModels:List[pd.DataFrame],
                            evaluatonTools:[AEvalTool], histories:List[AHistory], trainRatingsDF:DataFrame, testRatingsDF:DataFrame):
 
-        #print("trainRatingsDF")
-        #print(trainRatingsDF)
-
-        #print("testRatingsDF")
-        #print(testRatingsDF)
-
         portfolios:List[Portfolio1Aggr] = []
 
         portfolioDescI:Portfolio1AggrDescription
@@ -123,7 +117,7 @@ class SimulationPortfolioToUser:
 
             # train portfolio model
             portfolioI: Portfolio1Aggr = portfolioDescI.exportPortfolio(self._uBehaviourDesc, historyI)
-            portfolioI.train(historyI, trainRatingsDF, self._usersDF, self._itemsDF)
+            portfolioI.train(historyI, trainRatingsDF.copy(), self._usersDF.copy(), self._itemsDF.copy())
             portfolios.append(portfolioI)
 
 

@@ -25,6 +25,8 @@ import pandas as pd
 
 from pandas.core.frame import DataFrame #class
 
+from simulator.simulator import Simulator #class
+
 from simulation.recommendToItem.simulatorOfPortfoliosRecomToItemSeparatedUsers import SimulationPortfoliosRecomToItemSeparatedUsers #class
 from simulation.recommendToUser.simulatorOfPortfoliosRecommToUser import SimulationPortfolioToUser #class
 
@@ -123,85 +125,10 @@ def simulationOfPortfolio():
     #evaluations:List[dict] = simulator.simulate([pDescCCB], [modelCCBDF], [EToolSingleMethod], [historyCCB])
     #evaluations:List[dict] = simulator.simulate([pDescW2V], [modelW2VDF], [EToolSingleMethod], [historyW2V])
     #evaluations:List[dict] = simulator.simulate([pDescTheMostPopular], [modelTheMostPopularDF], [EToolSingleMethod], [historyTheMostPopular])
-    evaluations:List[dict] = simulator.simulate([pDescDHont], [modelDHontDF], [EToolDHontHit1], [historyDHont])
+    #evaluations:List[dict] = simulator.simulate([pDescDHont], [modelDHontDF], [EToolDHontHit1], [historyDHont])
     #evaluations:List[dict] = simulator.simulate([pDescBanditTS], [modelBanditTSDF], [EToolBanditTSHit1], [historyBanditTS])
-    #evaluations:List[dict] = simulator.simulate([pDescDHont, pDescBanditTS], [modelDHontDF, modelBanditTSDF], [EToolDHontHit1, EToolBanditTSHit1], [historyDHont, historyBanditTS])
+    evaluations:List[dict] = simulator.simulate([pDescDHont, pDescBanditTS], [modelDHontDF, modelBanditTSDF], [EToolDHontHit1, EToolBanditTSHit1], [historyDHont, historyBanditTS])
 
 
 
 
-class Simulator:
-
-    def __init__(self, simulatorClass, ratingsDF:DataFrame, usersDF:DataFrame, itemsDF:DataFrame, uBehaviourDesc:UserBehaviourDescription, repetitionOfRecommendation:int=1, numberOfItems:int=20):
-        if type(ratingsDF) is not DataFrame:
-            raise ValueError("Argument ratingsDF isn't type DataFrame.")
-        if type(usersDF) is not DataFrame:
-            raise ValueError("Argument usersDF isn't type DataFrame.")
-        if type(itemsDF) is not DataFrame:
-            raise ValueError("Argument itemsDF isn't type DataFrame.")
-        if type(itemsDF) is not DataFrame:
-            raise ValueError("Argument itemsDF isn't type DataFrame.")
-        if type(uBehaviourDesc) is not UserBehaviourDescription:
-            raise ValueError("Argument uBehaviourDesc isn't type UserBehaviourDescription.")
-        if type(repetitionOfRecommendation) is not int:
-            raise ValueError("Argument repetitionOfRecommendation isn't type int.")
-        if type(numberOfItems) is not int:
-            raise ValueError("Argument numberOfItems isn't type int.")
-
-        self._simulation:SimulationPortfolioToUser = simulatorClass(
-            ratingsDF, usersDF, itemsDF, uBehaviourDesc, repetitionOfRecommendation=repetitionOfRecommendation, numberOfItems=numberOfItems)
-
-
-    def simulate(self, pDescs:List[APortfolioDescription], portModels:List[DataFrame], eTools:List[AEvalTool], histories:List[AHistory]):
-
-        if type(pDescs) is not list:
-            raise ValueError("Argument histories isn't type list.")
-        for pDescI in pDescs:
-            if not isinstance(pDescI, APortfolioDescription):
-               raise ValueError("Argument pDescs don't contain APortfolioDescription.")
-
-        if type(portModels) is not list:
-            raise ValueError("Argument portModels isn't type list.")
-        for portModI in portModels:
-            if type(portModI) is not DataFrame:
-               raise ValueError("Argument portModels don't contain DataFrame.")
-
-        if type(eTools) is not list:
-            raise ValueError("Argument etools isn't type list.")
-
-        if type(histories) is not list:
-            raise ValueError("Argument histories isn't type list.")
-        for historyI in histories:
-            if not isinstance(historyI, AHistory):
-               raise ValueError("Argument histories don't contain AHistory.")
-
-
-        evaluations:List[dict] = self._simulation.run(pDescs, portModels, eTools, histories)
-
-        i:int
-        for i in range(len(pDescs)):
-
-            pDescI:APortfolioDescription = pDescs[i]
-
-            print()
-            portfolioIdI:str = pDescI.getPortfolioID()
-            print("PortfolioIdI: " + portfolioIdI)
-
-            print()
-            eToolClassI:str = eTools[i]
-            print("EToolClass " + portfolioIdI)
-            print(eToolClassI)
-
-            print()
-            portModelI:DataFrame = portModels[i]
-            print("Model of " + portfolioIdI)
-            print(portModelI)
-
-            print()
-            historyI:AHistory = histories[i]
-            print("History of " + portfolioIdI)
-            historyI.print()
-
-        print()
-        print("Evaluations: " + str(evaluations))
-        return evaluations
