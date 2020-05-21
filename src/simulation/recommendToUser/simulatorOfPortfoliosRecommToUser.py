@@ -119,11 +119,12 @@ class SimulationPortfolioToUser:
             portfolioI.train(historyI, trainRatingsDF.copy(), self._usersDF.copy(), self._itemsDF.copy())
             portfolios.append(portfolioI)
 
+        portIds:List[str] = [portDescI.getPortfolioID() for portDescI in portfolioDescs]
 
-        return self.__iterateOverDataset(portfolios, portFolioModels, evaluatonTools, histories, testRatingsDF)
+        return self.__iterateOverDataset(portfolios, portIds, portFolioModels, evaluatonTools, histories, testRatingsDF)
 
 
-    def __iterateOverDataset(self, portfolios:List[APortfolio], portFolioModels:List[pd.DataFrame],
+    def __iterateOverDataset(self, portfolios:List[APortfolio], portIds:List[str], portFolioModels:List[pd.DataFrame],
                              evaluatonTools:[AEvalTool], histories:List[AHistory], testRatingsDF:DataFrame):
 
         model:ModelOfIndexes = ModelOfIndexes(testRatingsDF)
@@ -140,8 +141,7 @@ class SimulationPortfolioToUser:
             if counterI  % 100 == 0:
                 print("RatingI: " + str(counterI) + " / " + str(testRatingsDF.shape[0]))
 
-                ids: List[str] = [portI.getPortfolioID() for portI in portfolios]
-                print("ids: " + str(ids))
+                print("ids: " + str(portIds))
                 print("Evaluations: " + str(evaluations))
 
 ## TODO ######
