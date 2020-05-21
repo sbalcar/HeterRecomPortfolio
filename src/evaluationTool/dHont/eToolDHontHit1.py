@@ -8,11 +8,10 @@ from pandas.core.frame import DataFrame #class
 
 import numpy as np
 
-
 class EToolDHontHit1(AEvalTool):
     # TODO: maybe store learning rates to a database?
-    learningRateClicks = 0.01
-    learningRateViews = 0.01 / 500
+    learningRateClicks = 0.1
+    learningRateViews = (0.1 / 500)
     maxVotesConst = 0.99
     minVotesConst = 0.01
 
@@ -103,5 +102,7 @@ class EToolDHontHit1(AEvalTool):
                 elif portfolioModel.loc[methodIdI, 'votes'] > EToolDHontHit1.maxVotesConst:
                     portfolioModel.loc[methodIdI, 'votes'] = EToolDHontHit1.maxVotesConst
 
-            # linearly normalizing to unit sum of votes
-            portfolioModel = portfolioModel / portfolioModel.sum()
+         # linearly normalizing to unit sum of votes
+        sumMethodsVotes:float = portfolioModel.sum()
+        for methodIdI in responsibilityDict.keys():
+            portfolioModel.loc[methodIdI] = portfolioModel.loc[methodIdI] / sumMethodsVotes
