@@ -18,5 +18,5 @@ class AEvalTool(ABC):
         assert False, "this needs to be overridden"
 
     @abstractmethod
-    def ignore(rItemIDsWithResponsibility:List, portfolioModel:DataFrame, evaluationDict:dict):
+    def displayed(rItemIDsWithResponsibility:List, portfolioModel:DataFrame, evaluationDict:dict):
         assert False, "this needs to be overridden"

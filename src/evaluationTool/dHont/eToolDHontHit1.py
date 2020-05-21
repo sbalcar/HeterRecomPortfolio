@@ -68,7 +68,7 @@ class EToolDHontHit1(AEvalTool):
 
 
     @staticmethod
-    def ignore(rItemIDsWithResponsibility: List, portfolioModel: DataFrame, evaluationDict: dict):
+    def displayed(rItemIDsWithResponsibility: List, portfolioModel: DataFrame, evaluationDict: dict):
         if type(rItemIDsWithResponsibility) is not list:
             raise ValueError("Argument rItemIDsWithResponsibility isn't type list.")
         if type(portfolioModel) is not DataFrame:

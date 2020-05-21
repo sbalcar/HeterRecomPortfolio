@@ -44,7 +44,9 @@ from userBehaviourDescription.userBehaviourDescription import observationalLinea
 
 class Simulator:
 
-    def __init__(self, simulatorClass, ratingsDF:DataFrame, usersDF:DataFrame, itemsDF:DataFrame, uBehaviourDesc:UserBehaviourDescription, repetitionOfRecommendation:int=1, numberOfItems:int=20):
+    def __init__(self, simulatorClass, argumentsDict:dict, ratingsDF:DataFrame, usersDF:DataFrame, itemsDF:DataFrame, uBehaviourDesc:UserBehaviourDescription):
+        if type(argumentsDict) is not dict:
+            raise ValueError("Argument argumentsDict isn't type dict.")
         if type(ratingsDF) is not DataFrame:
             raise ValueError("Argument ratingsDF isn't type DataFrame.")
         if type(usersDF) is not DataFrame:
@@ -55,13 +57,9 @@ class Simulator:
             raise ValueError("Argument itemsDF isn't type DataFrame.")
         if type(uBehaviourDesc) is not UserBehaviourDescription:
             raise ValueError("Argument uBehaviourDesc isn't type UserBehaviourDescription.")
-        if type(repetitionOfRecommendation) is not int:
-            raise ValueError("Argument repetitionOfRecommendation isn't type int.")
-        if type(numberOfItems) is not int:
-            raise ValueError("Argument numberOfItems isn't type int.")
 
         self._simulation:SimulationPortfolioToUser = simulatorClass(
-            ratingsDF, usersDF, itemsDF, uBehaviourDesc, repetitionOfRecommendation=repetitionOfRecommendation, numberOfItems=numberOfItems)
+            ratingsDF, usersDF, itemsDF, uBehaviourDesc, argumentsDict)
 
 
     def simulate(self, pDescs:List[APortfolioDescription], portModels:List[DataFrame], eTools:List[AEvalTool], histories:List[AHistory]):

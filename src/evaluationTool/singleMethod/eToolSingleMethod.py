@@ -30,7 +30,7 @@ class EToolSingleMethod(AEvalTool):
         evaluationDict[AEvalTool.CLICKS] = evaluationDict.get(AEvalTool.CLICKS, 0) + 1
 
     @staticmethod
-    def ignore(rItemIDsWithResponsibility:List, portfolioModel:DataFrame, evaluationDict:dict):
+    def displayed(rItemIDsWithResponsibility:List, portfolioModel:DataFrame, evaluationDict:dict):
         if type(rItemIDsWithResponsibility) is not Series:
             raise ValueError("Argument rItemIDsWithResponsibility isn't type Series.")
         if type(portfolioModel) is not DataFrame:

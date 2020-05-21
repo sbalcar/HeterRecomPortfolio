@@ -31,4 +31,5 @@ def test01():
     a3:int = m.getNextIndex(2783, 2901)
     print(a3)
 
+
 test01()

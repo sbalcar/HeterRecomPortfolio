@@ -27,7 +27,7 @@ class EToolBanditTSHit1(AEvalTool):
         if type(evaluationDict) is not dict:
             raise ValueError("Argument evaluationDict isn't type dict.")
 
-        EToolBanditTSHit1.ignore(rItemIDsWithResponsibility, portfolioModel, evaluationDict)
+        #EToolBanditTSHit1.ignore(rItemIDsWithResponsibility, portfolioModel, evaluationDict)
 
         for itemI, methodI in rItemIDsWithResponsibility:
             if itemI == clickedItemID:
@@ -42,7 +42,7 @@ class EToolBanditTSHit1(AEvalTool):
 
 
     @staticmethod
-    def ignore(rItemIDsWithResponsibility:List, portfolioModel:DataFrame, evaluationDict:dict):
+    def displayed(rItemIDsWithResponsibility:List, portfolioModel:DataFrame, evaluationDict:dict):
         if type(rItemIDsWithResponsibility) is not list:
             raise ValueError("Argument rItemIDsWithResponsibility isn't type list.")
         if type(portfolioModel) is not DataFrame:
