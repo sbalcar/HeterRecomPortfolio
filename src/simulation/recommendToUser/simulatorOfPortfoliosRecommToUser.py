@@ -59,7 +59,6 @@ class SimulationPortfolioToUser:
             raise ValueError("Argument portfolioDescs isn't type list.")
         for portfolioDescI in portfolioDescs:
             if not isinstance(portfolioDescI, APortfolioDescription):
-                print(type(portfolioDescI))
                 raise ValueError("Argument portfolioDescs don't contain PortfolioDescription.")
 
         if type(portFolioModels) is not list:
@@ -127,50 +126,58 @@ class SimulationPortfolioToUser:
     def __iterateOverDataset(self, portfolios:List[APortfolio], portFolioModels:List[pd.DataFrame],
                              evaluatonTools:[AEvalTool], histories:List[AHistory], testRatingsDF:DataFrame):
 
+        model:ModelOfIndexes = ModelOfIndexes(testRatingsDF)
+
         evaluations:List[dict] = [{} for i in range(len(portfolios))]
 
         counterI:int = 0
 
-        currentIndexI:int
-        nextIndexI:int
-        for currentIndexI in list(testRatingsDF.index):
+        currentIndexDFI:int
+        nextIndexDFI:int
+        for currentIndexDFI in list(testRatingsDF.index):
 
             counterI += 1
             if counterI  % 100 == 0:
                 print("RatingI: " + str(counterI) + " / " + str(testRatingsDF.shape[0]))
+
+                ids: List[str] = [portI.getPortfolioID() for portI in portfolios]
+                print("ids: " + str(ids))
+                print("Evaluations: " + str(evaluations))
+
 ## TODO ######
-            if counterI == 1000:
+            if counterI == 3000:
                 return evaluations
 ## TODO ######
 
+            currentItemIdI:int = testRatingsDF.loc[currentIndexDFI][Ratings.COL_MOVIEID]
+            currentRatingI:int = testRatingsDF.loc[currentIndexDFI][Ratings.COL_RATING]
+            currentUserIdI:int = testRatingsDF.loc[currentIndexDFI][Ratings.COL_USERID]
 
-            currentItemIdI:int = testRatingsDF.loc[currentIndexI][Ratings.COL_MOVIEID]
-            currentItemRatingI:int = testRatingsDF.loc[currentIndexI][Ratings.COL_RATING]
-            currentItemUserIdI:int = testRatingsDF.loc[currentIndexI][Ratings.COL_USERID]
-            currentTimestampI:int = testRatingsDF.loc[currentIndexI][Ratings.COL_TIMESTAMP]
+            nextIndexDFI:int = model.getNextIndex(currentUserIdI, currentItemIdI)
+            if nextIndexDFI == None:
+                continue
 
-            #print("currentItemUserIdI: " + str(currentItemUserIdI))
+            if currentRatingI < 4:
+                continue
 
-            if currentItemRatingI < 4:
-              continue
-
-            repetitionI:int
-            for repetitionI in range(self._repetitionOfRecommendation):
-                self.__simulateRecommendations(portfolios, portFolioModels, evaluatonTools, testRatingsDF,
-                                               histories, evaluations, currentItemIdI, currentItemUserIdI)
             portfolioI:APortfolio
             for portfolioI in portfolios:
 
-                dfI:DataFrame = DataFrame([testRatingsDF.loc[currentIndexI]],
+                dfI:DataFrame = DataFrame([testRatingsDF.loc[currentIndexDFI]],
                     columns=[Ratings.COL_USERID, Ratings.COL_MOVIEID, Ratings.COL_RATING, Ratings.COL_TIMESTAMP])
 
                 portfolioI.update(dfI)
+
+            repetitionI: int
+            for repetitionI in range(self._repetitionOfRecommendation):
+                self.__simulateRecommendations(portfolios, portFolioModels, evaluatonTools, testRatingsDF,
+                                               histories, evaluations, currentIndexDFI, nextIndexDFI)
 
         return evaluations
 
     def __simulateRecommendations(self, portfolios:List[APortfolio], portFolioModels:List[pd.DataFrame],
                                   evaluatonTools:[AEvalTool], testRatingsDF:DataFrame, histories:List[AHistory],
-                                  evaluations:List[dict], currentItem:int, userID:int):
+                                  evaluations:List[dict], currentIndexDF:int, nextIndexDF:int):
 
         if type(portfolios) is not list:
             raise ValueError("Argument portfolios isn't type list.")
@@ -199,10 +206,10 @@ class SimulationPortfolioToUser:
             if not isinstance(evaluationI, dict):
                raise ValueError("Argument evaluations don't contain dict.")
 
-        if type(currentItem) is not int and type(currentItem) is not np.int64:
-            raise ValueError("Argument currentItem isn't type int.")
-        if type(userID) is not int and type(userID) is not np.int64:
-            raise ValueError("Argument userID isn't type int.")
+        if type(currentIndexDF) is not int and type(currentIndexDF) is not np.int64:
+            raise ValueError("Argument currentIndex isn't type int.")
+        if type(nextIndexDF) is not int and type(nextIndexDF) is not np.int64:
+            raise ValueError("Argument nextIndex isn't type int.")
 
         uProbOfObservGenerated:List[float] = UserBehaviourSimulator().simulateStaticProb(self._uBehaviourDesc, self._numberOfItems)
         #print("uProbOfObservGenerated: " + str(uProbOfObservGenerated))
@@ -215,21 +222,35 @@ class SimulationPortfolioToUser:
         historyI:pd.DataFrame
         for portfolioI, portFolioModelI, evaluatonToolI, historyI, evaluationI in zip(portfolios, portFolioModels, evaluatonTools, histories, evaluations):
             self.__simulateRecommendation(portfolioI, portFolioModelI, evaluatonToolI, testRatingsDF, historyI,
-                                          evaluationI, uProbOfObservGenerated, uObservation, currentItem, userID)
+                                          evaluationI, uProbOfObservGenerated, uObservation, currentIndexDF, nextIndexDF)
 
 
-    def __simulateRecommendation(self, portfolio:Portfolio1Aggr, portfolioModel:pd.DataFrame, evaluatonTool:AEvalTool, testRatingsDF:DataFrame,
-                                 history:AHistory, evaluation:dict, uProbOfObserv:List[float], uObservation:List[bool], currentItemID:int, userID:int):
-        if type(userID) is not int and type(userID) is not np.int64:
-            raise ValueError("Argument userID isn't type int.")
+    def __simulateRecommendation(self, portfolio:Portfolio1Aggr, portfolioModel:pd.DataFrame, evaluatonTool:AEvalTool,
+                                 testRatingsDF:DataFrame, history:AHistory, evaluation:dict, uProbOfObserv:List[float],
+                                 uObservation:List[bool], currentIndexDF:int, nextIndexDF:int):
+
+        currentItemID:int = testRatingsDF.loc[currentIndexDF, Ratings.COL_MOVIEID]
+        currentUserID: int = testRatingsDF.loc[currentIndexDF, Ratings.COL_USERID]
+
+        nextItemID:int = testRatingsDF.loc[nextIndexDF, Ratings.COL_MOVIEID]
+        nextUserID: int = testRatingsDF.loc[nextIndexDF, Ratings.COL_USERID]
+
+        if currentUserID != nextUserID:
+            raise ValueError("Error")
+        userID = nextUserID
 
         rItemIDs:List[int]
         rItemIDsWithResponsibility:List[tuple[int, Series[int, str]]]
         rItemIDs, rItemIDsWithResponsibility = portfolio.recommend(
             userID, portfolioModel, numberOfItems=self._numberOfItems)
 
-        if not currentItemID in rItemIDs:
+
+        #print("nextItemID: " + str(nextItemID))
+        #print("rItemIDs: " + str(rItemIDs))
+
+        if not nextItemID in rItemIDs:
             return
+
 
         index:int = rItemIDs.index(currentItemID)
         probOfObserv:float = uProbOfObserv[index]
@@ -249,3 +270,92 @@ class SimulationPortfolioToUser:
 
             # save log of history
             history.insertRecommendations(userID, rItemIDs, uProbOfObserv, None)
+
+
+class Item:
+    # next:Intem
+    def __init__(self, itemID: int, indexDF: int, next):
+        self._itemID: int = itemID
+        self._indexDF: int = indexDF
+        self._next: Item = next
+
+    def getIndexDF(self):
+        return self._indexDF
+
+    # next:Item
+    def getNext(self):
+        return self._next
+
+    # next:Item
+    def setNext(self, next):
+        self._next = next
+
+
+class ModelOfIndexes:
+    def __init__(self, ratingsDF:DataFrame):
+        if type(ratingsDF) is not DataFrame:
+            raise ValueError("Argument ratingsDF isn't type DataFrame.")
+
+        ratingsCopyDF:DataFrame = ratingsDF.copy()
+        ratingsCopyDF['index1'] = ratingsCopyDF.index
+
+        #print(ratingsDF)
+        #print(ratingsCopyDF)
+
+        userIds:List[int] = list(set([rowI[Ratings.COL_USERID] for indexDFI, rowI in ratingsCopyDF.iterrows()]))
+
+        # dictionary (index = userID, value = list[tuple(int, int)])
+        # each list contains pair(int,int) or (itemID, indefOfDataFrame)
+        self._dictionaryOfUserIDs:dict[List[tuple(int, int)]] = {}
+
+        userIdI:int
+        for userIdI in userIds:
+            # select ratings of userIdI
+            ratingsUserIDF:DataFrame = ratingsCopyDF.loc[ratingsCopyDF[Ratings.COL_USERID] == userIdI]
+
+            userDictI:dict = {}
+            lastItemI:Item = None
+
+            indexDFI:int
+            rowI:Series
+            for i, rowI in ratingsUserIDF.iterrows():
+
+                indexDFI:int = rowI['index1']
+                userIdI:int = rowI[Ratings.COL_USERID]
+                itemIdI:int = rowI[Ratings.COL_MOVIEID]
+
+                itemI:Item = Item(userIdI, indexDFI, None)
+                if not lastItemI is None:
+                    lastItemI.setNext(itemI)
+
+                lastItemI = itemI
+                userDictI[itemIdI] = itemI
+
+            self._dictionaryOfUserIDs[userIdI] = userDictI
+
+
+    def getNextIndex(self, userId:int, itemId:int):
+        u:dict[Item] = self._dictionaryOfUserIDs[userId]
+        item:Item = u[itemId]
+
+        itemNext:Item = item.getNext()
+        if itemNext is None:
+            return None
+
+        return itemNext.getIndexDF()
+
+def test01():
+
+    df:DataFrame = DataFrame({'$a':[2783,2783,2783,3970], '$b':[1909,1396,2901,3408], '$c':[2,4,5,4]})
+    df.columns = [Ratings.COL_USERID, Ratings.COL_MOVIEID, Ratings.COL_RATING]
+    print(df)
+
+    m:ModelOfIndexes = ModelOfIndexes(df)
+    a1:int = m.getNextIndex(2783, 1909)
+    print(a1)
+    a2:int = m.getNextIndex(2783, 1396)
+    print(a2)
+    a3:int = m.getNextIndex(2783, 2901)
+    print(a3)
+
+#test01()

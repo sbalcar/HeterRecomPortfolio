@@ -198,6 +198,8 @@ class SimulationPortfoliosRecomToItemSeparatedUsers:
         rItemIDs, rItemIDsWithResponsibility = portfolio.recommend(
             userID, portfolioModel, testRatingsDF, history, numberOfItems=self._numberOfItems)
 
+        print(testRatingsDF)
+
         if not nextItemID in rItemIDs:
             return
 

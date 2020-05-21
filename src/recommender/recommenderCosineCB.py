@@ -93,7 +93,7 @@ class RecommenderCosineCB(ARecommender):
 
         return ([], [], "")
 
-    #userID: int, ratingsTestDF: DataFrame, history: AHistory, numberOfItems: int = 20
+    #userID: int, ratingsTestDF: DataFrame, history: AHistory, numberOfItems:int=20
     def recommend(self, userID:int, numberOfItems:int=20, userProfileStrategy:str="mean"):
         if type(userID) is not int and type(userID) is not np.int64:
             raise ValueError("Argument userID isn't type int.")

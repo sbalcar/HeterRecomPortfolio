@@ -51,4 +51,4 @@ class RecommenderTheMostPopular(ARecommender):
         items:List[int] = list(ratingsDF.index)
         ratings:List[float] = [1.0/len(items) for itemI in items]
 
-        return pd.Series(ratings,items,name="rating")
+        return pd.Series(ratings,index=items)

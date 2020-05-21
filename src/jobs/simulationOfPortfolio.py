@@ -60,7 +60,7 @@ def simulationOfPortfolio():
     # portfolio definiton
     rDescTheMostPopular:RecommenderDescription = RecommenderDescription(RecommenderTheMostPopular, {})
     rDescDummyRedirector:RecommenderDescription = RecommenderDescription(RecommenderDummyRedirector,
-                            {RecommenderDummyRedirector.ARG_RESULT:pd.Series([0.05]*20, list(range(1, 21)), name="rating")} )
+                            {RecommenderDummyRedirector.ARG_RESULT:pd.Series([0.05]*20, index=list(range(1, 21)))} )
 
     rDescCB:RecommenderDescription = RecommenderDescription(RecommenderCosineCB, {RecommenderCosineCB.ARG_CB_DATA_PATH:Configuration.cbDataFileWithPathTFIDF})
     rDescW2v:RecommenderDescription = RecommenderDescription(RecommenderW2V, {RecommenderW2V.ARG_TRAIN_VARIANT:"all"})

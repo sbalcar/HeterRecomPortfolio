@@ -19,16 +19,16 @@ class RecommenderDummyRandom(ARecommender):
 
         self._argumentsDict:dict = argumentsDict
 
-    def train(self, ratingsTrainDF:DataFrame, usersDF:DataFrame, itemsDF:DataFrame):
+    def train(self, historyDF:DataFrame, ratingsDF:DataFrame, usersDF:DataFrame, itemsDF:DataFrame):
         pass
 
     def update(self, ratingsUpdateDF:DataFrame):
         pass
 
-    def recommend(self, itemID:int, ratingsTestDF:DataFrame, history:AHistory, numberOfItems:int=20):
+    def recommend(self, userID:int, numberOfItems:int=20):
         items:List[int] = list(range(numberOfItems))
         #random.shuffle(items)
 
         ratings:List[float] = [1.0/len(items) for itemI in items]
 
-        return pd.Series(ratings,items,name="rating")
+        return pd.Series(ratings,index=items)
