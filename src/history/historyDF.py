@@ -61,6 +61,14 @@ class HistoryDF(AHistory):
 
         return result
 
+    def isObjectClicked(self, userID:int, itemID:int, limit:int=100):
+        hDF:DataFrame = self._historyDF.tail(limit)
+        uDF:DataFrame = hDF[hDF[self.USER_ID] == userID]
+        uiDF:DataFrame = uDF[uDF[self.ITEM_ID] == itemID]
+
+        cuiDF:DataFrame = uiDF[uiDF[self.CLICKED]]
+
+        return len(cuiDF.index)
 
     def print(self):
         print(self._historyDF.head(10))

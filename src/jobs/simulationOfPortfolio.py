@@ -117,7 +117,7 @@ def simulationOfPortfolio():
     modelW2VDF:DataFrame = pd.DataFrame()
     historyW2V:AHistory = HistoryDF("W2V")
 
-    argsSimulationDict:dict = {SimulationPortfolioToUser.ARG_WINDOW_SIZE:1, SimulationPortfolioToUser.ARG_REPETITION_OF_RECOMMENDATION:1, SimulationPortfolioToUser.ARG_NUMBER_OF_ITEMS:20}
+    argsSimulationDict:dict = {SimulationPortfolioToUser.ARG_WINDOW_SIZE:3, SimulationPortfolioToUser.ARG_REPETITION_OF_RECOMMENDATION:1, SimulationPortfolioToUser.ARG_NUMBER_OF_ITEMS:20}
 
     # simulation of portfolio
     #simulator:Simulator = Simulator(SimulationPortfoliosRecomToItemSeparatedUsers, ratingsDF, usersDF, itemsDF, uBehaviourDesc

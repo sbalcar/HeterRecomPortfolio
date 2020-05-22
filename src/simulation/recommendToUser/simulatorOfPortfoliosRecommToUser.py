@@ -149,8 +149,8 @@ class SimulationPortfolioToUser:
                 print("Evaluations: " + str(evaluations))
 
 ## TODO ######
-            if counterI == 3000:
-                return evaluations
+#            if counterI == 3000:
+#                return evaluations
 ## TODO ######
 
             currentItemIdI:int = testRatingsDF.loc[currentIndexDFI][Ratings.COL_MOVIEID]
@@ -257,25 +257,24 @@ class SimulationPortfolioToUser:
         rItemIDs, rItemIDsWithResponsibility = portfolio.recommend(
             userID, portfolioModel, numberOfItems=self._numberOfItems)
 
-        candidatesToClick:List[int] = list(set(nextItemIDs) & set(rItemIDs))
+        nextNoClickedItemIDs:List[int] = [nItemIdI for nItemIdI in nextItemIDs if not history.isObjectClicked(userID, nItemIdI)]
+
+        candidatesToClick:List[int] = list(set(nextNoClickedItemIDs) & set(rItemIDs))
         recommendedRelevantItem:bool = len(candidatesToClick) != 0
 
         selectedCandidateItemID:int = None
-        wasObserved:bool = False
+        wasCandidateObserved:bool = False
         probOfObserv:float = -1
         if recommendedRelevantItem:
             selectedCandidateItemID = candidatesToClick[0]  # take the first candidate
             index:int = rItemIDs.index(selectedCandidateItemID)
-            wasObserved = uObservation[index]
+            wasCandidateObserved = uObservation[index]
             probOfObserv = uProbOfObserv[index]
 
-
-        if recommendedRelevantItem and wasObserved:
-            print("Click")
-            evaluatonTool.click(rItemIDsWithResponsibility, selectedCandidateItemID, probOfObserv, portfolioModel, evaluation)
-
-
         evaluatonTool.displayed(rItemIDsWithResponsibility, portfolioModel, evaluation)
+
+        if recommendedRelevantItem and wasCandidateObserved:
+            evaluatonTool.click(rItemIDsWithResponsibility, selectedCandidateItemID, probOfObserv, portfolioModel, evaluation)
 
         # save log of history
         history.insertRecommendations(userID, rItemIDs, uProbOfObserv, selectedCandidateItemID)

@@ -59,6 +59,9 @@ def test02():
         # userID, itemID, position, observation, clicked
         history1.insertRecommendation(1, i, 1, 0.5, False)
 
+    isClicked:bool = history1.isObjectClicked(1,1,200)
+    print("isClicked: " + str(isClicked))
+
     end1 = time.time()
 
 

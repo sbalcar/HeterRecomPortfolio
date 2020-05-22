@@ -148,5 +148,13 @@ class HistorySQLite(AHistory):
 
         return len(previousRecommendations)
 
+
+    def isObjectClicked(self, userID:int, itemID:int, limit:int=100):
+        interaction:List[tuple] = self.getPreviousRecomOfUserAndItem(userID, itemID, limit)
+
+        interactionClicked:List[tuple] = [interI for interI in interaction if interI[5]]
+
+        return len(interactionClicked) != 0
+
     def print(selfs):
         pass

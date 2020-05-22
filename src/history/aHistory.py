@@ -49,5 +49,9 @@ class AHistory(ABC):
         return sum(map(valueOfIgnoring, uRows))
 
     @abstractmethod
+    def isObjectClicked(self, userID:int, itemID:int, limit:int=100):
+        assert False, "this needs to be overridden"
+
+    @abstractmethod
     def print(selfs):
         pass
