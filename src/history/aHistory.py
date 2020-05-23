@@ -53,5 +53,13 @@ class AHistory(ABC):
         assert False, "this needs to be overridden"
 
     @abstractmethod
+    def delete(self, numberOfUserRecommendationToKeep:int):
+        assert False, "this needs to be overridden"
+
+    @abstractmethod
+    def deletePreviousRecomOfUser(self, userID:int, numberOfUserRecommendationToKeep:int):
+        assert False, "this needs to be overridden"
+
+    @abstractmethod
     def print(selfs):
         pass

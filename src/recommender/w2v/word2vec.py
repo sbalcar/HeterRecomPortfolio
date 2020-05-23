@@ -145,7 +145,7 @@ def word2vecRun(window_size = 3, embedding_size = 64, texts = []):
 
 
     final_embeddings = sess.run(embeddings)
-    print(os.getcwd())
+    #print(os.getcwd())
 
     embeddingsFname = Configuration.modelDirectory + os.sep +"embed_word2vec_"+str(window_size)+"_"+str(embedding_size)+".csv"
     np.savetxt(embeddingsFname, final_embeddings, fmt="%.6e")

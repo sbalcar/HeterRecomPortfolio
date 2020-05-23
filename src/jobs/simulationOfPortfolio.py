@@ -32,6 +32,7 @@ from simulation.recommendToUser.simulatorOfPortfoliosRecommToUser import Simulat
 
 from history.aHistory import AHistory #class
 from history.historyDF import HistoryDF #class
+from history.historyHierDF import HistoryHierDF #class
 
 from portfolioDescription.aPortfolioDescription import APortfolioDescription #class
 
@@ -84,7 +85,7 @@ def simulationOfPortfolio():
     modelDHontDF:DataFrame = pd.DataFrame(modelDHontData, columns=["methodID", "votes"])
     modelDHontDF.set_index("methodID", inplace=True)
 
-    historyDHont:AHistory = HistoryDF("DHont")
+    historyDHont:AHistory = HistoryHierDF("DHont")
 
 
 
@@ -96,26 +97,26 @@ def simulationOfPortfolio():
     modelBanditTSDF:DataFrame = pd.DataFrame(modelBanditTSData, columns=["methodID", "r", "n", "alpha0", "beta0"])
     modelBanditTSDF.set_index("methodID", inplace=True)
 
-    historyBanditTS:AHistory = HistoryDF("BanditTS")
+    historyBanditTS:AHistory = HistoryHierDF("BanditTS")
 
 
 
     # TheMostPopular Portfolio description
     pDescTheMostPopular:APortfolioDescription = Portfolio1MethDescription("theMostPopular", "theMostPopular", rDescTheMostPopular)
     modelTheMostPopularDF:DataFrame = pd.DataFrame()
-    historyTheMostPopular:AHistory = HistoryDF("TheMostPopular")
+    historyTheMostPopular:AHistory = HistoryHierDF("TheMostPopular")
 
 
     # Cosine CB Portfolio description
     pDescCCB:APortfolioDescription = Portfolio1MethDescription("cosineCB", "cosineCB", rDescCB)
     modelCCBDF:DataFrame = pd.DataFrame()
-    historyCCB:AHistory = HistoryDF("cosineCB")
+    historyCCB:AHistory = HistoryHierDF("cosineCB")
 
 
     # W2V Portfolio description
     pDescW2V:APortfolioDescription = Portfolio1MethDescription("w2v", "w2v", rDescW2v)
     modelW2VDF:DataFrame = pd.DataFrame()
-    historyW2V:AHistory = HistoryDF("W2V")
+    historyW2V:AHistory = HistoryHierDF("W2V")
 
     argsSimulationDict:dict = {SimulationPortfolioToUser.ARG_WINDOW_SIZE:3, SimulationPortfolioToUser.ARG_REPETITION_OF_RECOMMENDATION:1, SimulationPortfolioToUser.ARG_NUMBER_OF_ITEMS:20}
 

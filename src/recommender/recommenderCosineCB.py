@@ -30,23 +30,23 @@ class RecommenderCosineCB(ARecommender):
             raise ValueError("Argument argumentsDict is not type dict.")
 
         # arguments je dictionary, povinny parametr je cesta k souboru s CB daty
-        self._arguments = argumentsDict
+        self._arguments:dict = argumentsDict
         # "../../../../data/cbDataOHE.txt" nebo "../../../../data/cbDataTFIDF.txt"
-        self.cbDataPath = self._arguments[self.ARG_CB_DATA_PATH]
+        self.cbDataPath:str = self._arguments[self.ARG_CB_DATA_PATH]
 
         self.dfCBFeatures = pd.read_csv(self.cbDataPath, sep=",", header=0, index_col=0)
         dfCBSim = 1 - pairwise_distances(self.dfCBFeatures, metric="cosine")
         np.fill_diagonal(dfCBSim, 0.0)
-        self.cbData = pd.DataFrame(data=dfCBSim, index=self.dfCBFeatures.index, columns=self.dfCBFeatures.index)
-        self.userProfiles = {}
+        self.cbData:DataFrame = DataFrame(data=dfCBSim, index=self.dfCBFeatures.index, columns=self.dfCBFeatures.index)
+        self.userProfiles:dict = {}
 
     def train(self, historyDF:DataFrame, ratingsDF:DataFrame, usersDF:DataFrame, itemsDF:DataFrame):
         if type(ratingsDF) is not DataFrame:
             raise ValueError("Argument trainRatingsDF is not type DataFrame.")
 
         # ratingsSum:Dataframe<(userId:int, movieId:int, ratings:int, timestamp:int)>
-        ratingsDF = ratingsDF.loc[ratingsDF[Ratings.COL_RATING] >= 4]
-        self.ratingsGroupDF = ratingsDF.groupby(Ratings.COL_USERID)[Ratings.COL_MOVIEID]
+        ratingsDF:DataFrame = ratingsDF.loc[ratingsDF[Ratings.COL_RATING] >= 4]
+        self.ratingsGroupDF:DataFrame = ratingsDF.groupby(Ratings.COL_USERID)[Ratings.COL_MOVIEID]
         userProfileDF = self.ratingsGroupDF.aggregate(lambda x: list(x))
         self.userProfiles = userProfileDF.to_dict()
 
@@ -62,7 +62,7 @@ class RecommenderCosineCB(ARecommender):
             userTrainData.append(objectID)
             self.userProfiles[userID] = userTrainData
 
-    def resolveUserProfile(self, userProfileStrategy, userTrainData):
+    def resolveUserProfile(self, userProfileStrategy:str, userTrainData):
         rec = userProfileStrategy
         if self.DEBUG_MODE:
             print(rec)

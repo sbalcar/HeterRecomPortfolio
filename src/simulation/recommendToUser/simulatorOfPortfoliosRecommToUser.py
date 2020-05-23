@@ -148,6 +148,10 @@ class SimulationPortfolioToUser:
                 print("ids: " + str(portIds))
                 print("Evaluations: " + str(evaluations))
 
+#            if counterI % 1000 == 0:
+#                for historyI in histories:
+#                    historyI.delete(self._repetitionOfRecommendation * self._numberOfItems)
+
 ## TODO ######
 #            if counterI == 3000:
 #                return evaluations
@@ -279,6 +283,8 @@ class SimulationPortfolioToUser:
         # save log of history
         history.insertRecommendations(userID, rItemIDs, uProbOfObserv, selectedCandidateItemID)
 
+        # delete log of history
+        history.deletePreviousRecomOfUser(userID, self._repetitionOfRecommendation * self._numberOfItems)
 
 
 

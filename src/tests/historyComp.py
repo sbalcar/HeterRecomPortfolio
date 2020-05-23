@@ -7,8 +7,10 @@ from pandas.core.frame import DataFrame #class
 from pandas.core.series import Series #class
 
 import pandas as pd
+from history.aHistory import AHistory #class
 from history.historySQLite import HistorySQLite #class
 from history.historyDF import HistoryDF #class
+from history.historyHierDF import HistoryHierDF #class
 
 from userBehaviourDescription.userBehaviourDescription import UserBehaviourDescription #class
 from userBehaviourDescription.userBehaviourDescription import observationalStaticProbabilityFnc #function
@@ -84,5 +86,29 @@ def test02():
     print(history2.getPreviousRecomOfUser(1)[0])
 
 
+def test03():
+    print("Test 03")
+
+    history1:AHistory = HistoryHierDF("databse1")
+
+    for i in range(100):
+        # userID, itemID, position, observation, clicked
+        history1.insertRecommendation(1, i, 1, 0.5, False)
+
+    count1:int = history1.getInteractionCount(1, 1000)
+    print("count1: " + str(count1))
+
+    history1.delete(50)
+
+    count2:int = history1.getInteractionCount(1, 1000)
+    print("count2: " + str(count2))
+
+    history1.deletePreviousRecomOfUser(1,10)
+
+    count3:int = history1.getInteractionCount(1, 1000)
+    print("count3: " + str(count3))
+
+
 #test01()
-test02()
+#test02()
+test03()

@@ -5,6 +5,9 @@ Heterogeneous Recommending Portfolio provides a framework for online and offline
 
 requires Python 3.7
 
+pip install numpy pandas sklearn tensorflow
+
+
 ```sh
 $ git clone https://github.com/sbalcar/HeterRecomPortfolio.git
 $ cd HeterRecomPortfolio

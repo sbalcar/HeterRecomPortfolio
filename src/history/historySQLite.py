@@ -156,5 +156,14 @@ class HistorySQLite(AHistory):
 
         return len(interactionClicked) != 0
 
+
+    def delete(self, numberOfUserRecommendationToKeep:int):
+        assert False, "this needs to be overridden"
+
+
+    def deletePreviousRecomOfUser(self, userID:int, numberOfUserRecommendationToKeep:int):
+        assert False, "this needs to be overridden"
+
+
     def print(selfs):
         pass

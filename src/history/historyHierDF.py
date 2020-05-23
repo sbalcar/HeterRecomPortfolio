@@ -7,15 +7,15 @@ from pandas.core.series import Series #class
 from pandas.core.frame import DataFrame #class
 
 import pandas as pd
+import numpy as np
 
 from history.aHistory import AHistory #class
 
 from userBehaviourDescription.userBehaviourDescription import UserBehaviourDescription #class
 
 
-class HistoryDF(AHistory):
+class HistoryHierDF(AHistory):
 
-    USER_ID = "userID"
     ITEM_ID = "itemID"
     POSITION = "position"
     OBSERVATION = "observation"
@@ -27,21 +27,26 @@ class HistoryDF(AHistory):
 
         self.dbName:str = dbName
 
-        historyData:pd.DataFrame = []
-        self._historyDF:pd.DataFrame = pd.DataFrame(historyData, columns=[
-            self.USER_ID, self.ITEM_ID, self.POSITION, self.OBSERVATION, self.CLICKED, self.TIMESTAMP])
+        self._historyDict:dict = {}
 
 
     def insertRecommendation(self, userID:int, itemID:int, position:int, uObservation:float, clicked:bool, timestamp=datetime.datetime.now()):
 
-        new_row:dict = {self.USER_ID:userID, self.ITEM_ID:itemID, self.POSITION:position, self.OBSERVATION:uObservation, self.CLICKED:clicked, self.TIMESTAMP:timestamp}
+        if not userID in self._historyDict.keys():
+            uHistoryDF:DataFrame = pd.DataFrame(columns=[
+                    self.ITEM_ID, self.POSITION, self.OBSERVATION, self.CLICKED, self.TIMESTAMP])
+            self._historyDict[userID] = uHistoryDF
 
-        self._historyDF = self._historyDF.append(new_row, ignore_index=True)
+        newRow:dict = {self.ITEM_ID:itemID, self.POSITION:position, self.OBSERVATION:uObservation, self.CLICKED:clicked, self.TIMESTAMP:timestamp}
+        self._historyDict[userID] = self._historyDict[userID].append(newRow, ignore_index=True)
 
 
     def getPreviousRecomOfUser(self, userID:int, limit:int=100):
 
-        uDF:DataFrame = self._historyDF[self._historyDF[self.USER_ID] == userID]
+        if not userID in self._historyDict.keys():
+            return []
+
+        uDF:DataFrame = self._historyDict[userID]
 
         result:List[tuple] = []
         for indexI, rowI  in uDF.tail(limit).iterrows():
@@ -52,7 +57,10 @@ class HistoryDF(AHistory):
 
     def getPreviousRecomOfUserAndItem(self, userID:int, itemID:int, limit:int=100):
 
-        uDF:DataFrame = self._historyDF[self._historyDF[self.USER_ID] == userID]
+        if not userID in self._historyDict.keys():
+            return []
+
+        uDF:DataFrame = self._historyDict[userID]
         uiDF:DataFrame = uDF[uDF[self.ITEM_ID] == itemID]
 
         result: List[tuple] = []
@@ -63,9 +71,21 @@ class HistoryDF(AHistory):
         return result
 
 
+    def getInteractionCount(self, userID:int, limit:int):
+
+        if not userID in self._historyDict.keys():
+            return 0
+
+        uDF:DataFrame = self._historyDict[userID]
+        return len(uDF.index)
+
+
     def isObjectClicked(self, userID:int, itemID:int, limit:int=100):
-        hDF:DataFrame = self._historyDF.tail(limit)
-        uDF:DataFrame = hDF[hDF[self.USER_ID] == userID]
+
+        if not userID in self._historyDict.keys():
+            return False
+
+        uDF:DataFrame = self._historyDict[userID]
         uiDF:DataFrame = uDF[uDF[self.ITEM_ID] == itemID]
 
         cuiDF:DataFrame = uiDF[uiDF[self.CLICKED]]
@@ -74,11 +94,15 @@ class HistoryDF(AHistory):
 
 
     def delete(self, numberOfUserRecommendationToKeep:int):
-        assert False, "this needs to be overridden"
+
+        userIdI:int
+        userHistDFI:dict
+        for userIdI, userHistDFI in self._historyDict.items():
+            self._historyDict[userIdI] = userHistDFI.tail(numberOfUserRecommendationToKeep)
 
 
     def deletePreviousRecomOfUser(self, userID:int, numberOfUserRecommendationToKeep:int):
-        assert False, "this needs to be overridden"
+        self._historyDict[userID] = self._historyDict[userID].tail(numberOfUserRecommendationToKeep)
 
 
     def print(self):
