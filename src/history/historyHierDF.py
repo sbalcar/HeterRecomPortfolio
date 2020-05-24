@@ -16,6 +16,7 @@ from userBehaviourDescription.userBehaviourDescription import UserBehaviourDescr
 
 class HistoryHierDF(AHistory):
 
+    USER_ID = "userID"
     ITEM_ID = "itemID"
     POSITION = "position"
     OBSERVATION = "observation"
@@ -69,7 +70,7 @@ class HistoryHierDF(AHistory):
         indexI:int
         rowI:DataFrame
         for indexI, rowI in uiDF.tail(limit).iterrows():
-            result.append((indexI, rowI[self.USER_ID], rowI[self.ITEM_ID], rowI[self.POSITION], rowI[self.OBSERVATION],
+            result.append((indexI, userID, rowI[self.ITEM_ID], rowI[self.POSITION], rowI[self.OBSERVATION],
                            rowI[self.CLICKED], rowI[self.TIMESTAMP]))
 
         return result

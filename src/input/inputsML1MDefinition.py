@@ -18,8 +18,10 @@ from portfolioDescription.portfolio1MethDescription import Portfolio1MethDescrip
 from portfolioDescription.portfolio1AggrDescription import Portfolio1AggrDescription #class
 
 from aggregationDescription.aggregationDescription import AggregationDescription #class
-from aggregation.aggrDHont import AggrDHont #class
 from aggregation.aggrBanditTS import AggrBanditTS #class
+from aggregation.aggrDHont import AggrDHont #class
+from aggregation.aggrDHontNegativeImplFeedback import AggrDHontNegativeImplFeedback #class
+
 
 import pandas as pd
 
@@ -62,33 +64,9 @@ class InputsML1MDefinition:
     rIDs:List[str] = ["RecommenderCosineCB", "RecommenderW2V"]
     rDescs:List[RecommenderDescription] = [rDescCB, rDescW2v]
 
-    aDescDHont:AggregationDescription = AggregationDescription(AggrDHont, {AggrDHont.ARG_SELECTORFNC:(AggrDHont.selectorOfRouletteWheelRatedItem,[])})
     aDescBanditTS:AggregationDescription = AggregationDescription(AggrBanditTS, {AggrBanditTS.ARG_SELECTORFNC:(AggrBanditTS.selectorOfRouletteWheelRatedItem,[])})
-
-
-
-    # DHont Portfolio description
-    pDescDHont:APortfolioDescription = Portfolio1AggrDescription(
-            "DHont", rIDs, rDescs, aDescDHont)
-
-    # modelDHontData:List[List(str,float)]
-    modelDHontData:List[List] = [[rIdI, 1] for rIdI in pDescDHont.getRecommendersIDs()]
-    modelDHontDF:DataFrame = pd.DataFrame(modelDHontData, columns=["methodID", "votes"])
-    modelDHontDF.set_index("methodID", inplace=True)
-
-    historyDHont:AHistory = HistoryHierDF("DHont")
-
-
-
-    # BanditTS Portfolio description
-    pDescBanditTS:APortfolioDescription = Portfolio1AggrDescription(
-            "BanditTS", rIDs, rDescs, aDescBanditTS)
-
-    modelBanditTSData:List = [[rIdI, 1, 1, 1, 1] for rIdI in rIDs]
-    modelBanditTSDF:DataFrame = pd.DataFrame(modelBanditTSData, columns=["methodID", "r", "n", "alpha0", "beta0"])
-    modelBanditTSDF.set_index("methodID", inplace=True)
-
-    historyBanditTS:AHistory = HistoryHierDF("BanditTS")
+    aDescDHont:AggregationDescription = AggregationDescription(AggrDHont, {AggrDHont.ARG_SELECTORFNC:(AggrDHont.selectorOfRouletteWheelRatedItem,[])})
+    aDescDHontNF:AggregationDescription = AggregationDescription(AggrDHontNegativeImplFeedback, {AggrDHontNegativeImplFeedback.ARG_SELECTORFNC:(AggrDHont.selectorOfRouletteWheelRatedItem,[])})
 
 
 
@@ -108,4 +86,34 @@ class InputsML1MDefinition:
     pDescW2V:APortfolioDescription = Portfolio1MethDescription("w2v", "w2v", rDescW2v)
     modelW2VDF:DataFrame = pd.DataFrame()
     historyW2V:AHistory = HistoryHierDF("W2V")
+
+
+    # BanditTS Portfolio description
+    pDescBanditTS:APortfolioDescription = Portfolio1AggrDescription(
+            "BanditTS", rIDs, rDescs, aDescBanditTS)
+    modelBanditTSData:List = [[rIdI, 1, 1, 1, 1] for rIdI in rIDs]
+    modelBanditTSDF:DataFrame = pd.DataFrame(modelBanditTSData, columns=["methodID", "r", "n", "alpha0", "beta0"])
+    modelBanditTSDF.set_index("methodID", inplace=True)
+    historyBanditTS:AHistory = HistoryHierDF("BanditTS")
+
+
+    # DHont Portfolio description
+    pDescDHont:APortfolioDescription = Portfolio1AggrDescription(
+            "DHont", rIDs, rDescs, aDescDHont)
+    modelDHontData:List[List] = [[rIdI, 1] for rIdI in pDescDHont.getRecommendersIDs()]
+    modelDHontDF:DataFrame = pd.DataFrame(modelDHontData, columns=["methodID", "votes"])
+    modelDHontDF.set_index("methodID", inplace=True)
+    historyDHont:AHistory = HistoryHierDF("DHont")
+
+
+    # DHont Negative Implicit Feedback Portfolio description
+    pDescDHontNF:APortfolioDescription = Portfolio1AggrDescription(
+            "DHontNF", rIDs, rDescs, aDescDHontNF)
+    modelDHontNFData:List[List] = [[rIdI, 1] for rIdI in pDescDHont.getRecommendersIDs()]
+    modelDHontNFDF:DataFrame = pd.DataFrame(modelDHontData, columns=["methodID", "votes"])
+    modelDHontNFDF.set_index("methodID", inplace=True)
+    historyDHontNF:AHistory = HistoryHierDF("DHontNF")
+
+
+
 
