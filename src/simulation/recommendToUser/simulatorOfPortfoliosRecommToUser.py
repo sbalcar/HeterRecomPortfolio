@@ -4,6 +4,8 @@ from typing import List
 
 from pandas.core.series import Series #class
 
+from configuration.configuration import Configuration #class
+
 from datasets.ratings import Ratings #class
 
 from portfolioDescription.aPortfolioDescription import APortfolioDescription #class
@@ -12,6 +14,7 @@ from portfolio.portfolio1Aggr import Portfolio1Aggr #class
 
 from portfolio.aPortfolio import APortfolio #class
 
+import os
 import pandas as pd
 import numpy as np
 
@@ -26,9 +29,11 @@ from userBehaviourDescription.userBehaviourDescription import UserBehaviourDescr
 
 class SimulationPortfolioToUser:
 
+    ARG_ID = "id"
     ARG_WINDOW_SIZE:str = "windowSize"
     ARG_REPETITION_OF_RECOMMENDATION:str = "repetitionOfRecommendation"
     ARG_NUMBER_OF_ITEMS:str = "numberOfItems"
+    ARG_DIV_DATASET_PERC_SIZE = "divisionDatasetPercentualSizes"
 
     def __init__(self, ratingsDF:DataFrame, usersDF:DataFrame, itemsDF:DataFrame,
                  uBehaviourDesc:UserBehaviourDescription, argumentsDict:dict):
@@ -51,11 +56,13 @@ class SimulationPortfolioToUser:
 
         self._uBehaviourDesc = uBehaviourDesc
 
+
+        self._id:int = argumentsDict[self.ARG_ID]
         self._windowSize:int = argumentsDict[self.ARG_WINDOW_SIZE]
         self._repetitionOfRecommendation:int = argumentsDict[self.ARG_REPETITION_OF_RECOMMENDATION]
         self._numberOfItems:int = argumentsDict[self.ARG_NUMBER_OF_ITEMS]
 
-
+        self._divisionDatasetPercentualSize:int = argumentsDict[self.ARG_DIV_DATASET_PERC_SIZE]
 
     def run(self, portfolioDescs:List[APortfolioDescription], portFolioModels:List[pd.DataFrame],
             evaluatonTools:List, histories:List[AHistory]):
@@ -80,12 +87,25 @@ class SimulationPortfolioToUser:
             if not isinstance(historyI, AHistory):
                raise ValueError("Argument histories don't contain AHistory.")
 
+        # create directory for results
+        dir:str = Configuration.resultsDirectory + os.sep + self._id
+        if os.path.isdir(dir):
+            raise ValueError("Directory results contains old results \'" + str(self._id) +"\'")
+        os.mkdir(dir)
+
+        # opening files
+        self.historyOfModelDict = {}
+        for portfolioDescI in portfolioDescs:
+            fileName:str = Configuration.resultsDirectory + os.sep + self._id + os.sep + "historyOfModel-" + portfolioDescI.getPortfolioID() + ".txt"
+            self.historyOfModelDict[portfolioDescI.getPortfolioID()] = open(fileName, "a")
+
+
         ratingsSortedDF:DataFrame = self._ratingsDF.sort_values(by=Ratings.COL_TIMESTAMP)
         numberOfRatings:int = ratingsSortedDF.shape[0]
 
         # dataset division setting
         #divisionDatasetPercentualSizes:List[int] = [50, 60, 70, 80, 90]
-        divisionDatasetPercentualSizes:List[int] = [50]
+        divisionDatasetPercentualSizes:List[int] = [self._divisionDatasetPercentualSize]
         testDatasetPercentualSize:int = 10
 
         evaluations:List[int] = []
@@ -103,6 +123,18 @@ class SimulationPortfolioToUser:
 
             evaluationI = self.__runPortfolioDesc(portfolioDescs, portFolioModels, evaluatonTools, histories, trainDFI, testDFI)
             evaluations.append(evaluationI)
+
+        # closing files
+        #hOfModelDictI:File
+        for hOfModelDictI in self.historyOfModelDict.values():
+            hOfModelDictI.close()
+
+        #evalFileName:File
+        evalFileName:str = Configuration.resultsDirectory + os.sep + self._id + os.sep + "evaluation.txt"
+        evalFile = open(evalFileName, "a")
+        evalFile.write("ids: " + str([portDescI.getPortfolioID() for portDescI in portfolioDescs]) + "\n")
+        evalFile.write(str(evaluations))
+        evalFile.close()
 
         return evaluations
 
@@ -152,11 +184,6 @@ class SimulationPortfolioToUser:
 #                for historyI in histories:
 #                    historyI.delete(self._repetitionOfRecommendation * self._numberOfItems)
 
-## TODO ######
-#            if counterI == 3000:
-#                return evaluations
-## TODO ######
-
             currentItemIdI:int = testRatingsDF.loc[currentIndexDFI][Ratings.COL_MOVIEID]
             currentRatingI:int = testRatingsDF.loc[currentIndexDFI][Ratings.COL_RATING]
             currentUserIdI:int = testRatingsDF.loc[currentIndexDFI][Ratings.COL_USERID]
@@ -178,7 +205,7 @@ class SimulationPortfolioToUser:
 
             repetitionI: int
             for repetitionI in range(self._repetitionOfRecommendation):
-                self.__simulateRecommendations(portfolios, portFolioModels, evaluatonTools, testRatingsDF,
+                self.__simulateRecommendations(portfolios, portIds, portFolioModels, evaluatonTools, testRatingsDF,
                                                histories, evaluations, currentItemIdI, nextItemIDsI, currentUserIdI)
 
         return evaluations
@@ -205,39 +232,9 @@ class SimulationPortfolioToUser:
 
         return selectedItems
 
-    def __simulateRecommendations(self, portfolios:List[APortfolio], portFolioModels:List[pd.DataFrame],
+    def __simulateRecommendations(self, portfolios:List[APortfolio], portIds:List[str], portFolioModels:List[pd.DataFrame],
                                   evaluatonTools:[AEvalTool], testRatingsDF:DataFrame, histories:List[AHistory],
                                   evaluations:List[dict], currentItemID:int, nextItemIDs:List[int], userID:int):
-
-        if type(portfolios) is not list:
-            raise ValueError("Argument portfolios isn't type list.")
-        for portfolioI in portfolios:
-            if not isinstance(portfolioI, APortfolio):
-               raise ValueError("Argument portfolioI don't contain APortfolio.")
-
-        if type(portFolioModels) is not list:
-            raise ValueError("Argument portFolioModels isn't type list.")
-        for portfolioModelI in portFolioModels:
-            if type(portfolioModelI) is not DataFrame:
-               raise ValueError("Argument portfolioModelI don't contain DataFrame.")
-
-        if type(testRatingsDF) is not DataFrame:
-            raise ValueError("Argument testRatingsDF isn't type DataFrame.")
-
-        if type(histories) is not list:
-            raise ValueError("Argument histories isn't type list.")
-        for historyI in histories:
-            if not isinstance(historyI, AHistory):
-               raise ValueError("Argument histories don't contain AHistory.")
-
-        if type(evaluations) is not list:
-            raise ValueError("Argument evaluations isn't type list.")
-        for evaluationI in evaluations:
-            if not isinstance(evaluationI, dict):
-               raise ValueError("Argument evaluations don't contain dict.")
-
-        if type(currentItemID) is not int and type(currentItemID) is not np.int64:
-            raise ValueError("Argument currentIndex isn't type int.")
 
         uProbOfObservGenerated:List[float] = UserBehaviourSimulator().simulateStaticProb(self._uBehaviourDesc, self._numberOfItems)
         #print("uProbOfObservGenerated: " + str(uProbOfObservGenerated))
@@ -248,11 +245,11 @@ class SimulationPortfolioToUser:
         portfolioI:Portfolio1Aggr
         portFolioModelI:pd.DataFrame
         historyI:pd.DataFrame
-        for portfolioI, portFolioModelI, evaluatonToolI, historyI, evaluationI in zip(portfolios, portFolioModels, evaluatonTools, histories, evaluations):
-            self.__simulateRecommendation(portfolioI, portFolioModelI, evaluatonToolI, testRatingsDF, historyI,
+        for portfolioI, portIdI, portFolioModelI, evaluatonToolI, historyI, evaluationI in zip(portfolios, portIds, portFolioModels, evaluatonTools, histories, evaluations):
+            self.__simulateRecommendation(portfolioI, portIdI, portFolioModelI, evaluatonToolI, testRatingsDF, historyI,
                                           evaluationI, uProbOfObservGenerated, uObservation, currentItemID, nextItemIDs, userID)
 
-    def __simulateRecommendation(self, portfolio:Portfolio1Aggr, portfolioModel:pd.DataFrame, evaluatonTool:AEvalTool,
+    def __simulateRecommendation(self, portfolio:Portfolio1Aggr, portId:str, portfolioModel:pd.DataFrame, evaluatonTool:AEvalTool,
                                  testRatingsDF:DataFrame, history:AHistory, evaluation:dict, uProbOfObserv:List[float],
                                  uObservation:List[bool], currentItemID:int, nextItemIDs:List[int], userID:int):
 
@@ -279,6 +276,9 @@ class SimulationPortfolioToUser:
 
         if recommendedRelevantItem and wasCandidateObserved:
             evaluatonTool.click(rItemIDsWithResponsibility, selectedCandidateItemID, probOfObserv, portfolioModel, evaluation)
+
+            self.historyOfModelDict[portId].write("currentItemID: " + str(currentItemID) + "\n")
+            self.historyOfModelDict[portId].write(str(portfolioModel) + "\n\n")
 
         # save log of history
         history.insertRecommendations(userID, rItemIDs, uProbOfObserv, selectedCandidateItemID)

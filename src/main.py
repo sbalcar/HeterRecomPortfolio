@@ -9,7 +9,8 @@ def main():
 
   start = time.time()
 
-  job01()
+  divisionDatasetPercentualSize:int = 50
+  job01(divisionDatasetPercentualSize)
 
   end = time.time()
 

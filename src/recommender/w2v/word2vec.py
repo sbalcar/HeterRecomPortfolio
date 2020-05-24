@@ -18,14 +18,13 @@ def word2vecRun(window_size = 3, embedding_size = 64, texts = []):
     import tensorflow.compat.v1 as tf
     tf.disable_v2_behavior()
     import numpy as np
-    import random
     import os
     #import text_helpers
     from recommender.w2v.text_helpers import build_dictionary #function
     from recommender.w2v.text_helpers import text_to_numbers #function
     from recommender.w2v.text_helpers import generate_batch_data #function
     from tensorflow.python.framework import ops
-    from datasets.configuration import Configuration #class
+    from configuration.configuration import Configuration #class
 
     ops.reset_default_graph()
 
