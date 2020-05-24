@@ -3,14 +3,21 @@
 import time
 import sys
 
-from jobs.job01 import job01 #function
+from jobs.ml1m import ml1mDiv50 #function
+from jobs.ml1m import ml1mDiv60 #function
+from jobs.ml1m import ml1mDiv70 #function
+from jobs.ml1m import ml1mDiv80 #function
+from jobs.ml1m import ml1mDiv90 #function
 
 def main():
 
   start = time.time()
 
-  divisionDatasetPercentualSize:int = 50
-  job01(divisionDatasetPercentualSize)
+  ml1mDiv50()
+  #ml1mDiv60()
+  #ml1mDiv70()
+  #ml1mDiv80()
+  #ml1mDiv90()
 
   end = time.time()
 

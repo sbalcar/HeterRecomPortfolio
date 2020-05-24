@@ -177,7 +177,7 @@ class SimulationPortfolioToUser:
             if counterI  % 100 == 0:
                 print("RatingI: " + str(counterI) + " / " + str(testRatingsDF.shape[0]))
 
-                print("ids: " + str(portIds))
+                print("Ids: " + str(portIds))
                 print("Evaluations: " + str(evaluations))
 
 #            if counterI % 1000 == 0:
@@ -258,30 +258,32 @@ class SimulationPortfolioToUser:
         rItemIDs, rItemIDsWithResponsibility = portfolio.recommend(
             userID, portfolioModel, numberOfItems=self._numberOfItems)
 
+        evaluatonTool.displayed(rItemIDsWithResponsibility, portfolioModel, evaluation)
+
+
         nextNoClickedItemIDs:List[int] = [nItemIdI for nItemIdI in nextItemIDs if not history.isObjectClicked(userID, nItemIdI)]
 
         candidatesToClick:List[int] = list(set(nextNoClickedItemIDs) & set(rItemIDs))
-        recommendedRelevantItem:bool = len(candidatesToClick) != 0
+        clickedItemIDs:List[int] = []
+        probOfObserv:List[float] = []
+        for candidateToClickI in candidatesToClick:
+            indexI:int = rItemIDs.index(candidateToClickI)
+            wasCandidateObservedI:bool = uObservation[indexI]
+            probOfObservI:float = uProbOfObserv[indexI]
+            if wasCandidateObservedI:
+                clickedItemIDs.append(candidateToClickI)
+                probOfObserv.append(probOfObservI)
 
-        selectedCandidateItemID:int = None
-        wasCandidateObserved:bool = False
-        probOfObserv:float = -1
-        if recommendedRelevantItem:
-            selectedCandidateItemID = candidatesToClick[0]  # take the first candidate
-            index:int = rItemIDs.index(selectedCandidateItemID)
-            wasCandidateObserved = uObservation[index]
-            probOfObserv = uProbOfObserv[index]
-
-        evaluatonTool.displayed(rItemIDsWithResponsibility, portfolioModel, evaluation)
-
-        if recommendedRelevantItem and wasCandidateObserved:
-            evaluatonTool.click(rItemIDsWithResponsibility, selectedCandidateItemID, probOfObserv, portfolioModel, evaluation)
+        for clickedItemIdI, probOfObservI in zip(clickedItemIDs, probOfObserv):
+            evaluatonTool.click(rItemIDsWithResponsibility, candidateToClickI,
+                                probOfObservI, portfolioModel, evaluation)
 
             self.historyOfModelDict[portId].write("currentItemID: " + str(currentItemID) + "\n")
             self.historyOfModelDict[portId].write(str(portfolioModel) + "\n\n")
 
+
         # save log of history
-        history.insertRecommendations(userID, rItemIDs, uProbOfObserv, selectedCandidateItemID)
+        history.insertRecomAndClickedItemIDs(userID, rItemIDs, uProbOfObserv, clickedItemIDs)
 
         # delete log of history
         history.deletePreviousRecomOfUser(userID, self._repetitionOfRecommendation * self._numberOfItems)
