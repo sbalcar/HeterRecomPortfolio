@@ -45,7 +45,8 @@ from userBehaviourDescription.userBehaviourDescription import UserBehaviourDescr
 from userBehaviourDescription.userBehaviourDescription import observationalLinearProbabilityFnc #function
 
 
-def simulationOfPortfolio():
+
+class InputsML1MDefinition:
 
     # dataset reading
 
@@ -81,7 +82,8 @@ def simulationOfPortfolio():
     pDescDHont:APortfolioDescription = Portfolio1AggrDescription(
             "DHont", rIDs, rDescs, aDescDHont)
 
-    modelDHontData:List[str,float] = [[rIdI, 1] for rIdI in pDescDHont.getRecommendersIDs()]
+    # modelDHontData:List[List(str,float)]
+    modelDHontData:List[List] = [[rIdI, 1] for rIdI in pDescDHont.getRecommendersIDs()]
     modelDHontDF:DataFrame = pd.DataFrame(modelDHontData, columns=["methodID", "votes"])
     modelDHontDF.set_index("methodID", inplace=True)
 
@@ -117,20 +119,4 @@ def simulationOfPortfolio():
     pDescW2V:APortfolioDescription = Portfolio1MethDescription("w2v", "w2v", rDescW2v)
     modelW2VDF:DataFrame = pd.DataFrame()
     historyW2V:AHistory = HistoryHierDF("W2V")
-
-    argsSimulationDict:dict = {SimulationPortfolioToUser.ARG_WINDOW_SIZE:3, SimulationPortfolioToUser.ARG_REPETITION_OF_RECOMMENDATION:1, SimulationPortfolioToUser.ARG_NUMBER_OF_ITEMS:20}
-
-    # simulation of portfolio
-    #simulator:Simulator = Simulator(SimulationPortfoliosRecomToItemSeparatedUsers, ratingsDF, usersDF, itemsDF, uBehaviourDesc
-    simulator:Simulator = Simulator(SimulationPortfolioToUser, argsSimulationDict, ratingsDF, usersDF, itemsDF, uBehaviourDesc)
-
-    #evaluations:List[dict] = simulator.simulate([pDescCCB], [modelCCBDF], [EToolSingleMethod], [historyCCB])
-    #evaluations:List[dict] = simulator.simulate([pDescW2V], [modelW2VDF], [EToolSingleMethod], [historyW2V])
-    #evaluations:List[dict] = simulator.simulate([pDescTheMostPopular], [modelTheMostPopularDF], [EToolSingleMethod], [historyTheMostPopular])
-    #evaluations:List[dict] = simulator.simulate([pDescDHont], [modelDHontDF], [EToolDHontHit1], [historyDHont])
-    #evaluations:List[dict] = simulator.simulate([pDescBanditTS], [modelBanditTSDF], [EToolBanditTSHit1], [historyBanditTS])
-    evaluations:List[dict] = simulator.simulate([pDescDHont, pDescBanditTS], [modelDHontDF, modelBanditTSDF], [EToolDHontHit1, EToolBanditTSHit1], [historyDHont, historyBanditTS])
-
-
-
 

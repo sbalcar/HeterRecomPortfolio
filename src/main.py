@@ -1,18 +1,15 @@
 #!/usr/bin/python3
 
 import time
-import numpy as np
-import pandas as pd
+import sys
 
-#from jobs.recommendation import recommendation #function
-from jobs.simulationOfPortfolio import simulationOfPortfolio #function
+from jobs.job01 import job01 #function
 
 def main():
 
   start = time.time()
 
-  ##recommendation()
-  simulationOfPortfolio()
+  job01()
 
   end = time.time()
 
@@ -21,5 +18,6 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+
+  main()
 
