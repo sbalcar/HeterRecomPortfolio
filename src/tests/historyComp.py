@@ -94,6 +94,8 @@ def test03():
     for i in range(100):
         # userID, itemID, position, observation, clicked
         history1.insertRecommendation(1, i, 1, 0.5, False)
+        history1.insertRecommendation(2, i, 1, 0.5, True)
+        history1.insertRecommendation(3, i, 1, 0.5, True)
 
     count1:int = history1.getInteractionCount(1, 1000)
     print("count1: " + str(count1))
@@ -108,6 +110,7 @@ def test03():
     count3:int = history1.getInteractionCount(1, 1000)
     print("count3: " + str(count3))
 
+    history1.print()
 
 #test01()
 #test02()

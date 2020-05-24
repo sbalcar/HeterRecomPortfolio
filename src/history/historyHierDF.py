@@ -49,6 +49,8 @@ class HistoryHierDF(AHistory):
         uDF:DataFrame = self._historyDict[userID]
 
         result:List[tuple] = []
+        indexI:int
+        rowI:DataFrame
         for indexI, rowI  in uDF.tail(limit).iterrows():
             result.append((indexI, rowI[self.USER_ID], rowI[self.ITEM_ID], rowI[self.POSITION], rowI[self.OBSERVATION], rowI[self.CLICKED], rowI[self.TIMESTAMP]))
 
@@ -64,6 +66,8 @@ class HistoryHierDF(AHistory):
         uiDF:DataFrame = uDF[uDF[self.ITEM_ID] == itemID]
 
         result: List[tuple] = []
+        indexI:int
+        rowI:DataFrame
         for indexI, rowI in uiDF.tail(limit).iterrows():
             result.append((indexI, rowI[self.USER_ID], rowI[self.ITEM_ID], rowI[self.POSITION], rowI[self.OBSERVATION],
                            rowI[self.CLICKED], rowI[self.TIMESTAMP]))
@@ -106,4 +110,12 @@ class HistoryHierDF(AHistory):
 
 
     def print(self):
-        print(self._historyDF.head(10))
+        print("Number of users: " + str(len(self._historyDict.keys())))
+
+        counter:int = 0
+        userIdI:int
+        userHistDFI:dict
+        for userIdI, userHistDFI in self._historyDict.items():
+            counter += len(userHistDFI.keys())
+
+        print("Number of rows: " + str(counter))

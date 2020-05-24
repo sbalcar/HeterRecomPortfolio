@@ -74,11 +74,20 @@ class HistoryDF(AHistory):
 
 
     def delete(self, numberOfUserRecommendationToKeep:int):
-        assert False, "this needs to be overridden"
+        self._historyDF = self._historyDF.tail(numberOfUserRecommendationToKeep)
 
 
     def deletePreviousRecomOfUser(self, userID:int, numberOfUserRecommendationToKeep:int):
-        assert False, "this needs to be overridden"
+        userIDs:List[int] = list(set([self._historyDF[indexI, self.USER_ID] for indexI in len(self._historyDF.index)]))
+
+        histOfUsers:List[DataFrame] = []
+
+        userIdI:int
+        for userIdI in userIDs:
+            uDFI:DataFrame = self._historyDF[self._historyDF[self.USER_ID] == userID]
+            histOfUsers.append(uDFI)
+
+        self._historyDF = pd.concat(histOfUsers)
 
 
     def print(self):
