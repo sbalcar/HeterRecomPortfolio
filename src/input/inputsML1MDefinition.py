@@ -111,8 +111,8 @@ class InputsML1MDefinition:
     # DHont Negative Implicit Feedback Portfolio description
     pDescDHontNF:APortfolioDescription = Portfolio1AggrDescription(
             "DHontNF", rIDs, rDescs, aDescDHontNF)
-    modelDHontNFData:List[List] = [[rIdI, 1] for rIdI in pDescDHont.getRecommendersIDs()]
-    modelDHontNFDF:DataFrame = pd.DataFrame(modelDHontData, columns=["methodID", "votes"])
+    modelDHontNFData:List[List] = [[rIdI, 1] for rIdI in pDescDHontNF.getRecommendersIDs()]
+    modelDHontNFDF:DataFrame = pd.DataFrame(modelDHontNFData, columns=["methodID", "votes"])
     modelDHontNFDF.set_index("methodID", inplace=True)
     historyDHontNF:AHistory = HistoryHierDF("DHontNF")
 

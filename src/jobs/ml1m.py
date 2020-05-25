@@ -58,14 +58,15 @@ def __ml1m(divisionDatasetPercentualSize:int):
         #evaluations:List[dict] = simulator.simulate([d.pDescCCB], [d.modelCCBDF], [EToolSingleMethod], [d.historyCCB])
         #evaluations:List[dict] = simulator.simulate([pDescW2V], [modelW2VDF], [EToolSingleMethod], [historyW2V])
         #evaluations:List[dict] = simulator.simulate([pDescTheMostPopular], [modelTheMostPopularDF], [EToolSingleMethod], [historyTheMostPopular])
-        #evaluations:List[dict] = simulator.simulate([pDescDHont], [modelDHontDF], [EToolDHontHit1], [historyDHont])
         #evaluations:List[dict] = simulator.simulate([pDescBanditTS], [modelBanditTSDF], [EToolBanditTSHit1], [historyBanditTS])
+        #evaluations:List[dict] = simulator.simulate([pDescDHont], [modelDHontDF], [EToolDHontHit1], [historyDHont])
+        evaluations:List[dict] = simulator.simulate([d.pDescDHontNF], [d.modelDHontNFDF], [EToolDHontHit1], [d.historyDHontNF])
         #evaluations: List[dict] = simulator.simulate([d.pDescBanditTS, d.pDescDHont],
         #                                            [d.modelBanditTSDF, d.modelDHontDF],
         #                                            [EToolBanditTSHit1, EToolDHontHit1],
         #                                            [d.historyBanditTS, d.historyDHont])
 
-        evaluations: List[dict] = simulator.simulate([d.pDescBanditTS, d.pDescDHont, d.pDescDHontNF],
-                                                     [d.modelBanditTSDF, d.modelDHontDF, d.modelDHontNFDF],
-                                                     [EToolBanditTSHit1, EToolDHontHit1, EToolDHontHit1],
-                                                     [d.historyBanditTS, d.historyDHont, d.historyDHontNF])
+        #evaluations: List[dict] = simulator.simulate([d.pDescBanditTS, d.pDescDHont, d.pDescDHontNF],
+        #                                             [d.modelBanditTSDF, d.modelDHontDF, d.modelDHontNFDF],
+        #                                             [EToolBanditTSHit1, EToolDHontHit1, EToolDHontHit1],
+        #                                             [d.historyBanditTS, d.historyDHont, d.historyDHontNF])

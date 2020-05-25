@@ -206,7 +206,7 @@ class SimulationPortfolioToUser:
 
             repetitionI: int
             for repetitionI in range(self._repetitionOfRecommendation):
-                self.__simulateRecommendations(portfolios, portfolioDescs, portFolioModels, evaluatonTools, testRatingsDF,
+                self.__simulateRecommendations(portfolios, portfolioDescs, portFolioModels, evaluatonTools,
                                                histories, evaluations, currentItemIdI, nextItemIDsI, currentUserIdI)
 
         return evaluations
@@ -234,7 +234,7 @@ class SimulationPortfolioToUser:
         return selectedItems
 
     def __simulateRecommendations(self, portfolios:List[APortfolio], portfolioDescs:List[Portfolio1AggrDescription], portFolioModels:List[pd.DataFrame],
-                                  evaluatonTools:[AEvalTool], testRatingsDF:DataFrame, histories:List[AHistory],
+                                  evaluatonTools:[AEvalTool], histories:List[AHistory],
                                   evaluations:List[dict], currentItemID:int, nextItemIDs:List[int], userID:int):
 
         uProbOfObservGenerated:List[float] = UserBehaviourSimulator().simulateStaticProb(self._uBehaviourDesc, self._numberOfItems)
@@ -247,11 +247,11 @@ class SimulationPortfolioToUser:
         portFolioModelI:pd.DataFrame
         historyI:pd.DataFrame
         for portfolioI, portfolioDescI, portFolioModelI, evaluatonToolI, historyI, evaluationI in zip(portfolios, portfolioDescs, portFolioModels, evaluatonTools, histories, evaluations):
-            self.__simulateRecommendation(portfolioI, portfolioDescI, portFolioModelI, evaluatonToolI, testRatingsDF, historyI,
+            self.__simulateRecommendation(portfolioI, portfolioDescI, portFolioModelI, evaluatonToolI, historyI,
                                           evaluationI, uProbOfObservGenerated, uObservation, currentItemID, nextItemIDs, userID)
 
     def __simulateRecommendation(self, portfolio:Portfolio1Aggr, portfolioDesc:Portfolio1AggrDescription, portfolioModel:pd.DataFrame, evaluatonTool:AEvalTool,
-                                 testRatingsDF:DataFrame, history:AHistory, evaluation:dict, uProbOfObserv:List[float],
+                                 history:AHistory, evaluation:dict, uProbOfObserv:List[float],
                                  uObservation:List[bool], currentItemID:int, nextItemIDs:List[int], userID:int):
 
         portId:str = portfolioDesc.getPortfolioID()
@@ -261,7 +261,11 @@ class SimulationPortfolioToUser:
         rItemIDs, rItemIDsWithResponsibility = portfolio.recommend(
             userID, portfolioModel, numberOfItems=self._numberOfItems)
 
-        print(str(evaluation))
+        if not type(evaluation) is dict:
+            print(type(evaluation))
+            print(evaluation)
+            print("CHYBA")
+        #print(str(evaluation))
         evaluatonTool.displayed(rItemIDsWithResponsibility, portfolioModel, evaluation)
 
 
