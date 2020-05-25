@@ -16,8 +16,8 @@ class EToolDHontHit1(AEvalTool):
     minVotesConst = 0.01
 
     @staticmethod
-    def click(rItemIDsWithResponsibility: List, clickedItemID: int, probability: float, portfolioModel: DataFrame,
-              evaluationDict: dict):
+    def click(rItemIDsWithResponsibility:List, clickedItemID:int, probability:float, portfolioModel:DataFrame,
+              evaluationDict:dict):
         if type(rItemIDsWithResponsibility) is not list:
             raise ValueError("Argument rItemIDsWithResponsibility isn't type list.")
         if type(clickedItemID) is not int and type(clickedItemID) is not np.int64:
@@ -62,10 +62,10 @@ class EToolDHontHit1(AEvalTool):
             elif portfolioModel.loc[methodIdI, 'votes'] > EToolDHontHit1.maxVotesConst:
                 portfolioModel.loc[methodIdI, 'votes'] = EToolDHontHit1.maxVotesConst
 
-        # linearly normalizing to unit sum of votes
-        portfolioModel = portfolioModel / portfolioModel.sum()
-        print(portfolioModel)
-
+         # linearly normalizing to unit sum of votes
+        sumMethodsVotes:float = portfolioModel.sum()
+        for methodIdI in portfolioModel.index:
+            portfolioModel.loc[methodIdI] = portfolioModel.loc[methodIdI] / sumMethodsVotes
 
     @staticmethod
     def displayed(rItemIDsWithResponsibility:List, portfolioModel:DataFrame, evaluationDict:dict):
@@ -104,5 +104,5 @@ class EToolDHontHit1(AEvalTool):
 
          # linearly normalizing to unit sum of votes
         sumMethodsVotes:float = portfolioModel.sum()
-        for methodIdI in responsibilityDict.keys():
+        for methodIdI in portfolioModel.index:
             portfolioModel.loc[methodIdI] = portfolioModel.loc[methodIdI] / sumMethodsVotes
