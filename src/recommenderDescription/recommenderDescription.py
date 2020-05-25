@@ -12,6 +12,8 @@ class RecommenderDescription:
         self._recommenderClass = recommenderClass
         self._argumentsDict:dict = argumentsDict
 
+    def getArguments(self):
+        return self._argumentsDict
 
     def exportRecommender(self):
         return self._recommenderClass(self._argumentsDict)

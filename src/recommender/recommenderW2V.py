@@ -122,11 +122,15 @@ class RecommenderW2V(ARecommender):
         return ([], [], "")
 
 
-    def recommend(self, userID:int, numberOfItems:int=20, userProfileStrategy:str="max"):
+    def recommend(self, userID:int, numberOfItems:int=20, argumentsDict:dict={}):
         if type(userID) is not int and type(userID) is not np.int64:
             raise ValueError("Argument userID isn't type int.")
         if type(numberOfItems) is not int and type(numberOfItems) is not np.int64:
             raise ValueError("Argument numberOfItems isn't type int.")
+        if type(argumentsDict) is not dict:
+            raise ValueError("Argument argumentsDict isn't type dict.")
+
+        userProfileStrategy:str = argumentsDict[self.ARG_USER_PROFILE_STRATEGY]
 
         userTrainData = self.userProfiles.get(userID, [])
         w2vObjects, weights, aggregation = self.resolveUserProfile(userProfileStrategy, userTrainData)

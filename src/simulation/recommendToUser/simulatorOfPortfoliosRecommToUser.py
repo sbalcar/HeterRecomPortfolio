@@ -155,15 +155,16 @@ class SimulationPortfolioToUser:
             portfolioI.train(historyI, trainRatingsDF.copy(), self._usersDF.copy(), self._itemsDF.copy())
             portfolios.append(portfolioI)
 
-        portIds:List[str] = [portDescI.getPortfolioID() for portDescI in portfolioDescs]
-
-        return self.__iterateOverDataset(portfolios, portIds, portFolioModels, evaluatonTools, histories, testRatingsDF)
+        return self.__iterateOverDataset(portfolios, portfolioDescs, portFolioModels, evaluatonTools, histories, testRatingsDF)
 
 
-    def __iterateOverDataset(self, portfolios:List[APortfolio], portIds:List[str], portFolioModels:List[pd.DataFrame],
-                             evaluatonTools:[AEvalTool], histories:List[AHistory], testRatingsDF:DataFrame):
+    def __iterateOverDataset(self, portfolios:List[APortfolio], portfolioDescs:List[Portfolio1AggrDescription],
+                             portFolioModels:List[pd.DataFrame], evaluatonTools:[AEvalTool], histories:List[AHistory],
+                             testRatingsDF:DataFrame):
 
         model:ModelOfIndexes = ModelOfIndexes(testRatingsDF)
+
+        portIds:List[str] = [portDescI.getPortfolioID() for portDescI in portfolioDescs]
 
         evaluations:List[dict] = [{} for i in range(len(portfolios))]
 
@@ -205,7 +206,7 @@ class SimulationPortfolioToUser:
 
             repetitionI: int
             for repetitionI in range(self._repetitionOfRecommendation):
-                self.__simulateRecommendations(portfolios, portIds, portFolioModels, evaluatonTools, testRatingsDF,
+                self.__simulateRecommendations(portfolios, portfolioDescs, portFolioModels, evaluatonTools, testRatingsDF,
                                                histories, evaluations, currentItemIdI, nextItemIDsI, currentUserIdI)
 
         return evaluations
@@ -232,7 +233,7 @@ class SimulationPortfolioToUser:
 
         return selectedItems
 
-    def __simulateRecommendations(self, portfolios:List[APortfolio], portIds:List[str], portFolioModels:List[pd.DataFrame],
+    def __simulateRecommendations(self, portfolios:List[APortfolio], portfolioDescs:List[Portfolio1AggrDescription], portFolioModels:List[pd.DataFrame],
                                   evaluatonTools:[AEvalTool], testRatingsDF:DataFrame, histories:List[AHistory],
                                   evaluations:List[dict], currentItemID:int, nextItemIDs:List[int], userID:int):
 
@@ -245,19 +246,22 @@ class SimulationPortfolioToUser:
         portfolioI:Portfolio1Aggr
         portFolioModelI:pd.DataFrame
         historyI:pd.DataFrame
-        for portfolioI, portIdI, portFolioModelI, evaluatonToolI, historyI, evaluationI in zip(portfolios, portIds, portFolioModels, evaluatonTools, histories, evaluations):
-            self.__simulateRecommendation(portfolioI, portIdI, portFolioModelI, evaluatonToolI, testRatingsDF, historyI,
+        for portfolioI, portfolioDescI, portFolioModelI, evaluatonToolI, historyI, evaluationI in zip(portfolios, portfolioDescs, portFolioModels, evaluatonTools, histories, evaluations):
+            self.__simulateRecommendation(portfolioI, portfolioDescI, portFolioModelI, evaluatonToolI, testRatingsDF, historyI,
                                           evaluationI, uProbOfObservGenerated, uObservation, currentItemID, nextItemIDs, userID)
 
-    def __simulateRecommendation(self, portfolio:Portfolio1Aggr, portId:str, portfolioModel:pd.DataFrame, evaluatonTool:AEvalTool,
+    def __simulateRecommendation(self, portfolio:Portfolio1Aggr, portfolioDesc:Portfolio1AggrDescription, portfolioModel:pd.DataFrame, evaluatonTool:AEvalTool,
                                  testRatingsDF:DataFrame, history:AHistory, evaluation:dict, uProbOfObserv:List[float],
                                  uObservation:List[bool], currentItemID:int, nextItemIDs:List[int], userID:int):
+
+        portId:str = portfolioDesc.getPortfolioID()
 
         rItemIDs:List[int]
         rItemIDsWithResponsibility:List[tuple[int, Series[int, str]]]
         rItemIDs, rItemIDsWithResponsibility = portfolio.recommend(
             userID, portfolioModel, numberOfItems=self._numberOfItems)
 
+        print(str(evaluation))
         evaluatonTool.displayed(rItemIDsWithResponsibility, portfolioModel, evaluation)
 
 

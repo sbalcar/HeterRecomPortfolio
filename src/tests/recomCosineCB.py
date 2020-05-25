@@ -38,12 +38,12 @@ def test01():
     print(len(rec.userProfiles[331]))
 
     print("max")
-    r:Series = rec.recommend(331, 50, "max")
+    r:Series = rec.recommend(331, 50, {RecommenderCosineCB.ARG_USER_PROFILE_STRATEGY:"max"})
     print(type(r))
     print(r)
 
     print("mean")
-    r:Series =rec.recommend(10000, 50, "mean")
+    r:Series =rec.recommend(10000, 50, {RecommenderCosineCB.ARG_USER_PROFILE_STRATEGY:"mean"})
     print(type(r))
     print(r)
 

@@ -72,4 +72,4 @@ class Portfolio1AggrDescription(APortfolioDescription):
        # aggregation:Aggregation
        aggregation = self._aggrDescr.exportAggregation(history)
 
-       return Portfolio1Aggr(self._recommIDs, recommenders, aggregation)
+       return Portfolio1Aggr(recommenders, self._recommIDs, self._recommDescrs, aggregation)

@@ -28,7 +28,7 @@ class RecommenderDummyRedirector(ARecommender):
    def update(self, ratingsUpdateDF:DataFrame):
         pass
 
-   def recommend(self, userID: int, numberOfItems: int = 20):
+   def recommend(self, userID: int, numberOfItems: int = 20, argumentsDict:dict={}):
         result:pd.Series = self._argumentsDict[self.ARG_RESULT]
 
         # pd.Series

@@ -53,7 +53,9 @@ def test01():
     ignoringValue:float = historyDF.getIgnoringValue(userID, itemID, limit=3)
     print("IgnoringValue: " + str(ignoringValue))
 
-    aggr:AggrDHont = AggrDHontNegativeImplFeedback(historyDF, {AggrDHontNegativeImplFeedback.ARG_SELECTORFNC:(AggrDHontNegativeImplFeedback.selectorOfTheMostVotedItem,[])})
+    aggr:AggrDHont = AggrDHontNegativeImplFeedback(historyDF, {AggrDHontNegativeImplFeedback.ARG_SELECTORFNC:(AggrDHontNegativeImplFeedback.selectorOfTheMostVotedItem,[]),
+                                                               AggrDHontNegativeImplFeedback.AGR_LENGTH_OF_HISTORY:10,
+                                                               AggrDHontNegativeImplFeedback.AGR_BORDER_NEGATIVE_FEEDBACK:1.0})
 
     itemIDs:List[tuple] = aggr.runWithResponsibility(methodsResultDict, methodsParamsDF, userID, N)
     print(itemIDs)

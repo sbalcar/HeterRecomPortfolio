@@ -22,6 +22,6 @@ class ARecommender(ABC):
         assert False, "this needs to be overridden"
 
     @abstractmethod
-    def recommend(self, userID:int, numberOfItems:int=20):
+    def recommend(self, userID:int, numberOfItems:int=20, argumentsDict:dict={}):
         assert False, "this needs to be overridden"
 

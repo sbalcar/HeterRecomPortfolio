@@ -31,6 +31,10 @@ class Portfolio1MethDescription(APortfolioDescription):
         return self._recommID
 
     def exportPortfolio(self, uBehaviourDesc:UserBehaviourDescription, history:AHistory):
+        if type(uBehaviourDesc) is not UserBehaviourDescription:
+            raise ValueError("Type of argument uBehaviourDesc isn't UserBehaviourDescription.")
+        if not isinstance(history, AHistory):
+            raise ValueError("Type of argument history isn't AHistory.")
 
         recommender:ARecommender = self._recommDescr.exportRecommender()
-        return Portfolio1Meth(self._recommID, recommender)
+        return Portfolio1Meth(recommender, self._recommID, self._recommDescr)

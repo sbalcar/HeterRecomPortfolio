@@ -17,11 +17,9 @@ from userBehaviourDescription.userBehaviourDescription import UserBehaviourDescr
 
 class NegativeImplicitFeedback:
 
-    LENGTH_OF_HISTORY = 10
-
     # methodsResultDict:dict[int,Series[int,str]]
     @staticmethod
-    def transformResultsOfMethods(methodsResultDict:dict, history:AHistory, userID:int, numberOfItems=20, argumentsDict:dict={}):
+    def transformResultsOfMethods(methodsResultDict:dict, history:AHistory, userID:int, lengthOfHistory:int, borderNegFeedback:float):
 
         def getItemIDs(methIdI:str):
             recommI:Series = methodsResultDict[methIdI]
@@ -33,9 +31,9 @@ class NegativeImplicitFeedback:
 
         itemIdsToRemove:List[int] = []
         for itemIdI in itemsInRecomendations:
-            valueOfIgnoringI:float = history.getIgnoringValue(userID, itemIdI, limit=NegativeImplicitFeedback.LENGTH_OF_HISTORY)
+            valueOfIgnoringI:float = history.getIgnoringValue(userID, itemIdI, limit=lengthOfHistory)
             #print("valueOfIgnoringI: " + str(valueOfIgnoringI))
-            if valueOfIgnoringI >= 2.7:
+            if valueOfIgnoringI >= borderNegFeedback:
                 itemIdsToRemove.append(itemIdI)
 
         #print("itemIdsToRemove: " + str(itemIdsToRemove))

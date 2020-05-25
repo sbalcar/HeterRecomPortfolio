@@ -7,6 +7,7 @@ from typing import List #class
 from pandas.core.frame import DataFrame #class
 from pandas.core.series import Series #class
 
+from recommenderDescription.recommenderDescription import RecommenderDescription #class
 from recommender.aRecommender import ARecommender #class
 
 from history.aHistory import AHistory #class
@@ -15,14 +16,17 @@ from portfolio.aPortfolio import APortfolio #class
 
 class Portfolio1Meth(APortfolio):
 
-   def __init__(self, recommID:str, recommender:ARecommender):
-       if type(recommID) is not str:
-          raise ValueError("Argument recommID isn't type str.")
+   def __init__(self, recommender:ARecommender, recomID:str, recomDesc:RecommenderDescription):
        if not isinstance(recommender, ARecommender):
            raise ValueError("Argument recommender isn't type ARecommender.")
+       if type(recomID) is not str:
+          raise ValueError("Argument recomID isn't type str.")
+       if type(recomDesc) is not RecommenderDescription:
+          raise ValueError("Argument recomDesc isn't type RecommenderDescription.")
 
-       self._recommID:str = recommID
        self._recommender:ARecommender = recommender
+       self._recomID:str = recomID
+       self._recomDesc:RecommenderDescription = recomDesc
 
    def getRecommIDs(self):
         return [self._recommID]
@@ -54,7 +58,7 @@ class Portfolio1Meth(APortfolio):
         if type(numberOfItems) is not int:
             raise ValueError("Argument numberOfItems isn't type int.")
 
-        recomItemIDsWithResponsibility:Series = self._recommender.recommend(userID, numberOfItems=numberOfItems)
+        recomItemIDsWithResponsibility:Series = self._recommender.recommend(userID, numberOfItems=numberOfItems, argumentsDict=self._recomDesc.getArguments())
 
         recomItemIDs:List[int] = list(recomItemIDsWithResponsibility.index)
 

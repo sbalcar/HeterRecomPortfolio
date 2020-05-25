@@ -41,12 +41,12 @@ def test01():
     print(len(rec.userProfiles[331]))
 
 
-    r:Series = rec.recommend(331, 50, "max")
+    r:Series = rec.recommend(331, 50, {RecommenderW2V.ARG_USER_PROFILE_STRATEGY:"max"})
     print("max")
     print(type(r))
     print(r)
 
-    r:Series = rec.recommend(10000, 50, "mean")
+    r:Series = rec.recommend(10000, 50, {RecommenderW2V.ARG_USER_PROFILE_STRATEGY:"mean"})
     print("mean")
     print(type(r))
     print(r)

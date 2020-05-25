@@ -4,6 +4,8 @@ from pandas.core.frame import DataFrame #class
 
 from typing import List
 
+from recommenderDescription.recommenderDescription import RecommenderDescription #class
+
 from aggregation.aAggregation import AAgregation #class
 
 from recommender.aRecommender import ARecommender #class
@@ -17,25 +19,26 @@ import numpy as np
 
 class Portfolio1Aggr(APortfolio):
 
-   def __init__(self, recommIDs:List[str], recommenders:List[ARecommender], agregation:AAgregation):
-      if type(recommIDs) is not list:
-         raise ValueError("Argument recommIDs isn't type list.")
-
-      for recommIdI in recommIDs:
-          if not type(recommIdI) is str:
-              raise ValueError("Argument recommIDs don't contains type str.")
-
+   def __init__(self, recommenders:List[ARecommender], recommIDs:List[str], recomDescs:List[RecommenderDescription],
+                agregation:AAgregation):
       if type(recommenders) is not list:
          raise ValueError("Argument recommenders isn't type list.")
       for recommenderI in recommenders:
           if not isinstance(recommenderI, ARecommender):
               raise ValueError("Argument recommenders don't contains type ARecommender.")
 
+      if type(recomDescs) is not list:
+         raise ValueError("Argument recomDescs isn't type list.")
+      for recomDescI in recomDescs:
+          if not type(recomDescI) is RecommenderDescription:
+              raise ValueError("Argument recomDescs don't contains type RecommenderDescription.")
+
       if not isinstance(agregation, AAgregation):
          raise ValueError("Argument agregation isn't type AAgregation.")
 
-      self._recommIDs:List[str] = recommIDs
       self._recommenders:List[ARecommender] = recommenders
+      self._recomDescs:List[RecommenderDescription] = recomDescs
+      self._recommIDs:List[str] = recommIDs
       self._aggregation:AAgregation = agregation
 
    def getRecommIDs(self):
@@ -75,13 +78,11 @@ class Portfolio1Aggr(APortfolio):
 
        resultsOfRecommendations:dict = {}
 
-       recommIndexI: int
-       for recommIndexI in range(len(self._recommenders)):
-           recommIDI: str = self._recommIDs[recommIndexI]
-           recommI:ARecommender = self._recommenders[recommIndexI]
+       for recomI, recomIdI, recomDescsI in zip(self._recommenders, self._recommIDs, self._recomDescs):
+           resultOfRecommendationI:List[int] = recomI.recommend(userID, numberOfItems=numberOfItems,
+                                                                argumentsDict=recomDescsI.getArguments())
+           resultsOfRecommendations[recomIdI] = resultOfRecommendationI
 
-           resultOfRecommendationI:List[int] = recommI.recommend(userID, numberOfItems=numberOfItems)
-           resultsOfRecommendations[recommIDI] = resultOfRecommendationI
 
        aggItemIDsWithResponsibility:List = self._aggregation.runWithResponsibility(
            resultsOfRecommendations, portFolioModel, userID, numberOfItems=numberOfItems)

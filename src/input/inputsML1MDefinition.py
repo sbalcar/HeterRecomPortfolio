@@ -55,8 +55,8 @@ class InputsML1MDefinition:
     rDescDummyRedirector:RecommenderDescription = RecommenderDescription(RecommenderDummyRedirector,
                             {RecommenderDummyRedirector.ARG_RESULT:pd.Series([0.05]*20, index=list(range(1, 21)))} )
 
-    rDescCB:RecommenderDescription = RecommenderDescription(RecommenderCosineCB, {RecommenderCosineCB.ARG_CB_DATA_PATH:Configuration.cbDataFileWithPathTFIDF})
-    rDescW2v:RecommenderDescription = RecommenderDescription(RecommenderW2V, {RecommenderW2V.ARG_TRAIN_VARIANT:"all"})
+    rDescCB:RecommenderDescription = RecommenderDescription(RecommenderCosineCB, {RecommenderCosineCB.ARG_CB_DATA_PATH:Configuration.cbDataFileWithPathTFIDF, RecommenderCosineCB.ARG_USER_PROFILE_STRATEGY:"mean"})
+    rDescW2v:RecommenderDescription = RecommenderDescription(RecommenderW2V, {RecommenderW2V.ARG_TRAIN_VARIANT:"all", RecommenderW2V.ARG_USER_PROFILE_STRATEGY:"max"})
 
     #rIDs:List[str] = ["RecommenderTheMostPopular", "RecommenderDummyRedirector"]
     #rDescs:List[RecommenderDescription] = [rDescTheMostPopular, rDescDummyRedirector]
@@ -66,7 +66,9 @@ class InputsML1MDefinition:
 
     aDescBanditTS:AggregationDescription = AggregationDescription(AggrBanditTS, {AggrBanditTS.ARG_SELECTORFNC:(AggrBanditTS.selectorOfRouletteWheelRatedItem,[])})
     aDescDHont:AggregationDescription = AggregationDescription(AggrDHont, {AggrDHont.ARG_SELECTORFNC:(AggrDHont.selectorOfRouletteWheelRatedItem,[])})
-    aDescDHontNF:AggregationDescription = AggregationDescription(AggrDHontNegativeImplFeedback, {AggrDHontNegativeImplFeedback.ARG_SELECTORFNC:(AggrDHont.selectorOfRouletteWheelRatedItem,[])})
+    aDescDHontNF:AggregationDescription = AggregationDescription(AggrDHontNegativeImplFeedback, {AggrDHontNegativeImplFeedback.ARG_SELECTORFNC:(AggrDHont.selectorOfRouletteWheelRatedItem,[]),
+                                                                                                 AggrDHontNegativeImplFeedback.AGR_LENGTH_OF_HISTORY:10,
+                                                                                                 AggrDHontNegativeImplFeedback.AGR_BORDER_NEGATIVE_FEEDBACK:1.0})
 
 
 
