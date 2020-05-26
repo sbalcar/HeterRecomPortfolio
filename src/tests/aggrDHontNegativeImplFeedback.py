@@ -15,6 +15,8 @@ from userBehaviourDescription.userBehaviourDescription import UserBehaviourDescr
 from userBehaviourDescription.userBehaviourDescription import observationalStaticProbabilityFnc #function
 from userBehaviourDescription.userBehaviourDescription import observationalLinearProbabilityFnc #function
 
+from aggregation.tools.penalizationOfResultsByNegImpFeedbackUsingReduceRelevance import PenalizationOfResultsByNegImpFeedbackUsingReduceRelevance #class
+
 
 def test01():
     print("Test 01")
@@ -61,4 +63,57 @@ def test01():
     print(itemIDs)
 
 
-test01()
+def test02():
+    print("Test 02")
+
+    methodsResultDict:dict[str,pd.Series] = {
+          "metoda1":pd.Series([0.2,0.1,0.3,0.3,0.1],[32,2,8,1,4],name="rating"),
+          "metoda2":pd.Series([0.1,0.1,0.2,0.3,0.3],[1,5,32,6,7],name="rating"),
+          "metoda3":pd.Series([0.3,0.1,0.2,0.3,0.1],[7,2,77,64,12],name="rating")
+          }
+    print(methodsResultDict)
+    print()
+
+    userID:int = 0
+    itemID:int = 1
+
+    historyDF:AHistory = HistoryDF("test01")
+    historyDF.insertRecommendation(userID, itemID, 0, 0.9, False)
+    historyDF.insertRecommendation(userID, itemID, 0, 0.9, False)
+    historyDF.insertRecommendation(userID, itemID, 0, 0.9, False)
+    #historyDF.print()
+
+    ###################
+    maxPenaltyValue:float = 1.2
+    minPenaltyValue:float = 0.2
+    lengthOfHistory:int = 5
+
+    p = PenalizationOfResultsByNegImpFeedbackUsingReduceRelevance(historyDF, maxPenaltyValue, minPenaltyValue, lengthOfHistory)
+    methodsResultDict:dict[str, pd.Series] = p.proportionalRelevanceReduction(methodsResultDict, userID)
+    print("methodsResultDict")
+    print(methodsResultDict)
+
+
+    ###################
+    i:int = 2
+    maxPenaltyValue:float = 1.2
+    minPenaltyValue:float = 0.2
+    lengthOfHistory:int = 5
+
+    value:float = PenalizationOfResultsByNegImpFeedbackUsingReduceRelevance.getPenaltyLinear2(i, maxPenaltyValue, minPenaltyValue, lengthOfHistory)
+    print("value: " + str(value))
+
+
+    ###################
+    minTimeDiff:float = 1.0
+    maxTimeDiff:float = 1.5
+    minPenalty:float = 0.0
+    maxPenalty:float = 1.0
+
+    timeDiff:float = minTimeDiff + 0.25
+
+    value:float = PenalizationOfResultsByNegImpFeedbackUsingReduceRelevance.getPenaltyLinear(timeDiff, minTimeDiff, maxTimeDiff, minPenalty, maxPenalty)
+    print("value: " + str(value))
+
+#test01()
+test02()

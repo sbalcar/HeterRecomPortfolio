@@ -64,11 +64,15 @@ class InputsML1MDefinition:
     rIDs:List[str] = ["RecommenderCosineCB", "RecommenderW2V"]
     rDescs:List[RecommenderDescription] = [rDescCB, rDescW2v]
 
-    aDescBanditTS:AggregationDescription = AggregationDescription(AggrBanditTS, {AggrBanditTS.ARG_SELECTORFNC:(AggrBanditTS.selectorOfRouletteWheelRatedItem,[])})
-    aDescDHont:AggregationDescription = AggregationDescription(AggrDHont, {AggrDHont.ARG_SELECTORFNC:(AggrDHont.selectorOfRouletteWheelRatedItem,[])})
-    aDescDHontNF:AggregationDescription = AggregationDescription(AggrDHontNegativeImplFeedback, {AggrDHontNegativeImplFeedback.ARG_SELECTORFNC:(AggrDHont.selectorOfRouletteWheelRatedItem,[]),
-                                                                                                 AggrDHontNegativeImplFeedback.AGR_LENGTH_OF_HISTORY:10,
-                                                                                                 AggrDHontNegativeImplFeedback.AGR_BORDER_NEGATIVE_FEEDBACK:1.0})
+    aDescBanditTS:AggregationDescription = AggregationDescription(AggrBanditTS,
+                            {AggrBanditTS.ARG_SELECTORFNC:(AggrBanditTS.selectorOfRouletteWheelRatedItem,[])})
+    aDescDHont:AggregationDescription = AggregationDescription(AggrDHont,
+                            {AggrDHont.ARG_SELECTORFNC:(AggrDHont.selectorOfRouletteWheelRatedItem,[])})
+    aDescDHontNF:AggregationDescription = AggregationDescription(AggrDHontNegativeImplFeedback,
+                            {AggrDHontNegativeImplFeedback.ARG_SELECTORFNC:(AggrDHont.selectorOfRouletteWheelRatedItem,[]),
+                             AggrDHontNegativeImplFeedback.ARG_MAX_PENALTY_VALUE:0.8,
+                             AggrDHontNegativeImplFeedback.ARG_MIN_PENALTY_VALUE:0.2,
+                             AggrDHontNegativeImplFeedback.ARG_LENGTH_OF_HISTORY:10})
 
 
 

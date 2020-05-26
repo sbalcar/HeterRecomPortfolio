@@ -42,6 +42,7 @@ def test01():
     print(type(r))
     print(r)
 
+    # testing of a non-existent user
     print("mean")
     r:Series =rec.recommend(10000, 50, {RecommenderCosineCB.ARG_USER_PROFILE_STRATEGY:"mean"})
     print(type(r))

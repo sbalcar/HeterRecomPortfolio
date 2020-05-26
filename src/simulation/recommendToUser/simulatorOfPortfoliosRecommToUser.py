@@ -261,11 +261,6 @@ class SimulationPortfolioToUser:
         rItemIDs, rItemIDsWithResponsibility = portfolio.recommend(
             userID, portfolioModel, numberOfItems=self._numberOfItems)
 
-        if not type(evaluation) is dict:
-            print(type(evaluation))
-            print(evaluation)
-            print("CHYBA")
-        #print(str(evaluation))
         evaluatonTool.displayed(rItemIDsWithResponsibility, portfolioModel, evaluation)
 
 

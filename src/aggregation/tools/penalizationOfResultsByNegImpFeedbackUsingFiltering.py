@@ -15,11 +15,12 @@ from history.aHistory import AHistory #class
 
 from userBehaviourDescription.userBehaviourDescription import UserBehaviourDescription #class
 
-class NegativeImplicitFeedback:
+# transforming Results Of D'Hont Methods
+class PenalizationOfResultsByNegImpFeedbackUsingFiltering:
 
     # methodsResultDict:dict[int,Series[int,str]]
     @staticmethod
-    def transformResultsOfMethods(methodsResultDict:dict, history:AHistory, userID:int, lengthOfHistory:int, borderNegFeedback:float):
+    def filteringOfItemIds(methodsResultDict:dict, history:AHistory, userID:int, lengthOfHistory:int, borderNegFeedback:float):
 
         def getItemIDs(methIdI:str):
             recommI:Series = methodsResultDict[methIdI]
@@ -45,3 +46,4 @@ class NegativeImplicitFeedback:
             methodsResultNewDict[methIdI] = ratingsNewI
 
         return methodsResultNewDict
+
