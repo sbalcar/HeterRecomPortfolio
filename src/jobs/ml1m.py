@@ -12,6 +12,8 @@ from evaluationTool.singleMethod.eToolSingleMethod import EToolSingleMethod #cla
 
 from input.inputsML1MDefinition import InputsML1MDefinition #class
 
+from history.historyHierDF import HistoryHierDF #class
+
 
 def ml1mDiv50():
     divisionDatasetPercentualSize:int = 50
@@ -55,9 +57,10 @@ def __ml1m(divisionDatasetPercentualSize:int):
         simulator: Simulator = Simulator(SimulationPortfolioToUser, argsSimulationDict, d.ratingsDF, d.usersDF,
                                          d.itemsDF, d.uBehaviourDesc)
 
+        #evaluations:List[dict] = simulator.simulate([d.pDescTheMostPopular], [d.modelTheMostPopularDF], [EToolSingleMethod], [HistoryHierDF("historyTheMostPopular")])
+
         #evaluations:List[dict] = simulator.simulate([d.pDescCCB], [d.modelCCBDF], [EToolSingleMethod], [d.historyCCB])
         #evaluations:List[dict] = simulator.simulate([pDescW2V], [modelW2VDF], [EToolSingleMethod], [historyW2V])
-        #evaluations:List[dict] = simulator.simulate([pDescTheMostPopular], [modelTheMostPopularDF], [EToolSingleMethod], [historyTheMostPopular])
         #evaluations:List[dict] = simulator.simulate([pDescBanditTS], [modelBanditTSDF], [EToolBanditTSHit1], [historyBanditTS])
         #evaluations:List[dict] = simulator.simulate([pDescDHont], [modelDHontDF], [EToolDHontHit1], [historyDHont])
         #evaluations:List[dict] = simulator.simulate([d.pDescDHontNF], [d.modelDHontNFDF], [EToolDHontHit1], [d.historyDHontNF])

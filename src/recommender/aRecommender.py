@@ -14,7 +14,7 @@ class ARecommender(ABC):
         raise Exception("ARecommender is abstract class, can't be instanced")
 
     @abstractmethod
-    def train(self, ratingsTrainDF:DataFrame, usersDF:DataFrame, itemsDF:DataFrame):
+    def train(self, history:AHistory, ratingsTrainDF:DataFrame, usersDF:DataFrame, itemsDF:DataFrame):
         assert False, "this needs to be overridden"
 
     @abstractmethod

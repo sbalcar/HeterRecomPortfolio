@@ -15,6 +15,8 @@ from recommender.aRecommender import ARecommender  # class
 
 from datasets.ratings import Ratings  # class
 
+from history.aHistory import AHistory #class
+
 
 class RecommenderCosineCB(ARecommender):
 
@@ -40,7 +42,7 @@ class RecommenderCosineCB(ARecommender):
         self.cbData:DataFrame = DataFrame(data=dfCBSim, index=self.dfCBFeatures.index, columns=self.dfCBFeatures.index)
         self.userProfiles:dict = {}
 
-    def train(self, historyDF:DataFrame, ratingsDF:DataFrame, usersDF:DataFrame, itemsDF:DataFrame):
+    def train(self, history:AHistory, ratingsDF:DataFrame, usersDF:DataFrame, itemsDF:DataFrame):
         if type(ratingsDF) is not DataFrame:
             raise ValueError("Argument trainRatingsDF is not type DataFrame.")
 

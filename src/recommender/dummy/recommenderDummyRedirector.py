@@ -22,7 +22,7 @@ class RecommenderDummyRedirector(ARecommender):
 
         self._argumentsDict: dict = argumentsDict
 
-   def train(self, ratingTrainsDF:DataFrame, usersDF:DataFrame, itemsDF:DataFrame):
+   def train(self, history:AHistory, ratingTrainsDF:DataFrame, usersDF:DataFrame, itemsDF:DataFrame):
         pass
 
    def update(self, ratingsUpdateDF:DataFrame):

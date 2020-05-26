@@ -36,6 +36,7 @@ class EToolDHontHit1(AEvalTool):
 
         print("HOP")
         print("clickedItemID: " + str(clickedItemID))
+        print(portfolioModel)
 
         evaluationDict[AEvalTool.CLICKS] = evaluationDict.get(AEvalTool.CLICKS, 0) + 1
 

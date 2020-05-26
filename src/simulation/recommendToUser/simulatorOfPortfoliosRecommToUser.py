@@ -93,22 +93,28 @@ class SimulationPortfolioToUser:
             raise ValueError("Directory results contains old results \'" + str(self._id) +"\'")
         os.mkdir(dir)
 
-        # opening files
+        # opening files for history of models
         self.historyOfModelDict = {}
         for portfolioDescI in portfolioDescs:
             fileName:str = Configuration.resultsDirectory + os.sep + self._id + os.sep + "historyOfModel-" + portfolioDescI.getPortfolioID() + ".txt"
             self.historyOfModelDict[portfolioDescI.getPortfolioID()] = open(fileName, "a")
 
+        # results of portfolios evaluations
+        evaluations:List[int] = []
 
-        ratingsSortedDF:DataFrame = self._ratingsDF.sort_values(by=Ratings.COL_TIMESTAMP)
-        numberOfRatings:int = ratingsSortedDF.shape[0]
+        # model with clicked ItemIDs for users
+        self._clickedItems:dict[List[int]] = {}
+        for indexI, rowI in self._usersDF.iterrows():
+            self._clickedItems[rowI[Ratings.COL_USERID]] = []
 
         # dataset division setting
         #divisionDatasetPercentualSizes:List[int] = [50, 60, 70, 80, 90]
         divisionDatasetPercentualSizes:List[int] = [self._divisionDatasetPercentualSize]
         testDatasetPercentualSize:int = 10
 
-        evaluations:List[int] = []
+        ratingsSortedDF:DataFrame = self._ratingsDF.sort_values(by=Ratings.COL_TIMESTAMP)
+        numberOfRatings:int = ratingsSortedDF.shape[0]
+
 
         # dataset division
         percentualSizeI:int
@@ -264,9 +270,10 @@ class SimulationPortfolioToUser:
         evaluatonTool.displayed(rItemIDsWithResponsibility, portfolioModel, evaluation)
 
 
-        nextNoClickedItemIDs:List[int] = [nItemIdI for nItemIdI in nextItemIDs if not history.isObjectClicked(userID, nItemIdI)]
+        #nextNoClickedItemIDs:List[int] = [nItemIdI for nItemIdI in nextItemIDs if not history.isObjectClicked(userID, nItemIdI)]
+        nextNoClickedItemIDs:List[int] = list(set(nextItemIDs) -set(self._clickedItems[userID]))
 
-        candidatesToClick:List[int] = list(set(nextNoClickedItemIDs) & set(rItemIDs))
+        candidatesToClick:List[int] = list(set(rItemIDs) & set(nextNoClickedItemIDs))
         clickedItemIDs:List[int] = []
         probOfObserv:List[float] = []
         for candidateToClickI in candidatesToClick:
@@ -280,6 +287,11 @@ class SimulationPortfolioToUser:
         for clickedItemIdI, probOfObservI in zip(clickedItemIDs, probOfObserv):
             evaluatonTool.click(rItemIDsWithResponsibility, candidateToClickI,
                                 probOfObservI, portfolioModel, evaluation)
+
+            if not clickedItemIdI in self._clickedItems[userID]:
+                self._clickedItems[userID].append(clickedItemIdI)
+
+            print("clickedItems: " + str(self._clickedItems[userID]))
 
             self.historyOfModelDict[portId].write("currentItemID: " + str(currentItemID) + "\n")
             self.historyOfModelDict[portId].write(str(portfolioModel) + "\n\n")

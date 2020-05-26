@@ -19,7 +19,7 @@ class RecommenderDummyRandom(ARecommender):
 
         self._argumentsDict:dict = argumentsDict
 
-    def train(self, historyDF:DataFrame, ratingsDF:DataFrame, usersDF:DataFrame, itemsDF:DataFrame):
+    def train(self, history:AHistory, ratingsDF:DataFrame, usersDF:DataFrame, itemsDF:DataFrame):
         pass
 
     def update(self, ratingsUpdateDF:DataFrame):
