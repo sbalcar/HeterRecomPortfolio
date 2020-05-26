@@ -26,8 +26,8 @@ class AggrDHontNegativeImplFeedback(AggrDHont):
 
     ARG_SELECTORFNC:str = "selectorFnc"
 
-    ARG_MAX_PENALTY_VALUE = "maxPenaltyValue"
-    ARG_MIN_PENALTY_VALUE = "minPenaltyValue"
+    ARG_MAX_PENALTY_VALUE:str = "maxPenaltyValue"
+    ARG_MIN_PENALTY_VALUE:str = "minPenaltyValue"
     ARG_LENGTH_OF_HISTORY:str = "lengthOfHistory"
 
     def __init__(self, history:AHistory, argumentsDict:dict):

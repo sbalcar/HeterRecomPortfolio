@@ -4,8 +4,7 @@ from typing import List
 
 from recommenderDescription.recommenderDescription import RecommenderDescription #class
 
-from recommender.dummy.recommenderTheMostPopular import RecommenderTheMostPopular #class
-from recommender.dummy.recommenderDummyRedirector import RecommenderDummyRedirector #class
+from recommender.recommenderTheMostPopular import RecommenderTheMostPopular #class
 from recommender.recommenderCosineCB import RecommenderCosineCB #class
 from recommender.recommenderW2V import RecommenderW2V #class
 
@@ -47,22 +46,21 @@ class InputsML1MDefinition:
 
     numberOfItems:int = 20
 
-    #uBehaviourDesc:UserBehaviourDescription = UserBehaviourDescription(observationalStaticProbabilityFnc, [0.5])
     uBehaviourDesc:UserBehaviourDescription = UserBehaviourDescription(observationalLinearProbabilityFnc, [0.1, 0.9])
 
     # portfolio definiton
-    rDescTheMostPopular:RecommenderDescription = RecommenderDescription(RecommenderTheMostPopular, {})
-    rDescDummyRedirector:RecommenderDescription = RecommenderDescription(RecommenderDummyRedirector,
-                            {RecommenderDummyRedirector.ARG_RESULT:pd.Series([0.05]*20, index=list(range(1, 21)))} )
+    rDescTheMostPopular:RecommenderDescription = RecommenderDescription(RecommenderTheMostPopular,
+                            {})
+    rDescCB:RecommenderDescription = RecommenderDescription(RecommenderCosineCB,
+                            {RecommenderCosineCB.ARG_CB_DATA_PATH:Configuration.cbDataFileWithPathTFIDF,
+                             RecommenderCosineCB.ARG_USER_PROFILE_STRATEGY:"mean"})
+    rDescW2v:RecommenderDescription = RecommenderDescription(RecommenderW2V,
+                            {RecommenderW2V.ARG_TRAIN_VARIANT:"all",
+                             RecommenderW2V.ARG_USER_PROFILE_STRATEGY:"max"})
 
-    rDescCB:RecommenderDescription = RecommenderDescription(RecommenderCosineCB, {RecommenderCosineCB.ARG_CB_DATA_PATH:Configuration.cbDataFileWithPathTFIDF, RecommenderCosineCB.ARG_USER_PROFILE_STRATEGY:"mean"})
-    rDescW2v:RecommenderDescription = RecommenderDescription(RecommenderW2V, {RecommenderW2V.ARG_TRAIN_VARIANT:"all", RecommenderW2V.ARG_USER_PROFILE_STRATEGY:"max"})
 
-    #rIDs:List[str] = ["RecommenderTheMostPopular", "RecommenderDummyRedirector"]
-    #rDescs:List[RecommenderDescription] = [rDescTheMostPopular, rDescDummyRedirector]
-
-    rIDs:List[str] = ["RecommenderCosineCB", "RecommenderW2V"]
-    rDescs:List[RecommenderDescription] = [rDescCB, rDescW2v]
+    rIDs:List[str] = ["RecommenderTheMostPopular", "RecommenderCosineCB", "RecommenderW2V"]
+    rDescs:List[RecommenderDescription] = [rDescTheMostPopular, rDescCB, rDescW2v]
 
     aDescBanditTS:AggregationDescription = AggregationDescription(AggrBanditTS,
                             {AggrBanditTS.ARG_SELECTORFNC:(AggrBanditTS.selectorOfRouletteWheelRatedItem,[])})
@@ -79,19 +77,15 @@ class InputsML1MDefinition:
     # TheMostPopular Portfolio description
     pDescTheMostPopular:APortfolioDescription = Portfolio1MethDescription("theMostPopular", "theMostPopular", rDescTheMostPopular)
     modelTheMostPopularDF:DataFrame = pd.DataFrame()
-    historyTheMostPopular:AHistory = HistoryHierDF("TheMostPopular")
-
 
     # Cosine CB Portfolio description
     pDescCCB:APortfolioDescription = Portfolio1MethDescription("cosineCB", "cosineCB", rDescCB)
     modelCCBDF:DataFrame = pd.DataFrame()
-    historyCCB:AHistory = HistoryHierDF("cosineCB")
-
 
     # W2V Portfolio description
     pDescW2V:APortfolioDescription = Portfolio1MethDescription("w2v", "w2v", rDescW2v)
     modelW2VDF:DataFrame = pd.DataFrame()
-    historyW2V:AHistory = HistoryHierDF("W2V")
+
 
 
     # BanditTS Portfolio description
