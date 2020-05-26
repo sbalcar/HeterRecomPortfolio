@@ -21,7 +21,7 @@ class EToolBanditTSHit1(AEvalTool):
         if type(probability) is not float:
             raise ValueError("Argument probability isn't type float.")
         if type(portfolioModel) is not DataFrame:
-            raise ValueError("Argument pModelDF isn't type DataFrame.")
+            raise ValueError("Argument portfolioModel isn't type DataFrame.")
         if list(portfolioModel.columns) != ['r', 'n', 'alpha0', 'beta0']:
             raise ValueError("Argument pModelDF doen't contain rights columns.")
         if type(evaluationDict) is not dict:

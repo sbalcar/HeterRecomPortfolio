@@ -28,17 +28,20 @@ def test01():
           }
     #print(methodsResultDict)
 
-
     # methods parametes
-    methodsParamsData:List[tuple] = [['metoda1',100], ['metoda2',80], ['metoda3',60]]
-    methodsParamsDF:DataFrame = pd.DataFrame(methodsParamsData, columns=["methodID","votes"])
-    methodsParamsDF.set_index("methodID", inplace=True)
-    #print(methodsParamsDF)
+    portfolioModelData:List[tuple] = [['metoda1',100], ['metoda2',80], ['metoda3',60]]
+    portfolioModel:DataFrame = pd.DataFrame(portfolioModelData, columns=["methodID","votes"])
+    portfolioModel.set_index("methodID", inplace=True)
+
+    sumMethodsVotes: float = portfolioModel["votes"].sum()
+    for methodIdI in portfolioModel.index:
+        portfolioModel.loc[methodIdI, "votes"] = portfolioModel.loc[methodIdI, "votes"] / sumMethodsVotes
+
 
     aggr:AggrDHont = AggrDHont(HistoryDF(""), {AggrDHont.ARG_SELECTORFNC:(AggrDHont.selectorOfTheMostVotedItem,[])})
     #itemIDs:int = aggr.run(methodsResultDict, methodsParamsDF, N)
     #print(itemIDs)
-    itemIDs:List[tuple] = aggr.runWithResponsibility(methodsResultDict, methodsParamsDF, N)
+    itemIDs:List[tuple] = aggr.runWithResponsibility(portfolioModel, methodsParamsDF, N)
     print(itemIDs)
 
 

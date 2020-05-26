@@ -6,13 +6,10 @@ from simulator.simulator import Simulator #class
 
 from simulation.recommendToUser.simulatorOfPortfoliosRecommToUser import SimulationPortfolioToUser #class
 
-from evaluationTool.dHont.eToolDHontHit1 import EToolDHontHit1 #class
-from evaluationTool.banditTS.eToolBanditTSHit1 import EToolBanditTSHit1 #class
-from evaluationTool.singleMethod.eToolSingleMethod import EToolSingleMethod #class
+from evaluationTool.eToolDHontHit1 import EToolDHontHit1 #class
+from evaluationTool.eToolBanditTSHit1 import EToolBanditTSHit1 #class
 
 from input.inputsML1MDefinition import InputsML1MDefinition #class
-
-from history.historyHierDF import HistoryHierDF #class
 
 
 def ml1mDiv50():

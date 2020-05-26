@@ -10,8 +10,10 @@ import numpy as np
 
 class EToolDHontHit1(AEvalTool):
     # TODO: maybe store learning rates to a database?
-    learningRateClicks = 0.1
-    learningRateViews = (0.1 / 500)
+    #learningRateClicks = 0.1
+    learningRateClicks = 0.5
+    #learningRateViews = (0.1 / 500)
+    learningRateViews = (0.1 / 2500)
     maxVotesConst = 0.99
     minVotesConst = 0.01
 
@@ -44,13 +46,12 @@ class EToolDHontHit1(AEvalTool):
         responsibilityDict: dict[str, float] = aggrItemIDsWithRespDF.loc[clickedItemID]["responsibility"]
 
         # increment portfolio model
-        sumMethodsVotes = portfolioModel.sum()
+        sumMethodsVotes = portfolioModel["votes"].sum()
         for methodIdI in responsibilityDict.keys():
 
             relevance_this = responsibilityDict[methodIdI]
             relevance_others = sumMethodsVotes - relevance_this
             update_step = EToolDHontHit1.learningRateClicks * (relevance_this - relevance_others)
-
             # elif action == "storeViews":
             #    update_step = -1 * learningRateViews * (relevance_this - relevance_others)
             #    pos_step = 0
@@ -64,9 +65,9 @@ class EToolDHontHit1(AEvalTool):
                 portfolioModel.loc[methodIdI, 'votes'] = EToolDHontHit1.maxVotesConst
 
          # linearly normalizing to unit sum of votes
-        sumMethodsVotes:float = portfolioModel.sum()
+        sumMethodsVotes:float = portfolioModel["votes"].sum()
         for methodIdI in portfolioModel.index:
-            portfolioModel.loc[methodIdI] = portfolioModel.loc[methodIdI] / sumMethodsVotes
+            portfolioModel.loc[methodIdI, "votes"] = portfolioModel.loc[methodIdI, "votes"] / sumMethodsVotes
 
     @staticmethod
     def displayed(rItemIDsWithResponsibility:List, portfolioModel:DataFrame, evaluationDict:dict):

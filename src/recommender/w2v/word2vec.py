@@ -35,8 +35,8 @@ def word2vecRun(window_size = 3, embedding_size = 64, texts = []):
     batch_size:int = 32
     vocabulary_size:int = 10000
     #generations:int = 200000
-    #generations:int = 2000
-    generations: int = 400000
+    generations:int = 2000
+    #generations: int = 400000
     model_learning_rate = 0.01
 
     #embedding_size = 64   # Word embedding size

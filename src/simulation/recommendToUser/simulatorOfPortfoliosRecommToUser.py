@@ -256,8 +256,8 @@ class SimulationPortfolioToUser:
             self.__simulateRecommendation(portfolioI, portfolioDescI, portFolioModelI, evaluatonToolI, historyI,
                                           evaluationI, uProbOfObservGenerated, uObservation, currentItemID, nextItemIDs, userID)
 
-    def __simulateRecommendation(self, portfolio:Portfolio1Aggr, portfolioDesc:Portfolio1AggrDescription, portfolioModel:pd.DataFrame, evaluatonTool:AEvalTool,
-                                 history:AHistory, evaluation:dict, uProbOfObserv:List[float],
+    def __simulateRecommendation(self, portfolio:Portfolio1Aggr, portfolioDesc:Portfolio1AggrDescription, portfolioModel:pd.DataFrame,
+                                 evaluatonTool:AEvalTool, history:AHistory, evaluation:dict, uProbOfObserv:List[float],
                                  uObservation:List[bool], currentItemID:int, nextItemIDs:List[int], userID:int):
 
         portId:str = portfolioDesc.getPortfolioID()
