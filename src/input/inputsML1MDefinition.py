@@ -21,6 +21,7 @@ from aggregation.aggrBanditTS import AggrBanditTS #class
 from aggregation.aggrDHont import AggrDHont #class
 from aggregation.aggrDHontNegativeImplFeedback import AggrDHontNegativeImplFeedback #class
 
+from evaluationTool.evalToolDHont import EvalToolDHont #class
 
 import pandas as pd
 
@@ -44,7 +45,7 @@ class InputsML1MDefinition:
     usersDF:DataFrame = Users.readFromFileMl1m()
     itemsDF:DataFrame = Items.readFromFileMl1m()
 
-    numberOfItems:int = 20
+    numberOfItems:int = 60
 
     uBehaviourDesc:UserBehaviourDescription = UserBehaviourDescription(observationalLinearProbabilityFnc, [0.1, 0.9])
 
@@ -103,6 +104,7 @@ class InputsML1MDefinition:
     modelDHontData:List[List] = [[rIdI, 1] for rIdI in pDescDHont.getRecommendersIDs()]
     modelDHontDF:DataFrame = pd.DataFrame(modelDHontData, columns=["methodID", "votes"])
     modelDHontDF.set_index("methodID", inplace=True)
+    EvalToolDHont.linearNormalizingPortfolioModelDHont(modelDHontDF)
     historyDHont:AHistory = HistoryHierDF("DHont")
 
 
@@ -112,8 +114,6 @@ class InputsML1MDefinition:
     modelDHontNFData:List[List] = [[rIdI, 1] for rIdI in pDescDHontNF.getRecommendersIDs()]
     modelDHontNFDF:DataFrame = pd.DataFrame(modelDHontNFData, columns=["methodID", "votes"])
     modelDHontNFDF.set_index("methodID", inplace=True)
+    EvalToolDHont.linearNormalizingPortfolioModelDHont(modelDHontNFDF)
     historyDHontNF:AHistory = HistoryHierDF("DHontNF")
-
-
-
 

@@ -41,7 +41,7 @@ def test01():
     aggr:AggrDHont = AggrDHont(HistoryDF(""), {AggrDHont.ARG_SELECTORFNC:(AggrDHont.selectorOfTheMostVotedItem,[])})
     #itemIDs:int = aggr.run(methodsResultDict, methodsParamsDF, N)
     #print(itemIDs)
-    itemIDs:List[tuple] = aggr.runWithResponsibility(portfolioModel, methodsParamsDF, N)
+    itemIDs:List[tuple] = aggr.runWithResponsibility(methodsResultDict, portfolioModel, N)
     print(itemIDs)
 
 
@@ -67,7 +67,11 @@ def test02():
     #aggr:AggrDHont = AggrDHont(HistoryDF(), {AggrDHont.ARG_SELECTORFNC:(AggrDHont.selectorOfTheMostVotedItem,[])})
     #aggr:AggrDHont = AggrDHont(HistoryDF(), {AggrDHont.ARG_SELECTORFNC:(AggrDHont.selectorOfRouletteWheelRatedItem,[])})
     #aggr:AggrDHont = AggrDHont(HistoryDF(), {AggrDHont.ARG_SELECTORFNC:(AggrDHont.selectorOfRouletteWheelExpRatedItem,[1])})
-    aggr:AggrDHont = AggrDHontNegativeImplFeedback(HistoryDF(""), {AggrDHontNegativeImplFeedback.ARG_SELECTORFNC:(AggrDHontNegativeImplFeedback.selectorOfRouletteWheelExpRatedItem,[1])})
+    aggr:AggrDHont = AggrDHontNegativeImplFeedback(HistoryDF(""),
+                                {AggrDHontNegativeImplFeedback.ARG_SELECTORFNC:(AggrDHontNegativeImplFeedback.selectorOfRouletteWheelExpRatedItem,[1]),
+                                 AggrDHontNegativeImplFeedback.ARG_MAX_PENALTY_VALUE: 0.8,
+                                 AggrDHontNegativeImplFeedback.ARG_MIN_PENALTY_VALUE: 0.2,
+                                 AggrDHontNegativeImplFeedback.ARG_LENGTH_OF_HISTORY: 10})
 
     ##itemIDs:int = aggr.run(methodsResultDict, methodsParamsDF, N)
     itemIDs:int = aggr.run(methodsResultDict, methodsParamsDF, N)

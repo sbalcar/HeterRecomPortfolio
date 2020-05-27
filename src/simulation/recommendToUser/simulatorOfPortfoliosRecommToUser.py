@@ -286,7 +286,7 @@ class SimulationPortfolioToUser:
 
         for clickedItemIdI, probOfObservI in zip(clickedItemIDs, probOfObserv):
             evaluatonTool.click(rItemIDsWithResponsibility, candidateToClickI,
-                                probOfObservI, portfolioModel, evaluation)
+                                portfolioModel, evaluation)
 
             if not clickedItemIdI in self._clickedItems[userID]:
                 self._clickedItems[userID].append(clickedItemIdI)

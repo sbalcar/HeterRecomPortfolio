@@ -13,7 +13,7 @@ import numpy as np
 class EToolSingleMethod(AEvalTool):
 
     @staticmethod
-    def click(rItemIDsWithResponsibility:List, clickedItemID:int, probability:float, portfolioModel:DataFrame, evaluationDict:dict):
+    def click(rItemIDsWithResponsibility:List, clickedItemID:int, portfolioModel:DataFrame, evaluationDict:dict):
         if type(rItemIDsWithResponsibility) is not Series:
             raise ValueError("Argument rItemIDsWithResponsibility isn't type Series.")
         if type(clickedItemID) is not int and type(clickedItemID) is not np.int64:

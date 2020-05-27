@@ -14,7 +14,7 @@ class AEvalTool(ABC):
        raise Exception("AAgregation is abstract class, can't be instanced")
 
     @abstractmethod
-    def click(rItemIDsWithResponsibility:List, clickedItemID:int, probability:float, portfolioModel:DataFrame, evaluationDict:dict):
+    def click(rItemIDsWithResponsibility:List, clickedItemID:int, portfolioModel:DataFrame, evaluationDict:dict):
         assert False, "this needs to be overridden"
 
     @abstractmethod
