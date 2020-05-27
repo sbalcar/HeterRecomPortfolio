@@ -3,8 +3,10 @@
 from pandas.core.frame import DataFrame #class
 
 from typing import List
+from pandas.core.series import Series #class
 
 import random
+from sklearn.preprocessing import normalize
 
 from recommender.aRecommender import ARecommender #class
 
@@ -12,6 +14,7 @@ from datasets.ratings import Ratings #class
 from history.aHistory import AHistory #class
 
 import pandas as pd
+import numpy as np
 
 class RecommenderTheMostPopular(ARecommender):
 
@@ -20,6 +23,9 @@ class RecommenderTheMostPopular(ARecommender):
             raise ValueError("Argument argumentsDict is not type dict.")
 
         self._argumentsDict:dict = argumentsDict
+
+        self.numberOfItems:int
+        self.result:Series = None
 
     # ratingsSum:Dataframe<(userId:int, movieId:int, ratings:int, timestamp:int)>
     def train(self, history:AHistory, ratingsTrainDF:DataFrame, usersDF:DataFrame, itemsDF:DataFrame):
@@ -42,13 +48,18 @@ class RecommenderTheMostPopular(ARecommender):
     def update(self, ratingsUpdateDF:DataFrame):
         pass
 
-
     def recommend(self, userID:int, numberOfItems:int=20, argumentsDict:dict={}):
 
+        if not self.result is None:
+            if self.numberOfItems == numberOfItems:
+                return self.result
+
         # ratings:Dataframe<(movieId:int, ratings:int)>
-        ratingsDF:DataFrame = self._sortedAscRatings5CountDF.head(numberOfItems)
+        ratingsDF:DataFrame = self._sortedAscRatings5CountDF[Ratings.COL_RATING].head(numberOfItems)
 
         items:List[int] = list(ratingsDF.index)
-        ratings:List[float] = [1.0/len(items) for itemI in items]
+        finalScores = normalize(np.expand_dims(ratingsDF, axis=0))[0, :]
 
-        return pd.Series(ratings,index=items)
+        self.numberOfItems:int = numberOfItems
+        self.result = pd.Series(finalScores.tolist(),index=items)
+        return self.result
