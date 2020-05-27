@@ -19,7 +19,9 @@ import numpy as np
 
 class Portfolio1Aggr(APortfolio):
 
-   def __init__(self, recommenders:List[ARecommender], recommIDs:List[str], recomDescs:List[RecommenderDescription],
+    ARG_NUMBER_OF_AGGR_ITEMS:str = "numberOfAggrItems"
+
+    def __init__(self, recommenders:List[ARecommender], recommIDs:List[str], recomDescs:List[RecommenderDescription],
                 agregation:AAgregation):
       if type(recommenders) is not list:
          raise ValueError("Argument recommenders isn't type list.")
@@ -41,10 +43,10 @@ class Portfolio1Aggr(APortfolio):
       self._recommIDs:List[str] = recommIDs
       self._aggregation:AAgregation = agregation
 
-   def getRecommIDs(self):
+    def getRecommIDs(self):
        return self._recommIDs
 
-   def train(self, history:AHistory, ratingsDF:DataFrame, usersDF:DataFrame, itemsDF:DataFrame):
+    def train(self, history:AHistory, ratingsDF:DataFrame, usersDF:DataFrame, itemsDF:DataFrame):
         if not isinstance(history, AHistory):
             raise ValueError("Argument history isn't type AHistory.")
         if type(ratingsDF) is not DataFrame:
@@ -58,7 +60,7 @@ class Portfolio1Aggr(APortfolio):
         for recommenderI in self._recommenders:
             recommenderI.train(history, ratingsDF, usersDF, itemsDF)
 
-   def update(self, ratingsUpdateDF:DataFrame):
+    def update(self, ratingsUpdateDF:DataFrame):
        if type(ratingsUpdateDF) is not DataFrame:
            raise ValueError("Argument ratingsUpdateDF isn't type DataFrame.")
 
@@ -67,25 +69,29 @@ class Portfolio1Aggr(APortfolio):
            recommenderI.update(ratingsUpdateDF)
 
 
-   # portFolioModel:DataFrame<(methodID, votes)>
-   def recommend(self, userID:int, portFolioModel:DataFrame, numberOfItems:int):
+    # portFolioModel:DataFrame<(methodID, votes)>
+    def recommend(self, userID:int, portFolioModel:DataFrame, argumentsDict:dict):
        if type(userID) is not int and type(userID) is not np.int64:
            raise ValueError("Argument userID isn't type int.")
        if type(portFolioModel) is not DataFrame:
            raise ValueError("Argument portFolioModel isn't type DataFrame.")
-       if type(numberOfItems) is not int:
-           raise ValueError("Argument numberOfItems isn't type int.")
+       if type(argumentsDict) is not dict:
+           raise ValueError("Argument argumentsDict isn't type dict.")
+
+       numberOfRecomItems:int = argumentsDict[self.ARG_NUMBER_OF_RECOMM_ITEMS]
+       numberOfAggrItems:int = argumentsDict[self.ARG_NUMBER_OF_AGGR_ITEMS]
+
 
        resultsOfRecommendations:dict = {}
 
        for recomI, recomIdI, recomDescsI in zip(self._recommenders, self._recommIDs, self._recomDescs):
-           resultOfRecommendationI:List[int] = recomI.recommend(userID, numberOfItems=numberOfItems,
-                                                                argumentsDict=recomDescsI.getArguments())
+           resultOfRecommendationI:List[int] = recomI.recommend(
+               userID, numberOfItems=numberOfRecomItems, argumentsDict=recomDescsI.getArguments())
            resultsOfRecommendations[recomIdI] = resultOfRecommendationI
 
 
        aggItemIDsWithResponsibility:List = self._aggregation.runWithResponsibility(
-           resultsOfRecommendations, portFolioModel, userID, numberOfItems=numberOfItems)
+           resultsOfRecommendations, portFolioModel, userID, numberOfItems=numberOfAggrItems)
        #print(aggregatedItemIDsWithResponsibility)
 
        aggItemIDs:List[int] = list(map(lambda rs: rs[0], aggItemIDsWithResponsibility))

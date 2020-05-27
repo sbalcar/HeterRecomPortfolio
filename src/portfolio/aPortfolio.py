@@ -14,6 +14,8 @@ from abc import ABC, abstractmethod
 
 class APortfolio(ABC):
 
+    ARG_NUMBER_OF_RECOMM_ITEMS:str = "numberOfRecomItems"
+
     @abstractmethod
     def __init__(self, recommIDs: List[str], recommenders: List[ARecommender], agregation:AAgregation):
         raise Exception("APortfolio is abstract class, can't be instanced")
@@ -32,5 +34,5 @@ class APortfolio(ABC):
 
     @abstractmethod
     # portFolioModel:DataFrame<(methodID, votes)>
-    def recommend(self, userID:int, portFolioModel:DataFrame, testRatingsDF:DataFrame, history:AHistory, numberOfItems:int):
+    def recommend(self, userID:int, portFolioModel:DataFrame, testRatingsDF:DataFrame, history:AHistory, argumentsDict:dict):
         assert False, "this needs to be overridden"

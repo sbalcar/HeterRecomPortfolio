@@ -4,7 +4,7 @@ import time
 import sys
 
 import random
-from numpy import np
+import numpy as np
 
 from jobs.ml1m import ml1mDiv50 #function
 from jobs.ml1m import ml1mDiv60 #function

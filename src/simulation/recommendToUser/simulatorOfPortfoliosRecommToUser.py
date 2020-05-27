@@ -32,7 +32,9 @@ class SimulationPortfolioToUser:
     ARG_ID = "id"
     ARG_WINDOW_SIZE:str = "windowSize"
     ARG_REPETITION_OF_RECOMMENDATION:str = "repetitionOfRecommendation"
-    ARG_NUMBER_OF_ITEMS:str = "numberOfItems"
+    ARG_NUMBER_OF_RECOMM_ITEMS:str = "numberOfRecomItems"
+    ARG_NUMBER_OF_AGGR_ITEMS:str = "numberOfAggrItems"
+
     ARG_DIV_DATASET_PERC_SIZE = "divisionDatasetPercentualSizes"
 
     def __init__(self, ratingsDF:DataFrame, usersDF:DataFrame, itemsDF:DataFrame,
@@ -60,7 +62,8 @@ class SimulationPortfolioToUser:
         self._id:int = argumentsDict[self.ARG_ID]
         self._windowSize:int = argumentsDict[self.ARG_WINDOW_SIZE]
         self._repetitionOfRecommendation:int = argumentsDict[self.ARG_REPETITION_OF_RECOMMENDATION]
-        self._numberOfItems:int = argumentsDict[self.ARG_NUMBER_OF_ITEMS]
+        self._numberOfRecommItems:int = argumentsDict[self.ARG_NUMBER_OF_RECOMM_ITEMS]
+        self._numberOfAggrItems:int = argumentsDict[self.ARG_NUMBER_OF_AGGR_ITEMS]
 
         self._divisionDatasetPercentualSize:int = argumentsDict[self.ARG_DIV_DATASET_PERC_SIZE]
 
@@ -157,7 +160,7 @@ class SimulationPortfolioToUser:
             print("Training mode: " + str(portfolioDescI.getPortfolioID()))
 
             # train portfolio model
-            portfolioI: Portfolio1Aggr = portfolioDescI.exportPortfolio(self._uBehaviourDesc, historyI)
+            portfolioI:Portfolio1Aggr = portfolioDescI.exportPortfolio(self._uBehaviourDesc, historyI)
             portfolioI.train(historyI, trainRatingsDF.copy(), self._usersDF.copy(), self._itemsDF.copy())
             portfolios.append(portfolioI)
 
@@ -243,10 +246,10 @@ class SimulationPortfolioToUser:
                                   evaluatonTools:[AEvalTool], histories:List[AHistory],
                                   evaluations:List[dict], currentItemID:int, nextItemIDs:List[int], userID:int):
 
-        uProbOfObservGenerated:List[float] = UserBehaviourSimulator().simulateStaticProb(self._uBehaviourDesc, self._numberOfItems)
+        uProbOfObservGenerated:List[float] = UserBehaviourSimulator().simulateStaticProb(self._uBehaviourDesc, self._numberOfRecommItems)
         #print("uProbOfObservGenerated: " + str(uProbOfObservGenerated))
 
-        uObservation:List[bool] = list(map(lambda x, y: x > y, uProbOfObservGenerated, np.random.uniform(low=0.0, high=1.0, size=self._numberOfItems)))
+        uObservation:List[bool] = list(map(lambda x, y: x > y, uProbOfObservGenerated, np.random.uniform(low=0.0, high=1.0, size=self._numberOfRecommItems)))
         #print("uObservation: " + str(uObservation))
 
         portfolioI:Portfolio1Aggr
@@ -262,10 +265,11 @@ class SimulationPortfolioToUser:
 
         portId:str = portfolioDesc.getPortfolioID()
 
+        args:dict = {APortfolio.ARG_NUMBER_OF_RECOMM_ITEMS:self._numberOfRecommItems, Portfolio1Aggr.ARG_NUMBER_OF_AGGR_ITEMS:self._numberOfAggrItems}
+
         rItemIDs:List[int]
         rItemIDsWithResponsibility:List[tuple[int, Series[int, str]]]
-        rItemIDs, rItemIDsWithResponsibility = portfolio.recommend(
-            userID, portfolioModel, numberOfItems=self._numberOfItems)
+        rItemIDs, rItemIDsWithResponsibility = portfolio.recommend(userID, portfolioModel, args)
 
         evaluatonTool.displayed(rItemIDsWithResponsibility, portfolioModel, evaluation)
 
@@ -301,7 +305,7 @@ class SimulationPortfolioToUser:
         history.insertRecomAndClickedItemIDs(userID, rItemIDs, uProbOfObserv, clickedItemIDs)
 
         # delete log of history
-        history.deletePreviousRecomOfUser(userID, self._repetitionOfRecommendation * self._numberOfItems)
+        history.deletePreviousRecomOfUser(userID, self._repetitionOfRecommendation * self._numberOfRecommItems)
 
 
 

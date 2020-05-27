@@ -46,7 +46,8 @@ def __ml1m(divisionDatasetPercentualSize:int):
         argsSimulationDict:dict = {SimulationPortfolioToUser.ARG_ID: "ml1mDiv50",
                                    SimulationPortfolioToUser.ARG_WINDOW_SIZE: 3,
                                    SimulationPortfolioToUser.ARG_REPETITION_OF_RECOMMENDATION: 1,
-                                   SimulationPortfolioToUser.ARG_NUMBER_OF_ITEMS: 20,
+                                   SimulationPortfolioToUser.ARG_NUMBER_OF_RECOMM_ITEMS: 60,
+                                   SimulationPortfolioToUser.ARG_NUMBER_OF_AGGR_ITEMS: 20,
                                    SimulationPortfolioToUser.ARG_DIV_DATASET_PERC_SIZE: divisionDatasetPercentualSize}
 
         # simulation of portfolio
@@ -59,14 +60,14 @@ def __ml1m(divisionDatasetPercentualSize:int):
         #evaluations:List[dict] = simulator.simulate([d.pDescCCB], [d.modelCCBDF], [EToolSingleMethod], [d.historyCCB])
         #evaluations:List[dict] = simulator.simulate([pDescW2V], [modelW2VDF], [EToolSingleMethod], [historyW2V])
         #evaluations:List[dict] = simulator.simulate([pDescBanditTS], [modelBanditTSDF], [EToolBanditTSHit1], [historyBanditTS])
-        evaluations:List[dict] = simulator.simulate([d.pDescDHont], [d.modelDHontDF], [EvalToolDHont], [d.historyDHont])
+        #evaluations:List[dict] = simulator.simulate([d.pDescDHont], [d.modelDHontDF], [EvalToolDHont], [d.historyDHont])
         #evaluations:List[dict] = simulator.simulate([d.pDescDHontNF], [d.modelDHontNFDF], [EToolDHontHit1], [d.historyDHontNF])
         #evaluations: List[dict] = simulator.simulate([d.pDescBanditTS, d.pDescDHont],
         #                                            [d.modelBanditTSDF, d.modelDHontDF],
         #                                            [EToolBanditTSHit1, EToolDHontHit1],
         #                                            [d.historyBanditTS, d.historyDHont])
 
-        #evaluations: List[dict] = simulator.simulate([d.pDescBanditTS, d.pDescDHont, d.pDescDHontNF],
-        #                                             [d.modelBanditTSDF, d.modelDHontDF, d.modelDHontNFDF],
-        #                                             [EvalToolBanditTS, EvalToolDHont, EvalToolDHont],
-        #                                             [d.historyBanditTS, d.historyDHont, d.historyDHontNF])
+        evaluations: List[dict] = simulator.simulate([d.pDescBanditTS, d.pDescDHont, d.pDescDHontNF],
+                                                     [d.modelBanditTSDF, d.modelDHontDF, d.modelDHontNFDF],
+                                                     [EvalToolBanditTS, EvalToolDHont, EvalToolDHont],
+                                                     [d.historyBanditTS, d.historyDHont, d.historyDHontNF])
