@@ -3,6 +3,9 @@
 import time
 import sys
 
+import random
+from numpy import np
+
 from jobs.ml1m import ml1mDiv50 #function
 from jobs.ml1m import ml1mDiv60 #function
 from jobs.ml1m import ml1mDiv70 #function
@@ -10,6 +13,9 @@ from jobs.ml1m import ml1mDiv80 #function
 from jobs.ml1m import ml1mDiv90 #function
 
 def main():
+
+  np.random.seed(42)
+  random.seed(42)
 
   start = time.time()
 
