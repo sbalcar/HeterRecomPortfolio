@@ -36,7 +36,7 @@ def test01():
     ratingsDFTrain:DataFrame = ratingsDF.iloc[0:50000]
 
     #rec:ARecommender = RecommenderW2V({RecommenderW2V.ARG_TRAIN_VARIANT:"posneg"})
-    rec:ARecommender = RecommenderW2V({RecommenderW2V.ARG_TRAIN_VARIANT:"positive"})
+    rec:ARecommender = RecommenderW2V("test", {RecommenderW2V.ARG_TRAIN_VARIANT:"positive"})
     rec.train(HistoryDF("w2v"), ratingsDFTrain, pd.DataFrame(), pd.DataFrame())
 
     ratingsDFUpdate:DataFrame = ratingsDF.iloc[50003:50004]

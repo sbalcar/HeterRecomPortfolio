@@ -29,7 +29,7 @@ def test01():
 
     ratingsDFTrain:DataFrame = ratingsDF.iloc[0:50000]
 
-    rec:ARecommender = RecommenderCosineCB({RecommenderCosineCB.ARG_CB_DATA_PATH:cbDataPath})
+    rec:ARecommender = RecommenderCosineCB("test", {RecommenderCosineCB.ARG_CB_DATA_PATH:cbDataPath})
     rec.train(pd.DataFrame(), ratingsDFTrain, pd.DataFrame(), pd.DataFrame())
 
     ratingsDFUpdate:DataFrame = ratingsDF.iloc[50003:50004]

@@ -42,16 +42,16 @@ def ml1mDiv90():
 def __ml1m(divisionDatasetPercentualSize:int):
 
         d = InputsML1MDefinition
+        jobID:str = "ml1mDiv" + str(divisionDatasetPercentualSize)
 
-        argsSimulationDict:dict = {SimulationPortfolioToUser.ARG_ID: "ml1mDiv" + str(divisionDatasetPercentualSize),
-                                   SimulationPortfolioToUser.ARG_WINDOW_SIZE: 5,
+        argsSimulationDict:dict = {SimulationPortfolioToUser.ARG_WINDOW_SIZE: 5,
                                    SimulationPortfolioToUser.ARG_REPETITION_OF_RECOMMENDATION: 1,
                                    SimulationPortfolioToUser.ARG_NUMBER_OF_RECOMM_ITEMS: d.numberOfRecommItems,
                                    SimulationPortfolioToUser.ARG_NUMBER_OF_AGGR_ITEMS: d.numberOfAggrItems,
                                    SimulationPortfolioToUser.ARG_DIV_DATASET_PERC_SIZE: divisionDatasetPercentualSize}
 
         # simulation of portfolio
-        simulator:Simulator = Simulator(SimulationPortfolioToUser, argsSimulationDict, d.ratingsDF, d.usersDF,
+        simulator:Simulator = Simulator(jobID, SimulationPortfolioToUser, argsSimulationDict, d.ratingsDF, d.usersDF,
                                          d.itemsDF, d.uBehaviourDesc)
 
         #evaluations:List[dict] = simulator.simulate([d.pDescTheMostPopular], [d.modelTheMostPopularDF], [EToolSingleMethod], [HistoryHierDF("historyTheMostPopular")])

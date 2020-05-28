@@ -1,7 +1,12 @@
 #!/usr/bin/python3
 
+import pickle
+import os
+
 import pandas as pd
 import numpy as np
+
+from configuration.configuration import Configuration #class
 
 from typing import List
 
@@ -26,9 +31,10 @@ class RecommenderW2V(ARecommender):
     DEBUG_MODE = False
 
     # ratingsSum:Dataframe<(userId:int, movieId:int, ratings:int, timestamp:int)>
-    def __init__(self, argumentsDict:dict):
+    def __init__(self, jobID:str, argumentsDict:dict):
         if type(argumentsDict) is not dict:
             raise ValueError("Argument argumentsDict is not type dict.")
+        self._jobID:str = jobID
         self._arguments:dict = argumentsDict
 
         self.trainVariant:str = self._arguments[self.ARG_TRAIN_VARIANT]
@@ -60,14 +66,23 @@ class RecommenderW2V(ARecommender):
         # t_sequences.set_index(Ratings.COL_USERID, inplace=True)
         w2vTrainData = t_sequences.values.tolist()
 
-        w:int = 3
         e:int = 64
-        model, rev_dict, dictionary = word2vec.word2vecRun(w, e, w2vTrainData)
-        dictionary = dict([((int(i), j) if i != "RARE" else (-1, j)) for i, j in dictionary.items()])
-        rev_dict = dict(zip(dictionary.values(), dictionary.keys()))
-        self.model = model
-        self.dictionary = dictionary
-        self.rev_dict = rev_dict
+        w:int = 3
+
+        self.model = self.__load_obj("model", e, w)
+        self.dictionary = self.__load_obj("dictionary", e, w)
+        self.rev_dict = self.__load_obj("rev_dict", e, w)
+
+        if self.model is None:
+            model, rev_dict, dictionary = word2vec.word2vecRun(w, e, w2vTrainData)
+            dictionary = dict([((int(i), j) if i != "RARE" else (-1, j)) for i, j in dictionary.items()])
+            rev_dict = dict(zip(dictionary.values(), dictionary.keys()))
+            self.__save_obj(model, "model", e, w)
+            self.__save_obj(dictionary, "dictionary", e, w)
+            self.__save_obj(rev_dict, "rev_dict", e, w)
+            self.model = model
+            self.dictionary = dictionary
+            self.rev_dict = rev_dict
 
         # ratingsSum:Dataframe<(userId:int, movieId:int, ratings:int, timestamp:int)>
 
@@ -166,3 +181,15 @@ class RecommenderW2V(ARecommender):
             return pd.Series(finalScores.tolist(), index=resultingOIDs)
 
         return pd.Series([], index=[])
+
+    def __save_obj(self, obj, name:str, e:int, w:int):
+        fileName:str = Configuration.modelDirectory + os.sep + self._jobID + name + "{0}_{1}".format(e, w)+ '.pkl'
+        with open(fileName, 'wb') as f:
+            pickle.dump(obj, f)
+
+    def __load_obj(self, name:str, e:int, w:int):
+        fileName:str = Configuration.modelDirectory + os.sep + self._jobID + name + "{0}_{1}".format(e, w)+ '.pkl'
+        if not os.path.isfile(fileName):
+            return None
+        with open(fileName, 'rb') as f:
+            return pickle.load(f)

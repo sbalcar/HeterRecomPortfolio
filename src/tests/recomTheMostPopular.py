@@ -29,7 +29,7 @@ def test01():
 
     ratingsDFTrain:DataFrame = ratingsDF.iloc[0:50000]
 
-    rec:ARecommender = RecommenderTheMostPopular({})
+    rec:ARecommender = RecommenderTheMostPopular("test", {})
     rec.train(pd.DataFrame(), ratingsDFTrain, pd.DataFrame(), pd.DataFrame())
 
     ratingsDFUpdate:DataFrame = ratingsDF.iloc[50003:50004]

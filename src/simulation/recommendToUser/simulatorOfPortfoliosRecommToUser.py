@@ -29,7 +29,6 @@ from userBehaviourDescription.userBehaviourDescription import UserBehaviourDescr
 
 class SimulationPortfolioToUser:
 
-    ARG_ID = "id"
     ARG_WINDOW_SIZE:str = "windowSize"
     ARG_REPETITION_OF_RECOMMENDATION:str = "repetitionOfRecommendation"
     ARG_NUMBER_OF_RECOMM_ITEMS:str = "numberOfRecomItems"
@@ -37,9 +36,11 @@ class SimulationPortfolioToUser:
 
     ARG_DIV_DATASET_PERC_SIZE = "divisionDatasetPercentualSizes"
 
-    def __init__(self, ratingsDF:DataFrame, usersDF:DataFrame, itemsDF:DataFrame,
+    def __init__(self, jobID:str, ratingsDF:DataFrame, usersDF:DataFrame, itemsDF:DataFrame,
                  uBehaviourDesc:UserBehaviourDescription, argumentsDict:dict):
 
+        if type(jobID) is not str:
+            raise ValueError("Argument jobID isn't type str.")
         if type(ratingsDF) is not DataFrame:
             raise ValueError("Argument ratingsDF isn't type DataFrame.")
         if type(usersDF) is not DataFrame:
@@ -52,14 +53,13 @@ class SimulationPortfolioToUser:
         if type(argumentsDict) is not dict:
             raise ValueError("Argument argumentsDict isn't type dict.")
 
+        self._jobID:str = jobID
         self._ratingsDF:DataFrame = ratingsDF
         self._usersDF:DataFrame = usersDF
         self._itemsDF:DataFrame = itemsDF
 
         self._uBehaviourDesc = uBehaviourDesc
 
-
-        self._id:int = argumentsDict[self.ARG_ID]
         self._windowSize:int = argumentsDict[self.ARG_WINDOW_SIZE]
         self._repetitionOfRecommendation:int = argumentsDict[self.ARG_REPETITION_OF_RECOMMENDATION]
         self._numberOfRecommItems:int = argumentsDict[self.ARG_NUMBER_OF_RECOMM_ITEMS]
@@ -91,15 +91,15 @@ class SimulationPortfolioToUser:
                raise ValueError("Argument histories don't contain AHistory.")
 
         # create directory for results
-        dir:str = Configuration.resultsDirectory + os.sep + self._id
+        dir:str = Configuration.resultsDirectory + os.sep + self._jobID
         if os.path.isdir(dir):
-            raise ValueError("Directory results contains old results \'" + str(self._id) +"\'")
+            raise ValueError("Directory results contains old results \'" + str(self._jobID) +"\'")
         os.mkdir(dir)
 
         # opening files for history of models
         self.historyOfModelDict = {}
         for portfolioDescI in portfolioDescs:
-            fileName:str = Configuration.resultsDirectory + os.sep + self._id + os.sep + "historyOfModel-" + portfolioDescI.getPortfolioID() + ".txt"
+            fileName:str = Configuration.resultsDirectory + os.sep + self._jobID + os.sep + "historyOfModel-" + portfolioDescI.getPortfolioID() + ".txt"
             self.historyOfModelDict[portfolioDescI.getPortfolioID()] = open(fileName, "a")
 
         # results of portfolios evaluations
@@ -160,7 +160,7 @@ class SimulationPortfolioToUser:
             print("Training mode: " + str(portfolioDescI.getPortfolioID()))
 
             # train portfolio model
-            portfolioI:Portfolio1Aggr = portfolioDescI.exportPortfolio(self._uBehaviourDesc, historyI)
+            portfolioI:Portfolio1Aggr = portfolioDescI.exportPortfolio(self._jobID, self._uBehaviourDesc, historyI)
             portfolioI.train(historyI, trainRatingsDF.copy(), self._usersDF.copy(), self._itemsDF.copy())
             portfolios.append(portfolioI)
 

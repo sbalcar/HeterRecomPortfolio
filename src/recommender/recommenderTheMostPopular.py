@@ -18,7 +18,7 @@ import numpy as np
 
 class RecommenderTheMostPopular(ARecommender):
 
-    def __init__(self, argumentsDict:dict):
+    def __init__(self, jobID:str, argumentsDict:dict):
         if type(argumentsDict) is not dict:
             raise ValueError("Argument argumentsDict is not type dict.")
 

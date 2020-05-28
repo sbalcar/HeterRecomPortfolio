@@ -17,6 +17,7 @@ from userBehaviourDescription.userBehaviourDescription import UserBehaviourDescr
 class Portfolio1AggrDescription(APortfolioDescription):
 
     def __init__(self, portfolioID:str, recommIDs:List[str], recommDescrs:List[RecommenderDescription], aggrDescr:List[AggregationDescription]):
+
        if type(portfolioID) is not str:
           raise ValueError("Type of portfolioID isn't str.")
        self._portfolioID:str = portfolioID
@@ -56,7 +57,9 @@ class Portfolio1AggrDescription(APortfolioDescription):
 
 
 
-    def exportPortfolio(self, uBehaviourDesc:UserBehaviourDescription, history:AHistory):
+    def exportPortfolio(self, jobID:str, uBehaviourDesc:UserBehaviourDescription, history:AHistory):
+       if type(jobID) is not str:
+          raise ValueError("Type of argument jobID isn't str.")
        if type(uBehaviourDesc) is not UserBehaviourDescription:
           raise ValueError("Type of argument uBehaviourDesc isn't UserBehaviourDescription.")
        if not isinstance(history, AHistory):
@@ -66,7 +69,7 @@ class Portfolio1AggrDescription(APortfolioDescription):
 
        recommDescrI:RecommenderDescription
        for recommDescrI in self._recommDescrs:
-          recommenderI:ARecommender = recommDescrI.exportRecommender()
+          recommenderI:ARecommender = recommDescrI.exportRecommender(jobID)
           recommenders.append(recommenderI)
 
        # aggregation:Aggregation

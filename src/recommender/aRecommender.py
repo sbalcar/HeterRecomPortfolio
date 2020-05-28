@@ -10,7 +10,7 @@ from abc import ABC, abstractmethod
 class ARecommender(ABC):
 
     @abstractmethod
-    def __init__(self, argumentsDict:dict):
+    def __init__(self, jobID:str, argumentsDict:dict):
         raise Exception("ARecommender is abstract class, can't be instanced")
 
     @abstractmethod

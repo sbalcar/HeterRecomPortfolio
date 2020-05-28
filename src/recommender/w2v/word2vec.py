@@ -35,8 +35,7 @@ def word2vecRun(window_size = 3, embedding_size = 64, texts = []):
     batch_size:int = 32
     vocabulary_size:int = 10000
     #generations:int = 200000
-    #generations: int = 400000
-    generations: int = 2000
+    generations: int = 400000
     model_learning_rate = 0.01
 
     #embedding_size = 64   # Word embedding size
@@ -147,6 +146,6 @@ def word2vecRun(window_size = 3, embedding_size = 64, texts = []):
     final_embeddings = sess.run(embeddings)
     #print(os.getcwd())
 
-    embeddingsFname = Configuration.modelDirectory + os.sep +"embed_word2vec_"+str(window_size)+"_"+str(embedding_size)+".csv"
-    np.savetxt(embeddingsFname, final_embeddings, fmt="%.6e")
+    #embeddingsFname = Configuration.modelDirectory + os.sep +"embed_word2vec_"+str(window_size)+"_"+str(embedding_size)+".csv"
+    #np.savetxt(embeddingsFname, final_embeddings, fmt="%.6e")
     return(final_embeddings, word_dictionary_rev, word_dictionary)
