@@ -71,6 +71,7 @@ class Portfolio1Aggr(APortfolio):
 
     # portFolioModel:DataFrame<(methodID, votes)>
     def recommend(self, userID:int, portFolioModel:DataFrame, argumentsDict:dict):
+       #print("userID: " + str(userID))
        if type(userID) is not int and type(userID) is not np.int64:
            raise ValueError("Argument userID isn't type int.")
        if type(portFolioModel) is not DataFrame:

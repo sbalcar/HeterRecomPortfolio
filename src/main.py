@@ -19,11 +19,11 @@ def main():
 
   start = time.time()
 
-  ml1mDiv50()
+  #ml1mDiv50()
   #ml1mDiv60()
   #ml1mDiv70()
   #ml1mDiv80()
-  #ml1mDiv90()
+  ml1mDiv90()
 
   end = time.time()
 

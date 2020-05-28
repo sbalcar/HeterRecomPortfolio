@@ -34,34 +34,59 @@ from portfolioDescription.aPortfolioDescription import APortfolioDescription #cl
 
 from userBehaviourDescription.userBehaviourDescription import UserBehaviourDescription #class
 from userBehaviourDescription.userBehaviourDescription import observationalLinearProbabilityFnc #function
-
+from userBehaviourDescription.userBehaviourDescription import observationalStaticProbabilityFnc #function
 
 
 class InputsML1MDefinition:
 
     # dataset reading
-
     ratingsDF:DataFrame = Ratings.readFromFileMl1m()
     usersDF:DataFrame = Users.readFromFileMl1m()
     itemsDF:DataFrame = Items.readFromFileMl1m()
 
-    numberOfItems:int = 60
+    numberOfRecommItems:int = 100
+    numberOfAggrItems:int = 20
 
-    uBehaviourDesc:UserBehaviourDescription = UserBehaviourDescription(observationalLinearProbabilityFnc, [0.1, 0.9])
+    #uBehaviourDesc:UserBehaviourDescription = UserBehaviourDescription(observationalLinearProbabilityFnc, [0.1, 0.9])
+    uBehaviourDesc:UserBehaviourDescription = UserBehaviourDescription(observationalStaticProbabilityFnc, [0.8])
 
     # portfolio definiton
     rDescTheMostPopular:RecommenderDescription = RecommenderDescription(RecommenderTheMostPopular,
                             {})
-    rDescCB:RecommenderDescription = RecommenderDescription(RecommenderCosineCB,
+
+    rDescCBmax:RecommenderDescription = RecommenderDescription(RecommenderCosineCB,
                             {RecommenderCosineCB.ARG_CB_DATA_PATH:Configuration.cbDataFileWithPathTFIDF,
                              RecommenderCosineCB.ARG_USER_PROFILE_STRATEGY:"mean"})
-    rDescW2v:RecommenderDescription = RecommenderDescription(RecommenderW2V,
-                            {RecommenderW2V.ARG_TRAIN_VARIANT:"all",
+    rDescCBwindow10:RecommenderDescription = RecommenderDescription(RecommenderCosineCB,
+                            {RecommenderCosineCB.ARG_CB_DATA_PATH:Configuration.cbDataFileWithPathTFIDF,
+                             RecommenderCosineCB.ARG_USER_PROFILE_STRATEGY:"window10"})
+
+    rDescW2vPositiveMax:RecommenderDescription = RecommenderDescription(RecommenderW2V,
+                            {RecommenderW2V.ARG_TRAIN_VARIANT:"positive",
                              RecommenderW2V.ARG_USER_PROFILE_STRATEGY:"max"})
+    rDescW2vPositiveWindow10:RecommenderDescription = RecommenderDescription(RecommenderW2V,
+                            {RecommenderW2V.ARG_TRAIN_VARIANT:"positive",
+                             RecommenderW2V.ARG_USER_PROFILE_STRATEGY:"window10"})
+    rDescW2vPosnegMax:RecommenderDescription = RecommenderDescription(RecommenderW2V,
+                            {RecommenderW2V.ARG_TRAIN_VARIANT:"posneg",
+                             RecommenderW2V.ARG_USER_PROFILE_STRATEGY:"max"})
+    rDescW2vPosnegWindow10:RecommenderDescription = RecommenderDescription(RecommenderW2V,
+                            {RecommenderW2V.ARG_TRAIN_VARIANT:"posneg",
+                             RecommenderW2V.ARG_USER_PROFILE_STRATEGY:"window10"})
 
+    rIDsCB:List[str] = ["RecomCBmax", "RecomCBwindow10"]
+    rDescsCB:List[RecommenderDescription] = [rDescCBmax, rDescCBwindow10]
 
-    rIDs:List[str] = ["RecommenderTheMostPopular", "RecommenderCosineCB", "RecommenderW2V"]
-    rDescs:List[RecommenderDescription] = [rDescTheMostPopular, rDescCB, rDescW2v]
+    #rIDsW2V:List[str] = ["RecomW2vPositiveMax", "RecomW2vPositiveWindow10", "RecomW2vPosnegMax", "RecomPosnegWindow10"]
+    #rDescsW2V:List[RecommenderDescription] = [rDescW2vPositiveMax, rDescW2vPositiveWindow10, rDescW2vPosnegMax, rDescW2vPosnegWindow10]
+    #rIDsW2V:List[str] = ["RecomW2vPositiveMax", "RecomW2vPosnegMax", "RecomPosnegWindow10"]
+    #rDescsW2V:List[RecommenderDescription] = [rDescW2vPosnegMax, rDescW2vPosnegMax, rDescW2vPosnegWindow10]
+    rIDsW2V:List[str] = ["RecomW2vPosnegMax", "RecomPosnegWindow10"]
+    rDescsW2V:List[RecommenderDescription] = [rDescW2vPosnegMax, rDescW2vPosnegWindow10]
+
+    rIDs:List[str] = ["RecomTheMostPopular"] + rIDsCB + rIDsW2V
+    rDescs:List[RecommenderDescription] = [rDescTheMostPopular] + rDescsCB + rDescsW2V
+
 
     aDescBanditTS:AggregationDescription = AggregationDescription(AggrBanditTS,
                             {AggrBanditTS.ARG_SELECTORFNC:(AggrBanditTS.selectorOfRouletteWheelRatedItem,[])})
@@ -80,12 +105,12 @@ class InputsML1MDefinition:
     modelTheMostPopularDF:DataFrame = pd.DataFrame()
 
     # Cosine CB Portfolio description
-    pDescCCB:APortfolioDescription = Portfolio1MethDescription("cosineCB", "cosineCB", rDescCB)
-    modelCCBDF:DataFrame = pd.DataFrame()
+    #pDescCCB:APortfolioDescription = Portfolio1MethDescription("cosineCB", "cosineCB", rDescCB)
+    #modelCCBDF:DataFrame = pd.DataFrame()
 
     # W2V Portfolio description
-    pDescW2V:APortfolioDescription = Portfolio1MethDescription("w2v", "w2v", rDescW2v)
-    modelW2VDF:DataFrame = pd.DataFrame()
+    #pDescW2V:APortfolioDescription = Portfolio1MethDescription("w2v", "w2v", rDescW2v)
+    #modelW2VDF:DataFrame = pd.DataFrame()
 
 
 

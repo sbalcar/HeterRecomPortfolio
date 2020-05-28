@@ -43,20 +43,18 @@ def __ml1m(divisionDatasetPercentualSize:int):
 
         d = InputsML1MDefinition
 
-        argsSimulationDict:dict = {SimulationPortfolioToUser.ARG_ID: "ml1mDiv50",
-                                   SimulationPortfolioToUser.ARG_WINDOW_SIZE: 3,
+        argsSimulationDict:dict = {SimulationPortfolioToUser.ARG_ID: "ml1mDiv" + str(divisionDatasetPercentualSize),
+                                   SimulationPortfolioToUser.ARG_WINDOW_SIZE: 5,
                                    SimulationPortfolioToUser.ARG_REPETITION_OF_RECOMMENDATION: 1,
-                                   SimulationPortfolioToUser.ARG_NUMBER_OF_RECOMM_ITEMS: 60,
-                                   SimulationPortfolioToUser.ARG_NUMBER_OF_AGGR_ITEMS: 20,
+                                   SimulationPortfolioToUser.ARG_NUMBER_OF_RECOMM_ITEMS: d.numberOfRecommItems,
+                                   SimulationPortfolioToUser.ARG_NUMBER_OF_AGGR_ITEMS: d.numberOfAggrItems,
                                    SimulationPortfolioToUser.ARG_DIV_DATASET_PERC_SIZE: divisionDatasetPercentualSize}
 
         # simulation of portfolio
-        # simulator:Simulator = Simulator(SimulationPortfoliosRecomToItemSeparatedUsers, ratingsDF, usersDF, itemsDF, uBehaviourDesc
         simulator:Simulator = Simulator(SimulationPortfolioToUser, argsSimulationDict, d.ratingsDF, d.usersDF,
                                          d.itemsDF, d.uBehaviourDesc)
 
         #evaluations:List[dict] = simulator.simulate([d.pDescTheMostPopular], [d.modelTheMostPopularDF], [EToolSingleMethod], [HistoryHierDF("historyTheMostPopular")])
-
         #evaluations:List[dict] = simulator.simulate([d.pDescCCB], [d.modelCCBDF], [EToolSingleMethod], [d.historyCCB])
         #evaluations:List[dict] = simulator.simulate([pDescW2V], [modelW2VDF], [EToolSingleMethod], [historyW2V])
         #evaluations:List[dict] = simulator.simulate([pDescBanditTS], [modelBanditTSDF], [EToolBanditTSHit1], [historyBanditTS])

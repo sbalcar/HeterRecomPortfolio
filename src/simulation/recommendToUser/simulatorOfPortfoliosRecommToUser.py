@@ -263,6 +263,7 @@ class SimulationPortfolioToUser:
                                  evaluatonTool:AEvalTool, history:AHistory, evaluation:dict, uProbOfObserv:List[float],
                                  uObservation:List[bool], currentItemID:int, nextItemIDs:List[int], userID:int):
 
+        #print("userID: " + str(userID))
         portId:str = portfolioDesc.getPortfolioID()
 
         args:dict = {APortfolio.ARG_NUMBER_OF_RECOMM_ITEMS:self._numberOfRecommItems, Portfolio1Aggr.ARG_NUMBER_OF_AGGR_ITEMS:self._numberOfAggrItems}

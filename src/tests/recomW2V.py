@@ -26,13 +26,17 @@ def test01():
     print("Test 01")
     os.chdir("..")
 
+    #- ARG_TRAIN_VARIANT: positive | posneg
+    #- ARG_USER_PROFILE_STRATEGY: max | window10
+
     print("Running RecommenderW2V:")
 
-    ratingsDF: DataFrame = Ratings.readFromFileMl1m()
+    ratingsDF:DataFrame = Ratings.readFromFileMl1m()
 
     ratingsDFTrain:DataFrame = ratingsDF.iloc[0:50000]
 
-    rec:ARecommender = RecommenderW2V({RecommenderW2V.ARG_TRAIN_VARIANT:"all"})
+    #rec:ARecommender = RecommenderW2V({RecommenderW2V.ARG_TRAIN_VARIANT:"posneg"})
+    rec:ARecommender = RecommenderW2V({RecommenderW2V.ARG_TRAIN_VARIANT:"positive"})
     rec.train(HistoryDF("w2v"), ratingsDFTrain, pd.DataFrame(), pd.DataFrame())
 
     ratingsDFUpdate:DataFrame = ratingsDF.iloc[50003:50004]
@@ -46,7 +50,14 @@ def test01():
     print(type(r))
     print(r)
 
-    r:Series = rec.recommend(10000, 50, {RecommenderW2V.ARG_USER_PROFILE_STRATEGY:"mean"})
+
+    r:Series = rec.recommend(331, 50, {RecommenderW2V.ARG_USER_PROFILE_STRATEGY:"window10"})
+    print("window10")
+    print(type(r))
+    print(r)
+
+
+    r:Series = rec.recommend(10000, 50, {RecommenderW2V.ARG_USER_PROFILE_STRATEGY:"window10"})
     print("mean")
     print(type(r))
     print(r)

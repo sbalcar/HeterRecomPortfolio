@@ -49,6 +49,7 @@ class RecommenderTheMostPopular(ARecommender):
         pass
 
     def recommend(self, userID:int, numberOfItems:int=20, argumentsDict:dict={}):
+        #print("userID: " + str(userID))
 
         if not self.result is None:
             if self.numberOfItems == numberOfItems:
