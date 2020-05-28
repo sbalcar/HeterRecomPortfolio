@@ -99,19 +99,30 @@ class InputsML1MDefinition:
                              AggrDHontNegativeImplFeedback.ARG_LENGTH_OF_HISTORY:10})
 
 
-
+    # Single method portfolios
     # TheMostPopular Portfolio description
-    pDescTheMostPopular:APortfolioDescription = Portfolio1MethDescription("theMostPopular", "theMostPopular", rDescTheMostPopular)
+    pDescTheMostPopular:APortfolioDescription = Portfolio1MethDescription("SingleTMPopular", "theMostPopular", rDescTheMostPopular)
     modelTheMostPopularDF:DataFrame = pd.DataFrame()
 
     # Cosine CB Portfolio description
-    #pDescCCB:APortfolioDescription = Portfolio1MethDescription("cosineCB", "cosineCB", rDescCB)
-    #modelCCBDF:DataFrame = pd.DataFrame()
+    pDescCBmax:APortfolioDescription = Portfolio1MethDescription("CosCBmax", "cosCBmax", rDescCBmax)
+    modelCBmax:DataFrame = pd.DataFrame()
 
-    # W2V Portfolio description
-    #pDescW2V:APortfolioDescription = Portfolio1MethDescription("w2v", "w2v", rDescW2v)
-    #modelW2VDF:DataFrame = pd.DataFrame()
+    pDescCBwindow10:APortfolioDescription = Portfolio1MethDescription("CosCBwindow10", "cosCBwindow10", rDescCBwindow10)
+    modelCBwindow10:DataFrame = pd.DataFrame()
 
+    # W2v Portfolio description
+    pDescW2vPositiveMax:APortfolioDescription = Portfolio1MethDescription("W2vPositiveMax", "w2vPositiveMax", rDescW2vPositiveMax)
+    modelW2vPositiveMax:DataFrame = pd.DataFrame()
+
+    pDescW2vPositiveWindow10:APortfolioDescription = Portfolio1MethDescription("W2vPositiveWindow10", "w2vPositiveWindow10", rDescW2vPositiveWindow10)
+    modelW2vPositiveWindow10:DataFrame = pd.DataFrame()
+
+    pDescW2vPosnegMax:APortfolioDescription = Portfolio1MethDescription("W2vPosnegMax", "w2vPosnegMax", rDescW2vPosnegMax)
+    modelW2vPosnegMax:DataFrame = pd.DataFrame()
+
+    pDescW2vPosnegWindow10:APortfolioDescription = Portfolio1MethDescription("W2vPosnegWindow10", "w2vPosnegWindow10", rDescW2vPosnegWindow10)
+    modelW2vPosnegWindow10:DataFrame = pd.DataFrame()
 
 
     # BanditTS Portfolio description

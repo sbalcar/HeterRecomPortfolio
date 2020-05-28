@@ -2,14 +2,22 @@
 
 from typing import List
 
+from pandas.core.frame import DataFrame #class
+
 from simulator.simulator import Simulator #class
 
 from simulation.recommendToUser.simulatorOfPortfoliosRecommToUser import SimulationPortfolioToUser #class
 
+from evaluationTool.evalToolSingleMethod import EToolSingleMethod #class
 from evaluationTool.evalToolDHont import EvalToolDHont #class
 from evaluationTool.evalToolBanditTS import EvalToolBanditTS #class
 
 from input.inputsML1MDefinition import InputsML1MDefinition #class
+
+from portfolioDescription.aPortfolioDescription import APortfolioDescription #class
+
+from history.aHistory import AHistory #class
+from history.historyHierDF import HistoryHierDF #class
 
 
 def ml1mDiv50():
@@ -50,22 +58,33 @@ def __ml1m(divisionDatasetPercentualSize:int):
                                    SimulationPortfolioToUser.ARG_NUMBER_OF_AGGR_ITEMS: d.numberOfAggrItems,
                                    SimulationPortfolioToUser.ARG_DIV_DATASET_PERC_SIZE: divisionDatasetPercentualSize}
 
+        pDescs:List[APortfolioDescription] = []
+        models:List[DataFrame] = []
+        evalTools:List = []
+        histories:List = []
+
+        # single CB portfolios
+        pDescs += [d.pDescTheMostPopular, d.pDescCBmax, d.pDescCBwindow10]
+        models += [d.modelTheMostPopularDF, d.modelCBmax, d.modelCBwindow10]
+        evalTools += [EToolSingleMethod, EToolSingleMethod, EToolSingleMethod]
+        histories += [HistoryHierDF("TMPopular"), HistoryHierDF("CBmax"), HistoryHierDF("CBwindow10")]
+
+        # single W2V portfolios
+        pDescs += [d.pDescW2vPosnegMax, d.pDescW2vPosnegWindow10]
+        models += [d.modelW2vPosnegMax, d.modelW2vPosnegWindow10]
+        evalTools += [EToolSingleMethod, EToolSingleMethod]
+        histories += [HistoryHierDF("W2vPosnegMax"), HistoryHierDF("W2vPosnegWindow10")]
+
+
+        pDescs += [d.pDescBanditTS, d.pDescDHont, d.pDescDHontNF]
+        models += [d.modelBanditTSDF, d.modelDHontDF, d.modelDHontNFDF]
+        evalTools += [EvalToolBanditTS, EvalToolDHont, EvalToolDHont]
+        histories += [d.historyBanditTS, d.historyDHont, d.historyDHontNF]
+
+
+
         # simulation of portfolio
         simulator:Simulator = Simulator(jobID, SimulationPortfolioToUser, argsSimulationDict, d.ratingsDF, d.usersDF,
                                          d.itemsDF, d.uBehaviourDesc)
 
-        #evaluations:List[dict] = simulator.simulate([d.pDescTheMostPopular], [d.modelTheMostPopularDF], [EToolSingleMethod], [HistoryHierDF("historyTheMostPopular")])
-        #evaluations:List[dict] = simulator.simulate([d.pDescCCB], [d.modelCCBDF], [EToolSingleMethod], [d.historyCCB])
-        #evaluations:List[dict] = simulator.simulate([pDescW2V], [modelW2VDF], [EToolSingleMethod], [historyW2V])
-        #evaluations:List[dict] = simulator.simulate([pDescBanditTS], [modelBanditTSDF], [EToolBanditTSHit1], [historyBanditTS])
-        #evaluations:List[dict] = simulator.simulate([d.pDescDHont], [d.modelDHontDF], [EvalToolDHont], [d.historyDHont])
-        #evaluations:List[dict] = simulator.simulate([d.pDescDHontNF], [d.modelDHontNFDF], [EToolDHontHit1], [d.historyDHontNF])
-        #evaluations: List[dict] = simulator.simulate([d.pDescBanditTS, d.pDescDHont],
-        #                                            [d.modelBanditTSDF, d.modelDHontDF],
-        #                                            [EToolBanditTSHit1, EToolDHontHit1],
-        #                                            [d.historyBanditTS, d.historyDHont])
-
-        evaluations: List[dict] = simulator.simulate([d.pDescBanditTS, d.pDescDHont, d.pDescDHontNF],
-                                                     [d.modelBanditTSDF, d.modelDHontDF, d.modelDHontNFDF],
-                                                     [EvalToolBanditTS, EvalToolDHont, EvalToolDHont],
-                                                     [d.historyBanditTS, d.historyDHont, d.historyDHontNF])
+        evaluations: List[dict] = simulator.simulate(pDescs, models, evalTools, histories)
