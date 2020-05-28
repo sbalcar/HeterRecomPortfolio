@@ -19,8 +19,6 @@ import numpy as np
 
 class Portfolio1Aggr(APortfolio):
 
-    ARG_NUMBER_OF_AGGR_ITEMS:str = "numberOfAggrItems"
-
     def __init__(self, recommenders:List[ARecommender], recommIDs:List[str], recomDescs:List[RecommenderDescription],
                 agregation:AAgregation):
       if type(recommenders) is not list:

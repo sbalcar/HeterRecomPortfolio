@@ -15,6 +15,7 @@ from abc import ABC, abstractmethod
 class APortfolio(ABC):
 
     ARG_NUMBER_OF_RECOMM_ITEMS:str = "numberOfRecomItems"
+    ARG_NUMBER_OF_AGGR_ITEMS:str = "numberOfAggrItems"
 
     @abstractmethod
     def __init__(self, recommIDs: List[str], recommenders: List[ARecommender], agregation:AAgregation):

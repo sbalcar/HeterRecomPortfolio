@@ -58,9 +58,9 @@ class Portfolio1Meth(APortfolio):
         if type(argumentsDict) is not dict:
             raise ValueError("Argument argumentsDict isn't type dict.")
 
-        numberOfRecommItems:int = argumentsDict[self.ARG_NUMBER_OF_RECOMM_ITEMS]
+        numberOfItems:int = argumentsDict[self.ARG_NUMBER_OF_AGGR_ITEMS]
 
-        recomItemIDsWithResponsibility:Series = self._recommender.recommend(userID, numberOfItems=numberOfRecommItems, argumentsDict=self._recomDesc.getArguments())
+        recomItemIDsWithResponsibility:Series = self._recommender.recommend(userID, numberOfItems=numberOfItems, argumentsDict=self._recomDesc.getArguments())
 
         recomItemIDs:List[int] = list(recomItemIDsWithResponsibility.index)
 
