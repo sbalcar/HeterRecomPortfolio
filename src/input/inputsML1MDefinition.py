@@ -33,9 +33,30 @@ from history.historyHierDF import HistoryHierDF #class
 from portfolioDescription.aPortfolioDescription import APortfolioDescription #class
 
 from userBehaviourDescription.userBehaviourDescription import UserBehaviourDescription #class
-from userBehaviourDescription.userBehaviourDescription import observationalLinearProbabilityFnc #function
 from userBehaviourDescription.userBehaviourDescription import observationalStaticProbabilityFnc #function
 
+
+from aggregation.toolsDHontNF.penalizationOfResultsByNegImpFeedback.aPenalization import APenalization #class
+from aggregation.toolsDHontNF.penalizationOfResultsByNegImpFeedback.penalUsingFiltering import PenalUsingFiltering #class
+from aggregation.toolsDHontNF.penalizationOfResultsByNegImpFeedback.penalUsingReduceRelevance import PenalUsingReduceRelevance #class
+from aggregation.toolsDHontNF.penalizationOfResultsByNegImpFeedback.penalUsingReduceRelevance import penaltyStatic #function
+from aggregation.toolsDHontNF.penalizationOfResultsByNegImpFeedback.penalUsingReduceRelevance import penaltyLinear #function
+
+
+class Tools:
+
+    def createDHontModel(recommendersIDs: List[str]):
+        modelDHontData: List[List] = [[rIdI, 1] for rIdI in recommendersIDs]
+        modelDHontDF: DataFrame = pd.DataFrame(modelDHontData, columns=["methodID", "votes"])
+        modelDHontDF.set_index("methodID", inplace=True)
+        EvalToolDHont.linearNormalizingPortfolioModelDHont(modelDHontDF)
+        return modelDHontDF
+
+    def createBanditModel(recommendersIDs:List[str]):
+        modelBanditTSData:List = [[rIdI, 1, 1, 1, 1] for rIdI in recommendersIDs]
+        modelBanditTSDF:DataFrame = pd.DataFrame(modelBanditTSData, columns=["methodID", "r", "n", "alpha0", "beta0"])
+        modelBanditTSDF.set_index("methodID", inplace=True)
+        return modelBanditTSDF
 
 class InputsML1MDefinition:
 
@@ -90,13 +111,23 @@ class InputsML1MDefinition:
 
     aDescBanditTS:AggregationDescription = AggregationDescription(AggrBanditTS,
                             {AggrBanditTS.ARG_SELECTORFNC:(AggrBanditTS.selectorOfRouletteWheelRatedItem,[])})
-    aDescDHont:AggregationDescription = AggregationDescription(AggrDHont,
+    aDescDHontFixed:AggregationDescription = AggregationDescription(AggrDHont,
+                            {AggrDHont.ARG_SELECTORFNC:(AggrDHont.selectorOfTheMostVotedItem,[])})
+    aDescDHontRoulette:AggregationDescription = AggregationDescription(AggrDHont,
                             {AggrDHont.ARG_SELECTORFNC:(AggrDHont.selectorOfRouletteWheelRatedItem,[])})
-    aDescDHontNF:AggregationDescription = AggregationDescription(AggrDHontNegativeImplFeedback,
-                            {AggrDHontNegativeImplFeedback.ARG_SELECTORFNC:(AggrDHont.selectorOfRouletteWheelRatedItem,[]),
-                             AggrDHontNegativeImplFeedback.ARG_MAX_PENALTY_VALUE:0.8,
-                             AggrDHontNegativeImplFeedback.ARG_MIN_PENALTY_VALUE:0.2,
-                             AggrDHontNegativeImplFeedback.ARG_LENGTH_OF_HISTORY:10})
+    aDescDHontRoulette3:AggregationDescription = AggregationDescription(AggrDHont,
+                            {AggrDHont.ARG_SELECTORFNC:(AggrDHont.selectorOfRouletteWheelExpRatedItem,[3])})
+
+
+    _penaltyToolOStat08HLin1002:APenalization = PenalUsingReduceRelevance(penaltyStatic, [1.0], penaltyLinear, [1.0, 0.2, 100])
+    aDescNegDHontOStat08HLin1002:AggregationDescription = AggregationDescription(AggrDHontNegativeImplFeedback, {
+                            AggrDHontNegativeImplFeedback.ARG_SELECTORFNC:(AggrDHont.selectorOfTheMostVotedItem,[]),
+                            AggrDHontNegativeImplFeedback.ARG_PENALTY_TOOL:_penaltyToolOStat08HLin1002})
+
+    _penaltyToolOLin0802HLin1002:APenalization = PenalUsingReduceRelevance(penaltyLinear, [0.8, 0.2, numberOfAggrItems], penaltyLinear, [1.0, 0.2, 100])
+    aDescNegDHontOLin0802HLin1002:AggregationDescription = AggregationDescription(AggrDHontNegativeImplFeedback, {
+                            AggrDHontNegativeImplFeedback.ARG_SELECTORFNC:(AggrDHont.selectorOfTheMostVotedItem,[]),
+                            AggrDHontNegativeImplFeedback.ARG_PENALTY_TOOL:_penaltyToolOLin0802HLin1002})
 
 
     # Single method portfolios
@@ -125,31 +156,45 @@ class InputsML1MDefinition:
     modelW2vPosnegWindow10:DataFrame = pd.DataFrame()
 
 
+
     # BanditTS Portfolio description
     pDescBanditTS:APortfolioDescription = Portfolio1AggrDescription(
             "BanditTS", rIDs, rDescs, aDescBanditTS)
-    modelBanditTSData:List = [[rIdI, 1, 1, 1, 1] for rIdI in rIDs]
-    modelBanditTSDF:DataFrame = pd.DataFrame(modelBanditTSData, columns=["methodID", "r", "n", "alpha0", "beta0"])
-    modelBanditTSDF.set_index("methodID", inplace=True)
-    historyBanditTS:AHistory = HistoryHierDF("BanditTS")
+    modelBanditTSData:List = Tools.createBanditModel(rIDs)
 
 
-    # DHont Portfolio description
-    pDescDHont:APortfolioDescription = Portfolio1AggrDescription(
-            "DHont", rIDs, rDescs, aDescDHont)
-    modelDHontData:List[List] = [[rIdI, 1] for rIdI in pDescDHont.getRecommendersIDs()]
-    modelDHontDF:DataFrame = pd.DataFrame(modelDHontData, columns=["methodID", "votes"])
-    modelDHontDF.set_index("methodID", inplace=True)
-    EvalToolDHont.linearNormalizingPortfolioModelDHont(modelDHontDF)
-    historyDHont:AHistory = HistoryHierDF("DHont")
+
+    # DHont Fixed Portfolio description
+    pDescDHontFixed:APortfolioDescription = Portfolio1AggrDescription(
+            "DHontFixed", rIDs, rDescs, aDescDHontFixed)
+    modelDHontFixedData:List[List] = Tools.createDHontModel(pDescDHontFixed.getRecommendersIDs())
+
+    # DHont Roulette Portfolio description
+    pDescDHontRoulette:APortfolioDescription = Portfolio1AggrDescription(
+            "DHontRoulette", rIDs, rDescs, aDescDHontRoulette)
+    modelDHontRouletteData:List[List] = Tools.createDHontModel(pDescDHontRoulette.getRecommendersIDs())
+
+    # DHont Roulette3 Portfolio description
+    pDescDHontRoulette3:APortfolioDescription = Portfolio1AggrDescription(
+            "DHontRoulette3", rIDs, rDescs, aDescDHontRoulette3)
+    modelDHontRoulette3Data:List[List] = Tools.createDHontModel(pDescDHontRoulette3.getRecommendersIDs())
+
 
 
     # DHont Negative Implicit Feedback Portfolio description
-    pDescDHontNF:APortfolioDescription = Portfolio1AggrDescription(
-            "DHontNF", rIDs, rDescs, aDescDHontNF)
-    modelDHontNFData:List[List] = [[rIdI, 1] for rIdI in pDescDHontNF.getRecommendersIDs()]
-    modelDHontNFDF:DataFrame = pd.DataFrame(modelDHontNFData, columns=["methodID", "votes"])
-    modelDHontNFDF.set_index("methodID", inplace=True)
-    EvalToolDHont.linearNormalizingPortfolioModelDHont(modelDHontNFDF)
-    historyDHontNF:AHistory = HistoryHierDF("DHontNF")
+    pDescNegDHontOStat08HLin1002:Portfolio1AggrDescription = Portfolio1AggrDescription(
+            "NegDHontOStat08HLin1002", rIDs, rDescs, aDescNegDHontOStat08HLin1002)
+    modelNegDHontOStat08HLin1002:List[List] = Tools.createDHontModel(pDescNegDHontOStat08HLin1002.getRecommendersIDs())
+
+
+
+    # DHont Negative Implicit Feedback Portfolio description
+    pDescNegDHontOLin0802HLin1002:Portfolio1AggrDescription = Portfolio1AggrDescription(
+            "NegDHontOLin0802HLin1002", rIDs, rDescs, aDescNegDHontOLin0802HLin1002)
+    modelNegDHontOLin0802HLin1002:List[List] = Tools.createDHontModel(pDescNegDHontOLin0802HLin1002.getRecommendersIDs())
+
+
+
+
+
 

@@ -14,13 +14,20 @@ from pandas.core.series import Series  # class
 from history.aHistory import AHistory #class
 
 from userBehaviourDescription.userBehaviourDescription import UserBehaviourDescription #class
+from aggregation.toolsDHontNF.penalizationOfResultsByNegImpFeedback.aPenalization import APenalization #class
+
 
 # transforming Results Of D'Hont Methods
-class PenalizationOfResultsByNegImpFeedbackUsingFiltering:
+class PenalUsingFiltering(APenalization):
+
+    def __init__(self, borderNegFeedback:float):
+        if type(borderNegFeedback) is not float:
+            raise ValueError("Type of borderNegFeedback isn't float.")
+
+        self._borderNegFeedback:float = borderNegFeedback
 
     # methodsResultDict:dict[int,Series[int,str]]
-    @staticmethod
-    def filteringOfItemIds(methodsResultDict:dict, history:AHistory, userID:int, lengthOfHistory:int, borderNegFeedback:float):
+    def runPenalization(self, userID:int, methodsResultDict:dict, history:AHistory, lengthOfHistory:int):
 
         def getItemIDs(methIdI:str):
             recommI:Series = methodsResultDict[methIdI]
@@ -34,7 +41,7 @@ class PenalizationOfResultsByNegImpFeedbackUsingFiltering:
         for itemIdI in itemsInRecomendations:
             valueOfIgnoringI:float = history.getIgnoringValue(userID, itemIdI, limit=lengthOfHistory)
             #print("valueOfIgnoringI: " + str(valueOfIgnoringI))
-            if valueOfIgnoringI >= borderNegFeedback:
+            if valueOfIgnoringI >= self._borderNegFeedback:
                 itemIdsToRemove.append(itemIdI)
 
         #print("itemIdsToRemove: " + str(itemIdsToRemove))

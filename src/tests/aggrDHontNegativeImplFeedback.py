@@ -9,13 +9,11 @@ from aggregation.aggrDHontNegativeImplFeedback import AggrDHontNegativeImplFeedb
 import pandas as pd
 from history.aHistory import AHistory #class
 from history.historyDF import HistoryDF #class
-from history.historySQLite import HistorySQLite #class
 
 from userBehaviourDescription.userBehaviourDescription import UserBehaviourDescription #class
-from userBehaviourDescription.userBehaviourDescription import observationalStaticProbabilityFnc #function
 from userBehaviourDescription.userBehaviourDescription import observationalLinearProbabilityFnc #function
 
-from aggregation.tools.penalizationOfResultsByNegImpFeedbackUsingReduceRelevance import PenalizationOfResultsByNegImpFeedbackUsingReduceRelevance #class
+from aggregation.toolsDHontNF.penalizationOfResultsByNegImpFeedback.penalUsingReduceRelevance import PenalizationOfResultsByNegImpFeedbackUsingReduceRelevance #class
 
 
 def test01():

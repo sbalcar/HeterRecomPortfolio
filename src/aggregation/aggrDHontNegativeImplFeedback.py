@@ -1,34 +1,22 @@
 #!/usr/bin/python3
-import random
 
 import numpy as np
 import pandas as pd
 
-from numpy.random import beta
 from typing import List
 
 from pandas.core.frame import DataFrame #class
 from pandas.core.series import Series #class
 
-from aggregation.aAggregation import AAgregation #class
 from aggregation.aggrDHont import AggrDHont #class
 
-from aggregation.tools.penalizationOfResultsByNegImpFeedbackUsingFiltering import PenalizationOfResultsByNegImpFeedbackUsingFiltering #class
-from aggregation.tools.penalizationOfResultsByNegImpFeedbackUsingReduceRelevance import PenalizationOfResultsByNegImpFeedbackUsingReduceRelevance #class
-
 from history.aHistory import AHistory #class
-from abc import ABC, abstractmethod
-
-from userBehaviourDescription.userBehaviourDescription import UserBehaviourDescription #class
 
 
 class AggrDHontNegativeImplFeedback(AggrDHont):
 
     ARG_SELECTORFNC:str = "selectorFnc"
-
-    ARG_MAX_PENALTY_VALUE:str = "maxPenaltyValue"
-    ARG_MIN_PENALTY_VALUE:str = "minPenaltyValue"
-    ARG_LENGTH_OF_HISTORY:str = "lengthOfHistory"
+    ARG_PENALTY_TOOL:str = "penaltyTool"
 
     def __init__(self, history:AHistory, argumentsDict:dict):
         if not isinstance(history, AHistory):
@@ -41,9 +29,8 @@ class AggrDHontNegativeImplFeedback(AggrDHont):
 
         self._selectorFnc = argumentsDict[self.ARG_SELECTORFNC][0]
         self._selectorArg = argumentsDict[self.ARG_SELECTORFNC][1]
-        self._maxPenaltyValue:float = argumentsDict[self.ARG_MAX_PENALTY_VALUE]
-        self._minPenaltyValue:float = argumentsDict[self.ARG_MIN_PENALTY_VALUE]
-        self._lengthOfHistory:int = argumentsDict[self.ARG_LENGTH_OF_HISTORY]
+        self._penaltyTool = argumentsDict[self.ARG_PENALTY_TOOL]
+
 
     # methodsResultDict:{String:pd.Series(rating:float[], itemID:int[])},
     # modelDF:pd.DataFrame[numberOfVotes:int], numberOfItems:int
@@ -67,9 +54,8 @@ class AggrDHontNegativeImplFeedback(AggrDHont):
         if numberOfItems < 0:
             raise ValueError("Argument numberOfItems must be positive value.")
 
-        p = PenalizationOfResultsByNegImpFeedbackUsingReduceRelevance(
-            self._history, self._maxPenaltyValue, self._minPenaltyValue, self._lengthOfHistory)
-        methodsResultNewDict:dict[str, pd.Series] = p.proportionalRelevanceReduction(methodsResultDict, userID)
+        methodsResultNewDict: dict[str, pd.Series] = self._penaltyTool.runPenalization(
+                userID, methodsResultDict, self._history)
 
         itemsWithResposibilityOfRecommenders:List[int,np.Series[int,str]] =\
             super().run(methodsResultNewDict, modelDF, userID, numberOfItems=numberOfItems)
@@ -103,12 +89,8 @@ class AggrDHontNegativeImplFeedback(AggrDHont):
         if numberOfItems < 0:
             raise ValueError("Argument numberOfItems must be positive value.")
 
-        p = PenalizationOfResultsByNegImpFeedbackUsingReduceRelevance(
-            self._history, self._maxPenaltyValue, self._minPenaltyValue, self._lengthOfHistory)
-        methodsResultNewDict:dict[str, pd.Series] = p.proportionalRelevanceReduction(methodsResultDict, userID)
-
-        #methodsResultNewDict:List[int,Series[int,str]] = PenalizationOfResultsByNegImpFeedbackUsingReduceRelevance\
-        #    .proportionalRelevanceReduction(methodsResultDict, self._history, userID, self._lengthOfHistory)
+        methodsResultNewDict: dict[str, pd.Series] = self._penaltyTool.runPenalization(
+                userID, methodsResultDict, self._history)
 
         itemsWithResposibilityOfRecommenders:List[int,Series[int,str]] = super().runWithResponsibility(
             methodsResultNewDict, modelDF, userID, numberOfItems=numberOfItems)
