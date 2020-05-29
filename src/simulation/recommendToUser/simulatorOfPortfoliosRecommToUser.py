@@ -7,6 +7,7 @@ from pandas.core.series import Series #class
 from configuration.configuration import Configuration #class
 
 from datasets.ratings import Ratings #class
+from datasets.users import Users #class
 
 from portfolioDescription.aPortfolioDescription import APortfolioDescription #class
 from portfolioDescription.portfolio1AggrDescription import Portfolio1AggrDescription #class
@@ -54,6 +55,20 @@ class SimulationPortfolioToUser:
             raise ValueError("Argument argumentsDict isn't type dict.")
 
         self._jobID:str = jobID
+
+        print("Deletion the first 20 ratings of each user from ratings")
+        # deletion the first 20 ratings of each user from ratings
+        ratingsDel:List[DataFrame] = []
+
+        userIDs:List[int] = list(usersDF[Users.COL_USERID])
+        for userIdI in userIDs:
+            ratingsOfUserIDF:DataFrame = ratingsDF.loc[ratingsDF[Ratings.COL_USERID] == userIdI]
+            ratingsOfUserSortedIDF:DataFrame = ratingsOfUserIDF.sort_values(by=Ratings.COL_TIMESTAMP)
+            ratingsDel.append(ratingsOfUserSortedIDF.iloc[20:])
+
+        ratingsDF = pd.concat(ratingsDel)
+
+
         self._ratingsDF:DataFrame = ratingsDF
         self._usersDF:DataFrame = usersDF
         self._itemsDF:DataFrame = itemsDF
