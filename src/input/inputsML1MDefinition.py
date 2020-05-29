@@ -137,61 +137,61 @@ class InputsML1MDefinition:
 
     # Cosine CB Portfolio description
     pDescCBmax:APortfolioDescription = Portfolio1MethDescription("CosCBmax", "cosCBmax", rDescCBmax)
-    modelCBmax:DataFrame = pd.DataFrame()
+    modelCBmaxDF:DataFrame = pd.DataFrame()
 
     pDescCBwindow10:APortfolioDescription = Portfolio1MethDescription("CosCBwindow10", "cosCBwindow10", rDescCBwindow10)
-    modelCBwindow10:DataFrame = pd.DataFrame()
+    modelCBwindow10DF:DataFrame = pd.DataFrame()
 
     # W2v Portfolio description
     pDescW2vPositiveMax:APortfolioDescription = Portfolio1MethDescription("W2vPositiveMax", "w2vPositiveMax", rDescW2vPositiveMax)
-    modelW2vPositiveMax:DataFrame = pd.DataFrame()
+    modelW2vPositiveMaxDF:DataFrame = pd.DataFrame()
 
     pDescW2vPositiveWindow10:APortfolioDescription = Portfolio1MethDescription("W2vPositiveWindow10", "w2vPositiveWindow10", rDescW2vPositiveWindow10)
-    modelW2vPositiveWindow10:DataFrame = pd.DataFrame()
+    modelW2vPositiveWindow10DF:DataFrame = pd.DataFrame()
 
     pDescW2vPosnegMax:APortfolioDescription = Portfolio1MethDescription("W2vPosnegMax", "w2vPosnegMax", rDescW2vPosnegMax)
-    modelW2vPosnegMax:DataFrame = pd.DataFrame()
+    modelW2vPosnegMaxDF:DataFrame = pd.DataFrame()
 
     pDescW2vPosnegWindow10:APortfolioDescription = Portfolio1MethDescription("W2vPosnegWindow10", "w2vPosnegWindow10", rDescW2vPosnegWindow10)
-    modelW2vPosnegWindow10:DataFrame = pd.DataFrame()
+    modelW2vPosnegWindow10DF:DataFrame = pd.DataFrame()
 
 
 
     # BanditTS Portfolio description
     pDescBanditTS:APortfolioDescription = Portfolio1AggrDescription(
             "BanditTS", rIDs, rDescs, aDescBanditTS)
-    modelBanditTSData:List = Tools.createBanditModel(rIDs)
+    modelBanditTSDF:DataFrame = Tools.createBanditModel(rIDs)
 
 
 
     # DHont Fixed Portfolio description
     pDescDHontFixed:APortfolioDescription = Portfolio1AggrDescription(
             "DHontFixed", rIDs, rDescs, aDescDHontFixed)
-    modelDHontFixedData:List[List] = Tools.createDHontModel(pDescDHontFixed.getRecommendersIDs())
+    modelDHontFixedDF:DataFrame = Tools.createDHontModel(pDescDHontFixed.getRecommendersIDs())
 
     # DHont Roulette Portfolio description
     pDescDHontRoulette:APortfolioDescription = Portfolio1AggrDescription(
             "DHontRoulette", rIDs, rDescs, aDescDHontRoulette)
-    modelDHontRouletteData:List[List] = Tools.createDHontModel(pDescDHontRoulette.getRecommendersIDs())
+    modelDHontRouletteDF:DataFrame = Tools.createDHontModel(pDescDHontRoulette.getRecommendersIDs())
 
     # DHont Roulette3 Portfolio description
     pDescDHontRoulette3:APortfolioDescription = Portfolio1AggrDescription(
             "DHontRoulette3", rIDs, rDescs, aDescDHontRoulette3)
-    modelDHontRoulette3Data:List[List] = Tools.createDHontModel(pDescDHontRoulette3.getRecommendersIDs())
+    modelDHontRoulette3DF:DataFrame = Tools.createDHontModel(pDescDHontRoulette3.getRecommendersIDs())
 
 
 
     # DHont Negative Implicit Feedback Portfolio description
     pDescNegDHontOStat08HLin1002:Portfolio1AggrDescription = Portfolio1AggrDescription(
             "NegDHontOStat08HLin1002", rIDs, rDescs, aDescNegDHontOStat08HLin1002)
-    modelNegDHontOStat08HLin1002:List[List] = Tools.createDHontModel(pDescNegDHontOStat08HLin1002.getRecommendersIDs())
+    modelNegDHontOStat08HLin1002DF:DataFrame = Tools.createDHontModel(pDescNegDHontOStat08HLin1002.getRecommendersIDs())
 
 
 
     # DHont Negative Implicit Feedback Portfolio description
     pDescNegDHontOLin0802HLin1002:Portfolio1AggrDescription = Portfolio1AggrDescription(
             "NegDHontOLin0802HLin1002", rIDs, rDescs, aDescNegDHontOLin0802HLin1002)
-    modelNegDHontOLin0802HLin1002:List[List] = Tools.createDHontModel(pDescNegDHontOLin0802HLin1002.getRecommendersIDs())
+    modelNegDHontOLin0802HLin1002DF:DataFrame = Tools.createDHontModel(pDescNegDHontOLin0802HLin1002.getRecommendersIDs())
 
 
 

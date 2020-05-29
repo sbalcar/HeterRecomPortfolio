@@ -65,13 +65,13 @@ def __ml1m(divisionDatasetPercentualSize:int):
 
         # single CB portfolios
         pDescs += [d.pDescTheMostPopular, d.pDescCBmax, d.pDescCBwindow10]
-        models += [d.modelTheMostPopularDF, d.modelCBmax, d.modelCBwindow10]
+        models += [d.modelTheMostPopularDF, d.modelCBmaxDF, d.modelCBwindow10DF]
         evalTools += [EToolSingleMethod, EToolSingleMethod, EToolSingleMethod]
         histories += [HistoryHierDF("TMPopular"), HistoryHierDF("CBmax"), HistoryHierDF("CBwindow10")]
 
         # single W2V portfolios
         pDescs += [d.pDescW2vPosnegMax, d.pDescW2vPosnegWindow10]
-        models += [d.modelW2vPosnegMax, d.modelW2vPosnegWindow10]
+        models += [d.modelW2vPosnegMaxDF, d.modelW2vPosnegWindow10DF]
         evalTools += [EToolSingleMethod, EToolSingleMethod]
         histories += [HistoryHierDF("W2vPosnegMax"), HistoryHierDF("W2vPosnegWindow10")]
 
@@ -89,13 +89,13 @@ def __ml1m(divisionDatasetPercentualSize:int):
 
         # NegDHontNF portfolios1
         pDescs += [d.pDescNegDHontOStat08HLin1002]
-        models += [d.modelNegDHontOStat08HLin1002]
+        models += [d.modelNegDHontOStat08HLin1002DF]
         evalTools += [EvalToolDHont]
         histories += [HistoryHierDF("NegDHontOStat08HLin1002")]
 
         # NegDHontNF portfolios2
         pDescs += [d.pDescNegDHontOLin0802HLin1002]
-        models += [d.modelNegDHontOLin0802HLin1002]
+        models += [d.modelNegDHontOLin0802HLin1002DF]
         evalTools += [EvalToolDHont]
         histories += [HistoryHierDF("NegDHontOLin0802HLin1002")]
 
