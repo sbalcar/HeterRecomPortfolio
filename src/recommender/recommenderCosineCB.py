@@ -51,6 +51,7 @@ class RecommenderCosineCB(ARecommender):
         self.ratingsGroupDF:DataFrame = ratingsDF.groupby(Ratings.COL_USERID)[Ratings.COL_MOVIEID]
         userProfileDF = self.ratingsGroupDF.aggregate(lambda x: list(x))
         self.userProfiles = userProfileDF.to_dict()
+        s = ""
 
     def update(self, ratingsUpdateDF:DataFrame):
         # ratingsUpdateDF has only one row
@@ -63,6 +64,7 @@ class RecommenderCosineCB(ARecommender):
             userTrainData = self.userProfiles.get(userID, [])
             userTrainData.append(objectID)
             self.userProfiles[userID] = userTrainData
+            s = ""
 
     def resolveUserProfile(self, userProfileStrategy:str, userTrainData):
         rec = userProfileStrategy
@@ -112,8 +114,9 @@ class RecommenderCosineCB(ARecommender):
 
         # provedu agregaci dle zvolené metody
         if len(objectIDs) > 0:
-            results = self.cbData[objectIDs]
-            weights = np.asarray(weights)  # .reshape((-1, 1))
+            results = self.cbData.loc[objectIDs]
+            weights = np.asarray(weights)
+            weights = weights[:, np.newaxis]
             results = results * weights
             results = aggregation(results, axis=0)
 
