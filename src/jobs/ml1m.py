@@ -76,16 +76,16 @@ def __ml1m(divisionDatasetPercentualSize:int):
         histories += [HistoryHierDF("W2vPosnegMax"), HistoryHierDF("W2vPosnegWindow10")]
 
         # BanditTS portfolios
-#        pDescs += [d.pDescBanditTS]
-#        models += [d.modelBanditTSDF]
-#        evalTools += [EvalToolBanditTS]
-#        histories += [HistoryHierDF("BanditTS")]
+        pDescs += [d.pDescBanditTS]
+        models += [d.modelBanditTSDF]
+        evalTools += [EvalToolBanditTS]
+        histories += [HistoryHierDF("BanditTS")]
 
         # DHont portfolios
-#        pDescs += [d.pDescDHontFixed, d.pDescDHontRoulette, d.pDescDHontRoulette3]
-#        models += [d.modelDHontFixedDF, d.modelDHontRouletteDF, d.modelDHontRoulette3DF]
-#        evalTools += [EvalToolDHont, EvalToolDHont, EvalToolDHont]
-#        histories += [HistoryHierDF("DHontFixed"), HistoryHierDF("DHontRoulette"), HistoryHierDF("DHontRoulette3")]
+        pDescs += [d.pDescDHontFixed, d.pDescDHontRoulette, d.pDescDHontRoulette3]
+        models += [d.modelDHontFixedDF, d.modelDHontRouletteDF, d.modelDHontRoulette3DF]
+        evalTools += [EvalToolDHont, EvalToolDHont, EvalToolDHont]
+        histories += [HistoryHierDF("DHontFixed"), HistoryHierDF("DHontRoulette"), HistoryHierDF("DHontRoulette3")]
 
         # NegDHontNF portfolios1
         pDescs += [d.pDescNegDHontOStat08HLin1002]
