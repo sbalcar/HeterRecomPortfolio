@@ -22,6 +22,7 @@ def test01():
     print("Running RecommenderCosineCB:")
 
     cbDataPath:str = Configuration.cbDataFileWithPathTFIDF
+    cbDataPath:str = Configuration.cbDataFileWithPathOHE
 
     #ratingsDF:DataFrame = Ratings.readFromFileMl100k()
     ratingsDF: DataFrame = Ratings.readFromFileMl1m()
@@ -33,6 +34,7 @@ def test01():
     rec.train(pd.DataFrame(), ratingsDFTrain, pd.DataFrame(), pd.DataFrame())
 
     ratingsDFUpdate:DataFrame = ratingsDF.iloc[50003:50004]
+    #ratingsDFUpdate:DataFrame = ratingsDF.iloc[3:4]
     rec.update(ratingsDFUpdate)
 
     print(len(rec.userProfiles[331]))

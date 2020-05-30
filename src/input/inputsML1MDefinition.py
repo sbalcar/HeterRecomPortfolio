@@ -88,9 +88,9 @@ class InputsML1MDefinition:
     rDescW2vPositiveWindow10:RecommenderDescription = RecommenderDescription(RecommenderW2V,
                             {RecommenderW2V.ARG_TRAIN_VARIANT:"positive",
                              RecommenderW2V.ARG_USER_PROFILE_STRATEGY:"window10"})
-    rDescW2vPosnegMax:RecommenderDescription = RecommenderDescription(RecommenderW2V,
+    rDescW2vPosnegMean:RecommenderDescription = RecommenderDescription(RecommenderW2V,
                             {RecommenderW2V.ARG_TRAIN_VARIANT:"posneg",
-                             RecommenderW2V.ARG_USER_PROFILE_STRATEGY:"max"})
+                             RecommenderW2V.ARG_USER_PROFILE_STRATEGY:"mean"})
     rDescW2vPosnegWindow10:RecommenderDescription = RecommenderDescription(RecommenderW2V,
                             {RecommenderW2V.ARG_TRAIN_VARIANT:"posneg",
                              RecommenderW2V.ARG_USER_PROFILE_STRATEGY:"window10"})
@@ -98,12 +98,12 @@ class InputsML1MDefinition:
     rIDsCB:List[str] = ["RecomCBmax", "RecomCBwindow10"]
     rDescsCB:List[RecommenderDescription] = [rDescCBmax, rDescCBwindow10]
 
-    #rIDsW2V:List[str] = ["RecomW2vPositiveMax", "RecomW2vPositiveWindow10", "RecomW2vPosnegMax", "RecomPosnegWindow10"]
+    #rIDsW2V:List[str] = ["RecomW2vPositiveMax", "RecomW2vPositiveWindow10", "RecomW2vPosnegMax", "RecomW2vPosnegWindow10"]
     #rDescsW2V:List[RecommenderDescription] = [rDescW2vPositiveMax, rDescW2vPositiveWindow10, rDescW2vPosnegMax, rDescW2vPosnegWindow10]
-    #rIDsW2V:List[str] = ["RecomW2vPositiveMax", "RecomW2vPosnegMax", "RecomPosnegWindow10"]
+    #rIDsW2V:List[str] = ["RecomW2vPositiveMax", "RecomW2vPosnegMax", "RecomW2vPosnegWindow10"]
     #rDescsW2V:List[RecommenderDescription] = [rDescW2vPosnegMax, rDescW2vPosnegMax, rDescW2vPosnegWindow10]
-    rIDsW2V:List[str] = ["RecomW2vPosnegMax", "RecomPosnegWindow10"]
-    rDescsW2V:List[RecommenderDescription] = [rDescW2vPosnegMax, rDescW2vPosnegWindow10]
+    rIDsW2V:List[str] = ["RecomW2vPosnegMax", "RecomW2vPosnegWindow10"]
+    rDescsW2V:List[RecommenderDescription] = [rDescW2vPosnegMean, rDescW2vPosnegWindow10]
 
     rIDs:List[str] = ["RecomTheMostPopular"] + rIDsCB + rIDsW2V
     rDescs:List[RecommenderDescription] = [rDescTheMostPopular] + rDescsCB + rDescsW2V
@@ -149,8 +149,8 @@ class InputsML1MDefinition:
     pDescW2vPositiveWindow10:APortfolioDescription = Portfolio1MethDescription("W2vPositiveWindow10", "w2vPositiveWindow10", rDescW2vPositiveWindow10)
     modelW2vPositiveWindow10DF:DataFrame = pd.DataFrame()
 
-    pDescW2vPosnegMax:APortfolioDescription = Portfolio1MethDescription("W2vPosnegMax", "w2vPosnegMax", rDescW2vPosnegMax)
-    modelW2vPosnegMaxDF:DataFrame = pd.DataFrame()
+    pDescW2vPosnegMean:APortfolioDescription = Portfolio1MethDescription("W2vPosnegMean", "w2vPosnegMean", rDescW2vPosnegMean)
+    modelW2vPosnegMeanDF:DataFrame = pd.DataFrame()
 
     pDescW2vPosnegWindow10:APortfolioDescription = Portfolio1MethDescription("W2vPosnegWindow10", "w2vPosnegWindow10", rDescW2vPosnegWindow10)
     modelW2vPosnegWindow10DF:DataFrame = pd.DataFrame()

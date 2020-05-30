@@ -69,17 +69,17 @@ class RecommenderW2V(ARecommender):
         e:int = 64
         w:int = 3
 
-        self.model = self.__load_obj("model", e, w)
-        self.dictionary = self.__load_obj("dictionary", e, w)
-        self.rev_dict = self.__load_obj("rev_dict", e, w)
+        self.model = self.__load_obj("model", self.trainVariant, e, w)
+        self.dictionary = self.__load_obj("dictionary", self.trainVariant, e, w)
+        self.rev_dict = self.__load_obj("rev_dict", self.trainVariant, e, w)
 
         if self.model is None:
             model, rev_dict, dictionary = word2vec.word2vecRun(w, e, w2vTrainData)
             dictionary = dict([((int(i), j) if i != "RARE" else (-1, j)) for i, j in dictionary.items()])
             rev_dict = dict(zip(dictionary.values(), dictionary.keys()))
-            self.__save_obj(model, "model", e, w)
-            self.__save_obj(dictionary, "dictionary", e, w)
-            self.__save_obj(rev_dict, "rev_dict", e, w)
+            self.__save_obj(model, "model", self.trainVariant, e, w)
+            self.__save_obj(dictionary, "dictionary", self.trainVariant, e, w)
+            self.__save_obj(rev_dict, "rev_dict", self.trainVariant, e, w)
             self.model = model
             self.dictionary = dictionary
             self.rev_dict = rev_dict
@@ -182,13 +182,14 @@ class RecommenderW2V(ARecommender):
 
         return pd.Series([], index=[])
 
-    def __save_obj(self, obj, name:str, e:int, w:int):
-        fileName:str = Configuration.modelDirectory + os.sep + self._jobID + name + "{0}_{1}".format(e, w)+ '.pkl'
+    def __save_obj(self, obj, name:str, trainVariant:str, e:int, w:int):
+        fileName:str = Configuration.modelDirectory + os.sep + self._jobID + name + "_{0}_{1}_{2}".format(trainVariant, e, w)+ '.pkl'
         with open(fileName, 'wb') as f:
             pickle.dump(obj, f)
 
-    def __load_obj(self, name:str, e:int, w:int):
-        fileName:str = Configuration.modelDirectory + os.sep + self._jobID + name + "{0}_{1}".format(e, w)+ '.pkl'
+    def __load_obj(self, name:str, trainVariant:str, e:int, w:int):
+        fileName:str = Configuration.modelDirectory + os.sep + self._jobID + name + "_{0}_{1}_{2}".format(trainVariant, e, w)+ '.pkl'
+        print(fileName)
         if not os.path.isfile(fileName):
             return None
         with open(fileName, 'rb') as f:

@@ -107,6 +107,8 @@ class HistoryHierDF(AHistory):
 
 
     def deletePreviousRecomOfUser(self, userID:int, numberOfUserRecommendationToKeep:int):
+        if not userID in self._historyDict.keys():
+            return
         self._historyDict[userID] = self._historyDict[userID].tail(numberOfUserRecommendationToKeep)
 
 

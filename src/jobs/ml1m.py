@@ -70,10 +70,11 @@ def __ml1m(divisionDatasetPercentualSize:int):
         histories += [HistoryHierDF("TMPopular"), HistoryHierDF("CBmax"), HistoryHierDF("CBwindow10")]
 
         # single W2V portfolios
-        pDescs += [d.pDescW2vPosnegMax, d.pDescW2vPosnegWindow10]
-        models += [d.modelW2vPosnegMaxDF, d.modelW2vPosnegWindow10DF]
+        pDescs += [d.pDescW2vPosnegMean, d.pDescW2vPosnegWindow10]
+        models += [d.modelW2vPosnegMeanDF, d.modelW2vPosnegWindow10DF]
         evalTools += [EToolSingleMethod, EToolSingleMethod]
-        histories += [HistoryHierDF("W2vPosnegMax"), HistoryHierDF("W2vPosnegWindow10")]
+        histories += [HistoryHierDF("W2vPosnegMax"), HistoryHierDF("CBwindow10")]
+
 
         # BanditTS portfolios
         pDescs += [d.pDescBanditTS]
@@ -94,10 +95,10 @@ def __ml1m(divisionDatasetPercentualSize:int):
         histories += [HistoryHierDF("NegDHontOStat08HLin1002")]
 
         # NegDHontNF portfolios2
-        pDescs += [d.pDescNegDHontOLin0802HLin1002]
-        models += [d.modelNegDHontOLin0802HLin1002DF]
-        evalTools += [EvalToolDHont]
-        histories += [HistoryHierDF("NegDHontOLin0802HLin1002")]
+#        pDescs += [d.pDescNegDHontOLin0802HLin1002]
+#        models += [d.modelNegDHontOLin0802HLin1002DF]
+#        evalTools += [EvalToolDHont]
+#        histories += [HistoryHierDF("NegDHontOLin0802HLin1002")]
 
         # simulation of portfolio
         simulator:Simulator = Simulator(jobID, SimulationPortfolioToUser, argsSimulationDict, d.ratingsDF, d.usersDF,

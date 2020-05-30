@@ -84,12 +84,13 @@ def generate_batch_data(sentences, batch_size, window_size, method='skip_gram'):
         window_sequences = [rand_sentence[max((ix-window_size),0):(ix+window_size+1)] for ix, x in enumerate(rand_sentence)]
         # Denote which element of each window is the center word of interest
         label_indices = [ix if ix<window_size else window_size for ix,x in enumerate(window_sequences)]
-        
+
         # Pull out center word of interest for each window and create a tuple for each window
         if method=='skip_gram':
             batch_and_labels = [(x[y], x[:y] + x[(y+1):]) for x,y in zip(window_sequences, label_indices)]
             # Make it in to a big list of tuples (target word, surrounding word)
             tuple_data = [(x, y_) for x,y in batch_and_labels for y_ in y]
+            #print("tuple_data: " + str(tuple_data))
             batch, labels = [list(x) for x in zip(*tuple_data)]
         elif method=='cbow':
             batch_and_labels = [(x[:y] + x[(y+1):], x[y]) for x,y in zip(window_sequences, label_indices)]

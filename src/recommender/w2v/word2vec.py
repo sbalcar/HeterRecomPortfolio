@@ -34,8 +34,10 @@ def word2vecRun(window_size = 3, embedding_size = 64, texts = []):
     # Declare model parameters
     batch_size:int = 32
     vocabulary_size:int = 10000
-    #generations:int = 200000
-    generations: int = 400000
+    generations:int = 200000
+    #generations:int = 400000
+    #generations:int = 450000
+
     model_learning_rate = 0.01
 
     #embedding_size = 64   # Word embedding size
@@ -118,6 +120,11 @@ def word2vecRun(window_size = 3, embedding_size = 64, texts = []):
     for i in range(generations):
         batch_inputs, batch_labels = generate_batch_data(text_data, batch_size, window_size)
         feed_dict = {x_inputs : batch_inputs, y_target : batch_labels}
+        #print("x_inputs: " + str(x_inputs))
+
+        #print("optimizer: " + str(optimizer))
+        #print("")
+        #print("feed_dict: " + str(feed_dict))
 
         # Run the train step
         sess.run(optimizer, feed_dict=feed_dict)

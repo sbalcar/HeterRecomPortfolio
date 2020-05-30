@@ -35,6 +35,7 @@ class RecommenderCosineCB(ARecommender):
         self._arguments:dict = argumentsDict
         # "../../../../data/cbDataOHE.txt" nebo "../../../../data/cbDataTFIDF.txt"
         self.cbDataPath:str = self._arguments[self.ARG_CB_DATA_PATH]
+        print(self.cbDataPath)
 
         self.dfCBFeatures = pd.read_csv(self.cbDataPath, sep=",", header=0, index_col=0)
         dfCBSim = 1 - pairwise_distances(self.dfCBFeatures, metric="cosine")
@@ -66,8 +67,8 @@ class RecommenderCosineCB(ARecommender):
             self.userProfiles[userID] = userTrainData
             s = ""
 
-    def resolveUserProfile(self, userProfileStrategy:str, userTrainData):
-        rec = userProfileStrategy
+    def resolveUserProfile(self, userProfileStrategy:str, userTrainData:List[int]):
+        rec:str = userProfileStrategy
         if self.DEBUG_MODE:
             print(rec)
         if (len(userTrainData) > 0):
@@ -108,8 +109,11 @@ class RecommenderCosineCB(ARecommender):
 
         userProfileStrategy:str = argumentsDict[self.ARG_USER_PROFILE_STRATEGY]
 
-        userTrainData = self.userProfiles.get(userID, [])
+        userTrainData:List[int] = self.userProfiles.get(userID, [])
+        objectIDs:List[int]
+        weights:List[float]
         objectIDs, weights, aggregation = self.resolveUserProfile(userProfileStrategy, userTrainData)
+
         simList:List = []
 
         # provedu agregaci dle zvolené metody

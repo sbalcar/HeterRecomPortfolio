@@ -26,17 +26,17 @@ def test01():
     print("Test 01")
     os.chdir("..")
 
-    #- ARG_TRAIN_VARIANT: positive | posneg
-    #- ARG_USER_PROFILE_STRATEGY: max | window10
-
     print("Running RecommenderW2V:")
 
     ratingsDF:DataFrame = Ratings.readFromFileMl1m()
 
     ratingsDFTrain:DataFrame = ratingsDF.iloc[0:50000]
 
-    #rec:ARecommender = RecommenderW2V({RecommenderW2V.ARG_TRAIN_VARIANT:"posneg"})
-    rec:ARecommender = RecommenderW2V("test", {RecommenderW2V.ARG_TRAIN_VARIANT:"positive"})
+    id:str = "ml1mDiv90"
+    #id:str = "test"
+
+    rec:ARecommender = RecommenderW2V(id, {RecommenderW2V.ARG_TRAIN_VARIANT:"posneg"})
+    #rec:ARecommender = RecommenderW2V(id, {RecommenderW2V.ARG_TRAIN_VARIANT:"positive"})
     rec.train(HistoryDF("w2v"), ratingsDFTrain, pd.DataFrame(), pd.DataFrame())
 
     ratingsDFUpdate:DataFrame = ratingsDF.iloc[50003:50004]
