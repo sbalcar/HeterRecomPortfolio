@@ -75,12 +75,12 @@ class InputsML1MDefinition:
     rDescTheMostPopular:RecommenderDescription = RecommenderDescription(RecommenderTheMostPopular,
                             {})
 
-    rDescCBmax:RecommenderDescription = RecommenderDescription(RecommenderCosineCB,
+    rDescCBmean:RecommenderDescription = RecommenderDescription(RecommenderCosineCB,
                             {RecommenderCosineCB.ARG_CB_DATA_PATH:Configuration.cbDataFileWithPathTFIDF,
-                             RecommenderCosineCB.ARG_USER_PROFILE_STRATEGY:"max"})
-    rDescCBwindow10:RecommenderDescription = RecommenderDescription(RecommenderCosineCB,
+                             RecommenderCosineCB.ARG_USER_PROFILE_STRATEGY:"mean"})
+    rDescCBwindow3:RecommenderDescription = RecommenderDescription(RecommenderCosineCB,
                             {RecommenderCosineCB.ARG_CB_DATA_PATH:Configuration.cbDataFileWithPathTFIDF,
-                             RecommenderCosineCB.ARG_USER_PROFILE_STRATEGY:"window10"})
+                             RecommenderCosineCB.ARG_USER_PROFILE_STRATEGY:"window3"})
 
     rDescW2vPositiveMax:RecommenderDescription = RecommenderDescription(RecommenderW2V,
                             {RecommenderW2V.ARG_TRAIN_VARIANT:"positive",
@@ -91,19 +91,20 @@ class InputsML1MDefinition:
     rDescW2vPosnegMean:RecommenderDescription = RecommenderDescription(RecommenderW2V,
                             {RecommenderW2V.ARG_TRAIN_VARIANT:"posneg",
                              RecommenderW2V.ARG_USER_PROFILE_STRATEGY:"mean"})
-    rDescW2vPosnegWindow10:RecommenderDescription = RecommenderDescription(RecommenderW2V,
-                            {RecommenderW2V.ARG_TRAIN_VARIANT:"posneg",
-                             RecommenderW2V.ARG_USER_PROFILE_STRATEGY:"window10"})
+    rDescW2vPosnegWindow3:RecommenderDescription = RecommenderDescription(RecommenderW2V,
+                                                                          {RecommenderW2V.ARG_TRAIN_VARIANT:"posneg",
+                             RecommenderW2V.ARG_USER_PROFILE_STRATEGY:"window3"})
 
-    rIDsCB:List[str] = ["RecomCBmax", "RecomCBwindow10"]
-    rDescsCB:List[RecommenderDescription] = [rDescCBmax, rDescCBwindow10]
+    rIDsCB:List[str] = ["RecomCBmean", "RecomCBwindow3"]
+    rDescsCB:List[RecommenderDescription] = [rDescCBmean, rDescCBwindow3]
 
-    #rIDsW2V:List[str] = ["RecomW2vPositiveMax", "RecomW2vPositiveWindow10", "RecomW2vPosnegMax", "RecomW2vPosnegWindow10"]
-    #rDescsW2V:List[RecommenderDescription] = [rDescW2vPositiveMax, rDescW2vPositiveWindow10, rDescW2vPosnegMax, rDescW2vPosnegWindow10]
+    #rIDsW2V:List[str] = ["RecomW2vPositiveMax", "RecomW2vPositiveWindow10", "RecomW2vPosnegMean", "RecomW2vPosnegWindow10"]
+    #rDescsW2V:List[RecommenderDescription] = [rDescW2vPositiveMax, rDescW2vPositiveWindow10, rDescW2vPosnegMean, rDescW2vPosnegWindow10]
     #rIDsW2V:List[str] = ["RecomW2vPositiveMax", "RecomW2vPosnegMax", "RecomW2vPosnegWindow10"]
     #rDescsW2V:List[RecommenderDescription] = [rDescW2vPosnegMax, rDescW2vPosnegMax, rDescW2vPosnegWindow10]
-    rIDsW2V:List[str] = ["RecomW2vPosnegMax", "RecomW2vPosnegWindow10"]
-    rDescsW2V:List[RecommenderDescription] = [rDescW2vPosnegMean, rDescW2vPosnegWindow10]
+    rIDsW2V:List[str] = ["RecomW2vPosnegMax", "RecomW2vPosnegWindow3"]
+    rDescsW2V:List[RecommenderDescription] = [rDescW2vPosnegMean, rDescW2vPosnegWindow3]
+
 
     rIDs:List[str] = ["RecomTheMostPopular"] + rIDsCB + rIDsW2V
     rDescs:List[RecommenderDescription] = [rDescTheMostPopular] + rDescsCB + rDescsW2V
@@ -136,10 +137,10 @@ class InputsML1MDefinition:
     modelTheMostPopularDF:DataFrame = pd.DataFrame()
 
     # Cosine CB Portfolio description
-    pDescCBmax:APortfolioDescription = Portfolio1MethDescription("CosCBmax", "cosCBmax", rDescCBmax)
+    pDescCBmax:APortfolioDescription = Portfolio1MethDescription("CosCBmax", "cosCBmax", rDescCBmean)
     modelCBmaxDF:DataFrame = pd.DataFrame()
 
-    pDescCBwindow10:APortfolioDescription = Portfolio1MethDescription("CosCBwindow10", "cosCBwindow10", rDescCBwindow10)
+    pDescCBwindow10:APortfolioDescription = Portfolio1MethDescription("CosCBwindow3", "cosCBwindow3", rDescCBwindow3)
     modelCBwindow10DF:DataFrame = pd.DataFrame()
 
     # W2v Portfolio description
@@ -152,8 +153,8 @@ class InputsML1MDefinition:
     pDescW2vPosnegMean:APortfolioDescription = Portfolio1MethDescription("W2vPosnegMean", "w2vPosnegMean", rDescW2vPosnegMean)
     modelW2vPosnegMeanDF:DataFrame = pd.DataFrame()
 
-    pDescW2vPosnegWindow10:APortfolioDescription = Portfolio1MethDescription("W2vPosnegWindow10", "w2vPosnegWindow10", rDescW2vPosnegWindow10)
-    modelW2vPosnegWindow10DF:DataFrame = pd.DataFrame()
+    pDescW2vPosnegWindow3:APortfolioDescription = Portfolio1MethDescription("W2vPosnegWindow3", "w2vPosnegWindow3", rDescW2vPosnegWindow3)
+    modelW2vPosnegWindow3DF:DataFrame = pd.DataFrame()
 
 
 

@@ -70,8 +70,8 @@ def __ml1m(divisionDatasetPercentualSize:int):
         histories += [HistoryHierDF("TMPopular"), HistoryHierDF("CBmax"), HistoryHierDF("CBwindow10")]
 
         # single W2V portfolios
-        pDescs += [d.pDescW2vPosnegMean, d.pDescW2vPosnegWindow10]
-        models += [d.modelW2vPosnegMeanDF, d.modelW2vPosnegWindow10DF]
+        pDescs += [d.pDescW2vPosnegMean, d.pDescW2vPosnegWindow3]
+        models += [d.modelW2vPosnegMeanDF, d.modelW2vPosnegWindow3DF]
         evalTools += [EToolSingleMethod, EToolSingleMethod]
         histories += [HistoryHierDF("W2vPosnegMax"), HistoryHierDF("CBwindow10")]
 
@@ -83,16 +83,16 @@ def __ml1m(divisionDatasetPercentualSize:int):
         histories += [HistoryHierDF("BanditTS")]
 
         # DHont portfolios
-        pDescs += [d.pDescDHontFixed, d.pDescDHontRoulette, d.pDescDHontRoulette3]
-        models += [d.modelDHontFixedDF, d.modelDHontRouletteDF, d.modelDHontRoulette3DF]
-        evalTools += [EvalToolDHont, EvalToolDHont, EvalToolDHont]
-        histories += [HistoryHierDF("DHontFixed"), HistoryHierDF("DHontRoulette"), HistoryHierDF("DHontRoulette3")]
+#        pDescs += [d.pDescDHontFixed, d.pDescDHontRoulette, d.pDescDHontRoulette3]
+#        models += [d.modelDHontFixedDF, d.modelDHontRouletteDF, d.modelDHontRoulette3DF]
+#        evalTools += [EvalToolDHont, EvalToolDHont, EvalToolDHont]
+#        histories += [HistoryHierDF("DHontFixed"), HistoryHierDF("DHontRoulette"), HistoryHierDF("DHontRoulette3")]
 
         # NegDHontNF portfolios1
-        pDescs += [d.pDescNegDHontOStat08HLin1002]
-        models += [d.modelNegDHontOStat08HLin1002DF]
-        evalTools += [EvalToolDHont]
-        histories += [HistoryHierDF("NegDHontOStat08HLin1002")]
+#        pDescs += [d.pDescNegDHontOStat08HLin1002]
+#        models += [d.modelNegDHontOStat08HLin1002DF]
+#        evalTools += [EvalToolDHont]
+#        histories += [HistoryHierDF("NegDHontOStat08HLin1002")]
 
         # NegDHontNF portfolios2
 #        pDescs += [d.pDescNegDHontOLin0802HLin1002]

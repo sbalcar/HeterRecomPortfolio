@@ -98,11 +98,17 @@ class SimulationPortfolioToUser:
             raise ValueError("Directory results contains old results \'" + str(self._jobID) +"\'")
         os.mkdir(dir)
 
-        # opening files for history of models
-        self.historyOfModelDict = {}
+        # opening files for portfolio model time evolution
+        self.portModelTimeEvolutionFiles = {}
         for portfolioDescI in portfolioDescs:
-            fileName:str = Configuration.resultsDirectory + os.sep + self._jobID + os.sep + "historyOfModel-" + portfolioDescI.getPortfolioID() + ".txt"
-            self.historyOfModelDict[portfolioDescI.getPortfolioID()] = open(fileName, "a")
+            fileName:str = Configuration.resultsDirectory + os.sep + self._jobID + os.sep + "portfModelTimeEvolution-" + portfolioDescI.getPortfolioID() + ".txt"
+            self.portModelTimeEvolutionFiles[portfolioDescI.getPortfolioID()] = open(fileName, "a")
+
+        # opening files for portfolio model time evolution
+        self.historyOfRecommendationFiles:dict = {}
+        for portfolioDescI in portfolioDescs:
+            fileName:str = Configuration.resultsDirectory + os.sep + self._jobID + os.sep + "historyOfRecommendation-" + portfolioDescI.getPortfolioID() + ".txt"
+            self.historyOfRecommendationFiles[portfolioDescI.getPortfolioID()] = open(fileName, "a")
 
         # results of portfolios evaluations
         evaluations:List[int] = []
@@ -137,8 +143,12 @@ class SimulationPortfolioToUser:
 
         # closing files
         #hOfModelDictI:File
-        for hOfModelDictI in self.historyOfModelDict.values():
+        for hOfModelDictI in self.portModelTimeEvolutionFiles.values():
             hOfModelDictI.close()
+
+        #hOfRecommDictI:File
+        for hOfRecommDictI in self.historyOfRecommendationFiles.values():
+            hOfRecommDictI.close()
 
         #evalFileName:File
         evalFileName:str = Configuration.resultsDirectory + os.sep + self._id + os.sep + "evaluation.txt"
@@ -276,7 +286,7 @@ class SimulationPortfolioToUser:
             self.__simulateRecommendation(portfolioI, portfolioDescI, portFolioModelI, evaluatonToolI, historyI,
                                           evaluationI, uProbOfObservGenerated, uObservation, currentItemID, nextItemIDs, userID)
 
-    def __simulateRecommendation(self, portfolio:Portfolio1Aggr, portfolioDesc:Portfolio1AggrDescription, portfolioModel:pd.DataFrame,
+    def __simulateRecommendation(self, portfolio:APortfolio, portfolioDesc:Portfolio1AggrDescription, portfolioModel:pd.DataFrame,
                                  evaluatonTool:AEvalTool, history:AHistory, evaluation:dict, uProbOfObserv:List[float],
                                  uObservation:List[bool], currentItemID:int, nextItemIDs:List[int], userID:int):
 
@@ -315,9 +325,13 @@ class SimulationPortfolioToUser:
 
             print("clickedItems: " + str(self._clickedItems[userID]))
 
-            self.historyOfModelDict[portId].write("currentItemID: " + str(currentItemID) + "\n")
-            self.historyOfModelDict[portId].write(str(portfolioModel) + "\n\n")
+            self.portModelTimeEvolutionFiles[portId].write("currentItemID: " + str(currentItemID) + "\n")
+            self.portModelTimeEvolutionFiles[portId].write(str(portfolioModel) + "\n\n")
 
+        # store history of recommendations to file
+        self.historyOfRecommendationFiles[portfolioDesc.getPortfolioID()].write(str(userID) + "\n")
+        self.historyOfRecommendationFiles[portfolioDesc.getPortfolioID()].write(str(rItemIDs) + "\n")
+        self.historyOfRecommendationFiles[portfolioDesc.getPortfolioID()].write(str(clickedItemIDs) + "\n\n")
 
         # save log of history
         history.insertRecomAndClickedItemIDs(userID, rItemIDs, uProbOfObserv, clickedItemIDs)
