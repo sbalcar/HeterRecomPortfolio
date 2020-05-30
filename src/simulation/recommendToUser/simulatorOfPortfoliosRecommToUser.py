@@ -98,16 +98,19 @@ class SimulationPortfolioToUser:
             raise ValueError("Directory results contains old results \'" + str(self._jobID) +"\'")
         os.mkdir(dir)
 
+        computationFileName:str = dir + os.sep + "computation.txt"
+        self.computationFile = open(computationFileName, "w+")
+
         # opening files for portfolio model time evolution
         self.portModelTimeEvolutionFiles = {}
         for portfolioDescI in portfolioDescs:
-            fileName:str = Configuration.resultsDirectory + os.sep + self._jobID + os.sep + "portfModelTimeEvolution-" + portfolioDescI.getPortfolioID() + ".txt"
+            fileName:str = dir + os.sep + "portfModelTimeEvolution-" + portfolioDescI.getPortfolioID() + ".txt"
             self.portModelTimeEvolutionFiles[portfolioDescI.getPortfolioID()] = open(fileName, "a")
 
         # opening files for portfolio model time evolution
         self.historyOfRecommendationFiles:dict = {}
         for portfolioDescI in portfolioDescs:
-            fileName:str = Configuration.resultsDirectory + os.sep + self._jobID + os.sep + "historyOfRecommendation-" + portfolioDescI.getPortfolioID() + ".txt"
+            fileName:str = dir + os.sep + "historyOfRecommendation-" + portfolioDescI.getPortfolioID() + ".txt"
             self.historyOfRecommendationFiles[portfolioDescI.getPortfolioID()] = open(fileName, "a")
 
         # results of portfolios evaluations
@@ -142,6 +145,8 @@ class SimulationPortfolioToUser:
             evaluations.append(evaluationI)
 
         # closing files
+        self.computationFile.close()
+
         #hOfModelDictI:File
         for hOfModelDictI in self.portModelTimeEvolutionFiles.values():
             hOfModelDictI.close()
@@ -213,9 +218,13 @@ class SimulationPortfolioToUser:
             counterI += 1
             if counterI  % 100 == 0:
                 print("RatingI: " + str(counterI) + " / " + str(testRatingsDF.shape[0]))
-
-                print("Ids: " + str(portIds))
+                print("PortfolioIds: " + str(portIds))
                 print("Evaluations: " + str(evaluations))
+
+                self.computationFile.write("RatingI: " + str(counterI) + " / " + str(testRatingsDF.shape[0]) + "\n")
+                self.computationFile.write("PortfolioIds: " + str(portIds) + "\n")
+                self.computationFile.write("Evaluations: " + str(evaluations) + "\n")
+                self.computationFile.flush()
 
 #            if counterI % 1000 == 0:
 #                for historyI in histories:
