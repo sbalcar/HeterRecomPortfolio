@@ -20,40 +20,13 @@ from history.aHistory import AHistory #class
 from history.historyHierDF import HistoryHierDF #class
 
 
-def ml1mDiv50():
-    divisionDatasetPercentualSize:int = 50
-
-    __ml1m(divisionDatasetPercentualSize)
-
-def ml1mDiv60():
-    divisionDatasetPercentualSize:int = 60
-
-    __ml1m(divisionDatasetPercentualSize)
-
-def ml1mDiv70():
-    divisionDatasetPercentualSize:int = 70
-
-    __ml1m(divisionDatasetPercentualSize)
-
-def ml1mDiv80():
-    divisionDatasetPercentualSize:int = 80
-
-    __ml1m(divisionDatasetPercentualSize)
-
-def ml1mDiv90():
-    divisionDatasetPercentualSize:int = 90
-
-    __ml1m(divisionDatasetPercentualSize)
-
-
-
-def __ml1m(divisionDatasetPercentualSize:int):
+def ml1m(prefix:str, divisionDatasetPercentualSize:int, repetition:int):
 
         d = InputsML1MDefinition
-        jobID:str = "ml1mDiv" + str(divisionDatasetPercentualSize)
+        jobID:str = prefix + "ml1mDiv" + str(divisionDatasetPercentualSize) + "R" + str(repetition)
 
         argsSimulationDict:dict = {SimulationPortfolioToUser.ARG_WINDOW_SIZE: 5,
-                                   SimulationPortfolioToUser.ARG_REPETITION_OF_RECOMMENDATION: 1,
+                                   SimulationPortfolioToUser.ARG_REPETITION_OF_RECOMMENDATION: repetition,
                                    SimulationPortfolioToUser.ARG_NUMBER_OF_RECOMM_ITEMS: d.numberOfRecommItems,
                                    SimulationPortfolioToUser.ARG_NUMBER_OF_AGGR_ITEMS: d.numberOfAggrItems,
                                    SimulationPortfolioToUser.ARG_DIV_DATASET_PERC_SIZE: divisionDatasetPercentualSize}
@@ -83,22 +56,22 @@ def __ml1m(divisionDatasetPercentualSize:int):
         histories += [HistoryHierDF("BanditTS")]
 
         # DHont portfolios
-#        pDescs += [d.pDescDHontFixed, d.pDescDHontRoulette, d.pDescDHontRoulette3]
-#        models += [d.modelDHontFixedDF, d.modelDHontRouletteDF, d.modelDHontRoulette3DF]
-#        evalTools += [EvalToolDHont, EvalToolDHont, EvalToolDHont]
-#        histories += [HistoryHierDF("DHontFixed"), HistoryHierDF("DHontRoulette"), HistoryHierDF("DHontRoulette3")]
+        pDescs += [d.pDescDHontFixed, d.pDescDHontRoulette, d.pDescDHontRoulette3]
+        models += [d.modelDHontFixedDF, d.modelDHontRouletteDF, d.modelDHontRoulette3DF]
+        evalTools += [EvalToolDHont, EvalToolDHont, EvalToolDHont]
+        histories += [HistoryHierDF("DHontFixed"), HistoryHierDF("DHontRoulette"), HistoryHierDF("DHontRoulette3")]
 
         # NegDHontNF portfolios1
-#        pDescs += [d.pDescNegDHontOStat08HLin1002]
-#        models += [d.modelNegDHontOStat08HLin1002DF]
-#        evalTools += [EvalToolDHont]
-#        histories += [HistoryHierDF("NegDHontOStat08HLin1002")]
+        pDescs += [d.pDescNegDHontOStat08HLin1002]
+        models += [d.modelNegDHontOStat08HLin1002DF]
+        evalTools += [EvalToolDHont]
+        histories += [HistoryHierDF("NegDHontOStat08HLin1002")]
 
         # NegDHontNF portfolios2
-#        pDescs += [d.pDescNegDHontOLin0802HLin1002]
-#        models += [d.modelNegDHontOLin0802HLin1002DF]
-#        evalTools += [EvalToolDHont]
-#        histories += [HistoryHierDF("NegDHontOLin0802HLin1002")]
+        pDescs += [d.pDescNegDHontOLin0802HLin1002]
+        models += [d.modelNegDHontOLin0802HLin1002DF]
+        evalTools += [EvalToolDHont]
+        histories += [HistoryHierDF("NegDHontOLin0802HLin1002")]
 
         # simulation of portfolio
         simulator:Simulator = Simulator(jobID, SimulationPortfolioToUser, argsSimulationDict, d.ratingsDF, d.usersDF,

@@ -168,18 +168,18 @@ class SimulationPortfolioToUser:
     def __runPortfolioDesc(self, portfolioDescs:List[Portfolio1AggrDescription], portFolioModels:List[pd.DataFrame],
                            evaluatonTools:[AEvalTool], histories:List[AHistory], trainRatingsDF:DataFrame, testRatingsDF:DataFrame):
 
-        print("Deletion the first 20 ratings of each user from tesing part of ratings")
-        # deletion the first 20 ratings of each user from ratings
-        ratingsDel:List[DataFrame] = []
-
-        userIDs:List[int] = list(self._usersDF[Users.COL_USERID])
-        for userIdI in userIDs:
-            ratingsOfUserIDF:DataFrame = testRatingsDF.loc[testRatingsDF[Ratings.COL_USERID] == userIdI]
-            ratingsOfUserSortedIDF:DataFrame = ratingsOfUserIDF.sort_values(by=Ratings.COL_TIMESTAMP)
-            ratingsDel.append(ratingsOfUserSortedIDF.iloc[20:])
-
-        testRatingsDF = pd.concat(ratingsDel)
-        testRatingsDF:DataFrame = testRatingsDF.sort_values(by=Ratings.COL_TIMESTAMP)
+        #print("Deletion the first 20 ratings of each user from tesing part of ratings")
+        ## deletion the first 20 ratings of each user from ratings
+        #ratingsDel:List[DataFrame] = []
+        #
+        #userIDs:List[int] = list(self._usersDF[Users.COL_USERID])
+        #for userIdI in userIDs:
+        #    ratingsOfUserIDF:DataFrame = testRatingsDF.loc[testRatingsDF[Ratings.COL_USERID] == userIdI]
+        #    ratingsOfUserSortedIDF:DataFrame = ratingsOfUserIDF.sort_values(by=Ratings.COL_TIMESTAMP)
+        #    ratingsDel.append(ratingsOfUserSortedIDF.iloc[20:])
+        #
+        #testRatingsDF = pd.concat(ratingsDel)
+        #testRatingsDF:DataFrame = testRatingsDF.sort_values(by=Ratings.COL_TIMESTAMP)
 
 
 

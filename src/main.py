@@ -6,11 +6,7 @@ import sys
 import random
 import numpy as np
 
-from jobs.ml1m import ml1mDiv50 #function
-from jobs.ml1m import ml1mDiv60 #function
-from jobs.ml1m import ml1mDiv70 #function
-from jobs.ml1m import ml1mDiv80 #function
-from jobs.ml1m import ml1mDiv90 #function
+from jobs.ml1m import ml1m #function
 
 def main():
 
@@ -19,11 +15,23 @@ def main():
 
   start = time.time()
 
-  #ml1mDiv50()
-  #ml1mDiv60()
-  #ml1mDiv70()
-  #ml1mDiv80()
-  ml1mDiv90()
+  #ml1m("stc08", 50, 1)
+  #ml1m("stc08", 60, 1)
+  #ml1m("stc08", 70, 1)
+  #ml1m("stc08", 80, 1)
+  ml1m("stc08", 90, 1)
+
+  #ml1m("stc08", 50, 2)
+  #ml1m("stc08", 60, 2)
+  #ml1m("stc08", 70, 2)
+  #ml1m("stc08", 80, 2)
+  #ml1m("stc08", 90, 2)
+
+  #ml1m("stc08", 50, 3)
+  #ml1m("stc08", 60, 3)
+  #ml1m("stc08", 70, 3)
+  #ml1m("stc08", 80, 3)
+  #ml1m("stc08", 90, 3)
 
   end = time.time()
 
