@@ -18,7 +18,7 @@ def jobDHontRoulette3(divisionDatasetPercentualSize:int, repetition:int):
         d = InputsML1MDefinition
 
         pDescs:List[APortfolioDescription] = [d.pDescDHontRoulette3]
-        models:List[DataFrame] = [d.modelDHontRouletteDF3]
+        models:List[DataFrame] = [d.modelDHontRoulette3DF]
         evalTools:List = [EvalToolDHont]
 
         ml1m("", divisionDatasetPercentualSize, repetition, pDescs, models, evalTools)
