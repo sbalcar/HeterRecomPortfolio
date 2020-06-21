@@ -39,11 +39,11 @@ class SimulationPortfolioToUser:
 
     ARG_DIV_DATASET_PERC_SIZE = "divisionDatasetPercentualSizes"
 
-    def __init__(self, jobID:str, ratingsDF:DataFrame, usersDF:DataFrame, itemsDF:DataFrame,
+    def __init__(self, batchID:str, ratingsDF:DataFrame, usersDF:DataFrame, itemsDF:DataFrame,
                  behaviourDF:DataFrame, argumentsDict:dict):
 
-        if type(jobID) is not str:
-            raise ValueError("Argument jobID isn't type str.")
+        if type(batchID) is not str:
+            raise ValueError("Argument batchID isn't type str.")
         if type(ratingsDF) is not DataFrame:
             raise ValueError("Argument ratingsDF isn't type DataFrame.")
         if type(usersDF) is not DataFrame:
@@ -56,7 +56,7 @@ class SimulationPortfolioToUser:
         if type(argumentsDict) is not dict:
             raise ValueError("Argument argumentsDict isn't type dict.")
 
-        self._jobID:str = jobID
+        self._batchID:str = batchID
 
         self._ratingsDF:DataFrame = ratingsDF
         self._usersDF:DataFrame = usersDF
@@ -94,12 +94,14 @@ class SimulationPortfolioToUser:
                raise ValueError("Argument histories don't contain AHistory.")
 
         # create directory for results
-        dir:str = Configuration.resultsDirectory + os.sep + self._jobID
-        if os.path.isdir(dir):
-            raise ValueError("Directory results contains old results \'" + str(self._jobID) +"\'")
-        os.mkdir(dir)
+        dir:str = Configuration.resultsDirectory + os.sep + self._batchID
+        if not os.path.isdir(dir):
+            os.mkdir(dir)
 
-        computationFileName:str = dir + os.sep + "computation.txt"
+        computationFileName:str = dir + os.sep + "computation-" + portfolioDescI.getPortfolioID() +".txt"
+        if os.path.isfile(computationFileName):
+            raise ValueError("Results directory contains old results.")
+
         self.computationFile = open(computationFileName, "w+")
 
         # opening files for portfolio model time evolution
@@ -157,7 +159,7 @@ class SimulationPortfolioToUser:
             hOfRecommDictI.close()
 
         #evalFileName:File
-        evalFileName:str = Configuration.resultsDirectory + os.sep + self._id + os.sep + "evaluation.txt"
+        evalFileName:str = Configuration.resultsDirectory + os.sep + self._batchID + os.sep + "evaluation.txt"
         evalFile = open(evalFileName, "a")
         evalFile.write("ids: " + str([portDescI.getPortfolioID() for portDescI in portfolioDescs]) + "\n")
         evalFile.write(str(evaluations))
@@ -193,7 +195,7 @@ class SimulationPortfolioToUser:
             print("Training mode: " + str(portfolioDescI.getPortfolioID()))
 
             # train portfolio model
-            portfolioI:Portfolio1Aggr = portfolioDescI.exportPortfolio(self._jobID, historyI)
+            portfolioI:Portfolio1Aggr = portfolioDescI.exportPortfolio(self._batchID, historyI)
             portfolioI.train(historyI, trainRatingsDF.copy(), self._usersDF.copy(), self._itemsDF.copy())
             portfolios.append(portfolioI)
 
@@ -283,8 +285,8 @@ class SimulationPortfolioToUser:
                                   portFolioModels:List[DataFrame], evaluatonTools:[AEvalTool], histories:List[AHistory],
                                   evaluations:List[dict], currentItemID:int, nextItemIDs:List[int], userID:int):
 
-        #print("userID: " + str(userID))
-        #print("currentItemID: " + str(currentItemID))
+        print("userID: " + str(userID))
+        print("currentItemID: " + str(currentItemID))
 
         isUser:List[bool] = self._behaviourDF[Behaviours.COL_USERID] == userID
         isItem:List[bool] = self._behaviourDF[Behaviours.COL_MOVIEID] == currentItemID

@@ -11,8 +11,8 @@ from pandas.core.frame import DataFrame #class
 from datasets.behaviours import Behaviours #class
 
 
-def generate():
-   print("generate")
+def generateBehaviour():
+   print("Generate Behaviour")
    os.chdir("..")
 
    np.random.seed(42)
@@ -24,4 +24,4 @@ def generate():
    print(bDF.head(10))
 
 
-generate()
+generateBehaviour()

@@ -63,7 +63,7 @@ class Behaviours:
   def readFromFileMl1m():
     behavioursFile: str = ".." + os.sep + "datasets" + os.sep + "ml-1m" + os.sep + "behaviours.dat"
 
-    behavioursDF:DataFrame = pd.read_csv(behavioursFile, sep='\t', header=1, encoding="ISO-8859-1")
+    behavioursDF:DataFrame = pd.read_csv(behavioursFile, sep='\t', header=0, encoding="ISO-8859-1")
     behavioursDF.columns = [Behaviours.COL_USERID, Behaviours.COL_MOVIEID, Behaviours.COL_LINEAR0109, Behaviours.COL_STATIC08]
 
     return behavioursDF

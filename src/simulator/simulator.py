@@ -37,7 +37,7 @@ class Simulator:
             jobID, ratingsDF, usersDF, itemsDF, behavioursDF, argumentsDict)
 
 
-    def simulate(self, pDescs:List[APortfolioDescription], portModels:List[DataFrame], eTools:List[AEvalTool], histories:List[AHistory]):
+    def simulate(self, pDescs:List[APortfolioDescription], portModels:List[DataFrame], eTools:List[AEvalTool], historyClass):
 
         if type(pDescs) is not list:
             raise ValueError("Argument histories isn't type list.")
@@ -54,14 +54,25 @@ class Simulator:
         if type(eTools) is not list:
             raise ValueError("Argument etools isn't type list.")
 
-        if type(histories) is not list:
-            raise ValueError("Argument histories isn't type list.")
-        for historyI in histories:
-            if not isinstance(historyI, AHistory):
-               raise ValueError("Argument histories don't contain AHistory.")
+        #if type(histories) is not list:
+        #    raise ValueError("Argument histories isn't type list.")
+        #for historyI in histories:
+        #    if not isinstance(historyI, AHistory):
+        #       raise ValueError("Argument histories don't contain AHistory.")
+
+        histories:List[AHistory] = []
+        for i in range(len(pDescs)):
+
+            pDescI:APortfolioDescription = pDescs[i]
+            portfolioIdI:str = pDescI.getPortfolioID()
+
+            historyI:AHistory = historyClass(portfolioIdI)
+            histories.append(historyI)
 
 
         evaluations:List[dict] = self._simulation.run(pDescs, portModels, eTools, histories)
+
+
 
         i:int
         for i in range(len(pDescs)):
