@@ -3,8 +3,6 @@
 import csv
 from typing import List
 
-from datasets.item import Item
-
 from pandas.core.frame import DataFrame #class
 
 import pandas as pd
@@ -50,22 +48,6 @@ class Items:
   @staticmethod
   def readFromFile10M100K():
       pass
-
-
-  @staticmethod
-  def __readFromFile(fileName:str):
-
-      items:list[Item] = []
-
-      f = open(fileName, "r", encoding='ISO-8859-1')
-      for lineStrI in f:
-         lineI = lineStrI.split('|')
-         itemIdI = int(lineI[0])
-         nameI = lineI[1]
-
-         items.append(Item(itemIdI, nameI))
-
-      return items
 
 
 

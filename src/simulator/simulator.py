@@ -17,7 +17,7 @@ from userBehaviourDescription.userBehaviourDescription import UserBehaviourDescr
 
 class Simulator:
 
-    def __init__(self, jobID:str, simulatorClass, argumentsDict:dict, ratingsDF:DataFrame, usersDF:DataFrame, itemsDF:DataFrame, uBehaviourDesc:UserBehaviourDescription):
+    def __init__(self, jobID:str, simulatorClass, argumentsDict:dict, ratingsDF:DataFrame, usersDF:DataFrame, itemsDF:DataFrame, behavioursDF:DataFrame):
         if type(jobID) is not str:
             raise ValueError("Argument jobID isn't type str.")
         if type(argumentsDict) is not dict:
@@ -30,11 +30,11 @@ class Simulator:
             raise ValueError("Argument itemsDF isn't type DataFrame.")
         if type(itemsDF) is not DataFrame:
             raise ValueError("Argument itemsDF isn't type DataFrame.")
-        if type(uBehaviourDesc) is not UserBehaviourDescription:
-            raise ValueError("Argument uBehaviourDesc isn't type UserBehaviourDescription.")
+        if type(behavioursDF) is not DataFrame:
+            raise ValueError("Argument behavioursDF isn't type DataFrame.")
 
         self._simulation:SimulationPortfolioToUser = simulatorClass(
-            jobID, ratingsDF, usersDF, itemsDF, uBehaviourDesc, argumentsDict)
+            jobID, ratingsDF, usersDF, itemsDF, behavioursDF, argumentsDict)
 
 
     def simulate(self, pDescs:List[APortfolioDescription], portModels:List[DataFrame], eTools:List[AEvalTool], histories:List[AHistory]):

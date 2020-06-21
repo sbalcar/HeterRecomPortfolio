@@ -2,6 +2,7 @@
 
 from typing import List
 
+import numpy as np
 
 def observationalStaticProbabilityFnc(probability: float, numberOfItems: int):
     if probability < 0.0 or probability > 1.0:
@@ -27,14 +28,24 @@ def observationalLinearProbabilityFnc(minProbability: float, maxProbability: flo
 
     return probabilities
 
+
 class UserBehaviourDescription:
 
     def __init__(self, uObservationalProbFnc, arguments:List):
 
         self._uObservationalProbFnc = uObservationalProbFnc
-        self._arguments = arguments
+        self._arguments:List = arguments
 
 
-    def getProbabilityOfBehavior(self, numberOfItems:int):
+    def getProbabilityOfBehaviour(self, numberOfItems:int):
 
         return self._uObservationalProbFnc(*self._arguments, numberOfItems)
+
+
+    def getBehaviour(self, numberOfItems:int):
+
+        probabilitiesOfBehaviour:List[float] = self.getProbabilityOfBehaviour(numberOfItems)
+
+        generatedProbabilities:List[float] = np.random.uniform(low=0.0, high=1.0, size=numberOfItems)
+
+        return [probabilitiesOfBehaviour[itemIndexI] > generatedProbabilities[itemIndexI] for itemIndexI in range(numberOfItems)]

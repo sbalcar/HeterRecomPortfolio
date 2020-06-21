@@ -75,6 +75,6 @@ def ml1m(prefix:str, divisionDatasetPercentualSize:int, repetition:int):
 
         # simulation of portfolio
         simulator:Simulator = Simulator(jobID, SimulationPortfolioToUser, argsSimulationDict, d.ratingsDF, d.usersDF,
-                                         d.itemsDF, d.uBehaviourDesc)
+                                         d.itemsDF, d.behavioursDF)
 
         evaluations:List[dict] = simulator.simulate(pDescs, models, evalTools, histories)

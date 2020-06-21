@@ -11,7 +11,7 @@ class UserBehaviourSimulator:
 
     def simulateStaticProb(self, uBehaviourDesc:UserBehaviourDescription, numberOfItems:int):
 
-        maxProbOfObserv:List[float] = uBehaviourDesc.getProbabilityOfBehavior(numberOfItems)
+        maxProbOfObserv:List[float] = uBehaviourDesc.getProbabilityOfBehaviour(numberOfItems)
         #print("maxProbOfObserv: " + str(maxProbOfObserv))
 
         return maxProbOfObserv
@@ -19,7 +19,7 @@ class UserBehaviourSimulator:
 
     def simulateRandomizedProb(self, uBehaviourDesc:UserBehaviourDescription, numberOfItems:int):
 
-        maxProbOfObserv:List[float] = uBehaviourDesc.getProbabilityOfBehavior(numberOfItems)
+        maxProbOfObserv:List[float] = uBehaviourDesc.getProbabilityOfBehaviour(numberOfItems)
         #print("maxProbOfObserv: " + str(maxProbOfObserv))
 
         probabilitiesGenerated:List[float] = list(map(lambda max: np.random.uniform(low=0.0, high=max), maxProbOfObserv))

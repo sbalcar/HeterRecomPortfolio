@@ -24,6 +24,8 @@ from pandas.core.frame import DataFrame #class
 from history.aHistory import AHistory #class
 from evaluationTool.aEvalTool import AEvalTool #class
 
+from datasets.behaviours import Behaviours #class
+
 from simulation.tools.userBehaviourSimulator import UserBehaviourSimulator #class
 from userBehaviourDescription.userBehaviourDescription import UserBehaviourDescription #class
 
@@ -38,7 +40,7 @@ class SimulationPortfolioToUser:
     ARG_DIV_DATASET_PERC_SIZE = "divisionDatasetPercentualSizes"
 
     def __init__(self, jobID:str, ratingsDF:DataFrame, usersDF:DataFrame, itemsDF:DataFrame,
-                 uBehaviourDesc:UserBehaviourDescription, argumentsDict:dict):
+                 behaviourDF:DataFrame, argumentsDict:dict):
 
         if type(jobID) is not str:
             raise ValueError("Argument jobID isn't type str.")
@@ -48,8 +50,8 @@ class SimulationPortfolioToUser:
             raise ValueError("Argument usersDF isn't type DataFrame.")
         if type(itemsDF) is not DataFrame:
             raise ValueError("Argument itemsDF isn't type DataFrame.")
-        if type(uBehaviourDesc) is not UserBehaviourDescription:
-            raise ValueError("Argument uBehaviourDesc isn't type UserBehaviourDescription.")
+        if type(behaviourDF) is not DataFrame:
+            raise ValueError("Argument behaviourDF isn't type DataFrame.")
 
         if type(argumentsDict) is not dict:
             raise ValueError("Argument argumentsDict isn't type dict.")
@@ -59,8 +61,7 @@ class SimulationPortfolioToUser:
         self._ratingsDF:DataFrame = ratingsDF
         self._usersDF:DataFrame = usersDF
         self._itemsDF:DataFrame = itemsDF
-
-        self._uBehaviourDesc = uBehaviourDesc
+        self._behaviourDF:DataFrame = behaviourDF
 
         self._windowSize:int = argumentsDict[self.ARG_WINDOW_SIZE]
         self._repetitionOfRecommendation:int = argumentsDict[self.ARG_REPETITION_OF_RECOMMENDATION]
@@ -165,7 +166,7 @@ class SimulationPortfolioToUser:
         return evaluations
 
 
-    def __runPortfolioDesc(self, portfolioDescs:List[Portfolio1AggrDescription], portFolioModels:List[pd.DataFrame],
+    def __runPortfolioDesc(self, portfolioDescs:List[Portfolio1AggrDescription], portFolioModels:List[DataFrame],
                            evaluatonTools:[AEvalTool], histories:List[AHistory], trainRatingsDF:DataFrame, testRatingsDF:DataFrame):
 
         #print("Deletion the first 20 ratings of each user from tesing part of ratings")
@@ -192,7 +193,7 @@ class SimulationPortfolioToUser:
             print("Training mode: " + str(portfolioDescI.getPortfolioID()))
 
             # train portfolio model
-            portfolioI:Portfolio1Aggr = portfolioDescI.exportPortfolio(self._jobID, self._uBehaviourDesc, historyI)
+            portfolioI:Portfolio1Aggr = portfolioDescI.exportPortfolio(self._jobID, historyI)
             portfolioI.train(historyI, trainRatingsDF.copy(), self._usersDF.copy(), self._itemsDF.copy())
             portfolios.append(portfolioI)
 
@@ -278,26 +279,28 @@ class SimulationPortfolioToUser:
 
         return selectedItems
 
-    def __simulateRecommendations(self, portfolios:List[APortfolio], portfolioDescs:List[Portfolio1AggrDescription], portFolioModels:List[pd.DataFrame],
-                                  evaluatonTools:[AEvalTool], histories:List[AHistory],
+    def __simulateRecommendations(self, portfolios:List[APortfolio], portfolioDescs:List[Portfolio1AggrDescription],
+                                  portFolioModels:List[DataFrame], evaluatonTools:[AEvalTool], histories:List[AHistory],
                                   evaluations:List[dict], currentItemID:int, nextItemIDs:List[int], userID:int):
 
-        uProbOfObservGenerated:List[float] = UserBehaviourSimulator().simulateStaticProb(self._uBehaviourDesc, self._numberOfRecommItems)
-        #print("uProbOfObservGenerated: " + str(uProbOfObservGenerated))
+        #print("userID: " + str(userID))
+        #print("currentItemID: " + str(currentItemID))
 
-        uObservation:List[bool] = list(map(lambda x, y: x > y, uProbOfObservGenerated, np.random.uniform(low=0.0, high=1.0, size=self._numberOfRecommItems)))
-        #print("uObservation: " + str(uObservation))
+        isUser:List[bool] = self._behaviourDF[Behaviours.COL_USERID] == userID
+        isItem:List[bool] = self._behaviourDF[Behaviours.COL_MOVIEID] == currentItemID
+        uObservation:List[bool] = self._behaviourDF[(isUser) & (isItem)][Behaviours.COL_LINEAR0109].iloc[0]
+        #print(uObservation)
 
         portfolioI:Portfolio1Aggr
         portFolioModelI:pd.DataFrame
         historyI:pd.DataFrame
         for portfolioI, portfolioDescI, portFolioModelI, evaluatonToolI, historyI, evaluationI in zip(portfolios, portfolioDescs, portFolioModels, evaluatonTools, histories, evaluations):
             self.__simulateRecommendation(portfolioI, portfolioDescI, portFolioModelI, evaluatonToolI, historyI,
-                                          evaluationI, uProbOfObservGenerated, uObservation, currentItemID, nextItemIDs, userID)
+                                          evaluationI, uObservation, currentItemID, nextItemIDs, userID)
 
     def __simulateRecommendation(self, portfolio:APortfolio, portfolioDesc:Portfolio1AggrDescription, portfolioModel:pd.DataFrame,
-                                 evaluatonTool:AEvalTool, history:AHistory, evaluation:dict, uProbOfObserv:List[float],
-                                 uObservation:List[bool], currentItemID:int, nextItemIDs:List[int], userID:int):
+                                 evaluatonTool:AEvalTool, history:AHistory, evaluation:dict, uObservation:List[bool],
+                                 currentItemID:int, nextItemIDs:List[int], userID:int):
 
         #print("userID: " + str(userID))
         portId:str = portfolioDesc.getPortfolioID()
@@ -316,18 +319,15 @@ class SimulationPortfolioToUser:
 
         candidatesToClick:List[int] = list(set(rItemIDs) & set(nextNoClickedItemIDs))
         clickedItemIDs:List[int] = []
-        probOfObserv:List[float] = []
         for candidateToClickI in candidatesToClick:
             indexI:int = rItemIDs.index(candidateToClickI)
             wasCandidateObservedI:bool = uObservation[indexI]
-            probOfObservI:float = uProbOfObserv[indexI]
             if wasCandidateObservedI:
                 clickedItemIDs.append(candidateToClickI)
-                probOfObserv.append(probOfObservI)
 
-        for clickedItemIdI, probOfObservI in zip(clickedItemIDs, probOfObserv):
-            evaluatonTool.click(rItemIDsWithResponsibility, candidateToClickI,
-                                portfolioModel, evaluation)
+
+        for clickedItemIdI in clickedItemIDs:
+            evaluatonTool.click(rItemIDsWithResponsibility, candidateToClickI, portfolioModel, evaluation)
 
             if not clickedItemIdI in self._clickedItems[userID]:
                 self._clickedItems[userID].append(clickedItemIdI)
@@ -343,7 +343,7 @@ class SimulationPortfolioToUser:
         self.historyOfRecommendationFiles[portfolioDesc.getPortfolioID()].write(str(clickedItemIDs) + "\n\n")
 
         # save log of history
-        history.insertRecomAndClickedItemIDs(userID, rItemIDs, uProbOfObserv, clickedItemIDs)
+        history.insertRecomAndClickedItemIDs(userID, rItemIDs, clickedItemIDs)
 
         # delete log of history
         history.deletePreviousRecomOfUser(userID, self._repetitionOfRecommendation * self._numberOfRecommItems)

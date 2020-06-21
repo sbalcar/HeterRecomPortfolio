@@ -43,7 +43,6 @@ class HistorySQLite(AHistory):
           UserID INTEGER,
           ItemID INTEGER,
           Position INTEGER,
-          Observation REAL,
           Clicked BOOLEAN,
           Timestamp TIMESTAMP)
           """)
@@ -76,13 +75,13 @@ class HistorySQLite(AHistory):
         self.connection.commit()
         # connection.close()
 
-    def insertRecommendation(self, userID:int, itemID:int, position:int, uObservation:float, clicked:bool, timestamp=datetime.datetime.now()):
+    def insertRecommendation(self, userID:int, itemID:int, position:int, clicked:bool, timestamp=datetime.datetime.now()):
         # connection = sqlite3.connect(self.databaseName)
         cursor = self.connection.cursor()
 
         cursor.execute(
-            "INSERT INTO RecommendedItems (UserID, ItemID, Position, Observation, Clicked, Timestamp) VALUES (?,?,?,?,?,?)",
-            (userID, itemID, position, uObservation, clicked, timestamp))
+            "INSERT INTO RecommendedItems (UserID, ItemID, Position, Clicked, Timestamp) VALUES (?,?,?,?,?,?)",
+            (userID, itemID, position, clicked, timestamp))
 
         self.connection.commit()
         # connection.close()

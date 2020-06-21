@@ -3,8 +3,6 @@
 import csv
 from typing import List
 
-from datasets.user import User
-
 from pandas.core.frame import DataFrame #class
 
 import pandas as pd
@@ -43,27 +41,4 @@ class Users:
   @staticmethod
   def readFromFile10M100K():
       pass
-
-
-  @staticmethod
-  def __readFromFile(fileName:str):
-
-      users:list[Users] = []
-
-      f = open(fileName, "r")
-      for lineStrI in f:
-          print(lineStrI)
-
-          lineI = lineStrI.split('|')
-
-          userIdI:int = int(lineI[0])
-          ageI:int = int(lineI[1])
-          sexI:str = str(lineI[2])
-          occupationI:str = str(lineI[3])
-          zipCodeI:str = str(lineI[4].strip())
-
-          users.append(User(userIdI, ageI, sexI, occupationI, zipCodeI))
-
-      return Users(users)
-
 

@@ -11,6 +11,8 @@ from recommender.recommenderW2V import RecommenderW2V #class
 from datasets.ratings import Ratings #class
 from datasets.users import Users #class
 from datasets.items import Items #class
+from datasets.behaviours import Behaviours #class
+
 from configuration.configuration import Configuration #class
 
 from portfolioDescription.portfolio1MethDescription import Portfolio1MethDescription #class
@@ -34,7 +36,7 @@ from portfolioDescription.aPortfolioDescription import APortfolioDescription #cl
 
 from userBehaviourDescription.userBehaviourDescription import UserBehaviourDescription #class
 from userBehaviourDescription.userBehaviourDescription import observationalStaticProbabilityFnc #function
-
+from userBehaviourDescription.userBehaviourDescription import observationalLinearProbabilityFnc #function
 
 from aggregation.toolsDHontNF.penalizationOfResultsByNegImpFeedback.aPenalization import APenalization #class
 from aggregation.toolsDHontNF.penalizationOfResultsByNegImpFeedback.penalUsingFiltering import PenalUsingFiltering #class
@@ -64,11 +66,12 @@ class InputsML1MDefinition:
     ratingsDF:DataFrame = Ratings.readFromFileMl1m()
     usersDF:DataFrame = Users.readFromFileMl1m()
     itemsDF:DataFrame = Items.readFromFileMl1m()
+    behavioursDF:DataFrame = Behaviours.readFromFileMl1m()
 
     numberOfRecommItems:int = 100
     numberOfAggrItems:int = 20
 
-    #uBehaviourDesc:UserBehaviourDescription = UserBehaviourDescription(observationalLinearProbabilityFnc, [0.1, 0.9])
+    uBehaviourDesc:UserBehaviourDescription = UserBehaviourDescription(observationalLinearProbabilityFnc, [0.1, 0.9])
     uBehaviourDesc:UserBehaviourDescription = UserBehaviourDescription(observationalStaticProbabilityFnc, [0.8])
 
     # portfolio definiton

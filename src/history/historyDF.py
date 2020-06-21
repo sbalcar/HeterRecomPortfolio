@@ -32,9 +32,9 @@ class HistoryDF(AHistory):
             self.USER_ID, self.ITEM_ID, self.POSITION, self.OBSERVATION, self.CLICKED, self.TIMESTAMP])
 
 
-    def insertRecommendation(self, userID:int, itemID:int, position:int, uObservation:float, clicked:bool, timestamp=datetime.datetime.now()):
+    def insertRecommendation(self, userID:int, itemID:int, position:int, clicked:bool, timestamp=datetime.datetime.now()):
 
-        new_row:dict = {self.USER_ID:userID, self.ITEM_ID:itemID, self.POSITION:position, self.OBSERVATION:uObservation, self.CLICKED:clicked, self.TIMESTAMP:timestamp}
+        new_row:dict = {self.USER_ID:userID, self.ITEM_ID:itemID, self.POSITION:position, self.CLICKED:clicked, self.TIMESTAMP:timestamp}
 
         self._historyDF = self._historyDF.append(new_row, ignore_index=True)
 

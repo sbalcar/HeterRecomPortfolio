@@ -19,7 +19,6 @@ class HistoryHierDF(AHistory):
     USER_ID = "userID"
     ITEM_ID = "itemID"
     POSITION = "position"
-    OBSERVATION = "observation"
     CLICKED = "clicked"
     TIMESTAMP = "timestamp"
 
@@ -31,14 +30,14 @@ class HistoryHierDF(AHistory):
         self._historyDict:dict = {}
 
 
-    def insertRecommendation(self, userID:int, itemID:int, position:int, uObservation:float, clicked:bool, timestamp=datetime.datetime.now()):
+    def insertRecommendation(self, userID:int, itemID:int, position:int, clicked:bool, timestamp=datetime.datetime.now()):
 
         if not userID in self._historyDict.keys():
             uHistoryDF:DataFrame = pd.DataFrame(columns=[
-                    self.ITEM_ID, self.POSITION, self.OBSERVATION, self.CLICKED, self.TIMESTAMP])
+                    self.ITEM_ID, self.POSITION, self.CLICKED, self.TIMESTAMP])
             self._historyDict[userID] = uHistoryDF
 
-        newRow:dict = {self.ITEM_ID:itemID, self.POSITION:position, self.OBSERVATION:uObservation, self.CLICKED:clicked, self.TIMESTAMP:timestamp}
+        newRow:dict = {self.ITEM_ID:itemID, self.POSITION:position, self.CLICKED:clicked, self.TIMESTAMP:timestamp}
         self._historyDict[userID] = self._historyDict[userID].append(newRow, ignore_index=True)
 
 
@@ -53,7 +52,7 @@ class HistoryHierDF(AHistory):
         indexI:int
         rowI:DataFrame
         for indexI, rowI  in uDF.tail(limit).iterrows():
-            result.append((indexI, rowI[self.USER_ID], rowI[self.ITEM_ID], rowI[self.POSITION], rowI[self.OBSERVATION], rowI[self.CLICKED], rowI[self.TIMESTAMP]))
+            result.append((indexI, rowI[self.USER_ID], rowI[self.ITEM_ID], rowI[self.POSITION], rowI[self.CLICKED], rowI[self.TIMESTAMP]))
 
         return result
 
@@ -70,8 +69,7 @@ class HistoryHierDF(AHistory):
         indexI:int
         rowI:DataFrame
         for indexI, rowI in uiDF.tail(limit).iterrows():
-            result.append((indexI, userID, rowI[self.ITEM_ID], rowI[self.POSITION], rowI[self.OBSERVATION],
-                           rowI[self.CLICKED], rowI[self.TIMESTAMP]))
+            result.append((indexI, userID, rowI[self.ITEM_ID], rowI[self.POSITION], rowI[self.CLICKED], rowI[self.TIMESTAMP]))
 
         return result
 

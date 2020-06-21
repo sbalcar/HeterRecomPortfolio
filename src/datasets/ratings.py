@@ -3,8 +3,6 @@
 import csv
 from typing import List
 
-from datasets.rating import Rating
-
 from pandas.core.frame import DataFrame #class
 
 import pandas as pd
@@ -47,23 +45,3 @@ class Ratings:
     ratingsDF.columns = [Ratings.COL_USERID, Ratings.COL_MOVIEID, Ratings.COL_RATING, Ratings.COL_TIMESTAMP]
 
     return ratingsDF
-
-
-  @staticmethod
-  def __readFromFile(fileName:str):
-
-      ratings:list[Rating] = []
-
-      f = open(fileName, "r")
-      for lineStrI in f:
-          print(lineStrI)
-
-          lineI = lineStrI.split()
-          userIdI = int(lineI[0])
-          itemIdI = int(lineI[1])
-          ratingI = float(lineI[2])
-          timestampI = int(lineI[3])
-
-          ratings.append(Rating(userIdI, itemIdI, ratingI, timestampI))
-
-      return Ratings(ratings)
