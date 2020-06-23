@@ -13,7 +13,7 @@ from portfolioDescription.aPortfolioDescription import APortfolioDescription #cl
 from input.batchML1m.aConfig import ml1m #function
 
 
-def jobSingleW2vPosnegWindow3(divisionDatasetPercentualSize:int, repetition:int):
+def jobSingleW2vPosnegWindow3(batchID:str, divisionDatasetPercentualSize:int, uBehaviour:str, repetition:int):
 
         d = InputsML1MDefinition
 
@@ -21,4 +21,4 @@ def jobSingleW2vPosnegWindow3(divisionDatasetPercentualSize:int, repetition:int)
         models:List[DataFrame] = [d.modelW2vPosnegWindow3DF]
         evalTools:List = [EToolSingleMethod]
 
-        ml1m("", divisionDatasetPercentualSize, repetition, pDescs, models, evalTools)
+        ml1m(batchID, divisionDatasetPercentualSize, uBehaviour, repetition, pDescs, models, evalTools)

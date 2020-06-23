@@ -13,7 +13,7 @@ from portfolioDescription.aPortfolioDescription import APortfolioDescription #cl
 from input.batchML1m.aConfig import ml1m #function
 
 
-def jobSingleML1mCBmax(divisionDatasetPercentualSize:int, repetition:int):
+def jobSingleML1mCBmax(batchID:str, divisionDatasetPercentualSize:int, uBehaviour:str, repetition:int):
 
         d = InputsML1MDefinition
 
@@ -21,4 +21,4 @@ def jobSingleML1mCBmax(divisionDatasetPercentualSize:int, repetition:int):
         models:List[DataFrame] = [d.modelCBmaxDF]
         evalTools:List = [EToolSingleMethod]
 
-        ml1m("", divisionDatasetPercentualSize, repetition, pDescs, models, evalTools)
+        ml1m(batchID, divisionDatasetPercentualSize, uBehaviour, repetition, pDescs, models, evalTools)

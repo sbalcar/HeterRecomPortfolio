@@ -37,7 +37,8 @@ class SimulationPortfolioToUser:
     ARG_NUMBER_OF_RECOMM_ITEMS:str = "numberOfRecomItems"
     ARG_NUMBER_OF_AGGR_ITEMS:str = "numberOfAggrItems"
 
-    ARG_DIV_DATASET_PERC_SIZE = "divisionDatasetPercentualSizes"
+    ARG_DIV_DATASET_PERC_SIZE:str = "divisionDatasetPercentualSizes"
+    AGR_USER_BEHAVIOUR_DFINDEX:str = "userBehaviourDFIndex"
 
     def __init__(self, batchID:str, ratingsDF:DataFrame, usersDF:DataFrame, itemsDF:DataFrame,
                  behaviourDF:DataFrame, argumentsDict:dict):
@@ -69,6 +70,8 @@ class SimulationPortfolioToUser:
         self._numberOfAggrItems:int = argumentsDict[self.ARG_NUMBER_OF_AGGR_ITEMS]
 
         self._divisionDatasetPercentualSize:int = argumentsDict[self.ARG_DIV_DATASET_PERC_SIZE]
+        self._uBehaviourDFIndex:str = argumentsDict[self.AGR_USER_BEHAVIOUR_DFINDEX]
+
 
     def run(self, portfolioDescs:List[APortfolioDescription], portFolioModels:List[pd.DataFrame],
             evaluatonTools:List, histories:List[AHistory]):
@@ -162,7 +165,7 @@ class SimulationPortfolioToUser:
         evalFileName:str = Configuration.resultsDirectory + os.sep + self._batchID + os.sep + "evaluation.txt"
         evalFile = open(evalFileName, "a")
         evalFile.write("ids: " + str([portDescI.getPortfolioID() for portDescI in portfolioDescs]) + "\n")
-        evalFile.write(str(evaluations))
+        evalFile.write(str(evaluations) + "\n\n")
         evalFile.close()
 
         return evaluations
@@ -290,7 +293,7 @@ class SimulationPortfolioToUser:
 
         isUser:List[bool] = self._behaviourDF[Behaviours.COL_USERID] == userID
         isItem:List[bool] = self._behaviourDF[Behaviours.COL_MOVIEID] == currentItemID
-        uObservation:List[bool] = self._behaviourDF[(isUser) & (isItem)][Behaviours.COL_LINEAR0109].iloc[0]
+        uObservation:List[bool] = self._behaviourDF[(isUser) & (isItem)][self._uBehaviourDFIndex].iloc[0]
         #print(uObservation)
 
         portfolioI:Portfolio1Aggr

@@ -27,34 +27,49 @@ from datasets.behaviours import Behaviours #class
 def generateBatches():
    print("Generate Batches")
 
-   __generateBatch(90, 1)
-   __generateBatch(90, 3)
-   __generateBatch(90, 5)
-   __generateBatch(90, 8)
+   uBehaviours:List[str] = [Behaviours.COL_LINEAR0109, Behaviours.COL_STATIC08]
+
+   uBehaviourI:str
+   for uBehaviourI in uBehaviours:
+      __generateBatch(90, uBehaviourI, 1)
+      __generateBatch(90, uBehaviourI, 3)
+      __generateBatch(90, uBehaviourI, 5)
+      __generateBatch(90, uBehaviourI, 8)
 
 
 
-def __generateBatch(divisionDatasetPercentualSize:int, repetition:int):
+def __generateBatch(divisionDatasetPercentualSize:int, uBehaviour:str, repetition:int):
 
-   batchDir:str = ".." + os.sep + "batches" + os.sep + "ml1mDiv" + str(divisionDatasetPercentualSize) + "R" + str(repetition)
+   batchID:str = "ml1mDiv" + str(divisionDatasetPercentualSize) + "U" + uBehaviour + "R" + str(repetition)
+   batchDir:str = ".." + os.sep + "batches" + os.sep + batchID
    os.mkdir(batchDir)
 
-   __writeToFile(batchDir + os.sep + "banditTS.job", "jobBanditTS(" + str(divisionDatasetPercentualSize) + ", " + str(repetition) + ")")
-   __writeToFile(batchDir + os.sep + "dHontFixed.job", "jobDHontFixed(" + str(divisionDatasetPercentualSize) + ", " + str(repetition) + ")")
-   __writeToFile(batchDir + os.sep + "dHontRoulette.job", "jobDHontRoulette(" + str(divisionDatasetPercentualSize) + ", " + str(repetition) + ")")
-   __writeToFile(batchDir + os.sep + "dHontRoulette3.job", "jobDHontRoulette3(" + str(divisionDatasetPercentualSize) + ", " + str(repetition) + ")")
+   __writeToFile(batchDir + os.sep + "banditTS.job", "jobBanditTS('" + batchID + "', " + str(divisionDatasetPercentualSize) + ", '" + uBehaviour + "', " + str(repetition) + ")")
+   __writeToFile(batchDir + os.sep + "dHontFixed.job", "jobDHontFixed('" + batchID + "', " + str(divisionDatasetPercentualSize) + ", '" + uBehaviour + "', " + str(repetition) + ")")
+   __writeToFile(batchDir + os.sep + "dHontRoulette.job", "jobDHontRoulette('" + batchID + "', " + str(divisionDatasetPercentualSize) + ", '" + uBehaviour + "', " + str(repetition) + ")")
+   __writeToFile(batchDir + os.sep + "dHontRoulette3.job", "jobDHontRoulette3('" + batchID + "', " + str(divisionDatasetPercentualSize) + ", '" + uBehaviour + "', " + str(repetition) + ")")
 
-   __writeToFile(batchDir + os.sep + "negDHontOLin0802HLin1002.job", "jobNegDHontOLin0802HLin1002(" + str(divisionDatasetPercentualSize) + ", " + str(repetition) + ")")
-   __writeToFile(batchDir + os.sep + "negDHontOStat08HLin1002.job", "jobNegDHontOStat08HLin1002(" + str(divisionDatasetPercentualSize) + ", " + str(repetition) + ")")
+   __writeToFile(batchDir + os.sep + "negDHontOLin0802HLin1002.job", "jobNegDHontOLin0802HLin1002('" + batchID + "', " + str(divisionDatasetPercentualSize) + ", '" + uBehaviour + "', " + str(repetition) + ")")
+   __writeToFile(batchDir + os.sep + "negDHontOStat08HLin1002.job", "jobNegDHontOStat08HLin1002('" + batchID + "', " + str(divisionDatasetPercentualSize) + ", '" + uBehaviour + "', " + str(repetition) + ")")
 
-   __writeToFile(batchDir + os.sep + "singleML1mCBmax.job", "jobSingleML1mCBmax(" + str(divisionDatasetPercentualSize) + ", " + str(repetition) + ")")
-   __writeToFile(batchDir + os.sep + "singleML1mCBwindow10.job", "jobSingleML1mCBwindow10(" + str(divisionDatasetPercentualSize) + ", " + str(repetition) + ")")
-   __writeToFile(batchDir + os.sep + "singleML1mTheMostPopular.job", "jobSingleML1mTheMostPopular(" + str(divisionDatasetPercentualSize) + ", " + str(repetition) + ")")
-   __writeToFile(batchDir + os.sep + "singleW2vPosnegMean.job", "jobSingleW2vPosnegMean(" + str(divisionDatasetPercentualSize) + ", " + str(repetition) + ")")
-   __writeToFile(batchDir + os.sep + "singleW2vPosnegWindow3.job", "jobSingleW2vPosnegWindow3(" + str(divisionDatasetPercentualSize) + ", " + str(repetition) + ")")
+   __writeToFile(batchDir + os.sep + "singleML1mCBmax.job", "jobSingleML1mCBmax('" + batchID + "', " + str(divisionDatasetPercentualSize) + ", '" + uBehaviour + "', " + str(repetition) + ")")
+   __writeToFile(batchDir + os.sep + "singleML1mCBwindow10.job", "jobSingleML1mCBwindow10('" + batchID + "', " + str(divisionDatasetPercentualSize) + ", '" + uBehaviour + "', " + str(repetition) + ")")
+   __writeToFile(batchDir + os.sep + "singleML1mTheMostPopular.job", "jobSingleML1mTheMostPopular('" + batchID + "', " + str(divisionDatasetPercentualSize) + ", '" + uBehaviour + "', " + str(repetition) + ")")
+   __writeToFile(batchDir + os.sep + "singleW2vPosnegMean.job", "jobSingleW2vPosnegMean('" + batchID + "', " + str(divisionDatasetPercentualSize) + ", '" + uBehaviour + "', " + str(repetition) + ")")
+   __writeToFile(batchDir + os.sep + "singleW2vPosnegWindow3.job", "jobSingleW2vPosnegWindow3('" + batchID + "', " + str(divisionDatasetPercentualSize) + ", '" + uBehaviour + "', " + str(repetition) + ")")
 
 
 def __writeToFile(fileName:str, text:str):
    f = open(fileName, "w")
    f.write(text)
    f.close()
+
+
+
+if __name__ == "__main__":
+
+  np.random.seed(42)
+  random.seed(42)
+
+  os.chdir("..")
+  generateBatches()

@@ -13,7 +13,7 @@ from portfolioDescription.aPortfolioDescription import APortfolioDescription #cl
 from input.batchML1m.aConfig import ml1m #function
 
 
-def jobNegDHontOLin0802HLin1002(divisionDatasetPercentualSize:int, repetition:int):
+def jobNegDHontOLin0802HLin1002(batchID:str, divisionDatasetPercentualSize:int, uBehaviour:str, repetition:int):
 
         d = InputsML1MDefinition
 
@@ -21,4 +21,4 @@ def jobNegDHontOLin0802HLin1002(divisionDatasetPercentualSize:int, repetition:in
         models:List[DataFrame] = [d.modelNegDHontOLin0802HLin1002DF]
         evalTools:List = [EvalToolDHont]
 
-        ml1m("", divisionDatasetPercentualSize, repetition, pDescs, models, evalTools)
+        ml1m(batchID, divisionDatasetPercentualSize, uBehaviour, repetition, pDescs, models, evalTools)

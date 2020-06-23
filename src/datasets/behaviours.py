@@ -21,7 +21,7 @@ class Behaviours:
   COL_USERID = Ratings.COL_USERID
   COL_MOVIEID = Ratings.COL_MOVIEID
 
-  COL_LINEAR0109 = 'linear01-09'
+  COL_LINEAR0109 = 'linear0109'
   COL_STATIC08 = 'static08'
 
 
