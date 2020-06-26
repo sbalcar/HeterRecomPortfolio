@@ -293,8 +293,11 @@ class SimulationPortfolioToUser:
 
         isUser:List[bool] = self._behaviourDF[Behaviours.COL_USERID] == userID
         isItem:List[bool] = self._behaviourDF[Behaviours.COL_MOVIEID] == currentItemID
-        uObservation:List[bool] = self._behaviourDF[(isUser) & (isItem)][self._uBehaviourDFIndex].iloc[0]
-        #print(uObservation)
+        uObservationUserItem:List[bool] = self._behaviourDF[(isUser) & (isItem)][self._uBehaviourDFIndex]
+        if uObservationUserItem.shape[0] != 1:
+            raise ValueError("Error")
+        uObservation: List[bool] = uObservationUserItem.iloc[0]
+        print("uObservation: " + str(uObservation))
 
         portfolioI:Portfolio1Aggr
         portFolioModelI:pd.DataFrame
@@ -326,13 +329,21 @@ class SimulationPortfolioToUser:
         clickedItemIDs:List[int] = []
         for candidateToClickI in candidatesToClick:
             indexI:int = rItemIDs.index(candidateToClickI)
+            print("indexI: " + str(indexI))
             wasCandidateObservedI:bool = uObservation[indexI]
+            print("wasCandidateObservedI: " + str(wasCandidateObservedI))
             if wasCandidateObservedI:
                 clickedItemIDs.append(candidateToClickI)
 
+        print("nextItemIDs: " + str(nextItemIDs))
+        print("rItemIDs: " + str(rItemIDs))
+        print("uObservation: " + str(uObservation))
+        print("candidatesToClick: " + str(candidatesToClick))
+        print("clickedItemIDs: " + str(clickedItemIDs))
+
 
         for clickedItemIdI in clickedItemIDs:
-            evaluatonTool.click(rItemIDsWithResponsibility, candidateToClickI, portfolioModel, evaluation)
+            evaluatonTool.click(rItemIDsWithResponsibility, clickedItemIdI, portfolioModel, evaluation)
 
             if not clickedItemIdI in self._clickedItems[userID]:
                 self._clickedItems[userID].append(clickedItemIdI)
@@ -343,9 +354,10 @@ class SimulationPortfolioToUser:
             self.portModelTimeEvolutionFiles[portId].write(str(portfolioModel) + "\n\n")
 
         # store history of recommendations to file
-        self.historyOfRecommendationFiles[portfolioDesc.getPortfolioID()].write(str(userID) + "\n")
-        self.historyOfRecommendationFiles[portfolioDesc.getPortfolioID()].write(str(rItemIDs) + "\n")
-        self.historyOfRecommendationFiles[portfolioDesc.getPortfolioID()].write(str(clickedItemIDs) + "\n\n")
+        self.historyOfRecommendationFiles[portfolioDesc.getPortfolioID()].write("userID: " + str(userID) + "\n")
+        self.historyOfRecommendationFiles[portfolioDesc.getPortfolioID()].write("rItemIDs: " + str(rItemIDs) + "\n")
+        self.historyOfRecommendationFiles[portfolioDesc.getPortfolioID()].write("uObservation: " + str(uObservation) + "\n")
+        self.historyOfRecommendationFiles[portfolioDesc.getPortfolioID()].write("clickedItemIDs: " + str(clickedItemIDs) + "\n\n")
 
         # save log of history
         history.insertRecomAndClickedItemIDs(userID, rItemIDs, clickedItemIDs)
