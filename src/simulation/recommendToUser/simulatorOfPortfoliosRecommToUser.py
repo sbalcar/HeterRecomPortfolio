@@ -174,21 +174,6 @@ class SimulationPortfolioToUser:
     def __runPortfolioDesc(self, portfolioDescs:List[Portfolio1AggrDescription], portFolioModels:List[DataFrame],
                            evaluatonTools:[AEvalTool], histories:List[AHistory], trainRatingsDF:DataFrame, testRatingsDF:DataFrame):
 
-        #print("Deletion the first 20 ratings of each user from tesing part of ratings")
-        ## deletion the first 20 ratings of each user from ratings
-        #ratingsDel:List[DataFrame] = []
-        #
-        #userIDs:List[int] = list(self._usersDF[Users.COL_USERID])
-        #for userIdI in userIDs:
-        #    ratingsOfUserIDF:DataFrame = testRatingsDF.loc[testRatingsDF[Ratings.COL_USERID] == userIdI]
-        #    ratingsOfUserSortedIDF:DataFrame = ratingsOfUserIDF.sort_values(by=Ratings.COL_TIMESTAMP)
-        #    ratingsDel.append(ratingsOfUserSortedIDF.iloc[20:])
-        #
-        #testRatingsDF = pd.concat(ratingsDel)
-        #testRatingsDF:DataFrame = testRatingsDF.sort_values(by=Ratings.COL_TIMESTAMP)
-
-
-
         portfolios:List[Portfolio1Aggr] = []
 
         portfolioDescI:Portfolio1AggrDescription
@@ -231,10 +216,6 @@ class SimulationPortfolioToUser:
                 self.computationFile.write("PortfolioIds: " + str(portIds) + "\n")
                 self.computationFile.write("Evaluations: " + str(evaluations) + "\n")
                 self.computationFile.flush()
-
-#            if counterI % 1000 == 0:
-#                for historyI in histories:
-#                    historyI.delete(self._repetitionOfRecommendation * self._numberOfItems)
 
             currentItemIdI:int = testRatingsDF.loc[currentIndexDFI][Ratings.COL_MOVIEID]
             currentRatingI:int = testRatingsDF.loc[currentIndexDFI][Ratings.COL_RATING]
@@ -321,17 +302,13 @@ class SimulationPortfolioToUser:
 
         evaluatonTool.displayed(rItemIDsWithResponsibility, portfolioModel, evaluation)
 
-
-        #nextNoClickedItemIDs:List[int] = [nItemIdI for nItemIdI in nextItemIDs if not history.isObjectClicked(userID, nItemIdI)]
         nextNoClickedItemIDs:List[int] = list(set(nextItemIDs) -set(self._clickedItems[userID]))
 
         candidatesToClick:List[int] = list(set(rItemIDs) & set(nextNoClickedItemIDs))
         clickedItemIDs:List[int] = []
         for candidateToClickI in candidatesToClick:
             indexI:int = rItemIDs.index(candidateToClickI)
-            print("indexI: " + str(indexI))
             wasCandidateObservedI:bool = uObservation[indexI]
-            print("wasCandidateObservedI: " + str(wasCandidateObservedI))
             if wasCandidateObservedI:
                 clickedItemIDs.append(candidateToClickI)
 

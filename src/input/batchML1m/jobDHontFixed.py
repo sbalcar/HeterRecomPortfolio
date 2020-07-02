@@ -7,6 +7,7 @@ from pandas.core.frame import DataFrame #class
 from evaluationTool.evalToolDHont import EvalToolDHont #class
 
 from input.inputsML1MDefinition import InputsML1MDefinition #class
+from input.inputsML1MDefinition import Tools #class
 
 from portfolioDescription.aPortfolioDescription import APortfolioDescription #class
 
@@ -18,7 +19,7 @@ def jobDHontFixed(batchID:str, divisionDatasetPercentualSize:int, uBehaviour:str
         d = InputsML1MDefinition
 
         pDescs:List[APortfolioDescription] = [d.pDescDHontFixed]
-        models:List[DataFrame] = [d.modelDHontFixedDF]
+        models:List[DataFrame] = [Tools.createDHontModel(d.pDescDHontFixed.getRecommendersIDs())]
         evalTools:List = [EvalToolDHont]
 
         ml1m(batchID, divisionDatasetPercentualSize, uBehaviour, repetition, pDescs, models, evalTools)

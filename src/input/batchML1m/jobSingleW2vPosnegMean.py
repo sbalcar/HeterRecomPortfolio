@@ -12,13 +12,15 @@ from portfolioDescription.aPortfolioDescription import APortfolioDescription #cl
 
 from input.batchML1m.aConfig import ml1m #function
 
+import pandas as pd
+
 
 def jobSingleW2vPosnegMean(batchID:str, divisionDatasetPercentualSize:int, uBehaviour:str, repetition:int):
 
         d = InputsML1MDefinition
 
         pDescs:List[APortfolioDescription] = [d.pDescW2vPosnegMean]
-        models:List[DataFrame] = [d.modelW2vPosnegMeanDF]
+        models:List[DataFrame] = [pd.DataFrame()]
         evalTools:List = [EToolSingleMethod]
 
         ml1m(batchID, divisionDatasetPercentualSize, uBehaviour, repetition, pDescs, models, evalTools)
