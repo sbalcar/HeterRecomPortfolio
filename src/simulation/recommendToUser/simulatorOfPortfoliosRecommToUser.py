@@ -328,10 +328,12 @@ class SimulationPortfolioToUser:
             print("clickedItems: " + str(self._clickedItems[userID]))
 
             self.portModelTimeEvolutionFiles[portId].write("currentItemID: " + str(currentItemID) + "\n")
+            self.portModelTimeEvolutionFiles[portId].write("userID: " + str(userID) + "\n")
             self.portModelTimeEvolutionFiles[portId].write(str(portfolioModel) + "\n\n")
 
         # store history of recommendations to file
         self.historyOfRecommendationFiles[portfolioDesc.getPortfolioID()].write("userID: " + str(userID) + "\n")
+        self.historyOfRecommendationFiles[portfolioDesc.getPortfolioID()].write("currentItemID: " + str(currentItemID) + "\n")
         self.historyOfRecommendationFiles[portfolioDesc.getPortfolioID()].write("rItemIDs: " + str(rItemIDs) + "\n")
         self.historyOfRecommendationFiles[portfolioDesc.getPortfolioID()].write("uObservation: " + str(uObservation) + "\n")
         self.historyOfRecommendationFiles[portfolioDesc.getPortfolioID()].write("clickedItemIDs: " + str(clickedItemIDs) + "\n\n")

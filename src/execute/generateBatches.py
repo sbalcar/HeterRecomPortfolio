@@ -29,12 +29,13 @@ def generateBatches():
 
    uBehaviours:List[str] = [Behaviours.COL_LINEAR0109, Behaviours.COL_STATIC08]
 
+   repetitions:List[int] = [1, 2, 3, 5, 8]
+
    uBehaviourI:str
+   repetitionI:int
    for uBehaviourI in uBehaviours:
-      __generateBatch(90, uBehaviourI, 1)
-      __generateBatch(90, uBehaviourI, 3)
-      __generateBatch(90, uBehaviourI, 5)
-      __generateBatch(90, uBehaviourI, 8)
+      for repetitionI in repetitions:
+         __generateBatch(90, uBehaviourI, repetitionI)
 
 
 
