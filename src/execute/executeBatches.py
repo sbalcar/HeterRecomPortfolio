@@ -36,7 +36,8 @@ def executeBatches():
   for batchIdI in batches:
       print(batchIdI)
 
-      jobs:List[str] = [batchIdI + os.sep + f.name for f in os.scandir(batchesDir + os.sep + batchIdI) if f.is_file()]
+      jobs:List[str] = [batchIdI + os.sep + f.name for f in os.scandir(batchesDir + os.sep + batchIdI)
+                        if f.is_file() and not f.name.startswith(".")]
       for jobI in jobs:
           print(jobI)
 
