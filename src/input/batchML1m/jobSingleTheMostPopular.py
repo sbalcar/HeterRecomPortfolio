@@ -18,7 +18,7 @@ import pandas as pd
 
 def jobSingleML1mTheMostPopular(batchID:str, divisionDatasetPercentualSize:int, uBehaviour:str, repetition:int):
 
-        d = InputsML1MDefinition
+        d = InputsML1MDefinition()
 
         pDescs:List[APortfolioDescription] = [d.pDescTheMostPopular]
         models:List[DataFrame] = [pd.DataFrame()]

@@ -16,7 +16,7 @@ from input.batchML1m.aConfig import ml1m #function
 
 def jobBanditTS(batchID:str, divisionDatasetPercentualSize:int, uBehaviour:str, repetition:int):
 
-        d = InputsML1MDefinition
+        d = InputsML1MDefinition()
 
         pDescs:List[APortfolioDescription] = [d.pDescBanditTS]
         models:List[DataFrame] = [Tools.createBanditModel(d.pDescBanditTS.getRecommendersIDs())]

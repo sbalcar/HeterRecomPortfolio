@@ -48,8 +48,8 @@ from aggregation.toolsDHontNF.penalizationOfResultsByNegImpFeedback.penalUsingRe
 class Tools:
 
     def createDHontModel(recommendersIDs: List[str]):
-        modelDHontData: List[List] = [[rIdI, 1] for rIdI in recommendersIDs]
-        modelDHontDF: DataFrame = pd.DataFrame(modelDHontData, columns=["methodID", "votes"])
+        modelDHontData:List[List] = [[rIdI, 1] for rIdI in recommendersIDs]
+        modelDHontDF:DataFrame = pd.DataFrame(modelDHontData, columns=["methodID", "votes"])
         modelDHontDF.set_index("methodID", inplace=True)
         EvalToolDHont.linearNormalizingPortfolioModelDHont(modelDHontDF)
         return modelDHontDF
@@ -62,119 +62,118 @@ class Tools:
 
 class InputsML1MDefinition:
 
-    # dataset reading
-    ratingsDF:DataFrame = Ratings.readFromFileMl1m()
-    usersDF:DataFrame = Users.readFromFileMl1m()
-    itemsDF:DataFrame = Items.readFromFileMl1m()
-    behavioursDF:DataFrame = Behaviours.readFromFileMl1m()
+    def __init__(self):
 
-    numberOfRecommItems:int = 100
-    numberOfAggrItems:int = 20
+        # dataset reading
+        self.ratingsDF:DataFrame = Ratings.readFromFileMl1m()
+        self.usersDF:DataFrame = Users.readFromFileMl1m()
+        self.itemsDF:DataFrame = Items.readFromFileMl1m()
+        self.behavioursDF:DataFrame = Behaviours.readFromFileMl1m()
 
-    uBehaviourDesc:UserBehaviourDescription = UserBehaviourDescription(observationalLinearProbabilityFnc, [0.1, 0.9])
-    uBehaviourDesc:UserBehaviourDescription = UserBehaviourDescription(observationalStaticProbabilityFnc, [0.8])
+        self.numberOfRecommItems:int = 100
+        self.numberOfAggrItems:int = 20
 
-    # portfolio definiton
-    rDescTheMostPopular:RecommenderDescription = RecommenderDescription(RecommenderTheMostPopular,
-                            {})
+        # portfolio definiton
+        self.rDescTheMostPopular:RecommenderDescription = RecommenderDescription(RecommenderTheMostPopular,
+                                {})
 
-    rDescCBmean:RecommenderDescription = RecommenderDescription(RecommenderCosineCB,
-                            {RecommenderCosineCB.ARG_CB_DATA_PATH:Configuration.cbDataFileWithPathTFIDF,
-                             RecommenderCosineCB.ARG_USER_PROFILE_STRATEGY:"mean"})
-    rDescCBwindow3:RecommenderDescription = RecommenderDescription(RecommenderCosineCB,
-                            {RecommenderCosineCB.ARG_CB_DATA_PATH:Configuration.cbDataFileWithPathTFIDF,
-                             RecommenderCosineCB.ARG_USER_PROFILE_STRATEGY:"window3"})
+        self.rDescCBmean:RecommenderDescription = RecommenderDescription(RecommenderCosineCB,
+                                {RecommenderCosineCB.ARG_CB_DATA_PATH:Configuration.cbDataFileWithPathTFIDF,
+                                 RecommenderCosineCB.ARG_USER_PROFILE_STRATEGY:"mean"})
+        self.rDescCBwindow3:RecommenderDescription = RecommenderDescription(RecommenderCosineCB,
+                                {RecommenderCosineCB.ARG_CB_DATA_PATH:Configuration.cbDataFileWithPathTFIDF,
+                                 RecommenderCosineCB.ARG_USER_PROFILE_STRATEGY:"window3"})
 
-    rDescW2vPositiveMax:RecommenderDescription = RecommenderDescription(RecommenderW2V,
-                            {RecommenderW2V.ARG_TRAIN_VARIANT:"positive",
-                             RecommenderW2V.ARG_USER_PROFILE_STRATEGY:"max"})
-    rDescW2vPositiveWindow10:RecommenderDescription = RecommenderDescription(RecommenderW2V,
-                            {RecommenderW2V.ARG_TRAIN_VARIANT:"positive",
-                             RecommenderW2V.ARG_USER_PROFILE_STRATEGY:"window10"})
-    rDescW2vPosnegMean:RecommenderDescription = RecommenderDescription(RecommenderW2V,
-                            {RecommenderW2V.ARG_TRAIN_VARIANT:"posneg",
-                             RecommenderW2V.ARG_USER_PROFILE_STRATEGY:"mean"})
-    rDescW2vPosnegWindow3:RecommenderDescription = RecommenderDescription(RecommenderW2V,
-                                                                          {RecommenderW2V.ARG_TRAIN_VARIANT:"posneg",
-                             RecommenderW2V.ARG_USER_PROFILE_STRATEGY:"window3"})
+        self.rDescW2vPositiveMax:RecommenderDescription = RecommenderDescription(RecommenderW2V,
+                                {RecommenderW2V.ARG_TRAIN_VARIANT:"positive",
+                                 RecommenderW2V.ARG_USER_PROFILE_STRATEGY:"max"})
+        self.rDescW2vPositiveWindow10:RecommenderDescription = RecommenderDescription(RecommenderW2V,
+                                {RecommenderW2V.ARG_TRAIN_VARIANT:"positive",
+                                 RecommenderW2V.ARG_USER_PROFILE_STRATEGY:"window10"})
+        self.rDescW2vPosnegMean:RecommenderDescription = RecommenderDescription(RecommenderW2V,
+                                {RecommenderW2V.ARG_TRAIN_VARIANT:"posneg",
+                                 RecommenderW2V.ARG_USER_PROFILE_STRATEGY:"mean"})
+        self.rDescW2vPosnegWindow3:RecommenderDescription = RecommenderDescription(RecommenderW2V,
+                                {RecommenderW2V.ARG_TRAIN_VARIANT:"posneg",
+                                 RecommenderW2V.ARG_USER_PROFILE_STRATEGY:"window3"})
 
-    rIDsCB:List[str] = ["RecomCBmean", "RecomCBwindow3"]
-    rDescsCB:List[RecommenderDescription] = [rDescCBmean, rDescCBwindow3]
+        rIDsCB:List[str] = ["RecomCBmean", "RecomCBwindow3"]
+        rDescsCB:List[RecommenderDescription] = [self.rDescCBmean, self.rDescCBwindow3]
 
-    #rIDsW2V:List[str] = ["RecomW2vPositiveMax", "RecomW2vPositiveWindow10", "RecomW2vPosnegMean", "RecomW2vPosnegWindow10"]
-    #rDescsW2V:List[RecommenderDescription] = [rDescW2vPositiveMax, rDescW2vPositiveWindow10, rDescW2vPosnegMean, rDescW2vPosnegWindow10]
-    #rIDsW2V:List[str] = ["RecomW2vPositiveMax", "RecomW2vPosnegMax", "RecomW2vPosnegWindow10"]
-    #rDescsW2V:List[RecommenderDescription] = [rDescW2vPosnegMax, rDescW2vPosnegMax, rDescW2vPosnegWindow10]
-    rIDsW2V:List[str] = ["RecomW2vPosnegMax", "RecomW2vPosnegWindow3"]
-    rDescsW2V:List[RecommenderDescription] = [rDescW2vPosnegMean, rDescW2vPosnegWindow3]
-
-
-    rIDs:List[str] = ["RecomTheMostPopular"] + rIDsCB + rIDsW2V
-    rDescs:List[RecommenderDescription] = [rDescTheMostPopular] + rDescsCB + rDescsW2V
+        #rIDsW2V:List[str] = ["RecomW2vPositiveMax", "RecomW2vPositiveWindow10", "RecomW2vPosnegMean", "RecomW2vPosnegWindow10"]
+        #rDescsW2V:List[RecommenderDescription] = [rDescW2vPositiveMax, rDescW2vPositiveWindow10, rDescW2vPosnegMean, rDescW2vPosnegWindow10]
+        #rIDsW2V:List[str] = ["RecomW2vPositiveMax", "RecomW2vPosnegMax", "RecomW2vPosnegWindow10"]
+        #rDescsW2V:List[RecommenderDescription] = [rDescW2vPosnegMax, rDescW2vPosnegMax, rDescW2vPosnegWindow10]
+        rIDsW2V:List[str] = ["RecomW2vPosnegMax", "RecomW2vPosnegWindow3"]
+        rDescsW2V:List[RecommenderDescription] = [self.rDescW2vPosnegMean, self.rDescW2vPosnegWindow3]
 
 
-    aDescBanditTS:AggregationDescription = AggregationDescription(AggrBanditTS,
-                            {AggrBanditTS.ARG_SELECTORFNC:(AggrBanditTS.selectorOfRouletteWheelRatedItem,[])})
-    aDescDHontFixed:AggregationDescription = AggregationDescription(AggrDHont,
-                            {AggrDHont.ARG_SELECTORFNC:(AggrDHont.selectorOfTheMostVotedItem,[])})
-    aDescDHontRoulette:AggregationDescription = AggregationDescription(AggrDHont,
-                            {AggrDHont.ARG_SELECTORFNC:(AggrDHont.selectorOfRouletteWheelRatedItem,[])})
-    aDescDHontRoulette3:AggregationDescription = AggregationDescription(AggrDHont,
-                            {AggrDHont.ARG_SELECTORFNC:(AggrDHont.selectorOfRouletteWheelExpRatedItem,[3])})
+        self.rIDs:List[str] = ["RecomTheMostPopular"] + rIDsCB + rIDsW2V
+        self.rDescs:List[RecommenderDescription] = [self.rDescTheMostPopular] + rDescsCB + rDescsW2V
 
 
-    _penaltyToolOStat08HLin1002:APenalization = PenalUsingReduceRelevance(penaltyStatic, [1.0], penaltyLinear, [1.0, 0.2, 100])
-    aDescNegDHontOStat08HLin1002:AggregationDescription = AggregationDescription(AggrDHontNegativeImplFeedback, {
-                            AggrDHontNegativeImplFeedback.ARG_SELECTORFNC:(AggrDHont.selectorOfTheMostVotedItem,[]),
-                            AggrDHontNegativeImplFeedback.ARG_PENALTY_TOOL:_penaltyToolOStat08HLin1002})
-
-    _penaltyToolOLin0802HLin1002:APenalization = PenalUsingReduceRelevance(penaltyLinear, [0.8, 0.2, numberOfAggrItems], penaltyLinear, [1.0, 0.2, 100])
-    aDescNegDHontOLin0802HLin1002:AggregationDescription = AggregationDescription(AggrDHontNegativeImplFeedback, {
-                            AggrDHontNegativeImplFeedback.ARG_SELECTORFNC:(AggrDHont.selectorOfTheMostVotedItem,[]),
-                            AggrDHontNegativeImplFeedback.ARG_PENALTY_TOOL:_penaltyToolOLin0802HLin1002})
-
-
-    # Single method portfolios
-    # TheMostPopular Portfolio description
-    pDescTheMostPopular:APortfolioDescription = Portfolio1MethDescription("SingleTMPopular", "theMostPopular", rDescTheMostPopular)
-
-    # Cosine CB Portfolio description
-    pDescCBmax:APortfolioDescription = Portfolio1MethDescription("CosCBmax", "cosCBmax", rDescCBmean)
-    pDescCBwindow10:APortfolioDescription = Portfolio1MethDescription("CosCBwindow3", "cosCBwindow3", rDescCBwindow3)
-
-    # W2v Portfolio description
-    #pDescW2vPositiveMax:APortfolioDescription = Portfolio1MethDescription("W2vPositiveMax", "w2vPositiveMax", rDescW2vPositiveMax)
-    #pDescW2vPositiveWindow10:APortfolioDescription = Portfolio1MethDescription("W2vPositiveWindow10", "w2vPositiveWindow10", rDescW2vPositiveWindow10)
-    pDescW2vPosnegMean:APortfolioDescription = Portfolio1MethDescription("W2vPosnegMean", "w2vPosnegMean", rDescW2vPosnegMean)
-    pDescW2vPosnegWindow3:APortfolioDescription = Portfolio1MethDescription("W2vPosnegWindow3", "w2vPosnegWindow3", rDescW2vPosnegWindow3)
+        aDescBanditTS:AggregationDescription = AggregationDescription(AggrBanditTS,
+                                {AggrBanditTS.ARG_SELECTORFNC:(AggrBanditTS.selectorOfRouletteWheelRatedItem,[])})
+        aDescDHontFixed:AggregationDescription = AggregationDescription(AggrDHont,
+                                {AggrDHont.ARG_SELECTORFNC:(AggrDHont.selectorOfTheMostVotedItem,[])})
+        aDescDHontRoulette:AggregationDescription = AggregationDescription(AggrDHont,
+                                {AggrDHont.ARG_SELECTORFNC:(AggrDHont.selectorOfRouletteWheelRatedItem,[])})
+        aDescDHontRoulette3:AggregationDescription = AggregationDescription(AggrDHont,
+                                {AggrDHont.ARG_SELECTORFNC:(AggrDHont.selectorOfRouletteWheelExpRatedItem,[3])})
 
 
-    # BanditTS Portfolio description
-    pDescBanditTS:APortfolioDescription = Portfolio1AggrDescription(
-            "BanditTS", rIDs, rDescs, aDescBanditTS)
+        _penaltyToolOStat08HLin1002:APenalization = PenalUsingReduceRelevance(penaltyStatic, [1.0], penaltyLinear, [1.0, 0.2, 100])
+        aDescNegDHontOStat08HLin1002:AggregationDescription = AggregationDescription(AggrDHontNegativeImplFeedback, {
+                                AggrDHontNegativeImplFeedback.ARG_SELECTORFNC:(AggrDHont.selectorOfTheMostVotedItem,[]),
+                                AggrDHontNegativeImplFeedback.ARG_PENALTY_TOOL:_penaltyToolOStat08HLin1002})
+
+        _penaltyToolOLin0802HLin1002:APenalization = PenalUsingReduceRelevance(penaltyLinear, [0.8, 0.2, self.numberOfAggrItems], penaltyLinear, [1.0, 0.2, 100])
+        aDescNegDHontOLin0802HLin1002:AggregationDescription = AggregationDescription(AggrDHontNegativeImplFeedback, {
+                                AggrDHontNegativeImplFeedback.ARG_SELECTORFNC:(AggrDHont.selectorOfTheMostVotedItem,[]),
+                                AggrDHontNegativeImplFeedback.ARG_PENALTY_TOOL:_penaltyToolOLin0802HLin1002})
 
 
-    # DHont Fixed Portfolio description
-    pDescDHontFixed:APortfolioDescription = Portfolio1AggrDescription(
-            "DHontFixed", rIDs, rDescs, aDescDHontFixed)
+        # Single method portfolios
+        # TheMostPopular Portfolio description
+        self.pDescTheMostPopular:APortfolioDescription = Portfolio1MethDescription("SingleTMPopular", "theMostPopular", self.rDescTheMostPopular)
 
-    # DHont Roulette Portfolio description
-    pDescDHontRoulette:APortfolioDescription = Portfolio1AggrDescription(
-            "DHontRoulette", rIDs, rDescs, aDescDHontRoulette)
+        # Cosine CB Portfolio description
+        self.pDescCBmax:APortfolioDescription = Portfolio1MethDescription("CosCBmax", "cosCBmax", self.rDescCBmean)
+        self.pDescCBwindow10:APortfolioDescription = Portfolio1MethDescription("CosCBwindow3", "cosCBwindow3", self.rDescCBwindow3)
 
-    # DHont Roulette3 Portfolio description
-    pDescDHontRoulette3:APortfolioDescription = Portfolio1AggrDescription(
-            "DHontRoulette3", rIDs, rDescs, aDescDHontRoulette3)
-
-
-    # DHont Negative Implicit Feedback Portfolio description
-    pDescNegDHontOStat08HLin1002:Portfolio1AggrDescription = Portfolio1AggrDescription(
-            "NegDHontOStat08HLin1002", rIDs, rDescs, aDescNegDHontOStat08HLin1002)
+        # W2v Portfolio description
+        #pDescW2vPositiveMax:APortfolioDescription = Portfolio1MethDescription("W2vPositiveMax", "w2vPositiveMax", rDescW2vPositiveMax)
+        #pDescW2vPositiveWindow10:APortfolioDescription = Portfolio1MethDescription("W2vPositiveWindow10", "w2vPositiveWindow10", rDescW2vPositiveWindow10)
+        self.pDescW2vPosnegMean:APortfolioDescription = Portfolio1MethDescription("W2vPosnegMean", "w2vPosnegMean", self.rDescW2vPosnegMean)
+        self.pDescW2vPosnegWindow3:APortfolioDescription = Portfolio1MethDescription("W2vPosnegWindow3", "w2vPosnegWindow3", self.rDescW2vPosnegWindow3)
 
 
-    # DHont Negative Implicit Feedback Portfolio description
-    pDescNegDHontOLin0802HLin1002:Portfolio1AggrDescription = Portfolio1AggrDescription(
-            "NegDHontOLin0802HLin1002", rIDs, rDescs, aDescNegDHontOLin0802HLin1002)
+        # BanditTS Portfolio description
+        self.pDescBanditTS:APortfolioDescription = Portfolio1AggrDescription(
+                "BanditTS", self.rIDs, self.rDescs, aDescBanditTS)
+
+
+        # DHont Fixed Portfolio description
+        self.pDescDHontFixed:APortfolioDescription = Portfolio1AggrDescription(
+                "DHontFixed", self.rIDs, self.rDescs, aDescDHontFixed)
+
+        # DHont Roulette Portfolio description
+        self.pDescDHontRoulette:APortfolioDescription = Portfolio1AggrDescription(
+                "DHontRoulette", self.rIDs, self.rDescs, aDescDHontRoulette)
+
+        # DHont Roulette3 Portfolio description
+        self.pDescDHontRoulette3:APortfolioDescription = Portfolio1AggrDescription(
+                "DHontRoulette3", self.rIDs, self.rDescs, aDescDHontRoulette3)
+
+
+        # DHont Negative Implicit Feedback Portfolio description
+        self.pDescNegDHontOStat08HLin1002:Portfolio1AggrDescription = Portfolio1AggrDescription(
+                "NegDHontOStat08HLin1002", self.rIDs, self.rDescs, aDescNegDHontOStat08HLin1002)
+
+
+        # DHont Negative Implicit Feedback Portfolio description
+        self.pDescNegDHontOLin0802HLin1002:Portfolio1AggrDescription = Portfolio1AggrDescription(
+                "NegDHontOLin0802HLin1002", self.rIDs, self.rDescs, aDescNegDHontOLin0802HLin1002)
 
 
 

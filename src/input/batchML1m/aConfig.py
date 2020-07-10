@@ -23,7 +23,7 @@ from history.historyHierDF import HistoryHierDF #class
 def ml1m(batchID:str, divisionDatasetPercentualSize:int, uBehaviour:str, repetition:int,
          pDescs:List[APortfolioDescription], models:List[DataFrame], evalTools:List):
 
-        d = InputsML1MDefinition
+        d = InputsML1MDefinition()
 
         argsSimulationDict:dict = {SimulationPortfolioToUser.ARG_WINDOW_SIZE: 5,
                                    SimulationPortfolioToUser.ARG_REPETITION_OF_RECOMMENDATION: repetition,

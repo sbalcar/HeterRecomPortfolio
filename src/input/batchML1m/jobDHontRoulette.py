@@ -16,7 +16,7 @@ from input.batchML1m.aConfig import ml1m #function
 
 def jobDHontRoulette(batchID:str, divisionDatasetPercentualSize:int, uBehaviour:str, repetition:int):
 
-        d = InputsML1MDefinition
+        d = InputsML1MDefinition()
 
         pDescs:List[APortfolioDescription] = [d.pDescDHontRoulette]
         models:List[DataFrame] = [Tools.createDHontModel(d.pDescDHontRoulette.getRecommendersIDs())]

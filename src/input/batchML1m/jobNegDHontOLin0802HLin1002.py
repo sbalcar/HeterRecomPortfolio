@@ -16,7 +16,7 @@ from input.batchML1m.aConfig import ml1m #function
 
 def jobNegDHontOLin0802HLin1002(batchID:str, divisionDatasetPercentualSize:int, uBehaviour:str, repetition:int):
 
-        d = InputsML1MDefinition
+        d = InputsML1MDefinition()
 
         pDescs:List[APortfolioDescription] = [d.pDescNegDHontOLin0802HLin1002]
         models:List[DataFrame] = [Tools.createDHontModel(d.pDescNegDHontOStat08HLin1002.getRecommendersIDs())]

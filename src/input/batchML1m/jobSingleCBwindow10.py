@@ -17,7 +17,7 @@ import pandas as pd
 
 def jobSingleML1mCBwindow10(batchID:str, divisionDatasetPercentualSize:int, uBehaviour:str, repetition:int):
 
-        d = InputsML1MDefinition
+        d = InputsML1MDefinition()
 
         pDescs:List[APortfolioDescription] = [d.pDescCBwindow10]
         models:List[DataFrame] = [pd.DataFrame()]

@@ -19,7 +19,7 @@ import pandas as pd
 
 def jobSingleW2vPosnegWindow3(batchID:str, divisionDatasetPercentualSize:int, uBehaviour:str, repetition:int):
 
-        d = InputsML1MDefinition
+        d = InputsML1MDefinition()
 
         pDescs:List[APortfolioDescription] = [d.pDescW2vPosnegWindow3]
         models:List[DataFrame] = [pd.DataFrame()]

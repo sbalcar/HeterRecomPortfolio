@@ -17,7 +17,7 @@ import pandas as pd
 
 def jobSingleW2vPosnegMean(batchID:str, divisionDatasetPercentualSize:int, uBehaviour:str, repetition:int):
 
-        d = InputsML1MDefinition
+        d = InputsML1MDefinition()
 
         pDescs:List[APortfolioDescription] = [d.pDescW2vPosnegMean]
         models:List[DataFrame] = [pd.DataFrame()]
