@@ -81,10 +81,8 @@ class Behaviours:
                                                  axis=1, keys=[Behaviours.COL_USERID, Behaviours.COL_MOVIEID,
                                                  Behaviours.COL_STATIC08, Behaviours.COL_LINEAR0109])
 
-    behavioursFile2: str = ".." + os.sep + "datasets" + os.sep + "ml-1m" + os.sep + "behaviours2.dat"
-    behavioursConvertedDF.to_csv(behavioursFile2, sep='\t', index=False)
 
-    return behavioursDF
+    return behavioursConvertedDF
 
   @staticmethod
   def readFromFile10M100K():
