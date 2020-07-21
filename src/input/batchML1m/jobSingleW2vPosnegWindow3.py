@@ -19,10 +19,10 @@ import pandas as pd
 
 def jobSingleW2vPosnegWindow3(batchID:str, divisionDatasetPercentualSize:int, uBehaviour:str, repetition:int):
 
-        d = InputsML1MDefinition()
+        d = InputsML1MDefinition(divisionDatasetPercentualSize)
 
         pDescs:List[APortfolioDescription] = [d.pDescW2vPosnegWindow3]
         models:List[DataFrame] = [pd.DataFrame()]
         evalTools:List = [EToolSingleMethod]
 
-        ml1m(batchID, divisionDatasetPercentualSize, uBehaviour, repetition, pDescs, models, evalTools)
+        ml1m(batchID, uBehaviour, repetition, d, pDescs, models, evalTools)

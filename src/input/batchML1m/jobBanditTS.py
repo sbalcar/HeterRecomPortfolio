@@ -16,10 +16,10 @@ from input.batchML1m.aConfig import ml1m #function
 
 def jobBanditTS(batchID:str, divisionDatasetPercentualSize:int, uBehaviour:str, repetition:int):
 
-        d = InputsML1MDefinition()
+        d = InputsML1MDefinition(divisionDatasetPercentualSize)
 
         pDescs:List[APortfolioDescription] = [d.pDescBanditTS]
         models:List[DataFrame] = [Tools.createBanditModel(d.pDescBanditTS.getRecommendersIDs())]
         evalTools:List = [EvalToolBanditTS]
 
-        ml1m(batchID, divisionDatasetPercentualSize, uBehaviour, repetition, pDescs, models, evalTools)
+        ml1m(batchID, uBehaviour, repetition, d, pDescs, models, evalTools)

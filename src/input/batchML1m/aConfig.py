@@ -20,16 +20,14 @@ from history.aHistory import AHistory #class
 from history.historyHierDF import HistoryHierDF #class
 
 
-def ml1m(batchID:str, divisionDatasetPercentualSize:int, uBehaviour:str, repetition:int,
+def ml1m(batchID:str, uBehaviour:str, repetition:int, d:InputsML1MDefinition,
          pDescs:List[APortfolioDescription], models:List[DataFrame], evalTools:List):
-
-        d = InputsML1MDefinition()
 
         argsSimulationDict:dict = {SimulationPortfolioToUser.ARG_WINDOW_SIZE: 5,
                                    SimulationPortfolioToUser.ARG_REPETITION_OF_RECOMMENDATION: repetition,
                                    SimulationPortfolioToUser.ARG_NUMBER_OF_RECOMM_ITEMS: d.numberOfRecommItems,
                                    SimulationPortfolioToUser.ARG_NUMBER_OF_AGGR_ITEMS: d.numberOfAggrItems,
-                                   SimulationPortfolioToUser.ARG_DIV_DATASET_PERC_SIZE: divisionDatasetPercentualSize,
+                                   SimulationPortfolioToUser.ARG_DIV_DATASET_PERC_SIZE: d.divisionDatasetPercentualSize,
                                    SimulationPortfolioToUser.AGR_USER_BEHAVIOUR_DFINDEX: uBehaviour}
 
         # simulation of portfolio

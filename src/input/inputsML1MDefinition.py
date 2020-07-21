@@ -62,7 +62,11 @@ class Tools:
 
 class InputsML1MDefinition:
 
-    def __init__(self):
+    def __init__(self, divisionDatasetPercentualSize:int):
+
+        self.divisionDatasetPercentualSize = divisionDatasetPercentualSize
+
+        self.datasetID:str = "ml1m" + "Div" + str(divisionDatasetPercentualSize)
 
         # dataset reading
         self.ratingsDF:DataFrame = Ratings.readFromFileMl1m()
@@ -86,16 +90,20 @@ class InputsML1MDefinition:
 
         self.rDescW2vPositiveMax:RecommenderDescription = RecommenderDescription(RecommenderW2V,
                                 {RecommenderW2V.ARG_TRAIN_VARIANT:"positive",
-                                 RecommenderW2V.ARG_USER_PROFILE_STRATEGY:"max"})
+                                 RecommenderW2V.ARG_USER_PROFILE_STRATEGY:"max",
+                                 RecommenderW2V.ARG_DATASET_ID: self.datasetID})
         self.rDescW2vPositiveWindow10:RecommenderDescription = RecommenderDescription(RecommenderW2V,
                                 {RecommenderW2V.ARG_TRAIN_VARIANT:"positive",
-                                 RecommenderW2V.ARG_USER_PROFILE_STRATEGY:"window10"})
+                                 RecommenderW2V.ARG_USER_PROFILE_STRATEGY:"window10",
+                                 RecommenderW2V.ARG_DATASET_ID: self.datasetID})
         self.rDescW2vPosnegMean:RecommenderDescription = RecommenderDescription(RecommenderW2V,
                                 {RecommenderW2V.ARG_TRAIN_VARIANT:"posneg",
-                                 RecommenderW2V.ARG_USER_PROFILE_STRATEGY:"mean"})
+                                 RecommenderW2V.ARG_USER_PROFILE_STRATEGY:"mean",
+                                 RecommenderW2V.ARG_DATASET_ID:self.datasetID})
         self.rDescW2vPosnegWindow3:RecommenderDescription = RecommenderDescription(RecommenderW2V,
                                 {RecommenderW2V.ARG_TRAIN_VARIANT:"posneg",
-                                 RecommenderW2V.ARG_USER_PROFILE_STRATEGY:"window3"})
+                                 RecommenderW2V.ARG_USER_PROFILE_STRATEGY:"window3",
+                                 RecommenderW2V.ARG_DATASET_ID: self.datasetID})
 
         rIDsCB:List[str] = ["RecomCBmean", "RecomCBwindow3"]
         rDescsCB:List[RecommenderDescription] = [self.rDescCBmean, self.rDescCBwindow3]

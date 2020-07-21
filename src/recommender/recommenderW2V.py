@@ -24,9 +24,14 @@ from history.aHistory import AHistory #class
 
 class RecommenderW2V(ARecommender):
 
+    # mandatory argument
     ARG_TRAIN_VARIANT:str = "trainVariant"
 
+    # mandatory argument
     ARG_USER_PROFILE_STRATEGY:str = "userProfileStrategy"
+
+    # mandatory argument
+    ARG_DATASET_ID:str = "datasetId"
 
     DEBUG_MODE = False
 
@@ -40,12 +45,12 @@ class RecommenderW2V(ARecommender):
         self.trainVariant:str = self._arguments[self.ARG_TRAIN_VARIANT]
         self.userProfiles:dict = {}
 
-    def getTrainVariant(self, trainDF:DataFrame):
-        if self.trainVariant == "all":
+    def __getTrainVariant(self, trainVariant:str, trainDF:DataFrame):
+        if trainVariant == "all":
             return trainDF
-        elif self.trainVariant == "positive":
+        elif trainVariant == "positive":
             return trainDF.loc[trainDF[Ratings.COL_RATING] >= 4]
-        elif self.trainVariant == "posneg":
+        elif trainVariant == "posneg":
             return trainDF
 
     def train(self, history:AHistory, ratingsDF:DataFrame, usersDF:DataFrame, itemsDF:DataFrame):
@@ -58,7 +63,7 @@ class RecommenderW2V(ARecommender):
         if type(itemsDF) is not DataFrame:
             raise ValueError("Argument itemsDF isn't type DataFrame.")
 
-        t = self.getTrainVariant(ratingsDF)
+        t:DataFrame = self.__getTrainVariant(self.trainVariant, ratingsDF)
         t[Ratings.COL_MOVIEID] = t[Ratings.COL_MOVIEID].astype("str")
         t_sequences = t.groupby(Ratings.COL_USERID)[Ratings.COL_MOVIEID].apply(" ".join)
         if self.DEBUG_MODE:
@@ -69,17 +74,20 @@ class RecommenderW2V(ARecommender):
         e:int = 64
         w:int = 3
 
-        self.model = self.__load_obj("model", self.trainVariant, e, w)
-        self.dictionary = self.__load_obj("dictionary", self.trainVariant, e, w)
-        self.rev_dict = self.__load_obj("rev_dict", self.trainVariant, e, w)
+        datasetId:str = self._arguments[self.ARG_DATASET_ID]
+        #print("datasetId: " + str(datasetId))
+
+        self.model = self.__load_obj("model", datasetId, self.trainVariant, e, w)
+        self.dictionary = self.__load_obj("dictionary", datasetId, self.trainVariant, e, w)
+        self.rev_dict = self.__load_obj("rev_dict", datasetId, self.trainVariant, e, w)
 
         if self.model is None:
             model, rev_dict, dictionary = word2vec.word2vecRun(w, e, w2vTrainData)
             dictionary = dict([((int(i), j) if i != "RARE" else (-1, j)) for i, j in dictionary.items()])
             rev_dict = dict(zip(dictionary.values(), dictionary.keys()))
-            self.__save_obj(model, "model", self.trainVariant, e, w)
-            self.__save_obj(dictionary, "dictionary", self.trainVariant, e, w)
-            self.__save_obj(rev_dict, "rev_dict", self.trainVariant, e, w)
+            self.__save_obj(model, "model", datasetId, self.trainVariant, e, w)
+            self.__save_obj(dictionary, "dictionary", datasetId, self.trainVariant, e, w)
+            self.__save_obj(rev_dict, "rev_dict", datasetId, self.trainVariant, e, w)
             self.model = model
             self.dictionary = dictionary
             self.rev_dict = rev_dict
@@ -92,7 +100,7 @@ class RecommenderW2V(ARecommender):
 
     def update(self, ratingsUpdateDF:DataFrame):
         # ratingsUpdateDF has only one row
-        ratingsUpdateDF:DataFrame = self.getTrainVariant(ratingsUpdateDF)
+        ratingsUpdateDF:DataFrame = self.__getTrainVariant(self.trainVariant, ratingsUpdateDF)
         if ratingsUpdateDF.shape[0] > 0:
             row = ratingsUpdateDF.iloc[0]
             rating = row[Ratings.COL_RATING]
@@ -102,7 +110,7 @@ class RecommenderW2V(ARecommender):
             userTrainData.append(objectID)
             self.userProfiles[userID] = userTrainData
 
-    def resolveUserProfile(self, userProfileStrategy:str, userTrainData):
+    def __resolveUserProfile(self, userProfileStrategy:str, userTrainData):
         objectIDs:List[int] = [int(i) for i in userTrainData]
         w2vObjects = [self.dictionary[i] for i in objectIDs if i in self.dictionary]
 
@@ -137,7 +145,7 @@ class RecommenderW2V(ARecommender):
         return ([], [], "")
 
 
-    def recommend(self, userID:int, numberOfItems, argumentsDict):
+    def recommend(self, userID:int, numberOfItems:int, argumentsDict:dict):
         #print("userID: " + str(userID))
         if type(userID) is not int and type(userID) is not np.int64:
             raise ValueError("Argument userID isn't type int.")
@@ -150,7 +158,7 @@ class RecommenderW2V(ARecommender):
         #print("userProfileStrategy: " + str(userProfileStrategy))
 
         userTrainData = self.userProfiles.get(userID, [])
-        w2vObjects, weights, aggregation = self.resolveUserProfile(userProfileStrategy, userTrainData)
+        w2vObjects, weights, aggregation = self.__resolveUserProfile(userProfileStrategy, userTrainData)
         simList:List = []
 
         # provedu agregaci dle zvolené metody
@@ -182,13 +190,13 @@ class RecommenderW2V(ARecommender):
 
         return pd.Series([], index=[])
 
-    def __save_obj(self, obj, name:str, trainVariant:str, e:int, w:int):
-        fileName:str = Configuration.modelDirectory + os.sep + self._jobID + name + "_{0}_{1}_{2}".format(trainVariant, e, w)+ '.pkl'
+    def __save_obj(self, obj, name:str, datasetId:str, trainVariant:str, e:int, w:int):
+        fileName:str = Configuration.modelDirectory + os.sep + name + "_{0}_{1}_{2}_{3}".format(datasetId, trainVariant, e, w)+ '.pkl'
         with open(fileName, 'wb') as f:
             pickle.dump(obj, f)
 
-    def __load_obj(self, name:str, trainVariant:str, e:int, w:int):
-        fileName:str = Configuration.modelDirectory + os.sep + self._jobID + name + "_{0}_{1}_{2}".format(trainVariant, e, w)+ '.pkl'
+    def __load_obj(self, name:str, datasetId:str, trainVariant:str, e:int, w:int):
+        fileName:str = Configuration.modelDirectory + os.sep + name + "_{0}_{1}_{2}_{3}".format(datasetId, trainVariant, e, w)+ '.pkl'
         print(fileName)
         if not os.path.isfile(fileName):
             return None
