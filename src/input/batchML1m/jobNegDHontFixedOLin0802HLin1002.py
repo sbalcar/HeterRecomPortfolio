@@ -14,12 +14,12 @@ from portfolioDescription.aPortfolioDescription import APortfolioDescription #cl
 from input.batchML1m.aConfig import ml1m #function
 
 
-def jobNegDHontOLin0802HLin1002(batchID:str, divisionDatasetPercentualSize:int, uBehaviour:str, repetition:int):
+def jobNegDHontFixedOLin0802HLin1002(batchID:str, divisionDatasetPercentualSize:int, uBehaviour:str, repetition:int):
 
         d = InputsML1MDefinition(divisionDatasetPercentualSize)
 
-        pDescs:List[APortfolioDescription] = [d.pDescNegDHontOLin0802HLin1002]
-        models:List[DataFrame] = [Tools.createDHontModel(d.pDescNegDHontOStat08HLin1002.getRecommendersIDs())]
+        pDescs:List[APortfolioDescription] = [d.pDescNegDHontFixedOLin0802HLin1002]
+        models:List[DataFrame] = [Tools.createDHontModel(d.pDescNegDHontFixedOLin0802HLin1002.getRecommendersIDs())]
         evalTools:List = [EvalToolDHont]
 
         ml1m(batchID, uBehaviour, repetition, d, pDescs, models, evalTools)

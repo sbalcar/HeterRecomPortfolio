@@ -131,13 +131,29 @@ class InputsML1MDefinition:
 
 
         _penaltyToolOStat08HLin1002:APenalization = PenalUsingReduceRelevance(penaltyStatic, [1.0], penaltyLinear, [1.0, 0.2, 100])
-        aDescNegDHontOStat08HLin1002:AggregationDescription = AggregationDescription(AggrDHontNegativeImplFeedback, {
+        aDescNegDHontFixedOStat08HLin1002:AggregationDescription = AggregationDescription(AggrDHontNegativeImplFeedback, {
                                 AggrDHontNegativeImplFeedback.ARG_SELECTORFNC:(AggrDHont.selectorOfTheMostVotedItem,[]),
                                 AggrDHontNegativeImplFeedback.ARG_PENALTY_TOOL:_penaltyToolOStat08HLin1002})
 
+        aDescNegDHontRouletteOStat08HLin1002:AggregationDescription = AggregationDescription(AggrDHontNegativeImplFeedback, {
+                                AggrDHontNegativeImplFeedback.ARG_SELECTORFNC:(AggrDHont.selectorOfRouletteWheelRatedItem,[]),
+                                AggrDHontNegativeImplFeedback.ARG_PENALTY_TOOL:_penaltyToolOStat08HLin1002})
+
+        aDescNegDHontRoulette3OStat08HLin1002:AggregationDescription = AggregationDescription(AggrDHontNegativeImplFeedback, {
+                                AggrDHontNegativeImplFeedback.ARG_SELECTORFNC:(AggrDHont.selectorOfRouletteWheelExpRatedItem,[3]),
+                                AggrDHontNegativeImplFeedback.ARG_PENALTY_TOOL:_penaltyToolOStat08HLin1002})
+
         _penaltyToolOLin0802HLin1002:APenalization = PenalUsingReduceRelevance(penaltyLinear, [0.8, 0.2, self.numberOfAggrItems], penaltyLinear, [1.0, 0.2, 100])
-        aDescNegDHontOLin0802HLin1002:AggregationDescription = AggregationDescription(AggrDHontNegativeImplFeedback, {
+        aDescNegDHontFixedOLin0802HLin1002:AggregationDescription = AggregationDescription(AggrDHontNegativeImplFeedback, {
                                 AggrDHontNegativeImplFeedback.ARG_SELECTORFNC:(AggrDHont.selectorOfTheMostVotedItem,[]),
+                                AggrDHontNegativeImplFeedback.ARG_PENALTY_TOOL:_penaltyToolOLin0802HLin1002})
+
+        aDescNegDHontRouletteOLin0802HLin1002:AggregationDescription = AggregationDescription(AggrDHontNegativeImplFeedback, {
+                                AggrDHontNegativeImplFeedback.ARG_SELECTORFNC:(AggrDHont.selectorOfRouletteWheelRatedItem,[]),
+                                AggrDHontNegativeImplFeedback.ARG_PENALTY_TOOL:_penaltyToolOLin0802HLin1002})
+
+        aDescNegDHontRoulette3OLin0802HLin1002:AggregationDescription = AggregationDescription(AggrDHontNegativeImplFeedback, {
+                                AggrDHontNegativeImplFeedback.ARG_SELECTORFNC:(AggrDHont.selectorOfRouletteWheelExpRatedItem,[3]),
                                 AggrDHontNegativeImplFeedback.ARG_PENALTY_TOOL:_penaltyToolOLin0802HLin1002})
 
 
@@ -175,15 +191,24 @@ class InputsML1MDefinition:
 
 
         # DHont Negative Implicit Feedback Portfolio description
-        self.pDescNegDHontOStat08HLin1002:Portfolio1AggrDescription = Portfolio1AggrDescription(
-                "NegDHontOStat08HLin1002", self.rIDs, self.rDescs, aDescNegDHontOStat08HLin1002)
+        self.pDescNegDHontFixedOStat08HLin1002:Portfolio1AggrDescription = Portfolio1AggrDescription(
+                "NegDHontFixedOStat08HLin1002", self.rIDs, self.rDescs, aDescNegDHontFixedOStat08HLin1002)
+
+        self.pDescNegDHontRouletteOStat08HLin1002:Portfolio1AggrDescription = Portfolio1AggrDescription(
+                "NegDHontRouletteOStat08HLin1002", self.rIDs, self.rDescs, aDescNegDHontRouletteOStat08HLin1002)
+
+        self.pDescNegDHontRoulette3OStat08HLin1002:Portfolio1AggrDescription = Portfolio1AggrDescription(
+                "NegDHontRoulette3OStat08HLin1002", self.rIDs, self.rDescs, aDescNegDHontRoulette3OStat08HLin1002)
 
 
         # DHont Negative Implicit Feedback Portfolio description
-        self.pDescNegDHontOLin0802HLin1002:Portfolio1AggrDescription = Portfolio1AggrDescription(
-                "NegDHontOLin0802HLin1002", self.rIDs, self.rDescs, aDescNegDHontOLin0802HLin1002)
+        self.pDescNegDHontFixedOLin0802HLin1002:Portfolio1AggrDescription = Portfolio1AggrDescription(
+                "NegDHontFixedOLin0802HLin1002", self.rIDs, self.rDescs, aDescNegDHontFixedOLin0802HLin1002)
 
+        self.pDescNegDHontRouletteOLin0802HLin1002:Portfolio1AggrDescription = Portfolio1AggrDescription(
+                "NegDHontRouletteOLin0802HLin1002", self.rIDs, self.rDescs, aDescNegDHontRouletteOLin0802HLin1002)
 
-
+        self.pDescNegDHontRoulette3OLin0802HLin1002:Portfolio1AggrDescription = Portfolio1AggrDescription(
+                "NegDHontRoulette3OLin0802HLin1002", self.rIDs, self.rDescs, aDescNegDHontRoulette3OLin0802HLin1002)
 
 

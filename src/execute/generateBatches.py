@@ -14,8 +14,8 @@ from datasets.behaviours import Behaviours #class
 #from input.batchML1m.jobDHontFixed import jobDHontFixed #function
 #from input.batchML1m.jobDHontRoulette import jobDHontRoulette #function
 #from input.batchML1m.jobDHontRoulette3 import jobDHontRoulette3 #function
-#from input.batchML1m.jobNegDHontOLin0802HLin1002 import jobNegDHontOLin0802HLin1002 #function
-#from input.batchML1m.jobNegDHontOStat08HLin1002 import jobNegDHontOStat08HLin1002 #function
+#from input.batchML1m.jobNegDHontFixedOLin0802HLin1002 import jobNegDHontFixedOLin0802HLin1002 #function
+#from input.batchML1m.jobNegDHontFixedOStat08HLin1002 import jobNegDHontFixedOStat08HLin1002 #function
 
 #from input.batchML1m.jobSingleCBmax import jobSingleML1mCBmax #class
 #from input.batchML1m.jobSingleCBwindow10 import jobSingleML1mCBwindow10 #class
@@ -50,8 +50,13 @@ def __generateBatch(divisionDatasetPercentualSize:int, uBehaviour:str, repetitio
    __writeToFile(batchDir + os.sep + "dHontRoulette.job", "jobDHontRoulette('" + batchID + "', " + str(divisionDatasetPercentualSize) + ", '" + uBehaviour + "', " + str(repetition) + ")")
    __writeToFile(batchDir + os.sep + "dHontRoulette3.job", "jobDHontRoulette3('" + batchID + "', " + str(divisionDatasetPercentualSize) + ", '" + uBehaviour + "', " + str(repetition) + ")")
 
-   __writeToFile(batchDir + os.sep + "negDHontOLin0802HLin1002.job", "jobNegDHontOLin0802HLin1002('" + batchID + "', " + str(divisionDatasetPercentualSize) + ", '" + uBehaviour + "', " + str(repetition) + ")")
-   __writeToFile(batchDir + os.sep + "negDHontOStat08HLin1002.job", "jobNegDHontOStat08HLin1002('" + batchID + "', " + str(divisionDatasetPercentualSize) + ", '" + uBehaviour + "', " + str(repetition) + ")")
+   __writeToFile(batchDir + os.sep + "negDHontFixedOLin0802HLin1002.job", "jobNegDHontFixedOLin0802HLin1002('" + batchID + "', " + str(divisionDatasetPercentualSize) + ", '" + uBehaviour + "', " + str(repetition) + ")")
+   __writeToFile(batchDir + os.sep + "negDHontFixedOStat08HLin1002.job", "jobNegDHontFixedOStat08HLin1002('" + batchID + "', " + str(divisionDatasetPercentualSize) + ", '" + uBehaviour + "', " + str(repetition) + ")")
+   __writeToFile(batchDir + os.sep + "negDHontRouletteOLin0802HLin1002.job", "jobNegDHontRouletteOLin0802HLin1002('" + batchID + "', " + str(divisionDatasetPercentualSize) + ", '" + uBehaviour + "', " + str(repetition) + ")")
+   __writeToFile(batchDir + os.sep + "negDHontRouletteOStat08HLin1002.job", "jobNegDHontRouletteOStat08HLin1002('" + batchID + "', " + str(divisionDatasetPercentualSize) + ", '" + uBehaviour + "', " + str(repetition) + ")")
+   __writeToFile(batchDir + os.sep + "negDHontRoulette3OLin0802HLin1002.job", "jobNegDHontRoulette3OLin0802HLin1002('" + batchID + "', " + str(divisionDatasetPercentualSize) + ", '" + uBehaviour + "', " + str(repetition) + ")")
+   __writeToFile(batchDir + os.sep + "negDHontRoulette3OStat08HLin1002.job", "jobNegDHontRoulette3OStat08HLin1002('" + batchID + "', " + str(divisionDatasetPercentualSize) + ", '" + uBehaviour + "', " + str(repetition) + ")")
+
 
    __writeToFile(batchDir + os.sep + "singleML1mCBmax.job", "jobSingleML1mCBmax('" + batchID + "', " + str(divisionDatasetPercentualSize) + ", '" + uBehaviour + "', " + str(repetition) + ")")
    __writeToFile(batchDir + os.sep + "singleML1mCBwindow10.job", "jobSingleML1mCBwindow10('" + batchID + "', " + str(divisionDatasetPercentualSize) + ", '" + uBehaviour + "', " + str(repetition) + ")")

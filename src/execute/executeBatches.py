@@ -20,8 +20,12 @@ from input.batchML1m.jobDHontFixed import jobDHontFixed #function
 from input.batchML1m.jobDHontRoulette import jobDHontRoulette #function
 from input.batchML1m.jobDHontRoulette3 import jobDHontRoulette3 #function
 
-from input.batchML1m.jobNegDHontOStat08HLin1002 import jobNegDHontOStat08HLin1002 #function
-from input.batchML1m.jobNegDHontOLin0802HLin1002 import jobNegDHontOLin0802HLin1002 #function
+from input.batchML1m.jobNegDHontFixedOStat08HLin1002 import jobNegDHontFixedOStat08HLin1002 #function
+from input.batchML1m.jobNegDHontFixedOLin0802HLin1002 import jobNegDHontFixedOLin0802HLin1002 #function
+from input.batchML1m.jobNegDHontRouletteOStat08HLin1002 import jobNegDHontRouletteOStat08HLin1002 #function
+from input.batchML1m.jobNegDHontRouletteOLin0802HLin1002 import jobNegDHontRouletteOLin0802HLin1002 #function
+from input.batchML1m.jobNegDHontRoulette3OStat08HLin1002 import jobNegDHontRoulette3OStat08HLin1002 #function
+from input.batchML1m.jobNegDHontRoulette3OLin0802HLin1002 import jobNegDHontRoulette3OLin0802HLin1002 #function
 
 
 def executeBatches():
