@@ -12,6 +12,7 @@ pip install numpy pandas sklearn tensorflow
 $ git clone https://github.com/sbalcar/HeterRecomPortfolio.git
 $ cd HeterRecomPortfolio
 $ ./generateBatches.sh
+$ ./generateBehaviours.sh
 $ cp batches/testBatch inputs/
 $ ./run.sh
 ```

@@ -9,9 +9,10 @@ import numpy as np
 
 from execute.executeBatches import executeBatches #function
 from execute.generateBatches import generateBatches #function
+from execute.generateBehaviour import generateBehaviour #function
 
 
-def main():
+def main2():
 
   start = time.time()
 
@@ -33,5 +34,8 @@ if __name__ == "__main__":
   if len(sys.argv) == 2 and sys.argv[1] == "-generateBatches":
       generateBatches()
 
+  if len(sys.argv) == 2 and sys.argv[1] == "-generateBehaviours":
+      generateBehaviour()
+
   if len(sys.argv) == 1:
-      main()
+      main2()

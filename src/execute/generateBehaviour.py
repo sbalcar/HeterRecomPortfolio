@@ -18,10 +18,13 @@ def generateBehaviour():
    np.random.seed(42)
    random.seed(42)
 
-   Behaviours.generateFileMl1m(20)
+   countOfItems:int = 20
+   countOfRepetitions:int = 2
+
+   Behaviours.generateFileMl1m(countOfItems, countOfRepetitions)
 
    bDF:DataFrame = Behaviours.readFromFileMl1m()
    print(bDF.head(10))
 
 
-generateBehaviour()
+#generateBehaviour()

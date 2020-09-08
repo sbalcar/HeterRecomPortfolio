@@ -236,10 +236,11 @@ class SimulationPortfolioToUser:
 
                 portfolioI.update(dfI)
 
-            repetitionI: int
+            repetitionI:int
             for repetitionI in range(self._repetitionOfRecommendation):
                 self.__simulateRecommendations(portfolios, portfolioDescs, portFolioModels, evaluatonTools,
-                                               histories, evaluations, currentItemIdI, nextItemIDsI, currentUserIdI)
+                                               histories, evaluations, currentItemIdI, nextItemIDsI,
+                                               currentUserIdI, repetitionI)
 
         return evaluations
 
@@ -267,14 +268,16 @@ class SimulationPortfolioToUser:
 
     def __simulateRecommendations(self, portfolios:List[APortfolio], portfolioDescs:List[Portfolio1AggrDescription],
                                   portFolioModels:List[DataFrame], evaluatonTools:[AEvalTool], histories:List[AHistory],
-                                  evaluations:List[dict], currentItemID:int, nextItemIDs:List[int], userID:int):
+                                  evaluations:List[dict], currentItemID:int, nextItemIDs:List[int], userID:int, repetition:int):
 
         print("userID: " + str(userID))
         print("currentItemID: " + str(currentItemID))
+        print("repetition: " + str(repetition))
 
         isUser:List[bool] = self._behaviourDF[Behaviours.COL_USERID] == userID
         isItem:List[bool] = self._behaviourDF[Behaviours.COL_MOVIEID] == currentItemID
-        uObservationUserItem:List[bool] = self._behaviourDF[(isUser) & (isItem)][self._uBehaviourDFIndex]
+        isRepetition:List[bool] = self._behaviourDF[Behaviours.COL_REPETITION] == repetition
+        uObservationUserItem:List[bool] = self._behaviourDF[(isUser) & (isItem) & (isRepetition)][self._uBehaviourDFIndex]
         if uObservationUserItem.shape[0] != 1:
             raise ValueError("Error")
         uObservation: List[bool] = uObservationUserItem.iloc[0]
