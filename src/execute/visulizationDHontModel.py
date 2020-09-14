@@ -24,23 +24,23 @@ def visualizationDHontModel():
    batchID:str = "ml1mDiv90Ulinear0109R2"
    #batchID:str = "ml1mDiv90Ustatic08R2"
 
-   fileName:str = "portfModelTimeEvolution-DHontFixed.txt"
+   #fileName:str = "portfModelTimeEvolution-DHontFixed.txt"
    #fileName:str = "portfModelTimeEvolution-DHontRoulette.txt"
    #fileName:str = "portfModelTimeEvolution-DHontRoulette3.txt"
 
-   #fileName:str = "portfModelTimeEvolution-NegDHontOLin0802HLin1002.txt"
-   #fileName:str = "portfModelTimeEvolution-NegDHontOStat08HLin1002.txt"
+   #fileName:str = "portfModelTimeEvolution-NegDHontFixedOLin0802HLin1002.txt"
+   fileName:str = "portfModelTimeEvolution-NegDHontFixedOStat08HLin1002.txt"
    #fileName:str = "portfModelTimeEvolution-NegDHontRouletteOLin0802HLin1002.txt"
    #fileName:str = "portfModelTimeEvolution-NegDHontRouletteOStat08HLin1002.txt"
-   fileName:str = "portfModelTimeEvolution-NegDHontRoulette3OLin0802HLin1002.txt"
-   fileName:str = "portfModelTimeEvolution-NegDHontRoulette3OStat08HLin1002.txt" ##
+   #fileName:str = "portfModelTimeEvolution-NegDHontRoulette3OLin0802HLin1002.txt"
+   #fileName:str = "portfModelTimeEvolution-NegDHontRoulette3OStat08HLin1002.txt" ##
 
    jobID:str = fileName[fileName.index("-")+1:fileName.index(".")]
    #print(jobID)
 
-   file:str = Configuration.resultsDirectory + os.sep + batchID + os.sep + fileName
+   inputFileName:str = Configuration.resultsDirectory + os.sep + batchID + os.sep + fileName
 
-   f = open(file, "r")
+   f = open(inputFileName, "r")
 
    currentItemIDs:List[int] = []
    userIDs:List[int] = []
@@ -131,8 +131,11 @@ def visualizationDHontModel():
    #plt.title(batchID + " - " + jobID)
 
    plt.legend(bbox_to_anchor=(0.01, 0.99), loc=2, borderaxespad=0.)
-   #plt.savefig(batchID + fileName + '.png')
-   plt.show()
+
+   outputFileName:str = ".." + os.sep + "images" + os.sep + batchID + fileName.replace(".txt", ".png")
+
+   plt.savefig(outputFileName)
+   #plt.show()
 
 
 
@@ -150,9 +153,10 @@ def visualizationDHontModel():
    axs[4].legend()
 
    #plt.show()
-   #plt.savefig("para" + batchID + fileName + '.png')
+   #plt.savefig("para" + batchID + fileName)
 
    print(recomCBmeanModel[0:10])
    print(recomW2vPosnegMaxModel[0:10])
+
 
 visualizationDHontModel()

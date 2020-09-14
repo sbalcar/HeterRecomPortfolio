@@ -13,7 +13,6 @@ from datasets.behaviours import Behaviours #class
 
 def generateBehaviour():
    print("Generate Behaviour")
-   os.chdir("..")
 
    np.random.seed(42)
    random.seed(42)
@@ -26,5 +25,5 @@ def generateBehaviour():
    bDF:DataFrame = Behaviours.readFromFileMl1m()
    print(bDF.head(10))
 
-
+#os.chdir("..")
 #generateBehaviour()
