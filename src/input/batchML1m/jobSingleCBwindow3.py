@@ -18,12 +18,12 @@ from input.batchML1m.aML1MConfig import AML1MConf #function
 import pandas as pd
 
 
-def jobSingleML1mTheMostPopular(batchID:str, divisionDatasetPercentualSize:int, uBehaviour:str, repetition:int):
+def jobSingleML1mCBwindow3(batchID:str, divisionDatasetPercentualSize:int, uBehaviour:str, repetition:int):
 
         aConf:AML1MConf = AML1MConf(batchID, divisionDatasetPercentualSize, uBehaviour, repetition)
 
         pDescr:APortfolioDescription = Portfolio1MethDescription(
-                "SingleTMPopular", "theMostPopular", InputRecomDefinition.exportRDescTheMostPopular(aConf.datasetID))
+                "CosCBwindow3", "cosCBwindow3", InputRecomDefinition.exportRDescCBwindow3(aConf.datasetID))
 
         model:DataFrame = pd.DataFrame()
         eTool = EToolSingleMethod()

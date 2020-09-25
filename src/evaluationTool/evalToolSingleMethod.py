@@ -12,8 +12,11 @@ import numpy as np
 
 class EToolSingleMethod(AEvalTool):
 
-    @staticmethod
-    def click(rItemIDsWithResponsibility:List, clickedItemID:int, portfolioModel:DataFrame, evaluationDict:dict):
+    def __init__(self, argsDict:dict):
+        if type(argsDict) is not dict:
+            raise ValueError("Argument argsDict isn't type dict.")
+
+    def click(self, rItemIDsWithResponsibility:List, clickedItemID:int, portfolioModel:DataFrame, evaluationDict:dict):
         if type(rItemIDsWithResponsibility) is not Series:
             raise ValueError("Argument rItemIDsWithResponsibility isn't type Series.")
         if type(clickedItemID) is not int and type(clickedItemID) is not np.int64:
@@ -29,8 +32,7 @@ class EToolSingleMethod(AEvalTool):
 
         evaluationDict[AEvalTool.CLICKS] = evaluationDict.get(AEvalTool.CLICKS, 0) + 1
 
-    @staticmethod
-    def displayed(rItemIDsWithResponsibility:List, portfolioModel:DataFrame, evaluationDict:dict):
+    def displayed(self, rItemIDsWithResponsibility:List, portfolioModel:DataFrame, evaluationDict:dict):
         if type(rItemIDsWithResponsibility) is not Series:
             raise ValueError("Argument rItemIDsWithResponsibility isn't type Series.")
         if type(portfolioModel) is not DataFrame:

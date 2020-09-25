@@ -10,13 +10,13 @@ class AEvalTool(ABC):
     CLICKS = "clicks"
 
     @abstractmethod
-    def __init__(self):
+    def __init__(self, args:dict):
        raise Exception("AAgregation is abstract class, can't be instanced")
 
     @abstractmethod
-    def click(rItemIDsWithResponsibility:List, clickedItemID:int, portfolioModel:DataFrame, evaluationDict:dict):
+    def click(self, rItemIDsWithResponsibility:List, clickedItemID:int, portfolioModel:DataFrame, evaluationDict:dict):
         assert False, "this needs to be overridden"
 
     @abstractmethod
-    def displayed(rItemIDsWithResponsibility:List, portfolioModel:DataFrame, evaluationDict:dict):
+    def displayed(self, rItemIDsWithResponsibility:List, portfolioModel:DataFrame, evaluationDict:dict):
         assert False, "this needs to be overridden"

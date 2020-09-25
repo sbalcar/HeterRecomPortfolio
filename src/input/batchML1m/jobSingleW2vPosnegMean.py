@@ -4,23 +4,28 @@ from typing import List
 
 from pandas.core.frame import DataFrame #class
 
+from portfolioDescription.portfolio1MethDescription import Portfolio1MethDescription #class
+from portfolioDescription.portfolio1AggrDescription import Portfolio1AggrDescription #class
+
 from evaluationTool.evalToolSingleMethod import EToolSingleMethod #class
 
-from input.inputsML1MDefinition import InputsML1MDefinition #class
+from input.InputRecomDefinition import InputRecomDefinition #class
 
 from portfolioDescription.aPortfolioDescription import APortfolioDescription #class
 
-from input.batchML1m.aConfig import ml1m #function
+from input.batchML1m.aML1MConfig import AML1MConf #function
 
 import pandas as pd
 
 
 def jobSingleW2vPosnegMean(batchID:str, divisionDatasetPercentualSize:int, uBehaviour:str, repetition:int):
 
-        d = InputsML1MDefinition(divisionDatasetPercentualSize)
+        aConf:AML1MConf = AML1MConf(batchID, divisionDatasetPercentualSize, uBehaviour, repetition)
 
-        pDescs:List[APortfolioDescription] = [d.pDescW2vPosnegMean]
-        models:List[DataFrame] = [pd.DataFrame()]
-        evalTools:List = [EToolSingleMethod]
+        pDescr:APortfolioDescription = Portfolio1MethDescription(
+                "W2vPosnegMean", "w2vPosnegMean", InputRecomDefinition.exportRDescW2vPosnegMean(aConf.datasetID))
 
-        ml1m(batchID, uBehaviour, repetition, d, pDescs, models, evalTools)
+        model:DataFrame = pd.DataFrame()
+        eTool = EToolSingleMethod()
+
+        aConf.run(pDescr, model, eTool)

@@ -9,14 +9,29 @@ from pandas.core.frame import DataFrame #class
 import numpy as np
 
 class EvalToolDHont(AEvalTool):
-    # TODO: maybe store learning rates to a database?
-    learningRateClicks:float = 0.1
-    learningRateViews:float = (0.1 / 500)
-    maxVotesConst:float = 0.99
-    minVotesConst:float = 0.01
+    #learningRateClicks:float = 0.1
+    #learningRateViews:float = (0.1 / 500)
+    #maxVotesConst:float = 0.99
+    #minVotesConst:float = 0.01
 
-    @staticmethod
-    def click(rItemIDsWithResponsibility:List, clickedItemID:int, portfolioModel:DataFrame, evaluationDict:dict):
+    ARG_LEARNING_RATE_CLICKS:str = "learningRateClicks"
+    ARG_LEARNING_RATE_VIEWS:str = "learningRateViews"
+
+
+    def __init__(self, argsDict:dict):
+        if type(argsDict) is not dict:
+            raise ValueError("Argument argsDict isn't type dict.")
+
+        self.learningRateClicks:float = argsDict[EvalToolDHont.ARG_LEARNING_RATE_CLICKS]
+        self.learningRateViews:float = argsDict[EvalToolDHont.ARG_LEARNING_RATE_VIEWS]
+        self.maxVotesConst:float = 0.99
+        self.minVotesConst:float = 0.01
+
+        print("learningRateClicks: " + str(self.learningRateClicks))
+        print("learningRateViews: " + str(self.learningRateViews))
+
+
+    def click(self, rItemIDsWithResponsibility:List, clickedItemID:int, portfolioModel:DataFrame, evaluationDict:dict):
         if type(rItemIDsWithResponsibility) is not list:
             raise ValueError("Argument rItemIDsWithResponsibility isn't type list.")
         if type(clickedItemID) is not int and type(clickedItemID) is not np.int64:
@@ -44,7 +59,7 @@ class EvalToolDHont(AEvalTool):
 
             relevance_this = responsibilityDict[methodIdI]
             relevance_others = sumMethodsVotes - relevance_this
-            update_step = EvalToolDHont.learningRateClicks * (relevance_this - relevance_others)
+            update_step = self.learningRateClicks * (relevance_this - relevance_others)
             # elif action == "storeViews":
             #    update_step = -1 * learningRateViews * (relevance_this - relevance_others)
             #    pos_step = 0
@@ -52,10 +67,10 @@ class EvalToolDHont(AEvalTool):
             portfolioModel.loc[methodIdI] = portfolioModel.loc[methodIdI] + update_step
 
             # Apply constraints on maximal and minimal volumes of votes
-            if portfolioModel.loc[methodIdI, 'votes'] < EvalToolDHont.minVotesConst:
-                portfolioModel.loc[methodIdI, 'votes'] = EvalToolDHont.minVotesConst
-            elif portfolioModel.loc[methodIdI, 'votes'] > EvalToolDHont.maxVotesConst:
-                portfolioModel.loc[methodIdI, 'votes'] = EvalToolDHont.maxVotesConst
+            if portfolioModel.loc[methodIdI, 'votes'] < self.minVotesConst:
+                portfolioModel.loc[methodIdI, 'votes'] = self.minVotesConst
+            elif portfolioModel.loc[methodIdI, 'votes'] > self.maxVotesConst:
+                portfolioModel.loc[methodIdI, 'votes'] = self.maxVotesConst
 
          # linearly normalizing to unit sum of votes
         EvalToolDHont.linearNormalizingPortfolioModelDHont(portfolioModel)
@@ -64,8 +79,7 @@ class EvalToolDHont(AEvalTool):
         print("clickedItemID: " + str(clickedItemID))
         print(portfolioModel)
 
-    @staticmethod
-    def displayed(rItemIDsWithResponsibility:List, portfolioModel:DataFrame, evaluationDict:dict):
+    def displayed(self, rItemIDsWithResponsibility:List, portfolioModel:DataFrame, evaluationDict:dict):
         if type(rItemIDsWithResponsibility) is not list:
             raise ValueError("Argument rItemIDsWithResponsibility isn't type list.")
         if type(portfolioModel) is not DataFrame:
@@ -92,16 +106,16 @@ class EvalToolDHont(AEvalTool):
             for methodIdI in responsibilityDict.keys():
                 relevance_this:float = responsibilityDict.get(methodIdI)
                 relevance_others:float = sumMethodsVotes - relevance_this
-                update_step:float = -1 * EvalToolDHont.learningRateViews * (relevance_this - relevance_others)
+                update_step:float = -1 * self.learningRateViews * (relevance_this - relevance_others)
                 #print("update_step: " + str(update_step))
 
                 portfolioModel.loc[methodIdI] = portfolioModel.loc[methodIdI] + update_step
 
                 # Apply constraints on maximal and minimal volumes of votes
-                if portfolioModel.loc[methodIdI, 'votes'] < EvalToolDHont.minVotesConst:
-                    portfolioModel.loc[methodIdI, 'votes'] = EvalToolDHont.minVotesConst
-                elif portfolioModel.loc[methodIdI, 'votes'] > EvalToolDHont.maxVotesConst:
-                    portfolioModel.loc[methodIdI, 'votes'] = EvalToolDHont.maxVotesConst
+                if portfolioModel.loc[methodIdI, 'votes'] < self.minVotesConst:
+                    portfolioModel.loc[methodIdI, 'votes'] = self.minVotesConst
+                elif portfolioModel.loc[methodIdI, 'votes'] > self.maxVotesConst:
+                    portfolioModel.loc[methodIdI, 'votes'] = self.maxVotesConst
 
         # linearly normalizing to unit sum of votes
         EvalToolDHont.linearNormalizingPortfolioModelDHont(portfolioModel)

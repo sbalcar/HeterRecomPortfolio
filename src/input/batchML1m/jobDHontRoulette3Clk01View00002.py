@@ -8,7 +8,7 @@ from portfolioDescription.portfolio1MethDescription import Portfolio1MethDescrip
 from portfolioDescription.portfolio1AggrDescription import Portfolio1AggrDescription #class
 
 from evaluationTool.aEvalTool import AEvalTool #class
-from evaluationTool.evalToolBanditTS import EvalToolBanditTS #class
+from evaluationTool.evalToolDHont import EvalToolDHont #class
 
 from input.inputAggrDefinition import InputAggrDefinition, ModelDefinition  # class
 
@@ -19,16 +19,18 @@ from portfolioDescription.aPortfolioDescription import APortfolioDescription #cl
 from input.batchML1m.aML1MConfig import AML1MConf #function
 
 
-def jobBanditTS(batchID:str, divisionDatasetPercentualSize:int, uBehaviour:str, repetition:int):
+def jobDHontRoulette3Clk01View00002(batchID:str, divisionDatasetPercentualSize:int, uBehaviour:str, repetition:int):
 
         aConf:AML1MConf = AML1MConf(batchID, divisionDatasetPercentualSize, uBehaviour, repetition)
 
         rIDs, rDescs = InputRecomDefinition.exportPairOfRecomIdsAndRecomDescrs(aConf.datasetID)
 
         pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
-                "BanditTS", rIDs, rDescs, InputAggrDefinition.exportADescBanditTS())
+                "DHontRoulette3Clk01View00002", rIDs, rDescs, InputAggrDefinition.exportADescDHontRoulette3())
 
-        evalTool:AEvalTool = EvalToolBanditTS()
-        model:DataFrame = ModelDefinition.createBanditModel(pDescr.getRecommendersIDs())
+        eTool:AEvalTool = EvalToolDHont({EvalToolDHont.ARG_LEARNING_RATE_CLICKS:0.1,
+                                         EvalToolDHont.ARG_LEARNING_RATE_VIEWS:0.1 / 500})
 
-        aConf.run(pDescr, model, evalTool)
+        model:DataFrame = ModelDefinition.createDHontModel(pDescr.getRecommendersIDs())
+
+        aConf.run(pDescr, model, eTool)

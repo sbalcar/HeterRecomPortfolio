@@ -10,19 +10,6 @@ from pandas.core.frame import DataFrame #class
 
 from datasets.behaviours import Behaviours #class
 
-#from input.batchML1m.jobBanditTS import jobBanditTS #function
-#from input.batchML1m.jobDHontFixed import jobDHontFixed #function
-#from input.batchML1m.jobDHontRoulette import jobDHontRoulette #function
-#from input.batchML1m.jobDHontRoulette3 import jobDHontRoulette3 #function
-#from input.batchML1m.jobNegDHontFixedOLin0802HLin1002 import jobNegDHontFixedOLin0802HLin1002 #function
-#from input.batchML1m.jobNegDHontFixedOStat08HLin1002 import jobNegDHontFixedOStat08HLin1002 #function
-
-#from input.batchML1m.jobSingleCBmax import jobSingleML1mCBmax #class
-#from input.batchML1m.jobSingleCBwindow10 import jobSingleML1mCBwindow10 #class
-#from input.batchML1m.jobSingleTheMostPopular import jobSingleML1mTheMostPopular #class
-#from input.batchML1m.jobSingleW2vPosnegMean import jobSingleW2vPosnegMean #class
-#from input.batchML1m.jobSingleW2vPosnegWindow3 import jobSingleW2vPosnegWindow3 #class
-
 
 def generateBatches():
    print("Generate Batches")
@@ -43,21 +30,22 @@ def __generateBatch(divisionDatasetPercentualSize:int, uBehaviour:str, repetitio
 
    data:List[tuple] = [
       ("singleML1mCBmax.job", "jobSingleML1mCBmax"),
-      ("singleML1mCBwindow10.job", "jobSingleML1mCBwindow10"),
+      ("singleML1mCBwindow3.job", "jobSingleML1mCBwindow3"),
       ("singleML1mTheMostPopular.job", "jobSingleML1mTheMostPopular"),
       ("singleW2vPosnegMean.job", "jobSingleW2vPosnegMean"),
       ("singleW2vPosnegWindow3.job", "jobSingleW2vPosnegWindow3"),
 
       ("banditTS.job", "jobBanditTS"),
-      ("dHontFixed.job", "jobDHontFixed"),
-      ("dHontRoulette.job", "jobDHontRoulette"),
-      ("dHontRoulette3.job", "jobDHontRoulette3"),
-      ("negDHontFixedOLin0802HLin1002.job", "jobNegDHontFixedOLin0802HLin1002"),
-      ("negDHontFixedOStat08HLin1002.job", "jobNegDHontFixedOStat08HLin1002"),
-      ("negDHontRouletteOLin0802HLin1002.job", "jobNegDHontRouletteOLin0802HLin1002"),
-      ("negDHontRouletteOStat08HLin1002.job", "jobNegDHontRouletteOStat08HLin1002"),
-      ("negDHontRoulette3OLin0802HLin1002.job", "jobNegDHontRoulette3OLin0802HLin1002"),
-      ("negDHontRoulette3OStat08HLin1002.job", "jobNegDHontRoulette3OStat08HLin1002")
+      ("dHontFixedClk01View00002.job", "jobDHontFixedClk01View00002"),
+      ("dHontRoulette1Clk01View00002.job", "jobDHontRoulette1Clk01View00002"),
+      ("dHontRoulette3Clk01View00002.job", "jobDHontRoulette3Clk01View00002"),
+
+      ("negDHontFixedClk01View00002OLin0802HLin1002.job", "jobNegDHontFixedClk01View00002OLin0802HLin1002"),
+      ("negDHontFixedClk01View00002OStat08HLin1002.job", "jobNegDHontFixedClk01View00002OStat08HLin1002"),
+      ("negDHontRoulette1Clk01View00002OLin0802HLin1002.job", "jobNegDHontRoulette1Clk01View00002OLin0802HLin1002"),
+      ("negDHontRoulette1Clk01View00002OStat08HLin1002.job", "jobNegDHontRoulette1Clk01View00002OStat08HLin1002"),
+      ("negDHontRoulette3Clk01View00002OLin0802HLin1002.job", "jobNegDHontRoulette3Clk01View00002OLin0802HLin1002"),
+      ("negDHontRoulette3Clk01View00002OStat08HLin1002.job", "jobNegDHontRoulette3Clk01View00002OStat08HLin1002")
    ]
 
    batchID:str = "ml1mDiv" + str(divisionDatasetPercentualSize) + "U" + uBehaviour + "R" + str(repetition)

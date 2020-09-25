@@ -29,10 +29,10 @@ def visualizationDHontModel():
    #fileName:str = "portfModelTimeEvolution-DHontRoulette3.txt"
 
    #fileName:str = "portfModelTimeEvolution-NegDHontFixedOLin0802HLin1002.txt"
-   fileName:str = "portfModelTimeEvolution-NegDHontFixedOStat08HLin1002.txt"
+   #fileName:str = "portfModelTimeEvolution-NegDHontFixedOStat08HLin1002.txt"
    #fileName:str = "portfModelTimeEvolution-NegDHontRouletteOLin0802HLin1002.txt"
    #fileName:str = "portfModelTimeEvolution-NegDHontRouletteOStat08HLin1002.txt"
-   #fileName:str = "portfModelTimeEvolution-NegDHontRoulette3OLin0802HLin1002.txt"
+   fileName:str = "portfModelTimeEvolution-NegDHontRoulette3OLin0802HLin1002.txt"
    #fileName:str = "portfModelTimeEvolution-NegDHontRoulette3OStat08HLin1002.txt" ##
 
    jobID:str = fileName[fileName.index("-")+1:fileName.index(".")]
@@ -134,8 +134,8 @@ def visualizationDHontModel():
 
    outputFileName:str = ".." + os.sep + "images" + os.sep + batchID + fileName.replace(".txt", ".png")
 
-   plt.savefig(outputFileName)
-   #plt.show()
+   #plt.savefig(outputFileName)
+   plt.show()
 
 
 

@@ -172,7 +172,7 @@ class SimulationPortfolioToUser:
 
 
     def __runPortfolioDesc(self, portfolioDescs:List[Portfolio1AggrDescription], portFolioModels:List[DataFrame],
-                           evaluatonTools:[AEvalTool], histories:List[AHistory], trainRatingsDF:DataFrame, testRatingsDF:DataFrame):
+                           evaluatonTools:List[AEvalTool], histories:List[AHistory], trainRatingsDF:DataFrame, testRatingsDF:DataFrame):
 
         portfolios:List[Portfolio1Aggr] = []
 
@@ -191,7 +191,7 @@ class SimulationPortfolioToUser:
 
 
     def __iterateOverDataset(self, portfolios:List[APortfolio], portfolioDescs:List[Portfolio1AggrDescription],
-                             portFolioModels:List[pd.DataFrame], evaluatonTools:[AEvalTool], histories:List[AHistory],
+                             portFolioModels:List[pd.DataFrame], evaluatonTools:List[AEvalTool], histories:List[AHistory],
                              testRatingsDF:DataFrame):
 
         model:ModelOfIndexes = ModelOfIndexes(testRatingsDF)
@@ -267,7 +267,7 @@ class SimulationPortfolioToUser:
         return selectedItems
 
     def __simulateRecommendations(self, portfolios:List[APortfolio], portfolioDescs:List[Portfolio1AggrDescription],
-                                  portFolioModels:List[DataFrame], evaluatonTools:[AEvalTool], histories:List[AHistory],
+                                  portFolioModels:List[DataFrame], evaluatonTools:List[AEvalTool], histories:List[AHistory],
                                   evaluations:List[dict], currentItemID:int, nextItemIDs:List[int], userID:int, repetition:int):
 
         print("userID: " + str(userID))
