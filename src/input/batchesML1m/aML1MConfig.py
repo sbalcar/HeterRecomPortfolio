@@ -25,7 +25,9 @@ from datasets.behaviours import Behaviours #class
 
 class AML1MConf:
 
+    windowSize:int = 5
     numberOfAggrItems:int = 20
+    numberOfRecommItems:int = 100
 
     def __init__(self, batchID:str, divisionDatasetPercentualSize:int, uBehaviour:str, repetition:int):
         self.batchID = batchID
@@ -38,9 +40,9 @@ class AML1MConf:
 
     def run(self, pDesc:APortfolioDescription, model:DataFrame, evalTool):
 
-        argsSimulationDict:dict = {SimulationPortfolioToUser.ARG_WINDOW_SIZE: 5,
+        argsSimulationDict:dict = {SimulationPortfolioToUser.ARG_WINDOW_SIZE: AML1MConf.windowSize,
                                    SimulationPortfolioToUser.ARG_REPETITION_OF_RECOMMENDATION: self.repetition,
-                                   SimulationPortfolioToUser.ARG_NUMBER_OF_RECOMM_ITEMS: 100,
+                                   SimulationPortfolioToUser.ARG_NUMBER_OF_RECOMM_ITEMS: AML1MConf.numberOfRecommItems,
                                    SimulationPortfolioToUser.ARG_NUMBER_OF_AGGR_ITEMS: AML1MConf.numberOfAggrItems,
                                    SimulationPortfolioToUser.ARG_DIV_DATASET_PERC_SIZE: self.divisionDatasetPercentualSize,
                                    SimulationPortfolioToUser.AGR_USER_BEHAVIOUR_DFINDEX: self.uBehaviour}

@@ -27,8 +27,8 @@ class EvalToolDHont(AEvalTool):
         self.maxVotesConst:float = 0.99
         self.minVotesConst:float = 0.01
 
-        print("learningRateClicks: " + str(self.learningRateClicks))
-        print("learningRateViews: " + str(self.learningRateViews))
+        #print("learningRateClicks: " + str(self.learningRateClicks))
+        #print("learningRateViews: " + str(self.learningRateViews))
 
 
     def click(self, rItemIDsWithResponsibility:List, clickedItemID:int, portfolioModel:DataFrame, evaluationDict:dict):

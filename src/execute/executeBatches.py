@@ -9,23 +9,12 @@ import numpy as np
 
 from typing import List
 
-from input.batchML1m.jobSingleTheMostPopular import jobSingleML1mTheMostPopular #function
-from input.batchML1m.jobSingleCBmax import jobSingleML1mCBmax #function
-from input.batchML1m.jobSingleCBwindow3 import jobSingleML1mCBwindow3 #function
-from input.batchML1m.jobSingleW2vPosnegMean import jobSingleW2vPosnegMean #function
-from input.batchML1m.jobSingleW2vPosnegWindow3 import jobSingleW2vPosnegWindow3 #function
-
-from input.batchML1m.jobBanditTS import jobBanditTS #function
-from input.batchML1m.jobDHontFixedClk01View00002 import jobDHontFixedClk01View00002 #function
-from input.batchML1m.jobDHontRoulette1Clk01View00002 import jobDHontRoulette1Clk01View00002 #function
-from input.batchML1m.jobDHontRoulette3Clk01View00002 import jobDHontRoulette3Clk01View00002 #function
-
-from input.batchML1m.jobNegDHontFixedClk01View00002OStat08HLin1002 import jobNegDHontFixedClk01View00002OStat08HLin1002 #function
-from input.batchML1m.jobNegDHontFixedClk01View00002OLin0802HLin1002 import jobNegDHontFixedClk01View00002OLin0802HLin1002 #function
-from input.batchML1m.jobNegDHontRoulette1Clk01View00002OStat08HLin1002 import jobNegDHontRoulette1Clk01View00002OStat08HLin1002 #function
-from input.batchML1m.jobNegDHontRoulette1Clk01View00002OLin0802HLin1002 import jobNegDHontRoulette1Clk01View00002OLin0802HLin1002 #function
-from input.batchML1m.jobNegDHontRoulette3Clk01View00002OStat08HLin1002 import jobNegDHontRoulette3Clk01View00002OStat08HLin1002 #function
-from input.batchML1m.jobNegDHontRoulette3Clk01View00002OLin0802HLin1002 import jobNegDHontRoulette3Clk01View00002OLin0802HLin1002 #function
+from input.batchesML1m.batchBanditTS import BatchBanditTS #class
+from input.batchesML1m.batchDHontFixed import BatchDHontFixed #class
+from input.batchesML1m.batchDHontRoulette import BatchDHontRoulette #class
+from input.batchesML1m.batchNegDHontFixed import BatchNegDHontFixed #class
+from input.batchesML1m.batchNegDHontRoulette import BatchNegDHontRoulette #class
+from input.batchesML1m.batchSingle import BatchSingle #class
 
 
 def executeBatches():
@@ -33,6 +22,7 @@ def executeBatches():
   np.random.seed(42)
   random.seed(42)
 
+  print("ExecuteBatches")
 
   batchesDir:str = ".." + os.sep + "inputs"
 
@@ -51,3 +41,4 @@ def executeBatches():
           print(command)
 
           exec(command)
+          return
