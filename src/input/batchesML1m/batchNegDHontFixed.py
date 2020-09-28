@@ -21,6 +21,9 @@ from datasets.behaviours import Behaviours #class
 
 from aggregation.toolsDHontNF.penalizationOfResultsByNegImpFeedback.aPenalization import APenalization #class
 
+from aggregationDescription.aggregationDescription import AggregationDescription #class
+
+
 
 class BatchNegDHontFixed:
 
@@ -63,8 +66,10 @@ class BatchNegDHontFixed:
 
         rIDs, rDescs = InputRecomDefinition.exportPairOfRecomIdsAndRecomDescrs(aConf.datasetID)
 
+        aDescNegDHontFixed:AggregationDescription = InputAggrDefinition.exportADescNegDHontFixed(nImplFeedback)
+
         pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
-            "NegDHontFixed" + jobID, rIDs, rDescs, nImplFeedback)
+            "NegDHontFixed" + jobID, rIDs, rDescs, aDescNegDHontFixed)
 
         model:DataFrame = ModelDefinition.createDHontModel(pDescr.getRecommendersIDs())
 
@@ -75,7 +80,9 @@ class BatchNegDHontFixed:
     def generateBatches():
 
         divisionsDatasetPercentualSize:List[int] = [90]
-        uBehaviours:List[str] = [Behaviours.COL_LINEAR0109, Behaviours.COL_STATIC08]
+        uBehaviours:List[str] = [Behaviours.COL_LINEAR0109, Behaviours.COL_STATIC08,
+                                 Behaviours.COL_STATIC06, Behaviours.COL_STATIC04,
+                                 Behaviours.COL_STATIC02]
         repetitions:List[int] = [1, 2, 3, 5]
 
         jobIDs:List[str] = list(BatchNegDHontFixed.getParameters().keys())

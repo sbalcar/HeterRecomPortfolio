@@ -25,5 +25,9 @@ def generateBehaviour():
    bDF:DataFrame = Behaviours.readFromFileMl1m()
    print(bDF.head(10))
 
-#os.chdir("..")
-#generateBehaviour()
+
+
+
+if __name__ == "__main__":
+   os.chdir("..")
+   generateBehaviour()

@@ -60,9 +60,9 @@ class BatchNegDHontRoulette:
 
         aDescDHontRouletteI:AggregationDescription = None
         if rouletteExp == 1:
-            aDescDHontRouletteI = InputAggrDefinition.exportADescDHontRoulette()
+            aDescDHontRouletteI = InputAggrDefinition.exportADescNegDHontRoulette(nImplFeedback)
         elif rouletteExp == 3:
-            aDescDHontRouletteI = InputAggrDefinition.exportADescDHontRoulette3()
+            aDescDHontRouletteI = InputAggrDefinition.exportADescNegDHontRoulette3(nImplFeedback)
 
         pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
             "NegDHontRoulette" + jobID, rIDs, rDescs, aDescDHontRouletteI)
@@ -76,7 +76,9 @@ class BatchNegDHontRoulette:
     def generateBatches():
 
         divisionsDatasetPercentualSize:List[int] = [90]
-        uBehaviours:List[str] = [Behaviours.COL_LINEAR0109, Behaviours.COL_STATIC08]
+        uBehaviours:List[str] = [Behaviours.COL_LINEAR0109, Behaviours.COL_STATIC08,
+                                 Behaviours.COL_STATIC06, Behaviours.COL_STATIC04,
+                                 Behaviours.COL_STATIC02]
         repetitions:List[int] = [1, 2, 3, 5]
 
         jobIDs:List[str] = list(BatchNegDHontRoulette.getParameters().keys())

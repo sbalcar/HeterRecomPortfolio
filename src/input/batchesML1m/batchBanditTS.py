@@ -31,7 +31,7 @@ class BatchBanditTS:
         pDescr: Portfolio1AggrDescription = Portfolio1AggrDescription(
             "BanditTS", rIDs, rDescs, InputAggrDefinition.exportADescBanditTS())
 
-        evalTool: AEvalTool = EvalToolBanditTS()
+        evalTool:AEvalTool = EvalToolBanditTS({})
         model:DataFrame = ModelDefinition.createBanditModel(pDescr.getRecommendersIDs())
 
         aConf.run(pDescr, model, evalTool)
@@ -41,7 +41,9 @@ class BatchBanditTS:
     def generateBatches():
 
         divisionsDatasetPercentualSize:List[int] = [90]
-        uBehaviours:List[str] = [Behaviours.COL_LINEAR0109, Behaviours.COL_STATIC08]
+        uBehaviours:List[str] = [Behaviours.COL_LINEAR0109, Behaviours.COL_STATIC08,
+                                 Behaviours.COL_STATIC06, Behaviours.COL_STATIC04,
+                                 Behaviours.COL_STATIC02]
         repetitions:List[int] = [1, 2, 3, 5]
 
         for divisionDatasetPercentualSizeI in divisionsDatasetPercentualSize:
