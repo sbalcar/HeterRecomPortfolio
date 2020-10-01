@@ -13,7 +13,7 @@ from datasets.behaviours import Behaviours #class
 from input.batchesML1m.batchBanditTS import BatchBanditTS #class
 from input.batchesML1m.batchDHontFixed import BatchDHontFixed #class
 from input.batchesML1m.batchDHontRoulette import BatchDHontRoulette #class
-
+from input.batchesML1m.batchDHondtBanditsVotesRoulette import BatchDHondtBanditsVotesRoulette #class
 from input.batchesML1m.batchNegDHontRoulette import BatchNegDHontRoulette #class
 from input.batchesML1m.batchNegDHontFixed import BatchNegDHontFixed #class
 
@@ -22,14 +22,16 @@ from input.batchesML1m.batchSingle import BatchSingle #class
 def generateBatches():
    print("Generate Batches")
 
-   BatchBanditTS.generateBatches()
-   BatchDHontFixed.generateBatches()
-   BatchDHontRoulette.generateBatches()
+   
+   BatchDHondtBanditsVotesRoulette.generateBatches()
+   #BatchBanditTS.generateBatches()
+   #BatchDHontFixed.generateBatches()
+   #BatchDHontRoulette.generateBatches()
 
-   BatchNegDHontFixed.generateBatches()
-   BatchNegDHontRoulette.generateBatches()
+   #BatchNegDHontFixed.generateBatches()
+   #BatchNegDHontRoulette.generateBatches()
 
-   BatchSingle.generateBatches()
+   #BatchSingle.generateBatches()
 
 
 if __name__ == "__main__":

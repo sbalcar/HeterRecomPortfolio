@@ -78,7 +78,7 @@ class Behaviours:
               behavioursDF.at[indexJ, Behaviours.COL_LINEAR0109] = strLinear0109IJ
 
 
-
+      
       np.random.seed(42)
       random.seed(42)
 
@@ -136,7 +136,7 @@ class Behaviours:
               ubStatic02IJ:List[bool] = uBehavStatic02Desc.getBehaviour(numberOfItems)
               strStatic02IJ:str = Behaviours.__convertToString(ubStatic02IJ)
               behavioursDF.at[indexJ, Behaviours.COL_STATIC02] = strStatic02IJ
-
+      
 
 
       print(behavioursDF.head(10))
@@ -188,7 +188,7 @@ class Behaviours:
 
        behavStatic08I:List[bool] = Behaviours.__convertToListOfBoolean(str(rowI[Behaviours.COL_STATIC08]))
        behaviourStatic08.append(behavStatic08I)
-
+       
        behavStatic06I:List[bool] = Behaviours.__convertToListOfBoolean(str(rowI[Behaviours.COL_STATIC06]))
        behaviourStatic06.append(behavStatic06I)
 
@@ -197,7 +197,7 @@ class Behaviours:
 
        behavStatic02I:List[bool] = Behaviours.__convertToListOfBoolean(str(rowI[Behaviours.COL_STATIC02]))
        behaviourStatic02.append(behavStatic02I)
-
+       
        behavLinear0109I:List[bool] = Behaviours.__convertToListOfBoolean(str(rowI[Behaviours.COL_LINEAR0109]))
        behaviourLinear0109.append(behavLinear0109I)
 

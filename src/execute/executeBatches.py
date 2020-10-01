@@ -12,6 +12,7 @@ from typing import List
 from input.batchesML1m.batchBanditTS import BatchBanditTS #class
 from input.batchesML1m.batchDHontFixed import BatchDHontFixed #class
 from input.batchesML1m.batchDHontRoulette import BatchDHontRoulette #class
+from input.batchesML1m.batchDHondtBanditsVotesRoulette import BatchDHondtBanditsVotesRoulette #class
 from input.batchesML1m.batchNegDHontFixed import BatchNegDHontFixed #class
 from input.batchesML1m.batchNegDHontRoulette import BatchNegDHontRoulette #class
 from input.batchesML1m.batchSingle import BatchSingle #class
@@ -37,7 +38,7 @@ def executeBatches():
 
           file = open(jobI, "r")
           command:str = file.read()
-          os.remove(jobI)
+          #os.remove(jobI)
           print(command)
 
           exec(command)
