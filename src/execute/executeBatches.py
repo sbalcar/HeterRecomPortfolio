@@ -22,7 +22,7 @@ def executeBatches():
   np.random.seed(42)
   random.seed(42)
 
-  print("ExecuteBatches")
+  print("ExecuteBatch")
 
   batchesDir:str = ".." + os.sep + "inputs"
 
@@ -37,8 +37,9 @@ def executeBatches():
 
           file = open(jobI, "r")
           command:str = file.read()
+          print("Removing job: " + command)
           os.remove(jobI)
-          print(command)
 
+          print("Executing job: " + command)
           exec(command)
           return
