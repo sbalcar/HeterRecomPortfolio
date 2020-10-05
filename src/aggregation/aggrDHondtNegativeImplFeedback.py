@@ -8,12 +8,12 @@ from typing import List
 from pandas.core.frame import DataFrame #class
 from pandas.core.series import Series #class
 
-from aggregation.aggrDHont import AggrDHont #class
+from aggregation.aggrDHondt import AggrDHondt #class
 
 from history.aHistory import AHistory #class
 
 
-class AggrDHontNegativeImplFeedback(AggrDHont):
+class AggrDHondtNegativeImplFeedback(AggrDHondt):
 
     ARG_SELECTORFNC:str = "selectorFnc"
     ARG_PENALTY_TOOL:str = "penaltyTool"

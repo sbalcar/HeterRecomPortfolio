@@ -9,7 +9,7 @@ from simulator.simulator import Simulator #class
 from simulation.recommendToUser.simulatorOfPortfoliosRecommToUser import SimulationPortfolioToUser #class
 
 from evaluationTool.evalToolSingleMethod import EToolSingleMethod #class
-from evaluationTool.evalToolDHont import EvalToolDHont #class
+from evaluationTool.evalToolDHondt import EvalToolDHondt #class
 from evaluationTool.evalToolDHondtBanditVotes import EvalToolDHondtBanditVotes #class
 from evaluationTool.evalToolBanditTS import EvalToolBanditTS #class
 

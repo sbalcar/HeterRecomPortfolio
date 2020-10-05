@@ -6,7 +6,7 @@ from pandas.core.frame import DataFrame #class
 
 import pandas as pd
 
-from evaluationTool.evalToolDHont import EvalToolDHont #class
+from evaluationTool.evalToolDHondt import EvalToolDHondt #class
 from evaluationTool.evalToolBanditTS import EvalToolBanditTS #class
 
 

@@ -9,7 +9,7 @@ from pandas.core.frame import DataFrame #class
 from portfolioDescription.portfolio1AggrDescription import Portfolio1AggrDescription #class
 
 from evaluationTool.aEvalTool import AEvalTool #class
-from evaluationTool.evalToolDHont import EvalToolDHont #class
+from evaluationTool.evalToolDHondt import EvalToolDHondt #class
 
 from input.inputAggrDefinition import InputAggrDefinition, ModelDefinition  # class
 
@@ -20,7 +20,7 @@ from input.batchesML1m.aML1MConfig import AML1MConf #function
 from datasets.behaviours import Behaviours #class
 
 
-class BatchDHontFixed:
+class BatchDHondtFixed:
 
     @staticmethod
     def getParameters():
@@ -31,8 +31,8 @@ class BatchDHontFixed:
         for lrClickI in lrClicks:
             for lrViewJ in lrViews:
                 keyIJ:str = "Clk" + str(lrClickI).replace(".", "") + "View" + str(lrViewJ).replace(".", "")
-                eTool:AEvalTool = EvalToolDHont({EvalToolDHont.ARG_LEARNING_RATE_CLICKS: lrClickI,
-                                                 EvalToolDHont.ARG_LEARNING_RATE_VIEWS: lrViewJ})
+                eTool:AEvalTool = EvalToolDHondt({EvalToolDHondt.ARG_LEARNING_RATE_CLICKS: lrClickI,
+                                                  EvalToolDHondt.ARG_LEARNING_RATE_VIEWS: lrViewJ})
                 aDict[keyIJ] = eTool
         return aDict
 
@@ -50,7 +50,7 @@ class BatchDHontFixed:
         #eTool:AEvalTool = EvalToolDHont({EvalToolDHont.ARG_LEARNING_RATE_CLICKS: 0.1,
         #                                  EvalToolDHont.ARG_LEARNING_RATE_VIEWS: 0.1 / 500})
 
-        eTool:AEvalTool = BatchDHontFixed.getParameters()[jobID]
+        eTool:AEvalTool = BatchDHondtFixed.getParameters()[jobID]
 
         model:DataFrame = ModelDefinition.createDHontModel(pDescr.getRecommendersIDs())
 
@@ -66,7 +66,7 @@ class BatchDHontFixed:
                                  Behaviours.BHVR_STATIC02]
         repetitions:List[int] = [1, 2, 3, 5]
 
-        learningRates:List[str] = list(BatchDHontFixed.getParameters().keys())
+        learningRates:List[str] = list(BatchDHondtFixed.getParameters().keys())
 
         for divisionDatasetPercentualSizeI in divisionsDatasetPercentualSize:
             for uBehaviourJ in uBehaviours:
@@ -78,16 +78,16 @@ class BatchDHontFixed:
                         if not os.path.exists(batchesDir):
                             os.mkdir(batchesDir)
 
-                        job:str = str(BatchDHontFixed.__name__) + learningRateL
-                        text:str = str(BatchDHontFixed.__name__) + ".run('"\
-                                   + str(batchID) + "', "\
-                                   + str(divisionDatasetPercentualSizeI) + ", '"\
-                                   + str(uBehaviourJ) + "', "\
-                                   + str(repetitionK) + ", "\
+                        job:str = str(BatchDHondtFixed.__name__) + learningRateL
+                        text:str = str(BatchDHondtFixed.__name__) + ".run('" \
+                                   + str(batchID) + "', " \
+                                   + str(divisionDatasetPercentualSizeI) + ", '" \
+                                   + str(uBehaviourJ) + "', " \
+                                   + str(repetitionK) + ", " \
                                    + "'" + str(learningRateL) + "'" + ")"
 
                         jobFile:str = batchesDir + os.sep + job + ".txt"
-                        BatchDHontFixed.__writeToFile(jobFile, text)
+                        BatchDHondtFixed.__writeToFile(jobFile, text)
 
 
     @staticmethod
@@ -101,4 +101,4 @@ if __name__ == "__main__":
    os.chdir("..")
    os.chdir("..")
    print(os.getcwd())
-   BatchDHontFixed.generateBatches()
+   BatchDHondtFixed.generateBatches()

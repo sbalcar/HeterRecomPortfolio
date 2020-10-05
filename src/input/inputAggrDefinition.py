@@ -22,11 +22,11 @@ from portfolioDescription.portfolio1AggrDescription import Portfolio1AggrDescrip
 
 from aggregationDescription.aggregationDescription import AggregationDescription #class
 from aggregation.aggrBanditTS import AggrBanditTS #class
-from aggregation.aggrDHont import AggrDHont #class
+from aggregation.aggrDHondt import AggrDHondt #class
 from aggregation.aggrDHondtBanditsVotes import AggrDHondtBanditsVotes #class
-from aggregation.aggrDHontNegativeImplFeedback import AggrDHontNegativeImplFeedback #class
+from aggregation.aggrDHondtNegativeImplFeedback import AggrDHondtNegativeImplFeedback #class
 
-from evaluationTool.evalToolDHont import EvalToolDHont #class
+from evaluationTool.evalToolDHondt import EvalToolDHondt #class
 from evaluationTool.evalToolDHondtBanditVotes import EvalToolDHondtBanditVotes 
 
 import pandas as pd
@@ -59,20 +59,20 @@ class InputAggrDefinition:
 
     @staticmethod
     def exportADescDHontFixed():
-        aDescDHontFixed:AggregationDescription = AggregationDescription(AggrDHont,
-                                {AggrDHont.ARG_SELECTORFNC:(AggrDHont.selectorOfTheMostVotedItem,[])})
+        aDescDHontFixed:AggregationDescription = AggregationDescription(AggrDHondt,
+                                                                        {AggrDHondt.ARG_SELECTORFNC:(AggrDHondt.selectorOfTheMostVotedItem, [])})
         return aDescDHontFixed
 
     @staticmethod
     def exportADescDHontRoulette():
-        aDescDHontRoulette:AggregationDescription = AggregationDescription(AggrDHont,
-                                {AggrDHont.ARG_SELECTORFNC:(AggrDHont.selectorOfRouletteWheelRatedItem,[])})
+        aDescDHontRoulette:AggregationDescription = AggregationDescription(AggrDHondt,
+                                                                           {AggrDHondt.ARG_SELECTORFNC:(AggrDHondt.selectorOfRouletteWheelRatedItem, [])})
         return aDescDHontRoulette
 
     @staticmethod
     def exportADescDHontRoulette3():
-        aDescDHontRoulette3:AggregationDescription = AggregationDescription(AggrDHont,
-                                {AggrDHont.ARG_SELECTORFNC:(AggrDHont.selectorOfRouletteWheelExpRatedItem,[3])})
+        aDescDHontRoulette3:AggregationDescription = AggregationDescription(AggrDHondt,
+                                                                            {AggrDHondt.ARG_SELECTORFNC:(AggrDHondt.selectorOfRouletteWheelExpRatedItem, [3])})
         return aDescDHontRoulette3
 
     @staticmethod
@@ -89,23 +89,23 @@ class InputAggrDefinition:
 
     @staticmethod
     def exportADescNegDHontFixed(aPenalization:APenalization):
-        aDescNegDHontFixed:AggregationDescription = AggregationDescription(AggrDHontNegativeImplFeedback, {
-                                AggrDHontNegativeImplFeedback.ARG_SELECTORFNC:(AggrDHont.selectorOfTheMostVotedItem,[]),
-                                AggrDHontNegativeImplFeedback.ARG_PENALTY_TOOL:aPenalization})
+        aDescNegDHontFixed:AggregationDescription = AggregationDescription(AggrDHondtNegativeImplFeedback, {
+                                AggrDHondtNegativeImplFeedback.ARG_SELECTORFNC:(AggrDHondt.selectorOfTheMostVotedItem, []),
+                                AggrDHondtNegativeImplFeedback.ARG_PENALTY_TOOL:aPenalization})
         return aDescNegDHontFixed
 
     @staticmethod
     def exportADescNegDHontRoulette(aPenalization:APenalization):
-        aDescNegDHontRoulette:AggregationDescription = AggregationDescription(AggrDHontNegativeImplFeedback, {
-                                AggrDHontNegativeImplFeedback.ARG_SELECTORFNC:(AggrDHont.selectorOfRouletteWheelRatedItem,[]),
-                                AggrDHontNegativeImplFeedback.ARG_PENALTY_TOOL:aPenalization})
+        aDescNegDHontRoulette:AggregationDescription = AggregationDescription(AggrDHondtNegativeImplFeedback, {
+                                AggrDHondtNegativeImplFeedback.ARG_SELECTORFNC:(AggrDHondt.selectorOfRouletteWheelRatedItem, []),
+                                AggrDHondtNegativeImplFeedback.ARG_PENALTY_TOOL:aPenalization})
         return aDescNegDHontRoulette
 
     @staticmethod
     def exportADescNegDHontRoulette3(aPenalization:APenalization):
-        aDescNegDHontRoulette3:AggregationDescription = AggregationDescription(AggrDHontNegativeImplFeedback, {
-                                AggrDHontNegativeImplFeedback.ARG_SELECTORFNC:(AggrDHont.selectorOfRouletteWheelExpRatedItem,[3]),
-                                AggrDHontNegativeImplFeedback.ARG_PENALTY_TOOL:aPenalization})
+        aDescNegDHontRoulette3:AggregationDescription = AggregationDescription(AggrDHondtNegativeImplFeedback, {
+                                AggrDHondtNegativeImplFeedback.ARG_SELECTORFNC:(AggrDHondt.selectorOfRouletteWheelExpRatedItem, [3]),
+                                AggrDHondtNegativeImplFeedback.ARG_PENALTY_TOOL:aPenalization})
         return aDescNegDHontRoulette3
 
 
@@ -126,7 +126,7 @@ class ModelDefinition:
         modelDHontData:List[List] = [[rIdI, 1] for rIdI in recommendersIDs]
         modelDHontDF:DataFrame = pd.DataFrame(modelDHontData, columns=["methodID", "votes"])
         modelDHontDF.set_index("methodID", inplace=True)
-        EvalToolDHont.linearNormalizingPortfolioModelDHont(modelDHontDF)
+        EvalToolDHondt.linearNormalizingPortfolioModelDHont(modelDHontDF)
         return modelDHontDF
     
     def createDHondtBanditsVotesModel(recommendersIDs: List[str]):

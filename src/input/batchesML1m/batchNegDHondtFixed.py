@@ -9,7 +9,7 @@ from pandas.core.frame import DataFrame #class
 from portfolioDescription.portfolio1AggrDescription import Portfolio1AggrDescription #class
 
 from evaluationTool.aEvalTool import AEvalTool #class
-from evaluationTool.evalToolDHont import EvalToolDHont #class
+from evaluationTool.evalToolDHondt import EvalToolDHondt #class
 
 from input.inputAggrDefinition import InputAggrDefinition, ModelDefinition  # class
 
@@ -25,7 +25,7 @@ from aggregationDescription.aggregationDescription import AggregationDescription
 
 
 
-class BatchNegDHontFixed:
+class BatchNegDHondtFixed:
 
     @staticmethod
     def getNegativeImplFeedbackParameters():
@@ -41,7 +41,7 @@ class BatchNegDHontFixed:
 
     @staticmethod
     def getParameters():
-        negativeImplFeedback:List[str] = BatchNegDHontFixed.getNegativeImplFeedbackParameters().keys()
+        negativeImplFeedback:List[str] = BatchNegDHondtFixed.getNegativeImplFeedbackParameters().keys()
         lrClicks:List[float] = [0.2, 0.1, 0.02, 0.005]
         lrViews:List[float] = [0.1 / 500, 0.1 / 200, 0.1 / 1000]
 
@@ -50,9 +50,9 @@ class BatchNegDHontFixed:
             for lrClickJ in lrClicks:
                 for lrViewK in lrViews:
                     keyIJ:str = "Clk" + str(lrClickJ).replace(".", "") + "View" + str(lrViewK).replace(".", "") + nImplFeedbackI
-                    eTool:AEvalTool = EvalToolDHont({EvalToolDHont.ARG_LEARNING_RATE_CLICKS: lrClickJ,
-                                                 EvalToolDHont.ARG_LEARNING_RATE_VIEWS: lrViewK})
-                    nImplFeedback:APenalization = BatchNegDHontFixed.getNegativeImplFeedbackParameters()[nImplFeedbackI]
+                    eTool:AEvalTool = EvalToolDHondt({EvalToolDHondt.ARG_LEARNING_RATE_CLICKS: lrClickJ,
+                                                      EvalToolDHondt.ARG_LEARNING_RATE_VIEWS: lrViewK})
+                    nImplFeedback:APenalization = BatchNegDHondtFixed.getNegativeImplFeedbackParameters()[nImplFeedbackI]
                     aDict[keyIJ] = (nImplFeedback, eTool)
         return aDict
 
@@ -60,7 +60,7 @@ class BatchNegDHontFixed:
     def run(batchID:str, divisionDatasetPercentualSize:int, uBehaviour:str, repetition:int, jobID:str):
 
         #eTool:AEvalTool
-        nImplFeedback, eTool = BatchNegDHontFixed.getParameters()[jobID]
+        nImplFeedback, eTool = BatchNegDHondtFixed.getParameters()[jobID]
 
         aConf:AML1MConf = AML1MConf(batchID, divisionDatasetPercentualSize, uBehaviour, repetition)
 
@@ -85,7 +85,7 @@ class BatchNegDHontFixed:
                                  Behaviours.BHVR_STATIC02]
         repetitions:List[int] = [1, 2, 3, 5]
 
-        jobIDs:List[str] = list(BatchNegDHontFixed.getParameters().keys())
+        jobIDs:List[str] = list(BatchNegDHondtFixed.getParameters().keys())
 
         for divisionDatasetPercentualSizeI in divisionsDatasetPercentualSize:
             for uBehaviourJ in uBehaviours:
@@ -97,16 +97,16 @@ class BatchNegDHontFixed:
                         if not os.path.exists(batchesDir):
                             os.mkdir(batchesDir)
 
-                        job:str = str(BatchNegDHontFixed.__name__) + jobIDL
-                        text:str = str(BatchNegDHontFixed.__name__) + ".run('"\
-                                   + str(batchID) + "', "\
-                                   + str(divisionDatasetPercentualSizeI) + ", '"\
-                                   + str(uBehaviourJ) + "', "\
-                                   + str(repetitionK) + ", "\
+                        job:str = str(BatchNegDHondtFixed.__name__) + jobIDL
+                        text:str = str(BatchNegDHondtFixed.__name__) + ".run('" \
+                                   + str(batchID) + "', " \
+                                   + str(divisionDatasetPercentualSizeI) + ", '" \
+                                   + str(uBehaviourJ) + "', " \
+                                   + str(repetitionK) + ", " \
                                    + "'" + str(jobIDL) + "'" + ")"
 
                         jobFile:str = batchesDir + os.sep + job + ".txt"
-                        BatchNegDHontFixed.__writeToFile(jobFile, text)
+                        BatchNegDHondtFixed.__writeToFile(jobFile, text)
 
 
     @staticmethod
@@ -120,4 +120,4 @@ if __name__ == "__main__":
    os.chdir("..")
    os.chdir("..")
    print(os.getcwd())
-   BatchNegDHontFixed.generateBatches()
+   BatchNegDHondtFixed.generateBatches()

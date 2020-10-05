@@ -9,7 +9,7 @@ from pandas.core.frame import DataFrame #class
 from portfolioDescription.portfolio1AggrDescription import Portfolio1AggrDescription #class
 
 from evaluationTool.aEvalTool import AEvalTool #class
-from evaluationTool.evalToolDHont import EvalToolDHont #class
+from evaluationTool.evalToolDHondt import EvalToolDHondt #class
 
 from aggregationDescription.aggregationDescription import AggregationDescription #class
 
@@ -17,34 +17,42 @@ from input.inputAggrDefinition import InputAggrDefinition, ModelDefinition  # cl
 
 from input.InputRecomDefinition import InputRecomDefinition #class
 
+from input.batchesML1m.batchNegDHondtFixed import BatchNegDHondtFixed #class
+
+from aggregation.toolsDHontNF.penalizationOfResultsByNegImpFeedback.aPenalization import APenalization #class
+
 from input.batchesML1m.aML1MConfig import AML1MConf #function
 
 from datasets.behaviours import Behaviours #class
 
 
-class BatchDHontRoulette:
+class BatchNegDHondtRoulette:
 
     @staticmethod
     def getParameters():
         rouletteExps:List[int] = [1, 3]
+        negativeImplFeedback:List[str] = BatchNegDHondtFixed.getNegativeImplFeedbackParameters().keys()
         lrClicks:List[float] = [0.2, 0.1, 0.02, 0.005]
         lrViews:List[float] = [0.1 / 500, 0.1 / 200, 0.1 / 1000]
 
         aDict:dict = {}
-        for rouletteExpI in rouletteExps:
-            for lrClickJ in lrClicks:
-                for lrViewK in lrViews:
-                    keyIJ:str = str(rouletteExpI) + "Clk" + str(lrClickJ).replace(".", "") + "View" + str(lrViewK).replace(".", "")
-                    eTool:AEvalTool = EvalToolDHont({EvalToolDHont.ARG_LEARNING_RATE_CLICKS: lrClickJ,
-                                                 EvalToolDHont.ARG_LEARNING_RATE_VIEWS: lrViewK})
-                    aDict[keyIJ] = (rouletteExpI, eTool)
+        for rouletteExpH in rouletteExps:
+            for nImplFeedbackI in negativeImplFeedback:
+                for lrClickJ in lrClicks:
+                    for lrViewK in lrViews:
+                        keyIJ:str = str(rouletteExpH) + "Clk" + str(lrClickJ).replace(".", "") + "View" + str(lrViewK).replace(".", "") + nImplFeedbackI
+                        eTool:AEvalTool = EvalToolDHondt({EvalToolDHondt.ARG_LEARNING_RATE_CLICKS: lrClickJ,
+                                                          EvalToolDHondt.ARG_LEARNING_RATE_VIEWS: lrViewK})
+                        nImplFeedback:APenalization = BatchNegDHondtFixed.getNegativeImplFeedbackParameters()[nImplFeedbackI]
+                        aDict[keyIJ] = (rouletteExpH, nImplFeedback, eTool)
         return aDict
+
 
     @staticmethod
     def run(batchID:str, divisionDatasetPercentualSize:int, uBehaviour:str, repetition:int, jobID:str):
 
         #eTool:AEvalTool
-        rouletteExp, eTool = BatchDHontRoulette.getParameters()[jobID]
+        rouletteExp, nImplFeedback, eTool = BatchNegDHondtRoulette.getParameters()[jobID]
 
         aConf:AML1MConf = AML1MConf(batchID, divisionDatasetPercentualSize, uBehaviour, repetition)
 
@@ -52,12 +60,12 @@ class BatchDHontRoulette:
 
         aDescDHontRouletteI:AggregationDescription = None
         if rouletteExp == 1:
-            aDescDHontRouletteI = InputAggrDefinition.exportADescDHontRoulette()
+            aDescDHontRouletteI = InputAggrDefinition.exportADescNegDHontRoulette(nImplFeedback)
         elif rouletteExp == 3:
-            aDescDHontRouletteI = InputAggrDefinition.exportADescDHontRoulette3()
+            aDescDHontRouletteI = InputAggrDefinition.exportADescNegDHontRoulette3(nImplFeedback)
 
         pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
-            "DHontRoulette" + jobID, rIDs, rDescs, aDescDHontRouletteI)
+            "NegDHontRoulette" + jobID, rIDs, rDescs, aDescDHontRouletteI)
 
         model:DataFrame = ModelDefinition.createDHontModel(pDescr.getRecommendersIDs())
 
@@ -73,7 +81,7 @@ class BatchDHontRoulette:
                                  Behaviours.BHVR_STATIC02]
         repetitions:List[int] = [1, 2, 3, 5]
 
-        jobIDs:List[str] = list(BatchDHontRoulette.getParameters().keys())
+        jobIDs:List[str] = list(BatchNegDHondtRoulette.getParameters().keys())
 
         for divisionDatasetPercentualSizeI in divisionsDatasetPercentualSize:
             for uBehaviourJ in uBehaviours:
@@ -85,16 +93,16 @@ class BatchDHontRoulette:
                         if not os.path.exists(batchesDir):
                             os.mkdir(batchesDir)
 
-                        job:str = str(BatchDHontRoulette.__name__) + jobIDL
-                        text:str = str(BatchDHontRoulette.__name__) + ".run('"\
-                                   + str(batchID) + "', "\
-                                   + str(divisionDatasetPercentualSizeI) + ", '"\
-                                   + str(uBehaviourJ) + "', "\
-                                   + str(repetitionK) + ", "\
+                        job:str = str(BatchNegDHondtRoulette.__name__) + jobIDL
+                        text:str = str(BatchNegDHondtRoulette.__name__) + ".run('" \
+                                   + str(batchID) + "', " \
+                                   + str(divisionDatasetPercentualSizeI) + ", '" \
+                                   + str(uBehaviourJ) + "', " \
+                                   + str(repetitionK) + ", " \
                                    + "'" + str(jobIDL) + "'" + ")"
 
                         jobFile:str = batchesDir + os.sep + job + ".txt"
-                        BatchDHontRoulette.__writeToFile(jobFile, text)
+                        BatchNegDHondtRoulette.__writeToFile(jobFile, text)
 
 
     @staticmethod
@@ -105,7 +113,7 @@ class BatchDHontRoulette:
 
 
 if __name__ == "__main__":
-    os.chdir("..")
-    os.chdir("..")
-    print(os.getcwd())
-    BatchDHontRoulette.generateBatches()
+   os.chdir("..")
+   os.chdir("..")
+   print(os.getcwd())
+   BatchNegDHondtRoulette.generateBatches()

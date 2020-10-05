@@ -19,7 +19,7 @@ from abc import ABC, abstractmethod
 
 from userBehaviourDescription.userBehaviourDescription import UserBehaviourDescription #class
 
-class AggrDHont(AAgregation):
+class AggrDHondt(AAgregation):
 
     ARG_SELECTORFNC:str = "selectorFnc"
 

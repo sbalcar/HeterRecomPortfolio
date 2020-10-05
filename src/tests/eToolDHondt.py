@@ -6,7 +6,7 @@ from pandas.core.frame import DataFrame #class
 
 import pandas as pd
 
-from evaluationTool.evalToolDHont import EvalToolDHont #class
+from evaluationTool.evalToolDHondt import EvalToolDHondt #class
 
 
 def test01():
@@ -43,21 +43,21 @@ def test01():
     evaluationDict:dict = {}
 
     print("Clicked:")
-    EvalToolDHont.click(rItemIDsWithResponsibility, 7, portfolioModelDF, evaluationDict)
-    EvalToolDHont.click(rItemIDsWithResponsibility, 1, portfolioModelDF, evaluationDict)
-    EvalToolDHont.click(rItemIDsWithResponsibility, 7, portfolioModelDF, evaluationDict)
+    EvalToolDHondt.click(rItemIDsWithResponsibility, 7, portfolioModelDF, evaluationDict)
+    EvalToolDHondt.click(rItemIDsWithResponsibility, 1, portfolioModelDF, evaluationDict)
+    EvalToolDHondt.click(rItemIDsWithResponsibility, 7, portfolioModelDF, evaluationDict)
     print()
 
     print("Displayed - start:")
     for i in range(100):
         rItemIDsWithResponsibility1:List = [(7, {'metoda1': 0, 'metoda2': 24.0, 'metoda3': 18.0})]
-        EvalToolDHont.displayed(rItemIDsWithResponsibility1, portfolioModelDF, evaluationDict)
+        EvalToolDHondt.displayed(rItemIDsWithResponsibility1, portfolioModelDF, evaluationDict)
     print(portfolioModelDF)
     print("Displayed - end:")
     print()
 
     print("Clicked:")
-    EvalToolDHont.click(rItemIDsWithResponsibility, 4, portfolioModelDF, evaluationDict)
+    EvalToolDHondt.click(rItemIDsWithResponsibility, 4, portfolioModelDF, evaluationDict)
     print()
 
 

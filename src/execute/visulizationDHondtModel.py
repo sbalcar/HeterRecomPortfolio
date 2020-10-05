@@ -15,7 +15,7 @@ import matplotlib.pyplot as plt
 
 from scipy.signal import savgol_filter
 
-def visualizationDHontModel():
+def visualizationDHondtModel():
    print("Visualization D'Hont Model")
    os.chdir("..")
 
@@ -159,4 +159,4 @@ def visualizationDHontModel():
    print(recomW2vPosnegMaxModel[0:10])
 
 
-visualizationDHontModel()
+visualizationDHondtModel()

@@ -3,8 +3,8 @@
 from typing import List
 from pandas.core.frame import DataFrame #class
 
-from aggregation.aggrDHont import AggrDHont #class
-from aggregation.aggrDHontNegativeImplFeedback import AggrDHontNegativeImplFeedback #class
+from aggregation.aggrDHondt import AggrDHondt #class
+from aggregation.aggrDHondtNegativeImplFeedback import AggrDHondtNegativeImplFeedback #class
 
 import pandas as pd
 from history.historyDF import HistoryDF #class
@@ -38,7 +38,7 @@ def test01():
         portfolioModel.loc[methodIdI, "votes"] = portfolioModel.loc[methodIdI, "votes"] / sumMethodsVotes
 
 
-    aggr:AggrDHont = AggrDHont(HistoryDF(""), {AggrDHont.ARG_SELECTORFNC:(AggrDHont.selectorOfTheMostVotedItem,[])})
+    aggr:AggrDHondt = AggrDHondt(HistoryDF(""), {AggrDHondt.ARG_SELECTORFNC:(AggrDHondt.selectorOfTheMostVotedItem, [])})
     #itemIDs:int = aggr.run(methodsResultDict, methodsParamsDF, N)
     #print(itemIDs)
     itemIDs:List[tuple] = aggr.runWithResponsibility(methodsResultDict, portfolioModel, N)
@@ -67,11 +67,11 @@ def test02():
     #aggr:AggrDHont = AggrDHont(HistoryDF(), {AggrDHont.ARG_SELECTORFNC:(AggrDHont.selectorOfTheMostVotedItem,[])})
     #aggr:AggrDHont = AggrDHont(HistoryDF(), {AggrDHont.ARG_SELECTORFNC:(AggrDHont.selectorOfRouletteWheelRatedItem,[])})
     #aggr:AggrDHont = AggrDHont(HistoryDF(), {AggrDHont.ARG_SELECTORFNC:(AggrDHont.selectorOfRouletteWheelExpRatedItem,[1])})
-    aggr:AggrDHont = AggrDHontNegativeImplFeedback(HistoryDF(""),
-                                {AggrDHontNegativeImplFeedback.ARG_SELECTORFNC:(AggrDHontNegativeImplFeedback.selectorOfRouletteWheelExpRatedItem,[1]),
-                                 AggrDHontNegativeImplFeedback.ARG_MAX_PENALTY_VALUE: 0.8,
-                                 AggrDHontNegativeImplFeedback.ARG_MIN_PENALTY_VALUE: 0.2,
-                                 AggrDHontNegativeImplFeedback.ARG_LENGTH_OF_HISTORY: 10})
+    aggr:AggrDHondt = AggrDHondtNegativeImplFeedback(HistoryDF(""),
+                                                     {AggrDHondtNegativeImplFeedback.ARG_SELECTORFNC:(AggrDHondtNegativeImplFeedback.selectorOfRouletteWheelExpRatedItem, [1]),
+                                                      AggrDHondtNegativeImplFeedback.ARG_MAX_PENALTY_VALUE: 0.8,
+                                                      AggrDHondtNegativeImplFeedback.ARG_MIN_PENALTY_VALUE: 0.2,
+                                                      AggrDHondtNegativeImplFeedback.ARG_LENGTH_OF_HISTORY: 10})
 
     ##itemIDs:int = aggr.run(methodsResultDict, methodsParamsDF, N)
     itemIDs:int = aggr.run(methodsResultDict, methodsParamsDF, N)

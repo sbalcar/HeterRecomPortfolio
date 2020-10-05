@@ -11,11 +11,11 @@ from pandas.core.frame import DataFrame #class
 from datasets.behaviours import Behaviours #class
 
 from input.batchesML1m.batchBanditTS import BatchBanditTS #class
-from input.batchesML1m.batchDHontFixed import BatchDHontFixed #class
-from input.batchesML1m.batchDHontRoulette import BatchDHontRoulette #class
+from input.batchesML1m.batchDHondtFixed import BatchDHondtFixed #class
+from input.batchesML1m.batchDHondtRoulette import BatchDHondtRoulette #class
 from input.batchesML1m.batchDHondtBanditsVotesRoulette import BatchDHondtBanditsVotesRoulette #class
-from input.batchesML1m.batchNegDHontRoulette import BatchNegDHontRoulette #class
-from input.batchesML1m.batchNegDHontFixed import BatchNegDHontFixed #class
+from input.batchesML1m.batchNegDHondtRoulette import BatchNegDHondtRoulette #class
+from input.batchesML1m.batchNegDHondtFixed import BatchNegDHondtFixed #class
 
 from input.batchesML1m.batchSingle import BatchSingle #class
 
@@ -25,11 +25,11 @@ def generateBatches():
    
    BatchDHondtBanditsVotesRoulette.generateBatches()
    BatchBanditTS.generateBatches()
-   BatchDHontFixed.generateBatches()
-   BatchDHontRoulette.generateBatches()
+   BatchDHondtFixed.generateBatches()
+   BatchDHondtRoulette.generateBatches()
 
-   BatchNegDHontFixed.generateBatches()
-   BatchNegDHontRoulette.generateBatches()
+   BatchNegDHondtFixed.generateBatches()
+   BatchNegDHondtRoulette.generateBatches()
 
    BatchSingle.generateBatches()
 

@@ -8,7 +8,7 @@ from pandas.core.frame import DataFrame #class
 
 import numpy as np
 
-class EvalToolDHont(AEvalTool):
+class EvalToolDHondt(AEvalTool):
     #learningRateClicks:float = 0.1
     #learningRateViews:float = (0.1 / 500)
     #maxVotesConst:float = 0.99
@@ -22,8 +22,8 @@ class EvalToolDHont(AEvalTool):
         if type(argsDict) is not dict:
             raise ValueError("Argument argsDict isn't type dict.")
 
-        self.learningRateClicks:float = argsDict[EvalToolDHont.ARG_LEARNING_RATE_CLICKS]
-        self.learningRateViews:float = argsDict[EvalToolDHont.ARG_LEARNING_RATE_VIEWS]
+        self.learningRateClicks:float = argsDict[EvalToolDHondt.ARG_LEARNING_RATE_CLICKS]
+        self.learningRateViews:float = argsDict[EvalToolDHondt.ARG_LEARNING_RATE_VIEWS]
         self.maxVotesConst:float = 0.99
         self.minVotesConst:float = 0.01
 
@@ -73,7 +73,7 @@ class EvalToolDHont(AEvalTool):
                 portfolioModel.loc[methodIdI, 'votes'] = self.maxVotesConst
 
          # linearly normalizing to unit sum of votes
-        EvalToolDHont.linearNormalizingPortfolioModelDHont(portfolioModel)
+        EvalToolDHondt.linearNormalizingPortfolioModelDHont(portfolioModel)
 
         print("HOP")
         print("clickedItemID: " + str(clickedItemID))
@@ -118,7 +118,7 @@ class EvalToolDHont(AEvalTool):
                     portfolioModel.loc[methodIdI, 'votes'] = self.maxVotesConst
 
         # linearly normalizing to unit sum of votes
-        EvalToolDHont.linearNormalizingPortfolioModelDHont(portfolioModel)
+        EvalToolDHondt.linearNormalizingPortfolioModelDHont(portfolioModel)
 
 
 
