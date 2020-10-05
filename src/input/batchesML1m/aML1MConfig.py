@@ -30,10 +30,10 @@ class AML1MConf:
     numberOfAggrItems:int = 20
     numberOfRecommItems:int = 100
 
-    def __init__(self, batchID:str, divisionDatasetPercentualSize:int, uBehaviour:str, repetition:int):
+    def __init__(self, batchID:str, divisionDatasetPercentualSize:int, uBehaviourID:str, repetition:int):
         self.batchID = batchID
         self.divisionDatasetPercentualSize = divisionDatasetPercentualSize
-        self.uBehaviour = uBehaviour
+        self.uBehaviourID = uBehaviourID
         self.repetition = repetition
 
         self.datasetID:str = "ml1m" + "Div" + str(divisionDatasetPercentualSize)
@@ -45,14 +45,15 @@ class AML1MConf:
                                    SimulationPortfolioToUser.ARG_REPETITION_OF_RECOMMENDATION: self.repetition,
                                    SimulationPortfolioToUser.ARG_NUMBER_OF_RECOMM_ITEMS: AML1MConf.numberOfRecommItems,
                                    SimulationPortfolioToUser.ARG_NUMBER_OF_AGGR_ITEMS: AML1MConf.numberOfAggrItems,
-                                   SimulationPortfolioToUser.ARG_DIV_DATASET_PERC_SIZE: self.divisionDatasetPercentualSize,
-                                   SimulationPortfolioToUser.AGR_USER_BEHAVIOUR_DFINDEX: self.uBehaviour}
+                                   SimulationPortfolioToUser.ARG_DIV_DATASET_PERC_SIZE: self.divisionDatasetPercentualSize}
 
         # dataset reading
         ratingsDF:DataFrame = Ratings.readFromFileMl1m()
         usersDF:DataFrame = Users.readFromFileMl1m()
         itemsDF:DataFrame = Items.readFromFileMl1m()
-        behavioursDF:DataFrame = Behaviours.readFromFileMl1m()
+
+        behaviourFile:str = Behaviours.getFile(self.uBehaviourID)
+        behavioursDF:DataFrame = Behaviours.readFromFileMl1m(behaviourFile)
 
         # simulation of portfolio
         simulator:Simulator = Simulator(self.batchID, SimulationPortfolioToUser, argsSimulationDict,

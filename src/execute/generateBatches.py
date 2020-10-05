@@ -24,14 +24,14 @@ def generateBatches():
 
    
    BatchDHondtBanditsVotesRoulette.generateBatches()
-   #BatchBanditTS.generateBatches()
-   #BatchDHontFixed.generateBatches()
-   #BatchDHontRoulette.generateBatches()
+   BatchBanditTS.generateBatches()
+   BatchDHontFixed.generateBatches()
+   BatchDHontRoulette.generateBatches()
 
-   #BatchNegDHontFixed.generateBatches()
-   #BatchNegDHontRoulette.generateBatches()
+   BatchNegDHontFixed.generateBatches()
+   BatchNegDHontRoulette.generateBatches()
 
-   #BatchSingle.generateBatches()
+   BatchSingle.generateBatches()
 
 
 if __name__ == "__main__":

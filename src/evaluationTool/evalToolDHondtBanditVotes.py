@@ -25,7 +25,7 @@ class EvalToolDHondtBanditVotes(AEvalTool):
         if type(evaluationDict) is not dict:
             raise ValueError("Argument evaluationDict isn't type dict.")
 
-        aggrItemIDsWithRespDF: DataFrame = DataFrame(rItemIDsWithResponsibility, columns=["itemId", "responsibility"])
+        aggrItemIDsWithRespDF:DataFrame = DataFrame(rItemIDsWithResponsibility, columns=["itemId", "responsibility"])
         aggrItemIDsWithRespDF.set_index("itemId", inplace=True)
 
         #EvalToolDHont.linearNormalizingPortfolioModelDHont(portfolioModel)

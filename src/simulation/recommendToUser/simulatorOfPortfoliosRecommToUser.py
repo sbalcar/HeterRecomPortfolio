@@ -70,7 +70,7 @@ class SimulationPortfolioToUser:
         self._numberOfAggrItems:int = argumentsDict[self.ARG_NUMBER_OF_AGGR_ITEMS]
 
         self._divisionDatasetPercentualSize:int = argumentsDict[self.ARG_DIV_DATASET_PERC_SIZE]
-        self._uBehaviourDFIndex:str = argumentsDict[self.AGR_USER_BEHAVIOUR_DFINDEX]
+        #self._uBehaviourDFIndex:str = argumentsDict[self.AGR_USER_BEHAVIOUR_DFINDEX]
 
 
     def run(self, portfolioDescs:List[APortfolioDescription], portFolioModels:List[pd.DataFrame],
@@ -277,10 +277,16 @@ class SimulationPortfolioToUser:
         isUser:List[bool] = self._behaviourDF[Behaviours.COL_USERID] == userID
         isItem:List[bool] = self._behaviourDF[Behaviours.COL_MOVIEID] == currentItemID
         isRepetition:List[bool] = self._behaviourDF[Behaviours.COL_REPETITION] == repetition
-        uObservationUserItem:List[bool] = self._behaviourDF[(isUser) & (isItem) & (isRepetition)][self._uBehaviourDFIndex]
+        #print(self._behaviourDF.head(10))
+        uObservationUserItem:str = self._behaviourDF[(isUser) & (isItem) & (isRepetition)][Behaviours.COL_BEHAVIOUR]
+
         if uObservationUserItem.shape[0] != 1:
+            #print(uObservationUserItem)
             raise ValueError("Error")
-        uObservation: List[bool] = uObservationUserItem.iloc[0]
+        uObservationUserItemStr:str = uObservationUserItem.iloc[0]
+        #print(uObservationUserItemStr)
+        uObservation:List[bool] = Behaviours.convertToListOfBoolean(uObservationUserItemStr)
+
         print("uObservation: " + str(uObservation))
 
         portfolioI:Portfolio1Aggr

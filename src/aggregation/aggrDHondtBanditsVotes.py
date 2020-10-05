@@ -43,7 +43,7 @@ class AggrDHondtBanditsVotes(AAgregation):
       if type(modelDF) is not DataFrame:
           raise ValueError("Type of methodsParamsDF isn't DataFrame.")
       if list(modelDF.columns) != ['r', 'n', 'alpha0', 'beta0']:
-          raise ValueError("Argument methodsParamsDF doen't contain rights columns.")
+          raise ValueError("Argument methodsParamsDF doesn't contain rights columns.")
       if type(numberOfItems) is not int:
           raise ValueError("Type of numberOfItems isn't int.")
 
@@ -66,7 +66,7 @@ class AggrDHondtBanditsVotes(AAgregation):
       # votes number of parties - calculated via Thompson Sampling, unique for every inquiry
       votesOfPartiesDictI:dict[str,float] = {}
       for mI in methodsResultDict.keys():
-        pI = beta(modelDF.alpha0.loc[mI] + modelDF.r.loc[mI], modelDF.beta0.loc[mI] + (modelDF.n.loc[mI] - modelDF.r.loc[mI]), size=1)[0]
+        pI:float = beta(modelDF.alpha0.loc[mI] + modelDF.r.loc[mI], modelDF.beta0.loc[mI] + (modelDF.n.loc[mI] - modelDF.r.loc[mI]), size=1)[0]
         votesOfPartiesDictI[mI] = pI
       #print("VotesOfPartiesDictI: ", votesOfPartiesDictI)
       votesOfPartiesDictOriginal = votesOfPartiesDictI.copy()
@@ -99,7 +99,7 @@ class AggrDHondtBanditsVotes(AAgregation):
         selectedCandidateI:int = self._selectorFnc(actVotesOfCandidatesDictI, *self._selectorArg)
 
         # add new selected candidate in results
-        recommendedItemIDs.append(selectedCandidateI);
+        recommendedItemIDs.append(selectedCandidateI)
 
         # removing elected candidate from list of candidates
         uniqueCandidatesI.remove(selectedCandidateI)
@@ -109,7 +109,7 @@ class AggrDHondtBanditsVotes(AAgregation):
         #print("DevotionOfPartyDictI: ", devotionOfPartyDictI)
 
         # updating number of votes of parties
-        votesOfPartiesDictI:dict = {partyI: votesOfPartiesDictOriginal[partyI] / electedOfPartyDictI.get(partyI) for partyI in modelDF.index}
+        votesOfPartiesDictI:dict = {partyI:votesOfPartiesDictOriginal[partyI] / electedOfPartyDictI.get(partyI) for partyI in modelDF.index}
         #print("VotesOfPartiesDictI: ", votesOfPartiesDictI)
 
       # list<int>

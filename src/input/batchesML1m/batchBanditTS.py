@@ -41,9 +41,9 @@ class BatchBanditTS:
     def generateBatches():
 
         divisionsDatasetPercentualSize:List[int] = [90]
-        uBehaviours:List[str] = [Behaviours.COL_LINEAR0109, Behaviours.COL_STATIC08,
-                                 Behaviours.COL_STATIC06, Behaviours.COL_STATIC04,
-                                 Behaviours.COL_STATIC02]
+        uBehaviours:List[str] = [Behaviours.BHVR_LINEAR0109, Behaviours.BHVR_STATIC08,
+                                 Behaviours.BHVR_STATIC06, Behaviours.BHVR_STATIC04,
+                                 Behaviours.BHVR_STATIC02]
         repetitions:List[int] = [1, 2, 3, 5]
 
         for divisionDatasetPercentualSizeI in divisionsDatasetPercentualSize:
