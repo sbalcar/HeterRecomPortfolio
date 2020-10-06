@@ -15,7 +15,7 @@ from history.aHistory import AHistory #class
 
 class AggrDHondtNegativeImplFeedback(AggrDHondt):
 
-    ARG_SELECTORFNC:str = "selectorFnc"
+    ARG_SELECTOR:str = "selector"
     ARG_PENALTY_TOOL:str = "penaltyTool"
 
     def __init__(self, history:AHistory, argumentsDict:dict):
@@ -27,8 +27,7 @@ class AggrDHondtNegativeImplFeedback(AggrDHondt):
         self._history = history
         self.argumentsDict:dict = argumentsDict.copy()
 
-        self._selectorFnc = argumentsDict[self.ARG_SELECTORFNC][0]
-        self._selectorArg = argumentsDict[self.ARG_SELECTORFNC][1]
+        self._selector = argumentsDict[self.ARG_SELECTOR]
         self._penaltyTool = argumentsDict[self.ARG_PENALTY_TOOL]
 
 

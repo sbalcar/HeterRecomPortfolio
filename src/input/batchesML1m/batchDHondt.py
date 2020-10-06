@@ -21,43 +21,63 @@ from input.batchesML1m.aML1MConfig import AML1MConf #function
 
 from datasets.behaviours import Behaviours #class
 
+from aggregation.operators.aDHondtSelector import ADHondtSelector #class
+from aggregation.operators.rouletteWheelSelector import RouletteWheelSelector #class
+from aggregation.operators.theMostVotedItemSelector import TheMostVotedItemSelector #class
 
-class BatchDHondtRoulette:
+
+
+class BatchDHondt:
+
+    SLCTR_ROULETTE1:str = "Roulette1"
+    SLCTR_ROULETTE2:str = "Roulette3"
+    SLCTR_FIXED:str = "Fixed"
+
+    @staticmethod
+    def getSelectorParameters():
+
+        selectorRoulette1:ADHondtSelector = RouletteWheelSelector({RouletteWheelSelector.ARG_EXPONENT:1})
+        selectorRoulette3:ADHondtSelector = RouletteWheelSelector({RouletteWheelSelector.ARG_EXPONENT:3})
+        selectorFixed:ADHondtSelector = TheMostVotedItemSelector({})
+
+        aDict:dict = {}
+        aDict[BatchDHondt.SLCTR_ROULETTE1] = selectorRoulette1
+        aDict[BatchDHondt.SLCTR_ROULETTE2] = selectorRoulette3
+        aDict[BatchDHondt.SLCTR_FIXED] = selectorFixed
+        return aDict
+
 
     @staticmethod
     def getParameters():
-        rouletteExps:List[int] = [1, 3]
+        selectorIDs:List[str] = BatchDHondt.getSelectorParameters().keys()
         lrClicks:List[float] = [0.2, 0.1, 0.02, 0.005]
         lrViews:List[float] = [0.1 / 500, 0.1 / 200, 0.1 / 1000]
 
         aDict:dict = {}
-        for rouletteExpI in rouletteExps:
+        for selectorIDI in selectorIDs:
             for lrClickJ in lrClicks:
                 for lrViewK in lrViews:
-                    keyIJ:str = str(rouletteExpI) + "Clk" + str(lrClickJ).replace(".", "") + "View" + str(lrViewK).replace(".", "")
+                    keyIJ:str = selectorIDI + "Clk" + str(lrClickJ).replace(".", "") + "View" + str(lrViewK).replace(".", "")
                     eTool:AEvalTool = EvalToolDHondt({EvalToolDHondt.ARG_LEARNING_RATE_CLICKS: lrClickJ,
                                                       EvalToolDHondt.ARG_LEARNING_RATE_VIEWS: lrViewK})
-                    aDict[keyIJ] = (rouletteExpI, eTool)
+                    selectorI:ADHondtSelector = BatchDHondt.getSelectorParameters()[selectorIDI]
+                    aDict[keyIJ] = (selectorI, eTool)
         return aDict
 
     @staticmethod
     def run(batchID:str, divisionDatasetPercentualSize:int, uBehaviour:str, repetition:int, jobID:str):
 
         #eTool:AEvalTool
-        rouletteExp, eTool = BatchDHondtRoulette.getParameters()[jobID]
+        selector, eTool = BatchDHondt.getParameters()[jobID]
 
         aConf:AML1MConf = AML1MConf(batchID, divisionDatasetPercentualSize, uBehaviour, repetition)
 
         rIDs, rDescs = InputRecomDefinition.exportPairOfRecomIdsAndRecomDescrs(aConf.datasetID)
 
-        aDescDHontRouletteI:AggregationDescription = None
-        if rouletteExp == 1:
-            aDescDHontRouletteI = InputAggrDefinition.exportADescDHontRoulette()
-        elif rouletteExp == 3:
-            aDescDHontRouletteI = InputAggrDefinition.exportADescDHontRoulette3()
+        aDescDHont:AggregationDescription = InputAggrDefinition.exportADescDHont(selector)
 
         pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
-            "DHontRoulette" + jobID, rIDs, rDescs, aDescDHontRouletteI)
+            "DHont" + jobID, rIDs, rDescs, aDescDHont)
 
         model:DataFrame = ModelDefinition.createDHontModel(pDescr.getRecommendersIDs())
 
@@ -73,7 +93,7 @@ class BatchDHondtRoulette:
                                  Behaviours.BHVR_STATIC02]
         repetitions:List[int] = [1, 2, 3, 5]
 
-        jobIDs:List[str] = list(BatchDHondtRoulette.getParameters().keys())
+        jobIDs:List[str] = list(BatchDHondt.getParameters().keys())
 
         for divisionDatasetPercentualSizeI in divisionsDatasetPercentualSize:
             for uBehaviourJ in uBehaviours:
@@ -85,8 +105,8 @@ class BatchDHondtRoulette:
                         if not os.path.exists(batchesDir):
                             os.mkdir(batchesDir)
 
-                        job:str = str(BatchDHondtRoulette.__name__) + jobIDL
-                        text:str = str(BatchDHondtRoulette.__name__) + ".run('" \
+                        job:str = str(BatchDHondt.__name__) + jobIDL
+                        text:str = str(BatchDHondt.__name__) + ".run('" \
                                    + str(batchID) + "', " \
                                    + str(divisionDatasetPercentualSizeI) + ", '" \
                                    + str(uBehaviourJ) + "', " \
@@ -94,7 +114,7 @@ class BatchDHondtRoulette:
                                    + "'" + str(jobIDL) + "'" + ")"
 
                         jobFile:str = batchesDir + os.sep + job + ".txt"
-                        BatchDHondtRoulette.__writeToFile(jobFile, text)
+                        BatchDHondt.__writeToFile(jobFile, text)
 
 
     @staticmethod
@@ -108,4 +128,4 @@ if __name__ == "__main__":
     os.chdir("..")
     os.chdir("..")
     print(os.getcwd())
-    BatchDHondtRoulette.generateBatches()
+    BatchDHondt.generateBatches()

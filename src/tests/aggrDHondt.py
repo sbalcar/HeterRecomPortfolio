@@ -38,7 +38,7 @@ def test01():
         portfolioModel.loc[methodIdI, "votes"] = portfolioModel.loc[methodIdI, "votes"] / sumMethodsVotes
 
 
-    aggr:AggrDHondt = AggrDHondt(HistoryDF(""), {AggrDHondt.ARG_SELECTORFNC:(AggrDHondt.selectorOfTheMostVotedItem, [])})
+    aggr:AggrDHondt = AggrDHondt(HistoryDF(""), {AggrDHondt.ARG_SELECTOR:(AggrDHondt.selectorOfTheMostVotedItem, [])})
     #itemIDs:int = aggr.run(methodsResultDict, methodsParamsDF, N)
     #print(itemIDs)
     itemIDs:List[tuple] = aggr.runWithResponsibility(methodsResultDict, portfolioModel, N)
