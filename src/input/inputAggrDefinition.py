@@ -23,7 +23,7 @@ from portfolioDescription.portfolio1AggrDescription import Portfolio1AggrDescrip
 from aggregationDescription.aggregationDescription import AggregationDescription #class
 from aggregation.aggrBanditTS import AggrBanditTS #class
 from aggregation.aggrDHondt import AggrDHondt #class
-from aggregation.aggrDHondtBanditsVotes import AggrDHondtBanditsVotes #class
+from aggregation.aggrDHondtThompsonSampling import AggrDHondtThompsonSampling #class
 from aggregation.aggrDHondtNegativeImplFeedback import AggrDHondtNegativeImplFeedback #class
 
 from evaluationTool.evalToolDHondt import EvalToolDHondt #class
@@ -50,6 +50,8 @@ from aggregation.toolsDHontNF.penalizationOfResultsByNegImpFeedback.penalUsingRe
 
 from aggregation.operators.aDHondtSelector import ADHondtSelector #class
 
+
+
 class InputAggrDefinition:
 
     @staticmethod
@@ -68,24 +70,20 @@ class InputAggrDefinition:
 
     @staticmethod
     def exportADescNegDHont(selector:ADHondtSelector, nImplFeedback:APenalization):
-        aDescNegDHontFixed:AggregationDescription = AggregationDescription(AggrDHondtNegativeImplFeedback, {
-                                AggrDHondtNegativeImplFeedback.ARG_SELECTOR:selector,
-                                AggrDHondtNegativeImplFeedback.ARG_PENALTY_TOOL:nImplFeedback})
+        aDescNegDHontFixed:AggregationDescription = AggregationDescription(AggrDHondtNegativeImplFeedback,
+                                {AggrDHondtNegativeImplFeedback.ARG_SELECTOR:selector,
+                                 AggrDHondtNegativeImplFeedback.ARG_PENALTY_TOOL:nImplFeedback})
         return aDescNegDHontFixed
 
 
+    @staticmethod
+    def exportADescDHontThompsonSampling(nImplFeedback:APenalization):
+        aDescDHontBanditVotesRoulette:AggregationDescription = AggregationDescription(AggrDHondtThompsonSampling,
+                                {AggrDHondtThompsonSampling.ARG_SELECTOR: nImplFeedback})
+        return aDescDHontBanditVotesRoulette
 
-    @staticmethod
-    def exportADescDHontBanditVotesRoulette():
-        aDescDHontBanditVotesRoulette:AggregationDescription = AggregationDescription(AggrDHondtBanditsVotes,
-                                {AggrDHondtBanditsVotes.ARG_SELECTORFNC:(AggrDHondtBanditsVotes.selectorOfRouletteWheelExpRatedItem,[1])})
-        return aDescDHontBanditVotesRoulette    
-    
-    @staticmethod
-    def exportADescDHontBanditVotesRoulette3():
-        aDescDHontBanditVotesRoulette3:AggregationDescription = AggregationDescription(AggrDHondtBanditsVotes,
-                                {AggrDHondtBanditsVotes.ARG_SELECTORFNC:(AggrDHondtBanditsVotes.selectorOfRouletteWheelExpRatedItem,[3])})
-        return aDescDHontBanditVotesRoulette3
+
+
 
 
 

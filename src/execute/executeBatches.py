@@ -11,7 +11,7 @@ from typing import List
 
 from input.batchesML1m.batchBanditTS import BatchBanditTS #class
 from input.batchesML1m.batchDHondt import BatchDHondt #class
-from input.batchesML1m.batchDHondtBanditsVotesRoulette import BatchDHondtBanditsVotesRoulette #class
+from input.batchesML1m.batchDHondtThompsonSampling import BatchDHondtThompsonSampling #class
 from input.batchesML1m.batchNegDHondt import BatchNegDHondt #class
 from input.batchesML1m.batchSingle import BatchSingle #class
 

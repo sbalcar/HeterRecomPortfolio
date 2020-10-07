@@ -14,17 +14,15 @@ from portfolioDescription.aPortfolioDescription import APortfolioDescription #cl
 
 from input.batchesML1m.aML1MConfig import AML1MConf #function
 
-from datasets.behaviours import Behaviours #class
-
 from evaluationTool.evalToolSingleMethod import EToolSingleMethod #class
 
 import pandas as pd
+from input.aBatch import ABatch #class
 
 
-class BatchSingle:
+class BatchSingle(ABatch):
 
-    @staticmethod
-    def getParameters():
+    def getParameters(self):
 
         aDict:dict = {}
         aDict["CosCBmax"] = "CosCBmax"
@@ -36,8 +34,13 @@ class BatchSingle:
         return aDict
 
 
-    @staticmethod
-    def run(batchID:str, divisionDatasetPercentualSize:int, uBehaviour:str, repetition:int, jobID:str):
+    def run(self, batchID:str, jobID:str):
+
+        from execute.generateBatches import BatchParameters #class
+        divisionDatasetPercentualSize:int
+        uBehaviour:str
+        repetition:int
+        divisionDatasetPercentualSize, uBehaviour, repetition = BatchParameters.getBatchParameters()[batchID]
 
         aConf:AML1MConf = AML1MConf(batchID, divisionDatasetPercentualSize, uBehaviour, repetition)
 
@@ -62,46 +65,6 @@ class BatchSingle:
         eTool:List = EToolSingleMethod({})
 
         aConf.run(pDescr, model, eTool)
-
-
-
-    @staticmethod
-    def generateBatches():
-
-        divisionsDatasetPercentualSize:List[int] = [90]
-        uBehaviours:List[str] = [Behaviours.BHVR_LINEAR0109, Behaviours.BHVR_STATIC08,
-                                 Behaviours.BHVR_STATIC06, Behaviours.BHVR_STATIC04,
-                                 Behaviours.BHVR_STATIC02]
-        repetitions:List[int] = [1, 2, 3, 5]
-
-        jobIDs:List[str] = list(BatchSingle.getParameters().keys())
-
-        for divisionDatasetPercentualSizeI in divisionsDatasetPercentualSize:
-            for uBehaviourJ in uBehaviours:
-                for repetitionK in repetitions:
-                    for jobIDL in jobIDs:
-
-                        batchID:str = "ml1mDiv" + str(divisionDatasetPercentualSizeI) + "U" + uBehaviourJ + "R" + str(repetitionK)
-                        batchesDir:str = ".." + os.sep + "batches" + os.sep + batchID
-                        if not os.path.exists(batchesDir):
-                            os.mkdir(batchesDir)
-
-                        job:str = str(BatchSingle.__name__) + jobIDL
-                        text:str = str(BatchSingle.__name__) + ".run('"\
-                                   + str(batchID) + "', "\
-                                   + str(divisionDatasetPercentualSizeI) + ", '"\
-                                   + str(uBehaviourJ) + "', "\
-                                   + str(repetitionK) + ", "\
-                                   + "'" + str(jobIDL) + "'" + ")"
-
-                        jobFile:str = batchesDir + os.sep + job + ".txt"
-                        BatchSingle.__writeToFile(jobFile, text)
-
-    @staticmethod
-    def __writeToFile(fileName:str, text:str):
-        f = open(fileName, "w")
-        f.write(text)
-        f.close()
 
 
 
