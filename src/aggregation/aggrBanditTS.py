@@ -106,7 +106,8 @@ class AggrBanditTS(AAgregation):
             resultsOfMethodI:Series = methodsResultDictI.get(theBestMethodID)
             #print(resultsOfMethodI)
 
-            resultsOfMethodDictI:dict = dict([(str(itemIDI), votesI) for itemIDI, votesI in resultsOfMethodI.items()])
+            resultsOfMethodDictI:dict = dict([(itemIDI, votesI) for itemIDI, votesI in resultsOfMethodI.items()])
+            #print(resultsOfMethodDictI)
 
             # select next item (itemID)
             # selectedItemI:int = AggrBanditTS.selectorOfRouletteWheelRatedItem(resultsOfMethodI)

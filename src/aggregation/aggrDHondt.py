@@ -19,6 +19,7 @@ from abc import ABC, abstractmethod
 
 from userBehaviourDescription.userBehaviourDescription import UserBehaviourDescription #class
 
+
 class AggrDHondt(AAgregation):
 
     ARG_SELECTOR:str = "selector"
