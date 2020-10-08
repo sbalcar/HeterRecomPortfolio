@@ -24,7 +24,9 @@ from aggregationDescription.aggregationDescription import AggregationDescription
 from aggregation.aggrBanditTS import AggrBanditTS #class
 from aggregation.aggrDHondt import AggrDHondt #class
 from aggregation.aggrDHondtThompsonSampling import AggrDHondtThompsonSampling #class
-from aggregation.aggrDHondtNegativeImplFeedback import AggrDHondtNegativeImplFeedback #class
+from aggregation.aggrNegDHondt import AggrNegDHondt #class
+from aggregation.aggrNegDHondtThompsonSampling import AggrNegDHondtThompsonSampling #class
+
 
 from evaluationTool.evalToolDHondt import EvalToolDHondt #class
 from evaluationTool.evalToolDHondtBanditVotes import EvalToolDHondtBanditVotes 
@@ -70,9 +72,9 @@ class InputAggrDefinition:
 
     @staticmethod
     def exportADescNegDHont(selector:ADHondtSelector, nImplFeedback:APenalization):
-        aDescNegDHontFixed:AggregationDescription = AggregationDescription(AggrDHondtNegativeImplFeedback,
-                                {AggrDHondtNegativeImplFeedback.ARG_SELECTOR:selector,
-                                 AggrDHondtNegativeImplFeedback.ARG_PENALTY_TOOL:nImplFeedback})
+        aDescNegDHontFixed:AggregationDescription = AggregationDescription(AggrNegDHondt,
+                                {AggrNegDHondt.ARG_SELECTOR:selector,
+                                 AggrNegDHondt.ARG_PENALTY_TOOL:nImplFeedback})
         return aDescNegDHontFixed
 
 
@@ -81,6 +83,20 @@ class InputAggrDefinition:
         aDescDHontBanditVotesRoulette:AggregationDescription = AggregationDescription(AggrDHondtThompsonSampling,
                                 {AggrDHondtThompsonSampling.ARG_SELECTOR: nImplFeedback})
         return aDescDHontBanditVotesRoulette
+
+
+
+    @staticmethod
+    def exportADescNegDHontThompsonSampling(selector:ADHondtSelector, nImplFeedback:APenalization):
+        aDescDHontBanditVotesRoulette:AggregationDescription = AggregationDescription(AggrNegDHondtThompsonSampling,
+                                {AggrDHondtThompsonSampling.ARG_SELECTOR:selector,
+                                 AggrNegDHondt.ARG_PENALTY_TOOL: nImplFeedback})
+        return aDescDHontBanditVotesRoulette
+
+
+
+
+
 
 
 
@@ -95,6 +111,9 @@ class InputAggrDefinition:
     def exportAPenaltyToolOLin0802HLin1002(numberOfAggrItems:int):
         return PenalUsingReduceRelevance(penaltyLinear, [0.8, 0.2, numberOfAggrItems], penaltyLinear, [1.0, 0.2, 100])
 
+    @staticmethod
+    def exportAPenaltyToolFiltering():
+        return PenalUsingFiltering(1.5, 100)
 
 
 class ModelDefinition:

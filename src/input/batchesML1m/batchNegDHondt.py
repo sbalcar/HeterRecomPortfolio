@@ -24,6 +24,7 @@ from aggregation.toolsDHontNF.penalizationOfResultsByNegImpFeedback.aPenalizatio
 from input.batchesML1m.aML1MConfig import AML1MConf #function
 
 from aggregation.operators.aDHondtSelector import ADHondtSelector #class
+from aggregation.toolsDHontNF.penalizationOfResultsByNegImpFeedback.penalUsingFiltering import PenalUsingFiltering #class
 
 from input.aBatch import ABatch #class
 
@@ -36,17 +37,22 @@ class BatchNegDHondt(ABatch):
 
         pToolOStat08HLin1002:APenalization = InputAggrDefinition.exportAPenaltyToolOStat08HLin1002(AML1MConf.numberOfAggrItems)
 
+        pToolFilterBord3Lengt100:PenalUsingFiltering = InputAggrDefinition.exportAPenaltyToolFiltering()
+
         aDict:dict = {}
         aDict["OLin0802HLin1002"] = pToolOLin0802HLin1002
         aDict["OStat08HLin1002"] = pToolOStat08HLin1002
+        aDict["FilterBord3Lengt100"] = pToolFilterBord3Lengt100
         return aDict
 
 
     def getParameters(self):
         selectorIDs:List[str] = BatchDHondt().getSelectorParameters().keys()
         negativeImplFeedback:List[str] = self.getNegativeImplFeedbackParameters().keys()
-        lrClicks:List[float] = [0.2, 0.1, 0.02, 0.005]
-        lrViewDivisors:List[float] = [200, 500, 1000]
+        #lrClicks:List[float] = [0.2, 0.1, 0.02, 0.005]
+        lrClicks:List[float] = [0.1]
+        #lrViewDivisors:List[float] = [200, 500, 1000]
+        lrViewDivisors:List[float] = [200]
 
         aDict:dict = {}
         for selectorIDH in selectorIDs:

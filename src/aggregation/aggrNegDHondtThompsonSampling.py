@@ -9,11 +9,13 @@ from pandas.core.frame import DataFrame #class
 from pandas.core.series import Series #class
 
 from aggregation.aggrDHondt import AggrDHondt #class
+from aggregation.aggrNegDHondt import AggrNegDHondt #class
+from aggregation.aggrDHondtThompsonSampling import AggrDHondtThompsonSampling #class
 
 from history.aHistory import AHistory #class
 
 
-class AggrDHondtNegativeImplFeedback(AggrDHondt):
+class AggrNegDHondtThompsonSampling(AggrDHondtThompsonSampling):
 
     ARG_SELECTOR:str = "selector"
     ARG_PENALTY_TOOL:str = "penaltyTool"
@@ -40,7 +42,7 @@ class AggrDHondtNegativeImplFeedback(AggrDHondt):
             raise ValueError("Type of methodsResultDict isn't dict.")
         if type(modelDF) is not DataFrame:
             raise ValueError("Type of methodsParamsDF isn't DataFrame.")
-        if list(modelDF.columns) != ['votes']:
+        if list(modelDF.columns) != ['r', 'n', 'alpha0', 'beta0']:
             raise ValueError("Argument methodsParamsDF doen't contain rights columns.")
         if type(numberOfItems) is not int:
             raise ValueError("Type of numberOfItems isn't int.")
@@ -75,7 +77,7 @@ class AggrDHondtNegativeImplFeedback(AggrDHondt):
                 raise ValueError("Type of methodsParamsDF doen't contain Series.")
         if type(modelDF) is not DataFrame:
             raise ValueError("Type of methodsParamsDF isn't DataFrame.")
-        if list(modelDF.columns) != ['votes']:
+        if list(modelDF.columns) != ['r', 'n', 'alpha0', 'beta0']:
             raise ValueError("Argument methodsParamsDF doen't contain rights columns.")
         if type(numberOfItems) is not int:
             raise ValueError("Type of numberOfItems isn't int.")

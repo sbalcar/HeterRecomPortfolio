@@ -4,7 +4,7 @@ import os
 import random
 import numpy as np
 
-from typing import List
+from typing import List #class
 
 from pandas.core.frame import DataFrame #class
 
@@ -13,6 +13,8 @@ from datasets.behaviours import Behaviours #class
 from input.batchesML1m.batchBanditTS import BatchBanditTS #class
 from input.batchesML1m.batchDHondt import BatchDHondt #class
 from input.batchesML1m.batchDHondtThompsonSampling import BatchDHondtThompsonSampling #class
+from input.batchesML1m.batchNegDHondtThompsonSampling import BatchNegDHondtThompsonSampling #class
+
 from input.batchesML1m.batchNegDHondt import BatchNegDHondt #class
 
 from input.batchesML1m.batchSingle import BatchSingle #class
@@ -43,14 +45,16 @@ class BatchParameters:
 def generateBatches():
    print("Generate Batches")
    
-   #BatchDHondtThompsonSampling().generateBatches()
+   BatchDHondtThompsonSampling().generateBatches()
 
-   #BatchBanditTS().generateBatches()
+   BatchBanditTS().generateBatches()
 
-   #BatchDHondt().generateBatches()
-   #BatchNegDHondt().generateBatches()
+   BatchDHondt().generateBatches()
 
-   #BatchSingle().generateBatches()
+   BatchNegDHondt().generateBatches()
+   BatchNegDHondtThompsonSampling().generateBatches()
+
+   BatchSingle().generateBatches()
 
 
 if __name__ == "__main__":

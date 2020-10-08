@@ -48,8 +48,10 @@ class BatchDHondt(ABatch):
 
     def getParameters(self):
         selectorIDs:List[str] = BatchDHondt().getSelectorParameters().keys()
-        lrClicks:List[float] = [0.2, 0.1, 0.02, 0.005]
-        lrViewDivisors:List[float] = [500, 200, 1000]
+        #lrClicks:List[float] = [0.2, 0.1, 0.02, 0.005]
+        lrClicks:List[float] = [0.1]
+        #lrViewDivisors:List[float] = [200, 500, 1000]
+        lrViewDivisors:List[float] = [500]
 
         aDict:dict = {}
         for selectorIDI in selectorIDs:

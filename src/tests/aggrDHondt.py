@@ -4,7 +4,7 @@ from typing import List
 from pandas.core.frame import DataFrame #class
 
 from aggregation.aggrDHondt import AggrDHondt #class
-from aggregation.aggrDHondtNegativeImplFeedback import AggrDHondtNegativeImplFeedback #class
+from aggregation.aggrNegDHondt import AggrNegDHondt #class
 
 import pandas as pd
 from history.historyDF import HistoryDF #class
@@ -67,11 +67,11 @@ def test02():
     #aggr:AggrDHont = AggrDHont(HistoryDF(), {AggrDHont.ARG_SELECTORFNC:(AggrDHont.selectorOfTheMostVotedItem,[])})
     #aggr:AggrDHont = AggrDHont(HistoryDF(), {AggrDHont.ARG_SELECTORFNC:(AggrDHont.selectorOfRouletteWheelRatedItem,[])})
     #aggr:AggrDHont = AggrDHont(HistoryDF(), {AggrDHont.ARG_SELECTORFNC:(AggrDHont.selectorOfRouletteWheelExpRatedItem,[1])})
-    aggr:AggrDHondt = AggrDHondtNegativeImplFeedback(HistoryDF(""),
-                                                     {AggrDHondtNegativeImplFeedback.ARG_SELECTORFNC:(AggrDHondtNegativeImplFeedback.selectorOfRouletteWheelExpRatedItem, [1]),
-                                                      AggrDHondtNegativeImplFeedback.ARG_MAX_PENALTY_VALUE: 0.8,
-                                                      AggrDHondtNegativeImplFeedback.ARG_MIN_PENALTY_VALUE: 0.2,
-                                                      AggrDHondtNegativeImplFeedback.ARG_LENGTH_OF_HISTORY: 10})
+    aggr:AggrDHondt = AggrNegDHondt(HistoryDF(""),
+                                    {AggrNegDHondt.ARG_SELECTORFNC:(AggrNegDHondt.selectorOfRouletteWheelExpRatedItem, [1]),
+                                     AggrNegDHondt.ARG_MAX_PENALTY_VALUE: 0.8,
+                                     AggrNegDHondt.ARG_MIN_PENALTY_VALUE: 0.2,
+                                     AggrNegDHondt.ARG_LENGTH_OF_HISTORY: 10})
 
     ##itemIDs:int = aggr.run(methodsResultDict, methodsParamsDF, N)
     itemIDs:int = aggr.run(methodsResultDict, methodsParamsDF, N)
