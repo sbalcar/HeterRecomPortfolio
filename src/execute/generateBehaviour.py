@@ -33,9 +33,9 @@ def generateBehaviour():
 
 
    Behaviours.generateFileMl1m(countOfItems, countOfRepetitions, Behaviours.BHVR_STATIC08, uBehavStatic08Desc)
-   #Behaviours.generateFileMl1m(countOfItems, countOfRepetitions, Behaviours.BHVR_STATIC06, uBehavStatic06Desc)
-   #Behaviours.generateFileMl1m(countOfItems, countOfRepetitions, Behaviours.BHVR_STATIC04, uBehavStatic04Desc)
-   #Behaviours.generateFileMl1m(countOfItems, countOfRepetitions, Behaviours.BHVR_STATIC02, uBehavStatic02Desc)
+   Behaviours.generateFileMl1m(countOfItems, countOfRepetitions, Behaviours.BHVR_STATIC06, uBehavStatic06Desc)
+   Behaviours.generateFileMl1m(countOfItems, countOfRepetitions, Behaviours.BHVR_STATIC04, uBehavStatic04Desc)
+   Behaviours.generateFileMl1m(countOfItems, countOfRepetitions, Behaviours.BHVR_STATIC02, uBehavStatic02Desc)
 
    Behaviours.generateFileMl1m(countOfItems, countOfRepetitions, Behaviours.BHVR_LINEAR0109, uBehavLinear0109Desc)
 

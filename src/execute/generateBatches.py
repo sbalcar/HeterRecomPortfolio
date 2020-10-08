@@ -44,17 +44,16 @@ class BatchParameters:
 
 def generateBatches():
    print("Generate Batches")
-   
-   BatchDHondtThompsonSampling().generateBatches()
+
+   BatchSingle().generateBatches()
 
    BatchBanditTS().generateBatches()
 
    BatchDHondt().generateBatches()
+   BatchDHondtThompsonSampling().generateBatches()
 
    BatchNegDHondt().generateBatches()
    BatchNegDHondtThompsonSampling().generateBatches()
-
-   BatchSingle().generateBatches()
 
 
 if __name__ == "__main__":

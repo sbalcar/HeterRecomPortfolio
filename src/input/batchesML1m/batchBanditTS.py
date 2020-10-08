@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 import os
+from typing import List
 
 from pandas.core.frame import DataFrame #class
 
@@ -14,14 +15,26 @@ from input.inputAggrDefinition import InputAggrDefinition, ModelDefinition  # cl
 from input.InputRecomDefinition import InputRecomDefinition #class
 
 from input.batchesML1m.aML1MConfig import AML1MConf #function
+from input.batchesML1m.batchDHondt import BatchDHondt #class
 
 from input.aBatch import ABatch #class
+
+from aggregation.aggrDHondt import AggrDHondt #class
+from aggregation.operators.aDHondtSelector import ADHondtSelector #class
+
 
 
 class BatchBanditTS(ABatch):
 
     def getParameters(self):
-        return {"":""}
+        selectorIDs:List[str] = BatchDHondt().getSelectorParameters().keys()
+
+        aDict:dict = {}
+        for selectorIDI in selectorIDs:
+            keyI:str = selectorIDI
+            selectorI:ADHondtSelector = BatchDHondt().getSelectorParameters()[selectorIDI]
+            aDict[keyI] = (selectorI)
+        return aDict
 
     def run(self, batchID:str, jobID:str):
 
@@ -31,12 +44,14 @@ class BatchBanditTS(ABatch):
         repetition:int
         divisionDatasetPercentualSize, uBehaviour, repetition = BatchParameters.getBatchParameters()[batchID]
 
+        selector:ADHondtSelector = self.getParameters()[jobID]
+
         aConf:AML1MConf = AML1MConf(batchID, divisionDatasetPercentualSize, uBehaviour, repetition)
 
         rIDs, rDescs = InputRecomDefinition.exportPairOfRecomIdsAndRecomDescrs(aConf.datasetID)
 
         pDescr: Portfolio1AggrDescription = Portfolio1AggrDescription(
-            "BanditTS", rIDs, rDescs, InputAggrDefinition.exportADescBanditTS())
+            "BanditTS" + jobID, rIDs, rDescs, InputAggrDefinition.exportADescBanditTS(selector))
 
         evalTool:AEvalTool = EvalToolBanditTS({})
         model:DataFrame = ModelDefinition.createBanditModel(pDescr.getRecommendersIDs())

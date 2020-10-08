@@ -24,7 +24,7 @@ from userBehaviourDescription.userBehaviourDescription import UserBehaviourDescr
 
 class AggrBanditTS(AAgregation):
 
-    ARG_SELECTORFNC:str = "selectorFnc"
+    ARG_SELECTOR:str = "selector"
 
     def __init__(self, history:AHistory, argumentsDict:dict):
         if not isinstance(history, AHistory):
@@ -33,8 +33,7 @@ class AggrBanditTS(AAgregation):
             raise ValueError("Argument argumentsDict isn't type dict.")
 
         self._history = history
-        self._selectorFnc = argumentsDict[self.ARG_SELECTORFNC][0]
-        self._selectorArg = argumentsDict[self.ARG_SELECTORFNC][1]
+        self._selector = argumentsDict[self.ARG_SELECTOR]
 
     # methodsResultDict:{String:pd.Series(rating:float[], itemID:int[])},
     # modelDF:pd.DataFrame[methodID:String, r:int, n:int, alpha0:int, beta0:int], numberOfItems:int
@@ -104,12 +103,14 @@ class AggrBanditTS(AAgregation):
                 [aI for aI in methodProbabilitiesDicI.keys() if methodProbabilitiesDicI[aI] == maxPorbablJ])
 
             # extractiion results of selected method (method with highest probability)
-            resultsOfMethodI: Series = methodsResultDictI.get(theBestMethodID)
-            # print(resultsOfMethodI)
+            resultsOfMethodI:Series = methodsResultDictI.get(theBestMethodID)
+            #print(resultsOfMethodI)
+
+            resultsOfMethodDictI:dict = dict([(str(itemIDI), votesI) for itemIDI, votesI in resultsOfMethodI.items()])
 
             # select next item (itemID)
             # selectedItemI:int = AggrBanditTS.selectorOfRouletteWheelRatedItem(resultsOfMethodI)
-            selectedItemI: int = self._selectorFnc(resultsOfMethodI, *self._selectorArg)
+            selectedItemI:int = self._selector.select(resultsOfMethodDictI)
 
             # print("SelectedItemI: ", selectedItemI)
 

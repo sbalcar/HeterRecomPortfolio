@@ -22,7 +22,7 @@ class RouletteWheelSelector(ADHondtSelector):
             raise ValueError("Argument userID isn't in range (0, infinity).")
 
     # resultOfMethod:pd.Series([raitings],[itemIDs])
-    def select(self, votesOfCandidatesDict:Series):
+    def select(self, votesOfCandidatesDict:dict):
 
         votesOfCandidatesSer:Series = None
         if self._exponent == 1:

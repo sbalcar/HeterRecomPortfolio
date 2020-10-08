@@ -57,9 +57,9 @@ from aggregation.operators.aDHondtSelector import ADHondtSelector #class
 class InputAggrDefinition:
 
     @staticmethod
-    def exportADescBanditTS():
+    def exportADescBanditTS(selector:ADHondtSelector):
         aDescBanditTS:AggregationDescription = AggregationDescription(AggrBanditTS,
-                                {AggrBanditTS.ARG_SELECTORFNC:(AggrBanditTS.selectorOfRouletteWheelRatedItem,[])})
+                                {AggrBanditTS.ARG_SELECTOR:selector})
         return aDescBanditTS
 
 

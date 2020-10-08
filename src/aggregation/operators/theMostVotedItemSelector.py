@@ -18,7 +18,7 @@ class TheMostVotedItemSelector(ADHondtSelector):
         {}
 
     # resultOfMethod:pd.Series([raitings],[itemIDs])
-    def select(self, votesOfCandidatesDict:Series):
+    def select(self, votesOfCandidatesDict:dict):
 
         # get the highest number of votes of remaining candidates
         maxVotes:float = max(votesOfCandidatesDict.values())
