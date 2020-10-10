@@ -47,11 +47,11 @@ class BatchDHondt(ABatch):
 
 
     def getParameters(self):
-        selectorIDs:List[str] = BatchDHondt().getSelectorParameters().keys()
-        #lrClicks:List[float] = [0.2, 0.1, 0.02, 0.005]
-        lrClicks:List[float] = [0.1]
-        #lrViewDivisors:List[float] = [200, 500, 1000]
-        lrViewDivisors:List[float] = [500]
+        selectorIDs:List[str] = self.getSelectorParameters().keys()
+        lrClicks:List[float] = [0.2, 0.1, 0.02, 0.005]
+        #lrClicks:List[float] = [0.1]
+        lrViewDivisors:List[float] = [200, 500, 1000]
+        #lrViewDivisors:List[float] = [500]
 
         aDict:dict = {}
         for selectorIDI in selectorIDs:
@@ -61,7 +61,7 @@ class BatchDHondt(ABatch):
                     lrViewIJK:float = lrClickJ / lrViewDivisorK
                     eToolIJK:AEvalTool = EvalToolDHondt({EvalToolDHondt.ARG_LEARNING_RATE_CLICKS: lrClickJ,
                                                       EvalToolDHondt.ARG_LEARNING_RATE_VIEWS: lrViewIJK})
-                    selectorIJK:ADHondtSelector = BatchDHondt().getSelectorParameters()[selectorIDI]
+                    selectorIJK:ADHondtSelector = self.getSelectorParameters()[selectorIDI]
                     aDict[keyIJ] = (selectorIJK, eToolIJK)
         return aDict
 
@@ -75,7 +75,7 @@ class BatchDHondt(ABatch):
         divisionDatasetPercentualSize, uBehaviour, repetition = BatchParameters.getBatchParameters()[batchID]
 
         #eTool:AEvalTool
-        selector, eTool = BatchDHondt.getParameters()[jobID]
+        selector, eTool = self.getParameters()[jobID]
 
         aConf:AML1MConf = AML1MConf(batchID, divisionDatasetPercentualSize, uBehaviour, repetition)
 
