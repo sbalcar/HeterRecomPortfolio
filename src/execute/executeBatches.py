@@ -38,9 +38,14 @@ def executeBatches():
           file = open(jobI, "r")
           command:str = file.read()
 
-          print("Removing job: " + command)
-          os.remove(jobI)
+          try:
+              print("Removing job: " + command)
+              os.remove(jobI)
+              print("Removed job: " + command)
 
-          print("Executing job: " + command)
-          exec(command)
-          return
+              print("Executing job: " + command)
+              exec(command)
+              print("Finishing job: " + command)
+              return
+          except:
+              print("Skiped job: " + command)
