@@ -14,5 +14,7 @@ class Configuration:
     modelDirectory:str =  ".." + os.sep + "models"
 
 
+    imagesDirectory:str =  ".." + os.sep + "images"
+
 
     resultsDirectory:str =  ".." + os.sep + "results"

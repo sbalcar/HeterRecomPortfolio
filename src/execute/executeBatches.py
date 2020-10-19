@@ -35,10 +35,10 @@ def executeBatches():
       for jobI in jobs:
           print(jobI)
 
-          file = open(jobI, "r")
-          command:str = file.read()
-
           try:
+              file = open(jobI, "r")
+              command: str = file.read()
+
               print("Removing job: " + command)
               os.remove(jobI)
               print("Removed job: " + command)
