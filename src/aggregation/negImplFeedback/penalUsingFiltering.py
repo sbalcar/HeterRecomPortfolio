@@ -14,7 +14,9 @@ from pandas.core.series import Series  # class
 from history.aHistory import AHistory #class
 
 from userBehaviourDescription.userBehaviourDescription import UserBehaviourDescription #class
-from aggregation.toolsDHontNF.penalizationOfResultsByNegImpFeedback.aPenalization import APenalization #class
+from aggregation.negImplFeedback.aPenalization import APenalization #class
+
+from sklearn.preprocessing import normalize
 
 
 # transforming Results Of D'Hont Methods
@@ -58,3 +60,24 @@ class PenalUsingFiltering(APenalization):
 
         return methodsResultNewDict
 
+
+
+    def runOneMethodPenalization(self, userID:int, methodsResultSrs:Series, history:AHistory):
+
+        itemIdsToRemove:List[int] = []
+        for itemIdI in methodsResultSrs.index:
+            #print(itemIdI)
+            valueOfIgnoringI:float = history.getIgnoringValue(userID, itemIdI, limit=self._lengthOfHistory)
+            #print("valueOfIgnoringI: " + str(valueOfIgnoringI))
+            if valueOfIgnoringI >= self._borderNegFeedback:
+                itemIdsToRemove.append(itemIdI)
+
+        newMethodsResultSrs:Series = methodsResultSrs.drop(itemIdsToRemove)
+        #print(newMethodsResultSrs)
+        #print(normalize(newMethodsResultSrs.values[:,np.newaxis], axis=0).ravel())
+
+        normalizedNewMethodsResultSrs:Series = Series(
+            normalize(newMethodsResultSrs.values[:, np.newaxis], axis=0).ravel(),
+            index=newMethodsResultSrs.index)
+
+        return normalizedNewMethodsResultSrs

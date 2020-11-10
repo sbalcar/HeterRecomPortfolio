@@ -62,5 +62,5 @@ class RecommenderTheMostPopular(ARecommender):
         finalScores = normalize(np.expand_dims(ratingsDF, axis=0))[0, :]
 
         self.numberOfItems:int = numberOfItems
-        self.result = pd.Series(finalScores.tolist(),index=items)
+        self.result = Series(finalScores.tolist(),index=items)
         return self.result

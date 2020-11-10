@@ -65,11 +65,11 @@ class RecommenderW2V(ARecommender):
 
         t:DataFrame = self.__getTrainVariant(self.trainVariant, ratingsDF)
         t[Ratings.COL_MOVIEID] = t[Ratings.COL_MOVIEID].astype("str")
-        t_sequences = t.groupby(Ratings.COL_USERID)[Ratings.COL_MOVIEID].apply(" ".join)
+        t_sequences:DataFrame = t.groupby(Ratings.COL_USERID)[Ratings.COL_MOVIEID].apply(" ".join)
         if self.DEBUG_MODE:
             print(t_sequences)
         # t_sequences.set_index(Ratings.COL_USERID, inplace=True)
-        w2vTrainData = t_sequences.values.tolist()
+        w2vTrainData:List[str] = t_sequences.values.tolist()
 
         e:int = 64
         w:int = 3

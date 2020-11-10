@@ -20,7 +20,7 @@ from input.InputRecomDefinition import InputRecomDefinition #class
 from input.batchesML1m.batchDHondt import BatchDHondt #class
 from input.batchesML1m.batchNegDHondt import BatchNegDHondt #class
 
-from aggregation.toolsDHontNF.penalizationOfResultsByNegImpFeedback.aPenalization import APenalization #class
+from aggregation.negImplFeedback.aPenalization import APenalization #class
 
 from input.batchesML1m.aML1MConfig import AML1MConf #function
 

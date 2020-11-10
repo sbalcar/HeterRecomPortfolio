@@ -19,3 +19,8 @@ class APenalization(ABC):
     def runPenalization(self, methodsResultDict:dict, userID:int, aHistory:AHistory):
         assert False, "this needs to be overridden"
     # return list<(itemID:int, Series<(rating:int, methodID:str)>)>
+
+    @abstractmethod
+    def runOneMethodPenalization(self, userID:int, methodsResultSrs:Series, history:AHistory):
+        assert False, "this needs to be overridden"
+    # return Series<(rating:int, itemID:int)>

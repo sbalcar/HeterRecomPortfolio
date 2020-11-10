@@ -14,21 +14,27 @@ from pandas.core.series import Series  # class
 
 from history.aHistory import AHistory #class
 
-from aggregation.toolsDHontNF.penalizationOfResultsByNegImpFeedback.aPenalization import APenalization #class
+from aggregation.negImplFeedback.aPenalization import APenalization #class
 
 
 class PenalUsingReduceRelevance(APenalization):
 
-    def __init__(self, penalPositionFnc, argumentsPositionList:List, penalHistoryFnc, argumentsHistoryList:List):
+    def __init__(self, penalPositionFnc, argumentsPositionList:List,
+                 penalHistoryFnc, argumentsHistoryList:List,
+                 lengthOfHistory:int):
         if type(argumentsPositionList) is not list:
             raise ValueError("Type of argumentsPositionList isn't list.")
         if type(argumentsHistoryList) is not list:
             raise ValueError("Type of argumentsHistoryList isn't list.")
+        if type(lengthOfHistory) is not int:
+            raise ValueError("Argument lengthOfHistory isn't type int.")
 
         self._penalPositionFnc = penalPositionFnc
         self._argumentsPositionList = argumentsPositionList
         self._penalHistoryFnc = penalHistoryFnc
         self._argumentsHistoryList = argumentsHistoryList
+
+        self._lengthOfHistory = lengthOfHistory
 
     # methodsResultDict:dict[int,Series[int,str]]
     def runPenalization(self, userID:int, methodsResultDict:dict, history:AHistory):
@@ -40,15 +46,65 @@ class PenalUsingReduceRelevance(APenalization):
         if not isinstance(history, AHistory):
             raise ValueError("Type of history isn't AHistory.")
 
-        itemIDs: List[int] = list(set(itertools.chain(*[rI.index for mI, rI in methodsResultDict.items()])))
+        itemIDs:List[int] = list(set(itertools.chain(*[rI.index for mI, rI in methodsResultDict.items()])))
 
-        penalties: dict = {}
+        # dictionary of float penalization indexed by itemIDs
+        penalties:dict = self.__getPenaltiesOfItemIDs(userID, itemIDs, history)
+
+
+        penalizedResultsDict:dict = {}
+
+        methodIdI:str
+        resultsI:Series
+        for methodIdI, resultsI in methodsResultDict.items():
+            penalizedResultDictI:dict = {}
+
+            itemIdJ:int
+            ratingJ:int
+            for itemIdJ, ratingJ in resultsI.items():
+                #print("candidateIdJ: " + str(candidateIdJ))
+                #print("votesOfCandidateJ: " + str(votesOfCandidateJ))
+
+                penalizedResultDictI[itemIdJ] = ratingJ / (1 + penalties.get(itemIdJ, 0))
+
+            penalizedResultsDict[methodIdI] = Series(penalizedResultDictI, name="rating")
+
+        return penalizedResultsDict
+
+
+    def runOneMethodPenalization(self, userID:int, methodsResultSrs:Series, history:AHistory):
+
+        if type(userID) is not int and type(userID) is not np.int64:
+            raise ValueError("Type of userID isn't int.")
+        if type(methodsResultSrs) is not Series:
+            raise ValueError("Type of methodsResultSrs isn't Series.")
+        if not isinstance(history, AHistory):
+            raise ValueError("Type of history isn't AHistory.")
+
+        itemIDs:List[int] = methodsResultSrs.keys()
+
+        # dictionary of float penalization indexed by itemIDs
+        penalties:dict = self.__getPenaltiesOfItemIDs(userID, itemIDs, history)
+
+        penalizedRatings:List[float] = []
+        itemIdI:int
+        ratingI:int
+        for itemIdI, ratingI in methodsResultSrs.items():
+            penalizedRatings.append(ratingI / (1 + penalties.get(itemIdI, 0)))
+
+        return pd.Series(penalizedRatings, index=methodsResultSrs.keys())
+        # return Series<(rating:int, itemID:int)>
+
+
+    def __getPenaltiesOfItemIDs(self, userID:int, itemIDs:List[int], history:AHistory):
+
+        penalties:dict = {}
         for itemIdI in itemIDs:
-            prevRecomendations: List[tuple] = history.getPreviousRecomOfUserAndItem(userID, itemIdI, 100)
+            prevRecomendations:List[tuple] = history.getPreviousRecomOfUserAndItem(userID, itemIdI, self._lengthOfHistory)
             prevRecomendations.reverse()
 
             penaltyI: float = 0
-            i: int = 0
+            i:int = 0
             for indexJ, userIdJ, itemIdJ, positionJ, clickedJ, timestampJ in prevRecomendations:
                 penaltyPositionJ:float = self._penalPositionFnc(positionJ, *self._argumentsPositionList)
 
@@ -58,26 +114,7 @@ class PenalUsingReduceRelevance(APenalization):
                 i += 1
             penalties[itemIdI] = penaltyI
 
-
-        penalizedResultsDict:dict = {}
-
-        methodIdI:str
-        resulrsI:Series
-        for methodIdI, resultsI in methodsResultDict.items():
-            penalizedResultDictI:dict = {}
-
-            candidateIdJ:int
-            votesOfCandidateJ:int
-            for candidateIdJ, votesOfCandidateJ in resultsI.items():
-                #print("candidateIdJ: " + str(candidateIdJ))
-                #print("votesOfCandidateJ: " + str(votesOfCandidateJ))
-
-                penalizedResultDictI[candidateIdJ] = votesOfCandidateJ / (1 + penalties.get(candidateIdJ, 0))
-
-            penalizedResultsDict[methodIdI] = Series(penalizedResultDictI, name="rating")
-
-        return penalizedResultsDict
-
+        return penalties
 
 
 

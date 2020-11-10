@@ -17,13 +17,20 @@ from configuration.configuration import Configuration #class
 
 from pandas.core.frame import DataFrame #class
 
-from aggregation.toolsDHontNF.penalizationOfResultsByNegImpFeedback.aPenalization import APenalization #class
-from aggregation.toolsDHontNF.penalizationOfResultsByNegImpFeedback.penalUsingReduceRelevance import PenalUsingReduceRelevance #class
-from aggregation.toolsDHontNF.penalizationOfResultsByNegImpFeedback.penalUsingReduceRelevance import penaltyStatic #function
-from aggregation.toolsDHontNF.penalizationOfResultsByNegImpFeedback.penalUsingReduceRelevance import penaltyLinear #function
+from aggregation.negImplFeedback.aPenalization import APenalization #class
+from aggregation.negImplFeedback.penalUsingReduceRelevance import PenalUsingReduceRelevance #class
+from aggregation.negImplFeedback.penalUsingReduceRelevance import penaltyStatic #function
+from aggregation.negImplFeedback.penalUsingReduceRelevance import penaltyLinear #function
 
 
 class InputRecomDefinition:
+
+    COS_CB_MEAN:str = "cosCBmean"
+    COS_CB_WINDOW3:str = "cosCBwindow3"
+    THE_MOST_POPULAR:str = "theMostPopular"
+    W2V_POSNEG_MEAN:str = "w2vPosnegMean"
+    W2V_POSNEG_WINDOW3:str = "w2vPosnegWindow3"
+
 
     @staticmethod
     def exportRDescTheMostPopular(datasetID:str):
@@ -68,22 +75,37 @@ class InputRecomDefinition:
                  RecommenderW2V.ARG_USER_PROFILE_STRATEGY:"window3",
                  RecommenderW2V.ARG_DATASET_ID: datasetID})
 
+    @staticmethod
+    def exportInputRecomDefinition(recommenderID:str, datasetID:str):
+        if recommenderID == InputRecomDefinition.COS_CB_MEAN:
+            return InputRecomDefinition.exportRDescCBmean(datasetID)
+        elif recommenderID == InputRecomDefinition.COS_CB_WINDOW3:
+            return InputRecomDefinition.exportRDescCBwindow3(datasetID)
+        elif recommenderID == InputRecomDefinition.THE_MOST_POPULAR:
+            return InputRecomDefinition.exportRDescTheMostPopular(datasetID)
+        elif recommenderID == InputRecomDefinition.W2V_POSNEG_MEAN:
+            return InputRecomDefinition.exportRDescW2vPosnegMean(datasetID)
+        elif recommenderID == InputRecomDefinition.W2V_POSNEG_WINDOW3:
+            return InputRecomDefinition.exportRDescW2vPosnegWindow3(datasetID)
 
 
     @staticmethod
     def exportPairOfRecomIdsAndRecomDescrs(datasetID:str):
 
-        rIDsCB:List[str] = ["RecomCBmean", "RecomCBwindow3"]
+        recom:str = "Recom"
+
+        rIDsCB:List[str] = [recom + InputRecomDefinition.COS_CB_MEAN.title(), recom + InputRecomDefinition.COS_CB_WINDOW3.title()]
         rDescsCB:List[RecommenderDescription] = [InputRecomDefinition.exportRDescCBmean(datasetID), InputRecomDefinition.exportRDescCBwindow3(datasetID)]
 
         #rIDsW2V:List[str] = ["RecomW2vPositiveMax", "RecomW2vPositiveWindow10", "RecomW2vPosnegMean", "RecomW2vPosnegWindow10"]
         #rDescsW2V:List[RecommenderDescription] = [rDescW2vPositiveMax, rDescW2vPositiveWindow10, rDescW2vPosnegMean, rDescW2vPosnegWindow10]
         #rIDsW2V:List[str] = ["RecomW2vPositiveMax", "RecomW2vPosnegMax", "RecomW2vPosnegWindow10"]
         #rDescsW2V:List[RecommenderDescription] = [rDescW2vPosnegMax, rDescW2vPosnegMax, rDescW2vPosnegWindow10]
-        rIDsW2V:List[str] = ["RecomW2vPosnegMax", "RecomW2vPosnegWindow3"]
+
+        rIDsW2V:List[str] = [recom + InputRecomDefinition.W2V_POSNEG_MEAN.title(), recom + InputRecomDefinition.W2V_POSNEG_WINDOW3.title()]
         rDescsW2V:List[RecommenderDescription] = [InputRecomDefinition.exportRDescW2vPosnegMean(datasetID), InputRecomDefinition.exportRDescW2vPosnegWindow3(datasetID)]
 
-        rIDs:List[str] = ["RecomTheMostPopular"] + rIDsCB + rIDsW2V
+        rIDs:List[str] = [recom + InputRecomDefinition.THE_MOST_POPULAR.title()] + rIDsCB + rIDsW2V
         rDescs:List[RecommenderDescription] = [InputRecomDefinition.exportRDescTheMostPopular(datasetID)] + rDescsCB + rDescsW2V
 
         return (rIDs, rDescs)

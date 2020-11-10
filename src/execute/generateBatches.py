@@ -18,6 +18,8 @@ from input.batchesML1m.batchNegDHondtThompsonSampling import BatchNegDHondtThomp
 from input.batchesML1m.batchNegDHondt import BatchNegDHondt #class
 
 from input.batchesML1m.batchSingle import BatchSingle #class
+from input.batchesML1m.batchNegSingle import BatchNegSingle #class
+
 
 class BatchParameters:
 
@@ -45,15 +47,16 @@ class BatchParameters:
 def generateBatches():
    print("Generate Batches")
 
-   BatchSingle().generateBatches()
+#   BatchSingle().generateBatches()
+   BatchNegSingle().generateBatches()
 
-   BatchBanditTS().generateBatches()
+#   BatchBanditTS().generateBatches()
 
-   BatchDHondt().generateBatches()
-   BatchDHondtThompsonSampling().generateBatches()
+#   BatchDHondt().generateBatches()
+#   BatchDHondtThompsonSampling().generateBatches()
 
-   BatchNegDHondt().generateBatches()
-   BatchNegDHondtThompsonSampling().generateBatches()
+#   BatchNegDHondt().generateBatches()
+#   BatchNegDHondtThompsonSampling().generateBatches()
 
 
 if __name__ == "__main__":

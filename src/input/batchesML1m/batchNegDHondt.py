@@ -19,12 +19,12 @@ from input.InputRecomDefinition import InputRecomDefinition #class
 
 from input.batchesML1m.batchDHondt import BatchDHondt #class
 
-from aggregation.toolsDHontNF.penalizationOfResultsByNegImpFeedback.aPenalization import APenalization #class
+from aggregation.negImplFeedback.aPenalization import APenalization #class
 
 from input.batchesML1m.aML1MConfig import AML1MConf #function
 
 from aggregation.operators.aDHondtSelector import ADHondtSelector #class
-from aggregation.toolsDHontNF.penalizationOfResultsByNegImpFeedback.penalUsingFiltering import PenalUsingFiltering #class
+from aggregation.negImplFeedback.penalUsingFiltering import PenalUsingFiltering #class
 
 from input.aBatch import ABatch #class
 

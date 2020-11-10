@@ -44,11 +44,11 @@ from userBehaviourDescription.userBehaviourDescription import UserBehaviourDescr
 from userBehaviourDescription.userBehaviourDescription import observationalStaticProbabilityFnc #function
 from userBehaviourDescription.userBehaviourDescription import observationalLinearProbabilityFnc #function
 
-from aggregation.toolsDHontNF.penalizationOfResultsByNegImpFeedback.aPenalization import APenalization #class
-from aggregation.toolsDHontNF.penalizationOfResultsByNegImpFeedback.penalUsingFiltering import PenalUsingFiltering #class
-from aggregation.toolsDHontNF.penalizationOfResultsByNegImpFeedback.penalUsingReduceRelevance import PenalUsingReduceRelevance #class
-from aggregation.toolsDHontNF.penalizationOfResultsByNegImpFeedback.penalUsingReduceRelevance import penaltyStatic #function
-from aggregation.toolsDHontNF.penalizationOfResultsByNegImpFeedback.penalUsingReduceRelevance import penaltyLinear #function
+from aggregation.negImplFeedback.aPenalization import APenalization #class
+from aggregation.negImplFeedback.penalUsingFiltering import PenalUsingFiltering #class
+from aggregation.negImplFeedback.penalUsingReduceRelevance import PenalUsingReduceRelevance #class
+from aggregation.negImplFeedback.penalUsingReduceRelevance import penaltyStatic #function
+from aggregation.negImplFeedback.penalUsingReduceRelevance import penaltyLinear #function
 
 from aggregation.operators.aDHondtSelector import ADHondtSelector #class
 
@@ -105,11 +105,11 @@ class InputAggrDefinition:
 
     @staticmethod
     def exportAPenaltyToolOStat08HLin1002(numberOfAggrItems:int):
-        return PenalUsingReduceRelevance(penaltyStatic, [1.0], penaltyLinear, [1.0, 0.2, 100])
+        return PenalUsingReduceRelevance(penaltyStatic, [1.0], penaltyLinear, [1.0, 0.2, 100], 100)
 
     @staticmethod
     def exportAPenaltyToolOLin0802HLin1002(numberOfAggrItems:int):
-        return PenalUsingReduceRelevance(penaltyLinear, [0.8, 0.2, numberOfAggrItems], penaltyLinear, [1.0, 0.2, 100])
+        return PenalUsingReduceRelevance(penaltyLinear, [0.8, 0.2, numberOfAggrItems], penaltyLinear, [1.0, 0.2, 100], 100)
 
     @staticmethod
     def exportAPenaltyToolFiltering():

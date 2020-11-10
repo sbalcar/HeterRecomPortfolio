@@ -50,8 +50,9 @@ class RecommenderCosineCB(ARecommender):
         # ratingsSum:Dataframe<(userId:int, movieId:int, ratings:int, timestamp:int)>
         ratingsDF:DataFrame = ratingsDF.loc[ratingsDF[Ratings.COL_RATING] >= 4]
         self.ratingsGroupDF:DataFrame = ratingsDF.groupby(Ratings.COL_USERID)[Ratings.COL_MOVIEID]
-        userProfileDF = self.ratingsGroupDF.aggregate(lambda x: list(x))
-        self.userProfiles = userProfileDF.to_dict()
+        # userProfileDF:DataFrame[userID:int, itemIDs:List[int]]
+        userProfileDF:DataFrame = self.ratingsGroupDF.aggregate(lambda x: list(x))
+        self.userProfiles:dict = userProfileDF.to_dict()
         s = ""
 
     def update(self, ratingsUpdateDF:DataFrame):

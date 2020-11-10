@@ -5,6 +5,7 @@ import sys
 import os
 
 import random
+import traceback
 import numpy as np
 
 from typing import List
@@ -15,6 +16,7 @@ from input.batchesML1m.batchDHondtThompsonSampling import BatchDHondtThompsonSam
 from input.batchesML1m.batchNegDHondt import BatchNegDHondt #class
 from input.batchesML1m.batchNegDHondtThompsonSampling import BatchNegDHondtThompsonSampling #class
 from input.batchesML1m.batchSingle import BatchSingle #class
+from input.batchesML1m.batchNegSingle import BatchNegSingle #class
 
 
 def executeBatches():
@@ -47,5 +49,6 @@ def executeBatches():
               exec(command)
               print("Finishing job: " + command)
               return
-          except:
+          except Exception:
+              traceback.print_exc()
               print("Skiped job: " + command)

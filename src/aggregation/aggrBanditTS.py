@@ -70,8 +70,8 @@ class AggrBanditTS(AAgregation):
         if numberOfItems < 0:
             raise ValueError("Argument numberOfItems can't contain negative value.")
 
-        methodsResultDictI: dict = methodsResultDict
-        methodsParamsDFI: DataFrame = modelDF
+        methodsResultDictI:dict = methodsResultDict
+        methodsParamsDFI:DataFrame = modelDF
 
         recommendedItemIDs: List[tuple(int, str)] = []
 

@@ -7,49 +7,34 @@ from typing import List #class
 from pandas.core.frame import DataFrame #class
 from pandas.core.series import Series #class
 
+from aggregation.negImplFeedback.aPenalization import APenalization #class
+
 from recommenderDescription.recommenderDescription import RecommenderDescription #class
 from recommender.aRecommender import ARecommender #class
 
 from history.aHistory import AHistory #class
 from portfolio.aPortfolio import APortfolio #class
+from portfolio.portfolio1Meth import Portfolio1Meth #class
 
 
-class Portfolio1Meth(APortfolio):
+class PortfolioNeg1Meth(Portfolio1Meth):
 
-   def __init__(self, recommender:ARecommender, recomID:str, recomDesc:RecommenderDescription):
+   def __init__(self, recommender:ARecommender, recomID:str, recomDesc:RecommenderDescription,
+                penaltyTool:APenalization):
+
        if not isinstance(recommender, ARecommender):
            raise ValueError("Argument recommender isn't type ARecommender.")
        if type(recomID) is not str:
           raise ValueError("Argument recomID isn't type str.")
        if type(recomDesc) is not RecommenderDescription:
           raise ValueError("Argument recomDesc isn't type RecommenderDescription.")
+       if not isinstance(penaltyTool, APenalization):
+          raise ValueError("Argument penaltyTool isn't type APenalization.")
 
        self._recommender:ARecommender = recommender
        self._recomID:str = recomID
        self._recomDesc:RecommenderDescription = recomDesc
-
-   def getRecommIDs(self):
-        return [self._recommID]
-
-   def train(self, history:AHistory, ratingsDF:DataFrame, usersDF:DataFrame, itemsDF:DataFrame):
-        if not isinstance(history, AHistory):
-           raise ValueError("Argument history isn't type AHistory.")
-        if type(ratingsDF) is not DataFrame:
-            raise ValueError("Argument ratingsDF isn't type DataFrame.")
-        if type(usersDF) is not DataFrame:
-            raise ValueError("Argument usersDF isn't type DataFrame.")
-        if type(itemsDF) is not DataFrame:
-            raise ValueError("Argument ratingsUpdateDF isn't type DataFrame.")
-
-        self._history:AHistory = history
-
-        self._recommender.train(history, ratingsDF, usersDF, itemsDF)
-
-   def update(self, ratingsUpdateDF:DataFrame):
-        if type(ratingsUpdateDF) is not DataFrame:
-            raise ValueError("Argument ratingsUpdateDF isn't type DataFrame.")
-
-        self._recommender.update(ratingsUpdateDF)
+       self._penaltyTool:APenalization = penaltyTool
 
 
    def recommend(self, userID:int, portFolioModel:DataFrame, argumentsDict:dict):
@@ -62,7 +47,10 @@ class Portfolio1Meth(APortfolio):
 
         numberOfItems:int = argumentsDict[self.ARG_NUMBER_OF_AGGR_ITEMS]
 
-        recomItemIDsWithResponsibility:Series = self._recommender.recommend(userID, numberOfItems=numberOfItems, argumentsDict=self._recomDesc.getArguments())
+        recomItemIDsWithResponsibility:Series = self._recommender.recommend(
+            userID, numberOfItems=numberOfItems, argumentsDict=self._recomDesc.getArguments())
+
+        self._penaltyTool.runOneMethodPenalization(userID, recomItemIDsWithResponsibility, self._history)
 
         recomItemIDs:List[int] = list(recomItemIDsWithResponsibility.index)
 
