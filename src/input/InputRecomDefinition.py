@@ -73,7 +73,7 @@ class InputRecomDefinition:
         return RecommenderDescription(RecommenderW2V,
                 {RecommenderW2V.ARG_TRAIN_VARIANT:"posneg",
                  RecommenderW2V.ARG_USER_PROFILE_STRATEGY:"window3",
-                 RecommenderW2V.ARG_DATASET_ID: datasetID})
+                 RecommenderW2V.ARG_DATASET_ID:datasetID})
 
     @staticmethod
     def exportInputRecomDefinition(recommenderID:str, datasetID:str):

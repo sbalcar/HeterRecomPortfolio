@@ -45,13 +45,19 @@ class PortfolioNeg1Meth(Portfolio1Meth):
         if type(argumentsDict) is not dict:
             raise ValueError("Argument argumentsDict isn't type dict.")
 
-        numberOfItems:int = argumentsDict[self.ARG_NUMBER_OF_AGGR_ITEMS]
+        numberOfRecommItems:int = argumentsDict[self.ARG_NUMBER_OF_RECOMM_ITEMS]
+        numberOfAggrItems:int = argumentsDict[self.ARG_NUMBER_OF_AGGR_ITEMS]
+        #print("ARG_NUMBER_OF_AGGR_ITEMS " + str(argumentsDict[self.ARG_NUMBER_OF_AGGR_ITEMS]))
+        #print("ARG_NUMBER_OF_RECOMM_ITEMS " + str(argumentsDict[self.ARG_NUMBER_OF_RECOMM_ITEMS]))
 
-        recomItemIDsWithResponsibility:Series = self._recommender.recommend(
-            userID, numberOfItems=numberOfItems, argumentsDict=self._recomDesc.getArguments())
+        recomItemIDsWithRating:Series = self._recommender.recommend(
+            userID, numberOfItems=numberOfRecommItems, argumentsDict=self._recomDesc.getArguments())
 
-        self._penaltyTool.runOneMethodPenalization(userID, recomItemIDsWithResponsibility, self._history)
+        penalizedRecomItemIDsWithRating:Series = self._penaltyTool.runOneMethodPenalization(
+            userID, recomItemIDsWithRating, self._history)
 
-        recomItemIDs:List[int] = list(recomItemIDsWithResponsibility.index)
+        cuttedRecomItemIDsWithRating:Series = penalizedRecomItemIDsWithRating[:numberOfAggrItems]
 
-        return (recomItemIDs, recomItemIDsWithResponsibility)
+        cuttedRecomItemIDs:List[int] = list(cuttedRecomItemIDsWithRating.index)
+
+        return (cuttedRecomItemIDs, cuttedRecomItemIDsWithRating)

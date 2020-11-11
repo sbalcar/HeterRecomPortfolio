@@ -16,6 +16,8 @@ from history.aHistory import AHistory #class
 
 from aggregation.negImplFeedback.aPenalization import APenalization #class
 
+from sklearn.preprocessing import normalize
+
 
 class PenalUsingReduceRelevance(APenalization):
 
@@ -92,7 +94,16 @@ class PenalUsingReduceRelevance(APenalization):
         for itemIdI, ratingI in methodsResultSrs.items():
             penalizedRatings.append(ratingI / (1 + penalties.get(itemIdI, 0)))
 
-        return pd.Series(penalizedRatings, index=methodsResultSrs.keys())
+        penalizedItemIDswithRatingsSrs:Series = Series(penalizedRatings, index=methodsResultSrs.keys())
+
+        sortedPenalizedItemIDswithRatingsSrs:Series = penalizedItemIDswithRatingsSrs.sort_values(
+            axis=0, ascending=False, inplace=False, kind='quicksort', na_position='last')
+
+        normalizedNewMethodsResultSrs:Series = Series(
+            normalize(sortedPenalizedItemIDswithRatingsSrs.values[:, np.newaxis], axis=0).ravel(),
+            index=sortedPenalizedItemIDswithRatingsSrs.index)
+
+        return normalizedNewMethodsResultSrs
         # return Series<(rating:int, itemID:int)>
 
 
