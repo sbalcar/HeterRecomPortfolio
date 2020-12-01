@@ -15,7 +15,7 @@ from aggregation.aggrDHondtThompsonSampling import AggrDHondtThompsonSampling #c
 from history.aHistory import AHistory #class
 
 
-class AggrNegDHondtThompsonSampling(AggrDHondtThompsonSampling):
+class AggrDHondtThompsonSamplingINF(AggrDHondtThompsonSampling):
 
     ARG_SELECTOR:str = "selector"
     ARG_PENALTY_TOOL:str = "penaltyTool"

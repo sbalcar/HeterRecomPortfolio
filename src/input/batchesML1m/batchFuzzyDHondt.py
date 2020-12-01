@@ -84,7 +84,7 @@ class BatchFuzzyDHondt(ABatch):
         aDescDHont:AggregationDescription = InputAggrDefinition.exportADescDHont(selector)
 
         pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
-            "DHont" + jobID, rIDs, rDescs, aDescDHont)
+            "FuzzyDHont" + jobID, rIDs, rDescs, aDescDHont)
 
         model:DataFrame = ModelDefinition.createDHontModel(pDescr.getRecommendersIDs())
 

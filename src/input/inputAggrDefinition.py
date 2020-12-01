@@ -25,7 +25,7 @@ from aggregation.aggrBanditTS import AggrBanditTS #class
 from aggregation.aggrFuzzyDHondt import AggrFuzzyDHondt #class
 from aggregation.aggrDHondtThompsonSampling import AggrDHondtThompsonSampling #class
 from aggregation.aggrFuzzyDHondtINF import AggrFuzzyDHondtINF #class
-from aggregation.aggrNegDHondtThompsonSampling import AggrNegDHondtThompsonSampling #class
+from aggregation.aggrDHondtThompsonSamplingINF import AggrDHondtThompsonSamplingINF #class
 
 
 from evaluationTool.evalToolDHondt import EvalToolDHondt #class
@@ -88,7 +88,7 @@ class InputAggrDefinition:
 
     @staticmethod
     def exportADescNegDHontThompsonSampling(selector:ADHondtSelector, nImplFeedback:APenalization):
-        aDescDHontBanditVotesRoulette:AggregationDescription = AggregationDescription(AggrNegDHondtThompsonSampling,
+        aDescDHontBanditVotesRoulette:AggregationDescription = AggregationDescription(AggrDHondtThompsonSamplingINF,
                                                                                       {AggrDHondtThompsonSampling.ARG_SELECTOR:selector,
                                                                                        AggrFuzzyDHondtINF.ARG_PENALTY_TOOL: nImplFeedback})
         return aDescDHontBanditVotesRoulette

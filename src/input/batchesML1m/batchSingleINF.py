@@ -20,7 +20,7 @@ from evaluationTool.evalToolSingleMethod import EToolSingleMethod #class
 
 from input.aBatch import ABatch #class
 from input.batchesML1m.batchSingle import BatchSingle #class
-from input.batchesML1m.batchFuzzyDHondtINF import BatchNegDHondt #class
+from input.batchesML1m.batchFuzzyDHondtINF import BatchFuzzyDHondtINF #class
 
 from aggregation.negImplFeedback.aPenalization import APenalization #class
 
@@ -32,7 +32,7 @@ class BatchSingleINF(ABatch):
     def getParameters(self):
 
         recommenderIDs:List[str] = BatchSingle().getParameters().keys()
-        negativeImplFeedback:List[str] = BatchNegDHondt().getNegativeImplFeedbackParameters().keys()
+        negativeImplFeedback:List[str] = BatchFuzzyDHondtINF().getNegativeImplFeedbackParameters().keys()
 
         aDict:dict = {}
         for recommenderIDKeyI in recommenderIDs:
@@ -40,7 +40,7 @@ class BatchSingleINF(ABatch):
                 keyIJ:str = str(recommenderIDKeyI) + nImplFeedbackI
 
                 recommenderID:str = BatchSingle().getParameters()[recommenderIDKeyI]
-                nImplFeedback:APenalization = BatchNegDHondt().getNegativeImplFeedbackParameters()[nImplFeedbackI]
+                nImplFeedback:APenalization = BatchFuzzyDHondtINF().getNegativeImplFeedbackParameters()[nImplFeedbackI]
 
                 aDict[keyIJ] = (recommenderID, nImplFeedback)
         return aDict
