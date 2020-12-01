@@ -52,10 +52,10 @@ def generateBatches():
 
 #   BatchBanditTS().generateBatches()
 
-   BatchDHondt().generateBatches()
+#   BatchDHondt().generateBatches()
 #   BatchDHondtThompsonSampling().generateBatches()
 
-#   BatchNegDHondt().generateBatches()
+   BatchNegDHondt().generateBatches()
 #   BatchNegDHondtThompsonSampling().generateBatches()
 
 

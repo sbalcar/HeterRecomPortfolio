@@ -9,7 +9,7 @@ from pandas.core.frame import DataFrame #class
 from pandas.core.series import Series #class
 
 from aggregation.aggrFuzzyDHondt import AggrFuzzyDHondt #class
-from aggregation.aggrNegDHondt import AggrNegDHondt #class
+from aggregation.aggrFuzzyDHondtINF import AggrFuzzyDHondtINF #class
 from aggregation.aggrDHondtThompsonSampling import AggrDHondtThompsonSampling #class
 
 from history.aHistory import AHistory #class

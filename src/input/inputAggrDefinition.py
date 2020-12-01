@@ -24,7 +24,7 @@ from aggregationDescription.aggregationDescription import AggregationDescription
 from aggregation.aggrBanditTS import AggrBanditTS #class
 from aggregation.aggrFuzzyDHondt import AggrFuzzyDHondt #class
 from aggregation.aggrDHondtThompsonSampling import AggrDHondtThompsonSampling #class
-from aggregation.aggrNegDHondt import AggrNegDHondt #class
+from aggregation.aggrFuzzyDHondtINF import AggrFuzzyDHondtINF #class
 from aggregation.aggrNegDHondtThompsonSampling import AggrNegDHondtThompsonSampling #class
 
 
@@ -72,9 +72,9 @@ class InputAggrDefinition:
 
     @staticmethod
     def exportADescNegDHont(selector:ADHondtSelector, nImplFeedback:APenalization):
-        aDescNegDHontFixed:AggregationDescription = AggregationDescription(AggrNegDHondt,
-                                {AggrNegDHondt.ARG_SELECTOR:selector,
-                                 AggrNegDHondt.ARG_PENALTY_TOOL:nImplFeedback})
+        aDescNegDHontFixed:AggregationDescription = AggregationDescription(AggrFuzzyDHondtINF,
+                                                                           {AggrFuzzyDHondtINF.ARG_SELECTOR:selector,
+                                                                            AggrFuzzyDHondtINF.ARG_PENALTY_TOOL:nImplFeedback})
         return aDescNegDHontFixed
 
 
@@ -89,8 +89,8 @@ class InputAggrDefinition:
     @staticmethod
     def exportADescNegDHontThompsonSampling(selector:ADHondtSelector, nImplFeedback:APenalization):
         aDescDHontBanditVotesRoulette:AggregationDescription = AggregationDescription(AggrNegDHondtThompsonSampling,
-                                {AggrDHondtThompsonSampling.ARG_SELECTOR:selector,
-                                 AggrNegDHondt.ARG_PENALTY_TOOL: nImplFeedback})
+                                                                                      {AggrDHondtThompsonSampling.ARG_SELECTOR:selector,
+                                                                                       AggrFuzzyDHondtINF.ARG_PENALTY_TOOL: nImplFeedback})
         return aDescDHontBanditVotesRoulette
 
 

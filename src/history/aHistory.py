@@ -47,6 +47,8 @@ class AHistory(ABC):
     def getIgnoringValue(self, userID:int, itemID:int, limit:int=20):
 
         uRows:List[tuple] = self.getPreviousRecomOfUserAndItem(userID, itemID, limit=limit)
+        #print("uRows")
+        #print(uRows)
 
         def valueOfIgnoring(rowI:tuple):
             itemIdI:int = rowI[2]

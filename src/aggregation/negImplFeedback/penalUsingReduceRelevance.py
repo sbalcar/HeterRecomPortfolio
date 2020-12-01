@@ -42,6 +42,7 @@ class PenalUsingReduceRelevance(APenalization):
     def runPenalization(self, userID:int, methodsResultDict:dict, history:AHistory):
 
         if type(userID) is not int and type(userID) is not np.int64:
+            print(type(userID))
             raise ValueError("Type of userID isn't int.")
         if type(methodsResultDict) is not dict:
             raise ValueError("Type of methodsResultDict isn't dict.")
@@ -116,7 +117,8 @@ class PenalUsingReduceRelevance(APenalization):
 
             penaltyI: float = 0
             i:int = 0
-            for indexJ, userIdJ, itemIdJ, positionJ, clickedJ, timestampJ in prevRecomendations:
+            #print(prevRecomendations)
+            for indexJ, userIdJ, itemIdJ, positionJ, oJ, clickedJ, timestampJ in prevRecomendations:
                 penaltyPositionJ:float = self._penalPositionFnc(positionJ, *self._argumentsPositionList)
 
                 penaltyHistoryJ:float = self._penalHistoryFnc(i, *self._argumentsHistoryList)

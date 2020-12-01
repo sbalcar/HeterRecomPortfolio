@@ -4,7 +4,7 @@ from typing import List
 from pandas.core.frame import DataFrame #class
 
 from aggregation.aggrFuzzyDHondt import AggrFuzzyDHondt #class
-from aggregation.aggrNegDHondt import AggrNegDHondt #class
+from aggregation.aggrFuzzyDHondtINF import AggrFuzzyDHondtINF #class
 
 import pandas as pd
 from history.historyDF import HistoryDF #class
@@ -69,11 +69,11 @@ def test02():
     #aggr:AggrDHont = AggrDHont(HistoryDF(), {AggrDHont.ARG_SELECTORFNC:(AggrDHont.selectorOfTheMostVotedItem,[])})
     #aggr:AggrDHont = AggrDHont(HistoryDF(), {AggrDHont.ARG_SELECTORFNC:(AggrDHont.selectorOfRouletteWheelRatedItem,[])})
     #aggr:AggrDHont = AggrDHont(HistoryDF(), {AggrDHont.ARG_SELECTORFNC:(AggrDHont.selectorOfRouletteWheelExpRatedItem,[1])})
-    aggr:AggrFuzzyDHondt = AggrNegDHondt(HistoryDF(""),
-                                         {AggrNegDHondt.ARG_SELECTORFNC:(AggrNegDHondt.selectorOfRouletteWheelExpRatedItem, [1]),
-                                     AggrNegDHondt.ARG_MAX_PENALTY_VALUE: 0.8,
-                                     AggrNegDHondt.ARG_MIN_PENALTY_VALUE: 0.2,
-                                     AggrNegDHondt.ARG_LENGTH_OF_HISTORY: 10})
+    aggr:AggrFuzzyDHondt = AggrFuzzyDHondtINF(HistoryDF(""),
+                                              {AggrFuzzyDHondtINF.ARG_SELECTORFNC:(AggrFuzzyDHondtINF.selectorOfRouletteWheelExpRatedItem, [1]),
+                                               AggrFuzzyDHondtINF.ARG_MAX_PENALTY_VALUE: 0.8,
+                                               AggrFuzzyDHondtINF.ARG_MIN_PENALTY_VALUE: 0.2,
+                                               AggrFuzzyDHondtINF.ARG_LENGTH_OF_HISTORY: 10})
 
     ##itemIDs:int = aggr.run(methodsResultDict, methodsParamsDF, N)
     itemIDs:int = aggr.run(methodsResultDict, methodsParamsDF, N)

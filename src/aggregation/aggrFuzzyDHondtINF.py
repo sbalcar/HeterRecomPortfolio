@@ -13,7 +13,7 @@ from aggregation.aggrFuzzyDHondt import AggrFuzzyDHondt #class
 from history.aHistory import AHistory #class
 
 
-class AggrNegDHondt(AggrFuzzyDHondt):
+class AggrFuzzyDHondtINF(AggrFuzzyDHondt):
 
     ARG_SELECTOR:str = "selector"
     ARG_PENALTY_TOOL:str = "penaltyTool"
