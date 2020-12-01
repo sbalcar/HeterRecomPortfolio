@@ -1,1 +1,5 @@
 Folder for datasets.
+
+
+Dataset retailrocket
+https://www.kaggle.com/retailrocket/ecommerce-dataset

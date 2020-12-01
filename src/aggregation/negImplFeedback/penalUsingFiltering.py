@@ -72,6 +72,9 @@ class PenalUsingFiltering(APenalization):
             if valueOfIgnoringI >= self._borderNegFeedback:
                 itemIdsToRemove.append(itemIdI)
 
+        print("borderNegFeedback " + str(self._borderNegFeedback))
+        print(itemIdsToRemove)
+
         newMethodsResultSrs:Series = methodsResultSrs.drop(itemIdsToRemove)
         #print(newMethodsResultSrs)
         #print(normalize(newMethodsResultSrs.values[:,np.newaxis], axis=0).ravel())

@@ -14,6 +14,8 @@ from userBehaviourDescription.userBehaviourDescription import UserBehaviourDescr
 from userBehaviourDescription.userBehaviourDescription import observationalStaticProbabilityFnc #function
 from userBehaviourDescription.userBehaviourDescription import observationalLinearProbabilityFnc #function
 
+from aggregation.operators.rouletteWheelSelector import RouletteWheelSelector #class
+
 
 def test01():
     print("Test 01")
@@ -37,7 +39,7 @@ def test01():
     methodsParamsDF.set_index("methodID", inplace=True)
     # print(methodsParamsDF)
 
-    aggr:AggrBanditTS = AggrBanditTS(HistoryDF(""), {AggrBanditTS.ARG_SELECTORFNC:(AggrBanditTS.selectorOfRouletteWheelRatedItem,[])})
+    aggr:AggrBanditTS = AggrBanditTS(HistoryDF(""), {AggrBanditTS.ARG_SELECTOR:RouletteWheelSelector({RouletteWheelSelector.ARG_EXPONENT:1})})
 
     itemIDs:List[tuple] = aggr.runWithResponsibility(methodsResultDict, methodsParamsDF, N)
     #itemIDs:List[tuple] = aggr.run(methodsResultDict, methodsParamsDF, N)
