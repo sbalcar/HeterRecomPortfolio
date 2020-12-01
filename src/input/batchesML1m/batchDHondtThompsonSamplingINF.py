@@ -17,8 +17,8 @@ from input.inputAggrDefinition import InputAggrDefinition, ModelDefinition  #cla
 
 from input.InputRecomDefinition import InputRecomDefinition #class
 
-from input.batchesML1m.batchDHondt import BatchDHondt #class
-from input.batchesML1m.batchNegDHondt import BatchNegDHondt #class
+from input.batchesML1m.batchFuzzyDHondt import BatchFuzzyDHondt #class
+from input.batchesML1m.batchFuzzyDHondtINF import BatchNegDHondt #class
 
 from aggregation.negImplFeedback.aPenalization import APenalization #class
 
@@ -31,10 +31,10 @@ from input.aBatch import ABatch #class
 from evaluationTool.evalToolDHondtBanditVotes import EvalToolDHondtBanditVotes #class
 
 
-class BatchNegDHondtThompsonSampling(ABatch):
+class BatchDHondtThompsonSamplingINF(ABatch):
 
     def getParameters(self):
-        selectorIDs:List[str] = BatchDHondt().getSelectorParameters().keys()
+        selectorIDs:List[str] = BatchFuzzyDHondt().getSelectorParameters().keys()
         negativeImplFeedback:List[str] = BatchNegDHondt().getNegativeImplFeedbackParameters().keys()
 
         aDict:dict = {}
@@ -43,7 +43,7 @@ class BatchNegDHondtThompsonSampling(ABatch):
                 keyIJ:str = str(selectorIDH) + nImplFeedbackI
 
                 nImplFeedback:APenalization = BatchNegDHondt().getNegativeImplFeedbackParameters()[nImplFeedbackI]
-                selectorH:ADHondtSelector = BatchDHondt().getSelectorParameters()[selectorIDH]
+                selectorH:ADHondtSelector = BatchFuzzyDHondt().getSelectorParameters()[selectorIDH]
 
                 aDict[keyIJ] = (selectorH, nImplFeedback)
         return aDict

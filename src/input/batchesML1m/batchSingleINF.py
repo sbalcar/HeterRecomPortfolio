@@ -20,14 +20,14 @@ from evaluationTool.evalToolSingleMethod import EToolSingleMethod #class
 
 from input.aBatch import ABatch #class
 from input.batchesML1m.batchSingle import BatchSingle #class
-from input.batchesML1m.batchNegDHondt import BatchNegDHondt #class
+from input.batchesML1m.batchFuzzyDHondtINF import BatchNegDHondt #class
 
 from aggregation.negImplFeedback.aPenalization import APenalization #class
 
 from recommenderDescription.recommenderDescription import RecommenderDescription #class
 
 
-class BatchNegSingle(ABatch):
+class BatchSingleINF(ABatch):
 
     def getParameters(self):
 

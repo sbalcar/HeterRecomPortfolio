@@ -11,12 +11,12 @@ import numpy as np
 from typing import List
 
 from input.batchesML1m.batchBanditTS import BatchBanditTS #class
-from input.batchesML1m.batchDHondt import BatchDHondt #class
+from input.batchesML1m.batchFuzzyDHondt import BatchFuzzyDHondt #class
 from input.batchesML1m.batchDHondtThompsonSampling import BatchDHondtThompsonSampling #class
-from input.batchesML1m.batchNegDHondt import BatchNegDHondt #class
-from input.batchesML1m.batchNegDHondtThompsonSampling import BatchNegDHondtThompsonSampling #class
+from input.batchesML1m.batchFuzzyDHondtINF import BatchNegDHondt #class
+from input.batchesML1m.batchDHondtThompsonSamplingINF import BatchDHondtThompsonSamplingINF #class
 from input.batchesML1m.batchSingle import BatchSingle #class
-from input.batchesML1m.batchNegSingle import BatchNegSingle #class
+from input.batchesML1m.batchSingleINF import BatchSingleINF #class
 
 
 def executeBatches():

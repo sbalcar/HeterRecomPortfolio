@@ -19,7 +19,7 @@ from input.InputRecomDefinition import InputRecomDefinition #class
 
 from input.batchesML1m.aML1MConfig import AML1MConf #function
 
-from input.batchesML1m.batchDHondt import BatchDHondt #class
+from input.batchesML1m.batchFuzzyDHondt import BatchFuzzyDHondt #class
 
 from aggregation.operators.aDHondtSelector import ADHondtSelector #class
 from input.aBatch import ABatch #class
@@ -30,13 +30,13 @@ class BatchDHondtThompsonSampling(ABatch):
 
 
     def getParameters(self):
-        selectorIDs:List[str] = BatchDHondt().getSelectorParameters().keys()
+        selectorIDs:List[str] = BatchFuzzyDHondt().getSelectorParameters().keys()
 
         aDict:dict = {}
         for selectorIDI in selectorIDs:
             keyIJ:str = str(selectorIDI)
             eTool:AEvalTool = EvalToolDHondtBanditVotes({})
-            selectorIJK:ADHondtSelector = BatchDHondt().getSelectorParameters()[selectorIDI]
+            selectorIJK:ADHondtSelector = BatchFuzzyDHondt().getSelectorParameters()[selectorIDI]
             aDict[keyIJ] = (selectorIJK, eTool)
         return aDict
 

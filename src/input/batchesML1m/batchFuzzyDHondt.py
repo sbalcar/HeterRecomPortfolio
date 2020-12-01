@@ -27,7 +27,7 @@ from input.aBatch import ABatch #class
 
 
 
-class BatchDHondt(ABatch):
+class BatchFuzzyDHondt(ABatch):
 
     SLCTR_ROULETTE1:str = "Roulette1"
     SLCTR_ROULETTE2:str = "Roulette3"
@@ -40,9 +40,9 @@ class BatchDHondt(ABatch):
         selectorFixed:ADHondtSelector = TheMostVotedItemSelector({})
 
         aDict:dict = {}
-        aDict[BatchDHondt.SLCTR_ROULETTE1] = selectorRoulette1
-        aDict[BatchDHondt.SLCTR_ROULETTE2] = selectorRoulette3
-        aDict[BatchDHondt.SLCTR_FIXED] = selectorFixed
+        aDict[BatchFuzzyDHondt.SLCTR_ROULETTE1] = selectorRoulette1
+        aDict[BatchFuzzyDHondt.SLCTR_ROULETTE2] = selectorRoulette3
+        aDict[BatchFuzzyDHondt.SLCTR_FIXED] = selectorFixed
         return aDict
 
 
@@ -96,4 +96,4 @@ if __name__ == "__main__":
     os.chdir("..")
     os.chdir("..")
     print(os.getcwd())
-    BatchDHondt.generateBatches()
+    BatchFuzzyDHondt.generateBatches()

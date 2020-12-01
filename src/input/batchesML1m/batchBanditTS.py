@@ -15,7 +15,7 @@ from input.inputAggrDefinition import InputAggrDefinition, ModelDefinition  # cl
 from input.InputRecomDefinition import InputRecomDefinition #class
 
 from input.batchesML1m.aML1MConfig import AML1MConf #function
-from input.batchesML1m.batchDHondt import BatchDHondt #class
+from input.batchesML1m.batchFuzzyDHondt import BatchFuzzyDHondt #class
 
 from input.aBatch import ABatch #class
 
@@ -27,12 +27,12 @@ from aggregation.operators.aDHondtSelector import ADHondtSelector #class
 class BatchBanditTS(ABatch):
 
     def getParameters(self):
-        selectorIDs:List[str] = BatchDHondt().getSelectorParameters().keys()
+        selectorIDs:List[str] = BatchFuzzyDHondt().getSelectorParameters().keys()
 
         aDict:dict = {}
         for selectorIDI in selectorIDs:
             keyI:str = selectorIDI
-            selectorI:ADHondtSelector = BatchDHondt().getSelectorParameters()[selectorIDI]
+            selectorI:ADHondtSelector = BatchFuzzyDHondt().getSelectorParameters()[selectorIDI]
             aDict[keyI] = (selectorI)
         return aDict
 
