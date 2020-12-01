@@ -22,7 +22,7 @@ from portfolioDescription.portfolio1AggrDescription import Portfolio1AggrDescrip
 
 from aggregationDescription.aggregationDescription import AggregationDescription #class
 from aggregation.aggrBanditTS import AggrBanditTS #class
-from aggregation.aggrDHondt import AggrDHondt #class
+from aggregation.aggrFuzzyDHondt import AggrFuzzyDHondt #class
 from aggregation.aggrDHondtThompsonSampling import AggrDHondtThompsonSampling #class
 from aggregation.aggrNegDHondt import AggrNegDHondt #class
 from aggregation.aggrNegDHondtThompsonSampling import AggrNegDHondtThompsonSampling #class
@@ -65,8 +65,8 @@ class InputAggrDefinition:
 
     @staticmethod
     def exportADescDHont(selector:ADHondtSelector):
-        aDescDHontFixed:AggregationDescription = AggregationDescription(AggrDHondt,
-                                {AggrDHondt.ARG_SELECTOR:selector})
+        aDescDHontFixed:AggregationDescription = AggregationDescription(AggrFuzzyDHondt,
+                                                                        {AggrFuzzyDHondt.ARG_SELECTOR:selector})
         return aDescDHontFixed
 
 

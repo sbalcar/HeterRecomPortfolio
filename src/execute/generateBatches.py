@@ -48,11 +48,11 @@ def generateBatches():
    print("Generate Batches")
 
 #   BatchSingle().generateBatches()
-   BatchNegSingle().generateBatches()
+#   BatchNegSingle().generateBatches()
 
 #   BatchBanditTS().generateBatches()
 
-#   BatchDHondt().generateBatches()
+   BatchDHondt().generateBatches()
 #   BatchDHondtThompsonSampling().generateBatches()
 
 #   BatchNegDHondt().generateBatches()

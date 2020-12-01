@@ -3,7 +3,7 @@
 from typing import List
 from pandas.core.frame import DataFrame #class
 
-from aggregation.aggrDHondt import AggrDHondt #class
+from aggregation.aggrFuzzyDHondt import AggrFuzzyDHondt #class
 from aggregation.aggrNegDHondt import AggrNegDHondt #class
 
 import pandas as pd
@@ -53,9 +53,9 @@ def test01():
     ignoringValue:float = historyDF.getIgnoringValue(userID, itemID, limit=3)
     print("IgnoringValue: " + str(ignoringValue))
 
-    aggr:AggrDHondt = AggrNegDHondt(historyDF, {AggrNegDHondt.ARG_SELECTORFNC:(AggrNegDHondt.selectorOfTheMostVotedItem, []),
-                                                AggrNegDHondt.AGR_LENGTH_OF_HISTORY:10,
-                                                AggrNegDHondt.AGR_BORDER_NEGATIVE_FEEDBACK:1.0})
+    aggr:AggrFuzzyDHondt = AggrNegDHondt(historyDF, {AggrNegDHondt.ARG_SELECTORFNC:(AggrNegDHondt.selectorOfTheMostVotedItem, []),
+                                                     AggrNegDHondt.AGR_LENGTH_OF_HISTORY:10,
+                                                     AggrNegDHondt.AGR_BORDER_NEGATIVE_FEEDBACK:1.0})
 
     itemIDs:List[tuple] = aggr.runWithResponsibility(methodsResultDict, methodsParamsDF, userID, N)
     print(itemIDs)

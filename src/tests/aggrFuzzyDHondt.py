@@ -3,7 +3,7 @@
 from typing import List
 from pandas.core.frame import DataFrame #class
 
-from aggregation.aggrDHondt import AggrDHondt #class
+from aggregation.aggrFuzzyDHondt import AggrFuzzyDHondt #class
 from aggregation.aggrNegDHondt import AggrNegDHondt #class
 
 import pandas as pd
@@ -40,7 +40,7 @@ def test01():
         portfolioModel.loc[methodIdI, "votes"] = portfolioModel.loc[methodIdI, "votes"] / sumMethodsVotes
 
 
-    aggr:AggrDHondt = AggrDHondt(HistoryDF(""), {AggrDHondt.ARG_SELECTOR:TheMostVotedItemSelector({})})
+    aggr:AggrFuzzyDHondt = AggrFuzzyDHondt(HistoryDF(""), {AggrFuzzyDHondt.ARG_SELECTOR:TheMostVotedItemSelector({})})
     #itemIDs:int = aggr.run(methodsResultDict, methodsParamsDF, N)
     #print(itemIDs)
     itemIDs:List[tuple] = aggr.runWithResponsibility(methodsResultDict, portfolioModel, N)
@@ -69,8 +69,8 @@ def test02():
     #aggr:AggrDHont = AggrDHont(HistoryDF(), {AggrDHont.ARG_SELECTORFNC:(AggrDHont.selectorOfTheMostVotedItem,[])})
     #aggr:AggrDHont = AggrDHont(HistoryDF(), {AggrDHont.ARG_SELECTORFNC:(AggrDHont.selectorOfRouletteWheelRatedItem,[])})
     #aggr:AggrDHont = AggrDHont(HistoryDF(), {AggrDHont.ARG_SELECTORFNC:(AggrDHont.selectorOfRouletteWheelExpRatedItem,[1])})
-    aggr:AggrDHondt = AggrNegDHondt(HistoryDF(""),
-                                    {AggrNegDHondt.ARG_SELECTORFNC:(AggrNegDHondt.selectorOfRouletteWheelExpRatedItem, [1]),
+    aggr:AggrFuzzyDHondt = AggrNegDHondt(HistoryDF(""),
+                                         {AggrNegDHondt.ARG_SELECTORFNC:(AggrNegDHondt.selectorOfRouletteWheelExpRatedItem, [1]),
                                      AggrNegDHondt.ARG_MAX_PENALTY_VALUE: 0.8,
                                      AggrNegDHondt.ARG_MIN_PENALTY_VALUE: 0.2,
                                      AggrNegDHondt.ARG_LENGTH_OF_HISTORY: 10})

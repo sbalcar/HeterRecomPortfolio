@@ -8,7 +8,7 @@ from typing import List
 from pandas.core.frame import DataFrame #class
 from pandas.core.series import Series #class
 
-from aggregation.aggrDHondt import AggrDHondt #class
+from aggregation.aggrFuzzyDHondt import AggrFuzzyDHondt #class
 from aggregation.aggrNegDHondt import AggrNegDHondt #class
 from aggregation.aggrDHondtThompsonSampling import AggrDHondtThompsonSampling #class
 

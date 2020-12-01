@@ -19,7 +19,7 @@ from input.batchesML1m.batchDHondt import BatchDHondt #class
 
 from input.aBatch import ABatch #class
 
-from aggregation.aggrDHondt import AggrDHondt #class
+from aggregation.aggrFuzzyDHondt import AggrFuzzyDHondt #class
 from aggregation.operators.aDHondtSelector import ADHondtSelector #class
 
 

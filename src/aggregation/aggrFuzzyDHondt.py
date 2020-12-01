@@ -20,7 +20,7 @@ from abc import ABC, abstractmethod
 from userBehaviourDescription.userBehaviourDescription import UserBehaviourDescription #class
 
 
-class AggrDHondt(AAgregation):
+class AggrFuzzyDHondt(AAgregation):
 
     ARG_SELECTOR:str = "selector"
 
@@ -87,12 +87,12 @@ class AggrDHondt(AAgregation):
               votesOfPartyK:int = votesOfPartiesDictI.get(parityIDK)
               votesOfCandidateJ += partyAffiliationOfCandidateKJ * votesOfPartyK
            actVotesOfCandidatesDictI[candidateIDJ] = votesOfCandidateJ
-        print(actVotesOfCandidatesDictI)
+        #print(actVotesOfCandidatesDictI)
 
         # select candidate with highest number of votes
         #selectedCandidateI:int = AggrDHont.selectorOfTheMostVotedItem(actVotesOfCandidatesDictI)
         selectedCandidateI:int = self._selector.select(actVotesOfCandidatesDictI)
-        print("SelectedCandidateI: " + str(selectedCandidateI))
+        #print("SelectedCandidateI: " + str(selectedCandidateI))
 
         # add new selected candidate in results
         recommendedItemIDs.append(selectedCandidateI);
