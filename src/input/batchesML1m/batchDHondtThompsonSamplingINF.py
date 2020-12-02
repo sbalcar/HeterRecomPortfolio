@@ -68,7 +68,7 @@ class BatchDHondtThompsonSamplingINF(ABatch):
         aDescNegDHontThompsonSamplingI:AggregationDescription = InputAggrDefinition.exportADescNegDHontThompsonSampling(selector, nImplFeedback)
 
         pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
-            "NegDHondtThompsonSampling" + jobID, rIDs, rDescs, aDescNegDHontThompsonSamplingI)
+            "DHondtThompsonSamplingINF" + jobID, rIDs, rDescs, aDescNegDHontThompsonSamplingI)
 
         model:DataFrame = ModelDefinition.createDHondtBanditsVotesModel(pDescr.getRecommendersIDs())
 
