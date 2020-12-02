@@ -25,6 +25,7 @@ def countDHontResponsibility(aggregatedItemIDs:List[int], methodsResultDict:dict
         votesOfPartiesDictI:dict[str,int] = {mI:1.0 for mI in methodsParamsDF.index}
 
     candidatesOfMethods:np.asarray[str] = np.asarray([cI.keys() for cI in methodsResultDict.values()])
+    print("candidatesOfMethods: " + str(candidatesOfMethods))
     uniqueCandidatesI:List[str] = list(set(np.concatenate(candidatesOfMethods)))
 
     candidateOfdevotionOfPartiesDictDict:dict = {}

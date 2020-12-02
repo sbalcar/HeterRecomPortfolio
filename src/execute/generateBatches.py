@@ -12,6 +12,9 @@ from datasets.behaviours import Behaviours #class
 
 from input.batchesML1m.batchBanditTS import BatchBanditTS #class
 from input.batchesML1m.batchFuzzyDHondt import BatchFuzzyDHondt #class
+
+from input.batchesML1m.batchFuzzyDHondtDirectOptimize import BatchFuzzyDHondtDirectOptimize #class
+
 from input.batchesML1m.batchDHondtThompsonSampling import BatchDHondtThompsonSampling #class
 from input.batchesML1m.batchDHondtThompsonSamplingINF import BatchDHondtThompsonSamplingINF #class
 
@@ -47,16 +50,18 @@ class BatchParameters:
 def generateBatches():
    print("Generate Batches")
 
-   BatchBanditTS().generateBatches()
+   #BatchBanditTS().generateBatches()
 
-   BatchDHondtThompsonSampling().generateBatches()
-   BatchDHondtThompsonSamplingINF().generateBatches()
+   #BatchDHondtThompsonSampling().generateBatches()
+   #BatchDHondtThompsonSamplingINF().generateBatches()
 
-   BatchFuzzyDHondt().generateBatches()
-   BatchFuzzyDHondtINF().generateBatches()
+   #BatchFuzzyDHondt().generateBatches()
+   #BatchFuzzyDHondtINF().generateBatches()
 
-   BatchSingle().generateBatches()
-   BatchSingleINF().generateBatches()
+   BatchFuzzyDHondtDirectOptimize().generateBatches()
+
+   #BatchSingle().generateBatches()
+   #BatchSingleINF().generateBatches()
 
 if __name__ == "__main__":
 
