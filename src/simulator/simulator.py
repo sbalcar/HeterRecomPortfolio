@@ -4,7 +4,7 @@ from typing import List
 
 from pandas.core.frame import DataFrame #class
 
-from simulation.recommendToUser.simulatorOfPortfoliosRecommToUser import SimulationPortfolioToUser #class
+from simulation.simulationOfPortfoliosRecommToUser import SimulationPortfolioToUser #class
 
 from history.aHistory import AHistory #class
 
@@ -12,7 +12,7 @@ from portfolioDescription.aPortfolioDescription import APortfolioDescription #cl
 
 from evaluationTool.aEvalTool import AEvalTool #class
 
-from userBehaviourDescription.userBehaviourDescription import UserBehaviourDescription #class
+from simulation.aSequentialSimulation import ASequentialSimulation #class
 
 
 class Simulator:
@@ -33,7 +33,7 @@ class Simulator:
         if type(behavioursDF) is not DataFrame:
             raise ValueError("Argument behavioursDF isn't type DataFrame.")
 
-        self._simulation:SimulationPortfolioToUser = simulatorClass(
+        self._simulation:ASequentialSimulation = simulatorClass(
             jobID, ratingsDF, usersDF, itemsDF, behavioursDF, argumentsDict)
 
 

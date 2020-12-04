@@ -1,17 +1,10 @@
 #!/usr/bin/python3
 
-from typing import List
-
-from pandas.core.series import Series #class
-
 from datasets.ratings import Ratings #class
-
-import pandas as pd
-import numpy as np
 
 from pandas.core.frame import DataFrame #class
 
-from simulation.recommendToUser.simulatorOfPortfoliosRecommToUser import ModelOfIndexes #class
+from simulation.simulationOfPortfoliosRecommToUser import ModelOfIndexes #class
 
 
 def test01():

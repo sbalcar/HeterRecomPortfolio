@@ -15,6 +15,7 @@ from portfolioDescription.portfolio1AggrDescription import Portfolio1AggrDescrip
 from portfolio.aPortfolio import APortfolio #class
 from portfolio.portfolio1Aggr import Portfolio1Aggr #class
 
+from simulation.aSequentialSimulation import ASequentialSimulation #class
 
 import os
 import pandas as pd
@@ -31,7 +32,7 @@ from simulation.tools.userBehaviourSimulator import UserBehaviourSimulator #clas
 from userBehaviourDescription.userBehaviourDescription import UserBehaviourDescription #class
 
 
-class SimulationPortfolioToUser:
+class SimulationPortfolioToUser(ASequentialSimulation):
 
     ARG_WINDOW_SIZE:str = "windowSize"
     ARG_REPETITION_OF_RECOMMENDATION:str = "repetitionOfRecommendation"

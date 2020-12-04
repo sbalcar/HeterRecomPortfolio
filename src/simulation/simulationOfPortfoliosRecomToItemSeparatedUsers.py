@@ -24,11 +24,13 @@ from evaluationTool.aEvalTool import AEvalTool #class
 
 from history.aHistory import AHistory #class
 
+from simulation.aSequentialSimulation import ASequentialSimulation #class
+
 import pandas as pd
 import numpy as np
 
 
-class SimulationPortfoliosRecomToItemSeparatedUsers:
+class SimulationPortfoliosRecomToItemSeparatedUsers(ASequentialSimulation):
 
     def __init__(self, ratingsDF:DataFrame, usersDF:DataFrame, itemsDF:DataFrame,
                  uBehaviourDesc:UserBehaviourDescription, repetitionOfRecommendation:int=1, numberOfItems:int=20):

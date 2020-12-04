@@ -6,16 +6,10 @@ from pandas.core.frame import DataFrame #class
 
 from simulator.simulator import Simulator #class
 
-from simulation.recommendToUser.simulatorOfPortfoliosRecommToUser import SimulationPortfolioToUser #class
-
-from evaluationTool.evalToolSingleMethod import EToolSingleMethod #class
-from evaluationTool.evalToolDHondt import EvalToolDHondt #class
-from evaluationTool.evalToolDHondtBanditVotes import EvalToolDHondtBanditVotes #class
-from evaluationTool.evalToolBanditTS import EvalToolBanditTS #class
+from simulation.simulationOfPortfoliosRecommToUser import SimulationPortfolioToUser #class
 
 from portfolioDescription.aPortfolioDescription import APortfolioDescription #class
 
-from history.aHistory import AHistory #class
 from history.historyHierDF import HistoryHierDF #class
 
 from datasets.ratings import Ratings #class
