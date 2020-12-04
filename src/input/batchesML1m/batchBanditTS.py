@@ -14,13 +14,17 @@ from input.inputAggrDefinition import InputAggrDefinition, ModelDefinition  # cl
 
 from input.InputRecomDefinition import InputRecomDefinition #class
 
-from input.batchesML1m.aML1MConfig import AML1MConf #function
 from input.batchesML1m.batchFuzzyDHondt import BatchFuzzyDHondt #class
 
 from input.aBatch import ABatch #class
 
 from aggregation.aggrFuzzyDHondt import AggrFuzzyDHondt #class
 from aggregation.operators.aDHondtSelector import ADHondtSelector #class
+from input.inputSimulatorDefinition import InputSimulatorDefinition #class
+
+from simulator.simulator import Simulator #class
+
+from history.historyHierDF import HistoryHierDF #class
 
 
 
@@ -46,17 +50,20 @@ class BatchBanditTS(ABatch):
 
         selector:ADHondtSelector = self.getParameters()[jobID]
 
-        aConf:AML1MConf = AML1MConf(batchID, divisionDatasetPercentualSize, uBehaviour, repetition)
+        datasetID:str = "ml1m" + "Div" + str(divisionDatasetPercentualSize)
 
-        rIDs, rDescs = InputRecomDefinition.exportPairOfRecomIdsAndRecomDescrs(aConf.datasetID)
+        rIDs, rDescs = InputRecomDefinition.exportPairOfRecomIdsAndRecomDescrs(datasetID)
 
         pDescr: Portfolio1AggrDescription = Portfolio1AggrDescription(
             "BanditTS" + jobID, rIDs, rDescs, InputAggrDefinition.exportADescBanditTS(selector))
 
-        evalTool:AEvalTool = EvalToolBanditTS({})
+        eTool:AEvalTool = EvalToolBanditTS({})
         model:DataFrame = ModelDefinition.createBanditModel(pDescr.getRecommendersIDs())
 
-        aConf.run(pDescr, model, evalTool)
+        simulator:Simulator = InputSimulatorDefinition.exportSimulatorML1M(
+                batchID, divisionDatasetPercentualSize, uBehaviour, repetition)
+        simulator.simulate([pDescr], [model], [eTool], HistoryHierDF)
+
 
 
 

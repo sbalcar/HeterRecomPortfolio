@@ -12,11 +12,15 @@ from input.InputRecomDefinition import InputRecomDefinition #class
 
 from portfolioDescription.aPortfolioDescription import APortfolioDescription #class
 
-from input.batchesML1m.aML1MConfig import AML1MConf #function
-
 from evaluationTool.evalToolSingleMethod import EToolSingleMethod #class
 
 from recommenderDescription.recommenderDescription import RecommenderDescription #class
+
+from input.inputSimulatorDefinition import InputSimulatorDefinition #class
+
+from simulator.simulator import Simulator #class
+
+from history.historyHierDF import HistoryHierDF #class
 
 import pandas as pd
 from input.aBatch import ABatch #class
@@ -44,18 +48,17 @@ class BatchSingle(ABatch):
         repetition:int
         divisionDatasetPercentualSize, uBehaviour, repetition = BatchParameters.getBatchParameters()[batchID]
 
+        datasetID:str = "ml1m" + "Div" + str(divisionDatasetPercentualSize)
+
         recommenderID:str = self.getParameters()[jobID]
 
-        aConf:AML1MConf = AML1MConf(batchID, divisionDatasetPercentualSize, uBehaviour, repetition)
-
-        rDescr:RecommenderDescription = InputRecomDefinition.exportInputRecomDefinition(recommenderID, aConf.datasetID)
+        rDescr:RecommenderDescription = InputRecomDefinition.exportInputRecomDefinition(recommenderID, datasetID)
 
         pDescr:APortfolioDescription = Portfolio1MethDescription(recommenderID.title(), recommenderID, rDescr)
 
-        model:DataFrame = pd.DataFrame()
-        eTool:List = EToolSingleMethod({})
-
-        aConf.run(pDescr, model, eTool)
+        simulator:Simulator = InputSimulatorDefinition.exportSimulatorML1M(
+                batchID, divisionDatasetPercentualSize, uBehaviour, repetition)
+        simulator.simulate([pDescr], [DataFrame()], [EToolSingleMethod({})], HistoryHierDF)
 
 
 

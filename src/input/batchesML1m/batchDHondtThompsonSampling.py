@@ -17,12 +17,15 @@ from input.inputAggrDefinition import InputAggrDefinition, ModelDefinition  # cl
 
 from input.InputRecomDefinition import InputRecomDefinition #class
 
-from input.batchesML1m.aML1MConfig import AML1MConf #function
-
 from input.batchesML1m.batchFuzzyDHondt import BatchFuzzyDHondt #class
 
 from aggregation.operators.aDHondtSelector import ADHondtSelector #class
 from input.aBatch import ABatch #class
+from input.inputSimulatorDefinition import InputSimulatorDefinition #class
+
+from simulator.simulator import Simulator #class
+
+from history.historyHierDF import HistoryHierDF #class
 
 
 
@@ -53,9 +56,9 @@ class BatchDHondtThompsonSampling(ABatch):
         #eTool:AEvalTool
         selector, eTool = self.getParameters()[jobID]
 
-        aConf:AML1MConf = AML1MConf(batchID, divisionDatasetPercentualSize, uBehaviour, repetition)
+        datasetID:str = "ml1m" + "Div" + str(divisionDatasetPercentualSize)
 
-        rIDs, rDescs = InputRecomDefinition.exportPairOfRecomIdsAndRecomDescrs(aConf.datasetID)
+        rIDs, rDescs = InputRecomDefinition.exportPairOfRecomIdsAndRecomDescrs(datasetID)
 
         aDescDHontThompsonSamplingI:AggregationDescription = InputAggrDefinition.exportADescDHontThompsonSampling(selector)
 
@@ -64,7 +67,10 @@ class BatchDHondtThompsonSampling(ABatch):
 
         model:DataFrame = ModelDefinition.createDHondtBanditsVotesModel(pDescr.getRecommendersIDs())
 
-        aConf.run(pDescr, model, eTool)
+        simulator:Simulator = InputSimulatorDefinition.exportSimulatorML1M(
+                batchID, divisionDatasetPercentualSize, uBehaviour, repetition)
+        simulator.simulate([pDescr], [model], [eTool], HistoryHierDF)
+
 
 
 

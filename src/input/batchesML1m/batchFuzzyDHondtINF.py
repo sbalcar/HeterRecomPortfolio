@@ -21,12 +21,16 @@ from input.batchesML1m.batchFuzzyDHondt import BatchFuzzyDHondt #class
 
 from aggregation.negImplFeedback.aPenalization import APenalization #class
 
-from input.batchesML1m.aML1MConfig import AML1MConf #function
-
 from aggregation.operators.aDHondtSelector import ADHondtSelector #class
 from aggregation.negImplFeedback.penalUsingFiltering import PenalUsingFiltering #class
 
 from input.aBatch import ABatch #class
+
+from input.inputSimulatorDefinition import InputSimulatorDefinition #class
+
+from simulator.simulator import Simulator #class
+
+from history.historyHierDF import HistoryHierDF #class
 
 
 class BatchFuzzyDHondtINF(ABatch):
@@ -81,9 +85,9 @@ class BatchFuzzyDHondtINF(ABatch):
         #eTool:AEvalTool
         selector, nImplFeedback, eTool = self.getParameters()[jobID]
 
-        aConf:AML1MConf = AML1MConf(batchID, divisionDatasetPercentualSize, uBehaviour, repetition)
+        datasetID:str = "ml1m" + "Div" + str(divisionDatasetPercentualSize)
 
-        rIDs, rDescs = InputRecomDefinition.exportPairOfRecomIdsAndRecomDescrs(aConf.datasetID)
+        rIDs, rDescs = InputRecomDefinition.exportPairOfRecomIdsAndRecomDescrs(datasetID)
 
         aDescNegDHont:AggregationDescription = InputAggrDefinition.exportADescNegDHont(selector, nImplFeedback)
 
@@ -92,7 +96,10 @@ class BatchFuzzyDHondtINF(ABatch):
 
         model:DataFrame = ModelDefinition.createDHontModel(pDescr.getRecommendersIDs())
 
-        aConf.run(pDescr, model, eTool)
+        simulator:Simulator = InputSimulatorDefinition.exportSimulatorML1M(
+                batchID, divisionDatasetPercentualSize, uBehaviour, repetition)
+        simulator.simulate([pDescr], [model], [eTool], HistoryHierDF)
+
 
 
 

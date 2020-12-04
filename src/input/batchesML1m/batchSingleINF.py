@@ -14,8 +14,6 @@ from input.InputRecomDefinition import InputRecomDefinition #class
 
 from portfolioDescription.aPortfolioDescription import APortfolioDescription #class
 
-from input.batchesML1m.aML1MConfig import AML1MConf #function
-
 from evaluationTool.evalToolSingleMethod import EToolSingleMethod #class
 
 from input.aBatch import ABatch #class
@@ -25,6 +23,12 @@ from input.batchesML1m.batchFuzzyDHondtINF import BatchFuzzyDHondtINF #class
 from aggregation.negImplFeedback.aPenalization import APenalization #class
 
 from recommenderDescription.recommenderDescription import RecommenderDescription #class
+
+from input.inputSimulatorDefinition import InputSimulatorDefinition #class
+
+from simulator.simulator import Simulator #class
+
+from history.historyHierDF import HistoryHierDF #class
 
 
 class BatchSingleINF(ABatch):
@@ -58,16 +62,14 @@ class BatchSingleINF(ABatch):
         nImplFeedback:APenalization
         recommenderID, nImplFeedback = self.getParameters()[jobID]
 
-        aConf:AML1MConf = AML1MConf(batchID, divisionDatasetPercentualSize, uBehaviour, repetition)
-
         rDescr:RecommenderDescription = InputRecomDefinition.exportInputRecomDefinition(recommenderID, aConf.datasetID)
 
         pDescr:APortfolioDescription = PortfolioNeg1MethDescription(jobID.title(), recommenderID, rDescr, nImplFeedback)
 
-        model:DataFrame = pd.DataFrame()
-        eTool:List = EToolSingleMethod({})
+        simulator:Simulator = InputSimulatorDefinition.exportSimulatorML1M(
+                batchID, divisionDatasetPercentualSize, uBehaviour, repetition)
+        simulator.simulate([pDescr], [DataFrame()], [EToolSingleMethod({})], HistoryHierDF)
 
-        aConf.run(pDescr, model, eTool)
 
 
 
