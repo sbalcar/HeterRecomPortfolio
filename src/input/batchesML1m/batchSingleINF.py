@@ -58,11 +58,13 @@ class BatchSingleINF(ABatch):
         repetition:int
         divisionDatasetPercentualSize, uBehaviour, repetition = BatchParameters.getBatchParameters()[batchID]
 
+        datasetID:str = "ml1m" + "Div" + str(divisionDatasetPercentualSize)
+
         recommenderID:str
         nImplFeedback:APenalization
         recommenderID, nImplFeedback = self.getParameters()[jobID]
 
-        rDescr:RecommenderDescription = InputRecomDefinition.exportInputRecomDefinition(recommenderID, aConf.datasetID)
+        rDescr:RecommenderDescription = InputRecomDefinition.exportInputRecomDefinition(recommenderID, datasetID)
 
         pDescr:APortfolioDescription = PortfolioNeg1MethDescription(jobID.title(), recommenderID, rDescr, nImplFeedback)
 
