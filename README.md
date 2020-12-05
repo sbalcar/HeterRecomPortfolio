@@ -55,8 +55,8 @@ The systems in each run takes one file (Batch instance) from the input directory
 - it's necessary to extends child classes of [ASequentialSimulator](src/simulation/aSequentialSimulation.py) with capability to process this new portfolio architecture
 
 #### How to add new input Batch definition:
-- create new child class of [ABatch](src/input/ABatch.py)
-- we recommend adding a call to this class' function generateBatches into file [generateBatches](src/portfolio/generateBatches.py)
+- create new child class of [ABatch](src/input/aBatch.py)
+- we recommend adding a call to this class' function generateBatches into file [generateBatches](src/execute/generateBatches.py)
 
 #### How to add new dataset:
 - adding the new dataset requires changing child class of [ARecommender](src/recommender/aRecommender.py), adding new [batches](src/input/ABatch.py) and update of [simulation](src/simulation/aSequentialSimulation.py)
