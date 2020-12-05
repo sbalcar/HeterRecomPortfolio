@@ -16,6 +16,16 @@ update portfolio data model representing votes assigned to base [recommenders](s
 ![architecture](doc/architecture.png "Visualisation of the architecture")
 
 
+### Sequential evaluation:
+
+The main usecase of this system is sequential evaluation. The goal is to simulate online recommendation in an oflfine enviroment.
+
+![evaluation](doc/evaluation.png "Sequential evaluation")
+
+In the first step, the dataset of ratings is sorted by timestamp. Items are recommended for each user interaction. Relevant items correspond to observed items in the next (bounded) window.
+System allows for experiments with repeated recommending. By using generated user behaviour, performed experiments were enhanced by using implicit negative feedback in portfolios.
+
+
 ## Tutorial:
 
 ### Installation

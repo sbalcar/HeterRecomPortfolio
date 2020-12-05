@@ -15,7 +15,7 @@ from aggregationDescription.aggregationDescription import AggregationDescription
 
 from input.inputAggrDefinition import InputAggrDefinition, ModelDefinition  #class
 
-from input.InputRecomDefinition import InputRecomDefinition #class
+from input.inputRecomDefinition import InputRecomDefinition #class
 
 from input.batchesML1m.batchFuzzyDHondt import BatchFuzzyDHondt #class
 

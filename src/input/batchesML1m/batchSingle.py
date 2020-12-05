@@ -8,7 +8,7 @@ from pandas.core.frame import DataFrame #class
 
 from portfolioDescription.portfolio1MethDescription import Portfolio1MethDescription #class
 
-from input.InputRecomDefinition import InputRecomDefinition #class
+from input.inputRecomDefinition import InputRecomDefinition #class
 
 from portfolioDescription.aPortfolioDescription import APortfolioDescription #class
 
