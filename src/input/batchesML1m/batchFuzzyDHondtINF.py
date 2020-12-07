@@ -37,9 +37,9 @@ class BatchFuzzyDHondtINF(ABatch):
 
     def getNegativeImplFeedbackParameters(self):
 
-        pToolOLin0802HLin1002:APenalization = InputAggrDefinition.exportAPenaltyToolOLin0802HLin1002(AML1MConf.numberOfAggrItems)
+        pToolOLin0802HLin1002:APenalization = InputAggrDefinition.exportAPenaltyToolOLin0802HLin1002(InputSimulatorDefinition.numberOfAggrItems)
 
-        pToolOStat08HLin1002:APenalization = InputAggrDefinition.exportAPenaltyToolOStat08HLin1002(AML1MConf.numberOfAggrItems)
+        pToolOStat08HLin1002:APenalization = InputAggrDefinition.exportAPenaltyToolOStat08HLin1002(InputSimulatorDefinition.numberOfAggrItems)
 
         pToolFilterBord3Lengt100:PenalUsingFiltering = InputAggrDefinition.exportAPenaltyToolFiltering()
 
@@ -89,7 +89,7 @@ class BatchFuzzyDHondtINF(ABatch):
 
         rIDs, rDescs = InputRecomDefinition.exportPairOfRecomIdsAndRecomDescrs(datasetID)
 
-        aDescNegDHont:AggregationDescription = InputAggrDefinition.exportADescNegDHont(selector, nImplFeedback)
+        aDescNegDHont:AggregationDescription = InputAggrDefinition.exportADescDHontINF(selector, nImplFeedback)
 
         pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
             "FDHontINF" + jobID, rIDs, rDescs, aDescNegDHont)

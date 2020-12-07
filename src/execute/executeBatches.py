@@ -16,6 +16,7 @@ from input.batchesML1m.batchDHondtThompsonSampling import BatchDHondtThompsonSam
 from input.batchesML1m.batchFuzzyDHondtINF import BatchFuzzyDHondtINF #class
 from input.batchesML1m.batchDHondtThompsonSamplingINF import BatchDHondtThompsonSamplingINF #class
 from input.batchesML1m.batchFuzzyDHondtDirectOptimize import BatchFuzzyDHondtDirectOptimize #class
+from input.batchesML1m.batchFuzzyDHondtDirectOptimizeINF import BatchFuzzyDHondtDirectOptimizeINF #class
 from input.batchesML1m.batchSingle import BatchSingle #class
 from input.batchesML1m.batchSingleINF import BatchSingleINF #class
 

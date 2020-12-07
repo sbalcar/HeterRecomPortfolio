@@ -9,6 +9,7 @@ from typing import List #class
 from datasets.ml.behaviours import Behaviours #class
 
 from input.batchesML1m.batchFuzzyDHondtDirectOptimize import BatchFuzzyDHondtDirectOptimize #class
+from input.batchesML1m.batchFuzzyDHondtDirectOptimizeINF import BatchFuzzyDHondtDirectOptimizeINF #class
 
 
 class BatchParameters:
@@ -45,7 +46,8 @@ def generateBatches():
    #BatchFuzzyDHondt().generateBatches()
    #BatchFuzzyDHondtINF().generateBatches()
 
-   BatchFuzzyDHondtDirectOptimize().generateBatches()
+   #BatchFuzzyDHondtDirectOptimize().generateBatches()
+   BatchFuzzyDHondtDirectOptimizeINF().generateBatches()
 
    #BatchSingle().generateBatches()
    #BatchSingleINF().generateBatches()

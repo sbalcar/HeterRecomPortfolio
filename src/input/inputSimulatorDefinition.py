@@ -14,6 +14,7 @@ from simulator.simulator import Simulator #class
 
 
 class InputSimulatorDefinition:
+    numberOfAggrItems:int = 20
 
     @staticmethod
     def exportSimulatorML1M(batchID:str, divisionDatasetPercentualSize:int, uBehaviourID:str, repetition:int):
@@ -21,7 +22,7 @@ class InputSimulatorDefinition:
         argsSimulationDict:dict = {SimulationPortfolioToUser.ARG_WINDOW_SIZE: 5,
                                    SimulationPortfolioToUser.ARG_REPETITION_OF_RECOMMENDATION: repetition,
                                    SimulationPortfolioToUser.ARG_NUMBER_OF_RECOMM_ITEMS: 100,
-                                   SimulationPortfolioToUser.ARG_NUMBER_OF_AGGR_ITEMS: 20,
+                                   SimulationPortfolioToUser.ARG_NUMBER_OF_AGGR_ITEMS: InputSimulatorDefinition.numberOfAggrItems,
                                    SimulationPortfolioToUser.ARG_DIV_DATASET_PERC_SIZE: divisionDatasetPercentualSize}
 
         # dataset reading

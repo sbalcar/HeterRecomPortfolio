@@ -9,6 +9,7 @@ from aggregation.aggrDHondtThompsonSampling import AggrDHondtThompsonSampling #c
 from aggregation.aggrFuzzyDHondtINF import AggrFuzzyDHondtINF #class
 from aggregation.aggrDHondtThompsonSamplingINF import AggrDHondtThompsonSamplingINF #class
 from aggregation.aggrFuzzyDHondtDirectOptimize import AggrFuzzyDHondtDirectOptimize #class
+from aggregation.aggrFuzzyDHondtDirectOptimizeINF import AggrFuzzyDHondtDirectOptimizeINF #class
 
 from evaluationTool.evalToolDHondt import EvalToolDHondt #class
 
@@ -43,7 +44,7 @@ class InputAggrDefinition:
         return aDescDHontFixed
 
     @staticmethod
-    def exportADescNegDHont(selector:ADHondtSelector, nImplFeedback:APenalization):
+    def exportADescDHontINF(selector:ADHondtSelector, nImplFeedback:APenalization):
         aDescNegDHontFixed:AggregationDescription = AggregationDescription(AggrFuzzyDHondtINF,
                                                         {AggrFuzzyDHondtINF.ARG_SELECTOR:selector,
                                                          AggrFuzzyDHondtINF.ARG_PENALTY_TOOL:nImplFeedback})
@@ -58,7 +59,7 @@ class InputAggrDefinition:
         return aDescDHontBanditVotesRoulette
 
     @staticmethod
-    def exportADescNegDHontThompsonSampling(selector:ADHondtSelector, nImplFeedback:APenalization):
+    def exportADescDHontThompsonSamplingINF(selector:ADHondtSelector, nImplFeedback:APenalization):
         aDescDHontBanditVotesRoulette:AggregationDescription = AggregationDescription(AggrDHondtThompsonSamplingINF,
                                                         {AggrDHondtThompsonSampling.ARG_SELECTOR:selector,
                                                          AggrFuzzyDHondtINF.ARG_PENALTY_TOOL: nImplFeedback})
@@ -68,9 +69,16 @@ class InputAggrDefinition:
 
     @staticmethod
     def exportADescDHontDirectOptimize(selector:ADHondtSelector):
-        aDescDHontBanditVotesRoulette:AggregationDescription = AggregationDescription(AggrFuzzyDHondtDirectOptimize,
+        aDescFuzzyDHondtDirectOptimize:AggregationDescription = AggregationDescription(AggrFuzzyDHondtDirectOptimize,
                                                         {AggrFuzzyDHondtDirectOptimize.ARG_SELECTOR:selector})
-        return aDescDHontBanditVotesRoulette
+        return aDescFuzzyDHondtDirectOptimize
+
+    @staticmethod
+    def exportADescDFuzzyHontDirectOptimizeINF(selector:ADHondtSelector, nImplFeedback:APenalization):
+        aDescFuzzyDHondtDirectOptimizeINF:AggregationDescription = AggregationDescription(AggrFuzzyDHondtDirectOptimizeINF,
+                                                        {AggrFuzzyDHondtDirectOptimizeINF.ARG_SELECTOR:selector,
+                                                         AggrFuzzyDHondtDirectOptimizeINF.ARG_PENALTY_TOOL: nImplFeedback})
+        return aDescFuzzyDHondtDirectOptimizeINF
 
 
 

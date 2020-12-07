@@ -17,8 +17,8 @@ from input.inputAggrDefinition import InputAggrDefinition, ModelDefinition  #cla
 
 from input.inputRecomDefinition import InputRecomDefinition #class
 
-from input.batchesML1m.batchFuzzyDHondt import BatchFuzzyDHondt #class
-from input.batchesML1m.batchFuzzyDHondtINF import BatchFuzzyDHondtINF #class
+from input.batchesML1m.batchFuzzyDHondtDirectOptimize import BatchFuzzyDHondtDirectOptimize #class
+from input.batchesML1m.batchDHondtThompsonSamplingINF import BatchDHondtThompsonSamplingINF #class
 
 from aggregation.negImplFeedback.aPenalization import APenalization #class
 
@@ -36,22 +36,10 @@ from history.historyHierDF import HistoryHierDF #class
 
 
 
-class BatchDHondtThompsonSamplingINF(ABatch):
+class BatchFuzzyDHondtDirectOptimizeINF(ABatch):
 
     def getParameters(self):
-        selectorIDs:List[str] = BatchFuzzyDHondt().getSelectorParameters().keys()
-        negativeImplFeedback:List[str] = BatchFuzzyDHondtINF().getNegativeImplFeedbackParameters().keys()
-
-        aDict:dict = {}
-        for selectorIDH in selectorIDs:
-            for nImplFeedbackI in negativeImplFeedback:
-                keyIJ:str = str(selectorIDH) + nImplFeedbackI
-
-                nImplFeedback:APenalization = BatchFuzzyDHondtINF().getNegativeImplFeedbackParameters()[nImplFeedbackI]
-                selectorH:ADHondtSelector = BatchFuzzyDHondt().getSelectorParameters()[selectorIDH]
-
-                aDict[keyIJ] = (selectorH, nImplFeedback)
-        return aDict
+        return BatchDHondtThompsonSamplingINF().getParameters()
 
 
     def run(self, batchID:str, jobID:str):
@@ -64,18 +52,19 @@ class BatchDHondtThompsonSamplingINF(ABatch):
 
         selector, nImplFeedback = self.getParameters()[jobID]
 
-        eTool:AEvalTool = EvalToolDHondtBanditVotes({})
+        eTool:AEvalTool = EvalToolDHondt({EvalToolDHondt.ARG_LEARNING_RATE_CLICKS: 0.02,
+                                           EvalToolDHondt.ARG_LEARNING_RATE_VIEWS: 1000})
 
         datasetID:str = "ml1m" + "Div" + str(divisionDatasetPercentualSize)
 
         rIDs, rDescs = InputRecomDefinition.exportPairOfRecomIdsAndRecomDescrs(datasetID)
 
-        aDescNegDHontThompsonSamplingI:AggregationDescription = InputAggrDefinition.exportADescDHontThompsonSamplingINF(selector, nImplFeedback)
+        aDescFuzzyHontDirectOptimizeINF:AggregationDescription = InputAggrDefinition.exportADescDFuzzyHontDirectOptimizeINF(selector, nImplFeedback)
 
         pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
-            "DHondtThompsonSamplingINF" + jobID, rIDs, rDescs, aDescNegDHontThompsonSamplingI)
+            "FuzzyDHondtDirectOptimizeINF" + jobID, rIDs, rDescs, aDescFuzzyHontDirectOptimizeINF)
 
-        model:DataFrame = ModelDefinition.createDHondtBanditsVotesModel(pDescr.getRecommendersIDs())
+        model:DataFrame = ModelDefinition.createDHontModel(pDescr.getRecommendersIDs())
 
         simulator:Simulator = InputSimulatorDefinition.exportSimulatorML1M(
                 batchID, divisionDatasetPercentualSize, uBehaviour, repetition)
