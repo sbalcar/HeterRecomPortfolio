@@ -2,18 +2,14 @@ import pandas as pd
 import numpy as np
 
 from pandas.core.frame import DataFrame #class
-from pandas.core.series import Series #class
 
 from typing import List
 
-import random
-from sklearn.metrics.pairwise import euclidean_distances, pairwise_distances
 from sklearn.metrics import *
-from sklearn.preprocessing import MinMaxScaler
 from sklearn.preprocessing import normalize
 from recommender.aRecommender import ARecommender  # class
 
-from datasets.ratings import Ratings  # class
+from datasets.ml.ratings import Ratings  # class
 
 from history.aHistory import AHistory #class
 

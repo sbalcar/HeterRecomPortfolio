@@ -18,7 +18,7 @@ from sklearn.metrics import *
 from sklearn.preprocessing import normalize
 from recommender.aRecommender import ARecommender  #class
 
-from datasets.ratings import Ratings  #class
+from datasets.ml.ratings import Ratings  #class
 from history.aHistory import AHistory #class
 
 

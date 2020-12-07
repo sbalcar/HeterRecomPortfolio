@@ -5,15 +5,13 @@ from pandas.core.frame import DataFrame #class
 from typing import List
 from pandas.core.series import Series #class
 
-import random
 from sklearn.preprocessing import normalize
 
 from recommender.aRecommender import ARecommender #class
 
-from datasets.ratings import Ratings #class
+from datasets.ml.ratings import Ratings #class
 from history.aHistory import AHistory #class
 
-import pandas as pd
 import numpy as np
 
 class RecommenderTheMostPopular(ARecommender):

@@ -6,11 +6,9 @@ from pandas.core.series import Series #class
 
 from configuration.configuration import Configuration #class
 
-from datasets.ratings import Ratings #class
-from datasets.users import Users #class
+from datasets.ml.ratings import Ratings #class
 
 from portfolioDescription.aPortfolioDescription import APortfolioDescription #class
-from portfolioDescription.portfolio1AggrDescription import Portfolio1AggrDescription #class
 
 from portfolio.aPortfolio import APortfolio #class
 from portfolio.portfolio1Aggr import Portfolio1Aggr #class
@@ -19,17 +17,13 @@ from simulation.aSequentialSimulation import ASequentialSimulation #class
 
 import os
 import pandas as pd
-import numpy as np
 
 from pandas.core.frame import DataFrame #class
 
 from history.aHistory import AHistory #class
 from evaluationTool.aEvalTool import AEvalTool #class
 
-from datasets.behaviours import Behaviours #class
-
-from simulation.tools.userBehaviourSimulator import UserBehaviourSimulator #class
-from userBehaviourDescription.userBehaviourDescription import UserBehaviourDescription #class
+from datasets.ml.behaviours import Behaviours #class
 
 
 class SimulationPortfolioToUser(ASequentialSimulation):

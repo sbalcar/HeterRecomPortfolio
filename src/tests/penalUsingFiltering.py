@@ -2,27 +2,13 @@
 
 import os
 
-from configuration.configuration import Configuration #class
-
-from pandas.core.frame import DataFrame #class
 from pandas.core.series import Series #class
-
-from datasets.ratings import Ratings #class
-
-from recommender.aRecommender import ARecommender #class
-from recommender.recommenderCosineCB import RecommenderCosineCB #class
 
 from aggregation.negImplFeedback.penalUsingFiltering import PenalUsingFiltering #class
 from aggregation.negImplFeedback.aPenalization import APenalization #class
 
-import pandas as pd
 from history.aHistory import AHistory #class
-from history.historySQLite import HistorySQLite #class
-from history.historyDF import HistoryDF #class
 from history.historyHierDF import HistoryHierDF #class
-
-
-import pandas as pd
 
 
 def test01():

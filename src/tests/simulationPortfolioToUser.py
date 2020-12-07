@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-from datasets.ratings import Ratings #class
+from datasets.ml.ratings import Ratings #class
 
 from pandas.core.frame import DataFrame #class
 

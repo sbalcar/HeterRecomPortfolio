@@ -4,11 +4,7 @@ import os
 import random
 import numpy as np
 
-from typing import List
-
-from pandas.core.frame import DataFrame #class
-
-from datasets.behaviours import Behaviours #class
+from datasets.ml.behaviours import Behaviours #class
 
 from userBehaviourDescription.userBehaviourDescription import UserBehaviourDescription #class
 from userBehaviourDescription.userBehaviourDescription import observationalStaticProbabilityFnc #function

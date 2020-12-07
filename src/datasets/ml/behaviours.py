@@ -1,9 +1,8 @@
 #!/usr/bin/python3
 
-import csv
 from typing import List
 
-from datasets.ratings import Ratings
+from datasets.ml.ratings import Ratings
 
 from pandas.core.frame import DataFrame #class
 from pandas.core.frame import Series #class

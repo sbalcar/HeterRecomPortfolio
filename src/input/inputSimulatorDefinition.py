@@ -1,28 +1,11 @@
 #!/usr/bin/python3
 
-from typing import List
-
-from recommenderDescription.recommenderDescription import RecommenderDescription #class
-
-from recommender.recommenderTheMostPopular import RecommenderTheMostPopular #class
-from recommender.recommenderCosineCB import RecommenderCosineCB #class
-from recommender.recommenderW2V import RecommenderW2V #class
-
-from datasets.ratings import Ratings #class
-from datasets.users import Users #class
-from datasets.items import Items #class
-from datasets.behaviours import Behaviours #class
-
-from configuration.configuration import Configuration #class
+from datasets.ml.ratings import Ratings #class
+from datasets.ml.users import Users #class
+from datasets.ml.items import Items #class
+from datasets.ml.behaviours import Behaviours #class
 
 from pandas.core.frame import DataFrame #class
-
-from portfolioDescription.aPortfolioDescription import APortfolioDescription #class
-
-from aggregation.negImplFeedback.aPenalization import APenalization #class
-from aggregation.negImplFeedback.penalUsingReduceRelevance import PenalUsingReduceRelevance #class
-from aggregation.negImplFeedback.penalUsingReduceRelevance import penaltyStatic #function
-from aggregation.negImplFeedback.penalUsingReduceRelevance import penaltyLinear #function
 
 from simulation.simulationOfPortfoliosRecommToUser import SimulationPortfolioToUser #class
 

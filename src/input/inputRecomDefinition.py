@@ -8,19 +8,7 @@ from recommender.recommenderTheMostPopular import RecommenderTheMostPopular #cla
 from recommender.recommenderCosineCB import RecommenderCosineCB #class
 from recommender.recommenderW2V import RecommenderW2V #class
 
-from datasets.ratings import Ratings #class
-from datasets.users import Users #class
-from datasets.items import Items #class
-from datasets.behaviours import Behaviours #class
-
 from configuration.configuration import Configuration #class
-
-from pandas.core.frame import DataFrame #class
-
-from aggregation.negImplFeedback.aPenalization import APenalization #class
-from aggregation.negImplFeedback.penalUsingReduceRelevance import PenalUsingReduceRelevance #class
-from aggregation.negImplFeedback.penalUsingReduceRelevance import penaltyStatic #function
-from aggregation.negImplFeedback.penalUsingReduceRelevance import penaltyLinear #function
 
 
 class InputRecomDefinition:

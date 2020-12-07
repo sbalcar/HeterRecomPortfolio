@@ -2,24 +2,6 @@
 
 from typing import List
 
-from pandas import DataFrame
-
-from recommenderDescription.recommenderDescription import RecommenderDescription #class
-
-from recommender.recommenderTheMostPopular import RecommenderTheMostPopular #class
-from recommender.recommenderCosineCB import RecommenderCosineCB #class
-from recommender.recommenderW2V import RecommenderW2V #class
-
-from datasets.ratings import Ratings #class
-from datasets.users import Users #class
-from datasets.items import Items #class
-from datasets.behaviours import Behaviours #class
-
-from configuration.configuration import Configuration #class
-
-from portfolioDescription.portfolio1MethDescription import Portfolio1MethDescription #class
-from portfolioDescription.portfolio1AggrDescription import Portfolio1AggrDescription #class
-
 from aggregationDescription.aggregationDescription import AggregationDescription #class
 from aggregation.aggrBanditTS import AggrBanditTS #class
 from aggregation.aggrFuzzyDHondt import AggrFuzzyDHondt #class
@@ -29,20 +11,10 @@ from aggregation.aggrDHondtThompsonSamplingINF import AggrDHondtThompsonSampling
 from aggregation.aggrFuzzyDHondtDirectOptimize import AggrFuzzyDHondtDirectOptimize #class
 
 from evaluationTool.evalToolDHondt import EvalToolDHondt #class
-from evaluationTool.evalToolDHondtBanditVotes import EvalToolDHondtBanditVotes 
 
 import pandas as pd
 
 from pandas.core.frame import DataFrame #class
-
-from history.aHistory import AHistory #class
-from history.historyHierDF import HistoryHierDF #class
-
-from portfolioDescription.aPortfolioDescription import APortfolioDescription #class
-
-from userBehaviourDescription.userBehaviourDescription import UserBehaviourDescription #class
-from userBehaviourDescription.userBehaviourDescription import observationalStaticProbabilityFnc #function
-from userBehaviourDescription.userBehaviourDescription import observationalLinearProbabilityFnc #function
 
 from aggregation.negImplFeedback.aPenalization import APenalization #class
 from aggregation.negImplFeedback.penalUsingFiltering import PenalUsingFiltering #class

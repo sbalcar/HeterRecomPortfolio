@@ -7,7 +7,7 @@ from configuration.configuration import Configuration #class
 from pandas.core.frame import DataFrame #class
 from pandas.core.series import Series #class
 
-from datasets.ratings import Ratings #class
+from datasets.ml.ratings import Ratings #class
 
 from recommender.aRecommender import ARecommender #class
 from recommender.recommenderTheMostPopular import RecommenderTheMostPopular #class

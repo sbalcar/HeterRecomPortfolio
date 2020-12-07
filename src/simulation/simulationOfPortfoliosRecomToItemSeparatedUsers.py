@@ -5,15 +5,14 @@ from typing import List
 from pandas.core.frame import DataFrame #class
 from pandas.core.series import Series #class
 
-from datasets.ratings import Ratings #class
+from datasets.ml.ratings import Ratings #class
 
-from datasets.users import Users #class
+from datasets.ml.users import Users #class
 
 from portfolio.aPortfolio import APortfolio #class
 
 from portfolioDescription.aPortfolioDescription import APortfolioDescription #class
 
-from portfolioDescription.portfolio1AggrDescription import Portfolio1AggrDescription #class
 from portfolio.portfolio1Aggr import Portfolio1Aggr #class
 
 from userBehaviourDescription.userBehaviourDescription import UserBehaviourDescription #class

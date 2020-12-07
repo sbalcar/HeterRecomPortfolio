@@ -6,22 +6,9 @@ import numpy as np
 
 from typing import List #class
 
-from pandas.core.frame import DataFrame #class
-
-from datasets.behaviours import Behaviours #class
-
-from input.batchesML1m.batchBanditTS import BatchBanditTS #class
-from input.batchesML1m.batchFuzzyDHondt import BatchFuzzyDHondt #class
+from datasets.ml.behaviours import Behaviours #class
 
 from input.batchesML1m.batchFuzzyDHondtDirectOptimize import BatchFuzzyDHondtDirectOptimize #class
-
-from input.batchesML1m.batchDHondtThompsonSampling import BatchDHondtThompsonSampling #class
-from input.batchesML1m.batchDHondtThompsonSamplingINF import BatchDHondtThompsonSamplingINF #class
-
-from input.batchesML1m.batchFuzzyDHondtINF import BatchFuzzyDHondtINF #class
-
-from input.batchesML1m.batchSingle import BatchSingle #class
-from input.batchesML1m.batchSingleINF import BatchSingleINF #class
 
 
 class BatchParameters:

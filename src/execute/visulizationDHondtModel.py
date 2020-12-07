@@ -1,15 +1,12 @@
 #!/usr/bin/python3
 
 import os
-import random
-import numpy as np
 
 from typing import List
 
 from pandas.core.frame import DataFrame #class
 
 from configuration.configuration import Configuration #class
-from datasets.behaviours import Behaviours #class
 
 import matplotlib.pyplot as plt
 
