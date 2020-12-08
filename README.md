@@ -1,6 +1,8 @@
 # HeterRecomPortfolio
 This system's purpose is to serve as the framework for testing and evaluation of recommmender systems of various heterogenous architectures. It allows for testing fairness and proportionality of different types of basic recommenders aggregations. Sequential evaluation makes it possible to simulate online evaluation. 
 
+![logicalOverview](doc/logicalOverview.png "Logical Overview")
+
 ### Code conventions:
 Names of abstract classes begin with letter "A". For public class is usually created a separate file. Variables and functions are named in Camel case.
 
@@ -24,6 +26,13 @@ The main usecase of this system is sequential evaluation. The goal is to simulat
 
 In the first step, the dataset of ratings is sorted by timestamp. Items are recommended for each user interaction. Relevant items correspond to observed items in the next (bounded) window.
 System allows for experiments with repeated recommending. By using generated user behaviour, performed experiments were enhanced by using implicit negative feedback in portfolios.
+
+
+### Inputs definition:
+
+The input of the system is batches.
+
+![inputs](doc/inputs.png "Inputs definition")
 
 
 ## Tutorial:
