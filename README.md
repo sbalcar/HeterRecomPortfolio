@@ -48,16 +48,37 @@ $ pip install numpy pandas sklearn tensorflow
 
 Before the first run of the system, it si necessary to generate input Batches (task descriptions), which represent simulations and copy them to the input directory.
 
+##### Download GIT repository
+
 ```sh
 $ git clone https://github.com/sbalcar/HeterRecomPortfolio.git
 $ cd HeterRecomPortfolio
-$ ./generateBatches.sh
+```
+##### Download datasets
+```sh
+cd datasets
+wget http://files.grouplens.org/datasets/movielens/ml-1m.zip
+unzip -a ml-1m.zip
+```
+
+##### Generate behaviours
+```sh
 $ ./generateBehaviours.sh
-$ cp batches/testBatch inputs/
+```
+
+##### Generate batches
+```sh
+$ ./generateBehaviours.sh
+```
+
+##### Run input batches
+The systems in each run takes one file (Batch instance) from the input directory, deletes it and runs it.
+
+```sh
+$ cp -r batches/testBatch inputs/
 $ ./run.sh
 ```
 
-The systems in each run takes one file (Batch instance) from the input directory, deletes it and runs it.
 
 
 #### How to add new Recommender:
