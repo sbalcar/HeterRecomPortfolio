@@ -62,20 +62,26 @@ unzip -a ml-1m.zip
 ```
 
 ##### Generate behaviours
+
+The list of behaviors to be generated is located in the [src/execute/generateBehaviour.py](src/execute/generateBehaviour.py).
+
 ```sh
 $ ./generateBehaviours.sh
 ```
 
 ##### Generate batches
+
+The list of batches to be generated is located in the [src/execute/generateBatches.py](src/execute/generateBatches.py).
+
 ```sh
-$ ./generateBehaviours.sh
+$ ./generateBatches.sh
 ```
 
 ##### Run input batches
 The systems in each run takes one file (Batch instance) from the input directory, deletes it and runs it.
 
 ```sh
-$ cp -r batches/testBatch inputs/
+$ cp -r batches/* inputs/
 $ ./run.sh
 ```
 
