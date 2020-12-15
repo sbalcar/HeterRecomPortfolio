@@ -42,7 +42,7 @@ def test01():
 
     rec.update(ratingsDFUpdate)
 
-    print("Recommendations before update")
+    print("Recommendations after update")
     r: Series = rec.recommend(ratingsDFUpdate['userId'].iloc[0], 50, {})
 
     print("Test for non-existent user:")

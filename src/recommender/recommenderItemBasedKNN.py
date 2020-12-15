@@ -7,12 +7,14 @@ from pandas.core.frame import DataFrame #class
 from pandas.core.series import Series #class
 
 from sklearn.neighbors import NearestNeighbors
+from sklearn.preprocessing import normalize
 
 from datasets.ml.ratings import Ratings  # class
 
 from history.aHistory import AHistory #class
 
 from scipy.sparse import csr_matrix
+import numpy as np
 
 
 class RecommenderItemBasedKNN(ARecommender):
@@ -23,11 +25,14 @@ class RecommenderItemBasedKNN(ARecommender):
         self._jobID = jobID
         self._argumentsDict: dict = argumentsDict
         self._KNNs:DataFrame = None
+        self._distances = None
         self._sparseRatings:DataFrame = None
         self._modelKNN: NearestNeighbors = NearestNeighbors(metric='cosine', algorithm='brute', n_neighbors=20,
                                                             n_jobs=-1)
         self._lastRatedItemPerUser:DataFrame = None
         self._itemsDF:DataFrame = None
+        self.counter = 0
+        self.update_threshold = 100
 
 
     def train(self, history:AHistory, ratingsTrainDF:DataFrame, usersDF:DataFrame, itemsDF:DataFrame):
@@ -41,7 +46,7 @@ class RecommenderItemBasedKNN(ARecommender):
 
         self._modelKNN.fit(self._sparseRatings)
 
-        self.KNNs:DataFrame = self._modelKNN.kneighbors(n_neighbors=100, return_distance=False)
+        self._distances ,self.KNNs = self._modelKNN.kneighbors(n_neighbors=100)
 
         # get last positive feedback from each user
         self._lastRatedItemPerUser = \
@@ -63,11 +68,12 @@ class RecommenderItemBasedKNN(ARecommender):
         if rating > 3:
             self._lastRatedItemPerUser['movieId'][userID] = objectID
 
-        self._modelKNN.fit(self._sparseRatings)
-        self.KNNs:DataFrame = self._modelKNN.kneighbors(n_neighbors=100, return_distance=False)
-
-
-
+        if self.counter > self.update_threshold:
+            self._modelKNN.fit(self._sparseRatings)
+            self._distances ,self.KNNs = self._modelKNN.kneighbors(n_neighbors=100)
+            self.counter = 0
+        else:
+            self.counter += 1
 
     def recommend(self, userID:int, numberOfItems:int=20, argumentsDict:dict={}):
         # TODO: Check input/object data integrity!
@@ -75,12 +81,12 @@ class RecommenderItemBasedKNN(ARecommender):
         # Check if user is known
         if userID not in self.KNNs:
             # TODO: How to behave if yet no rating from user was recorded? Maybe return TOP-N most popular items?
-            return Series()
+            return Series([], index=[])
 
         # Get recommendations for user
         lastRatedItemFromUser:int = self._lastRatedItemPerUser.loc[userID]['movieId']
         result:Series = Series(self.KNNs[lastRatedItemFromUser][:numberOfItems])
-
+        finalScores = Series(self._distances[lastRatedItemFromUser][:numberOfItems])
         if self._jobID == 'test':
             print("Last visited film:")
             print(self._itemsDF[self._itemsDF['movieId'] == lastRatedItemFromUser])
@@ -88,5 +94,5 @@ class RecommenderItemBasedKNN(ARecommender):
             for film in result:
                 film_info:DataFrame = self._itemsDF[self._itemsDF['movieId'] == film]
                 print('\t', film_info['movieTitle'].to_string(header=False), film_info['Genres'].to_string(header=False))
-
-        return result
+        finalScores = normalize(np.expand_dims(finalScores, axis=0))[0, :]
+        return Series(finalScores.tolist(), index=list(result))
