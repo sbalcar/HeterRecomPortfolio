@@ -12,6 +12,8 @@ from datasets.ml.ratings import Ratings  # class
 
 from history.aHistory import AHistory #class
 
+from scipy.sparse import csr_matrix
+
 
 class RecommenderItemBasedKNN(ARecommender):
     def __init__(self, jobID:str, argumentsDict:dict):
@@ -21,7 +23,7 @@ class RecommenderItemBasedKNN(ARecommender):
         self._jobID = jobID
         self._argumentsDict: dict = argumentsDict
         self._KNNs:DataFrame = None
-        self._movieFeaturesDF:DataFrame = None
+        self._sparseRatings:DataFrame = None
         self._modelKNN: NearestNeighbors = NearestNeighbors(metric='cosine', algorithm='brute', n_neighbors=20,
                                                             n_jobs=-1)
         self._lastRatedItemPerUser:DataFrame = None
@@ -30,15 +32,14 @@ class RecommenderItemBasedKNN(ARecommender):
 
     def train(self, history:AHistory, ratingsTrainDF:DataFrame, usersDF:DataFrame, itemsDF:DataFrame):
         # TODO: Check input/object data integrity!
-
         self._itemsDF = itemsDF
-        self._movieFeaturesDF:DataFrame = ratingsTrainDF.pivot(
-            index='movieId',
-            columns='userId',
-            values='rating'
-        ).fillna(0)
+        cols = ratingsTrainDF['userId']
+        rows = ratingsTrainDF['movieId']
+        rating = ratingsTrainDF['rating']
+        self._sparseRatings = csr_matrix((rating, (rows, cols)))
+        self._sparseRatings.eliminate_zeros()
 
-        self._modelKNN.fit(self._movieFeaturesDF)
+        self._modelKNN.fit(self._sparseRatings)
 
         self.KNNs:DataFrame = self._modelKNN.kneighbors(n_neighbors=100, return_distance=False)
 
@@ -56,13 +57,13 @@ class RecommenderItemBasedKNN(ARecommender):
         objectID:int = row[Ratings.COL_MOVIEID]
         rating:int = row[Ratings.COL_RATING]
 
-        self._movieFeaturesDF[userID][objectID] = rating
+        self._sparseRatings[objectID, userID] = rating
 
         # update last positive feedback
         if rating > 3:
             self._lastRatedItemPerUser['movieId'][userID] = objectID
 
-        self._modelKNN.fit(self._movieFeaturesDF)
+        self._modelKNN.fit(self._sparseRatings)
         self.KNNs:DataFrame = self._modelKNN.kneighbors(n_neighbors=100, return_distance=False)
 
 
