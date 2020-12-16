@@ -34,7 +34,15 @@ class RecommenderItemBasedKNN(ARecommender):
         self.update_threshold = 100
 
     def train(self, history: AHistory, ratingsTrainDF: DataFrame, usersDF: DataFrame, itemsDF: DataFrame):
-        # TODO: Check input/object data integrity!
+        if not isinstance(history, AHistory):
+            raise ValueError("Argument history isn't type AHistory.")
+        if type(ratingsTrainDF) is not DataFrame:
+            raise ValueError("Argument ratingsTrainDF isn't type DataFrame.")
+        if type(usersDF) is not DataFrame:
+            raise ValueError("Argument usersDF isn't type DataFrame.")
+        if type(itemsDF) is not DataFrame:
+            raise ValueError("Argument itemsDF isn't type DataFrame.")
+
         self._itemsDF = itemsDF
         cols = ratingsTrainDF['userId']
         rows = ratingsTrainDF['movieId']
@@ -54,7 +62,8 @@ class RecommenderItemBasedKNN(ARecommender):
                 .groupby('userId').tail(1).set_index('userId').drop(columns=['rating', 'timestamp'])
 
     def update(self, ratingsUpdateDF: DataFrame):
-        # TODO: Check input/object data integrity!
+        if type(ratingsUpdateDF) is not DataFrame:
+            raise ValueError("Argument ratingsTrainDF isn't type DataFrame.")
 
         row: DataFrame = ratingsUpdateDF.iloc[0]
 
@@ -77,8 +86,6 @@ class RecommenderItemBasedKNN(ARecommender):
             self.counter += 1
 
     def recommend(self, userID: int, numberOfItems: int = 20, argumentsDict: dict = {}):
-        # TODO: Check input/object data integrity!
-
         # Check if user is known
         if userID not in self.KNNs:
             # TODO: How to behave if yet no rating from user was recorded? Maybe return TOP-N most popular items?
