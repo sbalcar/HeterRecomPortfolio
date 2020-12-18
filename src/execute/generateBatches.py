@@ -25,22 +25,22 @@ def generateBatches():
     print("Generate Batches")
 
     # ML
-    BatchBanditTS.generateBatches()
+#    BatchBanditTS.generateBatches()
 
-    BatchDHondtThompsonSampling.generateBatches()
-    BatchDHondtThompsonSamplingINF.generateBatches()
+#    BatchDHondtThompsonSampling.generateBatches()
+#    BatchDHondtThompsonSamplingINF.generateBatches()
 
-    BatchFuzzyDHondt.generateBatches()
-    BatchFuzzyDHondtINF.generateBatches()
+#    BatchFuzzyDHondt.generateBatches()
+#    BatchFuzzyDHondtINF.generateBatches()
 
-    BatchFuzzyDHondtDirectOptimize.generateBatches()
-    BatchFuzzyDHondtDirectOptimizeINF.generateBatches()
+#    BatchFuzzyDHondtDirectOptimize.generateBatches()
+#    BatchFuzzyDHondtDirectOptimizeINF.generateBatches()
 
     BatchSingle.generateBatches()
-    BatchSingleINF.generateBatches()
+#    BatchSingleINF.generateBatches()
 
     # RR
-    BatchRRSingle.generateBatches()
+#    BatchRRSingle.generateBatches()
 
 
 

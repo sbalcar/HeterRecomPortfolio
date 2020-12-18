@@ -48,20 +48,39 @@ $ pip install numpy pandas sklearn tensorflow
 
 Before the first run of the system, it si necessary to generate input Batches (task descriptions), which represent simulations and copy them to the input directory.
 
-##### Download GIT repository
+#### Download GIT repository
 
 ```sh
 $ git clone https://github.com/sbalcar/HeterRecomPortfolio.git
 $ cd HeterRecomPortfolio
 ```
-##### Download datasets
+#### Download datasets
+
+##### Download ML-1M dataset
+
 ```sh
-cd datasets
-wget http://files.grouplens.org/datasets/movielens/ml-1m.zip
-unzip -a ml-1m.zip
+$ cd datasets
+$ wget http://files.grouplens.org/datasets/movielens/ml-1m.zip
+$ unzip -a ml-1m.zip
 ```
 
-##### Generate behaviours
+##### Download Retailrocket dataset
+
+```sh
+$ cd datasets
+$ mkdir retailrocket
+$ cd retailrocket
+```
+Download files manually from the [website](https://www.kaggle.com/retailrocket/ecommerce-dataset).
+
+```sh
+$ ls
+events.csv      item_properties_part1.csv      item_properties_part2.csv      category_tree.csv
+```
+
+
+
+#### Generate behaviours
 
 The list of behaviors to be generated is located in the [src/execute/generateBehaviour.py](src/execute/generateBehaviour.py).
 
@@ -69,7 +88,7 @@ The list of behaviors to be generated is located in the [src/execute/generateBeh
 $ ./generateBehaviours.sh
 ```
 
-##### Generate batches
+#### Generate batches
 
 The list of batches to be generated is located in the [src/execute/generateBatches.py](src/execute/generateBatches.py).
 
@@ -77,7 +96,7 @@ The list of batches to be generated is located in the [src/execute/generateBatch
 $ ./generateBatches.sh
 ```
 
-##### Run input batches
+#### Run input batches
 The systems in each run takes one file (Batch instance) from the input directory, deletes it and runs it.
 
 ```sh

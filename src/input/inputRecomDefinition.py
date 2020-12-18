@@ -7,6 +7,7 @@ from recommenderDescription.recommenderDescription import RecommenderDescription
 from recommender.recommenderTheMostPopular import RecommenderTheMostPopular #class
 from recommender.recommenderCosineCB import RecommenderCosineCB #class
 from recommender.recommenderW2V import RecommenderW2V #class
+from recommender.recommenderItemBasedKNN import RecommenderItemBasedKNN #class
 
 from recommender.recommenderTheMostSold import RecommenderTheMostSold #class
 
@@ -21,6 +22,7 @@ class InputRecomDefinition:
     THE_MOST_POPULAR:str = "theMostPopular"
     W2V_POSNEG_MEAN:str = "w2vPosnegMean"
     W2V_POSNEG_WINDOW3:str = "w2vPosnegWindow3"
+    KNN:str = "KNN"
 
     # batchesRetailrocket methods
     THE_MOST_SOLD:str = "theMostSold"
@@ -69,6 +71,12 @@ class InputRecomDefinition:
                  RecommenderW2V.ARG_DATASET_ID:datasetID})
 
     @staticmethod
+    def exportRDescKNN(datasetID:str):
+        return RecommenderDescription(RecommenderItemBasedKNN,
+                {})
+
+
+    @staticmethod
     def exportPairOfRecomIdsAndRecomDescrsML(datasetID:str):
 
         recom:str = "Recom"
@@ -84,8 +92,14 @@ class InputRecomDefinition:
         rIDsW2V:List[str] = [recom + InputRecomDefinition.W2V_POSNEG_MEAN.title(), recom + InputRecomDefinition.W2V_POSNEG_WINDOW3.title()]
         rDescsW2V:List[RecommenderDescription] = [InputRecomDefinition.exportRDescW2vPosnegMean(datasetID), InputRecomDefinition.exportRDescW2vPosnegWindow3(datasetID)]
 
-        rIDs:List[str] = [recom + InputRecomDefinition.THE_MOST_POPULAR.title()] + rIDsCB + rIDsW2V
-        rDescs:List[RecommenderDescription] = [InputRecomDefinition.exportRDescTheMostPopular(datasetID)] + rDescsCB + rDescsW2V
+        rIDsKNN:List[str] = [recom + InputRecomDefinition.KNN.title()]
+        rDescsKNN:List[RecommenderDescription] = [InputRecomDefinition.exportRDescKNN(datasetID)]
+
+        rIDsPop:List[str] = [recom + InputRecomDefinition.THE_MOST_POPULAR.title()]
+        rDescsPop:List[RecommenderDescription] = [InputRecomDefinition.exportRDescTheMostPopular(datasetID)]
+
+        rIDs:List[str] = rIDsCB + rIDsW2V + rIDsPop + rIDsKNN
+        rDescs:List[RecommenderDescription] = rDescsCB + rDescsW2V + rDescsPop + rDescsKNN
 
         return (rIDs, rDescs)
 
@@ -121,5 +135,7 @@ class InputRecomDefinition:
             return InputRecomDefinition.exportRDescW2vPosnegMean(datasetID)
         elif recommenderID == InputRecomDefinition.W2V_POSNEG_WINDOW3:
             return InputRecomDefinition.exportRDescW2vPosnegWindow3(datasetID)
+        elif recommenderID == InputRecomDefinition.KNN:
+            return InputRecomDefinition.exportRDescKNN(datasetID)
         elif recommenderID == InputRecomDefinition.THE_MOST_SOLD:
             return InputRecomDefinition.exportRDescTheMostSold(datasetID)

@@ -38,7 +38,7 @@ class BatchSingle(ABatchML):
         aDict[InputRecomDefinition.THE_MOST_POPULAR] = InputRecomDefinition.THE_MOST_POPULAR
         aDict[InputRecomDefinition.W2V_POSNEG_MEAN] = InputRecomDefinition.W2V_POSNEG_MEAN
         aDict[InputRecomDefinition.W2V_POSNEG_WINDOW3] = InputRecomDefinition.W2V_POSNEG_WINDOW3
-
+        aDict[InputRecomDefinition.KNN] = InputRecomDefinition.KNN
         return aDict
 
 

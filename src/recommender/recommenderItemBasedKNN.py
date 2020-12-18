@@ -12,11 +12,17 @@ from datasets.ml.ratings import Ratings  # class
 
 from history.aHistory import AHistory  # class
 
+from history.historyDF import HistoryDF #class
+
+from datasets.aDataset import ADataset #class
+from datasets.datasetML import DatasetML #class
+
 from scipy.sparse import csr_matrix, lil_matrix
 import numpy as np
 
 
 class RecommenderItemBasedKNN(ARecommender):
+
     def __init__(self, jobID: str, argumentsDict: dict):
         if type(argumentsDict) is not dict:
             raise ValueError("Argument argumentsDict is not type dict.")
@@ -33,17 +39,15 @@ class RecommenderItemBasedKNN(ARecommender):
         self.counter = 0
         self.update_threshold = 100
 
-    def train(self, history: AHistory, ratingsTrainDF: DataFrame, usersDF: DataFrame, itemsDF: DataFrame):
+    def train(self, history: AHistory, dataset:ADataset):
         if not isinstance(history, AHistory):
             raise ValueError("Argument history isn't type AHistory.")
-        if type(ratingsTrainDF) is not DataFrame:
-            raise ValueError("Argument ratingsTrainDF isn't type DataFrame.")
-        if type(usersDF) is not DataFrame:
-            raise ValueError("Argument usersDF isn't type DataFrame.")
-        if type(itemsDF) is not DataFrame:
-            raise ValueError("Argument itemsDF isn't type DataFrame.")
+        if type(dataset) is not DatasetML:
+            raise ValueError("Argument dataset isn't type DatasetML.")
 
-        self._itemsDF = itemsDF
+        self._itemsDF = dataset.itemsDF
+        ratingsTrainDF = dataset.ratingsDF
+
         cols = ratingsTrainDF['userId']
         rows = ratingsTrainDF['movieId']
         rating = ratingsTrainDF['rating']

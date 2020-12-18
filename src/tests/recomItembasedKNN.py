@@ -13,6 +13,11 @@ from datasets.ml.items import Items #class
 from recommender.aRecommender import ARecommender #class
 from recommender.recommenderItemBasedKNN import RecommenderItemBasedKNN #class
 
+from history.historyDF import HistoryDF #class
+
+from datasets.aDataset import ADataset #class
+from datasets.datasetML import DatasetML #class
+
 import pandas as pd
 
 
@@ -22,16 +27,18 @@ def test01():
 
     print("Running RecommenderItemBasedKNN:")
 
-    ratingsDF: DataFrame = Ratings.readFromFileMl1m()
+    ratingsDF:DataFrame = Ratings.readFromFileMl1m()
 
-    filmsDF: DataFrame = Items.readFromFileMl1m()
+    filmsDF:DataFrame = Items.readFromFileMl1m()
 
     # Take only first 50k
     ratingsDFTrain:DataFrame = ratingsDF.iloc[0:50000]
 
+    trainDataset:ADataset = DatasetML(ratingsDFTrain, pd.DataFrame(), filmsDF)
+
     # train recommender
     rec:ARecommender = RecommenderItemBasedKNN("test", {})
-    rec.train(pd.DataFrame(), ratingsDFTrain, pd.DataFrame(), filmsDF)
+    rec.train(HistoryDF("test01"), trainDataset)
 
     # get one rating for update
     ratingsDFUpdate:DataFrame = ratingsDF.iloc[50005:50006]
@@ -55,18 +62,20 @@ def test02():
 
     print("Running RecommenderItemBasedKNN:")
 
-    ratingsDF: DataFrame = Ratings.readFromFileMl1m()
+    ratingsDF:DataFrame = Ratings.readFromFileMl1m()
 
-    filmsDF: DataFrame = Items.readFromFileMl1m()
+    filmsDF:DataFrame = Items.readFromFileMl1m()
 
     ratingsDFTrain:DataFrame = ratingsDF.iloc[0:1000000]
 
+    trainDataset:ADataset = DatasetML(ratingsDFTrain, pd.DataFrame(), filmsDF)
+
     # train recommender
     rec:ARecommender = RecommenderItemBasedKNN("test", {})
-    rec.train(pd.DataFrame(), ratingsDFTrain, pd.DataFrame(), filmsDF)
+    rec.train(HistoryDF("test02"), trainDataset)
 
     r:Series = rec.recommend(1, 50, {})
-
+    print(r)
 
 
 if __name__ == "__main__":
