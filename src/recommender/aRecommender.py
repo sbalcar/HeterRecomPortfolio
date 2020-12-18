@@ -3,6 +3,7 @@
 from pandas.core.frame import DataFrame #class
 from pandas.core.series import Series #class
 
+from datasets.aDataset import ADataset #class
 
 from history.aHistory import AHistory #class
 from abc import ABC, abstractmethod
@@ -14,7 +15,7 @@ class ARecommender(ABC):
         raise Exception("ARecommender is abstract class, can't be instanced")
 
     @abstractmethod
-    def train(self, history:AHistory, ratingsTrainDF:DataFrame, usersDF:DataFrame, itemsDF:DataFrame):
+    def train(self, history:AHistory, dataset:ADataset):
         assert False, "this needs to be overridden"
 
     @abstractmethod

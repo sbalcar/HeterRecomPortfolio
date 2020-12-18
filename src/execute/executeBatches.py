@@ -20,6 +20,7 @@ from input.batchesML1m.batchFuzzyDHondtDirectOptimizeINF import BatchFuzzyDHondt
 from input.batchesML1m.batchSingle import BatchSingle #class
 from input.batchesML1m.batchSingleINF import BatchSingleINF #class
 
+from input.batchesRetailrocket.batchRRSingle import BatchRRSingle #class
 
 def executeBatches():
 

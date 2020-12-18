@@ -24,7 +24,8 @@ from aggregation.negImplFeedback.aPenalization import APenalization #class
 from aggregation.operators.aDHondtSelector import ADHondtSelector #class
 from aggregation.negImplFeedback.penalUsingFiltering import PenalUsingFiltering #class
 
-from input.aBatch import ABatch #class
+from input.aBatch import BatchParameters #class
+from input.aBatchML import ABatchML #class
 
 from input.inputSimulatorDefinition import InputSimulatorDefinition #class
 
@@ -33,9 +34,10 @@ from simulator.simulator import Simulator #class
 from history.historyHierDF import HistoryHierDF #class
 
 
-class BatchFuzzyDHondtINF(ABatch):
+class BatchFuzzyDHondtINF(ABatchML):
 
-    def getNegativeImplFeedbackParameters(self):
+    @staticmethod
+    def getNegativeImplFeedbackParameters():
 
         pToolOLin0802HLin1002:APenalization = InputAggrDefinition.exportAPenaltyToolOLin0802HLin1002(InputSimulatorDefinition.numberOfAggrItems)
 
@@ -49,10 +51,10 @@ class BatchFuzzyDHondtINF(ABatch):
         aDict["FilterBord3Lengt100"] = pToolFilterBord3Lengt100
         return aDict
 
-
-    def getParameters(self):
+    @staticmethod
+    def getParameters():
         selectorIDs:List[str] = BatchFuzzyDHondt().getSelectorParameters().keys()
-        negativeImplFeedback:List[str] = self.getNegativeImplFeedbackParameters().keys()
+        negativeImplFeedback:List[str] = BatchFuzzyDHondtINF.getNegativeImplFeedbackParameters().keys()
         #lrClicks:List[float] = [0.2, 0.1, 0.02, 0.005]
         lrClicks:List[float] = [0.1]
         #lrViewDivisors:List[float] = [200, 500, 1000]
@@ -67,7 +69,7 @@ class BatchFuzzyDHondtINF(ABatch):
                         lrViewIJK:float = lrClickJ / lrViewDivisorK
                         eTool:AEvalTool = EvalToolDHondt({EvalToolDHondt.ARG_LEARNING_RATE_CLICKS: lrClickJ,
                                                           EvalToolDHondt.ARG_LEARNING_RATE_VIEWS: lrViewIJK})
-                        nImplFeedback:APenalization = self.getNegativeImplFeedbackParameters()[nImplFeedbackI]
+                        nImplFeedback:APenalization = BatchFuzzyDHondtINF.getNegativeImplFeedbackParameters()[nImplFeedbackI]
                         selectorH:ADHondtSelector = BatchFuzzyDHondt().getSelectorParameters()[selectorIDH]
 
                         aDict[keyIJ] = (selectorH, nImplFeedback, eTool)
@@ -76,18 +78,17 @@ class BatchFuzzyDHondtINF(ABatch):
 
     def run(self, batchID:str, jobID:str):
 
-        from execute.generateBatches import BatchParameters #class
         divisionDatasetPercentualSize:int
         uBehaviour:str
         repetition:int
-        divisionDatasetPercentualSize, uBehaviour, repetition = BatchParameters.getBatchParameters()[batchID]
+        divisionDatasetPercentualSize, uBehaviour, repetition = BatchParameters.getBatchParameters(self.datasetID)[batchID]
 
         #eTool:AEvalTool
         selector, nImplFeedback, eTool = self.getParameters()[jobID]
 
         datasetID:str = "ml1m" + "Div" + str(divisionDatasetPercentualSize)
 
-        rIDs, rDescs = InputRecomDefinition.exportPairOfRecomIdsAndRecomDescrs(datasetID)
+        rIDs, rDescs = InputRecomDefinition.exportPairOfRecomIdsAndRecomDescrsML(datasetID)
 
         aDescNegDHont:AggregationDescription = InputAggrDefinition.exportADescDHontINF(selector, nImplFeedback)
 

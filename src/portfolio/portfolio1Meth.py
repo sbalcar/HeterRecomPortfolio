@@ -7,6 +7,8 @@ from typing import List #class
 from pandas.core.frame import DataFrame #class
 from pandas.core.series import Series #class
 
+from datasets.aDataset import ADataset #class
+
 from recommenderDescription.recommenderDescription import RecommenderDescription #class
 from recommender.aRecommender import ARecommender #class
 
@@ -31,19 +33,15 @@ class Portfolio1Meth(APortfolio):
    def getRecommIDs(self):
         return [self._recommID]
 
-   def train(self, history:AHistory, ratingsDF:DataFrame, usersDF:DataFrame, itemsDF:DataFrame):
+   def train(self, history:AHistory, dataset:ADataset):
         if not isinstance(history, AHistory):
            raise ValueError("Argument history isn't type AHistory.")
-        if type(ratingsDF) is not DataFrame:
-            raise ValueError("Argument ratingsDF isn't type DataFrame.")
-        if type(usersDF) is not DataFrame:
-            raise ValueError("Argument usersDF isn't type DataFrame.")
-        if type(itemsDF) is not DataFrame:
-            raise ValueError("Argument ratingsUpdateDF isn't type DataFrame.")
+        if not isinstance(dataset, ADataset):
+           raise ValueError("Argument dataset isn't type ADataset.")
 
         self._history:AHistory = history
 
-        self._recommender.train(history, ratingsDF, usersDF, itemsDF)
+        self._recommender.train(history, dataset)
 
    def update(self, ratingsUpdateDF:DataFrame):
         if type(ratingsUpdateDF) is not DataFrame:

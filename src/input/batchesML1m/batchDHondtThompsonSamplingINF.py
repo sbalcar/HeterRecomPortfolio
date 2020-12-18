@@ -24,7 +24,8 @@ from aggregation.negImplFeedback.aPenalization import APenalization #class
 
 from aggregation.operators.aDHondtSelector import ADHondtSelector #class
 
-from input.aBatch import ABatch #class
+from input.aBatch import BatchParameters #class
+from input.aBatchML import ABatchML #class
 
 from evaluationTool.evalToolDHondtBanditVotes import EvalToolDHondtBanditVotes #class
 
@@ -36,9 +37,10 @@ from history.historyHierDF import HistoryHierDF #class
 
 
 
-class BatchDHondtThompsonSamplingINF(ABatch):
+class BatchDHondtThompsonSamplingINF(ABatchML):
 
-    def getParameters(self):
+    @staticmethod
+    def getParameters():
         selectorIDs:List[str] = BatchFuzzyDHondt().getSelectorParameters().keys()
         negativeImplFeedback:List[str] = BatchFuzzyDHondtINF().getNegativeImplFeedbackParameters().keys()
 
@@ -56,11 +58,10 @@ class BatchDHondtThompsonSamplingINF(ABatch):
 
     def run(self, batchID:str, jobID:str):
 
-        from execute.generateBatches import BatchParameters #class
         divisionDatasetPercentualSize:int
         uBehaviour:str
         repetition:int
-        divisionDatasetPercentualSize, uBehaviour, repetition = BatchParameters.getBatchParameters()[batchID]
+        divisionDatasetPercentualSize, uBehaviour, repetition = BatchParameters.getBatchParameters(self.datasetID)[batchID]
 
         selector, nImplFeedback = self.getParameters()[jobID]
 
@@ -68,7 +69,7 @@ class BatchDHondtThompsonSamplingINF(ABatch):
 
         datasetID:str = "ml1m" + "Div" + str(divisionDatasetPercentualSize)
 
-        rIDs, rDescs = InputRecomDefinition.exportPairOfRecomIdsAndRecomDescrs(datasetID)
+        rIDs, rDescs = InputRecomDefinition.exportPairOfRecomIdsAndRecomDescrsML(datasetID)
 
         aDescNegDHontThompsonSamplingI:AggregationDescription = InputAggrDefinition.exportADescDHontThompsonSamplingINF(selector, nImplFeedback)
 

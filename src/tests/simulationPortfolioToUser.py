@@ -4,7 +4,7 @@ from datasets.ml.ratings import Ratings #class
 
 from pandas.core.frame import DataFrame #class
 
-from simulation.simulationOfPortfoliosRecommToUser import ModelOfIndexes #class
+from simulation.simulationML import ModelOfIndexes #class
 
 
 def test01():

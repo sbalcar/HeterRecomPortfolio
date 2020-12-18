@@ -24,10 +24,12 @@ def test01():
 
     ratingsDFTrain:DataFrame = ratingsDF.iloc[0:50000]
 
-    id:str = "ml1mDiv90"
-    #id:str = "test"
+    datasetID: str = "ml1m" + "Div" + str(90)
 
-    rec:ARecommender = RecommenderW2V(id, {RecommenderW2V.ARG_TRAIN_VARIANT:"posneg"})
+    rec:ARecommender = RecommenderW2V("RecommenderW2V",{
+                                    RecommenderW2V.ARG_TRAIN_VARIANT:"posneg",
+                                    RecommenderW2V.ARG_USER_PROFILE_STRATEGY: "max",
+                                    RecommenderW2V.ARG_DATASET_ID: datasetID})
     #rec:ARecommender = RecommenderW2V(id, {RecommenderW2V.ARG_TRAIN_VARIANT:"positive"})
     rec.train(HistoryDF("w2v"), ratingsDFTrain, pd.DataFrame(), pd.DataFrame())
 

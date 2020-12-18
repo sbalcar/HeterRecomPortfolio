@@ -4,7 +4,9 @@ from typing import List
 
 from pandas.core.frame import DataFrame #class
 
-from simulation.simulationOfPortfoliosRecommToUser import SimulationPortfolioToUser #class
+from simulation.simulationML import SimulationML #class
+
+from datasets.aDataset import ADataset #class
 
 from history.aHistory import AHistory #class
 
@@ -17,24 +19,18 @@ from simulation.aSequentialSimulation import ASequentialSimulation #class
 
 class Simulator:
 
-    def __init__(self, jobID:str, simulatorClass, argumentsDict:dict, ratingsDF:DataFrame, usersDF:DataFrame, itemsDF:DataFrame, behavioursDF:DataFrame):
+    def __init__(self, jobID:str, simulatorClass, argumentsDict:dict, dataset:ADataset, behavioursDF:DataFrame):
         if type(jobID) is not str:
             raise ValueError("Argument jobID isn't type str.")
         if type(argumentsDict) is not dict:
             raise ValueError("Argument argumentsDict isn't type dict.")
-        if type(ratingsDF) is not DataFrame:
-            raise ValueError("Argument ratingsDF isn't type DataFrame.")
-        if type(usersDF) is not DataFrame:
-            raise ValueError("Argument usersDF isn't type DataFrame.")
-        if type(itemsDF) is not DataFrame:
-            raise ValueError("Argument itemsDF isn't type DataFrame.")
-        if type(itemsDF) is not DataFrame:
-            raise ValueError("Argument itemsDF isn't type DataFrame.")
+        if not isinstance(dataset, ADataset):
+            raise ValueError("Argument dataset isn't type ADataset.")
         if type(behavioursDF) is not DataFrame:
             raise ValueError("Argument behavioursDF isn't type DataFrame.")
 
         self._simulation:ASequentialSimulation = simulatorClass(
-            jobID, ratingsDF, usersDF, itemsDF, behavioursDF, argumentsDict)
+            jobID, dataset, behavioursDF, argumentsDict)
 
 
     def simulate(self, pDescs:List[APortfolioDescription], portModels:List[DataFrame], eTools:List[AEvalTool], historyClass):
@@ -71,7 +67,6 @@ class Simulator:
 
 
         evaluations:List[dict] = self._simulation.run(pDescs, portModels, eTools, histories)
-
 
 
         i:int

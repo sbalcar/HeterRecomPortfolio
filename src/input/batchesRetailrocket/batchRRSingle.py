@@ -23,21 +23,19 @@ from simulator.simulator import Simulator #class
 from history.historyHierDF import HistoryHierDF #class
 
 import pandas as pd
+from input.aBatch import ABatch #class
 from input.aBatch import BatchParameters #class
-from input.aBatchML import ABatchML #class
+
+from input.aBatchRR import ABatchRR #class
 
 
-class BatchSingle(ABatchML):
+class BatchRRSingle(ABatchRR):
 
     @staticmethod
     def getParameters():
 
         aDict:dict = {}
-        aDict[InputRecomDefinition.COS_CB_MEAN] = InputRecomDefinition.COS_CB_MEAN
-        aDict[InputRecomDefinition.COS_CB_WINDOW3] = InputRecomDefinition.COS_CB_WINDOW3
-        aDict[InputRecomDefinition.THE_MOST_POPULAR] = InputRecomDefinition.THE_MOST_POPULAR
-        aDict[InputRecomDefinition.W2V_POSNEG_MEAN] = InputRecomDefinition.W2V_POSNEG_MEAN
-        aDict[InputRecomDefinition.W2V_POSNEG_WINDOW3] = InputRecomDefinition.W2V_POSNEG_WINDOW3
+        aDict[InputRecomDefinition.THE_MOST_SOLD] = InputRecomDefinition.THE_MOST_SOLD
 
         return aDict
 
@@ -49,7 +47,7 @@ class BatchSingle(ABatchML):
         repetition:int
         divisionDatasetPercentualSize, uBehaviour, repetition = BatchParameters.getBatchParameters(self.datasetID)[batchID]
 
-        datasetID:str = "ml1m" + "Div" + str(divisionDatasetPercentualSize)
+        datasetID:str = "retailrocket" + "Div" + str(divisionDatasetPercentualSize)
 
         recommenderID:str = self.getParameters()[jobID]
 
@@ -57,7 +55,7 @@ class BatchSingle(ABatchML):
 
         pDescr:APortfolioDescription = Portfolio1MethDescription(recommenderID.title(), recommenderID, rDescr)
 
-        simulator:Simulator = InputSimulatorDefinition.exportSimulatorML1M(
+        simulator:Simulator = InputSimulatorDefinition.exportSimulatorRetailRocket(
                 batchID, divisionDatasetPercentualSize, uBehaviour, repetition)
         simulator.simulate([pDescr], [DataFrame()], [EToolSingleMethod({})], HistoryHierDF)
 
@@ -67,4 +65,4 @@ if __name__ == "__main__":
    os.chdir("..")
    os.chdir("..")
    print(os.getcwd())
-   BatchSingle.generateBatches()
+   BatchRRSingle.generateBatches()

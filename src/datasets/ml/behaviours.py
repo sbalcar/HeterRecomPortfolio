@@ -34,6 +34,23 @@ class Behaviours:
 
 
   @staticmethod
+  def getColNameUserID():
+    return Behaviours.COL_USERID
+
+  @staticmethod
+  def getColNameItemID():
+    return Behaviours.COL_MOVIEID
+
+  @staticmethod
+  def getColNameRepetition():
+    return Behaviours.COL_REPETITION
+
+  @staticmethod
+  def getColNameBehaviour():
+    return Behaviours.COL_BEHAVIOUR
+
+
+  @staticmethod
   def getFile(behaviourID:str):
       return ".." + os.sep + "datasets" + os.sep + "ml-1m" + os.sep + "behaviour" + behaviourID + ".dat"
 
@@ -44,7 +61,7 @@ class Behaviours:
       np.random.seed(42)
       random.seed(42)
 
-      print("Generate Behaviour " + behaviourID)
+      print("Generate Behaviour ML " + behaviourID)
 
       behaviourFile:str = Behaviours.getFile(behaviourID)
 
@@ -146,7 +163,7 @@ class Behaviours:
 
 
   @staticmethod
-  def __convertToString(values:List[bool]):
+  def convertToString(values:List[bool]):
       intValues:List[int] = list(map(int, values))
       strValues:List[str] = list(map(str, intValues))
 
@@ -176,18 +193,18 @@ class Behaviours:
 
     return behavioursDF
 
-    behaviour:List[float] = []
-    for indexI, rowI in behavioursDF.iterrows():
-
-       behaviourI:List[bool] = Behaviours.__convertToListOfBoolean(str(rowI[Behaviours.COL_BEHAVIOUR]))
-       behaviour.append(behaviourI)
-
-    behavioursConvertedDF:DataFrame = pd.concat([behavioursDF[Behaviours.COL_USERID], behavioursDF[Behaviours.COL_MOVIEID],
-                                                 behavioursDF[Behaviours.COL_REPETITION], Series(behaviour)],
-                                                 axis=1, keys=[Behaviours.COL_USERID, Behaviours.COL_MOVIEID,
-                                                 Behaviours.COL_REPETITION, Behaviours.COL_BEHAVIOUR])
-
-    return behavioursConvertedDF
+#    behaviour:List[float] = []
+#    for indexI, rowI in behavioursDF.iterrows():
+#
+#       behaviourI:List[bool] = Behaviours.__convertToListOfBoolean(str(rowI[Behaviours.COL_BEHAVIOUR]))
+#       behaviour.append(behaviourI)
+#
+#    behavioursConvertedDF:DataFrame = pd.concat([behavioursDF[Behaviours.COL_USERID], behavioursDF[Behaviours.COL_MOVIEID],
+#                                                 behavioursDF[Behaviours.COL_REPETITION], Series(behaviour)],
+#                                                 axis=1, keys=[Behaviours.COL_USERID, Behaviours.COL_MOVIEID,
+#                                                 Behaviours.COL_REPETITION, Behaviours.COL_BEHAVIOUR])
+#
+#    return behavioursConvertedDF
 
   @staticmethod
   def readFromFile10M100K():

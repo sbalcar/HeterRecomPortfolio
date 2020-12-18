@@ -10,6 +10,9 @@ from configuration.configuration import Configuration #class
 
 from typing import List
 
+from datasets.aDataset import ADataset #class
+from datasets.datasetML import DatasetML #class
+
 from recommender.w2v import word2vec
 
 from pandas.core.frame import DataFrame #class
@@ -53,15 +56,13 @@ class RecommenderW2V(ARecommender):
         elif trainVariant == "posneg":
             return trainDF
 
-    def train(self, history:AHistory, ratingsDF:DataFrame, usersDF:DataFrame, itemsDF:DataFrame):
+    def train(self, history:AHistory, dataset:DatasetML):
         if not isinstance(history, AHistory):
             raise ValueError("Argument history isn't type AHistory.")
-        if type(ratingsDF) is not DataFrame:
-            raise ValueError("Argument ratingsDF isn't type DataFrame.")
-        if type(usersDF) is not DataFrame:
-            raise ValueError("Argument usersDF isn't type DataFrame.")
-        if type(itemsDF) is not DataFrame:
-            raise ValueError("Argument itemsDF isn't type DataFrame.")
+        if type(dataset) is not DatasetML:
+            raise ValueError("Argument dataset isn't type DatasetML.")
+
+        ratingsDF:DataFrame = dataset.ratingsDF
 
         t:DataFrame = self.__getTrainVariant(self.trainVariant, ratingsDF)
         t[Ratings.COL_MOVIEID] = t[Ratings.COL_MOVIEID].astype("str")
@@ -103,10 +104,10 @@ class RecommenderW2V(ARecommender):
         ratingsUpdateDF:DataFrame = self.__getTrainVariant(self.trainVariant, ratingsUpdateDF)
         if ratingsUpdateDF.shape[0] > 0:
             row = ratingsUpdateDF.iloc[0]
-            rating = row[Ratings.COL_RATING]
-            userID = row[Ratings.COL_USERID]
-            objectID = row[Ratings.COL_MOVIEID]
-            userTrainData = self.userProfiles.get(userID, [])
+            rating:float = row[Ratings.COL_RATING]
+            userID:int = row[Ratings.COL_USERID]
+            objectID:int = row[Ratings.COL_MOVIEID]
+            userTrainData:List[int] = self.userProfiles.get(userID, [])
             userTrainData.append(objectID)
             self.userProfiles[userID] = userTrainData
 

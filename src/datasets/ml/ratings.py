@@ -18,6 +18,15 @@ class Ratings:
   COL_TIMESTAMP = 'timestamp'
 
   @staticmethod
+  def getColNameUserID():
+    return Ratings.COL_USERID
+
+  @staticmethod
+  def getColNameItemID():
+    return Ratings.COL_MOVIEID
+
+
+  @staticmethod
   def readFromFileMl100k():
     ratingsFile: str = ".." + os.sep + "datasets" + os.sep + "ml-100k" + os.sep + "u.data"
 

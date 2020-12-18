@@ -21,7 +21,9 @@ from aggregation.operators.aDHondtSelector import ADHondtSelector #class
 from aggregation.operators.rouletteWheelSelector import RouletteWheelSelector #class
 from aggregation.operators.theMostVotedItemSelector import TheMostVotedItemSelector #class
 
-from input.aBatch import ABatch #class
+from input.aBatch import BatchParameters #class
+from input.aBatchML import ABatchML #class
+
 from input.inputSimulatorDefinition import InputSimulatorDefinition #class
 
 from simulator.simulator import Simulator #class
@@ -30,13 +32,14 @@ from history.historyHierDF import HistoryHierDF #class
 
 
 
-class BatchFuzzyDHondtDirectOptimize(ABatch):
+class BatchFuzzyDHondtDirectOptimize(ABatchML):
 
     SLCTR_ROULETTE1:str = "Roulette1"
     SLCTR_ROULETTE2:str = "Roulette3"
     SLCTR_FIXED:str = "Fixed"
 
-    def getSelectorParameters(self):
+    @staticmethod
+    def getSelectorParameters():
 
         selectorRoulette1:ADHondtSelector = RouletteWheelSelector({RouletteWheelSelector.ARG_EXPONENT:1})
         selectorRoulette3:ADHondtSelector = RouletteWheelSelector({RouletteWheelSelector.ARG_EXPONENT:3})
@@ -48,9 +51,9 @@ class BatchFuzzyDHondtDirectOptimize(ABatch):
         aDict[BatchFuzzyDHondtDirectOptimize.SLCTR_FIXED] = selectorFixed
         return aDict
 
-
-    def getParameters(self):
-        selectorIDs:List[str] = self.getSelectorParameters().keys()
+    @staticmethod
+    def getParameters():
+        selectorIDs:List[str] = BatchFuzzyDHondtDirectOptimize.getSelectorParameters().keys()
         lrClicks:List[float] = [0.2, 0.1, 0.02, 0.005]
         #lrClicks:List[float] = [0.1]
         lrViewDivisors:List[float] = [200, 500, 1000]
@@ -64,25 +67,24 @@ class BatchFuzzyDHondtDirectOptimize(ABatch):
                     lrViewIJK:float = lrClickJ / lrViewDivisorK
                     eToolIJK:AEvalTool = EvalToolDHondt({EvalToolDHondt.ARG_LEARNING_RATE_CLICKS: lrClickJ,
                                                       EvalToolDHondt.ARG_LEARNING_RATE_VIEWS: lrViewIJK})
-                    selectorIJK:ADHondtSelector = self.getSelectorParameters()[selectorIDI]
+                    selectorIJK:ADHondtSelector = BatchFuzzyDHondtDirectOptimize.getSelectorParameters()[selectorIDI]
                     aDict[keyIJ] = (selectorIJK, eToolIJK)
         return aDict
 
 
     def run(self, batchID:str, jobID:str):
 
-        from execute.generateBatches import BatchParameters #class
         divisionDatasetPercentualSize:int
         uBehaviour:str
         repetition:int
-        divisionDatasetPercentualSize, uBehaviour, repetition = BatchParameters.getBatchParameters()[batchID]
+        divisionDatasetPercentualSize, uBehaviour, repetition = BatchParameters.getBatchParameters(self.datasetID)[batchID]
 
         #eTool:AEvalTool
         selector, eTool = self.getParameters()[jobID]
 
         datasetID:str = "ml1m" + "Div" + str(divisionDatasetPercentualSize)
 
-        rIDs, rDescs = InputRecomDefinition.exportPairOfRecomIdsAndRecomDescrs(datasetID)
+        rIDs, rDescs = InputRecomDefinition.exportPairOfRecomIdsAndRecomDescrsML(datasetID)
 
         aDescDHont:AggregationDescription = InputAggrDefinition.exportADescDHontDirectOptimize(selector)
 

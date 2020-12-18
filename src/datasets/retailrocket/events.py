@@ -19,6 +19,15 @@ class Events:
     COL_TRANSACTION_ID = "transactionid"
 
     @staticmethod
+    def getColNameUserID():
+        return Events.COL_VISITOR_ID
+
+    @staticmethod
+    def getColNameItemID():
+        return Events.COL_ITEM_ID
+
+
+    @staticmethod
     def readFromFile():
         eventsFile: str = ".." + os.sep + "datasets" + os.sep + "retailrocket" + os.sep + "events.csv"
 
@@ -40,5 +49,6 @@ if __name__ == "__main__":
 
   print(os.getcwd())
   evens:DataFrame = Events.readFromFile()
+  evens = evens.loc[evens[Events.COL_EVENT] == "transaction"]
 
-  print(evens.head())
+  print(evens.head(100))

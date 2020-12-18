@@ -8,17 +8,22 @@ from recommender.recommenderTheMostPopular import RecommenderTheMostPopular #cla
 from recommender.recommenderCosineCB import RecommenderCosineCB #class
 from recommender.recommenderW2V import RecommenderW2V #class
 
+from recommender.recommenderTheMostSold import RecommenderTheMostSold #class
+
 from configuration.configuration import Configuration #class
 
 
 class InputRecomDefinition:
 
+    # ML methods
     COS_CB_MEAN:str = "cosCBmean"
     COS_CB_WINDOW3:str = "cosCBwindow3"
     THE_MOST_POPULAR:str = "theMostPopular"
     W2V_POSNEG_MEAN:str = "w2vPosnegMean"
     W2V_POSNEG_WINDOW3:str = "w2vPosnegWindow3"
 
+    # batchesRetailrocket methods
+    THE_MOST_SOLD:str = "theMostSold"
 
     @staticmethod
     def exportRDescTheMostPopular(datasetID:str):
@@ -64,21 +69,7 @@ class InputRecomDefinition:
                  RecommenderW2V.ARG_DATASET_ID:datasetID})
 
     @staticmethod
-    def exportInputRecomDefinition(recommenderID:str, datasetID:str):
-        if recommenderID == InputRecomDefinition.COS_CB_MEAN:
-            return InputRecomDefinition.exportRDescCBmean(datasetID)
-        elif recommenderID == InputRecomDefinition.COS_CB_WINDOW3:
-            return InputRecomDefinition.exportRDescCBwindow3(datasetID)
-        elif recommenderID == InputRecomDefinition.THE_MOST_POPULAR:
-            return InputRecomDefinition.exportRDescTheMostPopular(datasetID)
-        elif recommenderID == InputRecomDefinition.W2V_POSNEG_MEAN:
-            return InputRecomDefinition.exportRDescW2vPosnegMean(datasetID)
-        elif recommenderID == InputRecomDefinition.W2V_POSNEG_WINDOW3:
-            return InputRecomDefinition.exportRDescW2vPosnegWindow3(datasetID)
-
-
-    @staticmethod
-    def exportPairOfRecomIdsAndRecomDescrs(datasetID:str):
+    def exportPairOfRecomIdsAndRecomDescrsML(datasetID:str):
 
         recom:str = "Recom"
 
@@ -97,3 +88,38 @@ class InputRecomDefinition:
         rDescs:List[RecommenderDescription] = [InputRecomDefinition.exportRDescTheMostPopular(datasetID)] + rDescsCB + rDescsW2V
 
         return (rIDs, rDescs)
+
+
+
+    @staticmethod
+    def exportRDescTheMostSold(datasetID:str):
+        return RecommenderDescription(RecommenderTheMostSold,
+                {})
+
+
+    @staticmethod
+    def exportPairOfRecomIdsAndRecomDescrsRetailRocket(datasetID:str):
+
+        recom:str = "Recom"
+
+        rIDs:List[str] = [recom + InputRecomDefinition.THE_MOST_SOLD.title()]
+        rDescs:List[RecommenderDescription] = [InputRecomDefinition.exportRDescTheMostSold(datasetID)]
+
+        return (rIDs, rDescs)
+
+
+
+    @staticmethod
+    def exportInputRecomDefinition(recommenderID:str, datasetID:str):
+        if recommenderID == InputRecomDefinition.COS_CB_MEAN:
+            return InputRecomDefinition.exportRDescCBmean(datasetID)
+        elif recommenderID == InputRecomDefinition.COS_CB_WINDOW3:
+            return InputRecomDefinition.exportRDescCBwindow3(datasetID)
+        elif recommenderID == InputRecomDefinition.THE_MOST_POPULAR:
+            return InputRecomDefinition.exportRDescTheMostPopular(datasetID)
+        elif recommenderID == InputRecomDefinition.W2V_POSNEG_MEAN:
+            return InputRecomDefinition.exportRDescW2vPosnegMean(datasetID)
+        elif recommenderID == InputRecomDefinition.W2V_POSNEG_WINDOW3:
+            return InputRecomDefinition.exportRDescW2vPosnegWindow3(datasetID)
+        elif recommenderID == InputRecomDefinition.THE_MOST_SOLD:
+            return InputRecomDefinition.exportRDescTheMostSold(datasetID)

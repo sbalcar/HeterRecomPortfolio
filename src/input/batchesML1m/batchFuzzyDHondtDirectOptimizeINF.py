@@ -24,7 +24,8 @@ from aggregation.negImplFeedback.aPenalization import APenalization #class
 
 from aggregation.operators.aDHondtSelector import ADHondtSelector #class
 
-from input.aBatch import ABatch #class
+from input.aBatch import BatchParameters #class
+from input.aBatchML import ABatchML #class
 
 from evaluationTool.evalToolDHondtBanditVotes import EvalToolDHondtBanditVotes #class
 
@@ -36,19 +37,19 @@ from history.historyHierDF import HistoryHierDF #class
 
 
 
-class BatchFuzzyDHondtDirectOptimizeINF(ABatch):
+class BatchFuzzyDHondtDirectOptimizeINF(ABatchML):
 
-    def getParameters(self):
+    @staticmethod
+    def getParameters():
         return BatchDHondtThompsonSamplingINF().getParameters()
 
 
     def run(self, batchID:str, jobID:str):
 
-        from execute.generateBatches import BatchParameters #class
         divisionDatasetPercentualSize:int
         uBehaviour:str
         repetition:int
-        divisionDatasetPercentualSize, uBehaviour, repetition = BatchParameters.getBatchParameters()[batchID]
+        divisionDatasetPercentualSize, uBehaviour, repetition = BatchParameters.getBatchParameters(self.datasetID)[batchID]
 
         selector, nImplFeedback = self.getParameters()[jobID]
 
@@ -57,7 +58,7 @@ class BatchFuzzyDHondtDirectOptimizeINF(ABatch):
 
         datasetID:str = "ml1m" + "Div" + str(divisionDatasetPercentualSize)
 
-        rIDs, rDescs = InputRecomDefinition.exportPairOfRecomIdsAndRecomDescrs(datasetID)
+        rIDs, rDescs = InputRecomDefinition.exportPairOfRecomIdsAndRecomDescrsML(datasetID)
 
         aDescFuzzyHontDirectOptimizeINF:AggregationDescription = InputAggrDefinition.exportADescDFuzzyHontDirectOptimizeINF(selector, nImplFeedback)
 

@@ -8,16 +8,17 @@ from pandas.core.series import Series #class
 from sklearn.preprocessing import normalize
 
 from datasets.aDataset import ADataset #class
-from datasets.datasetML import DatasetML #class
+from datasets.datasetRetailrocket import DatasetRetailRocket #class
 
 from recommender.aRecommender import ARecommender #class
 
 from datasets.ml.ratings import Ratings #class
+from datasets.retailrocket.events import Events #class
 from history.aHistory import AHistory #class
 
 import numpy as np
 
-class RecommenderTheMostPopular(ARecommender):
+class RecommenderTheMostSold(ARecommender):
 
     def __init__(self, jobID:str, argumentsDict:dict):
         if type(argumentsDict) is not dict:
@@ -29,25 +30,25 @@ class RecommenderTheMostPopular(ARecommender):
         self.result:Series = None
 
     # ratingsSum:Dataframe<(userId:int, movieId:int, ratings:int, timestamp:int)>
-    def train(self, history:AHistory, dataset:DatasetML):
+    def train(self, history:AHistory, dataset:DatasetRetailRocket):
         if not isinstance(history, AHistory):
             raise ValueError("Argument history isn't type AHistory.")
-        if type(dataset) is not DatasetML:
-            raise ValueError("Argument dataset isn't type DatasetML.")
+        if type(dataset) is not DatasetRetailRocket:
+            raise ValueError("Argument dataset isn't type DatasetRetailRocket.")
 
-        ratingsTrainDF:DataFrame = dataset.ratingsDF
+        eventsTrainDF:DataFrame = dataset.eventsDF
 
-        # ratingsSum:Dataframe<(userId:int, movieId:int, ratings:int, timestamp:int)>
-        ratings5DF:DataFrame = ratingsTrainDF.loc[ratingsTrainDF[Ratings.COL_RATING] >= 4]
+        # ratingsSum:Dataframe<(timestamp:int, visitorid:int, event:str, itemid:int, transactionid:int)>
+        eventsTransDF:DataFrame = eventsTrainDF.loc[eventsTrainDF[Events.COL_EVENT] == "transaction"]
 
         # ratingsSum:Dataframe<(movieId:int, ratings:int)>
-        ratings5SumDF:DataFrame = DataFrame(ratings5DF.groupby(Ratings.COL_MOVIEID)[Ratings.COL_RATING].count())
+        eventsTransSumDF:DataFrame = DataFrame(eventsTransDF.groupby(Events.COL_ITEM_ID)[Events.COL_EVENT].count())
 
-        # sortedAscRatings5CountDF:Dataframe<(movieId:int, ratings:int)>
-        sortedAscRatings5CountDF:DataFrame = ratings5SumDF.sort_values(by=Ratings.COL_RATING, ascending=False)
-        #print(sortedAscRatings5CountDF)
+        # sortedAsceventsTransCountDF:Dataframe<(movieId:int, ratings:int)>
+        sortedAsceventsTransCountDF:DataFrame = eventsTransSumDF.sort_values(by=Events.COL_EVENT, ascending=False)
+        #print(sortedAsceventsTransCountDF)
 
-        self._sortedAscRatings5CountDF:DataFrame = sortedAscRatings5CountDF
+        self._sortedAsceventsTransCountDF:DataFrame = sortedAsceventsTransCountDF
 
 
     def update(self, ratingsUpdateDF:DataFrame):
@@ -61,7 +62,7 @@ class RecommenderTheMostPopular(ARecommender):
                 return self.result
 
         # ratings:Dataframe<(movieId:int, ratings:int)>
-        ratingsDF:DataFrame = self._sortedAscRatings5CountDF[Ratings.COL_RATING].head(numberOfItems)
+        ratingsDF:DataFrame = self._sortedAsceventsTransCountDF[Events.COL_EVENT].head(numberOfItems)
 
         items:List[int] = list(ratingsDF.index)
         finalScores = normalize(np.expand_dims(ratingsDF, axis=0))[0, :]

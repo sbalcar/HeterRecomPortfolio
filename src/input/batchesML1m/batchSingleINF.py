@@ -16,7 +16,9 @@ from portfolioDescription.aPortfolioDescription import APortfolioDescription #cl
 
 from evaluationTool.evalToolSingleMethod import EToolSingleMethod #class
 
-from input.aBatch import ABatch #class
+from input.aBatch import BatchParameters #class
+
+from input.aBatchML import ABatchML #class
 from input.batchesML1m.batchSingle import BatchSingle #class
 from input.batchesML1m.batchFuzzyDHondtINF import BatchFuzzyDHondtINF #class
 
@@ -31,9 +33,10 @@ from simulator.simulator import Simulator #class
 from history.historyHierDF import HistoryHierDF #class
 
 
-class BatchSingleINF(ABatch):
+class BatchSingleINF(ABatchML):
 
-    def getParameters(self):
+    @staticmethod
+    def getParameters():
 
         recommenderIDs:List[str] = BatchSingle().getParameters().keys()
         negativeImplFeedback:List[str] = BatchFuzzyDHondtINF().getNegativeImplFeedbackParameters().keys()
@@ -52,11 +55,10 @@ class BatchSingleINF(ABatch):
 
     def run(self, batchID:str, jobID:str):
 
-        from execute.generateBatches import BatchParameters #class
         divisionDatasetPercentualSize:int
         uBehaviour:str
         repetition:int
-        divisionDatasetPercentualSize, uBehaviour, repetition = BatchParameters.getBatchParameters()[batchID]
+        divisionDatasetPercentualSize, uBehaviour, repetition = BatchParameters.getBatchParameters(self.datasetID)[batchID]
 
         datasetID:str = "ml1m" + "Div" + str(divisionDatasetPercentualSize)
 

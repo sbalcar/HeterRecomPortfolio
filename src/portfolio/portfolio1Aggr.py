@@ -4,6 +4,8 @@ from pandas.core.frame import DataFrame #class
 
 from typing import List
 
+from datasets.aDataset import ADataset #class
+
 from recommenderDescription.recommenderDescription import RecommenderDescription #class
 
 from aggregation.aAggregation import AAgregation #class
@@ -44,19 +46,15 @@ class Portfolio1Aggr(APortfolio):
     def getRecommIDs(self):
        return self._recommIDs
 
-    def train(self, history:AHistory, ratingsDF:DataFrame, usersDF:DataFrame, itemsDF:DataFrame):
+    def train(self, history:AHistory, dataset:ADataset):
         if not isinstance(history, AHistory):
             raise ValueError("Argument history isn't type AHistory.")
-        if type(ratingsDF) is not DataFrame:
-            raise ValueError("Argument ratingsDF isn't type DataFrame.")
-        if type(usersDF) is not DataFrame:
-            raise ValueError("Argument usersDF isn't type DataFrame.")
-        if type(itemsDF) is not DataFrame:
-            raise ValueError("Argument ratingsUpdateDF isn't type DataFrame.")
+        if not isinstance(history, AHistory):
+            raise ValueError("Argument history isn't type AHistory.")
 
         recommenderI:ARecommender
         for recommenderI in self._recommenders:
-            recommenderI.train(history, ratingsDF, usersDF, itemsDF)
+            recommenderI.train(history, dataset)
 
     def update(self, ratingsUpdateDF:DataFrame):
        if type(ratingsUpdateDF) is not DataFrame:

@@ -9,6 +9,9 @@ from sklearn.metrics import *
 from sklearn.preprocessing import normalize
 from recommender.aRecommender import ARecommender  # class
 
+from datasets.aDataset import ADataset #class
+from datasets.datasetML import DatasetML #class
+
 from datasets.ml.ratings import Ratings  # class
 
 from history.aHistory import AHistory #class
@@ -39,9 +42,13 @@ class RecommenderCosineCB(ARecommender):
         self.cbData:DataFrame = DataFrame(data=dfCBSim, index=self.dfCBFeatures.index, columns=self.dfCBFeatures.index)
         self.userProfiles:dict = {}
 
-    def train(self, history:AHistory, ratingsDF:DataFrame, usersDF:DataFrame, itemsDF:DataFrame):
-        if type(ratingsDF) is not DataFrame:
-            raise ValueError("Argument trainRatingsDF is not type DataFrame.")
+    def train(self, history:AHistory, dataset:DatasetML):
+        if not isinstance(history, AHistory):
+            raise ValueError("Argument history isn't type AHistory.")
+        if type(dataset) is not DatasetML:
+            raise ValueError("Argument dataset isn't type DatasetML.")
+
+        ratingsDF:DataFrame = dataset.ratingsDF
 
         # ratingsSum:Dataframe<(userId:int, movieId:int, ratings:int, timestamp:int)>
         ratingsDF:DataFrame = ratingsDF.loc[ratingsDF[Ratings.COL_RATING] >= 4]

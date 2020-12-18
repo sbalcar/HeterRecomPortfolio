@@ -20,7 +20,9 @@ from input.inputRecomDefinition import InputRecomDefinition #class
 from input.batchesML1m.batchFuzzyDHondt import BatchFuzzyDHondt #class
 
 from aggregation.operators.aDHondtSelector import ADHondtSelector #class
-from input.aBatch import ABatch #class
+
+from input.aBatch import BatchParameters #class
+from input.aBatchML import ABatchML #class
 from input.inputSimulatorDefinition import InputSimulatorDefinition #class
 
 from simulator.simulator import Simulator #class
@@ -29,10 +31,10 @@ from history.historyHierDF import HistoryHierDF #class
 
 
 
-class BatchDHondtThompsonSampling(ABatch):
+class BatchDHondtThompsonSampling(ABatchML):
 
-
-    def getParameters(self):
+    @staticmethod
+    def getParameters():
         selectorIDs:List[str] = BatchFuzzyDHondt().getSelectorParameters().keys()
 
         aDict:dict = {}
@@ -46,11 +48,10 @@ class BatchDHondtThompsonSampling(ABatch):
 
     def run(self, batchID:str, jobID:str):
 
-        from execute.generateBatches import BatchParameters #class
         divisionDatasetPercentualSize:int
         uBehaviour:str
         repetition:int
-        divisionDatasetPercentualSize, uBehaviour, repetition = BatchParameters.getBatchParameters()[batchID]
+        divisionDatasetPercentualSize, uBehaviour, repetition = BatchParameters.getBatchParameters(self.datasetID)[batchID]
 
 
         #eTool:AEvalTool
@@ -58,7 +59,7 @@ class BatchDHondtThompsonSampling(ABatch):
 
         datasetID:str = "ml1m" + "Div" + str(divisionDatasetPercentualSize)
 
-        rIDs, rDescs = InputRecomDefinition.exportPairOfRecomIdsAndRecomDescrs(datasetID)
+        rIDs, rDescs = InputRecomDefinition.exportPairOfRecomIdsAndRecomDescrsML(datasetID)
 
         aDescDHontThompsonSamplingI:AggregationDescription = InputAggrDefinition.exportADescDHontThompsonSampling(selector)
 

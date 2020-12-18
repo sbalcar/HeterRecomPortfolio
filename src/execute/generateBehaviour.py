@@ -5,6 +5,7 @@ import random
 import numpy as np
 
 from datasets.ml.behaviours import Behaviours #class
+from datasets.retailrocket.behavioursRR import BehavioursRR #class
 
 from userBehaviourDescription.userBehaviourDescription import UserBehaviourDescription #class
 from userBehaviourDescription.userBehaviourDescription import observationalStaticProbabilityFnc #function
@@ -27,14 +28,21 @@ def generateBehaviour():
 
    uBehavLinear0109Desc:UserBehaviourDescription = UserBehaviourDescription(observationalLinearProbabilityFnc, [0.1, 0.9])
 
+   # ML
+#   Behaviours.generateFileMl1m(countOfItems, countOfRepetitions, Behaviours.BHVR_STATIC08, uBehavStatic08Desc)
+#   Behaviours.generateFileMl1m(countOfItems, countOfRepetitions, Behaviours.BHVR_STATIC06, uBehavStatic06Desc)
+#   Behaviours.generateFileMl1m(countOfItems, countOfRepetitions, Behaviours.BHVR_STATIC04, uBehavStatic04Desc)
+#   Behaviours.generateFileMl1m(countOfItems, countOfRepetitions, Behaviours.BHVR_STATIC02, uBehavStatic02Desc)
 
-   Behaviours.generateFileMl1m(countOfItems, countOfRepetitions, Behaviours.BHVR_STATIC08, uBehavStatic08Desc)
-   Behaviours.generateFileMl1m(countOfItems, countOfRepetitions, Behaviours.BHVR_STATIC06, uBehavStatic06Desc)
-   Behaviours.generateFileMl1m(countOfItems, countOfRepetitions, Behaviours.BHVR_STATIC04, uBehavStatic04Desc)
-   Behaviours.generateFileMl1m(countOfItems, countOfRepetitions, Behaviours.BHVR_STATIC02, uBehavStatic02Desc)
+#   Behaviours.generateFileMl1m(countOfItems, countOfRepetitions, Behaviours.BHVR_LINEAR0109, uBehavLinear0109Desc)
 
-   Behaviours.generateFileMl1m(countOfItems, countOfRepetitions, Behaviours.BHVR_LINEAR0109, uBehavLinear0109Desc)
+   # RR
+   BehavioursRR.generateFileRR(countOfItems, countOfRepetitions, BehavioursRR.BHVR_STATIC08, uBehavStatic08Desc)
+#   BehavioursRR.generateFileRR(countOfItems, countOfRepetitions, BehavioursRR.BHVR_STATIC06, uBehavStatic06Desc)
+#   BehavioursRR.generateFileRR(countOfItems, countOfRepetitions, BehavioursRR.BHVR_STATIC04, uBehavStatic04Desc)
+#   BehavioursRR.generateFileRR(countOfItems, countOfRepetitions, BehavioursRR.BHVR_STATIC02, uBehavStatic02Desc)
 
+#   BehavioursRR.generateFileRR(countOfItems, countOfRepetitions, BehavioursRR.BHVR_LINEAR0109, uBehavLinear0109Desc)
 
    #behaviourFile:str = Behaviours.getFile(Behaviours.BHVR_STATIC08)
    #behaviourDF:DataFrame = Behaviours.readFromFileMl1m(behaviourFile)
