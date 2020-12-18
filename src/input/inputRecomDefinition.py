@@ -8,6 +8,7 @@ from recommender.recommenderTheMostPopular import RecommenderTheMostPopular #cla
 from recommender.recommenderCosineCB import RecommenderCosineCB #class
 from recommender.recommenderW2V import RecommenderW2V #class
 from recommender.recommenderItemBasedKNN import RecommenderItemBasedKNN #class
+from recommender.recommenderBPRMF import RecommenderBPRMF #class
 
 from recommender.recommenderTheMostSold import RecommenderTheMostSold #class
 
@@ -23,6 +24,7 @@ class InputRecomDefinition:
     W2V_POSNEG_MEAN:str = "w2vPosnegMean"
     W2V_POSNEG_WINDOW3:str = "w2vPosnegWindow3"
     KNN:str = "KNN"
+    BPRMF:str = "BPRMF"
 
     # batchesRetailrocket methods
     THE_MOST_SOLD:str = "theMostSold"
@@ -75,6 +77,11 @@ class InputRecomDefinition:
         return RecommenderDescription(RecommenderItemBasedKNN,
                 {})
 
+    @staticmethod
+    def exportRDescBPRMF(datasetID:str):
+        return RecommenderDescription(RecommenderBPRMF,
+                {})
+
 
     @staticmethod
     def exportPairOfRecomIdsAndRecomDescrsML(datasetID:str):
@@ -95,11 +102,14 @@ class InputRecomDefinition:
         rIDsKNN:List[str] = [recom + InputRecomDefinition.KNN.title()]
         rDescsKNN:List[RecommenderDescription] = [InputRecomDefinition.exportRDescKNN(datasetID)]
 
+        rIDsBPRMF:List[str] = [recom + InputRecomDefinition.BPRMF.title()]
+        rDescsBPRMF:List[RecommenderDescription] = [InputRecomDefinition.exportRDesBPRMF(datasetID)]
+
         rIDsPop:List[str] = [recom + InputRecomDefinition.THE_MOST_POPULAR.title()]
         rDescsPop:List[RecommenderDescription] = [InputRecomDefinition.exportRDescTheMostPopular(datasetID)]
 
-        rIDs:List[str] = rIDsCB + rIDsW2V + rIDsPop + rIDsKNN
-        rDescs:List[RecommenderDescription] = rDescsCB + rDescsW2V + rDescsPop + rDescsKNN
+        rIDs:List[str] = rIDsCB + rIDsW2V + rIDsKNN + rIDsBPRMF + rIDsPop
+        rDescs:List[RecommenderDescription] = rDescsCB + rDescsW2V + rDescsKNN + rDescsBPRMF + rDescsPop
 
         return (rIDs, rDescs)
 
@@ -137,5 +147,7 @@ class InputRecomDefinition:
             return InputRecomDefinition.exportRDescW2vPosnegWindow3(datasetID)
         elif recommenderID == InputRecomDefinition.KNN:
             return InputRecomDefinition.exportRDescKNN(datasetID)
+        elif recommenderID == InputRecomDefinition.BPRMF:
+            return InputRecomDefinition.exportRDescBPRMF(datasetID)
         elif recommenderID == InputRecomDefinition.THE_MOST_SOLD:
             return InputRecomDefinition.exportRDescTheMostSold(datasetID)

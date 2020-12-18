@@ -14,6 +14,9 @@ from sklearn.metrics import *
 from sklearn.preprocessing import normalize
 from recommender.aRecommender import ARecommender  # class
 
+from datasets.aDataset import ADataset #class
+from datasets.datasetML import DatasetML #class
+
 from datasets.ml.ratings import Ratings  # class
 from datasets.ml.items import Items #class
 from datasets.ml.users import Users #class
@@ -42,7 +45,14 @@ class RecommenderBPRMF(ARecommender):
         self._updateCounter = 0
         self.updateThreshold = 1000   #maybe use values from argumentsDict
 
-    def train(self, history:AHistory, ratingsDF:DataFrame, usersDF:DataFrame, itemsDF:DataFrame):
+    def train(self, history:AHistory, dataset:ADataset):
+        if type(dataset) is not DatasetML:
+            raise ValueError("Argument dataset is not type DatasetML.")
+
+        ratingsDF:DataFrame = dataset.ratingsDF
+        usersDF:DataFrame = dataset.usersDF
+        itemsDF:DataFrame = dataset.itemsDF
+
         ratingsDF:DataFrame = ratingsDF.loc[ratingsDF[Ratings.COL_RATING] >= 4]
         
         maxUID = usersDF[Users.COL_USERID].max()
