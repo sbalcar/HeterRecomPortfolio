@@ -96,7 +96,7 @@ class RecommenderItemBasedKNN(ARecommender):
 
     def recommend(self, userID: int, numberOfItems: int = 20, argumentsDict: dict = {}):
         # Check if user is known
-        if userID not in self.KNNs:
+        if userID not in self._lastRatedItemPerUser.index:
             # TODO: How to behave if yet no rating from user was recorded? Maybe return TOP-N most popular items?
             return Series([], index=[])
 
