@@ -34,17 +34,21 @@ def test01():
     dataset:DatasetML = DatasetML.readDatasets()
 
     # Take only first 500k
-    trainDataset:DatasetML = DatasetML(dataset.ratingsDF.iloc[0:500000], dataset.usersDF, dataset.itemsDF)
+    trainDataset:DatasetML = DatasetML(dataset.ratingsDF.iloc[0:499965], dataset.usersDF, dataset.itemsDF)
 
     # train recommender
+ 
+    
     rec:ARecommender = RecommenderBPRMF("test", {})
     rec.train(HistoryDF("test01"), trainDataset)
 
     # get one rating for update
-    ratingsDFUpdate:DataFrame = dataset.ratingsDF.iloc[500005:504006]
+    ratingsDFUpdate:DataFrame = dataset.ratingsDF.iloc[499965:503006]
 
     # get recommendations:
     print("Recommendations before update")
+    print(rec._movieFeaturesMatrixLIL[:,ratingsDFUpdate['userId'].iloc[0]  ].getnnz() )
+    
     r:Series = rec.recommend(ratingsDFUpdate['userId'].iloc[0], 50, {})
     print(r);
     for i in range(ratingsDFUpdate.shape[0]):
@@ -52,6 +56,8 @@ def test01():
         rec.update(rUp)
 
     print("Recommendations after update")
+    print(rec._movieFeaturesMatrixLIL[:,ratingsDFUpdate['userId'].iloc[0]  ].getnnz() )
+    
     r: Series = rec.recommend(ratingsDFUpdate['userId'].iloc[0], 50, {})
     print(r);
     
@@ -72,6 +78,8 @@ def test02():
     # Take only first 500k
     trainDataset:DatasetML = DatasetML(dataset.ratingsDF.iloc[0:800000], dataset.usersDF, dataset.itemsDF)
 
+
+    print(dataset.ratingsDF.iloc[655924:655926])
     # train recommender
     rec:ARecommender = RecommenderBPRMF("test", {})
     rec.train(HistoryDF("test02"), trainDataset)
@@ -87,5 +95,5 @@ def test02():
 if __name__ == "__main__":
     os.chdir("..")
 
-    #test01()
+    test01()
     test02()

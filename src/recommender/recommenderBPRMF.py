@@ -51,20 +51,22 @@ class RecommenderBPRMF(ARecommender):
 
         ratingsDF:DataFrame = dataset.ratingsDF
         usersDF:DataFrame = dataset.usersDF
-        itemsDF:DataFrame = dataset.itemsDF
+        self.itemsDF:DataFrame = dataset.itemsDF
 
         ratingsDF:DataFrame = ratingsDF.loc[ratingsDF[Ratings.COL_RATING] >= 4]
         
         maxUID = usersDF[Users.COL_USERID].max()
-        maxOID = itemsDF[Items.COL_MOVIEID].max()
-        print(maxUID, maxOID)
+        maxOID = self.itemsDF[Items.COL_MOVIEID].max()
+
+        if self.DEBUG_MODE:
+            print(maxUID, maxOID)
         ratingsDF[Ratings.COL_RATING] = 1.0 #flatten ratings
         if type(ratingsDF) is not DataFrame:
             raise ValueError("Argument trainRatingsDF is not type DataFrame.") 
                  
         self._movieFeaturesMatrix = sp.coo_matrix((ratingsDF[Ratings.COL_RATING], 
-                   (ratingsDF[Ratings.COL_USERID], 
-                    ratingsDF[Ratings.COL_MOVIEID])), shape = (maxOID, maxUID))
+                   (ratingsDF[Ratings.COL_MOVIEID], 
+                    ratingsDF[Ratings.COL_USERID])), shape = (maxOID+1, maxUID+1))
         self._movieFeaturesMatrixLIL =  self._movieFeaturesMatrix.tolil()
                    
         self._userFeaturesMatrix = self._movieFeaturesMatrix.T.tocsr()
@@ -84,7 +86,9 @@ class RecommenderBPRMF(ARecommender):
         if rating >= 4:
             self._updateCounter += 1
             #using flat ratings
-            self._movieFeaturesMatrixLIL[user, item] =  1.0 #rating
+            self._movieFeaturesMatrixLIL[item, user] =  1.0 #rating
+            #print(item, user)
+            #print(self._movieFeaturesMatrixLIL[item, user])
             #print(self._updateCounter)
             
             if self._updateCounter == self.updateThreshold:
@@ -121,7 +125,11 @@ class RecommenderBPRMF(ARecommender):
                 print(type(recommendations))
             recItems = [i[0] for i in recommendations]
             recScores = [i[1] for i in recommendations]
-
+            
+            #print(self.itemsDF.loc[self.itemsDF.movieID = recItems])
+            idf = self.itemsDF.set_index("movieId")
+            if self.DEBUG_MODE:
+                print(idf.loc[recItems])
             # print(results[resultList])
 
             # normalize scores into the unit vector (for aggregation purposes)
