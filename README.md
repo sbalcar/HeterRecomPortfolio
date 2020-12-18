@@ -41,7 +41,7 @@ The input of the system is batches.
 - requires Python 3.7
 
 ```sh
-$ pip install numpy pandas sklearn tensorflow
+$ pip install numpy pandas sklearn tensorflow implicit
 ```
 
 ### How to run it:
