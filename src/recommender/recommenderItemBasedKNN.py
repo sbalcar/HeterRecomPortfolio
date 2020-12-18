@@ -65,6 +65,11 @@ class RecommenderItemBasedKNN(ARecommender):
             ratingsTrainDF[ratingsTrainDF['rating'] > 3].sort_values('timestamp') \
                 .groupby('userId').tail(1).set_index('userId').drop(columns=['rating', 'timestamp'])
 
+#        print(self._lastRatedItemPerUser.head(20))
+#        if not int(23) in self._lastRatedItemPerUser.keys():
+#            print("aaaaaaaaaaaaa " + str(23))
+
+
     def update(self, ratingsUpdateDF: DataFrame):
         if type(ratingsUpdateDF) is not DataFrame:
             raise ValueError("Argument ratingsTrainDF isn't type DataFrame.")
@@ -96,6 +101,8 @@ class RecommenderItemBasedKNN(ARecommender):
             return Series([], index=[])
 
         # Get recommendations for user
+#        if not int(userID) in self._lastRatedItemPerUser.keys():
+#            print("aaaaaaaaaaaaa " + str(userID))
         lastRatedItemFromUser: int = self._lastRatedItemPerUser.loc[userID]['movieId']
         result: Series = Series(self.KNNs[lastRatedItemFromUser][:numberOfItems])
         finalScores = Series(self._distances[lastRatedItemFromUser][:numberOfItems])
