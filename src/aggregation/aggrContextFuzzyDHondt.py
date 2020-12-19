@@ -17,6 +17,12 @@ from history.aHistory import AHistory #class
 class AggrContextFuzzyDHondt(AggrFuzzyDHondt):
 
     ARG_SELECTOR:str = "selector"
+    ARG_ITEMS:str = "items"
+    ARG_USERS:str = "users"
+    dictOfGenreIndexes: dict = {"Action": 4, "Adventure": 5, "Animation": 6, "Children's": 7, "Comedy": 8, "Crime": 9,
+                                "Documentary": 10, "Drama": 11, "Fantasy": 12, "Film-Noir": 12, "Horror": 13,
+                                "Musical": 14, "Mystery": 15, "Romance": 16, "Sci-Fi": 17, "Thriller": 18, "War": 19,
+                                "Western": 20}
 
     def __init__(self, history:AHistory, argumentsDict:dict):
         if not isinstance(history, AHistory):
@@ -27,13 +33,16 @@ class AggrContextFuzzyDHondt(AggrFuzzyDHondt):
         self._selector = argumentsDict[self.ARG_SELECTOR]
         self._history = history
         self._listOfPreviousRecommendations = None
-        self._contextDim:int = 10
+        self._contextDim:int = 21
         self._b:dict = None
         self._A:dict = None
         self._context = None
         self._inverseA:dict = None
         self._INVERSE_CALCULATION_THRESHOLD: int = 100
-        self._inverseCounter = 101
+        self._inverseCounter = 0
+        self._lastTimestamp:dict = {}
+        self.items = argumentsDict[self.ARG_ITEMS]
+        self.users = argumentsDict[self.ARG_USERS]
 
 
     # methodsResultDict:{String:pd.Series(rating:float[], itemID:int[])},
@@ -41,12 +50,18 @@ class AggrContextFuzzyDHondt(AggrFuzzyDHondt):
     def run(self, methodsResultDict:dict, modelDF:DataFrame, userID:int, numberOfItems:int=20):
         # TODO: CHECK DATA INTEGRITY!
 
+        # create lastTimestamp for new user
+        if userID not in self._lastTimestamp:
+            self._lastTimestamp[userID] = 0
+
+        # update context
+        self._context = self.__calculateContext(userID)
+
         # initialize A and b if not done already
         if self._b is None or self._A is None or self._context is None:
             self._b: dict = {}
             self._A: dict = {}
             self._inverseA = {}
-            self._context = self.__calculateContext()
             for recommender, value in methodsResultDict.items():
                 self._b[recommender] = np.zeros(self._contextDim)
                 self._A[recommender] = np.identity(self._contextDim)
@@ -54,15 +69,18 @@ class AggrContextFuzzyDHondt(AggrFuzzyDHondt):
 
         # else update b's
         else:
-            # TODO: How to get ListOfClickedItems from previous reccommendation? (Ask Stepan!)
-            ListOfClickedItems = [7]
+            ListOfClickedItems = self.__getListOfPreviousClickedItems(userID)
+
             if self._listOfPreviousRecommendations is None:
                 raise ValueError("self._listOfPreviousRecommendations has to contain previous recommendations!")
             dictOfRewards:dict = {}
             counter = 0
             for recommender, value in methodsResultDict.items():
                 # TODO: Is performance OK here? This is just sketch
+                # calculate size of intersection between ListOfClickedItems and self._listOfPreviousRecommendations
                 succesfulRecomendations = len(list(set(ListOfClickedItems).intersection(self._listOfPreviousRecommendations)))
+
+                # give recommender 'points' based on the size of intersection
                 dictOfRewards[recommender] = succesfulRecomendations
                 counter += 1
                 # TODO: I don't take into account previous relevance or previous votes, maybe needs to be improved in future
@@ -94,7 +112,7 @@ class AggrContextFuzzyDHondt(AggrFuzzyDHondt):
             for recommendedItemID in itemsWithResposibilityOfRecommenders:
                 if recommendedItemID in methodsResultDict[recommender].index:
                     relevanceSum += methodsResultDict[recommender][recommendedItemID]
-            self._A[recommender] += self._context.dot(self._context.T)
+            self._A[recommender] += self._context.dot(self._context.T) * relevanceSum
 
         # recompute inverse A's if threshold is hit
         if self._inverseCounter > self._INVERSE_CALCULATION_THRESHOLD:
@@ -105,9 +123,84 @@ class AggrContextFuzzyDHondt(AggrFuzzyDHondt):
         self._listOfPreviousRecommendations = itemsWithResposibilityOfRecommenders
         return itemsWithResposibilityOfRecommenders
 
-    def __calculateContext(self):
-        # TODO: get context
-        return np.zeros(self._contextDim)
+    def __getListOfPreviousClickedItems(self, userID:int):
+
+        # get list of history with user
+        previousItemsOfUser = self._history.getPreviousRecomOfUser(userID)
+
+        # if we have no history about the user
+        if len(previousItemsOfUser) == 0:
+            return list()
+
+        # data indexes in previousItemsOfUser
+        ITEM_INDEX = 2
+        CLICKED_INDEX = 5
+        TIMESTAMP_INDEX = 6
+
+        # sort history by timestamp
+        sortedItemsByTimestamp = sorted(previousItemsOfUser, key=lambda x: x[TIMESTAMP_INDEX], reverse=True)
+
+        # get newest timestamp
+        newLastTimestamp = sortedItemsByTimestamp[0][TIMESTAMP_INDEX]
+
+        # check data integrity of lastTimestamp
+        if userID not in self._lastTimestamp:
+            raise ValueError("Timestamp has to be initialized for each user!")
+        # if there is no new history from user
+        if self._lastTimestamp[userID] == newLastTimestamp:
+            return list()
+
+        # get last interactions with the user (iteratively based on history timestamps)
+        iterator = 0
+        result = list()
+        while iterator < len(sortedItemsByTimestamp) and sortedItemsByTimestamp[iterator][TIMESTAMP_INDEX] > self._lastTimestamp[userID]:
+            if sortedItemsByTimestamp[iterator][CLICKED_INDEX] and sortedItemsByTimestamp[iterator][ITEM_INDEX] not in result:
+                result.append(sortedItemsByTimestamp[iterator][ITEM_INDEX])
+            iterator += 1
+
+        self._lastTimestamp[userID] = newLastTimestamp
+
+        return result
+
+    def __calculateContext(self, userID):
+        # get user data
+        user = self.users.iloc[userID]
+
+        # init result
+        result = np.zeros(self._contextDim)
+
+        # add seniority of user into the context (filter only clicked items)
+        CLICKED_INDEX = 5
+        previousClickedItemsOfUser = list(filter(lambda x: x[CLICKED_INDEX], self._history.getPreviousRecomOfUser(userID)))
+        historySize = len(previousClickedItemsOfUser)
+        if historySize < 10:
+            result[0] = 1
+        elif historySize < 30:
+            result[0] = 2
+        elif historySize < 50:
+            result[0] = 3
+        else:
+            result[0] = 4
+
+        # add user gender, age and occupation to the context
+        result[1] = self.users.iloc[userID]['age']
+        result[2] = 1 if self.users.iloc[userID]['gender'] == 'F' else -1
+        result[3] = self.users.iloc[userID]['occupation']
+
+        # get last 20 movies from user and aggregate their genres
+        TIMESTAMP_INDEX = 6
+        sortedItemsByTimestamp = sorted(previousClickedItemsOfUser, key=lambda x: x[TIMESTAMP_INDEX], reverse=True)
+        last20MoviesList = sortedItemsByTimestamp[:20]
+
+        # aggregation
+        ITEM_INDEX = 2
+        for item in last20MoviesList:
+            itemID = item[ITEM_INDEX]
+            genres = self.items.iloc[itemID]['Genres'].split("|")
+            for genre in genres:
+                result[self.dictOfGenreIndexes[genre]] += 1
+
+        return result
 
     # methodsResultDict:{String:Series(rating:float[], itemID:int[])},
     # modelDF:DataFrame<(methodID:str, votes:int)>, numberOfItems:int
