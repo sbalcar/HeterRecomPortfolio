@@ -23,7 +23,7 @@ class Users:
       usersFile: str = ".." + os.sep + "datasets" + os.sep + "ml-100k" + os.sep + "u.user"
 
       usersDF:DataFrame = pd.read_csv(usersFile, sep='|', header=None)
-      usersDF.columns = [Users.COL_USERID, Users.COL_AGE, Users.COL_GENDER, Users.COL_OCCUPATION, Users.COL_ZIPCODE]
+      usersDF.columns = [Users.COL_USERID, Users.COL_GENDER, Users.COL_AGE, Users.COL_OCCUPATION, Users.COL_ZIPCODE]
 
       return usersDF
 
@@ -34,7 +34,7 @@ class Users:
       #usersFile: str = ".." + os.sep + "datasets" + os.sep + "ml-10M100K" + os.sep + "tags.dat"
 
       usersDF:DataFrame = pd.read_csv(usersFile, sep=':', usecols=[0, 2, 4, 6, 8], header=None)
-      usersDF.columns = [Users.COL_USERID, Users.COL_AGE, Users.COL_GENDER, Users.COL_OCCUPATION, Users.COL_ZIPCODE]
+      usersDF.columns = [Users.COL_USERID, Users.COL_GENDER, Users.COL_AGE, Users.COL_OCCUPATION, Users.COL_ZIPCODE]
 
       return usersDF
 
