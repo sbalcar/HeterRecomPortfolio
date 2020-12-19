@@ -26,22 +26,25 @@ from history.aHistory import AHistory #class
 
 class RecommenderBPRMF(ARecommender):
 
-    ARG_USER_PROFILE_STRATEGY:str = "userProfileStrategy"
-
+    #ARG_USER_PROFILE_STRATEGY:str = "userProfileStrategy"
+    ARG_FACTORS:str = "factors"
+    ARG_ITERATIONS:str = "iterations"
 
     DEBUG_MODE = False
 
     def __init__(self, jobID:str, argumentsDict:dict):
+        if type(jobID) is not str:
+            raise ValueError("Argument jobID is not type strt.")
         if type(argumentsDict) is not dict:
             raise ValueError("Argument argumentsDict is not type dict.")
 
-        self._jobID = jobID
-        self._argumentsDict: dict = argumentsDict
+        self._jobID:str = jobID
+        self._argumentsDict:dict = argumentsDict
         self._KNNs:DataFrame = None
         self._movieFeaturesMatrix = None
         self._userFeaturesMatrix  = None
-        self._factors = 20      #use values from argumentsDict
-        self._iterations = 10   #use values from argumentsDict
+        self._factors = argumentsDict[RecommenderBPRMF.ARG_FACTORS]
+        self._iterations = argumentsDict[RecommenderBPRMF.ARG_ITERATIONS]
         self._updateCounter = 0
         self.updateThreshold = 1000   #maybe use values from argumentsDict
 

@@ -80,7 +80,8 @@ class InputRecomDefinition:
     @staticmethod
     def exportRDescBPRMF(datasetID:str):
         return RecommenderDescription(RecommenderBPRMF,
-                {})
+                {RecommenderBPRMF.ARG_FACTORS:20,
+                 RecommenderBPRMF.ARG_ITERATIONS:10})
 
 
     @staticmethod

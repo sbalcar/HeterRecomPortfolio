@@ -38,8 +38,9 @@ def test01():
 
     # train recommender
  
-    
-    rec:ARecommender = RecommenderBPRMF("test", {})
+    rec:ARecommender = RecommenderBPRMF("test",{
+                    RecommenderBPRMF.ARG_FACTORS:20,
+                    RecommenderBPRMF.ARG_ITERATIONS:10})
     rec.train(HistoryDF("test01"), trainDataset)
 
     # get one rating for update
@@ -81,7 +82,9 @@ def test02():
 
     print(dataset.ratingsDF.iloc[655924:655926])
     # train recommender
-    rec:ARecommender = RecommenderBPRMF("test", {})
+    rec:ARecommender = RecommenderBPRMF("test",{
+                    RecommenderBPRMF.ARG_FACTORS:20,
+                    RecommenderBPRMF.ARG_ITERATIONS:10})
     rec.train(HistoryDF("test02"), trainDataset)
 
     # get recommendations:
