@@ -3,6 +3,7 @@
 import numpy as np
 import pandas as pd
 import math
+from sklearn.preprocessing import PolynomialFeatures
 
 from typing import List
 
@@ -19,10 +20,10 @@ class AggrContextFuzzyDHondt(AggrFuzzyDHondt):
     ARG_SELECTOR:str = "selector"
     ARG_ITEMS:str = "items"
     ARG_USERS:str = "users"
-    dictOfGenreIndexes: dict = {"Action": 4, "Adventure": 5, "Animation": 6, "Children's": 7, "Comedy": 8, "Crime": 9,
-                                "Documentary": 10, "Drama": 11, "Fantasy": 12, "Film-Noir": 12, "Horror": 13,
-                                "Musical": 14, "Mystery": 15, "Romance": 16, "Sci-Fi": 17, "Thriller": 18, "War": 19,
-                                "Western": 20}
+    dictOfGenreIndexes: dict = {"Action": 0, "Adventure": 1, "Animation": 2, "Children's": 3, "Comedy": 4, "Crime": 5,
+                                "Documentary": 6, "Drama": 7, "Fantasy": 8, "Film-Noir": 9, "Horror": 10,
+                                "Musical": 11, "Mystery": 12, "Romance": 13, "Sci-Fi": 14, "Thriller": 15, "War": 16,
+                                "Western": 17}
 
     def __init__(self, history:AHistory, argumentsDict:dict):
         if not isinstance(history, AHistory):
@@ -44,7 +45,6 @@ class AggrContextFuzzyDHondt(AggrFuzzyDHondt):
         self.items = argumentsDict[self.ARG_ITEMS]
         self.users = argumentsDict[self.ARG_USERS]
 
-
     # methodsResultDict:{String:pd.Series(rating:float[], itemID:int[])},
     # modelDF:pd.DataFrame[numberOfVotes:int], numberOfItems:int
     def run(self, methodsResultDict:dict, modelDF:DataFrame, userID:int, numberOfItems:int=20):
@@ -56,6 +56,10 @@ class AggrContextFuzzyDHondt(AggrFuzzyDHondt):
 
         # update context
         self._context = self.__calculateContext(userID)
+
+        # check contextDim is OK
+        if self._contextDim != len(self._A) or self._contextDim != len(self._b):
+            raise ValueError("Context dimension should be same in every iteration!")
 
         # initialize A and b if not done already
         if self._b is None or self._A is None or self._context is None:
@@ -167,25 +171,20 @@ class AggrContextFuzzyDHondt(AggrFuzzyDHondt):
         user = self.users.iloc[userID]
 
         # init result
-        result = np.zeros(self._contextDim)
+        result = np.zeros(len(self.dictOfGenreIndexes) + 1)
 
         # add seniority of user into the context (filter only clicked items)
         CLICKED_INDEX = 5
         previousClickedItemsOfUser = list(filter(lambda x: x[CLICKED_INDEX], self._history.getPreviousRecomOfUser(userID)))
         historySize = len(previousClickedItemsOfUser)
         if historySize < 10:
-            result[0] = 1
+            result[len(self.dictOfGenreIndexes)] = 1
         elif historySize < 30:
-            result[0] = 2
+            result[len(self.dictOfGenreIndexes)] = 2
         elif historySize < 50:
-            result[0] = 3
+            result[len(self.dictOfGenreIndexes)] = 3
         else:
-            result[0] = 4
-
-        # add user gender, age and occupation to the context
-        result[1] = self.users.iloc[userID]['age']
-        result[2] = 1 if self.users.iloc[userID]['gender'] == 'F' else -1
-        result[3] = self.users.iloc[userID]['occupation']
+            result[len(self.dictOfGenreIndexes)] = 4
 
         # get last 20 movies from user and aggregate their genres
         TIMESTAMP_INDEX = 6
@@ -199,6 +198,22 @@ class AggrContextFuzzyDHondt(AggrFuzzyDHondt):
             genres = self.items.iloc[itemID]['Genres'].split("|")
             for genre in genres:
                 result[self.dictOfGenreIndexes[genre]] += 1
+
+        # create polynomial features from [seniority]*[genres]
+        poly = PolynomialFeatures(2)
+        result = poly.fit_transform(result.reshape(-1, 1))
+        result = result.flatten()
+
+        # add user gender, age and occupation to the context
+        userFeatures = []
+        userFeatures.append(self.users.iloc[userID]['age'])
+        userFeatures.append(1 if self.users.iloc[userID]['gender'] == 'F' else -1)
+        userFeatures.append(self.users.iloc[userID]['occupation'])
+
+        result = np.append(result, userFeatures)
+
+        # adjust context dimension attribute
+        self._contextDim = len(result)
 
         return result
 
