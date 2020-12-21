@@ -60,6 +60,8 @@ class Portfolio1Aggr(APortfolio):
        if type(ratingsUpdateDF) is not DataFrame:
            raise ValueError("Argument ratingsUpdateDF isn't type DataFrame.")
 
+       self._aggregation.update(ratingsUpdateDF)
+
        recommenderI:ARecommender
        for recommenderI in self._recommenders:
            recommenderI.update(ratingsUpdateDF)

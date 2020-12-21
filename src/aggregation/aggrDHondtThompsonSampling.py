@@ -35,6 +35,11 @@ class AggrDHondtThompsonSampling(AAgregation):
         self._history = history
         self._selector = argumentsDict[self.ARG_SELECTOR]
 
+
+    def update(self, ratingsUpdateDF:DataFrame):
+        pass
+
+
     # methodsResultDict:{String:pd.Series(rating:float[], itemID:int[])},
     # modelDF:pd.DataFrame[numberOfVotes:int], numberOfItems:int
     def run(self, methodsResultDict:dict, modelDF:DataFrame, userID:int, numberOfItems:int = 20):

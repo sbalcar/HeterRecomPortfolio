@@ -14,6 +14,10 @@ class AAgregation(ABC):
     def __init__(self, aHistory:AHistory, argumentsDict:dict):
        raise Exception("AAgregation is abstract class, can't be instanced")
 
+    @abstractmethod
+    def update(self, ratingsUpdateDF:DataFrame):
+        assert False, "this needs to be overridden"
+
     # userDef:DataFrame<(methodID:str, votes:int)>
     @abstractmethod
     def runWithResponsibility(self, methodsResultDict, userDef:DataFrame, userID:int, numberOfItems:float=20):

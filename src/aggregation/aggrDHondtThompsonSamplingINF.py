@@ -33,6 +33,10 @@ class AggrDHondtThompsonSamplingINF(AggrDHondtThompsonSampling):
         self._penaltyTool = argumentsDict[self.ARG_PENALTY_TOOL]
 
 
+    def update(self, ratingsUpdateDF:DataFrame):
+        pass
+
+
     # methodsResultDict:{String:pd.Series(rating:float[], itemID:int[])},
     # modelDF:pd.DataFrame[numberOfVotes:int], numberOfItems:int
     def run(self, methodsResultDict:dict, modelDF:DataFrame, userID:int, numberOfItems:int=20):

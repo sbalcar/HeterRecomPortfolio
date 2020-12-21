@@ -104,13 +104,17 @@ class InputRecomDefinition:
         rDescsKNN:List[RecommenderDescription] = [InputRecomDefinition.exportRDescKNN(datasetID)]
 
         rIDsBPRMF:List[str] = [recom + InputRecomDefinition.BPRMF.title()]
-        rDescsBPRMF:List[RecommenderDescription] = [InputRecomDefinition.exportRDesBPRMF(datasetID)]
+        rDescsBPRMF:List[RecommenderDescription] = [InputRecomDefinition.exportRDescBPRMF(datasetID)]
 
         rIDsPop:List[str] = [recom + InputRecomDefinition.THE_MOST_POPULAR.title()]
         rDescsPop:List[RecommenderDescription] = [InputRecomDefinition.exportRDescTheMostPopular(datasetID)]
 
-        rIDs:List[str] = rIDsCB + rIDsW2V + rIDsKNN + rIDsBPRMF + rIDsPop
-        rDescs:List[RecommenderDescription] = rDescsCB + rDescsW2V + rDescsKNN + rDescsBPRMF + rDescsPop
+#        rIDs:List[str] = rIDsCB + rIDsW2V + rIDsKNN + rIDsBPRMF + rIDsPop
+#        rDescs:List[RecommenderDescription] = rDescsCB + rDescsW2V + rDescsKNN + rDescsBPRMF + rDescsPop
+
+        rIDs:List[str] = rIDsCB + rIDsW2V + rIDsBPRMF + rIDsPop
+        rDescs:List[RecommenderDescription] = rDescsCB + rDescsW2V + rDescsBPRMF + rDescsPop
+
 
         return (rIDs, rDescs)
 

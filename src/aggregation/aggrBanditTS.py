@@ -35,6 +35,11 @@ class AggrBanditTS(AAgregation):
         self._history = history
         self._selector = argumentsDict[self.ARG_SELECTOR]
 
+
+    def update(self, ratingsUpdateDF:DataFrame):
+        pass
+
+
     # methodsResultDict:{String:pd.Series(rating:float[], itemID:int[])},
     # modelDF:pd.DataFrame[methodID:String, r:int, n:int, alpha0:int, beta0:int], numberOfItems:int
     def run(self, methodsResultDict:dict, modelDF:DataFrame, userID:int, numberOfItems=20):

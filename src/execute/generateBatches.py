@@ -27,11 +27,11 @@ def generateBatches():
     # ML
 #    BatchBanditTS.generateBatches()
 
-#    BatchDHondtThompsonSampling.generateBatches()
-#    BatchDHondtThompsonSamplingINF.generateBatches()
-
-#    BatchFuzzyDHondt.generateBatches()
+    BatchFuzzyDHondt.generateBatches()
 #    BatchFuzzyDHondtINF.generateBatches()
+
+    #    BatchDHondtThompsonSampling.generateBatches()
+#    BatchDHondtThompsonSamplingINF.generateBatches()
 
 #    BatchFuzzyDHondtDirectOptimize.generateBatches()
 #    BatchFuzzyDHondtDirectOptimizeINF.generateBatches()
