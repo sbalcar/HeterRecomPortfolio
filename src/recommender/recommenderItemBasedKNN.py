@@ -48,9 +48,9 @@ class RecommenderItemBasedKNN(ARecommender):
         self._itemsDF = dataset.itemsDF
         ratingsTrainDF = dataset.ratingsDF
 
-        cols = ratingsTrainDF['userId']
-        rows = ratingsTrainDF['movieId']
-        rating = ratingsTrainDF['rating']
+        cols = ratingsTrainDF[Ratings.COL_USERID]
+        rows = ratingsTrainDF[Ratings.COL_MOVIEID]
+        rating = ratingsTrainDF[Ratings.COL_RATING]
         sparseRatingsCSR: csr_matrix = csr_matrix((rating, (rows, cols)))
         sparseRatingsCSR.eliminate_zeros()
 
@@ -62,12 +62,8 @@ class RecommenderItemBasedKNN(ARecommender):
 
         # get last positive feedback from each user
         self._lastRatedItemPerUser = \
-            ratingsTrainDF[ratingsTrainDF['rating'] > 3].sort_values('timestamp') \
-                .groupby('userId').tail(1).set_index('userId').drop(columns=['rating', 'timestamp'])
-
-#        print(self._lastRatedItemPerUser.head(20))
-#        if not int(23) in self._lastRatedItemPerUser.keys():
-#            print("aaaaaaaaaaaaa " + str(23))
+            ratingsTrainDF[ratingsTrainDF[Ratings.COL_RATING] > 3].sort_values(Ratings.COL_TIMESTAMP) \
+                .groupby(Ratings.COL_USERID).tail(1).set_index(Ratings.COL_USERID).drop(columns=[Ratings.COL_RATING, Ratings.COL_TIMESTAMP])
 
 
     def update(self, ratingsUpdateDF: DataFrame):
@@ -101,8 +97,6 @@ class RecommenderItemBasedKNN(ARecommender):
             return Series([], index=[])
 
         # Get recommendations for user
-#        if not int(userID) in self._lastRatedItemPerUser.keys():
-#            print("aaaaaaaaaaaaa " + str(userID))
         lastRatedItemFromUser: int = self._lastRatedItemPerUser.loc[userID]['movieId']
         result: Series = Series(self.KNNs[lastRatedItemFromUser][:numberOfItems])
         finalScores = Series(self._distances[lastRatedItemFromUser][:numberOfItems])

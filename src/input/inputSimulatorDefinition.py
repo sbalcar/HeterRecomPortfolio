@@ -27,10 +27,11 @@ class InputSimulatorDefinition:
     def exportSimulatorML1M(batchID:str, divisionDatasetPercentualSize:int, uBehaviourID:str, repetition:int):
 
         argsSimulationDict:dict = {SimulationML.ARG_WINDOW_SIZE: 5,
-                                   SimulationML.ARG_REPETITION_OF_RECOMMENDATION: repetition,
+                                   SimulationML.ARG_RECOM_REPETITION_COUNT: repetition,
                                    SimulationML.ARG_NUMBER_OF_RECOMM_ITEMS: 100,
                                    SimulationML.ARG_NUMBER_OF_AGGR_ITEMS: InputSimulatorDefinition.numberOfAggrItems,
-                                   SimulationML.ARG_DIV_DATASET_PERC_SIZE: divisionDatasetPercentualSize}
+                                   SimulationML.ARG_DIV_DATASET_PERC_SIZE: divisionDatasetPercentualSize,
+                                   SimulationML.ARG_HISTORY_LENGTH: 10}
 
         # dataset reading
         dataset:ADataset = DatasetML.readDatasets()
@@ -48,10 +49,11 @@ class InputSimulatorDefinition:
     def exportSimulatorRetailRocket(batchID:str, divisionDatasetPercentualSize:int, uBehaviourID:str, repetition:int):
 
         argsSimulationDict:dict = {SimulationML.ARG_WINDOW_SIZE: 5,
-                                   SimulationML.ARG_REPETITION_OF_RECOMMENDATION: repetition,
+                                   SimulationML.ARG_RECOM_REPETITION_COUNT: repetition,
                                    SimulationML.ARG_NUMBER_OF_RECOMM_ITEMS: 100,
                                    SimulationML.ARG_NUMBER_OF_AGGR_ITEMS: InputSimulatorDefinition.numberOfAggrItems,
-                                   SimulationML.ARG_DIV_DATASET_PERC_SIZE: divisionDatasetPercentualSize}
+                                   SimulationML.ARG_DIV_DATASET_PERC_SIZE: divisionDatasetPercentualSize,
+                                   SimulationML.ARG_HISTORY_LENGTH: 10}
 
         # dataset reading
         dataset:ADataset = DatasetRetailRocket.readDatasets()

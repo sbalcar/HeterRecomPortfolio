@@ -17,44 +17,64 @@ from simulation.simulationML import SimulationML #class
 from history.aHistory import AHistory #class
 from evaluationTool.aEvalTool import AEvalTool #class
 
-from datasets.ml.behaviours import Behaviours #class
+from datasets.retailrocket.behavioursRR import BehavioursRR #class
 
 from portfolio.aPortfolio import APortfolio #class
 
 from simulation.tools.modelOfIndexes import ModelOfIndexes #class
 
 
-class SimulationRR(SimulationML):
+class SimulationRR(ASequentialSimulation):
 
-    _behaviourClass = Behaviours
+    _ratingClass = Events
+    _behaviourClass = BehavioursRR
+
 
     @staticmethod
-    def divideDataset(dataset:ADataset, divisionDatasetPercentualSize:int,
-                        testDatasetPercentualSize:int):
+    def divideDataset(dataset:ADataset, behaviourDF:DataFrame,
+                      divisionDatasetPercentualSize:int, testDatasetPercentualSize:int,
+                      recomRepetitionCount:int):
 
         eventsDF:DataFrame = dataset.eventsDF
         categoryTreeDF:DataFrame = dataset.categoryTreeDF
         itemPropertiesDF:DataFrame = dataset.itemPropertiesDF
 
+        # create train Dataset
         eventsSortedDF:DataFrame = eventsDF.sort_values(by=Events.COL_TIME_STAMP)
         numberOfEvents:int = eventsSortedDF.shape[0]
 
         trainSize:int = (int)(numberOfEvents * divisionDatasetPercentualSize / 100)
-        trainEventsDF:DataFrame = eventsSortedDF[0:trainSize]
-        trainEventsDF.reset_index(drop=True, inplace=True)
+        #print("trainSize: " + str(trainSize))
+        trainRatingsDF:DataFrame = eventsSortedDF[0:trainSize]
 
+        trainDataset:ADataset = DatasetRetailRocket(trainRatingsDF, categoryTreeDF, itemPropertiesDF)
+
+
+        # create test Event DataFrame
         testSize:int = (int)(numberOfEvents * testDatasetPercentualSize / 100)
-        testEventsDF:DataFrame = eventsSortedDF[trainSize:(trainSize + testSize)]
-        testEventsDF.reset_index(drop=True, inplace=True)
+        #print("testSize: " + str(testSize))
+        testEventsPartDF:DataFrame = eventsSortedDF[trainSize:(trainSize + testSize)]
+        testEventsDF:DataFrame = testEventsPartDF.loc[testEventsPartDF[Events.COL_EVENT] == "view"]
 
-        #print(testEventsDF.head(30))
-        trainDataset:ADataset = DatasetRetailRocket(trainEventsDF, categoryTreeDF, itemPropertiesDF)
 
-        testEventsDF = testEventsDF.loc[testEventsDF[Events.COL_EVENT] == "transaction"]
-        print("testEventsDF:")
-        print(len(testEventsDF))
+        # create test relevant Event DataFrame
+        testRelevantEventsDF:DataFrame = testEventsDF
 
-        return (trainDataset, testEventsDF)
+
+        # create behaviour dictionary of DataFrame indexed by recomRepetition
+        recomRepetitionCountInDataset:int = behaviourDF[BehavioursRR.COL_REPETITION].max() +1
+
+        testRepeatedBehaviourDict:dict = {}
+        bIndexes:List[int] = list([recomRepetitionCountInDataset*i for i in testEventsDF.index])
+        for repetitionI in range(recomRepetitionCount):
+            # indexes of behaviour
+            indexes:List[int] = [vI+repetitionI for vI in bIndexes]
+            behaviourDFI:DataFrame = DataFrame(behaviourDF.take(indexes).values.tolist(),
+                        index=testEventsDF.index, columns=behaviourDF.keys())
+            testRepeatedBehaviourDict[repetitionI] = behaviourDFI
+
+        return (trainDataset, testEventsDF, testRelevantEventsDF, testRepeatedBehaviourDict)
+
 
 
     @staticmethod
@@ -69,10 +89,11 @@ class SimulationRR(SimulationML):
 
 
     def iterateOverDataset(self, portfolios:List[APortfolio], portfolioDescs:List[APortfolioDescription],
-                             portFolioModels:List[DataFrame], evaluatonTools:List[AEvalTool], histories:List[AHistory],
-                             testRatingsDF:DataFrame):
+                             portFolioModels:List[DataFrame], evaluatonTools:List[AEvalTool],
+                             histories:List[AHistory], testRatingsDF:DataFrame, testRelevantRatingsDF:DataFrame,
+                             testBehaviourDict:dict[DataFrame]):
 
-        model:ModelOfIndexes = ModelOfIndexes(testRatingsDF, Events)
+        model:ModelOfIndexes = ModelOfIndexes(testRelevantRatingsDF, Events)
 
         portIds:List[str] = [portDescI.getPortfolioID() for portDescI in portfolioDescs]
 
@@ -80,9 +101,9 @@ class SimulationRR(SimulationML):
 
         counterI:int = 0
 
-        currentIndexDFI:int
+        currentDFIndexI:int
         nextIndexDFI:int
-        for currentIndexDFI in list(testRatingsDF.index):
+        for currentDFIndexI in list(testRatingsDF.index):
 
             counterI += 1
             if counterI  % 100 == 0:
@@ -90,58 +111,31 @@ class SimulationRR(SimulationML):
                 print("PortfolioIds: " + str(portIds))
                 print("Evaluations: " + str(evaluations))
 
-                self.computationFile.write("EventI: " + str(counterI) + " / " + str(testRatingsDF.shape[0]) + "\n")
+                self.computationFile.write("RatingI: " + str(counterI) + " / " + str(testRatingsDF.shape[0]) + "\n")
                 self.computationFile.write("PortfolioIds: " + str(portIds) + "\n")
                 self.computationFile.write("Evaluations: " + str(evaluations) + "\n")
                 self.computationFile.flush()
 
-            currentItemIdI:int = testRatingsDF.loc[currentIndexDFI][Events.COL_ITEM_ID]
-            currentEventI:int = testRatingsDF.loc[currentIndexDFI][Events.COL_EVENT]
-            currentVisitorIdI:int = testRatingsDF.loc[currentIndexDFI][Events.COL_VISITOR_ID]
+            currentItemIdI:int = testRatingsDF.loc[currentDFIndexI][Events.COL_ITEM_ID]
+            currentRatingI:int = testRatingsDF.loc[currentDFIndexI][Events.COL_EVENT]
+            currentUserIdI:int = testRatingsDF.loc[currentDFIndexI][Events.COL_VISITOR_ID]
 
-            if currentEventI == "view":
-                continue
+            #if currentRatingI < 4:
+            #    continue
 
-            nextItemIDsI:int = self.getNextItemIDs(model, currentVisitorIdI, currentItemIdI, testRatingsDF, self._windowSize)
-            if nextItemIDsI == []:
-                continue
+            windowOfItemIDsI:int = self.getWindowOfItemIDs(model, currentUserIdI, currentDFIndexI, testRatingsDF, self._windowSize)
 
             portfolioI:APortfolio
             for portfolioI in portfolios:
 
-                dfI:DataFrame = DataFrame([testRatingsDF.loc[currentIndexDFI]], columns=testRatingsDF.columns)
-
+                dfI:DataFrame = DataFrame([testRatingsDF.loc[currentDFIndexI]], columns=testRatingsDF.keys())
                 portfolioI.update(dfI)
 
             repetitionI:int
-            for repetitionI in range(self._repetitionOfRecommendation):
+            for repetitionI in range(self._recomRepetitionCount):
                 self.simulateRecommendations(portfolios, portfolioDescs, portFolioModels, evaluatonTools,
-                                               histories, evaluations, currentItemIdI, nextItemIDsI,
-                                               currentVisitorIdI, repetitionI)
+                                               histories, evaluations, currentDFIndexI, windowOfItemIDsI,
+                                               currentUserIdI, repetitionI, testBehaviourDict)
 
         return evaluations
-
-
-    # model:ModelOfIndexes
-    def getNextItemIDs(self, model, userId:int, itemId:int, ratingsDF:DataFrame, windowSize:int):
-
-        selectedItems:List[int] = []
-
-        itemIdI:int = itemId
-        for i in range(windowSize):
-            nextIndexIdI:int = model.getNextIndex(userId, itemIdI)
-            if nextIndexIdI is None:
-                break
-
-            nextItemIdI:int = ratingsDF.loc[nextIndexIdI][Events.COL_ITEM_ID]
-            nextUserIdI:int = ratingsDF.loc[nextIndexIdI][Events.COL_VISITOR_ID]
-            if nextUserIdI != userId:
-                raise ValueError("Error")
-
-            selectedItems.append(nextItemIdI)
-
-            itemIdI = nextItemIdI
-
-        return selectedItems
-
 

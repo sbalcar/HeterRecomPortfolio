@@ -174,6 +174,7 @@ class Behaviours:
   def convertToListOfBoolean(string:str):
       stringValues:List[str] = []
       stringValues[:0] = string[1:]
+      #print(stringValues)
       intValues:List[int] = list(map(int, stringValues))
 
       boolValues:List[bool] = [xI == 1 for xI in intValues]

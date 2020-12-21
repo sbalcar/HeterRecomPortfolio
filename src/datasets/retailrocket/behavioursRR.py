@@ -25,8 +25,8 @@ from userBehaviourDescription.userBehaviourDescription import observationalLinea
 
 class BehavioursRR:
 
-  COL_USERID = Ratings.COL_USERID
-  COL_MOVIEID = Ratings.COL_MOVIEID
+  COL_USERID = Events.COL_VISITOR_ID
+  COL_ITEMID = Events.COL_ITEM_ID
   COL_REPETITION = Behaviours.COL_REPETITION
   COL_BEHAVIOUR = Behaviours.COL_BEHAVIOUR
 
@@ -35,6 +35,23 @@ class BehavioursRR:
   BHVR_STATIC06 = Behaviours.BHVR_STATIC06
   BHVR_STATIC04 = Behaviours.BHVR_STATIC04
   BHVR_STATIC02 = Behaviours.BHVR_STATIC02
+
+  @staticmethod
+  def getColNameUserID():
+    return BehavioursRR.COL_USERID
+
+  @staticmethod
+  def getColNameItemID():
+    return BehavioursRR.COL_ITEMID
+
+  @staticmethod
+  def getColNameRepetition():
+    return BehavioursRR.COL_REPETITION
+
+  @staticmethod
+  def getColNameBehaviour():
+    return BehavioursRR.COL_BEHAVIOUR
+
 
   @staticmethod
   def getFile(behaviourID:str):
@@ -93,7 +110,7 @@ class BehavioursRR:
   def readFromFileRR(behavioursFile:str):
 
     behavioursDF:DataFrame = pd.read_csv(behavioursFile, sep='\t', header=0, encoding="ISO-8859-1")
-    behavioursDF.columns = [BehavioursRR.COL_USERID, BehavioursRR.COL_MOVIEID, BehavioursRR.COL_REPETITION,
+    behavioursDF.columns = [BehavioursRR.COL_USERID, BehavioursRR.COL_ITEMID, BehavioursRR.COL_REPETITION,
                             BehavioursRR.COL_BEHAVIOUR]
 
     return behavioursDF

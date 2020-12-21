@@ -30,12 +30,14 @@ class ASequentialSimulation(ABC):
 
 
     ARG_WINDOW_SIZE:str = "windowSize"
-    ARG_REPETITION_OF_RECOMMENDATION:str = "repetitionOfRecommendation"
+    ARG_RECOM_REPETITION_COUNT:str = "recomRepetitionCount"
     ARG_NUMBER_OF_RECOMM_ITEMS:str = "numberOfRecomItems"
     ARG_NUMBER_OF_AGGR_ITEMS:str = "numberOfAggrItems"
 
     ARG_DIV_DATASET_PERC_SIZE:str = "divisionDatasetPercentualSizes"
     AGR_USER_BEHAVIOUR_DFINDEX:str = "userBehaviourDFIndex"
+
+    ARG_HISTORY_LENGTH:str = "historyLength"
 
     def __init__(self, batchID:str, dataset:ADataset, behaviourDF:DataFrame, argumentsDict:dict):
 
@@ -45,7 +47,6 @@ class ASequentialSimulation(ABC):
             raise ValueError("Argument dataset isn't type ADataset.")
         if type(behaviourDF) is not DataFrame:
             raise ValueError("Argument behaviourDF isn't type DataFrame.")
-
         if type(argumentsDict) is not dict:
             raise ValueError("Argument argumentsDict isn't type dict.")
 
@@ -56,13 +57,13 @@ class ASequentialSimulation(ABC):
         #self._behaviourClass = None
 
         self._windowSize:int = argumentsDict[self.ARG_WINDOW_SIZE]
-        self._repetitionOfRecommendation:int = argumentsDict[self.ARG_REPETITION_OF_RECOMMENDATION]
+        self._recomRepetitionCount:int = argumentsDict[self.ARG_RECOM_REPETITION_COUNT]
         self._numberOfRecommItems:int = argumentsDict[self.ARG_NUMBER_OF_RECOMM_ITEMS]
         self._numberOfAggrItems:int = argumentsDict[self.ARG_NUMBER_OF_AGGR_ITEMS]
 
         self._divisionDatasetPercentualSize:int = argumentsDict[self.ARG_DIV_DATASET_PERC_SIZE]
-        #self._uBehaviourDFIndex:str = argumentsDict[self.AGR_USER_BEHAVIOUR_DFINDEX]
 
+        self._historyLength:int = argumentsDict[self.ARG_HISTORY_LENGTH]
 
     def run(self, portfolioDescs:List[APortfolioDescription], portFolioModels:List[pd.DataFrame],
             evaluatonTools:List, histories:List[AHistory]):
@@ -127,10 +128,13 @@ class ASequentialSimulation(ABC):
 
             trainDataset:ADataset
             testRatingsDF:DataFrame
-            trainDataset, testRatingsDF = self.divideDataset(
-                self._dataset, percentualSizeI, testDatasetPercentualSize)
+            testRelevantRatingsDF:DataFrame
+            testBehaviourDict:dict[DataFrame]
+            trainDataset, testRatingsDF, testRelevantRatingsDF, testBehaviourDict = self.divideDataset(
+                self._dataset, self._behaviourDF, percentualSizeI, testDatasetPercentualSize, self._recomRepetitionCount)
 
-            evaluationI = self.runPortfolioDesc(portfolioDescs, portFolioModels, evaluatonTools, histories, trainDataset, testRatingsDF)
+            evaluationI = self.runPortfolioDesc(portfolioDescs, portFolioModels, evaluatonTools,
+                                                histories, trainDataset, testRatingsDF, testRelevantRatingsDF, testBehaviourDict)
             evaluations.append(evaluationI)
 
         # closing files
@@ -155,7 +159,8 @@ class ASequentialSimulation(ABC):
 
 
     def runPortfolioDesc(self, portfolioDescs:List[APortfolioDescription], portFolioModels:List[DataFrame],
-                           evaluatonTools:List[AEvalTool], histories:List[AHistory], trainDataset:ADataset, testRatingsDF:DataFrame):
+                           evaluatonTools:List[AEvalTool], histories:List[AHistory], trainDataset:ADataset,
+                           testRatingsDF:DataFrame, testRelevantRatingsDF:DataFrame, testBehaviourDict:dict[DataFrame]):
 
         portfolios:List[APortfolio] = []
 
@@ -170,36 +175,56 @@ class ASequentialSimulation(ABC):
             portfolioI.train(historyI, trainDataset)
             portfolios.append(portfolioI)
 
-        return self.iterateOverDataset(portfolios, portfolioDescs, portFolioModels, evaluatonTools, histories, testRatingsDF)
+        return self.iterateOverDataset(portfolios, portfolioDescs, portFolioModels, evaluatonTools,
+                            histories, testRatingsDF, testRelevantRatingsDF, testBehaviourDict)
+
+
+
+    # model:ModelOfIndexes
+    def getWindowOfItemIDs(self, model, userId:int, currentDFIndexI:int, ratingsDF:DataFrame, windowSize:int):
+
+        COL_USERID:str = self._ratingClass.getColNameUserID()
+        COL_ITEMID:str = self._ratingClass.getColNameItemID()
+
+        selectedItems:List[int] = []
+
+        itemIdI:int = ratingsDF.loc[currentDFIndexI][COL_ITEMID]
+        while len(selectedItems) < windowSize:
+            nextIndexIdI:int = model.getNextIndex(userId, itemIdI)
+            if nextIndexIdI is None:
+                break
+
+            nextItemIdI:int = ratingsDF.loc[nextIndexIdI][COL_ITEMID]
+            nextUserIdI:int = ratingsDF.loc[nextIndexIdI][COL_USERID]
+            if nextUserIdI != userId:
+                raise ValueError("Error")
+
+            if not nextIndexIdI in self._clickedItems[userId]:
+                selectedItems.append(nextItemIdI)
+
+            itemIdI = nextItemIdI
+
+        return selectedItems
 
 
 
     def simulateRecommendations(self, portfolios:List[APortfolio], portfolioDescs:List[APortfolioDescription],
                                   portFolioModels:List[DataFrame], evaluatonTools:List[AEvalTool], histories:List[AHistory],
-                                  evaluations:List[dict], currentItemID:int, nextItemIDs:List[int], userID:int, repetition:int):
+                                  evaluations:List[dict], currentDFIndex:int, windowOfItemIDsI:List[int], userID:int, repetition:int,
+                                  testBehaviourDict:dict[DataFrame]):
+
+        COL_BEHAVIOUR:str = self._behaviourClass.getColNameBehaviour()
+        COL_ITEMID:str = self._behaviourClass.getColNameItemID()
+
+        currentItemID:int = self._behaviourDF.loc[currentDFIndex][COL_ITEMID]
 
         print("userID: " + str(userID))
+        print("currentDFIndex: " + str(currentDFIndex))
         print("currentItemID: " + str(currentItemID))
         print("repetition: " + str(repetition))
 
-        COL_USERID:str = self._behaviourClass.getColNameUserID()
-        COL_ITEMID:str = self._behaviourClass.getColNameItemID()
-        COL_REPETITION:str = self._behaviourClass.getColNameRepetition()
-        COL_BEHAVIOUR:str = self._behaviourClass.getColNameBehaviour()
-
-        isUser:List[bool] = self._behaviourDF[COL_USERID] == userID
-        isItem:List[bool] = self._behaviourDF[COL_ITEMID] == currentItemID
-        isRepetition:List[bool] = self._behaviourDF[COL_REPETITION] == repetition
-
-        #print(self._behaviourDF.head(10))
-        uObservationUserItem:str = self._behaviourDF[(isUser) & (isItem) & (isRepetition)][COL_BEHAVIOUR]
-
-        if uObservationUserItem.shape[0] != 1:
-            print(uObservationUserItem)
-            raise ValueError("Error")
-        uObservationUserItemStr:str = uObservationUserItem.iloc[0]
-        #print(uObservationUserItemStr)
-        uObservation:List[bool] = Behaviours.convertToListOfBoolean(uObservationUserItemStr)
+        uObservationStrI:str = testBehaviourDict[repetition].loc[currentDFIndex][COL_BEHAVIOUR]
+        uObservation:List[bool] = Behaviours.convertToListOfBoolean(uObservationStrI)
 
         print("uObservation: " + str(uObservation))
 
@@ -210,12 +235,15 @@ class ASequentialSimulation(ABC):
                 portfolios, portfolioDescs, portFolioModels, evaluatonTools, histories, evaluations):
 
             self.simulateRecommendation(portfolioI, portfolioDescI, portFolioModelI, evaluatonToolI, historyI,
-                                          evaluationI, uObservation, currentItemID, nextItemIDs, userID)
+                                          evaluationI, uObservation, currentDFIndex, windowOfItemIDsI, userID)
 
 
     def simulateRecommendation(self, portfolio:APortfolio, portfolioDesc:APortfolioDescription, portfolioModel:pd.DataFrame,
                                  evaluatonTool:AEvalTool, history:AHistory, evaluation:dict, uObservation:List[bool],
-                                 currentItemID:int, nextItemIDs:List[int], userID:int):
+                                 currentDFIndex:int, windowOfItemIDsI:List[int], userID:int):
+
+        COL_ITEMID:str = self._behaviourClass.getColNameItemID()
+        currentItemID:int = self._behaviourDF.loc[currentDFIndex][COL_ITEMID]
 
         #print("userID: " + str(userID))
         portId:str = portfolioDesc.getPortfolioID()
@@ -228,7 +256,7 @@ class ASequentialSimulation(ABC):
 
         evaluatonTool.displayed(rItemIDsWithResponsibility, portfolioModel, evaluation)
 
-        nextNoClickedItemIDs:List[int] = list(set(nextItemIDs) -set(self._clickedItems[userID]))
+        nextNoClickedItemIDs:List[int] = list(set(windowOfItemIDsI) -set(self._clickedItems[userID]))
 
         candidatesToClick:List[int] = list(set(rItemIDs) & set(nextNoClickedItemIDs))
         clickedItemIDs:List[int] = []
@@ -238,7 +266,7 @@ class ASequentialSimulation(ABC):
             if wasCandidateObservedI:
                 clickedItemIDs.append(candidateToClickI)
 
-        print("nextItemIDs: " + str(nextItemIDs))
+        print("windowOfItemIDsI: " + str(windowOfItemIDsI))
         print("rItemIDs: " + str(rItemIDs))
         print("uObservation: " + str(uObservation))
         print("candidatesToClick: " + str(candidatesToClick))
@@ -269,7 +297,7 @@ class ASequentialSimulation(ABC):
         history.insertRecomAndClickedItemIDs(userID, rItemIDs, clickedItemIDs)
 
         # delete log of history
-        history.deletePreviousRecomOfUser(userID, self._repetitionOfRecommendation * self._numberOfRecommItems)
+        history.deletePreviousRecomOfUser(userID, self._recomRepetitionCount * self._numberOfRecommItems * self._historyLength)
 
 
 
@@ -285,9 +313,5 @@ class ASequentialSimulation(ABC):
     def iterateOverDataset(self, portfolios:List[APortfolio], portfolioDescs:List[APortfolioDescription],
                              portFolioModels:List[pd.DataFrame], evaluatonTools:List[AEvalTool], histories:List[AHistory],
                              testRatingsDF:DataFrame):
-        assert False, "this needs to be overridden"
-
-    @abstractmethod
-    def getNextItemIDs(self, model, userId:int, itemId:int, ratingsDF:DataFrame, windowSize:int):
         assert False, "this needs to be overridden"
 

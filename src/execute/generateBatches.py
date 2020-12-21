@@ -40,7 +40,7 @@ def generateBatches():
 #    BatchSingleINF.generateBatches()
 
     # RR
-#    BatchRRSingle.generateBatches()
+    BatchRRSingle.generateBatches()
 
 
 

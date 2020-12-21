@@ -37,7 +37,6 @@ def test01():
     trainDataset:DatasetML = DatasetML(dataset.ratingsDF.iloc[0:499965], dataset.usersDF, dataset.itemsDF)
 
     # train recommender
- 
     rec:ARecommender = RecommenderBPRMF("test",{
                     RecommenderBPRMF.ARG_FACTORS:20,
                     RecommenderBPRMF.ARG_ITERATIONS:10})
@@ -79,8 +78,8 @@ def test02():
     # Take only first 500k
     trainDataset:DatasetML = DatasetML(dataset.ratingsDF.iloc[0:800000], dataset.usersDF, dataset.itemsDF)
 
-
     print(dataset.ratingsDF.iloc[655924:655926])
+
     # train recommender
     rec:ARecommender = RecommenderBPRMF("test",{
                     RecommenderBPRMF.ARG_FACTORS:20,

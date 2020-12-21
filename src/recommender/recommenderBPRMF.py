@@ -106,7 +106,6 @@ class RecommenderBPRMF(ARecommender):
  
 
     def recommend(self, userID:int, numberOfItems:int=20, argumentsDict:dict={}):
-        #print("userID: " + str(userID))
         if type(userID) is not int and type(userID) is not np.int64:
             raise ValueError("Argument userID isn't type int.")
         if type(numberOfItems) is not int and type(numberOfItems) is not np.int64:

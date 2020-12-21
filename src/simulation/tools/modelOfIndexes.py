@@ -17,9 +17,6 @@ class ModelOfIndexes:
         ratingsCopyDF:DataFrame = ratingsDF.copy()
         ratingsCopyDF['index1'] = ratingsCopyDF.index
 
-        #print(ratingsDF)
-        #print(ratingsCopyDF)
-
         COL_USERID:str = ratingsClass.getColNameUserID()
         COL_ITEMID:str = ratingsClass.getColNameItemID()
 
@@ -45,7 +42,7 @@ class ModelOfIndexes:
                 userIdI:int = rowI[COL_USERID]
                 itemIdI:int = rowI[COL_ITEMID]
 
-                itemI:Item = Item(userIdI, indexDFI, None)
+                itemI:Item = Item(itemIdI, indexDFI, None)
                 if not lastItemI is None:
                     lastItemI.setNext(itemI)
 
