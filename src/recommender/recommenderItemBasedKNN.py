@@ -1,6 +1,6 @@
-from recommender.aRecommender import ARecommender  # class
-
 # !/usr/bin/python3
+
+from typing import List
 
 from pandas.core.frame import DataFrame  # class
 from pandas.core.series import Series  # class
@@ -9,17 +9,19 @@ from sklearn.neighbors import NearestNeighbors
 from sklearn.preprocessing import normalize
 
 from datasets.ml.ratings import Ratings  # class
+from datasets.ml.users import Users  # class
 
 from history.aHistory import AHistory  # class
-
 from history.historyDF import HistoryDF #class
+
+from recommender.aRecommender import ARecommender  # class
 
 from datasets.aDataset import ADataset #class
 from datasets.datasetML import DatasetML #class
 
 from scipy.sparse import csr_matrix, lil_matrix
 import numpy as np
-
+import pandas as pd
 
 class RecommenderItemBasedKNN(ARecommender):
 
@@ -48,9 +50,9 @@ class RecommenderItemBasedKNN(ARecommender):
         self._itemsDF = dataset.itemsDF
         ratingsTrainDF = dataset.ratingsDF
 
-        cols = ratingsTrainDF[Ratings.COL_USERID]
-        rows = ratingsTrainDF[Ratings.COL_MOVIEID]
-        rating = ratingsTrainDF[Ratings.COL_RATING]
+        cols:List[int] = pd.to_numeric(ratingsTrainDF[Ratings.COL_USERID])
+        rows = pd.to_numeric(ratingsTrainDF[Ratings.COL_MOVIEID])
+        rating = pd.to_numeric(ratingsTrainDF[Ratings.COL_RATING])
         sparseRatingsCSR: csr_matrix = csr_matrix((rating, (rows, cols)))
         sparseRatingsCSR.eliminate_zeros()
 
@@ -80,7 +82,7 @@ class RecommenderItemBasedKNN(ARecommender):
 
         # update last positive feedback
         if rating > 3:
-            self._lastRatedItemPerUser['movieId'][userID] = objectID
+            self._lastRatedItemPerUser.loc[userID] = [objectID]
 
         if self.counter > self.update_threshold:
             sparseRatingsCSR: csr_matrix = self._sparseRatings.tocsr()
@@ -89,6 +91,7 @@ class RecommenderItemBasedKNN(ARecommender):
             self.counter = 0
         else:
             self.counter += 1
+
 
     def recommend(self, userID: int, numberOfItems: int = 20, argumentsDict: dict = {}):
         # Check if user is known

@@ -109,11 +109,11 @@ class InputRecomDefinition:
         rIDsPop:List[str] = [recom + InputRecomDefinition.THE_MOST_POPULAR.title()]
         rDescsPop:List[RecommenderDescription] = [InputRecomDefinition.exportRDescTheMostPopular(datasetID)]
 
-#        rIDs:List[str] = rIDsCB + rIDsW2V + rIDsKNN + rIDsBPRMF + rIDsPop
-#        rDescs:List[RecommenderDescription] = rDescsCB + rDescsW2V + rDescsKNN + rDescsBPRMF + rDescsPop
+        rIDs:List[str] = rIDsCB + rIDsW2V + rIDsKNN + rIDsBPRMF + rIDsPop
+        rDescs:List[RecommenderDescription] = rDescsCB + rDescsW2V + rDescsKNN + rDescsBPRMF + rDescsPop
 
-        rIDs:List[str] = rIDsCB + rIDsW2V + rIDsBPRMF + rIDsPop
-        rDescs:List[RecommenderDescription] = rDescsCB + rDescsW2V + rDescsBPRMF + rDescsPop
+#        rIDs:List[str] = rIDsCB + rIDsW2V + rIDsBPRMF + rIDsPop
+#        rDescs:List[RecommenderDescription] = rDescsCB + rDescsW2V + rDescsBPRMF + rDescsPop
 
 
         return (rIDs, rDescs)

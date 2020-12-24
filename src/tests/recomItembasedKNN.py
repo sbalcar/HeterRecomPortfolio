@@ -94,20 +94,38 @@ def test03():
     filmsDF:DataFrame = Items.readFromFileMl1m()
 
     print(len(ratingsSortedDF))
-    ratingsDFTrain:DataFrame = ratingsSortedDF.iloc[0:900000]
+    ratingsDFTrain:DataFrame = ratingsSortedDF[0:900000]
+    ratingsDFTrain: DataFrame = ratingsDFTrain[ratingsDFTrain[Ratings.COL_USERID] != 23]
+    ratingsDFTrain: DataFrame = ratingsDFTrain[ratingsDFTrain[Ratings.COL_MOVIEID] != 10]
+
+
+    print(ratingsDFTrain.head(25))
 
     trainDataset:ADataset = DatasetML(ratingsDFTrain, pd.DataFrame(), filmsDF)
 
+
     # train recommender
-    rec:ARecommender = RecommenderItemBasedKNN("test", {})
+    rec:ARecommender = RecommenderItemBasedKNN("test1", {})
     rec.train(HistoryDF("test03"), trainDataset)
+
+
+    uDdata = [[23, 10, 4, 10000]]
+    uDF: DataFrame = pd.DataFrame(uDdata, columns=[Ratings.COL_USERID, Ratings.COL_MOVIEID, Ratings.COL_RATING, Ratings.COL_TIMESTAMP])
+
+    rec.update(uDF)
+
 
     r:Series = rec.recommend(23, 10, {})
     print(r)
-    #print("================== END OF TEST 03 ======================\n\n\n\n\n")
+
+    r:Series = rec.recommend(23, 10, {})
+    print(r)
+
+    print("================== END OF TEST 03 ======================\n\n\n\n\n")
+
 
 if __name__ == "__main__":
     os.chdir("..")
-    test01()
-    test02()
+    #test01()
+    #test02()
     test03()
