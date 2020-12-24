@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 
+import io
 import csv
 from typing import List
 
@@ -36,14 +37,31 @@ class Items:
 
     return itemsDF
 
+
   @staticmethod
   def readFromFileMl1m():
     itemsFile: str = ".." + os.sep + "datasets" + os.sep + "ml-1m" + os.sep + "movies.dat"
 
-    itemsDF: DataFrame = pd.read_csv(itemsFile, sep=':', usecols=[0, 2, 4], header=None, encoding="ISO-8859-1")
+    itemsDF: DataFrame = pd.read_csv(itemsFile, sep='::', usecols=[0, 1, 2], header=None, encoding="ISO-8859-1", engine='python')
     itemsDF.columns = [Items.COL_MOVIEID, Items.COL_MOVIETITLE, Items.COL_GENRES]
 
     return itemsDF
+
+
+#  @staticmethod
+#  def readFromFileMl1m():
+#      itemsFile: str = ".." + os.sep + "datasets" + os.sep + "ml-1m" + os.sep + "movies.dat"
+#
+#      with open(itemsFile, encoding='latin-1') as f:
+#        str = " ".join([l.rstrip() + '\n' for l in f])
+#
+#      str = str.replace("::", "@")
+#
+#      itemsDF: DataFrame = pd.read_table(io.StringIO(str), sep='@', usecols=[0, 1, 2], header=None, engine='python', encoding='latin-1')
+#      itemsDF.columns = [Items.COL_MOVIEID, Items.COL_MOVIETITLE, Items.COL_GENRES]
+#
+#      return itemsDF
+
 
   @staticmethod
   def readFromFile10M100K():

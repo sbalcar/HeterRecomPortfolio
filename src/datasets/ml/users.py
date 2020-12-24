@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 import csv
+import io
 from typing import List
 
 from pandas.core.frame import DataFrame #class
@@ -36,6 +37,7 @@ class Users:
       usersDF.columns = [Users.COL_USERID, Users.COL_AGE, Users.COL_GENDER, Users.COL_OCCUPATION, Users.COL_ZIPCODE]
 
       return usersDF
+
 
 
   @staticmethod
