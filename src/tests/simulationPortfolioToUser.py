@@ -10,12 +10,19 @@ from datasets.datasetRetailrocket import DatasetRetailRocket #class
 from datasets.ml.ratings import Ratings #class
 from datasets.ml.behaviours import Behaviours #class
 from datasets.retailrocket.behavioursRR import BehavioursRR #class
+from datasets.slantour.behavioursST import BehavioursST #class
+
+
+from datasets.datasetST import DatasetST #class
 
 from pandas.core.frame import DataFrame #class
+
+from simulator.simulator import Simulator #class
 
 from simulation.tools.modelOfIndexes import ModelOfIndexes #class
 from simulation.simulationML import SimulationML #class
 from simulation.simulationRR import SimulationRR #class
+from simulation.simulationST import SimulationST #class
 
 from pandas.core.frame import DataFrame #class
 
@@ -30,8 +37,6 @@ from evaluationTool.evalToolSingleMethod import EToolSingleMethod #class
 from recommenderDescription.recommenderDescription import RecommenderDescription #class
 
 from input.inputSimulatorDefinition import InputSimulatorDefinition #class
-
-from simulator.simulator import Simulator #class
 
 from history.historyHierDF import HistoryHierDF #class
 
@@ -145,10 +150,10 @@ def test03():
 
 def test04():
     datasetID:str = "retailrocket" + "Div" + str(90)
-    rDescr:RecommenderDescription = InputRecomDefinition.exportRDescTheMostSold(datasetID)
+    rDescr:RecommenderDescription = InputRecomDefinition.exportRDescTheMostPopular(datasetID)
 
-    pDescr:APortfolioDescription = Portfolio1MethDescription(InputRecomDefinition.THE_MOST_SOLD.title(),
-                                    InputRecomDefinition.THE_MOST_SOLD, rDescr)
+    pDescr:APortfolioDescription = Portfolio1MethDescription(InputRecomDefinition.THE_MOST_POPULAR.title(),
+                                    InputRecomDefinition.THE_MOST_POPULAR, rDescr)
 
     batchID:str = "retailrocketDiv90Ulinear0109R1"
     dataset:DatasetRetailRocket = DatasetRetailRocket.readDatasets()
@@ -165,14 +170,48 @@ def test04():
     # remove old results
     path:str = ".." + os.sep + "results" + os.sep + batchID
     try:
-        os.remove(path + os.sep + "computation-theMostSold.txt")
-        os.remove(path + os.sep + "historyOfRecommendation-theMostSold.txt")
-        os.remove(path + os.sep + "portfModelTimeEvolution-theMostSold.txt")
+        os.remove(path + os.sep + "computation-theMostPopular.txt")
+        os.remove(path + os.sep + "historyOfRecommendation-theMostPopular.txt")
+        os.remove(path + os.sep + "portfModelTimeEvolution-theMostPopular.txt")
     except:
         print("An exception occurred")
 
     # simulation of portfolio
     simulator:Simulator = Simulator(batchID, SimulationRR, argsSimulationDict, dataset, behavioursDF)
+    simulator.simulate([pDescr], [DataFrame()], [EToolSingleMethod({})], HistoryHierDF)
+
+
+
+def test05():
+    datasetID:str = "slantour" + "Div" + str(90)
+    rDescr:RecommenderDescription = InputRecomDefinition.exportRDescTheMostPopular(datasetID)
+
+    pDescr:APortfolioDescription = Portfolio1MethDescription(InputRecomDefinition.THE_MOST_POPULAR.title(),
+                                    InputRecomDefinition.THE_MOST_POPULAR, rDescr)
+
+    batchID:str = "slantourDiv90Ulinear0109R1"
+    dataset:DatasetST = DatasetST.readDatasets()
+    behaviourFile:str = BehavioursST.getFile(BehavioursST.BHVR_LINEAR0109)
+    behavioursDF:DataFrame = BehavioursST.readFromFileST(behaviourFile)
+
+    argsSimulationDict:dict = {SimulationST.ARG_WINDOW_SIZE: 5,
+                                SimulationST.ARG_RECOM_REPETITION_COUNT: 1,
+                                SimulationST.ARG_NUMBER_OF_RECOMM_ITEMS: 100,
+                                SimulationST.ARG_NUMBER_OF_AGGR_ITEMS: InputSimulatorDefinition.numberOfAggrItems,
+                                SimulationST.ARG_DIV_DATASET_PERC_SIZE: 90,
+                                SimulationST.ARG_HISTORY_LENGTH: 10}
+
+    # remove old results
+    path:str = ".." + os.sep + "results" + os.sep + batchID
+    try:
+        os.remove(path + os.sep + "computation-theMostPopular.txt")
+        os.remove(path + os.sep + "historyOfRecommendation-theMostPopular.txt")
+        os.remove(path + os.sep + "portfModelTimeEvolution-theMostPopular.txt")
+    except:
+        print("An exception occurred")
+
+    # simulation of portfolio
+    simulator:Simulator = Simulator(batchID, SimulationST, argsSimulationDict, dataset, behavioursDF)
     simulator.simulate([pDescr], [DataFrame()], [EToolSingleMethod({})], HistoryHierDF)
 
 
@@ -183,3 +222,4 @@ if __name__ == "__main__":
     #test02()
     #test03()
     test04()
+    #test05()

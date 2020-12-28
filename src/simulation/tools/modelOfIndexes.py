@@ -12,6 +12,8 @@ class ModelOfIndexes:
         if type(ratingsDF) is not DataFrame:
             raise ValueError("Argument ratingsDF isn't type DataFrame.")
 
+        #print("ratingsClass: " + str(ratingsClass))
+
         self._ratingsClass = ratingsClass
 
         ratingsCopyDF:DataFrame = ratingsDF.copy()
@@ -21,6 +23,7 @@ class ModelOfIndexes:
         COL_ITEMID:str = ratingsClass.getColNameItemID()
 
         userIds:List[int] = list(set([rowI[COL_USERID] for indexDFI, rowI in ratingsCopyDF.iterrows()]))
+        #print(userIds)
 
         # dictionary (index = userID, value = list[tuple(int, int)])
         # each list contains pair(int,int) or (itemID, indefOfDataFrame)
@@ -53,6 +56,7 @@ class ModelOfIndexes:
 
 
     def getNextIndex(self, userId:int, itemId:int):
+        #print("userId: " + str(userId))
         u:dict[Item] = self._dictionaryOfUserIDs[userId]
         item:Item = u[itemId]
 

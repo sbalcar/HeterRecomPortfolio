@@ -9,6 +9,8 @@ from sklearn.preprocessing import normalize
 
 from datasets.aDataset import ADataset #class
 from datasets.datasetML import DatasetML #class
+from datasets.datasetRetailrocket import DatasetRetailRocket #class
+from datasets.datasetST import DatasetST #class
 
 from recommender.aRecommender import ARecommender #class
 
@@ -32,23 +34,21 @@ class RecommenderTheMostPopular(ARecommender):
     def train(self, history:AHistory, dataset:DatasetML):
         if not isinstance(history, AHistory):
             raise ValueError("Argument history isn't type AHistory.")
-        if type(dataset) is not DatasetML:
-            raise ValueError("Argument dataset isn't type DatasetML.")
+        if not isinstance(dataset, ADataset):
+            raise ValueError("Argument dataset isn't type ADataset.")
+        self.trainDataset = dataset
 
-        ratingsTrainDF:DataFrame = dataset.ratingsDF
+        if type(dataset) is DatasetML:
+            self._sortedAscRatings5CountDF:DataFrame = dataset.getTheMostPopular()
 
-        # ratingsSum:Dataframe<(userId:int, movieId:int, ratings:int, timestamp:int)>
-        ratings5DF:DataFrame = ratingsTrainDF.loc[ratingsTrainDF[Ratings.COL_RATING] >= 4]
+        elif type(dataset) is DatasetRetailRocket:
+            self._sortedAsceventsTransCountDF:DataFrame = dataset.getTheMostSold()
 
-        # ratingsSum:Dataframe<(movieId:int, ratings:int)>
-        ratings5SumDF:DataFrame = DataFrame(ratings5DF.groupby(Ratings.COL_MOVIEID)[Ratings.COL_RATING].count())
+        elif type(dataset) is DatasetST:
+            self._sortedTheMostCommon = dataset.getTheMostSold()
 
-        # sortedAscRatings5CountDF:Dataframe<(movieId:int, ratings:int)>
-        sortedAscRatings5CountDF:DataFrame = ratings5SumDF.sort_values(by=Ratings.COL_RATING, ascending=False)
-        #print(sortedAscRatings5CountDF)
-
-        self._sortedAscRatings5CountDF:DataFrame = sortedAscRatings5CountDF
-
+        else:
+            raise ValueError("Argument dataset isn't of expected type.")
 
     def update(self, ratingsUpdateDF:DataFrame):
         pass
@@ -60,8 +60,22 @@ class RecommenderTheMostPopular(ARecommender):
             if self.numberOfItems == numberOfItems:
                 return self.result
 
-        # ratings:Dataframe<(movieId:int, ratings:int)>
-        ratingsDF:DataFrame = self._sortedAscRatings5CountDF[Ratings.COL_RATING].head(numberOfItems)
+        if type(self.trainDataset) is DatasetML:
+            # ratings:Dataframe<(movieId:int, ratings:int)>
+            ratingsDF:DataFrame = self._sortedAscRatings5CountDF[Ratings.COL_RATING].head(numberOfItems)
+
+        elif type(self.trainDataset) is DatasetRetailRocket:
+            from datasets.retailrocket.events import Events #class
+            # ratings:Dataframe<(eventId:int, ratings:int)>
+            ratingsDF:DataFrame = self._sortedAsceventsTransCountDF[Events.COL_EVENT].head(numberOfItems)
+
+        elif type(self.trainDataset) is DatasetST:
+            from datasets.slantour.events import Events #class
+            ratingsDF:DataFrame = self._sortedTheMostCommon[Events.COL_USER_ID].head(numberOfItems)
+
+        else:
+            raise ValueError("Argument dataset isn't of expected type.")
+
 
         items:List[int] = list(ratingsDF.index)
         finalScores = normalize(np.expand_dims(ratingsDF, axis=0))[0, :]

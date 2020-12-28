@@ -5,3 +5,5 @@ https://grouplens.org/datasets/movielens/1m/
 
 Dataset retailrocket
 https://www.kaggle.com/retailrocket/ecommerce-dataset
+
+Dataset slantour

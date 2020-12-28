@@ -20,6 +20,8 @@ from input.batchesML1m.batchSingleINF import BatchSingleINF #class
 
 from input.batchesRetailrocket.batchRRSingle import BatchRRSingle #class
 
+from input.batchSlanTour.batchSTSingle import BatchSTSingle #class
+
 
 def generateBatches():
     print("Generate Batches")
@@ -30,7 +32,7 @@ def generateBatches():
     BatchFuzzyDHondt.generateBatches()
 #    BatchFuzzyDHondtINF.generateBatches()
 
-    #    BatchDHondtThompsonSampling.generateBatches()
+#    BatchDHondtThompsonSampling.generateBatches()
 #    BatchDHondtThompsonSamplingINF.generateBatches()
 
 #    BatchFuzzyDHondtDirectOptimize.generateBatches()
@@ -42,6 +44,8 @@ def generateBatches():
     # RR
     BatchRRSingle.generateBatches()
 
+    #ST
+    BatchSTSingle.generateBatches()
 
 
 if __name__ == "__main__":

@@ -31,3 +31,21 @@ class DatasetRetailRocket(ADataset):
         itemPropertiesDF:DataFrame = ItemProperties.readFromFile()
 
         return DatasetRetailRocket(eventsDF, categoryTreeDF, itemPropertiesDF)
+
+
+
+    def getTheMostSold(self):
+
+        eventsTrainDF:DataFrame = self.eventsDF
+
+        # ratingsSum:Dataframe<(timestamp:int, visitorid:int, event:str, itemid:int, transactionid:int)>
+        eventsTransDF:DataFrame = eventsTrainDF.loc[eventsTrainDF[Events.COL_EVENT] == "transaction"]
+
+        # ratingsSum:Dataframe<(movieId:int, ratings:int)>
+        eventsTransSumDF:DataFrame = DataFrame(eventsTransDF.groupby(Events.COL_ITEM_ID)[Events.COL_EVENT].count())
+
+        # sortedAsceventsTransCountDF:Dataframe<(movieId:int, ratings:int)>
+        sortedAsceventsTransCountDF:DataFrame = eventsTransSumDF.sort_values(by=Events.COL_EVENT, ascending=False)
+        #print(sortedAsceventsTransCountDF)
+
+        return sortedAsceventsTransCountDF

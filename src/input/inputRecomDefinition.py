@@ -10,8 +10,6 @@ from recommender.recommenderW2V import RecommenderW2V #class
 from recommender.recommenderItemBasedKNN import RecommenderItemBasedKNN #class
 from recommender.recommenderBPRMF import RecommenderBPRMF #class
 
-from recommender.recommenderTheMostSold import RecommenderTheMostSold #class
-
 from configuration.configuration import Configuration #class
 
 
@@ -25,9 +23,6 @@ class InputRecomDefinition:
     W2V_POSNEG_WINDOW3:str = "w2vPosnegWindow3"
     KNN:str = "KNN"
     BPRMF:str = "BPRMF"
-
-    # batchesRetailrocket methods
-    THE_MOST_SOLD:str = "theMostSold"
 
     @staticmethod
     def exportRDescTheMostPopular(datasetID:str):
@@ -120,11 +115,6 @@ class InputRecomDefinition:
 
 
 
-    @staticmethod
-    def exportRDescTheMostSold(datasetID:str):
-        return RecommenderDescription(RecommenderTheMostSold,
-                {})
-
 
     @staticmethod
     def exportPairOfRecomIdsAndRecomDescrsRetailRocket(datasetID:str):
@@ -154,5 +144,3 @@ class InputRecomDefinition:
             return InputRecomDefinition.exportRDescKNN(datasetID)
         elif recommenderID == InputRecomDefinition.BPRMF:
             return InputRecomDefinition.exportRDescBPRMF(datasetID)
-        elif recommenderID == InputRecomDefinition.THE_MOST_SOLD:
-            return InputRecomDefinition.exportRDescTheMostSold(datasetID)

@@ -210,13 +210,14 @@ class ASequentialSimulation(ABC):
 
     def simulateRecommendations(self, portfolios:List[APortfolio], portfolioDescs:List[APortfolioDescription],
                                   portFolioModels:List[DataFrame], evaluatonTools:List[AEvalTool], histories:List[AHistory],
-                                  evaluations:List[dict], currentDFIndex:int, windowOfItemIDsI:List[int], userID:int, repetition:int,
-                                  testBehaviourDict:dict[DataFrame]):
+                                  evaluations:List[dict], currentDFIndex:int, userID:int, repetition:int,
+                                  testRatingsDF:DataFrame, testBehaviourDict:dict[DataFrame], windowOfItemIDsI:List[int]):
 
         COL_BEHAVIOUR:str = self._behaviourClass.getColNameBehaviour()
-        COL_ITEMID:str = self._behaviourClass.getColNameItemID()
+        COL_ITEMID:str = self._ratingClass.getColNameItemID()
 
-        currentItemID:int = self._behaviourDF.loc[currentDFIndex][COL_ITEMID]
+
+        currentItemID:int = testRatingsDF.loc[currentDFIndex][COL_ITEMID]
 
         print("userID: " + str(userID))
         print("currentDFIndex: " + str(currentDFIndex))
@@ -235,17 +236,18 @@ class ASequentialSimulation(ABC):
                 portfolios, portfolioDescs, portFolioModels, evaluatonTools, histories, evaluations):
 
             self.simulateRecommendation(portfolioI, portfolioDescI, portFolioModelI, evaluatonToolI, historyI,
-                                          evaluationI, uObservation, currentDFIndex, windowOfItemIDsI, userID)
+                                        evaluationI, currentDFIndex, testRatingsDF, uObservation, userID,
+                                        windowOfItemIDsI)
 
 
-    def simulateRecommendation(self, portfolio:APortfolio, portfolioDesc:APortfolioDescription, portfolioModel:pd.DataFrame,
-                                 evaluatonTool:AEvalTool, history:AHistory, evaluation:dict, uObservation:List[bool],
-                                 currentDFIndex:int, windowOfItemIDsI:List[int], userID:int):
+    def simulateRecommendation(self, portfolio:APortfolio, portfolioDesc:APortfolioDescription, portfolioModel:DataFrame,
+                                 evaluatonTool:AEvalTool, history:AHistory, evaluation:dict, currentDFIndex:int, testRatingsDF:DataFrame,
+                                 uObservation:List[bool], userID:int, windowOfItemIDsI:List[int]):
 
-        COL_ITEMID:str = self._behaviourClass.getColNameItemID()
-        currentItemID:int = self._behaviourDF.loc[currentDFIndex][COL_ITEMID]
+        COL_ITEMID: str = self._ratingClass.getColNameItemID()
+        currentItemID:int = testRatingsDF.loc[currentDFIndex][COL_ITEMID]
 
-        #print("userID: " + str(userID))
+        print("userID: " + str(userID))
         portId:str = portfolioDesc.getPortfolioID()
 
         args:dict = {APortfolio.ARG_NUMBER_OF_RECOMM_ITEMS:self._numberOfRecommItems, Portfolio1Aggr.ARG_NUMBER_OF_AGGR_ITEMS:self._numberOfAggrItems}

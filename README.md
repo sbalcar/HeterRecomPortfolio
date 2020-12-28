@@ -78,7 +78,20 @@ $ ls
 events.csv      item_properties_part1.csv      item_properties_part2.csv      category_tree.csv
 ```
 
+##### Download Slantour dataset
 
+```sh
+$ cd datasets
+$ mkdir slantour
+$ cd slantour
+```
+
+Email authors to share this dataset with you.
+
+```sh
+$ ls
+new_implicit_events.csv      new_serial_table.csv
+```
 
 #### Generate behaviours
 

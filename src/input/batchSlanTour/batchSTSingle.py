@@ -26,10 +26,10 @@ import pandas as pd
 from input.aBatch import ABatch #class
 from input.aBatch import BatchParameters #class
 
-from input.aBatchRR import ABatchRR #class
+from input.aBatchST import ABatchST #class
 
 
-class BatchRRSingle(ABatchRR):
+class BatchSTSingle(ABatchST):
 
     @staticmethod
     def getParameters():
@@ -47,7 +47,7 @@ class BatchRRSingle(ABatchRR):
         repetition:int
         divisionDatasetPercentualSize, uBehaviour, repetition = BatchParameters.getBatchParameters(self.datasetID)[batchID]
 
-        datasetID:str = "retailrocket" + "Div" + str(divisionDatasetPercentualSize)
+        datasetID:str = "slantour" + "Div" + str(divisionDatasetPercentualSize)
 
         recommenderID:str = self.getParameters()[jobID]
 
@@ -55,7 +55,7 @@ class BatchRRSingle(ABatchRR):
 
         pDescr:APortfolioDescription = Portfolio1MethDescription(recommenderID.title(), recommenderID, rDescr)
 
-        simulator:Simulator = InputSimulatorDefinition.exportSimulatorRetailRocket(
+        simulator:Simulator = InputSimulatorDefinition.exportSimulatorSlantour(
                 batchID, divisionDatasetPercentualSize, uBehaviour, repetition)
         simulator.simulate([pDescr], [DataFrame()], [EToolSingleMethod({})], HistoryHierDF)
 
@@ -64,5 +64,6 @@ class BatchRRSingle(ABatchRR):
 if __name__ == "__main__":
    os.chdir("..")
    os.chdir("..")
-   print(os.getcwd())
-   BatchRRSingle.generateBatches()
+   #print(os.getcwd())
+
+   BatchSTSingle.generateBatches()

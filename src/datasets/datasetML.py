@@ -30,3 +30,20 @@ class DatasetML(ADataset):
         itemsDF:DataFrame = Items.readFromFileMl1m()
 
         return DatasetML(ratingsDF, usersDF, itemsDF)
+
+
+    def getTheMostPopular(self):
+
+        ratingsTrainDF:DataFrame = self.ratingsDF
+
+        # ratingsSum:Dataframe<(userId:int, movieId:int, ratings:int, timestamp:int)>
+        ratings5DF:DataFrame = ratingsTrainDF.loc[ratingsTrainDF[Ratings.COL_RATING] >= 4]
+
+        # ratingsSum:Dataframe<(movieId:int, ratings:int)>
+        ratings5SumDF:DataFrame = DataFrame(ratings5DF.groupby(Ratings.COL_MOVIEID)[Ratings.COL_RATING].count())
+
+        # sortedAscRatings5CountDF:Dataframe<(movieId:int, ratings:int)>
+        sortedAscRatings5CountDF:DataFrame = ratings5SumDF.sort_values(by=Ratings.COL_RATING, ascending=False)
+        #print(sortedAscRatings5CountDF)
+
+        return sortedAscRatings5CountDF

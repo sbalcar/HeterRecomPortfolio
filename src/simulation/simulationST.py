@@ -3,34 +3,32 @@
 from typing import List
 
 from datasets.aDataset import ADataset #class
-from datasets.datasetML import DatasetML #class
-from pandas.core.series import Series #class
+from datasets.datasetST import DatasetST #class
 
-from datasets.ml.ratings import Ratings #class
+from datasets.slantour.events import Events #class
+from datasets.slantour.serials import Serials #class
+
+from pandas.core.frame import DataFrame #class
 
 from portfolioDescription.aPortfolioDescription import APortfolioDescription #class
 
-from portfolio.aPortfolio import APortfolio #class
-
 from simulation.aSequentialSimulation import ASequentialSimulation #class
-
-import pandas as pd
-import numpy as np
-
-from pandas.core.frame import DataFrame #class
 
 from history.aHistory import AHistory #class
 from evaluationTool.aEvalTool import AEvalTool #class
 
-from datasets.ml.behaviours import Behaviours #class
+from datasets.slantour.behavioursST import BehavioursST #class
+
+
+from portfolio.aPortfolio import APortfolio #class
 
 from simulation.tools.modelOfIndexes import ModelOfIndexes #class
 
 
-class SimulationML(ASequentialSimulation):
+class SimulationST(ASequentialSimulation):
 
-    _ratingClass = Ratings
-    _behaviourClass = Behaviours
+    _ratingClass = Events
+    _behaviourClass = BehavioursST
 
 
     @staticmethod
@@ -38,65 +36,66 @@ class SimulationML(ASequentialSimulation):
                       divisionDatasetPercentualSize:int, testDatasetPercentualSize:int,
                       recomRepetitionCount:int):
 
-        ratingsDF:DataFrame = dataset.ratingsDF
-        usersDF:DataFrame = dataset.usersDF
-        itemsDF:DataFrame = dataset.itemsDF
+        eventsDF:DataFrame = dataset.eventsDF
+        serialsDF:DataFrame = dataset.serialsDF
+
 
         # create train Dataset
-        ratingsSortedDF:DataFrame = ratingsDF.sort_values(by=Ratings.COL_TIMESTAMP)
-        numberOfRatings:int = ratingsSortedDF.shape[0]
+        eventsSortedDF:DataFrame = eventsDF #.sort_values(by=Events.COL_TIME_STAMP)
+        numberOfEvents:int = eventsSortedDF.shape[0]
 
-        trainSize:int = (int)(numberOfRatings * divisionDatasetPercentualSize / 100)
+        trainSize:int = (int)(numberOfEvents * divisionDatasetPercentualSize / 100)
         #print("trainSize: " + str(trainSize))
-        trainRatingsDF:DataFrame = ratingsSortedDF[0:trainSize]
+        trainEventsDF:DataFrame = eventsSortedDF[0:trainSize]
 
-        trainDataset:ADataset = DatasetML(trainRatingsDF, usersDF, itemsDF)
+        trainDataset:ADataset = DatasetST(trainEventsDF, serialsDF)
 
 
-        # create test Rating DataFrame
-        testSize:int = (int)(numberOfRatings * testDatasetPercentualSize / 100)
+        # create test Event DataFrame
+        testSize:int = (int)(numberOfEvents * testDatasetPercentualSize / 100)
         #print("testSize: " + str(testSize))
-        testRatingsDF:DataFrame = ratingsSortedDF[trainSize:(trainSize + testSize)]
+        testEventsPartDF:DataFrame = eventsSortedDF[trainSize:(trainSize + testSize)]
+        testEventsDF:DataFrame = testEventsPartDF.loc[testEventsPartDF[Events.COL_OBJECT_ID] != 0]
 
 
-        # create test relevant Rating DataFrame
-        testRelevantRatingsDF:DataFrame = testRatingsDF.loc[testRatingsDF[Ratings.COL_RATING] >= 4]
+        # create test relevant Event DataFrame
+        testRelevantEventsDF:DataFrame = testEventsDF
 
 
         # create behaviour dictionary of DataFrame indexed by recomRepetition
-        recomRepetitionCountInDataset:int = behaviourDF[Behaviours.COL_REPETITION].max() +1
+        recomRepetitionCountInDataset:int = behaviourDF[BehavioursST.COL_REPETITION].max() +1
 
         testRepeatedBehaviourDict:dict = {}
-        bIndexes:List[int] = list([recomRepetitionCountInDataset*i for i in testRatingsDF.index])
+        bIndexes:List[int] = list([recomRepetitionCountInDataset*i for i in testEventsDF.index])
         for repetitionI in range(recomRepetitionCount):
             # indexes of behaviour
             indexes:List[int] = [vI+repetitionI for vI in bIndexes]
             behaviourDFI:DataFrame = DataFrame(behaviourDF.take(indexes).values.tolist(),
-                        index=testRatingsDF.index, columns=behaviourDF.keys())
+                        index=testEventsDF.index, columns=behaviourDF.keys())
             testRepeatedBehaviourDict[repetitionI] = behaviourDFI
 
 
-        return (trainDataset, testRatingsDF, testRelevantRatingsDF, testRepeatedBehaviourDict)
+        return (trainDataset, testEventsDF, testRelevantEventsDF, testRepeatedBehaviourDict)
+
 
 
     @staticmethod
     def initEvaluationModel(dataset:ADataset):
-        usersDF:DataFrame = dataset.usersDF
+        eventsDF:DataFrame = dataset.eventsDF
 
         # model with clicked ItemIDs for users
         clickedItems:dict[List[int]] = {}
-        for indexI, rowI in usersDF.iterrows():
-            clickedItems[rowI[Ratings.COL_USERID]] = []
+        for indexI, rowI in eventsDF.iterrows():
+            clickedItems[rowI[Events.COL_USER_ID]] = []
         return clickedItems
 
 
-
     def iterateOverDataset(self, portfolios:List[APortfolio], portfolioDescs:List[APortfolioDescription],
-                             portFolioModels:List[pd.DataFrame], evaluatonTools:List[AEvalTool],
+                             portFolioModels:List[DataFrame], evaluatonTools:List[AEvalTool],
                              histories:List[AHistory], testRatingsDF:DataFrame, testRelevantRatingsDF:DataFrame,
                              testBehaviourDict:dict[DataFrame]):
 
-        model:ModelOfIndexes = ModelOfIndexes(testRelevantRatingsDF, Ratings)
+        model:ModelOfIndexes = ModelOfIndexes(testRelevantRatingsDF, Events)
 
         portIds:List[str] = [portDescI.getPortfolioID() for portDescI in portfolioDescs]
 
@@ -110,7 +109,7 @@ class SimulationML(ASequentialSimulation):
 
             counterI += 1
             if counterI  % 100 == 0:
-                print("RatingI: " + str(counterI) + " / " + str(testRatingsDF.shape[0]))
+                print("EventI: " + str(counterI) + " / " + str(testRatingsDF.shape[0]))
                 print("PortfolioIds: " + str(portIds))
                 print("Evaluations: " + str(evaluations))
 
@@ -119,12 +118,9 @@ class SimulationML(ASequentialSimulation):
                 self.computationFile.write("Evaluations: " + str(evaluations) + "\n")
                 self.computationFile.flush()
 
-            currentItemIdI:int = testRatingsDF.loc[currentDFIndexI][Ratings.COL_MOVIEID]
-            currentRatingI:int = testRatingsDF.loc[currentDFIndexI][Ratings.COL_RATING]
-            currentUserIdI:int = testRatingsDF.loc[currentDFIndexI][Ratings.COL_USERID]
+            currentItemIdI:int = testRatingsDF.loc[currentDFIndexI][Events.COL_OBJECT_ID]
+            currentUserIdI:int = testRatingsDF.loc[currentDFIndexI][Events.COL_USER_ID]
 
-            if currentRatingI < 4:
-                continue
 
             windowOfItemIDsI:int = self.getWindowOfItemIDs(model, currentUserIdI, currentDFIndexI, testRatingsDF, self._windowSize)
 
@@ -141,3 +137,4 @@ class SimulationML(ASequentialSimulation):
                                              testRatingsDF, testBehaviourDict, windowOfItemIDsI)
 
         return evaluations
+
