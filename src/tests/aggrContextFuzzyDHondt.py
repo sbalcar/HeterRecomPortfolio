@@ -13,6 +13,7 @@ from history.historyDF import HistoryDF #class
 
 from datasets.ml.users import Users #class
 from datasets.ml.items import Items #class
+from datasets.ml.ratings import Ratings #class
 
 
 from aggregation.negImplFeedback.penalUsingReduceRelevance import penaltyLinear #function
@@ -36,6 +37,7 @@ def test01():
 
     itemsDF: DataFrame = Items.readFromFileMl1m()
     usersDF: DataFrame = Users.readFromFileMl1m()
+    ratingsDF: DataFrame = Ratings.readFromFileMl1m()
 
     # methods parametes
     methodsParamsData:List[tuple] = [['metoda1',100], ['metoda2',80], ['metoda3',60]]
@@ -46,18 +48,17 @@ def test01():
     itemID:int = 7
 
     historyDF:AHistory = HistoryDF("test01")
-    historyDF.insertRecommendation(userID, itemID, 1, True, 10)
-    historyDF.insertRecommendation(userID, itemID, 1, True, 20)
-    historyDF.insertRecommendation(userID, itemID, 1, True, 30)
-    historyDF.insertRecommendation(userID, itemID, 1, False, 40)
-    historyDF.print()
 
     # TODO: What is ARG_SELECTOR?
     aggr:AggrContextFuzzyDHondt = AggrContextFuzzyDHondt(historyDF, {AggrContextFuzzyDHondt.ARG_SELECTOR:TheMostVotedItemSelector({}),
                                                                      AggrContextFuzzyDHondt.ARG_USERS:usersDF,
-                                                                     AggrContextFuzzyDHondt.ARG_ITEMS:itemsDF})
+                                                                     AggrContextFuzzyDHondt.ARG_ITEMS:itemsDF,
+                                                                     AggrContextFuzzyDHondt.ARG_DATASET:"ml"})
+
     itemIDs = aggr.runWithResponsibility(methodsResultDict, methodsParamsDF, userID, N)
     print(itemIDs)
+    for index, row in ratingsDF.iloc[-100:].iterrows():
+        aggr.update(ratingsDF.iloc[index:index+1])
     itemIDs = aggr.runWithResponsibility(methodsResultDict, methodsParamsDF, userID, N)
     print(itemIDs)
 
