@@ -44,8 +44,7 @@ def test01():
     methodsParamsDF:DataFrame = pd.DataFrame(methodsParamsData, columns=["methodID", "votes"])
     methodsParamsDF.set_index("methodID", inplace=True)
 
-    userID:int = 0
-    itemID:int = 7
+    userID:int = 1
 
     historyDF:AHistory = HistoryDF("test01")
 
@@ -56,11 +55,32 @@ def test01():
                                                                      AggrContextFuzzyDHondt.ARG_DATASET:"ml"})
 
     itemIDs = aggr.runWithResponsibility(methodsResultDict, methodsParamsDF, userID, N)
-    print(itemIDs)
+
+    print("recommended items:")
+    for itemID, votes in itemIDs:
+        film_info: DataFrame = itemsDF[itemsDF['movieId'] == itemID]
+        print('\t', film_info['movieTitle'].to_string(header=False),
+                  film_info['Genres'].to_string(header=False))
+    print()
+    print("===========================END OF RECOMMENDATION LIST===========================")
+    print("Ratings:")
+    resultList = None
     for index, row in ratingsDF.iloc[-100:].iterrows():
         aggr.update(ratingsDF.iloc[index:index+1])
-    itemIDs = aggr.runWithResponsibility(methodsResultDict, methodsParamsDF, userID, N)
-    print(itemIDs)
+        resultList = aggr.runWithResponsibility(methodsResultDict, methodsParamsDF, row['userId'],N)
+        film_info: DataFrame = itemsDF[itemsDF['movieId'] == ratingsDF.iloc[index]['movieId']]
+        print('\t', film_info['movieTitle'].to_string(header=False),
+              film_info['Genres'].to_string(header=False))
+    itemIDs = aggr.runWithResponsibility(methodsResultDict, methodsParamsDF, ratingsDF.iloc[-1:]['userId'].item(), N)
+
+    print("recommended items:")
+    for itemID, votes in itemIDs:
+        film_info: DataFrame = itemsDF[itemsDF['movieId'] == itemID]
+        print('\t', film_info['movieTitle'].to_string(header=False),
+              film_info['Genres'].to_string(header=False))
+
+    print()
+    print("===========================END OF RECOMMENDATION LIST===========================")
 
 
 if __name__ == "__main__":

@@ -70,8 +70,8 @@ class AggrContextFuzzyDHondt(AggrFuzzyDHondt):
     def _onehotItemsGenresML(self, items:DataFrame):
         one_hot_encoding = items["Genres"].str.get_dummies(sep='|')
         one_hot_encoding.drop(one_hot_encoding.columns[0],axis=1, inplace=True)
-        items.drop(['Genres'], axis=1, inplace=True)
-        return pd.concat([items, one_hot_encoding], axis=1)
+        tmp = items.drop(['Genres'], axis=1, inplace=False)
+        return pd.concat([tmp, one_hot_encoding], axis=1)
 
     # methodsResultDict:{String:pd.Series(rating:float[], itemID:int[])},
     # modelDF:pd.DataFrame[numberOfVotes:int], numberOfItems:int
@@ -130,15 +130,25 @@ class AggrContextFuzzyDHondt(AggrFuzzyDHondt):
                 raise ValueError("Context dimension should be same in every iteration!")
 
         # update recommender's votes
+        updatedVotes = dict()
+        totalOriginalVotes = 0
+        totalUpdatedVotes = 0
         for recommender, votes in modelDF.iterrows():
-
             # Calculate change rate
             ridgeRegression = self._inverseA[recommender].dot(self._b[recommender])
             UCB = self._context.T.dot(self._inverseA[recommender]).dot(self._context)
-            change_rate = ridgeRegression.T.dot(self._context) + math.sqrt(UCB)
+            change_rate = (ridgeRegression.T.dot(self._context) + math.sqrt(UCB))
 
             # update votes
-            modelDF.at[recommender, 'votes'] = change_rate * votes['votes']
+            updatedVotes[recommender] = change_rate * votes['votes']
+            totalOriginalVotes += modelDF.at[recommender, 'votes']
+            totalUpdatedVotes += updatedVotes[recommender]
+
+        # normalize updated votes and save to modelDF
+        rate = (totalOriginalVotes / totalUpdatedVotes) + 1e-12     # totalOriginalVottes converges to 0 so for now we add
+                                                                    # 1e-12 to the rate to avoid this
+        for recommender, votes in modelDF.iterrows():
+            modelDF.at[recommender, 'votes'] = updatedVotes[recommender] * rate
 
         itemsWithResposibilityOfRecommenders: List[int, np.Series[int, str]] = \
             super().run(methodsResultDict, modelDF, userID, numberOfItems=numberOfItems)
@@ -183,7 +193,7 @@ class AggrContextFuzzyDHondt(AggrFuzzyDHondt):
     def _calculateContextML(self, userID):
 
         # get user data
-        user = self.users.iloc[userID]
+        user = self.users.loc[self.users['userId'] == userID]
 
         # init result
         result = np.zeros(2)
@@ -214,8 +224,7 @@ class AggrContextFuzzyDHondt(AggrFuzzyDHondt):
         last20MoviesList = previousClickedItemsOfUser[-20:]
 
         # aggregation
-        ITEM_INDEX = 2
-        itemsIDs = set([x[ITEM_INDEX] for x in last20MoviesList])
+        itemsIDs = last20MoviesList
         items = self.items.iloc[list(itemsIDs)]
         itemsGenres = items.drop(items.columns[[0,1]], axis=1).sum()
         result = np.append(result, itemsGenres)
@@ -227,10 +236,10 @@ class AggrContextFuzzyDHondt(AggrFuzzyDHondt):
 
         # add user gender to the context
         userFeatures = []
-        userFeatures.append(1 if self.users.iloc[userID]['gender'] == 'F' else -1)
+        userFeatures.append(1 if user['gender'].item() == 'F' else -1)
 
         # append age and onehot occupation
-        tmp = self.users.iloc[userID].drop(labels=['userId', 'gender', 'zipCode']).to_numpy()
+        tmp = user.T.drop(labels=['userId', 'gender', 'zipCode']).to_numpy().flatten()
         userFeatures = np.concatenate([userFeatures, tmp])
 
         result = np.concatenate([result, userFeatures])
