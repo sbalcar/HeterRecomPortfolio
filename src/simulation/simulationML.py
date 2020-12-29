@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 from typing import List
+from typing import Dict
 
 from datasets.aDataset import ADataset #class
 from datasets.datasetML import DatasetML #class
@@ -95,7 +96,7 @@ class SimulationML(ASequentialSimulation):
     def iterateOverDataset(self, portfolios:List[APortfolio], portfolioDescs:List[APortfolioDescription],
                              portFolioModels:List[pd.DataFrame], evaluatonTools:List[AEvalTool],
                              histories:List[AHistory], testRatingsDF:DataFrame, testRelevantRatingsDF:DataFrame,
-                             testBehaviourDict:dict[DataFrame]):
+                             testBehaviourDict:Dict[int, DataFrame]):
 
         model:ModelOfIndexes = ModelOfIndexes(testRelevantRatingsDF, Ratings)
 

@@ -39,7 +39,7 @@ def generateBehaviour():
 #   Behaviours.generateFileMl1m(countOfItems, countOfRepetitions, Behaviours.BHVR_LINEAR0109, uBehavLinear0109Desc)
 
    # RR
-#   BehavioursRR.generateFileRR(countOfItems, countOfRepetitions, BehavioursRR.BHVR_STATIC08, uBehavStatic08Desc)
+   BehavioursRR.generateFileRR(countOfItems, countOfRepetitions, BehavioursRR.BHVR_STATIC08, uBehavStatic08Desc)
 #   BehavioursRR.generateFileRR(countOfItems, countOfRepetitions, BehavioursRR.BHVR_STATIC06, uBehavStatic06Desc)
 #   BehavioursRR.generateFileRR(countOfItems, countOfRepetitions, BehavioursRR.BHVR_STATIC04, uBehavStatic04Desc)
 #   BehavioursRR.generateFileRR(countOfItems, countOfRepetitions, BehavioursRR.BHVR_STATIC02, uBehavStatic02Desc)
@@ -48,10 +48,10 @@ def generateBehaviour():
 
    # ST
 #   BehavioursST.generateFileST(countOfItems, countOfRepetitions, BehavioursST.BHVR_LINEAR0109, uBehavLinear0109Desc)
-   BehavioursST.generateFileST(countOfItems, countOfRepetitions, BehavioursST.BHVR_STATIC06, uBehavStatic06Desc)
-   BehavioursST.generateFileST(countOfItems, countOfRepetitions, BehavioursST.BHVR_STATIC04, uBehavStatic04Desc)
-   BehavioursST.generateFileST(countOfItems, countOfRepetitions, BehavioursST.BHVR_STATIC02, uBehavStatic02Desc)
-   BehavioursST.generateFileST(countOfItems, countOfRepetitions, BehavioursST.BHVR_LINEAR0109, uBehavLinear0109Desc)
+#   BehavioursST.generateFileST(countOfItems, countOfRepetitions, BehavioursST.BHVR_STATIC06, uBehavStatic06Desc)
+#   BehavioursST.generateFileST(countOfItems, countOfRepetitions, BehavioursST.BHVR_STATIC04, uBehavStatic04Desc)
+#   BehavioursST.generateFileST(countOfItems, countOfRepetitions, BehavioursST.BHVR_STATIC02, uBehavStatic02Desc)
+#   BehavioursST.generateFileST(countOfItems, countOfRepetitions, BehavioursST.BHVR_LINEAR0109, uBehavLinear0109Desc)
 
 
 if __name__ == "__main__":

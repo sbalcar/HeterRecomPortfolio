@@ -15,8 +15,8 @@
 #    ("hat", "the"), ("hat", "cat"), ("hat", "in"), ("hat", "the")
 
 def word2vecRun(window_size = 3, embedding_size = 64, generations = 100000, texts = [], caller=None):
-    #import tensorflow.compat.v1 as tf
-    import tensorflow as tf
+    import tensorflow.compat.v1 as tf
+    #import tensorflow as tf
     tf.disable_v2_behavior()
     import numpy as np
     import os

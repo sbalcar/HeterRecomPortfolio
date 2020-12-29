@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 from typing import List
+from typing import Dict
 
 import os
 import pandas as pd
@@ -160,7 +161,7 @@ class ASequentialSimulation(ABC):
 
     def runPortfolioDesc(self, portfolioDescs:List[APortfolioDescription], portFolioModels:List[DataFrame],
                            evaluatonTools:List[AEvalTool], histories:List[AHistory], trainDataset:ADataset,
-                           testRatingsDF:DataFrame, testRelevantRatingsDF:DataFrame, testBehaviourDict:dict[DataFrame]):
+                           testRatingsDF:DataFrame, testRelevantRatingsDF:DataFrame, testBehaviourDict:Dict[int, DataFrame]):
 
         portfolios:List[APortfolio] = []
 
@@ -211,7 +212,7 @@ class ASequentialSimulation(ABC):
     def simulateRecommendations(self, portfolios:List[APortfolio], portfolioDescs:List[APortfolioDescription],
                                   portFolioModels:List[DataFrame], evaluatonTools:List[AEvalTool], histories:List[AHistory],
                                   evaluations:List[dict], currentDFIndex:int, userID:int, repetition:int,
-                                  testRatingsDF:DataFrame, testBehaviourDict:dict[DataFrame], windowOfItemIDsI:List[int]):
+                                  testRatingsDF:DataFrame, testBehaviourDict:Dict[int, DataFrame], windowOfItemIDsI:List[int]):
 
         COL_BEHAVIOUR:str = self._behaviourClass.getColNameBehaviour()
         COL_ITEMID:str = self._ratingClass.getColNameItemID()

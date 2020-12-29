@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 from typing import List
+from typing import Dict
 
 from datasets.aDataset import ADataset #class
 from datasets.datasetST import DatasetST #class
@@ -94,7 +95,7 @@ class SimulationST(ASequentialSimulation):
     def iterateOverDataset(self, portfolios:List[APortfolio], portfolioDescs:List[APortfolioDescription],
                              portFolioModels:List[DataFrame], evaluatonTools:List[AEvalTool],
                              histories:List[AHistory], testRatingsDF:DataFrame, testRelevantRatingsDF:DataFrame,
-                             testBehaviourDict:dict[DataFrame]):
+                             testBehaviourDict:Dict[int, DataFrame]):
 
         model:ModelOfIndexes = ModelOfIndexes(testRelevantRatingsDF, Events)
 
