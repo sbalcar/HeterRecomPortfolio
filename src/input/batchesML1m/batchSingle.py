@@ -55,7 +55,7 @@ class BatchSingle(ABatchML):
 
         recommenderID:str = self.getParameters()[jobID]
 
-        rDescr:RecommenderDescription = InputRecomDefinition.exportInputRecomDefinition(recommenderID, datasetID)
+        rDescr:RecommenderDescription = InputRecomDefinition.exportInputRecomDefinition(recommenderID)
 
         pDescr:APortfolioDescription = Portfolio1MethDescription(recommenderID.title(), recommenderID, rDescr)
 

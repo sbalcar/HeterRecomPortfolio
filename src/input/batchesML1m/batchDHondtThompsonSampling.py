@@ -59,7 +59,7 @@ class BatchDHondtThompsonSampling(ABatchML):
 
         datasetID:str = "ml1m" + "Div" + str(divisionDatasetPercentualSize)
 
-        rIDs, rDescs = InputRecomDefinition.exportPairOfRecomIdsAndRecomDescrsML(datasetID)
+        rIDs, rDescs = InputRecomDefinition.exportPairOfRecomIdsAndRecomDescrsML()
 
         aDescDHontThompsonSamplingI:AggregationDescription = InputAggrDefinition.exportADescDHontThompsonSampling(selector)
 

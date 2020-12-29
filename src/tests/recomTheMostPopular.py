@@ -33,14 +33,11 @@ def test01():
 
     print("Running RecommenderTheMostPopular ML:")
 
-    cbDataPath:str = Configuration.cbDataFileWithPathTFIDF
-
-    #ratingsDF:DataFrame = Ratings.readFromFileMl100k()
     ratingsDF: DataFrame = Ratings.readFromFileMl1m()
 
     ratingsDFTrain:DataFrame = ratingsDF.iloc[0:50000]
 
-    trainDataset:ADataset = DatasetML(ratingsDFTrain, pd.DataFrame(), pd.DataFrame())
+    trainDataset:ADataset = DatasetML("test", ratingsDFTrain, pd.DataFrame(), pd.DataFrame())
 
     rec:ARecommender = RecommenderTheMostPopular("test", {})
     rec.train(HistoryDF("test"), trainDataset)
@@ -66,7 +63,7 @@ def test02():
     from datasets.retailrocket.events import Events  # class
     eventsDF:DataFrame = Events.readFromFile()
 
-    dataset:ADataset = DatasetRetailRocket(eventsDF, DataFrame(), DataFrame())
+    dataset:ADataset = DatasetRetailRocket("test", eventsDF, DataFrame(), DataFrame())
 
     rec:ARecommender = RecommenderTheMostPopular("rTheMostPopular", {})
     rec.train(HistoryDF("test"), dataset)
@@ -83,7 +80,7 @@ def test03():
     from datasets.slantour.events import Events  # class
     eventsDF:DataFrame = Events.readFromFile()
 
-    dataset:ADataset = DatasetST(eventsDF, DataFrame())
+    dataset:ADataset = DatasetST("test", eventsDF, DataFrame())
 
     rec:ARecommender = RecommenderTheMostPopular("rTheMostPopular", {})
     rec.train(HistoryDF("test"), dataset)

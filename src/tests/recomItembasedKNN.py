@@ -33,7 +33,7 @@ def test01():
     # Take only first 50k
     ratingsDFTrain:DataFrame = ratingsDF.iloc[0:50000]
 
-    trainDataset:ADataset = DatasetML(ratingsDFTrain, pd.DataFrame(), filmsDF)
+    trainDataset:ADataset = DatasetML("test", ratingsDFTrain, pd.DataFrame(), filmsDF)
 
     # train recommender
     rec:ARecommender = RecommenderItemBasedKNN("test", {})
@@ -68,7 +68,7 @@ def test02():
 
     ratingsDFTrain:DataFrame = ratingsDF.iloc[0:1000000]
 
-    trainDataset:ADataset = DatasetML(ratingsDFTrain, pd.DataFrame(), filmsDF)
+    trainDataset:ADataset = DatasetML("test", ratingsDFTrain, pd.DataFrame(), filmsDF)
 
     # train recommender
     rec:ARecommender = RecommenderItemBasedKNN("test", {})
@@ -101,7 +101,7 @@ def test03():
 
     print(ratingsDFTrain.head(25))
 
-    trainDataset:ADataset = DatasetML(ratingsDFTrain, pd.DataFrame(), filmsDF)
+    trainDataset:ADataset = DatasetML("test", ratingsDFTrain, pd.DataFrame(), filmsDF)
 
 
     # train recommender
@@ -126,6 +126,7 @@ def test03():
 
 if __name__ == "__main__":
     os.chdir("..")
-    #test01()
+
+    test01()
     #test02()
-    test03()
+    #test03()

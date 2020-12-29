@@ -10,12 +10,15 @@ from datasets.slantour.serials import Serials #class
 
 class DatasetST(ADataset):
 
-    def __init__(self, eventsDF:DataFrame, serialsDF:DataFrame):
+    def __init__(self, datasetID:str, eventsDF:DataFrame, serialsDF:DataFrame):
+        if type(datasetID) is not str:
+            raise ValueError("Argument datasetID isn't type str.")
         if type(eventsDF) is not DataFrame:
             raise ValueError("Argument eventsDF isn't type DataFrame.")
         if type(serialsDF) is not DataFrame:
             raise ValueError("Argument serialsDF isn't type DataFrame.")
 
+        self.datasetID = datasetID
         self.eventsDF:DataFrame = eventsDF
         self.serialsDF:DataFrame = serialsDF
 
@@ -25,7 +28,7 @@ class DatasetST(ADataset):
         eventsDF:DataFrame = Events.readFromFile()
         serialsDF:DataFrame = Serials.readFromFile()
 
-        return DatasetST(eventsDF, serialsDF)
+        return DatasetST("stDivAll", eventsDF, serialsDF)
 
 
     def getTheMostSold(self):

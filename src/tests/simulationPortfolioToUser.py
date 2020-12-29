@@ -114,8 +114,8 @@ def test02():
 
 
 def test03():
-    datasetID:str = "ml1m" + "Div" + str(90)
-    rDescr:RecommenderDescription = InputRecomDefinition.exportRDescTheMostPopular(datasetID)
+
+    rDescr:RecommenderDescription = InputRecomDefinition.exportRDescTheMostPopular()
 
     pDescr:APortfolioDescription = Portfolio1MethDescription(InputRecomDefinition.THE_MOST_POPULAR.title(),
                                     InputRecomDefinition.THE_MOST_POPULAR, rDescr)
@@ -149,8 +149,8 @@ def test03():
 
 
 def test04():
-    datasetID:str = "retailrocket" + "Div" + str(90)
-    rDescr:RecommenderDescription = InputRecomDefinition.exportRDescTheMostPopular(datasetID)
+
+    rDescr:RecommenderDescription = InputRecomDefinition.exportRDescTheMostPopular()
 
     pDescr:APortfolioDescription = Portfolio1MethDescription(InputRecomDefinition.THE_MOST_POPULAR.title(),
                                     InputRecomDefinition.THE_MOST_POPULAR, rDescr)
@@ -183,8 +183,8 @@ def test04():
 
 
 def test05():
-    datasetID:str = "slantour" + "Div" + str(90)
-    rDescr:RecommenderDescription = InputRecomDefinition.exportRDescTheMostPopular(datasetID)
+
+    rDescr:RecommenderDescription = InputRecomDefinition.exportRDescTheMostPopular()
 
     pDescr:APortfolioDescription = Portfolio1MethDescription(InputRecomDefinition.THE_MOST_POPULAR.title(),
                                     InputRecomDefinition.THE_MOST_POPULAR, rDescr)
@@ -221,5 +221,5 @@ if __name__ == "__main__":
     #test01()
     #test02()
     #test03()
-    test04()
-    #test05()
+    #test04()
+    test05()

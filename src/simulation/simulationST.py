@@ -48,7 +48,8 @@ class SimulationST(ASequentialSimulation):
         #print("trainSize: " + str(trainSize))
         trainEventsDF:DataFrame = eventsSortedDF[0:trainSize]
 
-        trainDataset:ADataset = DatasetST(trainEventsDF, serialsDF)
+        datasetID:str = "st" + "Div" + str(divisionDatasetPercentualSize)
+        trainDataset:ADataset = DatasetST(datasetID, trainEventsDF, serialsDF)
 
 
         # create test Event DataFrame

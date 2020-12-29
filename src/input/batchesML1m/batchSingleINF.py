@@ -66,7 +66,7 @@ class BatchSingleINF(ABatchML):
         nImplFeedback:APenalization
         recommenderID, nImplFeedback = self.getParameters()[jobID]
 
-        rDescr:RecommenderDescription = InputRecomDefinition.exportInputRecomDefinition(recommenderID, datasetID)
+        rDescr:RecommenderDescription = InputRecomDefinition.exportInputRecomDefinition(recommenderID)
 
         pDescr:APortfolioDescription = PortfolioNeg1MethDescription(jobID.title(), recommenderID, rDescr, nImplFeedback)
 

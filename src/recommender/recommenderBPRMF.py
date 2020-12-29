@@ -29,6 +29,8 @@ class RecommenderBPRMF(ARecommender):
     #ARG_USER_PROFILE_STRATEGY:str = "userProfileStrategy"
     ARG_FACTORS:str = "factors"
     ARG_ITERATIONS:str = "iterations"
+    ARG_LEARNINGRATE:str = "learning_rate"
+    ARG_REGULARIZATION:str = "regularization"
 
     DEBUG_MODE = False
 
@@ -45,8 +47,14 @@ class RecommenderBPRMF(ARecommender):
         self._userFeaturesMatrix  = None
         self._factors = argumentsDict[RecommenderBPRMF.ARG_FACTORS]
         self._iterations = argumentsDict[RecommenderBPRMF.ARG_ITERATIONS]
+        self._learningRate = argumentsDict[RecommenderBPRMF.ARG_LEARNINGRATE]
+        self._regularization = argumentsDict[RecommenderBPRMF.ARG_REGULARIZATION]
+        
         self._updateCounter = 0
         self.updateThreshold = 1000   #maybe use values from argumentsDict
+        
+        self._randomState = 42
+        
 
     def train(self, history:AHistory, dataset:ADataset):
         if type(dataset) is not DatasetML:
@@ -74,7 +82,11 @@ class RecommenderBPRMF(ARecommender):
                    
         self._userFeaturesMatrix = self._movieFeaturesMatrix.T.tocsr()
         
-        self.model = implicit.bpr.BayesianPersonalizedRanking(factors=self._factors, iterations=self._iterations)
+        self.model = implicit.bpr.BayesianPersonalizedRanking(factors=self._factors, 
+            iterations=self._iterations, 
+            learning_rate=self._learningRate, 
+            regularization=self._regularization, 
+            random_state=self._randomState)
         self.model.fit(self._movieFeaturesMatrix)
         
 
@@ -106,6 +118,7 @@ class RecommenderBPRMF(ARecommender):
  
 
     def recommend(self, userID:int, numberOfItems:int=20, argumentsDict:dict={}):
+        #print("userID: " + str(userID))
         if type(userID) is not int and type(userID) is not np.int64:
             raise ValueError("Argument userID isn't type int.")
         if type(numberOfItems) is not int and type(numberOfItems) is not np.int64:

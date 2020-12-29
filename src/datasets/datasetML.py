@@ -10,7 +10,9 @@ from datasets.ml.users import Users #class
 
 class DatasetML(ADataset):
 
-    def __init__(self, ratingsDF:DataFrame, usersDF:DataFrame, itemsDF:DataFrame):
+    def __init__(self, datasetID:str, ratingsDF:DataFrame, usersDF:DataFrame, itemsDF:DataFrame):
+        if type(datasetID) is not str:
+            raise ValueError("Argument datasetID isn't type str.")
         if type(ratingsDF) is not DataFrame:
             raise ValueError("Argument ratingsDF isn't type DataFrame.")
         if type(usersDF) is not DataFrame:
@@ -18,6 +20,7 @@ class DatasetML(ADataset):
         if type(itemsDF) is not DataFrame:
             raise ValueError("Argument itemsDF isn't type DataFrame.")
 
+        self.datasetID = datasetID
         self.ratingsDF:DataFrame = ratingsDF
         self.usersDF:DataFrame = usersDF
         self.itemsDF:DataFrame = itemsDF
@@ -29,7 +32,7 @@ class DatasetML(ADataset):
         usersDF:DataFrame = Users.readFromFileMl1m()
         itemsDF:DataFrame = Items.readFromFileMl1m()
 
-        return DatasetML(ratingsDF, usersDF, itemsDF)
+        return DatasetML("ml1mDivAll", ratingsDF, usersDF, itemsDF)
 
 
     def getTheMostPopular(self):

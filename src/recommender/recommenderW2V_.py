@@ -29,13 +29,12 @@ class RecommenderW2V(ARecommender):
 
     # mandatory argument
     ARG_TRAIN_VARIANT:str = "trainVariant"
-    ARG_VECTOR_SIZE:int = "vectorSize"
-    ARG_WINDOW_SIZE:int = "windowSize"
-    ARG_ITERATIONS:int = "iterations"
 
     # mandatory argument
     ARG_USER_PROFILE_STRATEGY:str = "userProfileStrategy"
-    ARG_USER_PROFILE_SIZE:str = "userProfileSize"
+
+    # mandatory argument
+    ARG_DATASET_ID:str = "datasetId"
 
     DEBUG_MODE = False
 
@@ -47,11 +46,6 @@ class RecommenderW2V(ARecommender):
         self._arguments:dict = argumentsDict
 
         self.trainVariant:str = self._arguments[self.ARG_TRAIN_VARIANT]
-        self.vectorSize:int = self._arguments[self.ARG_VECTOR_SIZE]
-        self.windowSize:int = self._arguments[self.ARG_WINDOW_SIZE]
-        self.iterations:int = self._arguments[self.ARG_ITERATIONS]
-        
-        
         self.userProfiles:dict = {}
 
     def __getTrainVariant(self, trainVariant:str, trainDF:DataFrame):
@@ -61,16 +55,7 @@ class RecommenderW2V(ARecommender):
             return trainDF.loc[trainDF[Ratings.COL_RATING] >= 4]
         elif trainVariant == "posneg":
             return trainDF
-            
-            
-    def saveModel(self, i, model, rev_dict, dictionary):
-        dictionary = dict([((int(i), j) if i != "RARE" else (-1, j)) for i, j in dictionary.items()])
-        rev_dict = dict(zip(dictionary.values(), dictionary.keys()))
-        self.__save_obj(model, "model", self.datasetId, self.trainVariant, self.vectorSize, self.windowSize, i )
-        self.__save_obj(dictionary, "dictionary", self.datasetId, self.trainVariant, self.vectorSize, self.windowSize, i)
-        self.__save_obj(rev_dict, "rev_dict", self.datasetId, self.trainVariant, self.vectorSize, self.windowSize, i)    
-    
-    
+
     def train(self, history:AHistory, dataset:DatasetML):
         if not isinstance(history, AHistory):
             raise ValueError("Argument history isn't type AHistory.")
@@ -87,26 +72,23 @@ class RecommenderW2V(ARecommender):
         # t_sequences.set_index(Ratings.COL_USERID, inplace=True)
         w2vTrainData:List[str] = t_sequences.values.tolist()
 
-        e:int = self.vectorSize #64
-        w:int = self.windowSize #3
-        i:int = self.iterations #100000
-        
-        datasetId:str = dataset.datasetID
-        self.datasetId = datasetId
+        e:int = 64
+        w:int = 3
+
+        datasetId:str = self._arguments[self.ARG_DATASET_ID]
         #print("datasetId: " + str(datasetId))
 
-        #datasetId = "ml1mDiv90"
-        self.model = self.__load_obj("model", datasetId, self.trainVariant, e, w, i)
-        self.dictionary = self.__load_obj("dictionary", datasetId, self.trainVariant, e, w, i)
-        self.rev_dict = self.__load_obj("rev_dict", datasetId, self.trainVariant, e, w, i)
+        self.model = self.__load_obj("model", datasetId, self.trainVariant, e, w)
+        self.dictionary = self.__load_obj("dictionary", datasetId, self.trainVariant, e, w)
+        self.rev_dict = self.__load_obj("rev_dict", datasetId, self.trainVariant, e, w)
 
         if self.model is None:
-            model, rev_dict, dictionary = word2vec.word2vecRun(w, e, i, w2vTrainData, self)
+            model, rev_dict, dictionary = word2vec.word2vecRun(w, e, w2vTrainData)
             dictionary = dict([((int(i), j) if i != "RARE" else (-1, j)) for i, j in dictionary.items()])
             rev_dict = dict(zip(dictionary.values(), dictionary.keys()))
-            self.__save_obj(model, "model", datasetId, self.trainVariant, e, w, i )
-            self.__save_obj(dictionary, "dictionary", datasetId, self.trainVariant, e, w, i)
-            self.__save_obj(rev_dict, "rev_dict", datasetId, self.trainVariant, e, w, i)
+            self.__save_obj(model, "model", datasetId, self.trainVariant, e, w)
+            self.__save_obj(dictionary, "dictionary", datasetId, self.trainVariant, e, w)
+            self.__save_obj(rev_dict, "rev_dict", datasetId, self.trainVariant, e, w)
             self.model = model
             self.dictionary = dictionary
             self.rev_dict = rev_dict
@@ -129,21 +111,27 @@ class RecommenderW2V(ARecommender):
             userTrainData.append(objectID)
             self.userProfiles[userID] = userTrainData
 
-    def __resolveUserProfile(self, userProfileStrategy:str,userProfileSize:int, userTrainData:List[int]):
+    def __resolveUserProfile(self, userProfileStrategy:str, userTrainData):
         objectIDs:List[int] = [int(i) for i in userTrainData]
         w2vObjects = [self.dictionary[i] for i in objectIDs if i in self.dictionary]
 
         rec:str = userProfileStrategy
         if self.DEBUG_MODE:
             print(rec)
-        if (len(userTrainData) > 0):
-            if(userProfileSize > 0 ):
-                val = -1 * userProfileSize    
-                w2vObjects = w2vObjects[val:]      
-                  
+        if (len(w2vObjects) > 0):
             if (rec == "mean") | (rec == "max"):
                 weights = [1.0] * len(w2vObjects)
-            elif rec == "weightedMean":
+            elif rec == "last":
+                w2vObjects = w2vObjects[-1:]
+                weights = [1.0]
+            elif rec == "window3":
+                w2vObjects = w2vObjects[-3:]
+                weights = [1 / len(w2vObjects) * i for i in range(1, (len(w2vObjects) + 1))]
+            elif rec == "window5":
+                w2vObjects = w2vObjects[-5:]
+                weights = [1 / len(w2vObjects) * i for i in range(1, (len(w2vObjects) + 1))]
+            elif rec == "window10":
+                w2vObjects = w2vObjects[-10:]
                 weights = [1 / len(w2vObjects) * i for i in range(1, (len(w2vObjects) + 1))]
 
             if rec == "max":
@@ -151,10 +139,12 @@ class RecommenderW2V(ARecommender):
             else:
                 agg = np.mean
 
-            return (w2vObjects, weights, agg)            
+            if self.DEBUG_MODE:
+                print((w2vObjects, weights, agg))
+            return (w2vObjects, weights, agg)
 
-        return ([], [], "")     
-        
+        return ([], [], "")
+
 
     def recommend(self, userID:int, numberOfItems:int, argumentsDict:dict):
         #print("userID: " + str(userID))
@@ -166,12 +156,10 @@ class RecommenderW2V(ARecommender):
             raise ValueError("Argument argumentsDict isn't type dict.")
 
         userProfileStrategy:str = argumentsDict[self.ARG_USER_PROFILE_STRATEGY]
-        userProfileSize:str = argumentsDict[self.ARG_USER_PROFILE_SIZE]
-        
         #print("userProfileStrategy: " + str(userProfileStrategy))
 
         userTrainData = self.userProfiles.get(userID, [])
-        w2vObjects, weights, aggregation = self.__resolveUserProfile(userProfileStrategy, userProfileSize, userTrainData)
+        w2vObjects, weights, aggregation = self.__resolveUserProfile(userProfileStrategy, userTrainData)
         simList:List = []
 
         # provedu agregaci dle zvolené metody
@@ -203,13 +191,13 @@ class RecommenderW2V(ARecommender):
 
         return pd.Series([], index=[])
 
-    def __save_obj(self, obj, name:str, datasetId:str, trainVariant:str, e:int, w:int, i:int):
-        fileName:str = Configuration.modelDirectory + os.sep + name + "_{0}_{1}_{2}_{3}_{4}".format(datasetId, trainVariant, e, w, i)+ '.pkl'
+    def __save_obj(self, obj, name:str, datasetId:str, trainVariant:str, e:int, w:int):
+        fileName:str = Configuration.modelDirectory + os.sep + name + "_{0}_{1}_{2}_{3}".format(datasetId, trainVariant, e, w)+ '.pkl'
         with open(fileName, 'wb') as f:
             pickle.dump(obj, f)
 
-    def __load_obj(self, name:str, datasetId:str, trainVariant:str, e:int, w:int, i:int):
-        fileName:str = Configuration.modelDirectory + os.sep + name + "_{0}_{1}_{2}_{3}_{4}".format(datasetId, trainVariant, e, w, i)+ '.pkl'
+    def __load_obj(self, name:str, datasetId:str, trainVariant:str, e:int, w:int):
+        fileName:str = Configuration.modelDirectory + os.sep + name + "_{0}_{1}_{2}_{3}".format(datasetId, trainVariant, e, w)+ '.pkl'
         print(fileName)
         if not os.path.isfile(fileName):
             return None

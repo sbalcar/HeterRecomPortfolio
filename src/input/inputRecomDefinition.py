@@ -25,67 +25,86 @@ class InputRecomDefinition:
     BPRMF:str = "BPRMF"
 
     @staticmethod
-    def exportRDescTheMostPopular(datasetID:str):
+    def exportRDescTheMostPopular():
         return RecommenderDescription(RecommenderTheMostPopular,
                 {})
 
 
     @staticmethod
-    def exportRDescCBmean(datasetID:str):
-        return RecommenderDescription(RecommenderCosineCB,
-                {RecommenderCosineCB.ARG_CB_DATA_PATH:Configuration.cbDataFileWithPathTFIDF,
-                 RecommenderCosineCB.ARG_USER_PROFILE_STRATEGY:"mean"})
+    def exportRDescCBmean():
+        return RecommenderDescription(RecommenderCosineCB, {
+                RecommenderCosineCB.ARG_CB_DATA_PATH:Configuration.cbDataFileWithPathTFIDF,
+                RecommenderCosineCB.ARG_USER_PROFILE_SIZE: 5,
+                RecommenderCosineCB.ARG_USER_PROFILE_STRATEGY:"mean"})
+
     @staticmethod
-    def exportRDescCBwindow3(datasetID:str):
-        return RecommenderDescription(RecommenderCosineCB,
-                {RecommenderCosineCB.ARG_CB_DATA_PATH:Configuration.cbDataFileWithPathTFIDF,
-                 RecommenderCosineCB.ARG_USER_PROFILE_STRATEGY:"window3"})
+    def exportRDescCBwindow3():
+        return RecommenderDescription(RecommenderCosineCB, {
+                RecommenderCosineCB.ARG_CB_DATA_PATH:Configuration.cbDataFileWithPathTFIDF,
+                RecommenderCosineCB.ARG_USER_PROFILE_SIZE: 5,
+                RecommenderCosineCB.ARG_USER_PROFILE_STRATEGY:"window3"})
 
 
     @staticmethod
-    def exportRDescW2vPositiveMax(datasetID:str):
-        return RecommenderDescription(RecommenderW2V,
-                {RecommenderW2V.ARG_TRAIN_VARIANT:"positive",
-                 RecommenderW2V.ARG_USER_PROFILE_STRATEGY:"max",
-                 RecommenderW2V.ARG_DATASET_ID:datasetID})
-    @staticmethod
-    def exportRDescW2vPositiveWindow10(datasetID:str):
-        return RecommenderDescription(RecommenderW2V,
-                {RecommenderW2V.ARG_TRAIN_VARIANT:"positive",
-                 RecommenderW2V.ARG_USER_PROFILE_STRATEGY:"window10",
-                 RecommenderW2V.ARG_DATASET_ID:datasetID})
-    @staticmethod
-    def exportRDescW2vPosnegMean(datasetID:str):
-        return RecommenderDescription(RecommenderW2V,
-                {RecommenderW2V.ARG_TRAIN_VARIANT:"posneg",
-                 RecommenderW2V.ARG_USER_PROFILE_STRATEGY:"mean",
-                 RecommenderW2V.ARG_DATASET_ID:datasetID})
-    @staticmethod
-    def exportRDescW2vPosnegWindow3(datasetID:str):
-        return RecommenderDescription(RecommenderW2V,
-                {RecommenderW2V.ARG_TRAIN_VARIANT:"posneg",
-                 RecommenderW2V.ARG_USER_PROFILE_STRATEGY:"window3",
-                 RecommenderW2V.ARG_DATASET_ID:datasetID})
+    def exportRDescW2vPositiveMax():
+        return RecommenderDescription(RecommenderW2V, {
+                RecommenderW2V.ARG_ITERATIONS: 50000,
+                RecommenderW2V.ARG_TRAIN_VARIANT:"positive",
+                RecommenderW2V.ARG_USER_PROFILE_SIZE: -1,
+                RecommenderW2V.ARG_USER_PROFILE_STRATEGY:"max",
+                RecommenderW2V.ARG_VECTOR_SIZE: 128,
+                RecommenderW2V.ARG_WINDOW_SIZE: 5})
+
 
     @staticmethod
-    def exportRDescKNN(datasetID:str):
+    def exportRDescW2vPositiveWindow10():
+        return RecommenderDescription(RecommenderW2V, {
+                RecommenderW2V.ARG_ITERATIONS: 50000,
+                RecommenderW2V.ARG_TRAIN_VARIANT:"positive",
+                RecommenderW2V.ARG_USER_PROFILE_SIZE: -1,
+                RecommenderW2V.ARG_USER_PROFILE_STRATEGY:"window10",
+                RecommenderW2V.ARG_VECTOR_SIZE: 128,
+                RecommenderW2V.ARG_WINDOW_SIZE: 5})
+
+    @staticmethod
+    def exportRDescW2vPosnegMean():
+        return RecommenderDescription(RecommenderW2V, {
+                RecommenderW2V.ARG_ITERATIONS: 50000,
+                RecommenderW2V.ARG_TRAIN_VARIANT:"posneg",
+                RecommenderW2V.ARG_USER_PROFILE_SIZE: -1,
+                RecommenderW2V.ARG_USER_PROFILE_STRATEGY:"mean",
+                RecommenderW2V.ARG_VECTOR_SIZE: 128,
+                RecommenderW2V.ARG_WINDOW_SIZE: 5})
+    @staticmethod
+    def exportRDescW2vPosnegWindow3():
+        return RecommenderDescription(RecommenderW2V, {
+                RecommenderW2V.ARG_ITERATIONS: 50000,
+                RecommenderW2V.ARG_TRAIN_VARIANT:"posneg",
+                RecommenderW2V.ARG_USER_PROFILE_SIZE: -1,
+                RecommenderW2V.ARG_USER_PROFILE_STRATEGY:"window3",
+                RecommenderW2V.ARG_VECTOR_SIZE: 128,
+                RecommenderW2V.ARG_WINDOW_SIZE: 5})
+
+    @staticmethod
+    def exportRDescKNN():
         return RecommenderDescription(RecommenderItemBasedKNN,
                 {})
 
     @staticmethod
-    def exportRDescBPRMF(datasetID:str):
-        return RecommenderDescription(RecommenderBPRMF,
-                {RecommenderBPRMF.ARG_FACTORS:20,
-                 RecommenderBPRMF.ARG_ITERATIONS:10})
-
+    def exportRDescBPRMF():
+        return RecommenderDescription(RecommenderBPRMF, {
+                RecommenderBPRMF.ARG_FACTORS: 20,
+                RecommenderBPRMF.ARG_ITERATIONS: 50,
+                RecommenderBPRMF.ARG_LEARNINGRATE: 0.003,
+                RecommenderBPRMF.ARG_REGULARIZATION: 0.003})
 
     @staticmethod
-    def exportPairOfRecomIdsAndRecomDescrsML(datasetID:str):
+    def exportPairOfRecomIdsAndRecomDescrsML():
 
         recom:str = "Recom"
 
         rIDsCB:List[str] = [recom + InputRecomDefinition.COS_CB_MEAN.title(), recom + InputRecomDefinition.COS_CB_WINDOW3.title()]
-        rDescsCB:List[RecommenderDescription] = [InputRecomDefinition.exportRDescCBmean(datasetID), InputRecomDefinition.exportRDescCBwindow3(datasetID)]
+        rDescsCB:List[RecommenderDescription] = [InputRecomDefinition.exportRDescCBmean(), InputRecomDefinition.exportRDescCBwindow3()]
 
         #rIDsW2V:List[str] = ["RecomW2vPositiveMax", "RecomW2vPositiveWindow10", "RecomW2vPosnegMean", "RecomW2vPosnegWindow10"]
         #rDescsW2V:List[RecommenderDescription] = [rDescW2vPositiveMax, rDescW2vPositiveWindow10, rDescW2vPosnegMean, rDescW2vPosnegWindow10]
@@ -93,54 +112,50 @@ class InputRecomDefinition:
         #rDescsW2V:List[RecommenderDescription] = [rDescW2vPosnegMax, rDescW2vPosnegMax, rDescW2vPosnegWindow10]
 
         rIDsW2V:List[str] = [recom + InputRecomDefinition.W2V_POSNEG_MEAN.title(), recom + InputRecomDefinition.W2V_POSNEG_WINDOW3.title()]
-        rDescsW2V:List[RecommenderDescription] = [InputRecomDefinition.exportRDescW2vPosnegMean(datasetID), InputRecomDefinition.exportRDescW2vPosnegWindow3(datasetID)]
+        rDescsW2V:List[RecommenderDescription] = [InputRecomDefinition.exportRDescW2vPosnegMean(), InputRecomDefinition.exportRDescW2vPosnegWindow3()]
 
         rIDsKNN:List[str] = [recom + InputRecomDefinition.KNN.title()]
-        rDescsKNN:List[RecommenderDescription] = [InputRecomDefinition.exportRDescKNN(datasetID)]
+        rDescsKNN:List[RecommenderDescription] = [InputRecomDefinition.exportRDescKNN()]
 
         rIDsBPRMF:List[str] = [recom + InputRecomDefinition.BPRMF.title()]
-        rDescsBPRMF:List[RecommenderDescription] = [InputRecomDefinition.exportRDescBPRMF(datasetID)]
+        rDescsBPRMF:List[RecommenderDescription] = [InputRecomDefinition.exportRDescBPRMF()]
 
         rIDsPop:List[str] = [recom + InputRecomDefinition.THE_MOST_POPULAR.title()]
-        rDescsPop:List[RecommenderDescription] = [InputRecomDefinition.exportRDescTheMostPopular(datasetID)]
+        rDescsPop:List[RecommenderDescription] = [InputRecomDefinition.exportRDescTheMostPopular()]
 
         rIDs:List[str] = rIDsCB + rIDsW2V + rIDsKNN + rIDsBPRMF + rIDsPop
         rDescs:List[RecommenderDescription] = rDescsCB + rDescsW2V + rDescsKNN + rDescsBPRMF + rDescsPop
 
-#        rIDs:List[str] = rIDsCB + rIDsW2V + rIDsBPRMF + rIDsPop
-#        rDescs:List[RecommenderDescription] = rDescsCB + rDescsW2V + rDescsBPRMF + rDescsPop
-
-
         return (rIDs, rDescs)
 
 
 
 
     @staticmethod
-    def exportPairOfRecomIdsAndRecomDescrsRetailRocket(datasetID:str):
+    def exportPairOfRecomIdsAndRecomDescrsRetailRocket():
 
         recom:str = "Recom"
 
-        rIDs:List[str] = [recom + InputRecomDefinition.THE_MOST_SOLD.title()]
-        rDescs:List[RecommenderDescription] = [InputRecomDefinition.exportRDescTheMostSold(datasetID)]
+        rIDs:List[str] = [recom + InputRecomDefinition.THE_MOST_POPULAR.title()]
+        rDescs:List[RecommenderDescription] = [InputRecomDefinition.exportRDescTheMostPopular()]
 
         return (rIDs, rDescs)
 
 
 
     @staticmethod
-    def exportInputRecomDefinition(recommenderID:str, datasetID:str):
+    def exportInputRecomDefinition(recommenderID:str):
         if recommenderID == InputRecomDefinition.COS_CB_MEAN:
-            return InputRecomDefinition.exportRDescCBmean(datasetID)
+            return InputRecomDefinition.exportRDescCBmean()
         elif recommenderID == InputRecomDefinition.COS_CB_WINDOW3:
-            return InputRecomDefinition.exportRDescCBwindow3(datasetID)
+            return InputRecomDefinition.exportRDescCBwindow3()
         elif recommenderID == InputRecomDefinition.THE_MOST_POPULAR:
-            return InputRecomDefinition.exportRDescTheMostPopular(datasetID)
+            return InputRecomDefinition.exportRDescTheMostPopular()
         elif recommenderID == InputRecomDefinition.W2V_POSNEG_MEAN:
-            return InputRecomDefinition.exportRDescW2vPosnegMean(datasetID)
+            return InputRecomDefinition.exportRDescW2vPosnegMean()
         elif recommenderID == InputRecomDefinition.W2V_POSNEG_WINDOW3:
-            return InputRecomDefinition.exportRDescW2vPosnegWindow3(datasetID)
+            return InputRecomDefinition.exportRDescW2vPosnegWindow3()
         elif recommenderID == InputRecomDefinition.KNN:
-            return InputRecomDefinition.exportRDescKNN(datasetID)
+            return InputRecomDefinition.exportRDescKNN()
         elif recommenderID == InputRecomDefinition.BPRMF:
-            return InputRecomDefinition.exportRDescBPRMF(datasetID)
+            return InputRecomDefinition.exportRDescBPRMF()

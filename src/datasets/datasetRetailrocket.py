@@ -10,8 +10,9 @@ from datasets.retailrocket.itemProperties import ItemProperties #class
 
 class DatasetRetailRocket(ADataset):
 
-    def __init__(self, eventsDF:DataFrame, categoryTreeDF:DataFrame, itemPropertiesDF:DataFrame):
-
+    def __init__(self, datasetID:str, eventsDF:DataFrame, categoryTreeDF:DataFrame, itemPropertiesDF:DataFrame):
+        if type(datasetID) is not str:
+            raise ValueError("Argument datasetID isn't type str.")
         if type(eventsDF) is not DataFrame:
             raise ValueError("Argument eventsDF isn't type DataFrame.")
         if type(categoryTreeDF) is not DataFrame:
@@ -19,6 +20,7 @@ class DatasetRetailRocket(ADataset):
         if type(itemPropertiesDF) is not DataFrame:
             raise ValueError("Argument itemPropertiesDF isn't type DataFrame.")
 
+        self.datasetID = datasetID
         self.eventsDF:DataFrame = eventsDF
         self.categoryTreeDF:DataFrame = categoryTreeDF
         self.itemPropertiesDF:DataFrame = itemPropertiesDF
@@ -30,7 +32,7 @@ class DatasetRetailRocket(ADataset):
         categoryTreeDF:DataFrame = CategoryTree.readFromFile()
         itemPropertiesDF:DataFrame = ItemProperties.readFromFile()
 
-        return DatasetRetailRocket(eventsDF, categoryTreeDF, itemPropertiesDF)
+        return DatasetRetailRocket("rrDivAll", eventsDF, categoryTreeDF, itemPropertiesDF)
 
 
 

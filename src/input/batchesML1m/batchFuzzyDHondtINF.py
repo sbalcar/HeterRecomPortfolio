@@ -88,7 +88,7 @@ class BatchFuzzyDHondtINF(ABatchML):
 
         datasetID:str = "ml1m" + "Div" + str(divisionDatasetPercentualSize)
 
-        rIDs, rDescs = InputRecomDefinition.exportPairOfRecomIdsAndRecomDescrsML(datasetID)
+        rIDs, rDescs = InputRecomDefinition.exportPairOfRecomIdsAndRecomDescrsML()
 
         aDescNegDHont:AggregationDescription = InputAggrDefinition.exportADescDHontINF(selector, nImplFeedback)
 

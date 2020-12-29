@@ -53,7 +53,7 @@ class BatchBanditTS(ABatchML):
 
         datasetID:str = "ml1m" + "Div" + str(divisionDatasetPercentualSize)
 
-        rIDs, rDescs = InputRecomDefinition.exportPairOfRecomIdsAndRecomDescrsML(datasetID)
+        rIDs, rDescs = InputRecomDefinition.exportPairOfRecomIdsAndRecomDescrsML()
 
         pDescr: Portfolio1AggrDescription = Portfolio1AggrDescription(
             "BanditTS" + jobID, rIDs, rDescs, InputAggrDefinition.exportADescBanditTS(selector))
@@ -72,5 +72,5 @@ if __name__ == "__main__":
     os.chdir("..")
     os.chdir("..")
     print(os.getcwd())
-    #os.chdir("batches")
+
     BatchBanditTS.generateBatches()

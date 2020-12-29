@@ -47,7 +47,8 @@ class SimulationRR(ASequentialSimulation):
         #print("trainSize: " + str(trainSize))
         trainRatingsDF:DataFrame = eventsSortedDF[0:trainSize]
 
-        trainDataset:ADataset = DatasetRetailRocket(trainRatingsDF, categoryTreeDF, itemPropertiesDF)
+        datasetID:str = "rr" + "Div" + str(divisionDatasetPercentualSize)
+        trainDataset:ADataset = DatasetRetailRocket(datasetID, trainRatingsDF, categoryTreeDF, itemPropertiesDF)
 
 
         # create test Event DataFrame

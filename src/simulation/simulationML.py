@@ -50,7 +50,8 @@ class SimulationML(ASequentialSimulation):
         #print("trainSize: " + str(trainSize))
         trainRatingsDF:DataFrame = ratingsSortedDF[0:trainSize]
 
-        trainDataset:ADataset = DatasetML(trainRatingsDF, usersDF, itemsDF)
+        datasetID:str = "ml1m" + "Div" + str(divisionDatasetPercentualSize)
+        trainDataset:ADataset = DatasetML(datasetID, trainRatingsDF, usersDF, itemsDF)
 
 
         # create test Rating DataFrame
