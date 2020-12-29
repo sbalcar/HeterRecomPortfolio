@@ -144,7 +144,7 @@ class AggrContextFuzzyDHondt(AggrFuzzyDHondt):
             totalOriginalVotes += modelDF.at[recommender, 'votes']
             totalUpdatedVotes += updatedVotes[recommender]
 
-        # normalize updated votes and save to modelDF
+        # normalize updated votes and save it to modelDF
         rate = (totalOriginalVotes / totalUpdatedVotes) + 1e-12     # totalOriginalVottes converges to 0 so for now we add
                                                                     # 1e-12 to the rate to avoid this
         for recommender, votes in modelDF.iterrows():

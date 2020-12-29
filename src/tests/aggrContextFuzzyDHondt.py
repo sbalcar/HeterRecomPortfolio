@@ -3,17 +3,28 @@
 import os
 
 from typing import List
+
+from pandas.core.series import Series #class
 from pandas.core.frame import DataFrame #class
+import pandas as pd
 
 from aggregation.aggrContextFuzzyDHondt import AggrContextFuzzyDHondt #class
 
-import pandas as pd
 from history.aHistory import AHistory #class
 from history.historyDF import HistoryDF #class
 
 from datasets.ml.users import Users #class
 from datasets.ml.items import Items #class
 from datasets.ml.ratings import Ratings #class
+
+from recommender.aRecommender import ARecommender #class
+from recommender.recommenderItemBasedKNN import RecommenderItemBasedKNN #class
+from recommender.recommenderTheMostPopular import RecommenderTheMostPopular #class
+
+from datasets.aDataset import ADataset #class
+from datasets.datasetML import DatasetML #class
+
+from configuration.configuration import Configuration #class
 
 
 from aggregation.negImplFeedback.penalUsingReduceRelevance import penaltyLinear #function
@@ -80,9 +91,101 @@ def test01():
               film_info['Genres'].to_string(header=False))
 
     print()
+    print("===========================END OF TEST01===========================")
+    print()
+    print()
+
+
+def test02():
+    print("Test 02")
+
+    # number of recommended items
+    N = 100
+
+    # get dataset
+    itemsDF: DataFrame = Items.readFromFileMl1m()
+    usersDF: DataFrame = Users.readFromFileMl1m()
+    ratingsDF: DataFrame = Ratings.readFromFileMl1m()
+
+    ratingsDFTrain = ratingsDF[:50000]
+    ratingsDFUpdate: DataFrame = ratingsDF.iloc[50001:50100]
+
+    trainDataset:ADataset = DatasetML(ratingsDFTrain, usersDF, itemsDF)
+
+    historyDF: AHistory = HistoryDF("test01")
+
+    # train KNN
+    rec1: ARecommender = RecommenderItemBasedKNN("run", {})
+    rec1.train(HistoryDF("test01"), trainDataset)
+
+    #train Most Popular
+    rec2: ARecommender = RecommenderTheMostPopular("run", {})
+    rec2.train(historyDF, trainDataset)
+
+    # methods parametes
+    methodsParamsData: List[tuple] = [['ItembasedKNN', 100], ['MostPopular', 80]]
+    methodsParamsDF: DataFrame = pd.DataFrame(methodsParamsData, columns=["methodID", "votes"])
+    methodsParamsDF.set_index("methodID", inplace=True)
+
+    userID: int = 1
+
+    # TODO: What is ARG_SELECTOR?
+    aggr: AggrContextFuzzyDHondt = AggrContextFuzzyDHondt(historyDF, {
+        AggrContextFuzzyDHondt.ARG_SELECTOR: TheMostVotedItemSelector({}),
+        AggrContextFuzzyDHondt.ARG_USERS: usersDF,
+        AggrContextFuzzyDHondt.ARG_ITEMS: itemsDF,
+        AggrContextFuzzyDHondt.ARG_DATASET: "ml"})
+
+    r1: Series = rec1.recommend(userID, N, {})
+
+    r2: Series = rec2.recommend(userID, N, {})
+
+    r1.name = 'rating'
+    r2.name = 'rating'
+    methodsResultDict: dict[str, pd.Series] = {
+        "ItembasedKNN": r1,
+        "MostPopular": r2
+    }
+
+    itemIDs = aggr.runWithResponsibility(methodsResultDict, methodsParamsDF, userID, N)
+
+    print("recommended items:")
+    for itemID, votes in itemIDs:
+        film_info: DataFrame = itemsDF[itemsDF['movieId'] == itemID]
+        print('\t', film_info['movieTitle'].to_string(header=False),
+              film_info['Genres'].to_string(header=False))
+    print()
     print("===========================END OF RECOMMENDATION LIST===========================")
+    print("Ratings:")
+    for index, row in ratingsDFUpdate.iterrows():
+        aggr.update(ratingsDF.iloc[index:index + 1])
+        rec1.update(ratingsDF.iloc[index:index + 1])
+        rec2.update(ratingsDF.iloc[index:index + 1])
+        r1: Series = rec1.recommend(row['userId'], N, {})
+        r2: Series = rec2.recommend(row['userId'], N, {})
+        r1.name = 'rating'
+        r2.name = 'rating'
+        methodsResultDict: dict[str, pd.Series] = {
+            "ItembasedKNN": r1,
+            "MostPopular": r2
+        }
+        aggr.runWithResponsibility(methodsResultDict, methodsParamsDF, row['userId'], N)
+        film_info: DataFrame = itemsDF[itemsDF['movieId'] == ratingsDF.iloc[index]['movieId']]
+        print('\t', film_info['movieTitle'].to_string(header=False),
+              film_info['Genres'].to_string(header=False))
+    itemIDs = aggr.runWithResponsibility(methodsResultDict, methodsParamsDF, ratingsDF.iloc[-1:]['userId'].item(), N)
+
+    print("recommended items:")
+    for itemID, votes in itemIDs:
+        film_info: DataFrame = itemsDF[itemsDF['movieId'] == itemID]
+        print('\t', film_info['movieTitle'].to_string(header=False),
+              film_info['Genres'].to_string(header=False))
+
+    print()
+    print("===========================END OF TEST02===========================")
 
 
 if __name__ == "__main__":
     os.chdir("..")
     test01()
+    test02()
