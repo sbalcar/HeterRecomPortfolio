@@ -14,8 +14,9 @@
 #  context-target pairs:
 #    ("hat", "the"), ("hat", "cat"), ("hat", "in"), ("hat", "the")
 
-def word2vecRun(window_size = 3, embedding_size = 64, texts = []):
-    import tensorflow.compat.v1 as tf
+def word2vecRun(window_size = 3, embedding_size = 64, generations = 100000, texts = [], caller=None):
+    #import tensorflow.compat.v1 as tf
+    import tensorflow as tf
     tf.disable_v2_behavior()
     import numpy as np
     import os
@@ -34,7 +35,7 @@ def word2vecRun(window_size = 3, embedding_size = 64, texts = []):
     # Declare model parameters
     batch_size:int = 32
     vocabulary_size:int = 10000
-    generations:int = 200000
+    #generations:int = 200000
     #generations:int = 400000
     #generations:int = 450000
 
@@ -148,6 +149,10 @@ def word2vecRun(window_size = 3, embedding_size = 64, texts = []):
                     close_word = word_dictionary_rev[nearest[k]]
                     log_str = "%s %s," % (log_str, close_word)
                 print(log_str)
+
+        if (i+1) % save_embeddings_every == 0:
+             final_embeddings = sess.run(embeddings)
+             caller.saveModel((i+1), final_embeddings, word_dictionary_rev, word_dictionary)
 
 
     final_embeddings = sess.run(embeddings)
