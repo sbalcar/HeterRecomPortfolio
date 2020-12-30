@@ -17,7 +17,7 @@ from input.inputAggrDefinition import InputAggrDefinition, ModelDefinition  # cl
 
 from input.inputRecomDefinition import InputRecomDefinition #class
 
-from input.batchesML1m.batchFuzzyDHondt import BatchFuzzyDHondt #class
+from input.batchesML1m.batchMLFuzzyDHondt import BatchMLFuzzyDHondt #class
 
 from aggregation.operators.aDHondtSelector import ADHondtSelector #class
 
@@ -31,17 +31,17 @@ from history.historyHierDF import HistoryHierDF #class
 
 
 
-class BatchDHondtThompsonSampling(ABatchML):
+class BatchMLDHondtThompsonSampling(ABatchML):
 
     @staticmethod
     def getParameters():
-        selectorIDs:List[str] = BatchFuzzyDHondt().getSelectorParameters().keys()
+        selectorIDs:List[str] = BatchMLFuzzyDHondt().getSelectorParameters().keys()
 
         aDict:dict = {}
         for selectorIDI in selectorIDs:
             keyIJ:str = str(selectorIDI)
             eTool:AEvalTool = EvalToolDHondtBanditVotes({})
-            selectorIJK:ADHondtSelector = BatchFuzzyDHondt().getSelectorParameters()[selectorIDI]
+            selectorIJK:ADHondtSelector = BatchMLFuzzyDHondt().getSelectorParameters()[selectorIDI]
             aDict[keyIJ] = (selectorIJK, eTool)
         return aDict
 
@@ -79,4 +79,4 @@ if __name__ == "__main__":
     os.chdir("..")
     os.chdir("..")
     print(os.getcwd())
-    BatchDHondtThompsonSampling.generateBatches()
+    BatchMLDHondtThompsonSampling.generateBatches()

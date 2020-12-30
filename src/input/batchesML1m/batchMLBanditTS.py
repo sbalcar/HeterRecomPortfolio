@@ -14,7 +14,7 @@ from input.inputAggrDefinition import InputAggrDefinition, ModelDefinition  # cl
 
 from input.inputRecomDefinition import InputRecomDefinition #class
 
-from input.batchesML1m.batchFuzzyDHondt import BatchFuzzyDHondt #class
+from input.batchesML1m.batchMLFuzzyDHondt import BatchMLFuzzyDHondt #class
 
 from input.aBatch import BatchParameters #class
 from input.aBatchML import ABatchML #class
@@ -29,16 +29,16 @@ from history.historyHierDF import HistoryHierDF #class
 
 
 
-class BatchBanditTS(ABatchML):
+class BatchMLBanditTS(ABatchML):
 
     @staticmethod
     def getParameters():
-        selectorIDs:List[str] = BatchFuzzyDHondt().getSelectorParameters().keys()
+        selectorIDs:List[str] = BatchMLFuzzyDHondt().getSelectorParameters().keys()
 
         aDict:dict = {}
         for selectorIDI in selectorIDs:
             keyI:str = selectorIDI
-            selectorI:ADHondtSelector = BatchFuzzyDHondt().getSelectorParameters()[selectorIDI]
+            selectorI:ADHondtSelector = BatchMLFuzzyDHondt().getSelectorParameters()[selectorIDI]
             aDict[keyI] = (selectorI)
         return aDict
 
@@ -73,4 +73,4 @@ if __name__ == "__main__":
     os.chdir("..")
     print(os.getcwd())
 
-    BatchBanditTS.generateBatches()
+    BatchMLBanditTS.generateBatches()

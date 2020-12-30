@@ -13,6 +13,7 @@ from pandas.core.series import Series #class
 
 from datasets.aDataset import ADataset #class
 from datasets.datasetML import DatasetML #class
+from datasets.datasetRetailrocket import DatasetRetailRocket #class
 
 from datasets.ml.ratings import Ratings #class
 from datasets.ml.items import Items #class
@@ -29,7 +30,7 @@ import pandas as pd
 def test01():
     print("Test 01")
 
-    print("Running Recommender BPRMF:")
+    print("Running Recommender BPRMF on ML:")
 
     dataset:DatasetML = DatasetML.readDatasets()
 
@@ -74,7 +75,7 @@ def test01():
 def test02():
     print("Test 02")
 
-    print("Running Recommender BPRMF:")
+    print("Running Recommender BPRMF on ML:")
 
     dataset:DatasetML = DatasetML.readDatasets()
 
@@ -99,8 +100,31 @@ def test02():
     print("================== END OF TEST 02 ======================\n\n\n\n\n")
 
 
+def test03():
+    print("Test 03")
+
+    print("Running Recommender BPRMF on RR:")
+
+    dataset:DatasetRetailRocket = DatasetRetailRocket.readDatasets()
+
+    trainDataset:DatasetRetailRocket = dataset
+
+    # train recommender
+    rec:ARecommender = RecommenderBPRMF("test",{
+                    RecommenderBPRMF.ARG_FACTORS: 20,
+                    RecommenderBPRMF.ARG_ITERATIONS: 50,
+                    RecommenderBPRMF.ARG_LEARNINGRATE: 0.003,
+                    RecommenderBPRMF.ARG_REGULARIZATION: 0.003})
+    rec.train(HistoryDF("test03"), trainDataset)
+
+    r:Series = rec.recommend(23, 50, {})
+    print(r)
+
+
+
 if __name__ == "__main__":
     os.chdir("..")
 
-    test01()
-    test02()
+#    test01()
+#    test02()
+    test03()

@@ -17,7 +17,7 @@ from input.inputAggrDefinition import InputAggrDefinition, ModelDefinition  #cla
 
 from input.inputRecomDefinition import InputRecomDefinition #class
 
-from input.batchesML1m.batchFuzzyDHondt import BatchFuzzyDHondt #class
+from input.batchesML1m.batchMLFuzzyDHondt import BatchMLFuzzyDHondt #class
 
 from aggregation.negImplFeedback.aPenalization import APenalization #class
 
@@ -53,7 +53,7 @@ class BatchFuzzyDHondtINF(ABatchML):
 
     @staticmethod
     def getParameters():
-        selectorIDs:List[str] = BatchFuzzyDHondt().getSelectorParameters().keys()
+        selectorIDs:List[str] = BatchMLFuzzyDHondt().getSelectorParameters().keys()
         negativeImplFeedback:List[str] = BatchFuzzyDHondtINF.getNegativeImplFeedbackParameters().keys()
         #lrClicks:List[float] = [0.2, 0.1, 0.02, 0.005]
         lrClicks:List[float] = [0.1]
@@ -70,7 +70,7 @@ class BatchFuzzyDHondtINF(ABatchML):
                         eTool:AEvalTool = EvalToolDHondt({EvalToolDHondt.ARG_LEARNING_RATE_CLICKS: lrClickJ,
                                                           EvalToolDHondt.ARG_LEARNING_RATE_VIEWS: lrViewIJK})
                         nImplFeedback:APenalization = BatchFuzzyDHondtINF.getNegativeImplFeedbackParameters()[nImplFeedbackI]
-                        selectorH:ADHondtSelector = BatchFuzzyDHondt().getSelectorParameters()[selectorIDH]
+                        selectorH:ADHondtSelector = BatchMLFuzzyDHondt().getSelectorParameters()[selectorIDH]
 
                         aDict[keyIJ] = (selectorH, nImplFeedback, eTool)
         return aDict

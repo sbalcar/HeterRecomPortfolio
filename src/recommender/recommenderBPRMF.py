@@ -16,6 +16,7 @@ from recommender.aRecommender import ARecommender  # class
 
 from datasets.aDataset import ADataset #class
 from datasets.datasetML import DatasetML #class
+from datasets.datasetRetailrocket import DatasetRetailRocket #class
 
 from datasets.ml.ratings import Ratings  # class
 from datasets.ml.items import Items #class
@@ -26,7 +27,6 @@ from history.aHistory import AHistory #class
 
 class RecommenderBPRMF(ARecommender):
 
-    #ARG_USER_PROFILE_STRATEGY:str = "userProfileStrategy"
     ARG_FACTORS:str = "factors"
     ARG_ITERATIONS:str = "iterations"
     ARG_LEARNINGRATE:str = "learning_rate"
@@ -57,27 +57,51 @@ class RecommenderBPRMF(ARecommender):
         
 
     def train(self, history:AHistory, dataset:ADataset):
-        if type(dataset) is not DatasetML:
-            raise ValueError("Argument dataset is not type DatasetML.")
+        if not isinstance(history, AHistory):
+            raise ValueError("Argument history isn't type AHistory.")
+        if not isinstance(dataset, ADataset):
+            raise ValueError("Argument dataset isn't type ADataset.")
+        self._trainDataset:ADataset = dataset
 
-        ratingsDF:DataFrame = dataset.ratingsDF
-        usersDF:DataFrame = dataset.usersDF
-        self.itemsDF:DataFrame = dataset.itemsDF
-
-        ratingsDF:DataFrame = ratingsDF.loc[ratingsDF[Ratings.COL_RATING] >= 4]
+        if type(dataset) is DatasetML:
+            COL_RATING:str = Ratings.COL_RATING
+            COL_USERID:str = Users.COL_USERID
+            COL_ITEMID:str = Items.COL_MOVIEID
+            ratingsDF:DataFrame = dataset.ratingsDF.loc[dataset.ratingsDF[COL_RATING] >= 4]
         
-        maxUID = usersDF[Users.COL_USERID].max()
-        maxOID = self.itemsDF[Items.COL_MOVIEID].max()
+            maxUID:int = dataset.usersDF[COL_USERID].max()
+            maxOID:int = dataset.itemsDF[COL_ITEMID].max()
+
+        elif type(dataset) is DatasetRetailRocket:
+            from datasets.retailrocket.events import Events
+            COL_RATING:str = "rating"
+            COL_USERID:str = Events.COL_VISITOR_ID
+            COL_ITEMID:str = Events.COL_ITEM_ID
+
+            ratings4DF:DataFrame = dataset.eventsDF[[COL_USERID, COL_ITEMID, Events.COL_EVENT]]
+            ratings4DF = ratings4DF.drop_duplicates()
+
+            ratings4DF.loc[ratings4DF[Events.COL_EVENT] == "view", COL_RATING] = 1
+            ratings4DF.loc[ratings4DF[Events.COL_EVENT] == "addtocart", COL_RATING] = 2
+            ratings4DF.loc[ratings4DF[Events.COL_EVENT] == "transaction", COL_RATING] = 3
+
+            ratingsDF:DataFrame = ratings4DF[[COL_USERID, COL_ITEMID, COL_RATING]]
+            ratingsDF = ratingsDF.groupby([COL_USERID, COL_ITEMID], as_index=False)[COL_RATING].max()
+
+            maxUID:int = dataset.eventsDF[COL_USERID].max()
+            maxOID:int = dataset.eventsDF[COL_ITEMID].max()
+
 
         if self.DEBUG_MODE:
             print(maxUID, maxOID)
-        ratingsDF[Ratings.COL_RATING] = 1.0 #flatten ratings
+
+        ratingsDF[COL_RATING] = 1.0 #flatten ratings
         if type(ratingsDF) is not DataFrame:
             raise ValueError("Argument trainRatingsDF is not type DataFrame.") 
                  
-        self._movieFeaturesMatrix = sp.coo_matrix((ratingsDF[Ratings.COL_RATING], 
-                   (ratingsDF[Ratings.COL_MOVIEID], 
-                    ratingsDF[Ratings.COL_USERID])), shape = (maxOID+1, maxUID+1))
+        self._movieFeaturesMatrix = sp.coo_matrix((ratingsDF[COL_RATING],
+                   (ratingsDF[COL_ITEMID],
+                    ratingsDF[COL_USERID])), shape = (maxOID+1, maxUID+1))
         self._movieFeaturesMatrixLIL =  self._movieFeaturesMatrix.tolil()
                    
         self._userFeaturesMatrix = self._movieFeaturesMatrix.T.tocsr()
@@ -125,8 +149,6 @@ class RecommenderBPRMF(ARecommender):
             raise ValueError("Argument numberOfItems isn't type int.")
         if type(argumentsDict) is not dict:
             raise ValueError("Argument argumentsDict isn't type dict.")
-
-        #userProfileStrategy:str = argumentsDict[self.ARG_USER_PROFILE_STRATEGY]
         
         if(userID < self._movieFeaturesMatrix.shape[1]):
             recommendations = self.model.recommend(userID, self._userFeaturesMatrix, N = numberOfItems)
@@ -135,21 +157,21 @@ class RecommenderBPRMF(ARecommender):
 
 
         # provedu agregaci dle zvolené metody
-        if len(recommendations) > 0:
-            if self.DEBUG_MODE:
-                print(type(recommendations))
-            recItems = [i[0] for i in recommendations]
-            recScores = [i[1] for i in recommendations]
-            
-            #print(self.itemsDF.loc[self.itemsDF.movieID = recItems])
-            idf = self.itemsDF.set_index("movieId")
-            if self.DEBUG_MODE:
-                print(idf.loc[recItems])
-            # print(results[resultList])
+        if len(recommendations) == 0:
+            return pd.Series([], index=[])
 
-            # normalize scores into the unit vector (for aggregation purposes)
-            # !!! tohle je zasadni a je potreba provest normalizaci u vsech recommenderu - teda i pro most popular!
-            finalScores = normalize(np.expand_dims(recScores, axis=0))[0, :]
-            return pd.Series(finalScores.tolist(), index=recItems)
+        if self.DEBUG_MODE:
+            print(type(recommendations))
+        recItems = [i[0] for i in recommendations]
+        recScores = [i[1] for i in recommendations]
 
-        return pd.Series([], index=[])
+        if self.DEBUG_MODE and type(self._trainDataset) is DatasetML:
+            idf = self._trainDataset.itemsDF.set_index("movieId")
+            print(idf.loc[recItems])
+
+
+        # normalize scores into the unit vector (for aggregation purposes)
+        # !!! tohle je zasadni a je potreba provest normalizaci u vsech recommenderu - teda i pro most popular!
+        finalScores = normalize(np.expand_dims(recScores, axis=0))[0, :]
+        return pd.Series(finalScores.tolist(), index=recItems)
+

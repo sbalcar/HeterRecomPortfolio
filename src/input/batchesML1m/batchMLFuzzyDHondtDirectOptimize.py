@@ -32,7 +32,7 @@ from history.historyHierDF import HistoryHierDF #class
 
 
 
-class BatchFuzzyDHondt(ABatchML):
+class BatchMLFuzzyDHondtDirectOptimize(ABatchML):
 
     SLCTR_ROULETTE1:str = "Roulette1"
     SLCTR_ROULETTE2:str = "Roulette3"
@@ -46,15 +46,14 @@ class BatchFuzzyDHondt(ABatchML):
         selectorFixed:ADHondtSelector = TheMostVotedItemSelector({})
 
         aDict:dict = {}
-        aDict[BatchFuzzyDHondt.SLCTR_ROULETTE1] = selectorRoulette1
-        aDict[BatchFuzzyDHondt.SLCTR_ROULETTE2] = selectorRoulette3
-        aDict[BatchFuzzyDHondt.SLCTR_FIXED] = selectorFixed
+        aDict[BatchMLFuzzyDHondtDirectOptimize.SLCTR_ROULETTE1] = selectorRoulette1
+        aDict[BatchMLFuzzyDHondtDirectOptimize.SLCTR_ROULETTE2] = selectorRoulette3
+        aDict[BatchMLFuzzyDHondtDirectOptimize.SLCTR_FIXED] = selectorFixed
         return aDict
-
 
     @staticmethod
     def getParameters():
-        selectorIDs:List[str] = BatchFuzzyDHondt.getSelectorParameters().keys()
+        selectorIDs:List[str] = BatchMLFuzzyDHondtDirectOptimize.getSelectorParameters().keys()
         lrClicks:List[float] = [0.2, 0.1, 0.02, 0.005]
         #lrClicks:List[float] = [0.1]
         lrViewDivisors:List[float] = [200, 500, 1000]
@@ -68,7 +67,7 @@ class BatchFuzzyDHondt(ABatchML):
                     lrViewIJK:float = lrClickJ / lrViewDivisorK
                     eToolIJK:AEvalTool = EvalToolDHondt({EvalToolDHondt.ARG_LEARNING_RATE_CLICKS: lrClickJ,
                                                       EvalToolDHondt.ARG_LEARNING_RATE_VIEWS: lrViewIJK})
-                    selectorIJK:ADHondtSelector = BatchFuzzyDHondt.getSelectorParameters()[selectorIDI]
+                    selectorIJK:ADHondtSelector = BatchMLFuzzyDHondtDirectOptimize.getSelectorParameters()[selectorIDI]
                     aDict[keyIJ] = (selectorIJK, eToolIJK)
         return aDict
 
@@ -87,10 +86,10 @@ class BatchFuzzyDHondt(ABatchML):
 
         rIDs, rDescs = InputRecomDefinition.exportPairOfRecomIdsAndRecomDescrsML()
 
-        aDescDHont:AggregationDescription = InputAggrDefinition.exportADescDHont(selector)
+        aDescDHont:AggregationDescription = InputAggrDefinition.exportADescDHontDirectOptimize(selector)
 
         pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
-            "FDHont" + jobID, rIDs, rDescs, aDescDHont)
+            "FDHontDirectOptimize" + jobID, rIDs, rDescs, aDescDHont)
 
         model:DataFrame = ModelDefinition.createDHontModel(pDescr.getRecommendersIDs())
 
@@ -100,9 +99,8 @@ class BatchFuzzyDHondt(ABatchML):
 
 
 
-
 if __name__ == "__main__":
     os.chdir("..")
     os.chdir("..")
     print(os.getcwd())
-    BatchFuzzyDHondt.generateBatches()
+    BatchMLFuzzyDHondtDirectOptimize.generateBatches()

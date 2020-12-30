@@ -14,14 +14,9 @@ from datasets.retailrocket.events import Events #class
 
 
 
-if __name__ == "__main__":
 
-  #np.random.seed(42)
-  #random.seed(42)
-
-  os.chdir("..")
-  #os.chdir("..")
-  print(os.getcwd())
+def test01():
+  print("Test 01")
 
   userID:int = 565892
   currentItemID:int = 168952
@@ -59,3 +54,35 @@ if __name__ == "__main__":
 #        print(len(eventsDF))
 
   print(eventsDF.head(100))
+
+
+def test02():
+  print("Test 02")
+
+  eventsDF:DataFrame = Events.readFromFile()
+
+  ratings4DF:DataFrame = eventsDF[[Events.COL_VISITOR_ID, Events.COL_ITEM_ID, Events.COL_EVENT]]
+  ratings4DF = ratings4DF.drop_duplicates()
+
+  ratings4DF.loc[ratings4DF[Events.COL_EVENT] == "view", "rating"] = 1
+  ratings4DF.loc[ratings4DF[Events.COL_EVENT] == "addtocart", "rating"] = 2
+  ratings4DF.loc[ratings4DF[Events.COL_EVENT] == "transaction", "rating"] = 3
+
+
+  ratingsDF:DataFrame = ratings4DF[[Events.COL_VISITOR_ID, Events.COL_ITEM_ID, "rating"]]
+
+  ratingsDF = ratingsDF.groupby([Events.COL_VISITOR_ID, Events.COL_ITEM_ID], as_index=False)["rating"].max()
+
+
+  print(ratingsDF.head(40))
+
+  print(len(eventsDF))
+  print(len(ratingsDF))
+
+
+
+if __name__ == "__main__":
+    os.chdir("..")
+
+    #test01()
+    test02()

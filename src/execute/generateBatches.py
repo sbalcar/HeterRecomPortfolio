@@ -4,20 +4,20 @@ import os
 import random
 import numpy as np
 
-from input.batchesML1m.batchBanditTS import BatchBanditTS #class
+from input.batchesML1m.batchMLBanditTS import BatchMLBanditTS #class
 
-from input.batchesML1m.batchDHondtThompsonSampling import BatchDHondtThompsonSampling #class
-from input.batchesML1m.batchDHondtThompsonSamplingINF import BatchDHondtThompsonSamplingINF #class
+from input.batchesML1m.batchMLDHondtThompsonSampling import BatchMLDHondtThompsonSampling #class
+from input.batchesML1m.batchMLDHondtThompsonSamplingINF import BatchMLDHondtThompsonSamplingINF #class
 
-from input.batchesML1m.batchFuzzyDHondt import BatchFuzzyDHondt #class
+from input.batchesML1m.batchMLFuzzyDHondt import BatchMLFuzzyDHondt #class
 from input.batchesML1m.batchFuzzyDHondtINF import BatchFuzzyDHondtINF #class
 
-from input.batchesML1m.batchFuzzyDHondtDirectOptimize import BatchFuzzyDHondtDirectOptimize #class
+from input.batchesML1m.batchMLFuzzyDHondtDirectOptimize import BatchMLFuzzyDHondtDirectOptimize #class
 from input.batchesML1m.batchFuzzyDHondtDirectOptimizeINF import BatchFuzzyDHondtDirectOptimizeINF #class
 
 from input.batchesML1m.batchMLSingle2 import BatchMLSingle2 #class
-from input.batchesML1m.batchSingle import BatchSingle #class
-from input.batchesML1m.batchSingleINF import BatchSingleINF #class
+from input.batchesML1m.batchMLSingle import BatchMLSingle #class
+from input.batchesML1m.batchMLSingleINF import BatchMLSingleINF #class
 
 from input.batchesRetailrocket.batchRRSingle import BatchRRSingle #class
 
@@ -28,19 +28,19 @@ def generateBatches():
     print("Generate Batches")
 
     # ML
-#    BatchBanditTS.generateBatches()
+#    BatchMLBanditTS.generateBatches()
 
-#    BatchFuzzyDHondt.generateBatches()
+#    BatchMLFuzzyDHondt.generateBatches()
 #    BatchFuzzyDHondtINF.generateBatches()
 
-#    BatchDHondtThompsonSampling.generateBatches()
-#    BatchDHondtThompsonSamplingINF.generateBatches()
+#    BatchMLDHondtThompsonSampling.generateBatches()
+#    BatchMLDHondtThompsonSamplingINF.generateBatches()
 
-#    BatchFuzzyDHondtDirectOptimize.generateBatches()
+#    BatchMLFuzzyDHondtDirectOptimize.generateBatches()
 #    BatchFuzzyDHondtDirectOptimizeINF.generateBatches()
 
-#    BatchSingle.generateBatches()
-#    BatchSingleINF.generateBatches()
+#    BatchMLSingle.generateBatches()
+#    BatchMLSingleINF.generateBatches()
 
     BatchMLSingle2.generateBatches()
 

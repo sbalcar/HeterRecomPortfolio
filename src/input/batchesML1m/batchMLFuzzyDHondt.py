@@ -32,7 +32,7 @@ from history.historyHierDF import HistoryHierDF #class
 
 
 
-class BatchFuzzyDHondtDirectOptimize(ABatchML):
+class BatchMLFuzzyDHondt(ABatchML):
 
     SLCTR_ROULETTE1:str = "Roulette1"
     SLCTR_ROULETTE2:str = "Roulette3"
@@ -46,14 +46,15 @@ class BatchFuzzyDHondtDirectOptimize(ABatchML):
         selectorFixed:ADHondtSelector = TheMostVotedItemSelector({})
 
         aDict:dict = {}
-        aDict[BatchFuzzyDHondtDirectOptimize.SLCTR_ROULETTE1] = selectorRoulette1
-        aDict[BatchFuzzyDHondtDirectOptimize.SLCTR_ROULETTE2] = selectorRoulette3
-        aDict[BatchFuzzyDHondtDirectOptimize.SLCTR_FIXED] = selectorFixed
+        aDict[BatchMLFuzzyDHondt.SLCTR_ROULETTE1] = selectorRoulette1
+        aDict[BatchMLFuzzyDHondt.SLCTR_ROULETTE2] = selectorRoulette3
+        aDict[BatchMLFuzzyDHondt.SLCTR_FIXED] = selectorFixed
         return aDict
+
 
     @staticmethod
     def getParameters():
-        selectorIDs:List[str] = BatchFuzzyDHondtDirectOptimize.getSelectorParameters().keys()
+        selectorIDs:List[str] = BatchMLFuzzyDHondt.getSelectorParameters().keys()
         lrClicks:List[float] = [0.2, 0.1, 0.02, 0.005]
         #lrClicks:List[float] = [0.1]
         lrViewDivisors:List[float] = [200, 500, 1000]
@@ -67,7 +68,7 @@ class BatchFuzzyDHondtDirectOptimize(ABatchML):
                     lrViewIJK:float = lrClickJ / lrViewDivisorK
                     eToolIJK:AEvalTool = EvalToolDHondt({EvalToolDHondt.ARG_LEARNING_RATE_CLICKS: lrClickJ,
                                                       EvalToolDHondt.ARG_LEARNING_RATE_VIEWS: lrViewIJK})
-                    selectorIJK:ADHondtSelector = BatchFuzzyDHondtDirectOptimize.getSelectorParameters()[selectorIDI]
+                    selectorIJK:ADHondtSelector = BatchMLFuzzyDHondt.getSelectorParameters()[selectorIDI]
                     aDict[keyIJ] = (selectorIJK, eToolIJK)
         return aDict
 
@@ -86,10 +87,10 @@ class BatchFuzzyDHondtDirectOptimize(ABatchML):
 
         rIDs, rDescs = InputRecomDefinition.exportPairOfRecomIdsAndRecomDescrsML()
 
-        aDescDHont:AggregationDescription = InputAggrDefinition.exportADescDHontDirectOptimize(selector)
+        aDescDHont:AggregationDescription = InputAggrDefinition.exportADescDHont(selector)
 
         pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
-            "FDHontDirectOptimize" + jobID, rIDs, rDescs, aDescDHont)
+            "FDHont" + jobID, rIDs, rDescs, aDescDHont)
 
         model:DataFrame = ModelDefinition.createDHontModel(pDescr.getRecommendersIDs())
 
@@ -99,8 +100,9 @@ class BatchFuzzyDHondtDirectOptimize(ABatchML):
 
 
 
+
 if __name__ == "__main__":
     os.chdir("..")
     os.chdir("..")
     print(os.getcwd())
-    BatchFuzzyDHondtDirectOptimize.generateBatches()
+    BatchMLFuzzyDHondt.generateBatches()
