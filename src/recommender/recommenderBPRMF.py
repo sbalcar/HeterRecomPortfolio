@@ -44,7 +44,7 @@ class RecommenderBPRMF(ARecommender):
         self._jobID:str = jobID
         self._argumentsDict:dict = argumentsDict
         self._KNNs:DataFrame = None
-        self._movieFeaturesMatrix = None
+        self._itemFeaturesMatrix = None
         self._userFeaturesMatrix  = None
         self._factors = argumentsDict[RecommenderBPRMF.ARG_FACTORS]
         self._iterations = argumentsDict[RecommenderBPRMF.ARG_ITERATIONS]
@@ -74,7 +74,7 @@ class RecommenderBPRMF(ARecommender):
             maxOID:int = dataset.itemsDF[COL_ITEMID].max()
 
         elif type(dataset) is DatasetRetailRocket:
-            from datasets.retailrocket.events import Events
+            from datasets.retailrocket.events import Events  # class
             COL_RATING:str = "rating"
             COL_USERID:str = Events.COL_VISITOR_ID
             COL_ITEMID:str = Events.COL_ITEM_ID
@@ -92,52 +92,82 @@ class RecommenderBPRMF(ARecommender):
             maxUID:int = dataset.eventsDF[COL_USERID].max()
             maxOID:int = dataset.eventsDF[COL_ITEMID].max()
 
+        elif type(self._trainDataset) is DatasetST:
+            from datasets.slantour.events import Events  # class
+            COL_RATING:str = "rating"
+            COL_USERID:str = Events.COL_USER_ID
+            COL_ITEMID:str = Events.COL_OBJECT_ID
+
+            trainEvents2DF:DataFrame = dataset.eventsDF[[Events.COL_USER_ID, Events.COL_OBJECT_ID]]
+            trainEventsDF:DatasetST = trainEvents2DF.drop_duplicates()
+            trainEventsDF[COL_RATING] = 1.0
+            ratingsDF:DataFrame = trainEventsDF
+
+            maxUID:int = dataset.eventsDF[COL_USERID].max()
+            maxOID:int = dataset.eventsDF[COL_ITEMID].max()
+
 
         if self.DEBUG_MODE:
             print(maxUID, maxOID)
 
         ratingsDF[COL_RATING] = 1.0 #flatten ratings
-        if type(ratingsDF) is not DataFrame:
-            raise ValueError("Argument trainRatingsDF is not type DataFrame.") 
-                 
-        self._movieFeaturesMatrix = sp.coo_matrix((ratingsDF[COL_RATING],
-                   (ratingsDF[COL_ITEMID],
+
+        self._itemFeaturesMatrix = sp.coo_matrix((ratingsDF[COL_RATING],
+                                                  (ratingsDF[COL_ITEMID],
                     ratingsDF[COL_USERID])), shape = (maxOID+1, maxUID+1))
-        self._movieFeaturesMatrixLIL =  self._movieFeaturesMatrix.tolil()
+        self._movieFeaturesMatrixLIL =  self._itemFeaturesMatrix.tolil()
                    
-        self._userFeaturesMatrix = self._movieFeaturesMatrix.T.tocsr()
+        self._userFeaturesMatrix = self._itemFeaturesMatrix.T.tocsr()
         
         self.model = implicit.bpr.BayesianPersonalizedRanking(factors=self._factors, 
             iterations=self._iterations, 
             learning_rate=self._learningRate, 
             regularization=self._regularization, 
             random_state=self._randomState)
-        self.model.fit(self._movieFeaturesMatrix)
+        self.model.fit(self._itemFeaturesMatrix)
         
 
     def update(self, ratingsUpdateDF:DataFrame):
+        if type(ratingsUpdateDF) is not DataFrame:
+            raise ValueError("Argument ratingsTrainDF isn't type DataFrame.")
+
         # ratingsUpdateDF has only one row
         row = ratingsUpdateDF.iloc[0]
-        rating = row[Ratings.COL_RATING]
-        user = row[Ratings.COL_USERID]
-        item = row[Ratings.COL_MOVIEID]
-        #print(self._movieFeaturesMatrix)
-        
-        if rating >= 4:
-            self._updateCounter += 1
-            #using flat ratings
-            self._movieFeaturesMatrixLIL[item, user] =  1.0 #rating
-            #print(item, user)
-            #print(self._movieFeaturesMatrixLIL[item, user])
-            #print(self._updateCounter)
-            
-            if self._updateCounter == self.updateThreshold:
-                self._updateCounter = 0
-                #print("updating matrix")
-                self._movieFeaturesMatrix =  self._movieFeaturesMatrixLIL.tocsr()
-                self._userFeaturesMatrix = self._movieFeaturesMatrix.T.tocsr()
-                self.model.fit(self._movieFeaturesMatrix)
-                #print(self._movieFeaturesMatrix)
+
+        if type(self._trainDataset) is DatasetML:
+            rating = row[Ratings.COL_RATING]
+            user = row[Ratings.COL_USERID]
+            item = row[Ratings.COL_MOVIEID]
+            if rating < 4:
+                return
+
+        elif type(self._trainDataset) is DatasetRetailRocket:
+            from datasets.retailrocket.events import Events
+            rating = 1.0
+            user = row[Events.COL_VISITOR_ID]
+            item = row[Events.COL_ITEM_ID]
+
+        elif type(self._trainDataset) is DatasetST:
+            from datasets.slantour.events import Events  # class
+            rating = 1.0
+            user = row[Events.COL_USER_ID]
+            item = row[Events.COL_OBJECT_ID]
+
+
+        self._updateCounter += 1
+        #using flat ratings
+        self._movieFeaturesMatrixLIL[item, user] =  1.0 #rating
+        #print(item, user)
+        #print(self._movieFeaturesMatrixLIL[item, user])
+        #print(self._updateCounter)
+
+        if self._updateCounter == self.updateThreshold:
+            self._updateCounter = 0
+            #print("updating matrix")
+            self._itemFeaturesMatrix =  self._movieFeaturesMatrixLIL.tocsr()
+            self._userFeaturesMatrix = self._itemFeaturesMatrix.T.tocsr()
+            self.model.fit(self._itemFeaturesMatrix)
+            #print(self._movieFeaturesMatrix)
                 
 
  
@@ -151,7 +181,7 @@ class RecommenderBPRMF(ARecommender):
         if type(argumentsDict) is not dict:
             raise ValueError("Argument argumentsDict isn't type dict.")
         
-        if(userID < self._movieFeaturesMatrix.shape[1]):
+        if(userID < self._itemFeaturesMatrix.shape[1]):
             recommendations = self.model.recommend(userID, self._userFeaturesMatrix, N = numberOfItems)
         else: #cannot recommend for unknown user
             return pd.Series([], index=[])

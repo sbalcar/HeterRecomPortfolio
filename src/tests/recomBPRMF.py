@@ -14,6 +14,7 @@ from pandas.core.series import Series #class
 from datasets.aDataset import ADataset #class
 from datasets.datasetML import DatasetML #class
 from datasets.datasetRetailrocket import DatasetRetailRocket #class
+from datasets.datasetST import DatasetST #class
 
 from datasets.ml.ratings import Ratings #class
 from datasets.ml.items import Items #class
@@ -109,6 +110,8 @@ def test03():
 
     trainDataset:DatasetRetailRocket = dataset
 
+    eventsDF:DataFrame = dataset.eventsDF
+
     # train recommender
     rec:ARecommender = RecommenderBPRMF("test",{
                     RecommenderBPRMF.ARG_FACTORS: 20,
@@ -117,8 +120,40 @@ def test03():
                     RecommenderBPRMF.ARG_REGULARIZATION: 0.003})
     rec.train(HistoryDF("test03"), trainDataset)
 
+    uDF:DataFrame = DataFrame([eventsDF.iloc[9000]])
+    print(uDF)
+    rec.update(uDF)
+
     r:Series = rec.recommend(23, 50, {})
     print(r)
+
+
+def test04():
+    print("Test 04")
+
+    print("Running Recommender BPRMF on SL:")
+
+    dataset:DatasetRetailRocket = DatasetST.readDatasets()
+
+    trainDataset:DatasetRetailRocket = dataset
+
+    eventsDF:DataFrame = dataset.eventsDF
+
+    # train recommender
+    rec:ARecommender = RecommenderBPRMF("test",{
+                    RecommenderBPRMF.ARG_FACTORS: 20,
+                    RecommenderBPRMF.ARG_ITERATIONS: 50,
+                    RecommenderBPRMF.ARG_LEARNINGRATE: 0.003,
+                    RecommenderBPRMF.ARG_REGULARIZATION: 0.003})
+    rec.train(HistoryDF("test04"), trainDataset)
+
+    uDF:DataFrame = DataFrame([eventsDF.iloc[9000]])
+    print(uDF)
+    rec.update(uDF)
+
+    r:Series = rec.recommend(23, 50, {})
+    print(r)
+
 
 
 
@@ -127,4 +162,5 @@ if __name__ == "__main__":
 
 #    test01()
 #    test02()
-    test03()
+#    test03()
+    test04()
