@@ -17,6 +17,8 @@ from history.historyDF import HistoryDF #class
 
 from datasets.aDataset import ADataset #class
 from datasets.datasetML import DatasetML #class
+from datasets.datasetRetailrocket import DatasetRetailRocket #class
+from datasets.datasetST import DatasetST #class
 
 import pandas as pd
 
@@ -24,7 +26,7 @@ import pandas as pd
 def test01():
     print("Test 01")
 
-    print("Running RecommenderItemBasedKNN:")
+    print("Running RecommenderItemBasedKNN ML:")
 
     ratingsDF:DataFrame = Ratings.readFromFileMl1m()
 
@@ -60,7 +62,7 @@ def test01():
 def test02():
     print("Test 02")
 
-    print("Running RecommenderItemBasedKNN:")
+    print("Running RecommenderItemBasedKNN ML:")
 
     ratingsDF:DataFrame = Ratings.readFromFileMl1m()
 
@@ -86,7 +88,7 @@ def test03():
 #    currentItemID: 196
 #    repetition: 0
 
-    print("Running RecommenderItemBasedKNN:")
+    print("Running RecommenderItemBasedKNN ML:")
 
     ratingsDF:DataFrame = Ratings.readFromFileMl1m()
     ratingsSortedDF:DataFrame = ratingsDF.sort_values(by=Ratings.COL_TIMESTAMP)
@@ -117,6 +119,7 @@ def test03():
 
     r:Series = rec.recommend(23, 10, {})
     print(r)
+    print("\n")
 
     r:Series = rec.recommend(23, 10, {})
     print(r)
@@ -124,9 +127,58 @@ def test03():
     print("================== END OF TEST 03 ======================\n\n\n\n\n")
 
 
+def test04():
+    print("Test 04")
+
+    print("Running RecommenderItemBasedKNN RR:")
+
+    from datasets.retailrocket.events import Events  # class
+    eventsDF:DataFrame = Events.readFromFile()
+
+    dataset:ADataset = DatasetRetailRocket("test", eventsDF, DataFrame(), DataFrame())
+
+    rec:ARecommender = RecommenderItemBasedKNN("test", {})
+    print("train")
+    rec.train(HistoryDF("test"), dataset)
+
+    uDF:DataFrame = DataFrame([eventsDF.iloc[9000]])
+    print(uDF)
+    rec.update(uDF)
+
+    recommendation = rec.recommend(1, 20, {})
+    print(recommendation)
+
+    print("================== END OF TEST 04 ======================\n\n\n\n\n")
+
+
+def test05():
+    print("Test 05")
+
+    print("Running RecommenderItemBasedKNN ST:")
+
+    from datasets.slantour.events import Events  # class
+    eventsDF:DataFrame = Events.readFromFile()
+
+    dataset:ADataset = DatasetST("test", eventsDF, DataFrame())
+
+    rec:ARecommender = RecommenderItemBasedKNN("test", {})
+    rec.train(HistoryDF("test"), dataset)
+
+    uDF:DataFrame = DataFrame([eventsDF.iloc[9000]])
+    print(uDF)
+    rec.update(uDF)
+
+    recommendation = rec.recommend(3325463, 20, {})
+    print(recommendation)
+
+    print("================== END OF TEST 05 ======================\n\n\n\n\n")
+
+
 if __name__ == "__main__":
     os.chdir("..")
 
-    test01()
+    #test01()
     #test02()
     #test03()
+    test04()
+    #test05()

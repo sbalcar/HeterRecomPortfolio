@@ -47,11 +47,9 @@ class BatchSTSingle(ABatchST):
         repetition:int
         divisionDatasetPercentualSize, uBehaviour, repetition = BatchParameters.getBatchParameters(self.datasetID)[batchID]
 
-        datasetID:str = "slantour" + "Div" + str(divisionDatasetPercentualSize)
-
         recommenderID:str = self.getParameters()[jobID]
 
-        rDescr:RecommenderDescription = InputRecomDefinition.exportInputRecomDefinition(recommenderID, datasetID)
+        rDescr:RecommenderDescription = InputRecomDefinition.exportInputRecomDefinition(recommenderID)
 
         pDescr:APortfolioDescription = Portfolio1MethDescription(recommenderID.title(), recommenderID, rDescr)
 

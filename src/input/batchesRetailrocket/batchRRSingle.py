@@ -36,6 +36,7 @@ class BatchRRSingle(ABatchRR):
 
         aDict:dict = {}
         aDict[InputRecomDefinition.THE_MOST_POPULAR] = InputRecomDefinition.THE_MOST_POPULAR
+        aDict[InputRecomDefinition.BPRMF] = InputRecomDefinition.BPRMF
 
         return aDict
 
@@ -47,11 +48,11 @@ class BatchRRSingle(ABatchRR):
         repetition:int
         divisionDatasetPercentualSize, uBehaviour, repetition = BatchParameters.getBatchParameters(self.datasetID)[batchID]
 
-        datasetID:str = "retailrocket" + "Div" + str(divisionDatasetPercentualSize)
+        #datasetID:str = "retailrocket" + "Div" + str(divisionDatasetPercentualSize)
 
         recommenderID:str = self.getParameters()[jobID]
 
-        rDescr:RecommenderDescription = InputRecomDefinition.exportInputRecomDefinition(recommenderID, datasetID)
+        rDescr:RecommenderDescription = InputRecomDefinition.exportInputRecomDefinition(recommenderID)
 
         pDescr:APortfolioDescription = Portfolio1MethDescription(recommenderID.title(), recommenderID, rDescr)
 

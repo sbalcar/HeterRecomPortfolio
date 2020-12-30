@@ -42,10 +42,10 @@ def generateBatches():
 #    BatchMLSingle.generateBatches()
 #    BatchMLSingleINF.generateBatches()
 
-    BatchMLSingle2.generateBatches()
+#    BatchMLSingle2.generateBatches()
 
     # RR
-#    BatchRRSingle.generateBatches()
+    BatchRRSingle.generateBatches()
 
     #ST
 #    BatchSTSingle.generateBatches()
