@@ -107,7 +107,7 @@ class MixinContextAggregation(AAgregation):
                 # TODO: Is performance OK here? This is just sketch
                 # calculate size of intersection between listOfClickedItems and self._listOfPreviousRecommendations
                 succesfulRecomendations = len(list(set(listOfClickedItems)
-                                                   .intersection(value)))
+                                                   .intersection(value.index)))
 
                 # give recommender 'points' based on the size of intersection
                 # TODO: I don't take into account previous relevance or previous votes, maybe needs to be improved in future
