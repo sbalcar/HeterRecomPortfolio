@@ -15,7 +15,7 @@ class BatchParameters:
     @abstractmethod
     def getBatchParameters(datasetID:str):
 
-        divisionsDatasetPercentualSize:List[int] = [90]
+        divisionsDatasetPercentualSize:List[int] = [80, 90]
         uBehaviours:List[str] = [Behaviours.BHVR_LINEAR0109, Behaviours.BHVR_STATIC08,
                                   Behaviours.BHVR_STATIC06, Behaviours.BHVR_STATIC04,
                                   Behaviours.BHVR_STATIC02]
