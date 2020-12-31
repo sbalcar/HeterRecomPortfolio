@@ -18,14 +18,17 @@ from input.batchesML1m.batchFuzzyDHondtDirectOptimizeINF import BatchFuzzyDHondt
 from input.batchesML1m.batchMLSingle import BatchMLSingle #class
 from input.batchesML1m.batchMLSingleINF import BatchMLSingleINF #class
 
-from input.batchesML1m.batchMLSingleW2VHT import BatchMLSingleW2VHT #class
-from input.batchesML1m.batchMLSingleBPRMFHT import BatchMLSingleBPRMFHT #class
 from input.batchesML1m.batchMLSingle2 import BatchMLSingle2 #class
+from input.batchesML1m.batchMLSingleBPRMFHT import BatchMLSingleBPRMFHT #class
+from input.batchesML1m.batchMLSingleW2VHT import BatchMLSingleW2VHT #class
+from input.batchesML1m.batchMLSingleCosineCBHT import BatchMLSingleCosineCBHT #class
 
 from input.batchesRetailrocket.batchRRSingle import BatchRRSingle #class
 
 from input.batchSlanTour.batchSTSingleBPRMFHT import BatchSTSingleBPRMFHT #class
 from input.batchSlanTour.batchSTSingle import BatchSTSingle #class
+from input.batchSlanTour.batchSTSingleW2VHT import BatchSTSingleW2VHT #class
+from input.batchSlanTour.batchSTSingleCosineCBHT import BatchSTSingleCosineCBHT #class
 
 
 def generateBatches():
@@ -48,7 +51,8 @@ def generateBatches():
 
 #    BatchMLSingle2.generateBatches()
 #    BatchMLSingleBPRMFHT.generateBatches()
-    BatchMLSingleW2VHT.generateBatches()
+#    BatchMLSingleW2VHT.generateBatches()
+    BatchMLSingleCosineCBHT.generateBatches()
 
     # RR
 #    BatchRRSingle.generateBatches()
@@ -56,7 +60,8 @@ def generateBatches():
     #ST
 #    BatchSTSingle.generateBatches()
 #    BatchSTSingleBPRMFHT.generateBatches()
-
+#    BatchSTSingleW2VHT.generateBatches()
+#    BatchSTSingleCosineCBHT.generateBatches()
 
 if __name__ == "__main__":
 
