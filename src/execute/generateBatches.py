@@ -24,6 +24,7 @@ from input.batchesML1m.batchMLSingleW2VHT import BatchMLSingleW2VHT #class
 from input.batchesML1m.batchMLSingleCosineCBHT import BatchMLSingleCosineCBHT #class
 
 from input.batchesRetailrocket.batchRRSingle import BatchRRSingle #class
+from input.batchesRetailrocket.batchRRSingleW2VHT import BatchRRSingleW2VHT #class
 
 from input.batchSlanTour.batchSTSingleBPRMFHT import BatchSTSingleBPRMFHT #class
 from input.batchSlanTour.batchSTSingle import BatchSTSingle #class
@@ -56,11 +57,12 @@ def generateBatches():
 
     # RR
 #    BatchRRSingle.generateBatches()
+    BatchRRSingleW2VHT.generateBatches()
 
     #ST
 #    BatchSTSingle.generateBatches()
 #    BatchSTSingleBPRMFHT.generateBatches()
-    BatchSTSingleW2VHT.generateBatches()
+#    BatchSTSingleW2VHT.generateBatches()
 #    BatchSTSingleCosineCBHT.generateBatches()
 
 if __name__ == "__main__":
