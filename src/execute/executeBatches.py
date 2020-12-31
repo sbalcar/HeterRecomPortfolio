@@ -24,6 +24,7 @@ from input.batchesRetailrocket.batchRRSingle import BatchRRSingle #class
 from input.batchesML1m.batchMLSingle2 import BatchMLSingle2 #class
 from input.batchesML1m.batchMLSingleBPRMFHT import BatchMLSingleBPRMFHT #class
 from input.batchesML1m.batchMLSingleW2VHT import BatchMLSingleW2VHT #class
+from input.batchesML1m.batchMLSingleCosineCBHT import BatchMLSingleCosineCBHT #class
 
 from input.batchSlanTour.batchSTSingleBPRMFHT import BatchSTSingleBPRMFHT #class
 
