@@ -12,6 +12,8 @@ from typing import List
 
 from datasets.aDataset import ADataset #class
 from datasets.datasetML import DatasetML #class
+from datasets.datasetRetailrocket import DatasetRetailRocket #class
+from datasets.datasetST import DatasetST #class
 
 from recommender.w2v import word2vec
 
@@ -50,8 +52,7 @@ class RecommenderW2V(ARecommender):
         self.vectorSize:int = self._arguments[self.ARG_VECTOR_SIZE]
         self.windowSize:int = self._arguments[self.ARG_WINDOW_SIZE]
         self.iterations:int = self._arguments[self.ARG_ITERATIONS]
-        
-        
+
         self.userProfiles:dict = {}
 
     def __getTrainVariant(self, trainVariant:str, trainDF:DataFrame):
@@ -66,22 +67,40 @@ class RecommenderW2V(ARecommender):
     def saveModel(self, i, model, rev_dict, dictionary):
         dictionary = dict([((int(i), j) if i != "RARE" else (-1, j)) for i, j in dictionary.items()])
         rev_dict = dict(zip(dictionary.values(), dictionary.keys()))
-        self.__save_obj(model, "model", self.datasetId, self.trainVariant, self.vectorSize, self.windowSize, i )
-        self.__save_obj(dictionary, "dictionary", self.datasetId, self.trainVariant, self.vectorSize, self.windowSize, i)
-        self.__save_obj(rev_dict, "rev_dict", self.datasetId, self.trainVariant, self.vectorSize, self.windowSize, i)    
+        datasetID:str = self._trainDataset.datasetID
+        self.__save_obj(model, "model", datasetID, self.trainVariant, self.vectorSize, self.windowSize, i )
+        self.__save_obj(dictionary, "dictionary", datasetID, self.trainVariant, self.vectorSize, self.windowSize, i)
+        self.__save_obj(rev_dict, "rev_dict", datasetID, self.trainVariant, self.vectorSize, self.windowSize, i)
     
     
     def train(self, history:AHistory, dataset:DatasetML):
         if not isinstance(history, AHistory):
             raise ValueError("Argument history isn't type AHistory.")
-        if type(dataset) is not DatasetML:
-            raise ValueError("Argument dataset isn't type DatasetML.")
+        if not isinstance(dataset, ADataset):
+            raise ValueError("Argument dataset isn't type ADataset.")
+        self._trainDataset = dataset
 
-        ratingsDF:DataFrame = dataset.ratingsDF
+        if type(dataset) is DatasetML:
+            trainRatingsDF:DataFrame = dataset.ratingsDF
+            COL_USERID:str = Ratings.COL_USERID
+            COL_ITEMID:str = Ratings.COL_MOVIEID
 
-        t:DataFrame = self.__getTrainVariant(self.trainVariant, ratingsDF)
-        t[Ratings.COL_MOVIEID] = t[Ratings.COL_MOVIEID].astype("str")
-        t_sequences:DataFrame = t.groupby(Ratings.COL_USERID)[Ratings.COL_MOVIEID].apply(" ".join)
+        elif type(dataset) is DatasetRetailRocket:
+            from datasets.retailrocket.events import Events  # class
+            trainRatingsDF:DataFrame = dataset.eventsDF
+            COL_USERID:str = Events.COL_VISITOR_ID
+            COL_ITEMID:str = Events.COL_ITEM_ID
+
+        elif type(self._trainDataset) is DatasetST:
+            from datasets.slantour.events import Events  # class
+            trainRatingsDF:DataFrame = dataset.eventsDF
+            COL_USERID:str = Events.COL_USER_ID
+            COL_ITEMID:str = Events.COL_OBJECT_ID
+
+        t:DataFrame = self.__getTrainVariant(self.trainVariant, trainRatingsDF)
+        t[COL_ITEMID] = t[COL_ITEMID].astype("str")
+        t_sequences:DataFrame = t.groupby(COL_USERID)[COL_ITEMID].apply(" ".join)
+
         if self.DEBUG_MODE:
             print(t_sequences)
         # t_sequences.set_index(Ratings.COL_USERID, inplace=True)
@@ -90,41 +109,53 @@ class RecommenderW2V(ARecommender):
         e:int = self.vectorSize #64
         w:int = self.windowSize #3
         i:int = self.iterations #100000
-        
-        datasetId:str = dataset.datasetID
-        self.datasetId = datasetId
-        #print("datasetId: " + str(datasetId))
 
         #datasetId = "ml1mDiv90"
-        self.model = self.__load_obj("model", datasetId, self.trainVariant, e, w, i)
-        self.dictionary = self.__load_obj("dictionary", datasetId, self.trainVariant, e, w, i)
-        self.rev_dict = self.__load_obj("rev_dict", datasetId, self.trainVariant, e, w, i)
+        self.model = self.__load_obj("model", dataset.datasetID, self.trainVariant, e, w, i)
+        self.dictionary = self.__load_obj("dictionary", dataset.datasetID, self.trainVariant, e, w, i)
+        self.rev_dict = self.__load_obj("rev_dict", dataset.datasetID, self.trainVariant, e, w, i)
 
         if self.model is None:
             model, rev_dict, dictionary = word2vec.word2vecRun(w, e, i, w2vTrainData, self)
             dictionary = dict([((int(i), j) if i != "RARE" else (-1, j)) for i, j in dictionary.items()])
             rev_dict = dict(zip(dictionary.values(), dictionary.keys()))
-            self.__save_obj(model, "model", datasetId, self.trainVariant, e, w, i )
-            self.__save_obj(dictionary, "dictionary", datasetId, self.trainVariant, e, w, i)
-            self.__save_obj(rev_dict, "rev_dict", datasetId, self.trainVariant, e, w, i)
+            self.__save_obj(model, "model", dataset.datasetID, self.trainVariant, e, w, i )
+            self.__save_obj(dictionary, "dictionary", dataset.datasetID, self.trainVariant, e, w, i)
+            self.__save_obj(rev_dict, "rev_dict", dataset.datasetID, self.trainVariant, e, w, i)
             self.model = model
             self.dictionary = dictionary
             self.rev_dict = rev_dict
 
         # ratingsSum:Dataframe<(userId:int, movieId:int, ratings:int, timestamp:int)>
 
-        self.ratingsGroupDF = t.groupby(Ratings.COL_USERID)[Ratings.COL_MOVIEID]
+        self.ratingsGroupDF = t.groupby(COL_USERID)[COL_ITEMID]
         userProfileDF = self.ratingsGroupDF.aggregate(lambda x: list(x))
         self.userProfiles = userProfileDF.to_dict()
 
     def update(self, ratingsUpdateDF:DataFrame):
+        if type(ratingsUpdateDF) is not DataFrame:
+            raise ValueError("Argument ratingsTrainDF isn't type DataFrame.")
+
+        if type(self._trainDataset) is DatasetML:
+            COL_USERID:str = Ratings.COL_USERID
+            COL_ITEMID:str = Ratings.COL_MOVIEID
+
+        elif type(self._trainDataset) is DatasetRetailRocket:
+            from datasets.retailrocket.events import Events  # class
+            COL_USERID:str = Events.COL_VISITOR_ID
+            COL_ITEMID:str = Events.COL_ITEM_ID
+
+        elif type(self._trainDataset) is DatasetST:
+            from datasets.slantour.events import Events  # class
+            COL_USERID:str = Events.COL_USER_ID
+            COL_ITEMID:str = Events.COL_OBJECT_ID
+
         # ratingsUpdateDF has only one row
         ratingsUpdateDF:DataFrame = self.__getTrainVariant(self.trainVariant, ratingsUpdateDF)
         if ratingsUpdateDF.shape[0] > 0:
             row = ratingsUpdateDF.iloc[0]
-            rating:float = row[Ratings.COL_RATING]
-            userID:int = row[Ratings.COL_USERID]
-            objectID:int = row[Ratings.COL_MOVIEID]
+            userID:int = row[COL_USERID]
+            objectID:int = row[COL_ITEMID]
             userTrainData:List[int] = self.userProfiles.get(userID, [])
             userTrainData.append(objectID)
             self.userProfiles[userID] = userTrainData
@@ -136,6 +167,7 @@ class RecommenderW2V(ARecommender):
         rec:str = userProfileStrategy
         if self.DEBUG_MODE:
             print(rec)
+
         if (len(userTrainData) > 0):
             if(userProfileSize > 0 ):
                 val = -1 * userProfileSize    
@@ -167,8 +199,6 @@ class RecommenderW2V(ARecommender):
 
         userProfileStrategy:str = argumentsDict[self.ARG_USER_PROFILE_STRATEGY]
         userProfileSize:str = argumentsDict[self.ARG_USER_PROFILE_SIZE]
-        
-        #print("userProfileStrategy: " + str(userProfileStrategy))
 
         userTrainData = self.userProfiles.get(userID, [])
         w2vObjects, weights, aggregation = self.__resolveUserProfile(userProfileStrategy, userProfileSize, userTrainData)
