@@ -24,6 +24,8 @@ from input.batchesRetailrocket.batchRRSingle import BatchRRSingle #class
 from input.batchesML1m.batchMLSingle2 import BatchMLSingle2 #class
 from input.batchesML1m.batchMLSingleBPRMFHT import BatchMLSingleBPRMFHT #class
 
+from input.batchSlanTour.batchSTSingleBPRMFHT import BatchSTSingleBPRMFHT #class
+
 def executeBatches():
 
   np.random.seed(42)

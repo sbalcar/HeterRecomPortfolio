@@ -3,6 +3,7 @@
 from datasets.aDataset import ADataset #class
 from datasets.datasetML import DatasetML #class
 from datasets.datasetRetailrocket import DatasetRetailRocket #class
+from datasets.datasetST import DatasetST #class
 
 from datasets.ml.ratings import Ratings #class
 from datasets.ml.users import Users #class
@@ -15,6 +16,7 @@ from pandas.core.frame import DataFrame #class
 
 from simulation.simulationML import SimulationML #class
 from simulation.simulationRR import SimulationRR #class
+from simulation.simulationST import SimulationST #class
 
 from simulator.simulator import Simulator #class
 
@@ -81,9 +83,9 @@ class InputSimulatorDefinition:
         dataset:ADataset = DatasetST.readDatasets()
 
         behaviourFile:str = BehavioursST.getFile(uBehaviourID)
-        behavioursDF:DataFrame = BehavioursST.readFromFileRR(behaviourFile)
+        behavioursDF:DataFrame = BehavioursST.readFromFileST(behaviourFile)
 
         # simulation of portfolio
-        simulator:Simulator = Simulator(batchID, SimulationRR, argsSimulationDict, dataset, behavioursDF)
+        simulator:Simulator = Simulator(batchID, SimulationST, argsSimulationDict, dataset, behavioursDF)
 
         return simulator

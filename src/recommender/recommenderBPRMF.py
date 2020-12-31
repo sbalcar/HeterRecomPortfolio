@@ -115,7 +115,7 @@ class RecommenderBPRMF(ARecommender):
         self._itemFeaturesMatrix = sp.coo_matrix((ratingsDF[COL_RATING],
                                                   (ratingsDF[COL_ITEMID],
                     ratingsDF[COL_USERID])), shape = (maxOID+1, maxUID+1))
-        self._movieFeaturesMatrixLIL =  self._itemFeaturesMatrix.tolil()
+        self._itemFeaturesMatrixLIL =  self._itemFeaturesMatrix.tolil()
                    
         self._userFeaturesMatrix = self._itemFeaturesMatrix.T.tocsr()
         
@@ -156,7 +156,7 @@ class RecommenderBPRMF(ARecommender):
 
         self._updateCounter += 1
         #using flat ratings
-        self._movieFeaturesMatrixLIL[item, user] =  1.0 #rating
+        self._itemFeaturesMatrixLIL[item, user] =  1.0 #rating
         #print(item, user)
         #print(self._movieFeaturesMatrixLIL[item, user])
         #print(self._updateCounter)
@@ -164,7 +164,7 @@ class RecommenderBPRMF(ARecommender):
         if self._updateCounter == self.updateThreshold:
             self._updateCounter = 0
             #print("updating matrix")
-            self._itemFeaturesMatrix =  self._movieFeaturesMatrixLIL.tocsr()
+            self._itemFeaturesMatrix =  self._itemFeaturesMatrixLIL.tocsr()
             self._userFeaturesMatrix = self._itemFeaturesMatrix.T.tocsr()
             self.model.fit(self._itemFeaturesMatrix)
             #print(self._movieFeaturesMatrix)

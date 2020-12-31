@@ -23,6 +23,7 @@ from input.batchesML1m.batchMLSingle2 import BatchMLSingle2 #class
 
 from input.batchesRetailrocket.batchRRSingle import BatchRRSingle #class
 
+from input.batchSlanTour.batchSTSingleBPRMFHT import BatchSTSingleBPRMFHT #class
 from input.batchSlanTour.batchSTSingle import BatchSTSingle #class
 
 
@@ -45,13 +46,14 @@ def generateBatches():
 #    BatchMLSingleINF.generateBatches()
 
 #    BatchMLSingle2.generateBatches()
-    BatchMLSingleBPRMFHT.generateBatches()
+#    BatchMLSingleBPRMFHT.generateBatches()
 
     # RR
 #    BatchRRSingle.generateBatches()
 
     #ST
 #    BatchSTSingle.generateBatches()
+    BatchSTSingleBPRMFHT.generateBatches()
 
 
 if __name__ == "__main__":
