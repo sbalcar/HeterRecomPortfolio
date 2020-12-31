@@ -15,9 +15,11 @@ from input.batchesML1m.batchFuzzyDHondtINF import BatchFuzzyDHondtINF #class
 from input.batchesML1m.batchMLFuzzyDHondtDirectOptimize import BatchMLFuzzyDHondtDirectOptimize #class
 from input.batchesML1m.batchFuzzyDHondtDirectOptimizeINF import BatchFuzzyDHondtDirectOptimizeINF #class
 
-from input.batchesML1m.batchMLSingle2 import BatchMLSingle2 #class
 from input.batchesML1m.batchMLSingle import BatchMLSingle #class
 from input.batchesML1m.batchMLSingleINF import BatchMLSingleINF #class
+
+from input.batchesML1m.batchMLSingleBPRMFHT import BatchMLSingleBPRMFHT #class
+from input.batchesML1m.batchMLSingle2 import BatchMLSingle2 #class
 
 from input.batchesRetailrocket.batchRRSingle import BatchRRSingle #class
 
@@ -43,9 +45,10 @@ def generateBatches():
 #    BatchMLSingleINF.generateBatches()
 
 #    BatchMLSingle2.generateBatches()
+    BatchMLSingleBPRMFHT.generateBatches()
 
     # RR
-    BatchRRSingle.generateBatches()
+#    BatchRRSingle.generateBatches()
 
     #ST
 #    BatchSTSingle.generateBatches()
