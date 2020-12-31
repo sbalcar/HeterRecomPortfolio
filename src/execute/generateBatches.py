@@ -52,7 +52,7 @@ def generateBatches():
 #    BatchMLSingle2.generateBatches()
 #    BatchMLSingleBPRMFHT.generateBatches()
 #    BatchMLSingleW2VHT.generateBatches()
-    BatchMLSingleCosineCBHT.generateBatches()
+#    BatchMLSingleCosineCBHT.generateBatches()
 
     # RR
 #    BatchRRSingle.generateBatches()
@@ -60,7 +60,7 @@ def generateBatches():
     #ST
 #    BatchSTSingle.generateBatches()
 #    BatchSTSingleBPRMFHT.generateBatches()
-#    BatchSTSingleW2VHT.generateBatches()
+    BatchSTSingleW2VHT.generateBatches()
 #    BatchSTSingleCosineCBHT.generateBatches()
 
 if __name__ == "__main__":
