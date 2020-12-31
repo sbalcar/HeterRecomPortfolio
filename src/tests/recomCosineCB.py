@@ -9,6 +9,9 @@ from pandas.core.series import Series #class
 
 from datasets.aDataset import ADataset #class
 from datasets.datasetML import DatasetML #class
+from datasets.datasetRetailrocket import DatasetRetailRocket #class
+from datasets.datasetST import DatasetST #class
+
 from datasets.ml.ratings import Ratings #class
 
 from history.historyDF import HistoryDF #class
@@ -22,10 +25,10 @@ import pandas as pd
 def test01():
     print("Test 01")
 
-    print("Running RecommenderCosineCB:")
+    print("Running RecommenderCosineCB ML:")
 
     #cbDataPath:str = Configuration.cbDataFileWithPathTFIDF
-    cbDataPath:str = Configuration.cbDataFileWithPathOHE
+    cbDataPath:str = Configuration.cbML1MDataFileWithPathOHE
 
     ratingsDF:DataFrame = Ratings.readFromFileMl1m()
 
@@ -33,9 +36,8 @@ def test01():
 
     trainDataset:ADataset = DatasetML("test", ratingsDFTrain, pd.DataFrame(), pd.DataFrame())
 
-
     args:dict = {
-            RecommenderCosineCB.ARG_CB_DATA_PATH: Configuration.cbDataFileWithPathTFIDF,
+            RecommenderCosineCB.ARG_CB_DATA_PATH: Configuration.cbML1MDataFileWithPathTFIDF,
             RecommenderCosineCB.ARG_USER_PROFILE_SIZE: 5,
             RecommenderCosineCB.ARG_USER_PROFILE_STRATEGY: "max"}
     rec:ARecommender = RecommenderCosineCB("test", args)
@@ -60,7 +62,42 @@ def test01():
     print(r)
 
 
+
+def test03():
+    print("Test 03")
+
+    print("Running RecommenderCosineCB ST:")
+
+    dataset:DatasetST = DatasetST.readDatasets()
+
+    trainDataset:DatasetST = dataset
+
+    args:dict = {
+#            RecommenderCosineCB.ARG_CB_DATA_PATH: Configuration.cbSTDataFileWithPathTFIDF,
+            RecommenderCosineCB.ARG_CB_DATA_PATH: Configuration.cbSTDataFileWithPathOHE,
+            RecommenderCosineCB.ARG_USER_PROFILE_SIZE: 5,
+            RecommenderCosineCB.ARG_USER_PROFILE_STRATEGY: "max"}
+    rec:ARecommender = RecommenderCosineCB("test", args)
+
+    rec.train(HistoryDF("test"), trainDataset)
+
+#    ratingsDFUpdate:DataFrame = ratingsDF.iloc[50003:50004]
+#    rec.update(ratingsDFUpdate)
+
+#    print("max")
+#    r:Series = rec.recommend(331, 50, args)
+#    print(type(r))
+#    print(r)
+
+    # testing of a non-existent user
+#    print("mean")
+#    r:Series =rec.recommend(10000, 50, args)
+#    print(type(r))
+#    print(r)
+
+
 if __name__ == "__main__":
     os.chdir("..")
 
-    test01()
+#    test01()
+    test03()

@@ -133,9 +133,9 @@ def test04():
 
     print("Running Recommender BPRMF on SL:")
 
-    dataset:DatasetRetailRocket = DatasetST.readDatasets()
+    dataset:DatasetST = DatasetST.readDatasets()
 
-    trainDataset:DatasetRetailRocket = dataset
+    trainDataset:DatasetST = dataset
 
     eventsDF:DataFrame = dataset.eventsDF
 

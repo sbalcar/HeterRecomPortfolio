@@ -11,6 +11,8 @@ from recommender.aRecommender import ARecommender  # class
 
 from datasets.aDataset import ADataset #class
 from datasets.datasetML import DatasetML #class
+from datasets.datasetRetailrocket import DatasetRetailRocket #class
+from datasets.datasetST import DatasetST #class
 
 from datasets.ml.ratings import Ratings  # class
 
@@ -44,36 +46,65 @@ class RecommenderCosineCB(ARecommender):
         self.cbData:DataFrame = DataFrame(data=dfCBSim, index=self.dfCBFeatures.index, columns=self.dfCBFeatures.index)
         self.userProfiles:dict = {}
 
-    def train(self, history:AHistory, dataset:DatasetML):
+    def train(self, history:AHistory, dataset:ADataset):
         if not isinstance(history, AHistory):
             raise ValueError("Argument history isn't type AHistory.")
-        if type(dataset) is not DatasetML:
-            raise ValueError("Argument dataset isn't type DatasetML.")
+        if not isinstance(dataset, ADataset):
+            raise ValueError("Argument dataset isn't type ADataset.")
+        self._trainDataset = dataset
 
-        ratingsDF:DataFrame = dataset.ratingsDF
+        if type(dataset) is DatasetML:
+            COL_USERID:str = Ratings.COL_USERID
+            COL_ITEMID:str = Ratings.COL_MOVIEID
+            ratingsDF:DataFrame = dataset.ratingsDF
+            # ratingsSum:Dataframe<(userId:int, movieId:int, ratings:int, timestamp:int)>
+            ratingsDF = ratingsDF.loc[ratingsDF[Ratings.COL_RATING] >= 4]
 
-        # ratingsSum:Dataframe<(userId:int, movieId:int, ratings:int, timestamp:int)>
-        ratingsDF:DataFrame = ratingsDF.loc[ratingsDF[Ratings.COL_RATING] >= 4]
-        self.ratingsGroupDF:DataFrame = ratingsDF.groupby(Ratings.COL_USERID)[Ratings.COL_MOVIEID]
+        elif type(dataset) is DatasetRetailRocket:
+            from datasets.retailrocket.events import Events  # class
+            pass
+
+        elif type(dataset) is DatasetST:
+            from datasets.slantour.events import Events  # class
+            COL_USERID:str = Events.COL_USER_ID
+            COL_ITEMID:str = Events.COL_OBJECT_ID
+            ratingsDF:DataFrame = dataset.eventsDF
+
+        self.ratingsGroupDF:DataFrame = ratingsDF.groupby(COL_USERID)[COL_ITEMID]
         # userProfileDF:DataFrame[userID:int, itemIDs:List[int]]
         userProfileDF:DataFrame = self.ratingsGroupDF.aggregate(lambda x: list(x))
         self.userProfiles:dict = userProfileDF.to_dict()
         s = ""
 
     def update(self, ratingsUpdateDF:DataFrame):
+        if type(ratingsUpdateDF) is not DataFrame:
+            raise ValueError("Argument ratingsTrainDF isn't type DataFrame.")
+
         # ratingsUpdateDF has only one row
         row = ratingsUpdateDF.iloc[0]
-        rating = row[Ratings.COL_RATING]
-        if rating >= 4:
-            # only positive feedback
-            userID = row[Ratings.COL_USERID]
-            objectID = row[Ratings.COL_MOVIEID]
-            userTrainData = self.userProfiles.get(userID, [])
-            userTrainData.append(objectID)
-            self.userProfiles[userID] = userTrainData
-            s = ""
 
-    def resolveUserProfile(self, userProfileStrategy:str,userProfileSize:int, userTrainData:List[int]):
+        if type(self._trainDataset) is DatasetML:
+            rating:int = row[Ratings.COL_RATING]
+            userID:int = row[Ratings.COL_USERID]
+            itemID:int = row[Ratings.COL_MOVIEID]
+            if rating < 4:
+                return
+
+        elif type(self._trainDataset) is DatasetRetailRocket:
+            from datasets.retailrocket.events import Events  # class
+            pass
+
+        elif type(self._trainDataset) is DatasetST:
+            from datasets.slantour.events import Events  # class
+            userID: int = row[Events.COL_USER_ID]
+            itemID:int = row[Events.COL_OBJECT_ID]
+
+        userTrainData = self.userProfiles.get(userID, [])
+        userTrainData.append(itemID)
+        self.userProfiles[userID] = userTrainData
+        s = ""
+
+    def resolveUserProfile(self, userProfileStrategy:str, userProfileSize:int, userTrainData:List[int]):
         rec:str = userProfileStrategy
         if self.DEBUG_MODE:
             print(rec)
@@ -123,30 +154,31 @@ class RecommenderCosineCB(ARecommender):
         
         simList:List = []
 
+        if len(objectIDs) <= 0:
+            return pd.Series([], index=[])
+
         # provedu agregaci dle zvolené metody
-        if len(objectIDs) > 0:
-            results = self.cbData.loc[objectIDs]
-            self._results = results
-            
-            #print(results.shape)
-            weights = np.asarray(weights)
-            weights = weights[:, np.newaxis]
-            results = results * weights
-            #print(results.shape)
-            results = aggregation(results, axis=0)
-            #print(results.shape)
-            if self.DEBUG_MODE:
-                print(type(results))
-            results.sort_values(ascending=False, inplace=True, ignore_index=False)
-            resultList = results.iloc[0:numberOfItems]
+        results = self.cbData.loc[objectIDs]
+        self._results = results
 
-            #print(resultList)
+        #print(results.shape)
+        weights = np.asarray(weights)
+        weights = weights[:, np.newaxis]
+        results = results * weights
+        #print(results.shape)
+        results = aggregation(results, axis=0)
+        #print(results.shape)
+        if self.DEBUG_MODE:
+            print(type(results))
+        results.sort_values(ascending=False, inplace=True, ignore_index=False)
+        resultList = results.iloc[0:numberOfItems]
 
-            # normalize scores into the unit vector (for aggregation purposes)
-            # !!! tohle je zasadni a je potreba provest normalizaci u vsech recommenderu - teda i pro most popular!
-            finalScores = resultList.values
-            finalScores = normalize(np.expand_dims(finalScores, axis=0))[0, :]
+        #print(resultList)
 
-            return pd.Series(finalScores.tolist(), index=list(resultList.index))
+        # normalize scores into the unit vector (for aggregation purposes)
+        # !!! tohle je zasadni a je potreba provest normalizaci u vsech recommenderu - teda i pro most popular!
+        finalScores = resultList.values
+        finalScores = normalize(np.expand_dims(finalScores, axis=0))[0, :]
 
-        return pd.Series([], index=[])
+        return pd.Series(finalScores.tolist(), index=list(resultList.index))
+

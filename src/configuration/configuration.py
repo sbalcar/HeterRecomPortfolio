@@ -6,9 +6,11 @@ class Configuration:
 
     dataDirectory:str = ".." + os.sep + "data"
 
-    cbDataFileWithPathTFIDF:str = dataDirectory + os.sep + "cbDataTFIDF.txt"
-    cbDataFileWithPathOHE:str = dataDirectory + os.sep + "cbDataOHE.txt"
+    cbML1MDataFileWithPathTFIDF:str = dataDirectory + os.sep + "cbDataTFIDF.txt"
+    cbML1MDataFileWithPathOHE:str = dataDirectory + os.sep + "cbDataOHE.txt"
 
+    cbSTDataFileWithPathTFIDF: str = dataDirectory + os.sep + "SLANtourCBFeaturesTFIDF.txt"
+    cbSTDataFileWithPathOHE:str = dataDirectory + os.sep + "SLANtourCBFeaturesOHE.txt"
 
 
     modelDirectory:str =  ".." + os.sep + "models"

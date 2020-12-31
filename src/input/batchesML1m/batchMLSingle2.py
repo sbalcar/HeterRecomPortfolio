@@ -41,17 +41,17 @@ class BatchMLSingle2(ABatchML):
 
 
         rCB1:ARecommender = RecommenderDescription(RecommenderCosineCB, {
-                    RecommenderCosineCB.ARG_CB_DATA_PATH: Configuration.cbDataFileWithPathTFIDF,
+                    RecommenderCosineCB.ARG_CB_DATA_PATH: Configuration.cbML1MDataFileWithPathTFIDF,
                     RecommenderCosineCB.ARG_USER_PROFILE_SIZE: 5,
                     RecommenderCosineCB.ARG_USER_PROFILE_STRATEGY: "max"})
 
         rCB2:ARecommender = RecommenderDescription(RecommenderCosineCB, {
-                    RecommenderCosineCB.ARG_CB_DATA_PATH: Configuration.cbDataFileWithPathOHE,
+                    RecommenderCosineCB.ARG_CB_DATA_PATH: Configuration.cbML1MDataFileWithPathOHE,
                     RecommenderCosineCB.ARG_USER_PROFILE_SIZE: 1,
                     RecommenderCosineCB.ARG_USER_PROFILE_STRATEGY: "max"})
 
         rCB3:ARecommender = RecommenderDescription(RecommenderCosineCB, {
-                    RecommenderCosineCB.ARG_CB_DATA_PATH: Configuration.cbDataFileWithPathOHE,
+                    RecommenderCosineCB.ARG_CB_DATA_PATH: Configuration.cbML1MDataFileWithPathOHE,
                     RecommenderCosineCB.ARG_USER_PROFILE_SIZE: 3,
                     RecommenderCosineCB.ARG_USER_PROFILE_STRATEGY: "weightedMean"})
 

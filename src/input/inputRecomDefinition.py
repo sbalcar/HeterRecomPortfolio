@@ -33,14 +33,14 @@ class InputRecomDefinition:
     @staticmethod
     def exportRDescCBmean():
         return RecommenderDescription(RecommenderCosineCB, {
-                RecommenderCosineCB.ARG_CB_DATA_PATH:Configuration.cbDataFileWithPathTFIDF,
+                RecommenderCosineCB.ARG_CB_DATA_PATH:Configuration.cbML1MDataFileWithPathTFIDF,
                 RecommenderCosineCB.ARG_USER_PROFILE_SIZE: 5,
                 RecommenderCosineCB.ARG_USER_PROFILE_STRATEGY:"mean"})
 
     @staticmethod
     def exportRDescCBwindow3():
         return RecommenderDescription(RecommenderCosineCB, {
-                RecommenderCosineCB.ARG_CB_DATA_PATH:Configuration.cbDataFileWithPathTFIDF,
+                RecommenderCosineCB.ARG_CB_DATA_PATH:Configuration.cbML1MDataFileWithPathTFIDF,
                 RecommenderCosineCB.ARG_USER_PROFILE_SIZE: 5,
                 RecommenderCosineCB.ARG_USER_PROFILE_STRATEGY:"window3"})
 

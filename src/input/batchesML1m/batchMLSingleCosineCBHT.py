@@ -39,7 +39,7 @@ class BatchMLSingleCosineCBHT(ABatchML):
     @staticmethod
     def getParameters():
 
-        cbDataPaths:List[str] = [Configuration.cbDataFileWithPathTFIDF, Configuration.cbDataFileWithPathOHE]
+        cbDataPaths:List[str] = [Configuration.cbML1MDataFileWithPathTFIDF, Configuration.cbML1MDataFileWithPathOHE]
         userProfileStrategies:List[str] = ["mean", "max", "weightedMean"]
         userProfileSizes:List[int] = [-1, 1, 3, 5, 7, 10]
 
@@ -49,9 +49,9 @@ class BatchMLSingleCosineCBHT(ABatchML):
                 for userProfileSizeI in userProfileSizes:
 
                     cbDataPathStrI:str = ""
-                    if cbDataPathI == Configuration.cbDataFileWithPathTFIDF:
+                    if cbDataPathI == Configuration.cbML1MDataFileWithPathTFIDF:
                         cbDataPathStrI = "TFIDF"
-                    elif cbDataPathI == Configuration.cbDataFileWithPathOHE:
+                    elif cbDataPathI == Configuration.cbML1MDataFileWithPathOHE:
                         cbDataPathStrI = "OHE"
                     else:
                         print("error")
