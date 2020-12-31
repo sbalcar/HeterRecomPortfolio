@@ -18,6 +18,7 @@ from input.batchesML1m.batchFuzzyDHondtDirectOptimizeINF import BatchFuzzyDHondt
 from input.batchesML1m.batchMLSingle import BatchMLSingle #class
 from input.batchesML1m.batchMLSingleINF import BatchMLSingleINF #class
 
+from input.batchesML1m.batchMLSingleW2VHT import BatchMLSingleW2VHT #class
 from input.batchesML1m.batchMLSingleBPRMFHT import BatchMLSingleBPRMFHT #class
 from input.batchesML1m.batchMLSingle2 import BatchMLSingle2 #class
 
@@ -47,13 +48,14 @@ def generateBatches():
 
 #    BatchMLSingle2.generateBatches()
 #    BatchMLSingleBPRMFHT.generateBatches()
+    BatchMLSingleW2VHT.generateBatches()
 
     # RR
 #    BatchRRSingle.generateBatches()
 
     #ST
 #    BatchSTSingle.generateBatches()
-    BatchSTSingleBPRMFHT.generateBatches()
+#    BatchSTSingleBPRMFHT.generateBatches()
 
 
 if __name__ == "__main__":
