@@ -40,6 +40,9 @@ class ASequentialSimulation(ABC):
 
     ARG_HISTORY_LENGTH:str = "historyLength"
 
+    ARG_OVERWRITE_RESULTS:str = "owerwriteResults"
+
+
     def __init__(self, batchID:str, dataset:ADataset, behaviourDF:DataFrame, argumentsDict:dict):
 
         if type(batchID) is not str:
@@ -65,6 +68,8 @@ class ASequentialSimulation(ABC):
         self._divisionDatasetPercentualSize:int = argumentsDict[self.ARG_DIV_DATASET_PERC_SIZE]
 
         self._historyLength:int = argumentsDict[self.ARG_HISTORY_LENGTH]
+
+        self._owerwriteResults:bool = argumentsDict[self.ARG_OVERWRITE_RESULTS]
 
     def run(self, portfolioDescs:List[APortfolioDescription], portFolioModels:List[pd.DataFrame],
             evaluatonTools:List, histories:List[AHistory]):
@@ -95,21 +100,28 @@ class ASequentialSimulation(ABC):
             os.mkdir(dir)
 
         computationFileName:str = dir + os.sep + "computation-" + portfolioDescI.getPortfolioID() +".txt"
-        if os.path.isfile(computationFileName):
+
+        if (not self._owerwriteResults) and os.path.isfile(computationFileName):
             raise ValueError("Results directory contains old results.")
 
+        if os.path.exists(computationFileName):
+            os.remove(computationFileName)
         self.computationFile = open(computationFileName, "w+")
 
         # opening files for portfolio model time evolution
         self.portModelTimeEvolutionFiles = {}
         for portfolioDescI in portfolioDescs:
             fileName:str = dir + os.sep + "portfModelTimeEvolution-" + portfolioDescI.getPortfolioID() + ".txt"
+            if os.path.exists(fileName):
+                os.remove(fileName)
             self.portModelTimeEvolutionFiles[portfolioDescI.getPortfolioID()] = open(fileName, "a")
 
         # opening files for portfolio model time evolution
         self.historyOfRecommendationFiles:dict = {}
         for portfolioDescI in portfolioDescs:
             fileName:str = dir + os.sep + "historyOfRecommendation-" + portfolioDescI.getPortfolioID() + ".txt"
+            if os.path.exists(fileName):
+                os.remove(fileName)
             self.historyOfRecommendationFiles[portfolioDescI.getPortfolioID()] = open(fileName, "a")
 
         # results of portfolios evaluations

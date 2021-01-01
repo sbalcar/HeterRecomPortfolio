@@ -57,6 +57,7 @@ class BatchRRSingleW2VHT(ABatchRR):
             batchID, divisionDatasetPercentualSize, uBehaviour, repetition)
         simulator.simulate([pDescr], [DataFrame()], [EToolSingleMethod({})], HistoryHierDF)
 
+
 if __name__ == "__main__":
     os.chdir("..")
     os.chdir("..")

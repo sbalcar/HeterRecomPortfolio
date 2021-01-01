@@ -70,30 +70,27 @@ def test03():
 
     dataset:DatasetST = DatasetST.readDatasets()
 
-    trainDataset:DatasetST = dataset
 
     args:dict = {
-#            RecommenderCosineCB.ARG_CB_DATA_PATH: Configuration.cbSTDataFileWithPathTFIDF,
-            RecommenderCosineCB.ARG_CB_DATA_PATH: Configuration.cbSTDataFileWithPathOHE,
+            RecommenderCosineCB.ARG_CB_DATA_PATH: Configuration.cbSTDataFileWithPathTFIDF,
+#            RecommenderCosineCB.ARG_CB_DATA_PATH: Configuration.cbSTDataFileWithPathOHE,
             RecommenderCosineCB.ARG_USER_PROFILE_SIZE: 5,
             RecommenderCosineCB.ARG_USER_PROFILE_STRATEGY: "max"}
     rec:ARecommender = RecommenderCosineCB("test", args)
 
-    rec.train(HistoryDF("test"), trainDataset)
+    rec.train(HistoryDF("test"), dataset)
 
-#    ratingsDFUpdate:DataFrame = ratingsDF.iloc[50003:50004]
-#    rec.update(ratingsDFUpdate)
+    eventsDFDFUpdate:DataFrame = dataset.eventsDF.iloc[50003:50004]
+    rec.update(eventsDFDFUpdate)
 
-#    print("max")
-#    r:Series = rec.recommend(331, 50, args)
-#    print(type(r))
-#    print(r)
+    r:Series = rec.recommend(3325463, 20, args)
+    print(type(r))
+    print(r)
 
     # testing of a non-existent user
-#    print("mean")
-#    r:Series =rec.recommend(10000, 50, args)
-#    print(type(r))
-#    print(r)
+    r:Series =rec.recommend(10000, 50, args)
+    print(type(r))
+    print(r)
 
 
 if __name__ == "__main__":

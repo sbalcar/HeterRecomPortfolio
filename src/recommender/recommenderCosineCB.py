@@ -41,6 +41,7 @@ class RecommenderCosineCB(ARecommender):
         print(argumentsDict)
 
         self.dfCBFeatures = pd.read_csv(self.cbDataPath, sep=",", header=0, index_col=0)
+        #self.dfCBFeatures.fillna(self.dfCBFeatures.mean(), inplace=True)
         dfCBSim = 1 - pairwise_distances(self.dfCBFeatures, metric="cosine")
         np.fill_diagonal(dfCBSim, 0.0)
         self.cbData:DataFrame = DataFrame(data=dfCBSim, index=self.dfCBFeatures.index, columns=self.dfCBFeatures.index)
@@ -156,7 +157,7 @@ class RecommenderCosineCB(ARecommender):
 
         if len(objectIDs) <= 0:
             return pd.Series([], index=[])
-
+        print(self.cbData)
         # provedu agregaci dle zvolené metody
         results = self.cbData.loc[objectIDs]
         self._results = results
