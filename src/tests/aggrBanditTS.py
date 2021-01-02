@@ -46,12 +46,9 @@ def test01():
     print(itemIDs)
 
 
-def main():
+if __name__ == "__main__":
     print("D'Hondt algorithm")
 
     test01()
     # [(1, 'metoda1'), (32, 'metoda1'), (2, 'metoda1'), (8, 'metoda1'), (6, 'metoda2'), (4, 'metoda1'), (7, 'metoda3'), (5, 'metoda2'), (64, 'metoda3'), (77, 'metoda3'), (12, 'metoda3')]
 
-
-if __name__ == "__main__":
-    main()

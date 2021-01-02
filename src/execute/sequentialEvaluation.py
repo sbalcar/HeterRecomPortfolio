@@ -35,7 +35,7 @@ from input.batchSlanTour.batchSTSingleW2VHT import BatchSTSingleW2VHT #class
 from input.batchSlanTour.batchSTSingleCosineCBHT import BatchSTSingleCosineCBHT #class
 
 
-def executeBatches():
+def sequentialEvaluation():
 
   np.random.seed(42)
   random.seed(42)

@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 
+import os
 from typing import List
 from pandas.core.frame import DataFrame #class
 
@@ -51,4 +52,7 @@ def test01():
 
 
 
-test01()
+if __name__ == '__main__':
+    os.chdir("..")
+
+    test01()

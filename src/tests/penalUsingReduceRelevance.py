@@ -36,4 +36,9 @@ def test01():
 
     print(pRecommendationSrs)
 
-test01()
+
+
+if __name__ == "__main__":
+    os.chdir("..")
+
+    test01()

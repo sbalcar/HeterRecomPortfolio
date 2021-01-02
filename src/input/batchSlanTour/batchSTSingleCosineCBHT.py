@@ -65,4 +65,4 @@ if __name__ == "__main__":
     os.chdir("..")
     print(os.getcwd())
 
-    BatchSTSingleBPRMFHT.generateBatches()
+    BatchSTSingleCosineCBHT.generateBatches()

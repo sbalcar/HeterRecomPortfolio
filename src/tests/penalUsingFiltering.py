@@ -13,7 +13,6 @@ from history.historyHierDF import HistoryHierDF #class
 
 def test01():
     print("Test 01")
-    os.chdir("..")
 
     borderNegFeedback:float = 1.0
     lengthOfHistory:int = 3
@@ -37,4 +36,9 @@ def test01():
 
     print(pRecommendationSrs)
 
-test01()
+
+
+if __name__ == "__main__":
+    os.chdir("..")
+
+    test01()

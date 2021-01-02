@@ -156,4 +156,8 @@ def visualizationDHondtModel():
    print(recomW2vPosnegMaxModel[0:10])
 
 
-visualizationDHondtModel()
+
+if __name__ == "__main__":
+   os.chdir("..")
+
+   visualizationDHondtModel()

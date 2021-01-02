@@ -111,4 +111,9 @@ def visualizationDHontModel():
    print(recomCBmeanModel[0:10])
    print(recomW2vPosnegMaxModel[0:10])
 
-visualizationDHontModel()
+
+
+if __name__ == "__main__":
+   os.chdir("..")
+
+   visualizationDHontModel()
