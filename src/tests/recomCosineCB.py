@@ -80,9 +80,15 @@ def test03():
 
     rec.train(HistoryDF("test"), dataset)
 
-    eventsDFDFUpdate:DataFrame = dataset.eventsDF.iloc[50003:50004]
-    rec.update(eventsDFDFUpdate)
+    eventsDFDFUpdate:DataFrame = dataset.eventsDF.iloc[5003:5004]
+    rec.update(eventsDFDFUpdate) 
 
+    # user with very outdated profile - no recent objects
+    r:Series = rec.recommend(3500678, 20, args)
+    print(type(r))
+    print(r)
+
+    # user with very outdated profile - no recent objects
     r:Series = rec.recommend(3325463, 20, args)
     print(type(r))
     print(r)
