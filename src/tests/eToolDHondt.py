@@ -7,6 +7,7 @@ from pandas.core.frame import DataFrame #class
 
 import pandas as pd
 
+from evaluationTool.aEvalTool import AEvalTool #class
 from evaluationTool.evalToolDHondt import EvalToolDHondt #class
 
 
@@ -44,21 +45,22 @@ def test01():
     evaluationDict:dict = {}
 
     print("Clicked:")
-    EvalToolDHondt.click(rItemIDsWithResponsibility, 7, portfolioModelDF, evaluationDict)
-    EvalToolDHondt.click(rItemIDsWithResponsibility, 1, portfolioModelDF, evaluationDict)
-    EvalToolDHondt.click(rItemIDsWithResponsibility, 7, portfolioModelDF, evaluationDict)
+    evalTool:AEvalTool = EvalToolDHondt({EvalToolDHondt.ARG_LEARNING_RATE_CLICKS:0.1, EvalToolDHondt.ARG_LEARNING_RATE_VIEWS:0.1,})
+    evalTool.click(rItemIDsWithResponsibility, 7, portfolioModelDF, evaluationDict)
+    evalTool.click(rItemIDsWithResponsibility, 1, portfolioModelDF, evaluationDict)
+    evalTool.click(rItemIDsWithResponsibility, 7, portfolioModelDF, evaluationDict)
     print()
 
     print("Displayed - start:")
     for i in range(100):
         rItemIDsWithResponsibility1:List = [(7, {'metoda1': 0, 'metoda2': 24.0, 'metoda3': 18.0})]
-        EvalToolDHondt.displayed(rItemIDsWithResponsibility1, portfolioModelDF, evaluationDict)
+        evalTool.displayed(rItemIDsWithResponsibility1, portfolioModelDF, evaluationDict)
     print(portfolioModelDF)
     print("Displayed - end:")
     print()
 
     print("Clicked:")
-    EvalToolDHondt.click(rItemIDsWithResponsibility, 4, portfolioModelDF, evaluationDict)
+    evalTool.click(rItemIDsWithResponsibility, 4, portfolioModelDF, evaluationDict)
     print()
 
 

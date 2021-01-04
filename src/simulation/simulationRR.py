@@ -10,6 +10,8 @@ from datasets.retailrocket.events import Events #class
 
 from pandas.core.frame import DataFrame #class
 
+from recommender.aRecommender import ARecommender #class
+
 from portfolioDescription.aPortfolioDescription import APortfolioDescription #class
 
 from simulation.aSequentialSimulation import ASequentialSimulation #class
@@ -95,7 +97,7 @@ class SimulationRR(ASequentialSimulation):
                              histories:List[AHistory], testRatingsDF:DataFrame, testRelevantRatingsDF:DataFrame,
                              testBehaviourDict:Dict[int, DataFrame]):
 
-        model:ModelOfIndexes = ModelOfIndexes(testRelevantRatingsDF, Events)
+        model:ModelOfIndexes = ModelOfIndexes(testRatingsDF, list(testRelevantRatingsDF.index), Events)
 
         portIds:List[str] = [portDescI.getPortfolioID() for portDescI in portfolioDescs]
 
@@ -122,16 +124,13 @@ class SimulationRR(ASequentialSimulation):
             currentRatingI:int = testRatingsDF.loc[currentDFIndexI][Events.COL_EVENT]
             currentUserIdI:int = testRatingsDF.loc[currentDFIndexI][Events.COL_VISITOR_ID]
 
-            #if currentRatingI < 4:
-            #    continue
-
-            windowOfItemIDsI:int = self.getWindowOfItemIDs(model, currentUserIdI, currentDFIndexI, testRatingsDF, self._windowSize)
-
+            windowOfItemIDsI:int = model.getNextRelevantItemIDsExceptItemIDs(currentDFIndexI,
+                                                                             self._clickedItems[currentUserIdI], self._windowSize)
             portfolioI:APortfolio
             for portfolioI in portfolios:
 
                 dfI:DataFrame = DataFrame([testRatingsDF.loc[currentDFIndexI]], columns=testRatingsDF.keys())
-                portfolioI.update(dfI)
+                portfolioI.update(ARecommender.UPDT_VIEW, dfI)
 
             repetitionI:int
             for repetitionI in range(self._recomRepetitionCount):

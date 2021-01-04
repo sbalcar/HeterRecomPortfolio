@@ -103,9 +103,15 @@ class RecommenderItemBasedKNN(ARecommender):
             self._lastRatedItemPerUser = trainEventsDF.loc[trainEventsDF[Events.COL_OBJECT_ID] != 0]\
                 .groupby(Events.COL_USER_ID).tail(1).set_index(Events.COL_USER_ID)
 
-    def update(self, ratingsUpdateDF:DataFrame):
+    def update(self, updtType:str, ratingsUpdateDF:DataFrame):
+        if type(updtType) is not str and not updtType in [self.UPDT_CLICK, self.UPDT_VIEW]:
+            raise ValueError("Argument updtType isn't type str.")
         if type(ratingsUpdateDF) is not DataFrame:
             raise ValueError("Argument ratingsTrainDF isn't type DataFrame.")
+
+        # the recommender implements only positive feedback
+        if updtType == self.UPDT_VIEW:
+            return
 
         row:DataFrame = ratingsUpdateDF.iloc[0]
         if type(self._trainDataset) is DatasetML:

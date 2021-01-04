@@ -193,34 +193,6 @@ class ASequentialSimulation(ABC):
 
 
 
-    # model:ModelOfIndexes
-    def getWindowOfItemIDs(self, model, userId:int, currentDFIndexI:int, ratingsDF:DataFrame, windowSize:int):
-
-        COL_USERID:str = self._ratingClass.getColNameUserID()
-        COL_ITEMID:str = self._ratingClass.getColNameItemID()
-
-        selectedItems:List[int] = []
-
-        itemIdI:int = ratingsDF.loc[currentDFIndexI][COL_ITEMID]
-        while len(selectedItems) < windowSize:
-            nextIndexIdI:int = model.getNextIndex(userId, itemIdI)
-            if nextIndexIdI is None:
-                break
-
-            nextItemIdI:int = ratingsDF.loc[nextIndexIdI][COL_ITEMID]
-            nextUserIdI:int = ratingsDF.loc[nextIndexIdI][COL_USERID]
-            if nextUserIdI != userId:
-                raise ValueError("Error")
-
-            if not nextIndexIdI in self._clickedItems[userId]:
-                selectedItems.append(nextItemIdI)
-
-            itemIdI = nextItemIdI
-
-        return selectedItems
-
-
-
     def simulateRecommendations(self, portfolios:List[APortfolio], portfolioDescs:List[APortfolioDescription],
                                   portFolioModels:List[DataFrame], evaluatonTools:List[AEvalTool], histories:List[AHistory],
                                   evaluations:List[dict], currentDFIndex:int, userID:int, repetition:int,
@@ -271,30 +243,26 @@ class ASequentialSimulation(ABC):
 
         evaluatonTool.displayed(rItemIDsWithResponsibility, portfolioModel, evaluation)
 
-        nextNoClickedItemIDs:List[int] = list(set(windowOfItemIDsI) -set(self._clickedItems[userID]))
-
-        candidatesToClick:List[int] = list(set(rItemIDs) & set(nextNoClickedItemIDs))
-        clickedItemIDs:List[int] = []
-        for candidateToClickI in candidatesToClick:
-            indexI:int = rItemIDs.index(candidateToClickI)
-            wasCandidateObservedI:bool = uObservation[indexI]
-            if wasCandidateObservedI:
-                clickedItemIDs.append(candidateToClickI)
+        candidatesToClick: List[int] = [itemIDI for itemIDI, observedI in zip(rItemIDs, uObservation[:len(rItemIDs)]) if observedI]
+        clickedItemIDs:List[int] = list(set(candidatesToClick) & set(windowOfItemIDsI))
+        clickedNewItemIDs:List[int] = [itemIdI for itemIdI in clickedItemIDs if itemIdI not in self._clickedItems[userID]]
 
         print("windowOfItemIDsI: " + str(windowOfItemIDsI))
         print("rItemIDs: " + str(rItemIDs))
         print("uObservation: " + str(uObservation))
         print("candidatesToClick: " + str(candidatesToClick))
         print("clickedItemIDs: " + str(clickedItemIDs))
+        print("clickedNewItemIDs: " + str(clickedNewItemIDs))
+        print("historyOfClickedItems: " + str(self._clickedItems[userID]))
 
+        for clickedNewItemIdI in clickedNewItemIDs:
+            evaluatonTool.click(rItemIDsWithResponsibility, clickedNewItemIdI, portfolioModel, evaluation)
 
-        for clickedItemIdI in clickedItemIDs:
-            evaluatonTool.click(rItemIDsWithResponsibility, clickedItemIdI, portfolioModel, evaluation)
+            dfI:DataFrame = DataFrame([testRatingsDF.loc[currentDFIndex]], columns=testRatingsDF.keys())
+            portfolio.update(APortfolio.UPDT_CLICK, dfI)
 
-            if not clickedItemIdI in self._clickedItems[userID]:
-                self._clickedItems[userID].append(clickedItemIdI)
+            self._clickedItems[userID].append(clickedNewItemIdI)
 
-            print("clickedItems: " + str(self._clickedItems[userID]))
 
         # store port model time evolution to file
         self.portModelTimeEvolutionFiles[portId].write("currentItemID: " + str(currentItemID) + "\n")
@@ -307,6 +275,7 @@ class ASequentialSimulation(ABC):
         self.historyOfRecommendationFiles[portfolioDesc.getPortfolioID()].write("rItemIDs: " + str(rItemIDs) + "\n")
         self.historyOfRecommendationFiles[portfolioDesc.getPortfolioID()].write("uObservation: " + str(uObservation) + "\n")
         self.historyOfRecommendationFiles[portfolioDesc.getPortfolioID()].write("clickedItemIDs: " + str(clickedItemIDs) + "\n\n")
+        self.historyOfRecommendationFiles[portfolioDesc.getPortfolioID()].write("clickedNewItemIDs: " + str(clickedNewItemIDs) + "\n\n")
 
         # save log of history
         history.insertRecomAndClickedItemIDs(userID, rItemIDs, clickedItemIDs)

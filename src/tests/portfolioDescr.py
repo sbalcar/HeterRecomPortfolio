@@ -49,10 +49,10 @@ def test01():
 
     df:DataFrame = DataFrame([[1, 555]], columns=[Events.COL_USER_ID, Events.COL_OBJECT_ID])
 
-    p.update(df)
+    p.update(ARecommender.UPDT_CLICK, df)
 
     userID:int = 1
-    r = p.recommend(userID, portFolioModel, {APortfolio.ARG_NUMBER_OF_AGGR_ITEMS:20})
+    r, rp = p.recommend(userID, portFolioModel, {APortfolio.ARG_NUMBER_OF_AGGR_ITEMS:20})
     print(r)
 
 

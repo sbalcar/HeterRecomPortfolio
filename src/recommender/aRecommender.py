@@ -10,6 +10,9 @@ from abc import ABC, abstractmethod
 
 class ARecommender(ABC):
 
+    UPDT_CLICK:str = "click"
+    UPDT_VIEW:str = "view"
+
     @abstractmethod
     def __init__(self, jobID:str, argumentsDict:dict):
         raise Exception("ARecommender is abstract class, can't be instanced")
@@ -19,7 +22,7 @@ class ARecommender(ABC):
         assert False, "this needs to be overridden"
 
     @abstractmethod
-    def update(self, ratingsUpdateDF:DataFrame):
+    def update(self, updtType:str, ratingsUpdateDF:DataFrame):
         assert False, "this needs to be overridden"
 
     @abstractmethod

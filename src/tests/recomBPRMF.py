@@ -58,12 +58,12 @@ def test01():
     print(r);
     for i in range(ratingsDFUpdate.shape[0]):
         rUp = ratingsDFUpdate.iloc[i:i+1,:]
-        rec.update(rUp)
+        rec.update(ARecommender.UPDT_CLICK, rUp)
 
     print("Recommendations after update")
     print(rec._movieFeaturesMatrixLIL[:,ratingsDFUpdate['userId'].iloc[0]  ].getnnz() )
     
-    r: Series = rec.recommend(ratingsDFUpdate['userId'].iloc[0], 50, {})
+    r:Series = rec.recommend(ratingsDFUpdate['userId'].iloc[0], 50, {})
     print(r);
     
     print("Test for non-existent user:")
@@ -122,7 +122,7 @@ def test03():
 
     uDF:DataFrame = DataFrame([eventsDF.iloc[9000]])
     print(uDF)
-    rec.update(uDF)
+    rec.update(ARecommender.UPDT_CLICK, uDF)
 
     r:Series = rec.recommend(23, 50, {})
     print(r)
@@ -149,7 +149,7 @@ def test04():
 
     uDF:DataFrame = DataFrame([eventsDF.iloc[9000]])
     print(uDF)
-    rec.update(uDF)
+    rec.update(ARecommender.UPDT_CLICK, uDF)
 
     r:Series = rec.recommend(23, 50, {})
     print(r)

@@ -18,6 +18,8 @@ from simulation.aSequentialSimulation import ASequentialSimulation #class
 import pandas as pd
 import numpy as np
 
+from recommender.aRecommender import ARecommender #class
+
 from pandas.core.frame import DataFrame #class
 
 from history.aHistory import AHistory #class
@@ -78,7 +80,7 @@ class SimulationML(ASequentialSimulation):
             testRepeatedBehaviourDict[repetitionI] = behaviourDFI
 
 
-        return (trainDataset, testRatingsDF, testRelevantRatingsDF, testRepeatedBehaviourDict)
+        return (trainDataset, testRelevantRatingsDF, testRelevantRatingsDF, testRepeatedBehaviourDict)
 
 
     @staticmethod
@@ -98,7 +100,7 @@ class SimulationML(ASequentialSimulation):
                              histories:List[AHistory], testRatingsDF:DataFrame, testRelevantRatingsDF:DataFrame,
                              testBehaviourDict:Dict[int, DataFrame]):
 
-        model:ModelOfIndexes = ModelOfIndexes(testRelevantRatingsDF, Ratings)
+        model:ModelOfIndexes = ModelOfIndexes(testRatingsDF, list(testRelevantRatingsDF.index), Ratings)
 
         portIds:List[str] = [portDescI.getPortfolioID() for portDescI in portfolioDescs]
 
@@ -125,16 +127,18 @@ class SimulationML(ASequentialSimulation):
             currentRatingI:int = testRatingsDF.loc[currentDFIndexI][Ratings.COL_RATING]
             currentUserIdI:int = testRatingsDF.loc[currentDFIndexI][Ratings.COL_USERID]
 
-            if currentRatingI < 4:
-                continue
-
-            windowOfItemIDsI:int = self.getWindowOfItemIDs(model, currentUserIdI, currentDFIndexI, testRatingsDF, self._windowSize)
-
             portfolioI:APortfolio
             for portfolioI in portfolios:
 
                 dfI:DataFrame = DataFrame([testRatingsDF.loc[currentDFIndexI]], columns=testRatingsDF.keys())
-                portfolioI.update(dfI)
+                portfolioI.update(ARecommender.UPDT_VIEW, dfI)
+
+#            if currentRatingI < 4:
+#                continue
+
+            windowOfItemIDsI:int = model.getNextRelevantItemIDsExceptItemIDs(currentDFIndexI,
+                                                                             self._clickedItems[currentUserIdI], self._windowSize)
+
 
             repetitionI:int
             for repetitionI in range(self._recomRepetitionCount):

@@ -43,11 +43,13 @@ class Portfolio1Meth(APortfolio):
 
         self._recommender.train(history, dataset)
 
-   def update(self, ratingsUpdateDF:DataFrame):
+   def update(self, updtType:str, ratingsUpdateDF:DataFrame):
         if type(ratingsUpdateDF) is not DataFrame:
             raise ValueError("Argument ratingsUpdateDF isn't type DataFrame.")
+        if type(updtType) is not str and not updtType in [self.UPDT_CLICK, self.UPDT_VIEW]:
+            raise ValueError("Argument updtType isn't type str.")
 
-        self._recommender.update(ratingsUpdateDF)
+        self._recommender.update(updtType, ratingsUpdateDF)
 
 
    def recommend(self, userID:int, portFolioModel:DataFrame, argumentsDict:dict):

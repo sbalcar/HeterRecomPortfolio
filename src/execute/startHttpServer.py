@@ -55,8 +55,9 @@ from recommender.recommenderBPRMF import RecommenderBPRMF #class
 from portfolio.aPortfolio import APortfolio #class
 from portfolioDescription.portfolio1MethDescription import Portfolio1MethDescription #class
 
+from evaluationTool.aEvalTool import AEvalTool #class
+from evaluationTool.evalToolSingleMethod import EToolSingleMethod #class
 
-import time
 from httpServer.httpServer import HeterRecomHTTPHandler #class
 from http.server import BaseHTTPRequestHandler, HTTPServer
 
@@ -84,9 +85,13 @@ def startHttpServer():
 
   portfolioDict:Dict[str,APortfolio] = {HeterRecomHTTPHandler.VARIANT_A:p}
   modelsDict:Dict[str,int] = {HeterRecomHTTPHandler.VARIANT_A:DataFrame()}
+  evalToolsDict:Dict[str, AEvalTool] = {HeterRecomHTTPHandler.VARIANT_A:EToolSingleMethod({})}
+
 
   HeterRecomHTTPHandler.portfolioDict = portfolioDict
   HeterRecomHTTPHandler.modelsDict = modelsDict
+  HeterRecomHTTPHandler.evalToolsDict = evalToolsDict
+
   server = HTTPServer(('', 8080), HeterRecomHTTPHandler)
   server.serve_forever()
 

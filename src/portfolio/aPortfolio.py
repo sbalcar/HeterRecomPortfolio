@@ -17,6 +17,9 @@ class APortfolio(ABC):
     ARG_NUMBER_OF_RECOMM_ITEMS:str = "numberOfRecomItems"
     ARG_NUMBER_OF_AGGR_ITEMS:str = "numberOfAggrItems"
 
+    UPDT_CLICK:str = "click"
+    UPDT_VIEW:str = "view"
+
     @abstractmethod
     def __init__(self, recommIDs: List[str], recommenders: List[ARecommender], agregation:AAgregation):
         raise Exception("APortfolio is abstract class, can't be instanced")
@@ -30,7 +33,7 @@ class APortfolio(ABC):
         assert False, "this needs to be overridden"
 
     @abstractmethod
-    def update(self, ratingsUpdateDF:DataFrame):
+    def update(self, updtType:str, ratingsUpdateDF:DataFrame):
         assert False, "this needs to be overridden"
 
     @abstractmethod

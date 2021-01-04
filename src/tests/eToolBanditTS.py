@@ -7,6 +7,7 @@ from pandas.core.frame import DataFrame #class
 
 import pandas as pd
 
+from evaluationTool.aEvalTool import AEvalTool #class
 from evaluationTool.evalToolDHondt import EvalToolDHondt #class
 from evaluationTool.evalToolBanditTS import EvalToolBanditTS #class
 
@@ -33,21 +34,23 @@ def test01():
     evaluationDict:dict = {}
 
     print("Clicked:")
-    EvalToolBanditTS.click(rItemIDsWithResponsibility, 1, portfolioModelDF, evaluationDict)
+
+    evalTool:AEvalTool = EvalToolBanditTS({})
+    evalTool.click(rItemIDsWithResponsibility, 1, portfolioModelDF, evaluationDict)
     print()
 
     print("Clicked:")
-    EvalToolBanditTS.click(rItemIDsWithResponsibility, 32, portfolioModelDF, evaluationDict)
+    evalTool.click(rItemIDsWithResponsibility, 32, portfolioModelDF, evaluationDict)
     print()
 
     print("Clicked:")
-    EvalToolBanditTS.click(rItemIDsWithResponsibility, 6, portfolioModelDF, evaluationDict)
+    evalTool.click(rItemIDsWithResponsibility, 6, portfolioModelDF, evaluationDict)
     print()
 
     print("Displayed:")
     rItemIDsWithResponsibility1:List[tuple] = [(1, 'metoda1'), (32, 'metoda1'), (2, 'metoda1'), (8, 'metoda1')]
     for i in [0,1,2]:
-        EvalToolBanditTS.displayed(rItemIDsWithResponsibility1, portfolioModelDF, evaluationDict)
+        evalTool.displayed(rItemIDsWithResponsibility1, portfolioModelDF, evaluationDict)
         print(portfolioModelDF)
 
 

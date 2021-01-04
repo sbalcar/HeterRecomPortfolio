@@ -20,6 +20,7 @@ from evaluationTool.aEvalTool import AEvalTool #class
 
 from datasets.slantour.behavioursST import BehavioursST #class
 
+from recommender.aRecommender import ARecommender #class
 
 from portfolio.aPortfolio import APortfolio #class
 
@@ -97,7 +98,7 @@ class SimulationST(ASequentialSimulation):
                              histories:List[AHistory], testRatingsDF:DataFrame, testRelevantRatingsDF:DataFrame,
                              testBehaviourDict:Dict[int, DataFrame]):
 
-        model:ModelOfIndexes = ModelOfIndexes(testRelevantRatingsDF, Events)
+        model:ModelOfIndexes = ModelOfIndexes(testRatingsDF, list(testRelevantRatingsDF.index), Events)
 
         portIds:List[str] = [portDescI.getPortfolioID() for portDescI in portfolioDescs]
 
@@ -124,13 +125,13 @@ class SimulationST(ASequentialSimulation):
             currentUserIdI:int = testRatingsDF.loc[currentDFIndexI][Events.COL_USER_ID]
 
 
-            windowOfItemIDsI:int = self.getWindowOfItemIDs(model, currentUserIdI, currentDFIndexI, testRatingsDF, self._windowSize)
-
+            windowOfItemIDsI:int = model.getNextRelevantItemIDsExceptItemIDs(currentDFIndexI,
+                                                                             self._clickedItems[currentUserIdI], self._windowSize)
             portfolioI:APortfolio
             for portfolioI in portfolios:
 
                 dfI:DataFrame = DataFrame([testRatingsDF.loc[currentDFIndexI]], columns=testRatingsDF.keys())
-                portfolioI.update(dfI)
+                portfolioI.update(ARecommender.UPDT_VIEW, dfI)
 
             repetitionI:int
             for repetitionI in range(self._recomRepetitionCount):

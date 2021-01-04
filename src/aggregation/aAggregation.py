@@ -15,7 +15,7 @@ class AAgregation(ABC):
        raise Exception("AAgregation is abstract class, can't be instanced")
 
     @abstractmethod
-    def update(self, ratingsUpdateDF:DataFrame):
+    def update(self, updtType:str, ratingsUpdateDF:DataFrame):
         assert False, "this needs to be overridden"
 
     # userDef:DataFrame<(methodID:str, votes:int)>

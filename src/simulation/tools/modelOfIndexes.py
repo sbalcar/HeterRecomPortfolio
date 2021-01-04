@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 from typing import List
+from typing import Dict
 
 from pandas.core.series import Series #class
 
@@ -8,81 +9,134 @@ from pandas.core.frame import DataFrame #class
 
 
 class ModelOfIndexes:
-    def __init__(self, ratingsDF:DataFrame, ratingsClass):
-        if type(ratingsDF) is not DataFrame:
+    def __init__(self, timeOrderedRatingsDF:DataFrame, relevantDFIndexes:List[int], ratingsClass):
+        if type(timeOrderedRatingsDF) is not DataFrame:
             raise ValueError("Argument ratingsDF isn't type DataFrame.")
+        if type(relevantDFIndexes) is not list:
+            raise ValueError("Argument relevantDFIndexes isn't type list.")
+        for relevantDFIndexI in relevantDFIndexes:
+            if type(relevantDFIndexI) is not int:
+               raise ValueError("Argument relevantDFIndexes don't contain int.")
 
-        #print("ratingsClass: " + str(ratingsClass))
-
+        self._ratingsDF:DataFrame = timeOrderedRatingsDF
+        self._relevantDFIndexes:List[int] = relevantDFIndexes
         self._ratingsClass = ratingsClass
 
-        ratingsCopyDF:DataFrame = ratingsDF.copy()
-        ratingsCopyDF['index1'] = ratingsCopyDF.index
+
+        self._tOrdRatingsDict:Dict[int,DataFrame] = {}
 
         COL_USERID:str = ratingsClass.getColNameUserID()
-        COL_ITEMID:str = ratingsClass.getColNameItemID()
+        #COL_ITEMID:str = ratingsClass.getColNameItemID()
 
-        userIds:List[int] = list(set([rowI[COL_USERID] for indexDFI, rowI in ratingsCopyDF.iterrows()]))
-        #print(userIds)
-
-        # dictionary (index = userID, value = list[tuple(int, int)])
-        # each list contains pair(int,int) or (itemID, indefOfDataFrame)
-        self._dictionaryOfUserIDs:dict[List[tuple(int, int)]] = {}
+        userIds:List[int] = list(set([rowI[COL_USERID] for indexDFI, rowI in timeOrderedRatingsDF.iterrows()]))
 
         userIdI:int
         for userIdI in userIds:
             # select ratings of userIdI
-            ratingsUserIDF:DataFrame = ratingsCopyDF.loc[ratingsCopyDF[COL_USERID] == userIdI]
+            ratingsUserIDF:DataFrame = timeOrderedRatingsDF.loc[timeOrderedRatingsDF[COL_USERID] == userIdI]
+            self._tOrdRatingsDict[userIdI] = ratingsUserIDF
+    #
 
-            userDictI:dict = {}
-            lastItemI:Item = None
+    def __getNextDFIndex(self, dfIndex:int):
+        COL_USERID:str = self._ratingsClass.getColNameUserID()
+        COL_ITEMID:str = self._ratingsClass.getColNameItemID()
 
-            indexDFI:int
-            rowI:Series
-            for i, rowI in ratingsUserIDF.iterrows():
-
-                indexDFI:int = rowI['index1']
-                userIdI:int = rowI[COL_USERID]
-                itemIdI:int = rowI[COL_ITEMID]
-
-                itemI:Item = Item(itemIdI, indexDFI, None)
-                if not lastItemI is None:
-                    lastItemI.setNext(itemI)
-
-                lastItemI = itemI
-                userDictI[itemIdI] = itemI
-
-            self._dictionaryOfUserIDs[userIdI] = userDictI
-
-
-    def getNextIndex(self, userId:int, itemId:int):
+        userId:int = self._ratingsDF[COL_USERID].loc[dfIndex]
+        itemId:int = self._ratingsDF[COL_ITEMID].loc[dfIndex]
         #print("userId: " + str(userId))
-        u:dict[Item] = self._dictionaryOfUserIDs[userId]
-        item:Item = u[itemId]
+        #print("itemId: " + str(itemId))
 
-        itemNext:Item = item.getNext()
-        if itemNext is None:
+        if not userId in self._tOrdRatingsDict:
+            return None
+        ratingsOfUserI:DataFrame = self._tOrdRatingsDict[userId]
+        indexes:List[int] = list(ratingsOfUserI.index.values.astype(int))
+
+        indexInListOfIndexes:int = indexes.index(dfIndex)
+
+        if indexInListOfIndexes + 1 == len(indexes):
             return None
 
-        return itemNext.getIndexDF()
+        return indexes[indexInListOfIndexes+1]
 
 
 
-class Item:
-    # next:Intem
-    def __init__(self, itemID:int, indexDF:int, next):
-        self._itemID:int = itemID
-        self._indexDF:int = indexDF
-        self._next:Item = next
+    def getNextDFIndexes(self, dfIndex:int, numberOfIndexes:int):
 
-    def getIndexDF(self):
-        return self._indexDF
+        dfIndexI:int = dfIndex
+        dfIndexes:List[int] = []
+        while len(dfIndexes) < numberOfIndexes:
+            dfIndexI:int = self.__getNextDFIndex(dfIndexI)
+            if dfIndexI == None:
+                return dfIndexes
+            dfIndexes.append(dfIndexI)
 
-    # next:Item
-    def getNext(self):
-        return self._next
+        return dfIndexes
 
-    # next:Item
-    def setNext(self, next):
-        self._next = next
+
+    def getNextItemIDs(self, dfIndex:int, numberOfItems:int):
+
+        COL_ITEMID:str = self._ratingsClass.getColNameItemID()
+
+        dfIndexI:int = dfIndex
+        selectedItemIDs:List[int] = []
+        while len(selectedItemIDs) < numberOfItems:
+            dfIndexI:int = self.__getNextDFIndex(dfIndexI)
+            if dfIndexI == None:
+                return selectedItemIDs
+
+            itemIdI:int = self._ratingsDF[COL_ITEMID].loc[dfIndexI]
+
+            if not itemIdI in selectedItemIDs:
+                selectedItemIDs.append(itemIdI)
+
+        return selectedItemIDs
+
+
+    def getNextRelevantItemIDs(self, dfIndex:int, numberOfItems:int):
+
+        COL_ITEMID:str = self._ratingsClass.getColNameItemID()
+
+        dfIndexI:int = dfIndex
+        selectedItemIDs:List[int] = []
+        while len(selectedItemIDs) < numberOfItems:
+            dfIndexI:int = self.__getNextDFIndex(dfIndexI)
+            if dfIndexI == None:
+                return selectedItemIDs
+            if not dfIndexI in self._relevantDFIndexes:
+                continue
+
+            itemIdI:int = self._ratingsDF[COL_ITEMID].loc[dfIndexI]
+
+            if not itemIdI in selectedItemIDs:
+                selectedItemIDs.append(itemIdI)
+
+        return selectedItemIDs
+
+
+    def getNextRelevantItemIDsExceptItemIDs(self, dfIndex:int, exceptedItemIDs:List[int], numberOfItems:int):
+
+        #print("dfIndex: " + str(dfIndex))
+        #print("exceptedItemIDs: " + str(exceptedItemIDs))
+        #print("numberOfItems: " + str(numberOfItems))
+
+        COL_ITEMID:str = self._ratingsClass.getColNameItemID()
+
+        dfIndexI:int = dfIndex
+        selectedItemIDs:List[int] = []
+        while len(selectedItemIDs) < numberOfItems:
+            dfIndexI:int = self.__getNextDFIndex(dfIndexI)
+            #print("dfIndexI: " + str(dfIndexI))
+            if dfIndexI == None:
+                return selectedItemIDs
+            if not dfIndexI in self._relevantDFIndexes:
+                continue
+            if dfIndexI in exceptedItemIDs:
+                continue
+
+            itemIdI:int = self._ratingsDF[COL_ITEMID].loc[dfIndexI]
+
+            if not itemIdI in selectedItemIDs:
+                selectedItemIDs.append(itemIdI)
+
+        return selectedItemIDs
 

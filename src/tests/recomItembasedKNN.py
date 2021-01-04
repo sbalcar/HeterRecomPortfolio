@@ -48,7 +48,7 @@ def test01():
     print("Recommendations before update")
     r:Series = rec.recommend(ratingsDFUpdate['userId'].iloc[0], 50, {})
 
-    rec.update(ratingsDFUpdate)
+    rec.update(ARecommender.UPDT_CLICK, ratingsDFUpdate)
 
     print("Recommendations after update")
     r: Series = rec.recommend(ratingsDFUpdate['userId'].iloc[0], 50, {})
@@ -114,7 +114,7 @@ def test03():
     uDdata = [[23, 10, 4, 10000]]
     uDF: DataFrame = pd.DataFrame(uDdata, columns=[Ratings.COL_USERID, Ratings.COL_MOVIEID, Ratings.COL_RATING, Ratings.COL_TIMESTAMP])
 
-    rec.update(uDF)
+    rec.update(ARecommender.UPDT_CLICK, uDF)
 
 
     r:Series = rec.recommend(23, 10, {})
@@ -143,7 +143,7 @@ def test04():
 
     uDF:DataFrame = DataFrame([eventsDF.iloc[9000]])
     print(uDF)
-    rec.update(uDF)
+    rec.update(ARecommender.UPDT_CLICK, uDF)
 
     recommendation = rec.recommend(1, 20, {})
     print(recommendation)
@@ -166,10 +166,10 @@ def test05():
 
     uDF:DataFrame = DataFrame([eventsDF.iloc[9000]])
     print(uDF)
-    rec.update(uDF)
+    rec.update(ARecommender.UPDT_CLICK, uDF)
 
-    recommendation = rec.recommend(3325463, 20, {})
-    print(recommendation)
+    r = rec.recommend(3325463, 20, {})
+    print(r)
 
     print("================== END OF TEST 05 ======================\n\n\n\n\n")
 
@@ -180,5 +180,5 @@ if __name__ == "__main__":
     #test01()
     #test02()
     #test03()
-    test04()
-    #test05()
+    #test04()
+    test05()

@@ -43,7 +43,7 @@ def test01():
     rec.train(HistoryDF("test"), trainDataset)
 
     ratingsDFUpdate:DataFrame = ratingsDF.iloc[50003:50004]
-    rec.update(ratingsDFUpdate)
+    rec.update(ARecommender.UPDT_CLICK, ratingsDFUpdate)
 
     r:Series = rec.recommend(331, 50, {})
     print(type(r))
@@ -93,7 +93,7 @@ if __name__ == "__main__":
 
     os.chdir("..")
 
-    #test01()
+    test01()
     #test02()
-    test03()
+    #test03()
 
