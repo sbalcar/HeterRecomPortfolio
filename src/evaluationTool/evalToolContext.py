@@ -158,25 +158,22 @@ class EvalToolContext(AEvalTool):
         last20MoviesList = previousClickedItemsOfUser[-20:]
 
         # aggregation
-        itemsIDs = last20MoviesList
+        itemsIDs = [i[2] for i in last20MoviesList]
         items = self.items.iloc[list(itemsIDs)]
         itemsGenres = items.drop(items.columns[[0,1]], axis=1).sum()
         result = np.append(result, itemsGenres)
 
-        # create polynomial features from [seniority]*[genres]
+        # create polynomial features from [seniority]*[genres]*[userInfo]
+        # append age and onehot occupation
+        tmp = user.T.drop(labels=['userId', 'gender', 'zipCode']).to_numpy().flatten()
+        result = np.concatenate([result, tmp])
+
+        # add user gender to the context
+        result = np.append(result, 1 if user['gender'].item() == 'F' else -1)
+
         poly = PolynomialFeatures(2)
         result = poly.fit_transform(result.reshape(-1, 1))
         result = result.flatten()
-
-        # add user gender to the context
-        userFeatures = []
-        userFeatures.append(1 if user['gender'].item() == 'F' else -1)
-
-        # append age and onehot occupation
-        tmp = user.T.drop(labels=['userId', 'gender', 'zipCode']).to_numpy().flatten()
-        userFeatures = np.concatenate([userFeatures, tmp])
-
-        result = np.concatenate([result, userFeatures])
 
         # adjust context dimension attribute
         self._contextDim = len(result)
