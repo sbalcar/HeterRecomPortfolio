@@ -19,6 +19,7 @@ class EvalToolContext(AEvalTool):
     ARG_DATASET: str = "dataset"
     ARG_USER_ID: str = "userID"
     ARG_RELEVANCE = "relevance"
+    ARG_HISTORY = "history"
 
     def __init__(self, argsDict:dict):
         if type(argsDict) is not dict:
@@ -29,6 +30,7 @@ class EvalToolContext(AEvalTool):
         self.dataset_name: str = argsDict[self.ARG_DATASET]
         self.items: DataFrame = self._preprocessItems(argsDict[self.ARG_ITEMS])
         self.users: DataFrame = self._preprocessUsers(argsDict[self.ARG_USERS])
+        self.history = argsDict[self.ARG_HISTORY]
         self._contextDim: int = 0
         self._b: dict = {}
         self._A: dict = {}
@@ -130,8 +132,8 @@ class EvalToolContext(AEvalTool):
         result = np.zeros(2)
 
         # add seniority of user into the context (filter only clicked items)
-        # TODO: what to do here? Log clicked items for each user?
-        previousClickedItemsOfUser = [1,2,3,4,5,6,7,8,9,10]
+        CLICKED_INDEX = 5
+        previousClickedItemsOfUser = list(filter(lambda x: x[CLICKED_INDEX], self.history.getPreviousRecomOfUser(userID)))
         historySize = len(previousClickedItemsOfUser)
         if historySize < 3:
             result[0] = 1
