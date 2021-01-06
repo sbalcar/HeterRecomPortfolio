@@ -5,10 +5,11 @@ import numpy as np
 import implicit
 import scipy.sparse as sp
 
-
 from pandas.core.frame import DataFrame #class
+from pandas.core.series import Series #class
 
 from typing import List
+from typing import Dict
 
 from sklearn.metrics import *
 from sklearn.preprocessing import normalize
@@ -53,7 +54,13 @@ class RecommenderBPRMF(ARecommender):
         
         self._updateCounter = 0
         self.updateThreshold = 1000   #maybe use values from argumentsDict
-        
+
+        self.userIdToUserIndexDict:Dict = {}
+        self.userIndexToUserIdDict:Dict = {}
+
+        self.itemIdToItemIndexDict:Dict = {}
+        self.itemIndexToItemIdDict:Dict = {}
+
         self._randomState = 42
         
 
@@ -69,9 +76,6 @@ class RecommenderBPRMF(ARecommender):
             COL_USERID:str = Users.COL_USERID
             COL_ITEMID:str = Items.COL_MOVIEID
             ratingsDF:DataFrame = dataset.ratingsDF.loc[dataset.ratingsDF[COL_RATING] >= 4]
-        
-            maxUID:int = dataset.usersDF[COL_USERID].max()
-            maxOID:int = dataset.itemsDF[COL_ITEMID].max()
 
         elif type(dataset) is DatasetRetailRocket:
             from datasets.retailrocket.events import Events  # class
@@ -89,9 +93,6 @@ class RecommenderBPRMF(ARecommender):
             ratingsDF:DataFrame = ratings4DF[[COL_USERID, COL_ITEMID, COL_RATING]]
             ratingsDF = ratingsDF.groupby([COL_USERID, COL_ITEMID], as_index=False)[COL_RATING].max()
 
-            maxUID:int = dataset.eventsDF[COL_USERID].max()
-            maxOID:int = dataset.eventsDF[COL_ITEMID].max()
-
         elif type(self._trainDataset) is DatasetST:
             from datasets.slantour.events import Events  # class
             COL_RATING:str = "rating"
@@ -103,18 +104,23 @@ class RecommenderBPRMF(ARecommender):
             trainEventsDF[COL_RATING] = 1.0
             ratingsDF:DataFrame = trainEventsDF
 
-            maxUID:int = dataset.eventsDF[COL_USERID].max()
-            maxOID:int = dataset.eventsDF[COL_ITEMID].max()
-
-
-        if self.DEBUG_MODE:
-            print(maxUID, maxOID)
-
         ratingsDF[COL_RATING] = 1.0 #flatten ratings
 
-        self._itemFeaturesMatrix = sp.coo_matrix((ratingsDF[COL_RATING],
-                                                  (ratingsDF[COL_ITEMID],
-                    ratingsDF[COL_USERID])), shape = (maxOID+1, maxUID+1))
+        self.userIdToUserIndexDict:Dict[int, int] = {val: i for (i, val) in enumerate(ratingsDF[COL_USERID].unique())}
+        self.userIndexToUserIdDict:Dict[int, int] = {v: k for k, v in self.userIdToUserIndexDict.items()}
+
+        self.itemIdToItemIndexDict:Dict[int, int] = {val: i for (i, val) in enumerate(ratingsDF[COL_ITEMID].unique())}
+        self.itemIndexToItemIdDict:Dict[int, int] = {v: k for k, v in self.itemIdToItemIndexDict.items()}
+
+        userIndexes:List[int] = [self.userIdToUserIndexDict[i] for i in ratingsDF[COL_USERID]]
+        itemIndexes:List[int] = [self.itemIdToItemIndexDict[i] for i in ratingsDF[COL_ITEMID]]
+
+        maxUID:int = len(userIndexes)-1
+        maxOID:int = len(itemIndexes)-1
+
+        self._itemFeaturesMatrix = sp.coo_matrix(
+                    (ratingsDF[COL_RATING], (itemIndexes, userIndexes)),
+            shape = (maxOID+1, maxUID+1))
         self._itemFeaturesMatrixLIL =  self._itemFeaturesMatrix.tolil()
                    
         self._userFeaturesMatrix = self._itemFeaturesMatrix.T.tocsr()
@@ -136,31 +142,49 @@ class RecommenderBPRMF(ARecommender):
 
         if type(self._trainDataset) is DatasetML:
             rating = row[Ratings.COL_RATING]
-            user = row[Ratings.COL_USERID]
-            item = row[Ratings.COL_MOVIEID]
+            userID = row[Ratings.COL_USERID]
+            itemID = row[Ratings.COL_MOVIEID]
             if rating < 4:
                 return
 
         elif type(self._trainDataset) is DatasetRetailRocket:
             from datasets.retailrocket.events import Events
             rating = 1.0
-            user = row[Events.COL_VISITOR_ID]
-            item = row[Events.COL_ITEM_ID]
+            userID = row[Events.COL_VISITOR_ID]
+            itemID = row[Events.COL_ITEM_ID]
 
         elif type(self._trainDataset) is DatasetST:
             from datasets.slantour.events import Events  # class
             rating = 1.0
-            user = row[Events.COL_USER_ID]
-            item = row[Events.COL_OBJECT_ID]
+            userID = row[Events.COL_USER_ID]
+            itemID = row[Events.COL_OBJECT_ID]
 
 
-        self._updateCounter += 1
         #using flat ratings
-        self._itemFeaturesMatrixLIL[item, user] =  1.0 #rating
+        if not userID in self.userIdToUserIndexDict:
+            newUIndex:int = len(self.userIdToUserIndexDict)
+            self.userIdToUserIndexDict[userID] = newUIndex
+            self.userIndexToUserIdDict[newUIndex] = userID
+
+        if not itemID in self.itemIdToItemIndexDict:
+            newIIndex:int = len(self.itemIdToItemIndexDict)
+            self.itemIdToItemIndexDict[itemID] = newIIndex
+            self.itemIndexToItemIdDict[newIIndex] = itemID
+
+        userIndex:int = self.userIdToUserIndexDict[userID]
+        itemIndex:int = self.itemIdToItemIndexDict[itemID]
+
+        #print("itemID: " + str(itemID))
+        #print("itemIndex: " + str(itemIndex))
+        #print("userID: " + str(userID))
+        #print("userIndex: " + str(userIndex))
+
+        self._itemFeaturesMatrixLIL[itemIndex, userIndex] =  1.0 #rating
         #print(item, user)
         #print(self._movieFeaturesMatrixLIL[item, user])
         #print(self._updateCounter)
 
+        self._updateCounter += 1
         if self._updateCounter == self.updateThreshold:
             self._updateCounter = 0
             #print("updating matrix")
@@ -180,9 +204,18 @@ class RecommenderBPRMF(ARecommender):
             raise ValueError("Argument numberOfItems isn't type int.")
         if type(argumentsDict) is not dict:
             raise ValueError("Argument argumentsDict isn't type dict.")
-        
-        if(userID < self._itemFeaturesMatrix.shape[1]):
-            recommendations = self.model.recommend(userID, self._userFeaturesMatrix, N = numberOfItems)
+
+        if not userID in self.userIdToUserIndexDict:
+            self.userIdToUserIndexDict[userID] = len(self.userIdToUserIndexDict)
+            self.userIndexToUserIdDict = {v: k for k, v in self.userIdToUserIndexDict.items()}
+
+        userIndex:int = self.userIdToUserIndexDict[userID]
+        if(userIndex < self._itemFeaturesMatrix.shape[1]):
+            # recommendationOfIndexes:Series
+            recommendationOfIndexesListOfTuple:List[tuple] = self.model.recommend(userIndex, self._userFeaturesMatrix, N = numberOfItems)
+
+            recommendations:List[tuple] = [(self.itemIndexToItemIdDict[itemIndexI], rI) for itemIndexI, rI in recommendationOfIndexesListOfTuple]
+
         else: #cannot recommend for unknown user
             return pd.Series([], index=[])
 

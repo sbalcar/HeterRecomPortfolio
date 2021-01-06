@@ -37,6 +37,7 @@ The input of the system is batches.
 
 ### HTTP Server:
 
+The portfolio can be used by both the simulator (sequential evaluation) and the HTTP server (online recommending).
 
 ![inputs](doc/httpServer.png "HTTP Server")
 

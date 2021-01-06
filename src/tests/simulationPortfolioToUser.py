@@ -143,7 +143,7 @@ def test02():
     simulator.simulate([pDescr], [DataFrame()], [EToolSingleMethod({})], HistoryHierDF)
 
 
-def test03():
+def test04():
 
     print("Simulation: ML CB")
 
@@ -155,6 +155,26 @@ def test03():
     #                                InputRecomDefinition.COS_CB_MEAN, rDescr)
     pDescr:APortfolioDescription = Portfolio1MethDescription(InputRecomDefinition.COS_CB_WINDOW3.title(),
                                     InputRecomDefinition.COS_CB_WINDOW3, rDescr)
+
+
+    batchID:str = "ml1mDiv90Ulinear0109R1"
+    dataset:DatasetML = DatasetML.readDatasets()
+    behaviourFile:str = Behaviours.getFile(Behaviours.BHVR_LINEAR0109)
+    behavioursDF:DataFrame = Behaviours.readFromFileMl1m(behaviourFile)
+
+    # simulation of portfolio
+    simulator:Simulator = Simulator(batchID, SimulationML, argsSimulationDict, dataset, behavioursDF)
+    simulator.simulate([pDescr], [DataFrame()], [EToolSingleMethod({})], HistoryHierDF)
+
+
+def test05():
+
+    print("Simulation: ML MF")
+
+    rDescr:RecommenderDescription = InputRecomDefinition.exportRDescBPRMF()
+
+    pDescr:APortfolioDescription = Portfolio1MethDescription(InputRecomDefinition.BPRMF.title(),
+                                    InputRecomDefinition.BPRMF, rDescr)
 
 
     batchID:str = "ml1mDiv90Ulinear0109R1"
@@ -292,7 +312,9 @@ if __name__ == "__main__":
     # Simulation ML
     #test01()  # TheMostPopular
     #test02()  # W2V
-    #test03()  # CB
+
+    #test04()  # CB
+    #test05()  # MF
 
     # Simulation RR
     #test11()  # TheMostPopular
