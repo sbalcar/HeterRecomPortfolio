@@ -22,7 +22,7 @@ class ARecommender(ABC):
         assert False, "this needs to be overridden"
 
     @abstractmethod
-    def update(self, updtType:str, ratingsUpdateDF:DataFrame):
+    def update(self, ratingsUpdateDF:DataFrame):
         assert False, "this needs to be overridden"
 
     @abstractmethod

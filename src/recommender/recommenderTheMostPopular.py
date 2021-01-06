@@ -50,15 +50,10 @@ class RecommenderTheMostPopular(ARecommender):
         else:
             raise ValueError("Argument dataset isn't of expected type.")
 
-    def update(self, updtType:str, ratingsUpdateDF:DataFrame):
-        if type(updtType) is not str and not updtType in [self.UPDT_CLICK, self.UPDT_VIEW]:
-            raise ValueError("Argument updtType isn't type str.")
+    def update(self, ratingsUpdateDF:DataFrame):
         if type(ratingsUpdateDF) is not DataFrame:
             raise ValueError("Argument ratingsTrainDF isn't type DataFrame.")
 
-        # the recommender implements only positive feedback
-        if updtType == self.UPDT_VIEW:
-            return
 
     def recommend(self, userID:int, numberOfItems:int=20, argumentsDict:dict={}):
         #print("userID: " + str(userID))

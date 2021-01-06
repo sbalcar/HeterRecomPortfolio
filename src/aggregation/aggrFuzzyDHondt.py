@@ -34,7 +34,7 @@ class AggrFuzzyDHondt(AAgregation):
         self._selector = argumentsDict[self.ARG_SELECTOR]
 
 
-    def update(self, updtType:str, ratingsUpdateDF:DataFrame):
+    def update(self, ratingsUpdateDF:DataFrame):
         pass
 
 

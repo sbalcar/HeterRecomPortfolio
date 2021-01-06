@@ -105,6 +105,7 @@ def test01():
 
     # testing part of dataset
     userID11:int = 11
+    userID12:int = 12
     timeStampI = timeStampI +1
     testRatingsDF.loc[len(testRatingsDF)] = [userID11] + list([rItemID1, 5, timeStampI])
     timeStampI = timeStampI +1
@@ -112,7 +113,7 @@ def test01():
     timeStampI = timeStampI +1
     testRatingsDF.loc[len(testRatingsDF)] = [userID11] + list([rItemID3, 5, timeStampI])
     timeStampI = timeStampI +1
-    testRatingsDF.loc[len(testRatingsDF)] = [userID11] + list([rItemID2, 5, timeStampI])
+    testRatingsDF.loc[len(testRatingsDF)] = [userID12] + list([rItemID2, 5, timeStampI])
     timeStampI = timeStampI +1
     testRatingsDF.loc[len(testRatingsDF)] = [userID11] + list([rItemID2, 5, timeStampI])
 

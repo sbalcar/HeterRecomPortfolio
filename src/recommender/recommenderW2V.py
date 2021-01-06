@@ -132,15 +132,9 @@ class RecommenderW2V(ARecommender):
         userProfileDF = self.ratingsGroupDF.aggregate(lambda x: list(x))
         self.userProfiles = userProfileDF.to_dict()
 
-    def update(self, updtType:str, ratingsUpdateDF:DataFrame):
-        if type(updtType) is not str and not updtType in [self.UPDT_CLICK, self.UPDT_VIEW]:
-            raise ValueError("Argument updtType isn't type str.")
+    def update(self, ratingsUpdateDF:DataFrame):
         if type(ratingsUpdateDF) is not DataFrame:
             raise ValueError("Argument ratingsTrainDF isn't type DataFrame.")
-
-        # the recommender implements only positive feedback
-        if updtType == self.UPDT_VIEW:
-            return
 
         if type(self._trainDataset) is DatasetML:
             COL_USERID:str = Ratings.COL_USERID

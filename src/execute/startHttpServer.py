@@ -41,6 +41,7 @@ from history.aHistory import AHistory #class
 from history.historyDF import HistoryDF #class
 
 from datasets.aDataset import ADataset #class
+from datasets.datasetML import DatasetML
 from datasets.datasetST import DatasetST #class
 
 from recommenderDescription.recommenderDescription import RecommenderDescription #class
@@ -91,6 +92,9 @@ def startHttpServer():
   HeterRecomHTTPHandler.portfolioDict = portfolioDict
   HeterRecomHTTPHandler.modelsDict = modelsDict
   HeterRecomHTTPHandler.evalToolsDict = evalToolsDict
+  HeterRecomHTTPHandler.evaluation:Dict = {}
+  #HeterRecomHTTPHandler.datasetClass = DatasetML
+  HeterRecomHTTPHandler.datasetClass = DatasetST
 
   server = HTTPServer(('', 8080), HeterRecomHTTPHandler)
   server.serve_forever()

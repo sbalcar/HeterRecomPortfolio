@@ -127,15 +127,9 @@ class RecommenderBPRMF(ARecommender):
         self.model.fit(self._itemFeaturesMatrix)
         
 
-    def update(self, updtType:str, ratingsUpdateDF:DataFrame):
-        if type(updtType) is not str and not updtType in [self.UPDT_CLICK, self.UPDT_VIEW]:
-            raise ValueError("Argument updtType isn't type str.")
+    def update(self, ratingsUpdateDF:DataFrame):
         if type(ratingsUpdateDF) is not DataFrame:
             raise ValueError("Argument ratingsTrainDF isn't type DataFrame.")
-
-        # the recommender implements only positive feedback
-        if updtType == self.UPDT_VIEW:
-            return
 
         # ratingsUpdateDF has only one row
         row = ratingsUpdateDF.iloc[0]

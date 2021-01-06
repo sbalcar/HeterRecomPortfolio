@@ -63,6 +63,11 @@ def test03():
     #eventsDF:DataFrame = dataset.eventsDF
     #eventsDF = eventsDF.loc[eventsDF[Events.COL_OBJECT_ID] != 0]
 
+    print(dataset.eventsDF.columns)
+    print(dataset.serialsDF.columns)
+
+    print(dataset.eventsDF["userID"].max())
+
 
 
 if __name__ == "__main__":

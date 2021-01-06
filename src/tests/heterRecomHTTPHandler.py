@@ -10,11 +10,13 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 from typing import Dict
 from typing import List
 from pandas import DataFrame
+from pandas.core.series import Series #class
 
 from history.aHistory import AHistory #class
 from history.historyDF import HistoryDF #class
 
 from datasets.aDataset import ADataset #class
+from datasets.datasetML import DatasetML #class
 from datasets.datasetST import DatasetST #class
 from datasets.slantour.events import Events #class
 
@@ -58,10 +60,13 @@ def test01():
     portfolioDict:Dict[str, APortfolio] = {HeterRecomHTTPHandler.VARIANT_A: p}
     modelsDict:Dict[str, int] = {HeterRecomHTTPHandler.VARIANT_A: DataFrame()}
     evalToolsDict:Dict[str, AEvalTool] = {HeterRecomHTTPHandler.VARIANT_A: EToolSingleMethod({})}
+    evaluationDict:Dict[str,object] = {}
 
     HeterRecomHTTPHandler.portfolioDict = portfolioDict
     HeterRecomHTTPHandler.modelsDict = modelsDict
     HeterRecomHTTPHandler.evalToolsDict = evalToolsDict
+    HeterRecomHTTPHandler.evaluation = evaluationDict
+    HeterRecomHTTPHandler.datasetClass = DatasetML
 
     # Run HTTP in separate thread
     try:
@@ -76,25 +81,31 @@ def test01():
 
     rItemIDsWithResponsibility:List = [(7, {'metoda1': 0, 'metoda2': 24.0, 'metoda3': 18.0}), (1, {'metoda1': 30.0, 'metoda2': 8.0, 'metoda3': 0}), (32, {'metoda1': 20.0, 'metoda2': 16.0, 'metoda3': 0}), (8, {'metoda1': 30.0, 'metoda2': 0, 'metoda3': 0}), (6, {'metoda1': 0, 'metoda2': 24.0, 'metoda3': 0}), (64, {'metoda1': 0, 'metoda2': 0, 'metoda3': 18.0}), (2, {'metoda1': 10.0, 'metoda2': 0, 'metoda3': 6.0}), (77, {'metoda1': 0, 'metoda2': 0, 'metoda3': 12.0}), (4, {'metoda1': 10.0, 'metoda2': 0, 'metoda3': 0}), (5, {'metoda1': 0, 'metoda2': 8.0, 'metoda3': 0}), (12, {'metoda1': 0, 'metoda2': 0, 'metoda3': 6.0})]
     #rItemIDsWithResponsibility = "\[1,2,3,\{\}\]"
-    rItemIDsWithResponsibility = "\[1,\{\"metoda1:0\"\}\]"
+    rItemIDsWithResponsibility = "\[(1,\{\"metoda1\":0\})\]"
 
-    command1:str = "curl -sS 'http://127.0.0.1:8080/?" +\
-                    HeterRecomHTTPHandler.ARG_ACTIONID + "=" + HeterRecomHTTPHandler.ACTION_UPDATE + "&" +\
-                    HeterRecomHTTPHandler.ARG_VARIANTID + "=" + HeterRecomHTTPHandler.VARIANT_A + "&" + \
-                    HeterRecomHTTPHandler.ARG_UPDU_TYPE + "=" + HeterRecomHTTPHandler.UPDT_CLICK + "&" + \
-                    HeterRecomHTTPHandler.ARG_ITEMID + "=" + str(itemID) + "&" + \
-                    HeterRecomHTTPHandler.ARG_USERID + "=" + str(userID) + "&" + \
-                    HeterRecomHTTPHandler.ARG_RITEMIDS_WITH_RESP + "=" + str(rItemIDsWithResponsibility) + "'"
+
+    command0:str = "curl -sS 'http://127.0.0.1:8080/?" + \
+                   HeterRecomHTTPHandler.ARG_ACTIONID + "=" + HeterRecomHTTPHandler.ACTION_VISIT + "&" + \
+                   HeterRecomHTTPHandler.ARG_VARIANTID + "=" + HeterRecomHTTPHandler.VARIANT_A + "&" + \
+                   HeterRecomHTTPHandler.ARG_USERID + "=" + str(userID) + "&" + \
+                   HeterRecomHTTPHandler.ARG_ITEMID + "=" + str(itemID) + "&" + \
+                   HeterRecomHTTPHandler.ARG_NUMBER_OF_ITEMS + "=20" + "'"
+    print(command0)
+    os.system(command0)
+
+
+    command1:str = "curl -sS 'http://127.0.0.1:8080/?" + \
+                   HeterRecomHTTPHandler.ARG_ACTIONID + "=" + HeterRecomHTTPHandler.ACTION_CLICK + "&" + \
+                   HeterRecomHTTPHandler.ARG_VARIANTID + "=" + HeterRecomHTTPHandler.VARIANT_A + "&" + \
+                   HeterRecomHTTPHandler.ARG_UPDU_TYPE + "=" + HeterRecomHTTPHandler.UPDT_CLICK + "&" + \
+                   HeterRecomHTTPHandler.ARG_ITEMID + "=" + str(itemID) + "&" + \
+                   HeterRecomHTTPHandler.ARG_USERID + "=" + str(userID) + "&" + \
+                   HeterRecomHTTPHandler.ARG_RITEMIDS_WITH_RESP + "=" + str(rItemIDsWithResponsibility) + "'"
     print(command1)
     os.system(command1)
 
-    command2:str = "curl -sS 'http://127.0.0.1:8080/?" +\
-                    HeterRecomHTTPHandler.ARG_ACTIONID + "=" + HeterRecomHTTPHandler.ACTION_RECOMMEND + "&" +\
-                    HeterRecomHTTPHandler.ARG_VARIANTID + "=" + HeterRecomHTTPHandler.VARIANT_A + "&" + \
-                    HeterRecomHTTPHandler.ARG_USERID + "=" + str(userID) + "&" +\
-                    HeterRecomHTTPHandler.ARG_NUMBER_OF_ITEMS + "=20" + "'"
-    print(command2)
-    os.system(command2)
+
+    print("evaluationDict: " + str(evaluationDict))
 
 
     time.sleep(3)

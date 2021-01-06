@@ -229,13 +229,13 @@ class ASequentialSimulation(ABC):
                                  evaluatonTool:AEvalTool, history:AHistory, evaluation:dict, currentDFIndex:int, testRatingsDF:DataFrame,
                                  uObservation:List[bool], userID:int, windowOfItemIDsI:List[int]):
 
-        COL_ITEMID: str = self._ratingClass.getColNameItemID()
+        COL_ITEMID:str = self._ratingClass.getColNameItemID()
         currentItemID:int = testRatingsDF.loc[currentDFIndex][COL_ITEMID]
 
         print("userID: " + str(userID))
         portId:str = portfolioDesc.getPortfolioID()
 
-        args:dict = {APortfolio.ARG_NUMBER_OF_RECOMM_ITEMS:self._numberOfRecommItems, Portfolio1Aggr.ARG_NUMBER_OF_AGGR_ITEMS:self._numberOfAggrItems}
+        args:Dict[str, object] = {APortfolio.ARG_NUMBER_OF_RECOMM_ITEMS:self._numberOfRecommItems, Portfolio1Aggr.ARG_NUMBER_OF_AGGR_ITEMS:self._numberOfAggrItems}
 
         rItemIDs:List[int]
         rItemIDsWithResponsibility:List[tuple[int, Series[int, str]]]
@@ -258,9 +258,6 @@ class ASequentialSimulation(ABC):
         for clickedNewItemIdI in clickedNewItemIDs:
             evaluatonTool.click(rItemIDsWithResponsibility, clickedNewItemIdI, portfolioModel, evaluation)
 
-            dfI:DataFrame = DataFrame([testRatingsDF.loc[currentDFIndex]], columns=testRatingsDF.keys())
-            portfolio.update(APortfolio.UPDT_CLICK, dfI)
-
             self._clickedItems[userID].append(clickedNewItemIdI)
 
 
@@ -277,11 +274,12 @@ class ASequentialSimulation(ABC):
         self.historyOfRecommendationFiles[portfolioDesc.getPortfolioID()].write("clickedItemIDs: " + str(clickedItemIDs) + "\n\n")
         self.historyOfRecommendationFiles[portfolioDesc.getPortfolioID()].write("clickedNewItemIDs: " + str(clickedNewItemIDs) + "\n\n")
 
+#TODO historie
         # save log of history
         history.insertRecomAndClickedItemIDs(userID, rItemIDs, clickedItemIDs)
 
         # delete log of history
-        history.deletePreviousRecomOfUser(userID, self._recomRepetitionCount * self._numberOfRecommItems * self._historyLength)
+        history.deletePreviousRecomOfUser(userID, self._recomRepetitionCount * self._numberOfRecommItems)
 
 
 

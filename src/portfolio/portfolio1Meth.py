@@ -43,13 +43,11 @@ class Portfolio1Meth(APortfolio):
 
         self._recommender.train(history, dataset)
 
-   def update(self, updtType:str, ratingsUpdateDF:DataFrame):
+   def update(self, ratingsUpdateDF:DataFrame):
         if type(ratingsUpdateDF) is not DataFrame:
             raise ValueError("Argument ratingsUpdateDF isn't type DataFrame.")
-        if type(updtType) is not str and not updtType in [self.UPDT_CLICK, self.UPDT_VIEW]:
-            raise ValueError("Argument updtType isn't type str.")
 
-        self._recommender.update(updtType, ratingsUpdateDF)
+        self._recommender.update(ratingsUpdateDF)
 
 
    def recommend(self, userID:int, portFolioModel:DataFrame, argumentsDict:dict):
@@ -63,6 +61,7 @@ class Portfolio1Meth(APortfolio):
         numberOfItems:int = argumentsDict[self.ARG_NUMBER_OF_AGGR_ITEMS]
 
         recomItemIDsWithResponsibility:Series = self._recommender.recommend(userID, numberOfItems=numberOfItems, argumentsDict=self._recomDesc.getArguments())
+        #print(recomItemIDsWithResponsibility)
 
         recomItemIDs:List[int] = list(recomItemIDsWithResponsibility.index)
 

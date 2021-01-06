@@ -89,6 +89,12 @@ def test00():
     print("")
 
 
+argsSimulationDict:dict = {SimulationST.ARG_WINDOW_SIZE: 5,
+                            SimulationST.ARG_RECOM_REPETITION_COUNT: 1,
+                            SimulationST.ARG_NUMBER_OF_RECOMM_ITEMS: 100,
+                            SimulationST.ARG_NUMBER_OF_AGGR_ITEMS: InputSimulatorDefinition.numberOfAggrItems,
+                            SimulationST.ARG_DIV_DATASET_PERC_SIZE: 90,
+                            SimulationST.ARG_HISTORY_LENGTH: 10}
 
 def test01():
 
@@ -103,13 +109,6 @@ def test01():
     dataset:DatasetML = DatasetML.readDatasets()
     behaviourFile:str = Behaviours.getFile(Behaviours.BHVR_LINEAR0109)
     behavioursDF:DataFrame = Behaviours.readFromFileMl1m(behaviourFile)
-
-    argsSimulationDict: dict = {SimulationML.ARG_WINDOW_SIZE: 5,
-                                SimulationML.ARG_RECOM_REPETITION_COUNT: 1,
-                                SimulationML.ARG_NUMBER_OF_RECOMM_ITEMS: 100,
-                                SimulationML.ARG_NUMBER_OF_AGGR_ITEMS: InputSimulatorDefinition.numberOfAggrItems,
-                                SimulationML.ARG_DIV_DATASET_PERC_SIZE: 90,
-                                SimulationML.ARG_HISTORY_LENGTH: 10}
 
     # remove old results
     #path:str = ".." + os.sep + "results" + os.sep + batchID
@@ -139,13 +138,6 @@ def test02():
     behaviourFile:str = Behaviours.getFile(Behaviours.BHVR_LINEAR0109)
     behavioursDF:DataFrame = Behaviours.readFromFileMl1m(behaviourFile)
 
-    argsSimulationDict: dict = {SimulationML.ARG_WINDOW_SIZE: 5,
-                                SimulationML.ARG_RECOM_REPETITION_COUNT: 1,
-                                SimulationML.ARG_NUMBER_OF_RECOMM_ITEMS: 100,
-                                SimulationML.ARG_NUMBER_OF_AGGR_ITEMS: InputSimulatorDefinition.numberOfAggrItems,
-                                SimulationML.ARG_DIV_DATASET_PERC_SIZE: 90,
-                                SimulationML.ARG_HISTORY_LENGTH: 10}
-
     # simulation of portfolio
     simulator:Simulator = Simulator(batchID, SimulationML, argsSimulationDict, dataset, behavioursDF)
     simulator.simulate([pDescr], [DataFrame()], [EToolSingleMethod({})], HistoryHierDF)
@@ -155,14 +147,14 @@ def test03():
 
     print("Simulation: ML CB")
 
-    rDescr:RecommenderDescription = InputRecomDefinition.exportRDescCBmean()
-    #rDescr:RecommenderDescription = InputRecomDefinition.exportRDescCBwindow3()
+    #rDescr:RecommenderDescription = InputRecomDefinition.exportRDescCBmean()
+    rDescr:RecommenderDescription = InputRecomDefinition.exportRDescCBwindow3()
 
 
-    pDescr:APortfolioDescription = Portfolio1MethDescription(InputRecomDefinition.COS_CB_MEAN.title(),
-                                    InputRecomDefinition.COS_CB_MEAN, rDescr)
-    #pDescr:APortfolioDescription = Portfolio1MethDescription(InputRecomDefinition.COS_CB_WINDOW3.title(),
-    #                                InputRecomDefinition.COS_CB_WINDOW3, rDescr)
+    #pDescr:APortfolioDescription = Portfolio1MethDescription(InputRecomDefinition.COS_CB_MEAN.title(),
+    #                                InputRecomDefinition.COS_CB_MEAN, rDescr)
+    pDescr:APortfolioDescription = Portfolio1MethDescription(InputRecomDefinition.COS_CB_WINDOW3.title(),
+                                    InputRecomDefinition.COS_CB_WINDOW3, rDescr)
 
 
     batchID:str = "ml1mDiv90Ulinear0109R1"
@@ -170,21 +162,12 @@ def test03():
     behaviourFile:str = Behaviours.getFile(Behaviours.BHVR_LINEAR0109)
     behavioursDF:DataFrame = Behaviours.readFromFileMl1m(behaviourFile)
 
-    argsSimulationDict: dict = {SimulationML.ARG_WINDOW_SIZE: 5,
-                                SimulationML.ARG_RECOM_REPETITION_COUNT: 1,
-                                SimulationML.ARG_NUMBER_OF_RECOMM_ITEMS: 100,
-                                SimulationML.ARG_NUMBER_OF_AGGR_ITEMS: InputSimulatorDefinition.numberOfAggrItems,
-                                SimulationML.ARG_DIV_DATASET_PERC_SIZE: 90,
-                                SimulationML.ARG_HISTORY_LENGTH: 10}
-
     # simulation of portfolio
     simulator:Simulator = Simulator(batchID, SimulationML, argsSimulationDict, dataset, behavioursDF)
     simulator.simulate([pDescr], [DataFrame()], [EToolSingleMethod({})], HistoryHierDF)
 
 
-
-
-def test04():
+def test11():
 
     print("Simulation: RR TheMostPopular")
 
@@ -198,29 +181,14 @@ def test04():
     behaviourFile:str = BehavioursRR.getFile(BehavioursRR.BHVR_LINEAR0109)
     behavioursDF:DataFrame = BehavioursRR.readFromFileRR(behaviourFile)
 
-    argsSimulationDict:dict = {SimulationML.ARG_WINDOW_SIZE: 5,
-                                SimulationML.ARG_RECOM_REPETITION_COUNT: 1,
-                                SimulationML.ARG_NUMBER_OF_RECOMM_ITEMS: 100,
-                                SimulationML.ARG_NUMBER_OF_AGGR_ITEMS: InputSimulatorDefinition.numberOfAggrItems,
-                                SimulationML.ARG_DIV_DATASET_PERC_SIZE: 90,
-                                SimulationML.ARG_HISTORY_LENGTH: 10}
-
-    # remove old results
-    path:str = ".." + os.sep + "results" + os.sep + batchID
-    try:
-        os.remove(path + os.sep + "computation-theMostPopular.txt")
-        os.remove(path + os.sep + "historyOfRecommendation-theMostPopular.txt")
-        os.remove(path + os.sep + "portfModelTimeEvolution-theMostPopular.txt")
-    except:
-        print("An exception occurred")
-
     # simulation of portfolio
     simulator:Simulator = Simulator(batchID, SimulationRR, argsSimulationDict, dataset, behavioursDF)
     simulator.simulate([pDescr], [DataFrame()], [EToolSingleMethod({})], HistoryHierDF)
 
 
 
-def test05():
+
+def test21():
 
     print("Simulation: ST TheMostPopular")
 
@@ -234,19 +202,31 @@ def test05():
     behaviourFile:str = BehavioursST.getFile(BehavioursST.BHVR_LINEAR0109)
     behavioursDF:DataFrame = BehavioursST.readFromFileST(behaviourFile)
 
-    argsSimulationDict:dict = {SimulationST.ARG_WINDOW_SIZE: 5,
-                                SimulationST.ARG_RECOM_REPETITION_COUNT: 1,
-                                SimulationST.ARG_NUMBER_OF_RECOMM_ITEMS: 100,
-                                SimulationST.ARG_NUMBER_OF_AGGR_ITEMS: InputSimulatorDefinition.numberOfAggrItems,
-                                SimulationST.ARG_DIV_DATASET_PERC_SIZE: 90,
-                                SimulationST.ARG_HISTORY_LENGTH: 10}
+    # simulation of portfolio
+    simulator:Simulator = Simulator(batchID, SimulationST, argsSimulationDict, dataset, behavioursDF)
+    simulator.simulate([pDescr], [DataFrame()], [EToolSingleMethod({})], HistoryHierDF)
+
+
+def test22():
+
+    print("Simulation: ST W2V")
+
+    rDescr:RecommenderDescription = InputRecomDefinition.exportRDescW2vPosnegMean()
+
+    pDescr:APortfolioDescription = Portfolio1MethDescription(InputRecomDefinition.W2V_POSNEG_MEAN.title(),
+                                    InputRecomDefinition.W2V_POSNEG_MEAN, rDescr)
+
+    batchID:str = "slantourDiv90Ulinear0109R1"
+    dataset:DatasetST = DatasetST.readDatasets()
+    behaviourFile:str = BehavioursST.getFile(BehavioursST.BHVR_LINEAR0109)
+    behavioursDF:DataFrame = BehavioursST.readFromFileST(behaviourFile)
 
     # simulation of portfolio
     simulator:Simulator = Simulator(batchID, SimulationST, argsSimulationDict, dataset, behavioursDF)
     simulator.simulate([pDescr], [DataFrame()], [EToolSingleMethod({})], HistoryHierDF)
 
 
-def test06():
+def test23():
 
     print("Simulation: ST KNN")
 
@@ -260,19 +240,12 @@ def test06():
     behaviourFile:str = BehavioursST.getFile(BehavioursST.BHVR_LINEAR0109)
     behavioursDF:DataFrame = BehavioursST.readFromFileST(behaviourFile)
 
-    argsSimulationDict:dict = {SimulationST.ARG_WINDOW_SIZE: 5,
-                                SimulationST.ARG_RECOM_REPETITION_COUNT: 1,
-                                SimulationST.ARG_NUMBER_OF_RECOMM_ITEMS: 100,
-                                SimulationST.ARG_NUMBER_OF_AGGR_ITEMS: InputSimulatorDefinition.numberOfAggrItems,
-                                SimulationST.ARG_DIV_DATASET_PERC_SIZE: 90,
-                                SimulationST.ARG_HISTORY_LENGTH: 10}
-
     # simulation of portfolio
     simulator:Simulator = Simulator(batchID, SimulationST, argsSimulationDict, dataset, behavioursDF)
     simulator.simulate([pDescr], [DataFrame()], [EToolSingleMethod({})], HistoryHierDF)
 
 
-def test07():
+def test24():
 
     print("Simulation: ST CB")
 
@@ -286,20 +259,12 @@ def test07():
     behaviourFile:str = BehavioursST.getFile(BehavioursST.BHVR_LINEAR0109)
     behavioursDF:DataFrame = BehavioursST.readFromFileST(behaviourFile)
 
-    argsSimulationDict:dict = {SimulationST.ARG_WINDOW_SIZE: 5,
-                                SimulationST.ARG_RECOM_REPETITION_COUNT: 1,
-                                SimulationST.ARG_NUMBER_OF_RECOMM_ITEMS: 100,
-                                SimulationST.ARG_NUMBER_OF_AGGR_ITEMS: InputSimulatorDefinition.numberOfAggrItems,
-                                SimulationST.ARG_DIV_DATASET_PERC_SIZE: 90,
-                                SimulationST.ARG_HISTORY_LENGTH: 10}
-
     # simulation of portfolio
     simulator:Simulator = Simulator(batchID, SimulationST, argsSimulationDict, dataset, behavioursDF)
     simulator.simulate([pDescr], [DataFrame()], [EToolSingleMethod({})], HistoryHierDF)
 
 
-
-def test08():
+def test25():
 
     print("Simulation: ST MF")
 
@@ -313,16 +278,10 @@ def test08():
     behaviourFile:str = BehavioursST.getFile(BehavioursST.BHVR_LINEAR0109)
     behavioursDF:DataFrame = BehavioursST.readFromFileST(behaviourFile)
 
-    argsSimulationDict:dict = {SimulationST.ARG_WINDOW_SIZE: 5,
-                                SimulationST.ARG_RECOM_REPETITION_COUNT: 1,
-                                SimulationST.ARG_NUMBER_OF_RECOMM_ITEMS: 100,
-                                SimulationST.ARG_NUMBER_OF_AGGR_ITEMS: InputSimulatorDefinition.numberOfAggrItems,
-                                SimulationST.ARG_DIV_DATASET_PERC_SIZE: 90,
-                                SimulationST.ARG_HISTORY_LENGTH: 10}
-
     # simulation of portfolio
     simulator:Simulator = Simulator(batchID, SimulationST, argsSimulationDict, dataset, behavioursDF)
     simulator.simulate([pDescr], [DataFrame()], [EToolSingleMethod({})], HistoryHierDF)
+
 
 
 if __name__ == "__main__":
@@ -331,13 +290,16 @@ if __name__ == "__main__":
     #test00()
 
     # Simulation ML
-    #test01()
-    #test02()
-    test03()
-    #test04()
+    #test01()  # TheMostPopular
+    #test02()  # W2V
+    #test03()  # CB
+
+    # Simulation RR
+    #test11()  # TheMostPopular
 
     # Simulation ST
-    #test05()
-    #test06()
-    #test07()
-    #test08()
+    #test21()  # TheMostPopular
+    #test22()  # W2V
+    #test23()  # KNN
+    #test24()  # CB
+    #test25()  # MF

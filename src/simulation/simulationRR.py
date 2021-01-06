@@ -130,7 +130,7 @@ class SimulationRR(ASequentialSimulation):
             for portfolioI in portfolios:
 
                 dfI:DataFrame = DataFrame([testRatingsDF.loc[currentDFIndexI]], columns=testRatingsDF.keys())
-                portfolioI.update(ARecommender.UPDT_VIEW, dfI)
+                portfolioI.update(dfI)
 
             repetitionI:int
             for repetitionI in range(self._recomRepetitionCount):

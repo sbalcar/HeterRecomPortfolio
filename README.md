@@ -35,6 +35,12 @@ The input of the system is batches.
 ![inputs](doc/inputs.png "Inputs definition")
 
 
+### HTTP Server:
+
+
+![inputs](doc/httpServer.png "HTTP Server")
+
+
 ## Tutorial:
 
 ### Installation

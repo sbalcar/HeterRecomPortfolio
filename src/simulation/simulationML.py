@@ -131,13 +131,11 @@ class SimulationML(ASequentialSimulation):
             for portfolioI in portfolios:
 
                 dfI:DataFrame = DataFrame([testRatingsDF.loc[currentDFIndexI]], columns=testRatingsDF.keys())
-                portfolioI.update(ARecommender.UPDT_VIEW, dfI)
+                portfolioI.update(dfI)
 
-#            if currentRatingI < 4:
-#                continue
 
             windowOfItemIDsI:int = model.getNextRelevantItemIDsExceptItemIDs(currentDFIndexI,
-                                                                             self._clickedItems[currentUserIdI], self._windowSize)
+                                            self._clickedItems[currentUserIdI], self._windowSize)
 
 
             repetitionI:int

@@ -56,13 +56,11 @@ class Portfolio1Aggr(APortfolio):
         for recommenderI in self._recommenders:
             recommenderI.train(history, dataset)
 
-    def update(self, updtType:str, ratingsUpdateDF:DataFrame):
+    def update(self, ratingsUpdateDF:DataFrame):
         if type(ratingsUpdateDF) is not DataFrame:
            raise ValueError("Argument ratingsUpdateDF isn't type DataFrame.")
-        if type(updtType) is not str and not updtType in [self.UPDT_CLICK, self.UPDT_VIEW]:
-            raise ValueError("Argument updtType isn't type str.")
 
-        self._aggregation.update(updtType, ratingsUpdateDF)
+        self._aggregation.update(ratingsUpdateDF)
 
         recommenderI:ARecommender
         for recommenderI in self._recommenders:

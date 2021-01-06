@@ -33,7 +33,7 @@ class AggrDHondtThompsonSamplingINF(AggrDHondtThompsonSampling):
         self._penaltyTool = argumentsDict[self.ARG_PENALTY_TOOL]
 
 
-    def update(self, updtType:str, ratingsUpdateDF:DataFrame):
+    def update(self, ratingsUpdateDF:DataFrame):
         pass
 
 
