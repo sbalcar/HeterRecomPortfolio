@@ -53,7 +53,7 @@ class RecommenderBPRMF(ARecommender):
         self._regularization = argumentsDict[RecommenderBPRMF.ARG_REGULARIZATION]
         
         self._updateCounter = 0
-        self._updateThreshold = 1000   #maybe use values from argumentsDict
+        self._updateThreshold = 50   #maybe use values from argumentsDict
 
         self._userIdToUserIndexDict:Dict[int, int] = {}
         self._userIndexToUserIdDict:Dict[int, int] = {}
@@ -115,12 +115,12 @@ class RecommenderBPRMF(ARecommender):
         userIndexes:List[int] = [self._userIdToUserIndexDict[i] for i in ratingsDF[COL_USERID]]
         itemIndexes:List[int] = [self._itemIdToItemIndexDict[i] for i in ratingsDF[COL_ITEMID]]
 
-        maxUID:int = len(userIndexes)-1
-        maxOID:int = len(itemIndexes)-1
+        maxUID:int = 2* len(userIndexes)
+        maxOID:int = 2* len(itemIndexes)
 
         self._itemFeaturesMatrix = sp.coo_matrix(
                     (ratingsDF[COL_RATING], (itemIndexes, userIndexes)),
-            shape = (maxOID+1, maxUID+1))
+                    shape = (maxOID, maxUID))
         self._itemFeaturesMatrixLIL =  self._itemFeaturesMatrix.tolil()
                    
         self._userFeaturesMatrix = self._itemFeaturesMatrix.T.tocsr()

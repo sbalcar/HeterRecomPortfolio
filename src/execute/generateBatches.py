@@ -57,13 +57,13 @@ def generateBatches():
 
     # RR
 #    BatchRRSingle.generateBatches()
-    BatchRRSingleW2VHT.generateBatches()
+#    BatchRRSingleW2VHT.generateBatches()
 
     #ST
-#    BatchSTSingle.generateBatches()
-#    BatchSTSingleBPRMFHT.generateBatches()
-#    BatchSTSingleW2VHT.generateBatches()
-#    BatchSTSingleCosineCBHT.generateBatches()
+    BatchSTSingle.generateBatches()
+    BatchSTSingleBPRMFHT.generateBatches()
+    BatchSTSingleW2VHT.generateBatches()
+    BatchSTSingleCosineCBHT.generateBatches()
 
 if __name__ == "__main__":
 

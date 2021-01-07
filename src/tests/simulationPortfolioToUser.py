@@ -331,7 +331,7 @@ if __name__ == "__main__":
     # Simulation ML
     #test01()  # TheMostPopular
     #test02()  # W2V
-    test03()  # KNNN
+    #test03()  # KNNN
     #test04()  # CB
     #test05()  # MF
 
@@ -343,4 +343,4 @@ if __name__ == "__main__":
     #test22()  # W2V
     #test23()  # KNN
     #test24()  # CB
-    #test25()  # MF
+    test25()  # MF
