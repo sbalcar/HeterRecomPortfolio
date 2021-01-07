@@ -41,7 +41,33 @@ class BatchSTSingleCosineCBHT(ABatchST):
     @staticmethod
     def getParameters():
 
-        return BatchMLSingleCosineCBHT.getParameters()
+        cbDataPaths:List[str] = [Configuration.cbSTDataFileWithPathTFIDF, Configuration.cbSTDataFileWithPathOHE]
+        userProfileStrategies:List[str] = ["mean", "max", "weightedMean"]
+        userProfileSizes:List[int] = [-1, 1, 3, 5, 7, 10]
+
+        aDict:dict = {}
+        for cbDataPathI in cbDataPaths:
+            for userProfileStrategyI in userProfileStrategies:
+                for userProfileSizeI in userProfileSizes:
+
+                    cbDataPathStrI:str = ""
+                    if cbDataPathI == Configuration.cbSTDataFileWithPathTFIDF:
+                        cbDataPathStrI = "TFIDF"
+                    elif cbDataPathI == Configuration.cbSTDataFileWithPathOHE:
+                        cbDataPathStrI = "OHE"
+                    else:
+                        print("error")
+
+                    keyI:str = "RecommenderCosineCB" + "cbd" + str(cbDataPathStrI) + "ups" + str(userProfileStrategyI) +\
+                               "ups" + str(userProfileSizeI)
+
+                    rCBI: ARecommender = RecommenderDescription(RecommenderCosineCB, {
+                        RecommenderCosineCB.ARG_CB_DATA_PATH: cbDataPathI,
+                        RecommenderCosineCB.ARG_USER_PROFILE_SIZE: userProfileSizeI,
+                        RecommenderCosineCB.ARG_USER_PROFILE_STRATEGY: userProfileStrategyI})
+
+                    aDict[keyI] = rCBI
+        return aDict
 
 
     def run(self, batchID: str, jobID: str):

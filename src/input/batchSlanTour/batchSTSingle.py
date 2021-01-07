@@ -36,6 +36,7 @@ class BatchSTSingle(ABatchST):
 
         aDict:dict = {}
         aDict[InputRecomDefinition.THE_MOST_POPULAR] = InputRecomDefinition.THE_MOST_POPULAR
+        aDict[InputRecomDefinition.KNN] = InputRecomDefinition.KNN
 
         return aDict
 
