@@ -1,6 +1,8 @@
 # !/usr/bin/python3
 
+import math
 from typing import List
+from typing import Dict
 
 from pandas.core.frame import DataFrame  # class
 from pandas.core.series import Series  # class
@@ -28,22 +30,28 @@ import pandas as pd
 
 class RecommenderItemBasedKNN(ARecommender):
 
-    def __init__(self, jobID: str, argumentsDict: dict):
+    def __init__(self, jobID:str, argumentsDict:Dict[str,str]):
         if type(argumentsDict) is not dict:
             raise ValueError("Argument argumentsDict is not type dict.")
 
-        self._jobID = jobID
-        self._argumentsDict: dict = argumentsDict
-        self._KNNs: DataFrame = None
+        self._jobID:str = jobID
+        self._argumentsDict:Dict[str,str] = argumentsDict
+        self._KNNs:DataFrame = None
         self._distances = None
-        self._sparseRatings: lil_matrix = None
-        self._modelKNN: NearestNeighbors = NearestNeighbors(metric='cosine', algorithm='brute', n_neighbors=20,
-                                                            n_jobs=-1)
-        self._lastRatedItemPerUser: DataFrame = None
-        self.counter = 0
-        self.update_threshold = 100
+        self._sparseRatings:lil_matrix = None
+        self._modelKNN:NearestNeighbors = NearestNeighbors(metric='cosine', algorithm='brute', n_neighbors=20, n_jobs=-1)
 
-    def train(self, history: AHistory, dataset:ADataset):
+        self._userIdToUserIndexDict:Dict[int, int] = {}
+        self._userIndexToUserIdDict:Dict[int, int] = {}
+
+        self._itemIdToItemIndexDict:Dict[int, int] = {}
+        self._itemIndexToItemIdDict:Dict[int, int] = {}
+
+        self._lastRatedItemPerUser:DataFrame = None
+        self.counter:int = 0
+        self.update_threshold:int = 5
+
+    def train(self, history:AHistory, dataset:ADataset):
         if not isinstance(history, AHistory):
             raise ValueError("Argument history isn't type AHistory.")
         if not isinstance(dataset, ADataset):
@@ -51,32 +59,36 @@ class RecommenderItemBasedKNN(ARecommender):
         self._trainDataset = dataset
 
         if type(dataset) is DatasetML:
-            ratingsTrainDF:DataFrame = dataset.ratingsDF
-            cols = pd.to_numeric(ratingsTrainDF[Users.COL_USERID])
-            rows = pd.to_numeric(ratingsTrainDF[Items.COL_MOVIEID])
-            rating = pd.to_numeric(ratingsTrainDF[Ratings.COL_RATING])
-
+            COL_USERID:str = Users.COL_USERID
+            COL_ITEMID:str = Items.COL_MOVIEID
+            trainRatingsDF:DataFrame = dataset.ratingsDF
         elif type(dataset) is DatasetRetailRocket:
             from datasets.retailrocket.events import Events #class
+            COL_USERID:str = Events.COL_VISITOR_ID
+            COL_ITEMID:str = Events.COL_ITEM_ID
             trainEvents2DF:DataFrame = dataset.eventsDF[[Events.COL_VISITOR_ID, Events.COL_ITEM_ID]]
-            trainEventsDF:DatasetST = trainEvents2DF.drop_duplicates()
-
-            cols = pd.to_numeric(trainEventsDF[Events.COL_VISITOR_ID])
-            rows = pd.to_numeric(trainEventsDF[Events.COL_ITEM_ID])
-            rating = pd.to_numeric(Series([1] * len(trainEventsDF), index=trainEventsDF.index))
-
+            trainRatingsDF:DatasetST = trainEvents2DF.drop_duplicates()
         elif type(dataset) is DatasetST:
             from datasets.slantour.events import Events  # class
+            COL_USERID:str = Events.COL_USER_ID
+            COL_ITEMID:str = Events.COL_OBJECT_ID
             trainEvents2DF:DataFrame = dataset.eventsDF[[Events.COL_USER_ID, Events.COL_OBJECT_ID]]
             trainEvents2WKDF:DataFrame = trainEvents2DF.loc[trainEvents2DF[Events.COL_OBJECT_ID] != 0]
-            trainEventsDF:DatasetST = trainEvents2WKDF.drop_duplicates()
-
-            cols = pd.to_numeric(trainEventsDF[Events.COL_USER_ID])
-            rows = pd.to_numeric(trainEventsDF[Events.COL_OBJECT_ID])
-            rating = pd.to_numeric(Series([1] * len(trainEventsDF), index=trainEventsDF.index))
+            trainRatingsDF:DatasetST = trainEvents2WKDF.drop_duplicates()
 
 
-        sparseRatingsCSR:csr_matrix = csr_matrix((rating, (rows, cols)))
+        self._userIdToUserIndexDict:Dict[int, int] = {val: i for (i, val) in enumerate(trainRatingsDF[COL_USERID].unique())}
+        self._userIndexToUserIdDict:Dict[int, int] = {v: k for k, v in self._userIdToUserIndexDict.items()}
+
+        self._itemIdToItemIndexDict:Dict[int, int] = {val: i for (i, val) in enumerate(trainRatingsDF[COL_ITEMID].unique())}
+        self._itemIndexToItemIdDict:Dict[int, int] = {v: k for k, v in self._itemIdToItemIndexDict.items()}
+
+        userIndexes:List[int] = [self._userIdToUserIndexDict[i] for i in trainRatingsDF[COL_USERID]]
+        itemIndexes:List[int] = [self._itemIdToItemIndexDict[i] for i in trainRatingsDF[COL_ITEMID]]
+
+
+        sparseRatingsCSR:csr_matrix = csr_matrix(([1.0]*len(itemIndexes), (itemIndexes, userIndexes)),
+                                                 shape=(2*len(self._itemIdToItemIndexDict), 2*len(self._userIdToUserIndexDict)))
         sparseRatingsCSR.eliminate_zeros()
 
         self._modelKNN.fit(sparseRatingsCSR)
@@ -87,20 +99,20 @@ class RecommenderItemBasedKNN(ARecommender):
 
         # get last positive feedback from each user
         if type(dataset) is DatasetML:
-            self._lastRatedItemPerUser = ratingsTrainDF[ratingsTrainDF[Ratings.COL_RATING] > 3]\
+            self._lastRatedItemPerUser = trainRatingsDF[trainRatingsDF[Ratings.COL_RATING] > 3]\
                 .sort_values(Ratings.COL_TIMESTAMP)\
                 .groupby(Ratings.COL_USERID).tail(1).set_index(Ratings.COL_USERID)\
                 .drop(columns=[Ratings.COL_RATING, Ratings.COL_TIMESTAMP])
 
         elif type(dataset) is DatasetRetailRocket:
             from datasets.retailrocket.events import Events #class
-            self._lastRatedItemPerUser = trainEventsDF.loc[trainEventsDF[Events.COL_EVENT] == "transaction"]\
+            self._lastRatedItemPerUser = trainRatingsDF.loc[trainRatingsDF[Events.COL_EVENT] == "transaction"]\
                 .sort_values(Events.COL_TIME_STAMP)\
                 .groupby(Events.COL_VISITOR_ID).tail(1).set_index(Events.COL_VISITOR_ID)[[Events.COL_VISITOR_ID, Events.COL_ITEM_ID]]
 
         elif type(dataset) is DatasetST:
             from datasets.slantour.events import Events  # class
-            self._lastRatedItemPerUser = trainEventsDF.loc[trainEventsDF[Events.COL_OBJECT_ID] != 0]\
+            self._lastRatedItemPerUser = trainRatingsDF.loc[trainRatingsDF[Events.COL_OBJECT_ID] != 0]\
                 .groupby(Events.COL_USER_ID).tail(1).set_index(Events.COL_USER_ID)
 
     def update(self, ratingsUpdateDF:DataFrame):
@@ -117,22 +129,35 @@ class RecommenderItemBasedKNN(ARecommender):
             from datasets.retailrocket.events import Events  # class
             userID:int = row[Events.COL_VISITOR_ID]
             itemID:int = row[Events.COL_ITEM_ID]
-            rating:int = 1.0
+            rating:int = 4.0
 
         elif type(self._trainDataset) is DatasetST:
             from datasets.slantour.events import Events  # class
             userID:int = row[Events.COL_USER_ID]
             itemID:int = row[Events.COL_OBJECT_ID]
-            rating:int = 1.0
+            rating:int = 4.0
 
+        if not userID in self._userIdToUserIndexDict:
+            userIndex:int = len(self._userIdToUserIndexDict)
+            self._userIdToUserIndexDict[userID] = userIndex
+            self._userIndexToUserIdDict[userIndex] = userID
 
-        self._sparseRatings[itemID, userID] = rating
+        if not itemID in self._itemIdToItemIndexDict:
+            itemIndex:int = len(self._itemIdToItemIndexDict)
+            self._itemIdToItemIndexDict[itemID] = itemIndex
+            self._itemIndexToItemIdDict[itemIndex] = itemID
+
+        userIndex:int = self._userIdToUserIndexDict[userID]
+        itemIndex:int = self._itemIdToItemIndexDict[itemID]
+
+        self._sparseRatings[itemIndex, userIndex] = rating
 
         # update last positive feedback
         if rating > 3:
             self._lastRatedItemPerUser.loc[userID] = [itemID]
 
         if self.counter > self.update_threshold:
+            print("update model")
             sparseRatingsCSR: csr_matrix = self._sparseRatings.tocsr()
             self._modelKNN.fit(sparseRatingsCSR)
             self._distances, self.KNNs = self._modelKNN.kneighbors(n_neighbors=100)
@@ -159,19 +184,30 @@ class RecommenderItemBasedKNN(ARecommender):
             COL_ITEMID: str = Events.COL_OBJECT_ID
 
         # Get recommendations for user
-        lastRatedItemFromUser: int = self._lastRatedItemPerUser.loc[userID][COL_ITEMID]
-        result: Series = Series(self.KNNs[lastRatedItemFromUser][:numberOfItems])
-        finalScores = Series(self._distances[lastRatedItemFromUser][:numberOfItems])
+        lastRatedItemFromUser:int = self._lastRatedItemPerUser.loc[userID][COL_ITEMID]
+        lastRatedIndex:int = self._itemIdToItemIndexDict[lastRatedItemFromUser]
+
+        rItemIndexes:Series = Series(self.KNNs[lastRatedIndex][:numberOfItems])
+        rDistances:List[int] = self._distances[lastRatedIndex][:numberOfItems]
+        # maping Indexes to IDs
+        rItemIDs:Series = Series([self._itemIndexToItemIdDict.get(rItemIndexI,-1) for rItemIndexI in rItemIndexes])
+        rRatings:Series = Series([1- dI for dI in rDistances])
+
+        nanIndexes:List[int] = [i for i, v in enumerate(rItemIDs.tolist()) if v == -1]
+        rItemIDs = rItemIDs.drop(rItemIDs.index[nanIndexes])
+        rRatings = rRatings.drop(rRatings.index[nanIndexes])
 
         if self._jobID == 'test' and type(self._trainDataset) is DatasetML:
             print("Last visited film:")
             itemsDF:DataFrame = self._trainDataset.itemsDF
             print(itemsDF[itemsDF['movieId'] == lastRatedItemFromUser])
             print("List of recommendations:")
-            for film in result:
-                film_info: DataFrame = itemsDF[itemsDF['movieId'] == film]
+            for filmI in rItemIndexes:
+                film_info: DataFrame = itemsDF[itemsDF['movieId'] == filmI]
                 print('\t', film_info['movieTitle'].to_string(header=False),
                       film_info['Genres'].to_string(header=False))
-        finalScores = normalize(np.expand_dims(finalScores, axis=0))[0, :]
 
-        return Series(finalScores.tolist(), index=list(result))
+        if len(rItemIDs) == 0:
+            return Series([], index=[])
+        rRatings = normalize(np.expand_dims(rRatings.tolist(), axis=0))[0, :]
+        return Series(rRatings.tolist(), index=list(rItemIDs))

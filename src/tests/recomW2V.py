@@ -45,7 +45,7 @@ def test01():
     rec.train(HistoryDF("w2v"), trainDataset)
 
     ratingsDFUpdate:DataFrame = ratingsDF.iloc[50003:50004]
-    rec.update(ARecommender.UPDT_CLICK, ratingsDFUpdate)
+    rec.update(ratingsDFUpdate)
 
     print(len(rec.userProfiles[331]))
 
@@ -87,7 +87,7 @@ def test02():
 
     uDF:DataFrame = DataFrame([eventsDF.iloc[9000]])
     print(uDF)
-    rec.update(ARecommender.UPDT_CLICK, uDF)
+    rec.update(uDF)
 
     r:Series = rec.recommend(23, 50, {})
     print(r)
@@ -118,7 +118,7 @@ def test03():
 
     uDF:DataFrame = DataFrame([eventsDF.iloc[9000]])
     print(uDF)
-    rec.update(ARecommender.UPDT_CLICK, uDF)
+    rec.update(uDF)
 
     r:Series = rec.recommend(23, 50, {})
     print(r)

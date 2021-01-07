@@ -43,7 +43,7 @@ def test01():
     rec.train(HistoryDF("test"), trainDataset)
 
     ratingsDFUpdate:DataFrame = ratingsDF.iloc[50003:50004]
-    rec.update(ARecommender.UPDT_CLICK, ratingsDFUpdate)
+    rec.update(ratingsDFUpdate)
 
     r:Series = rec.recommend(331, 50, {})
     print(type(r))

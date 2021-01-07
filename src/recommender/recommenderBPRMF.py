@@ -53,13 +53,13 @@ class RecommenderBPRMF(ARecommender):
         self._regularization = argumentsDict[RecommenderBPRMF.ARG_REGULARIZATION]
         
         self._updateCounter = 0
-        self.updateThreshold = 1000   #maybe use values from argumentsDict
+        self._updateThreshold = 1000   #maybe use values from argumentsDict
 
-        self.userIdToUserIndexDict:Dict = {}
-        self.userIndexToUserIdDict:Dict = {}
+        self._userIdToUserIndexDict:Dict[int, int] = {}
+        self._userIndexToUserIdDict:Dict[int, int] = {}
 
-        self.itemIdToItemIndexDict:Dict = {}
-        self.itemIndexToItemIdDict:Dict = {}
+        self._itemIdToItemIndexDict:Dict[int, int] = {}
+        self._itemIndexToItemIdDict:Dict[int, int] = {}
 
         self._randomState = 42
         
@@ -106,14 +106,14 @@ class RecommenderBPRMF(ARecommender):
 
         ratingsDF[COL_RATING] = 1.0 #flatten ratings
 
-        self.userIdToUserIndexDict:Dict[int, int] = {val: i for (i, val) in enumerate(ratingsDF[COL_USERID].unique())}
-        self.userIndexToUserIdDict:Dict[int, int] = {v: k for k, v in self.userIdToUserIndexDict.items()}
+        self._userIdToUserIndexDict:Dict[int, int] = {val: i for (i, val) in enumerate(ratingsDF[COL_USERID].unique())}
+        self._userIndexToUserIdDict:Dict[int, int] = {v: k for k, v in self._userIdToUserIndexDict.items()}
 
-        self.itemIdToItemIndexDict:Dict[int, int] = {val: i for (i, val) in enumerate(ratingsDF[COL_ITEMID].unique())}
-        self.itemIndexToItemIdDict:Dict[int, int] = {v: k for k, v in self.itemIdToItemIndexDict.items()}
+        self._itemIdToItemIndexDict:Dict[int, int] = {val: i for (i, val) in enumerate(ratingsDF[COL_ITEMID].unique())}
+        self._itemIndexToItemIdDict:Dict[int, int] = {v: k for k, v in self._itemIdToItemIndexDict.items()}
 
-        userIndexes:List[int] = [self.userIdToUserIndexDict[i] for i in ratingsDF[COL_USERID]]
-        itemIndexes:List[int] = [self.itemIdToItemIndexDict[i] for i in ratingsDF[COL_ITEMID]]
+        userIndexes:List[int] = [self._userIdToUserIndexDict[i] for i in ratingsDF[COL_USERID]]
+        itemIndexes:List[int] = [self._itemIdToItemIndexDict[i] for i in ratingsDF[COL_ITEMID]]
 
         maxUID:int = len(userIndexes)-1
         maxOID:int = len(itemIndexes)-1
@@ -161,18 +161,18 @@ class RecommenderBPRMF(ARecommender):
 
 
         #using flat ratings
-        if not userID in self.userIdToUserIndexDict:
-            newUIndex:int = len(self.userIdToUserIndexDict)
-            self.userIdToUserIndexDict[userID] = newUIndex
-            self.userIndexToUserIdDict[newUIndex] = userID
+        if not userID in self._userIdToUserIndexDict:
+            newUIndex:int = len(self._userIdToUserIndexDict)
+            self._userIdToUserIndexDict[userID] = newUIndex
+            self._userIndexToUserIdDict[newUIndex] = userID
 
-        if not itemID in self.itemIdToItemIndexDict:
-            newIIndex:int = len(self.itemIdToItemIndexDict)
-            self.itemIdToItemIndexDict[itemID] = newIIndex
-            self.itemIndexToItemIdDict[newIIndex] = itemID
+        if not itemID in self._itemIdToItemIndexDict:
+            newIIndex:int = len(self._itemIdToItemIndexDict)
+            self._itemIdToItemIndexDict[itemID] = newIIndex
+            self._itemIndexToItemIdDict[newIIndex] = itemID
 
-        userIndex:int = self.userIdToUserIndexDict[userID]
-        itemIndex:int = self.itemIdToItemIndexDict[itemID]
+        userIndex:int = self._userIdToUserIndexDict[userID]
+        itemIndex:int = self._itemIdToItemIndexDict[itemID]
 
         #print("itemID: " + str(itemID))
         #print("itemIndex: " + str(itemIndex))
@@ -185,9 +185,9 @@ class RecommenderBPRMF(ARecommender):
         #print(self._updateCounter)
 
         self._updateCounter += 1
-        if self._updateCounter == self.updateThreshold:
+        if self._updateCounter == self._updateThreshold:
             self._updateCounter = 0
-            #print("updating matrix")
+            print("updating matrix")
             self._itemFeaturesMatrix =  self._itemFeaturesMatrixLIL.tocsr()
             self._userFeaturesMatrix = self._itemFeaturesMatrix.T.tocsr()
             self.model.fit(self._itemFeaturesMatrix)
@@ -205,16 +205,16 @@ class RecommenderBPRMF(ARecommender):
         if type(argumentsDict) is not dict:
             raise ValueError("Argument argumentsDict isn't type dict.")
 
-        if not userID in self.userIdToUserIndexDict:
-            self.userIdToUserIndexDict[userID] = len(self.userIdToUserIndexDict)
-            self.userIndexToUserIdDict = {v: k for k, v in self.userIdToUserIndexDict.items()}
+        if not userID in self._userIdToUserIndexDict:
+            self._userIdToUserIndexDict[userID] = len(self._userIdToUserIndexDict)
+            self._userIndexToUserIdDict = {v: k for k, v in self._userIdToUserIndexDict.items()}
 
-        userIndex:int = self.userIdToUserIndexDict[userID]
+        userIndex:int = self._userIdToUserIndexDict[userID]
         if(userIndex < self._itemFeaturesMatrix.shape[1]):
             # recommendationOfIndexes:Series
             recommendationOfIndexesListOfTuple:List[tuple] = self.model.recommend(userIndex, self._userFeaturesMatrix, N = numberOfItems)
 
-            recommendations:List[tuple] = [(self.itemIndexToItemIdDict[itemIndexI], rI) for itemIndexI, rI in recommendationOfIndexesListOfTuple]
+            recommendations:List[tuple] = [(self._itemIndexToItemIdDict[itemIndexI], rI) for itemIndexI, rI in recommendationOfIndexesListOfTuple]
 
         else: #cannot recommend for unknown user
             return pd.Series([], index=[])

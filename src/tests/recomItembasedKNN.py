@@ -48,7 +48,7 @@ def test01():
     print("Recommendations before update")
     r:Series = rec.recommend(ratingsDFUpdate['userId'].iloc[0], 50, {})
 
-    rec.update(ARecommender.UPDT_CLICK, ratingsDFUpdate)
+    rec.update(ratingsDFUpdate)
 
     print("Recommendations after update")
     r: Series = rec.recommend(ratingsDFUpdate['userId'].iloc[0], 50, {})
@@ -114,7 +114,7 @@ def test03():
     uDdata = [[23, 10, 4, 10000]]
     uDF: DataFrame = pd.DataFrame(uDdata, columns=[Ratings.COL_USERID, Ratings.COL_MOVIEID, Ratings.COL_RATING, Ratings.COL_TIMESTAMP])
 
-    rec.update(ARecommender.UPDT_CLICK, uDF)
+    rec.update(uDF)
 
 
     r:Series = rec.recommend(23, 10, {})
@@ -143,7 +143,7 @@ def test04():
 
     uDF:DataFrame = DataFrame([eventsDF.iloc[9000]])
     print(uDF)
-    rec.update(ARecommender.UPDT_CLICK, uDF)
+    rec.update(uDF)
 
     recommendation = rec.recommend(1, 20, {})
     print(recommendation)
@@ -166,12 +166,60 @@ def test05():
 
     uDF:DataFrame = DataFrame([eventsDF.iloc[9000]])
     print(uDF)
-    rec.update(ARecommender.UPDT_CLICK, uDF)
+    rec.update(uDF)
 
     r = rec.recommend(3325463, 20, {})
     print(r)
 
     print("================== END OF TEST 05 ======================\n\n\n\n\n")
+
+
+def test06():
+    print("Test 06")
+
+    print("Running RecommenderItemBasedKNN ST:")
+
+    from datasets.slantour.events import Events  # class
+
+    userID1:int = 1
+    userID2:int = 2
+    userID3:int = 3
+
+    trainEventsDF:DataFrame = DataFrame(columns=[Events.COL_USER_ID, Events.COL_OBJECT_ID])
+
+    trainEventsDF.loc[0] = [userID1, 101]
+    trainEventsDF.loc[1] = [userID1, 102]
+    trainEventsDF.loc[2] = [userID1, 103]
+    trainEventsDF.loc[3] = [userID1, 104]
+    trainEventsDF.loc[4] = [userID2, 101]
+    trainEventsDF.loc[5] = [userID2, 102]
+
+    print(trainEventsDF.head(10))
+
+    trainDataset:ADataset = DatasetST("test", trainEventsDF, DataFrame())
+
+    rec:ARecommender = RecommenderItemBasedKNN("test", {})
+    rec.train(HistoryDF("test"), trainDataset)
+
+
+    print("update 1:")
+    updateEvents1DF:DataFrame = DataFrame(columns=trainEventsDF.columns)
+    updateEvents1DF.loc[0] = [userID1, 105]
+    print(updateEvents1DF.head())
+    rec.update(updateEvents1DF)
+
+    print("update 2:")
+    updateEvents2DF:DataFrame = DataFrame(columns=trainEventsDF.columns)
+    updateEvents2DF.loc[0] = [userID3, 106]
+    print(updateEvents2DF.head())
+    rec.update(updateEvents2DF)
+
+
+    print("recommend:")
+    r = rec.recommend(userID2, 10, {})
+    print(r)
+
+    print("================== END OF TEST 06 ======================\n\n\n\n\n")
 
 
 if __name__ == "__main__":
@@ -181,4 +229,5 @@ if __name__ == "__main__":
     #test02()
     #test03()
     #test04()
-    test05()
+    #test05()
+    test06()

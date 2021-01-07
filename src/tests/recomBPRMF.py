@@ -156,6 +156,35 @@ def test04():
 
 
 
+def test05():
+    print("Test 05")
+
+    import numpy as np
+    from scipy.sparse import csr_matrix
+    csr_matrix((3, 4), dtype=np.int8).toarray()
+
+    #row = np.array([0, 0, 1, 2, 2, 2])
+    row = [0, 0, 1, 2, 2, 2]
+    #col = np.array([0, 2, 2, 0, 1, 2])
+    col = [0, 2, 2, 0, 1, 2]
+    #data = np.array([1, 2, 3, 4, 5, 6])
+    data = [1, 2, 3, 4, 5, 6]
+
+    #sparseRatingsCSR:csr_matrix
+    sparseRatingsCSR:csr_matrix = csr_matrix((data, (row, col)), shape=(30, 30)) #.toarray()
+    print(type(sparseRatingsCSR))
+    print(sparseRatingsCSR)
+    print()
+
+    sparseRatingsCSR[10,10] = -1
+    print(sparseRatingsCSR)
+    print()
+
+    itemFeaturesMatrixLIL = sparseRatingsCSR.tolil()
+    print(type(itemFeaturesMatrixLIL))
+    print(sparseRatingsCSR.toarray())
+
+
 
 if __name__ == "__main__":
     os.chdir("..")
@@ -163,4 +192,5 @@ if __name__ == "__main__":
 #    test01()
 #    test02()
 #    test03()
-    test04()
+#    test04()
+    test05()

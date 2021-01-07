@@ -143,6 +143,25 @@ def test02():
     simulator.simulate([pDescr], [DataFrame()], [EToolSingleMethod({})], HistoryHierDF)
 
 
+def test03():
+
+    print("Simulation: ML KNN")
+
+    rDescr:RecommenderDescription = InputRecomDefinition.exportRDescKNN()
+
+    pDescr:APortfolioDescription = Portfolio1MethDescription(InputRecomDefinition.KNN.title(),
+                                    InputRecomDefinition.KNN, rDescr)
+
+    batchID:str = "ml1mDiv90Ulinear0109R1"
+    dataset:DatasetML = DatasetML.readDatasets()
+    behaviourFile:str = Behaviours.getFile(Behaviours.BHVR_LINEAR0109)
+    behavioursDF:DataFrame = Behaviours.readFromFileMl1m(behaviourFile)
+
+    # simulation of portfolio
+    simulator:Simulator = Simulator(batchID, SimulationML, argsSimulationDict, dataset, behavioursDF)
+    simulator.simulate([pDescr], [DataFrame()], [EToolSingleMethod({})], HistoryHierDF)
+
+
 def test04():
 
     print("Simulation: ML CB")
@@ -312,7 +331,7 @@ if __name__ == "__main__":
     # Simulation ML
     #test01()  # TheMostPopular
     #test02()  # W2V
-
+    test03()  # KNNN
     #test04()  # CB
     #test05()  # MF
 

@@ -46,7 +46,7 @@ def test01():
 
     ratingsDFUpdate:DataFrame = ratingsDF.iloc[50003:50004]
     #ratingsDFUpdate:DataFrame = ratingsDF.iloc[3:4]
-    rec.update(ARecommender.UPDT_CLICK, ratingsDFUpdate)
+    rec.update(ratingsDFUpdate)
 
     print(len(rec.userProfiles[331]))
 
@@ -81,7 +81,7 @@ def test03():
     rec.train(HistoryDF("test"), dataset)
 
     eventsDFDFUpdate:DataFrame = dataset.eventsDF.iloc[5003:5004]
-    rec.update(ARecommender.UPDT_CLICK, eventsDFDFUpdate)
+    rec.update(eventsDFDFUpdate)
 
     # user with very outdated profile - no recent objects
     r:Series = rec.recommend(3500678, 20, args)
