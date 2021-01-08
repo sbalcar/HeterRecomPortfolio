@@ -14,7 +14,7 @@
 #  context-target pairs:
 #    ("hat", "the"), ("hat", "cat"), ("hat", "in"), ("hat", "the")
 
-def word2vecRun(window_size = 3, embedding_size = 64, generations = 100000, texts = [], caller=None):
+def word2vecRun(window_size = 3, embedding_size = 64, generations = 100000, texts = []):
     import tensorflow.compat.v1 as tf
     #import tensorflow as tf
     tf.disable_v2_behavior()
@@ -150,13 +150,12 @@ def word2vecRun(window_size = 3, embedding_size = 64, generations = 100000, text
                     log_str = "%s %s," % (log_str, close_word)
                 print(log_str)
 
-        if (i+1) % save_embeddings_every == 0:
-             final_embeddings = sess.run(embeddings)
-             caller.saveModel((i+1), final_embeddings, word_dictionary_rev, word_dictionary)
+        #if (i+1) % save_embeddings_every == 0:
+        #     final_embeddings = sess.run(embeddings)
+        #     caller.saveModel((i+1), final_embeddings, word_dictionary_rev, word_dictionary)
 
 
     final_embeddings = sess.run(embeddings)
-    #print(os.getcwd())
 
     #embeddingsFname = Configuration.modelDirectory + os.sep +"embed_word2vec_"+str(window_size)+"_"+str(embedding_size)+".csv"
     #np.savetxt(embeddingsFname, final_embeddings, fmt="%.6e")

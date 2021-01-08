@@ -64,13 +64,13 @@ class RecommenderW2V(ARecommender):
             return trainDF
             
             
-    def saveModel(self, i, model, rev_dict, dictionary):
-        dictionary = dict([((int(i), j) if i != "RARE" else (-1, j)) for i, j in dictionary.items()])
-        rev_dict = dict(zip(dictionary.values(), dictionary.keys()))
-        datasetID:str = self._trainDataset.datasetID
-        self.__save_obj(model, "model", datasetID, self.trainVariant, self.vectorSize, self.windowSize, i )
-        self.__save_obj(dictionary, "dictionary", datasetID, self.trainVariant, self.vectorSize, self.windowSize, i)
-        self.__save_obj(rev_dict, "rev_dict", datasetID, self.trainVariant, self.vectorSize, self.windowSize, i)
+#    def saveModel(self, i, model, rev_dict, dictionary):
+#        dictionary = dict([((int(i), j) if i != "RARE" else (-1, j)) for i, j in dictionary.items()])
+#        rev_dict = dict(zip(dictionary.values(), dictionary.keys()))
+#        datasetID:str = self._trainDataset.datasetID
+#        self.__save_obj(model, "model", datasetID, self.trainVariant, self.vectorSize, self.windowSize, i )
+#        self.__save_obj(dictionary, "dictionary", datasetID, self.trainVariant, self.vectorSize, self.windowSize, i)
+#        self.__save_obj(rev_dict, "rev_dict", datasetID, self.trainVariant, self.vectorSize, self.windowSize, i)
     
     
     def train(self, history:AHistory, dataset:DatasetML):
@@ -116,7 +116,7 @@ class RecommenderW2V(ARecommender):
         self.rev_dict = self.__load_obj("rev_dict", dataset.datasetID, self.trainVariant, e, w, i)
 
         if self.model is None:
-            model, rev_dict, dictionary = word2vec.word2vecRun(w, e, i, w2vTrainData, self)
+            model, rev_dict, dictionary = word2vec.word2vecRun(w, e, i, w2vTrainData)
             dictionary = dict([((int(i), j) if i != "RARE" else (-1, j)) for i, j in dictionary.items()])
             rev_dict = dict(zip(dictionary.values(), dictionary.keys()))
             self.__save_obj(model, "model", dataset.datasetID, self.trainVariant, e, w, i )
@@ -126,10 +126,8 @@ class RecommenderW2V(ARecommender):
             self.dictionary = dictionary
             self.rev_dict = rev_dict
 
-        # ratingsSum:Dataframe<(userId:int, movieId:int, ratings:int, timestamp:int)>
-
         self.ratingsGroupDF = t.groupby(COL_USERID)[COL_ITEMID]
-        userProfileDF = self.ratingsGroupDF.aggregate(lambda x: list(x))
+        userProfileDF:DataFrame = self.ratingsGroupDF.aggregate(lambda x: list(x))
         self.userProfiles = userProfileDF.to_dict()
 
     def update(self, ratingsUpdateDF:DataFrame):
@@ -202,7 +200,6 @@ class RecommenderW2V(ARecommender):
 
         userTrainData = self.userProfiles.get(userID, [])
         w2vObjects, weights, aggregation = self.__resolveUserProfile(userProfileStrategy, userProfileSize, userTrainData)
-        simList:List = []
 
         # provedu agregaci dle zvolené metody
         if len(w2vObjects) > 0:
@@ -235,12 +232,13 @@ class RecommenderW2V(ARecommender):
 
     def __save_obj(self, obj, name:str, datasetId:str, trainVariant:str, e:int, w:int, i:int):
         fileName:str = Configuration.modelDirectory + os.sep + name + "_{0}_{1}_{2}_{3}_{4}".format(datasetId, trainVariant, e, w, i)+ '.pkl'
+        print("saveObject: " + str(fileName))
         with open(fileName, 'wb') as f:
             pickle.dump(obj, f)
 
     def __load_obj(self, name:str, datasetId:str, trainVariant:str, e:int, w:int, i:int):
         fileName:str = Configuration.modelDirectory + os.sep + name + "_{0}_{1}_{2}_{3}_{4}".format(datasetId, trainVariant, e, w, i)+ '.pkl'
-        print(fileName)
+        print("loadObject: " + str(fileName))
         if not os.path.isfile(fileName):
             return None
         with open(fileName, 'rb') as f:
