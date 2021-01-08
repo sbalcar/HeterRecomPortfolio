@@ -12,8 +12,11 @@ from execute.generateBatches import generateBatches #function
 from execute.generateBehaviour import generateBehaviour #function
 from execute.startHttpServer import startHttpServer #function
 
+from tests.simulationPortfolioToUser import test22 #function
+
 def main2():
 
+  #test22()
   start = time.time()
 
   sequentialEvaluation()

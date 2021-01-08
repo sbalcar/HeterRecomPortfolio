@@ -210,25 +210,26 @@ class RecommenderBPRMF(ARecommender):
             self._userIndexToUserIdDict = {v: k for k, v in self._userIdToUserIndexDict.items()}
 
         userIndex:int = self._userIdToUserIndexDict[userID]
-        if(userIndex < self._itemFeaturesMatrix.shape[1]):
-            # recommendationOfIndexes:Series
-            recommendationOfIndexesListOfTuple:List[tuple] = self.model.recommend(userIndex, self._userFeaturesMatrix, N = numberOfItems)
 
-            recommendations:List[tuple] = [(self._itemIndexToItemIdDict[itemIndexI], rI) for itemIndexI, rI in recommendationOfIndexesListOfTuple]
-
-        else: #cannot recommend for unknown user
+        if(userIndex >= self._itemFeaturesMatrix.shape[1]):
+            # cannot recommend for unknown user
             return pd.Series([], index=[])
+
+        # recommendationOfIndexes:Series
+        recommendationOfIndexesListOfTuple:List[tuple] = self.model.recommend(userIndex, self._userFeaturesMatrix, N = numberOfItems)
+
+        recommendations:List[tuple] = [(self._itemIndexToItemIdDict.get(itemIndexI, -1), rI) for itemIndexI, rI in recommendationOfIndexesListOfTuple]
+        recommendations = [(itemIndexI, rI) for itemIndexI, rI in recommendations if itemIndexI != -1]
 
 
         # provedu agregaci dle zvolené metody
         if len(recommendations) == 0:
             return pd.Series([], index=[])
-
-        if self.DEBUG_MODE:
-            print(type(recommendations))
         recItems = [i[0] for i in recommendations]
         recScores = [i[1] for i in recommendations]
 
+        if self.DEBUG_MODE:
+            print(type(recommendations))
         if self.DEBUG_MODE and type(self._trainDataset) is DatasetML:
             idf = self._trainDataset.itemsDF.set_index("movieId")
             print(idf.loc[recItems])

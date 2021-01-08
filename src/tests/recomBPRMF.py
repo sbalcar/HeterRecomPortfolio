@@ -176,7 +176,11 @@ def test04():
 
     r:Series = rec.recommend(23, 50, {})
     print(r)
+    print()
 
+    # recommend for unknown user
+    r:Series = rec.recommend(userID1, 50, {})
+    print(r)
 
 
 def test05():
