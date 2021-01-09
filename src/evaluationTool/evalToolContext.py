@@ -195,5 +195,6 @@ class EvalToolContext(AEvalTool):
             for recommender, value in self._inverseA.items():
                 self._inverseA[recommender] = np.linalg.inv(self._A[recommender])
             self._inverseCounter = 0
-            self._INVERSE_CALCULATION_THRESHOLD *= 2
+            if self._INVERSE_CALCULATION_THRESHOLD < 100:
+                self._INVERSE_CALCULATION_THRESHOLD *= 2
         self._inverseCounter += 1
