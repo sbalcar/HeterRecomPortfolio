@@ -65,6 +65,7 @@ def generateBatches():
     BatchSTSingleW2VHT.generateBatches()
     BatchSTSingleCosineCBHT.generateBatches()
 
+
 if __name__ == "__main__":
 
   np.random.seed(42)
