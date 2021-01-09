@@ -36,7 +36,7 @@ class EvalToolContext(AEvalTool):
         self._A: dict = {}
         self._inverseA: dict = {}
         self._context = None
-        self._INVERSE_CALCULATION_THRESHOLD: int = 100
+        self._INVERSE_CALCULATION_THRESHOLD: int = 2
         self._inverseCounter: int = 0
 
     def _preprocessUsers(self, users: DataFrame):
@@ -78,7 +78,7 @@ class EvalToolContext(AEvalTool):
         userID = evaluationDict[self.ARG_USER_ID]
 
         # compute context for selected user
-        self._context = self._calculateContext(userID)
+        self._context = self.calculateContext(userID)
 
         # check for each recommender method that it has A, b, inverseA
         for recommender, row in portfolioModel.iterrows():
@@ -97,27 +97,7 @@ class EvalToolContext(AEvalTool):
                 reward = relevances.loc[clickedItemID]
                 self._b[recommender] = self._b[recommender] + (reward * self._context)
 
-        # update recommender's votes
-        updatedVotes = dict()
-        totalOriginalVotes = 0
-        totalUpdatedVotes = 0
-        for recommender, votes in portfolioModel.iterrows():
-            # Calculate change rate
-            ridgeRegression = self._inverseA[recommender].dot(self._b[recommender])
-            UCB = self._context.T.dot(self._inverseA[recommender]).dot(self._context)
-            change_rate = (ridgeRegression.T.dot(self._context) + math.sqrt(UCB))
-
-            # update votes
-            updatedVotes[recommender] = change_rate
-            totalOriginalVotes += portfolioModel.at[recommender, 'votes']
-            totalUpdatedVotes += updatedVotes[recommender]
-
-        # normalize updated votes and save it to modelDF
-        rate = (totalOriginalVotes / totalUpdatedVotes)
-        for recommender, votes in portfolioModel.iterrows():
-            portfolioModel.at[recommender, 'votes'] = round(updatedVotes[recommender] * rate)
-
-    def _calculateContext(self, userID):
+    def calculateContext(self, userID):
         if self.dataset_name == "ml":
             return self._calculateContextML(userID)
         else:
@@ -159,17 +139,18 @@ class EvalToolContext(AEvalTool):
 
         # aggregation
         itemsIDs = [i[2] for i in last20MoviesList]
-        items = self.items.iloc[list(itemsIDs)]
+        items = self.items.loc[self.items['movieId'].isin(itemsIDs)]
         itemsGenres = items.drop(items.columns[[0,1]], axis=1).sum()
-        result = np.append(result, itemsGenres)
+        result = np.append(result, [float(i) for i in itemsGenres])
 
         # create polynomial features from [seniority]*[genres]*[userInfo]
         # append age and onehot occupation
-        tmp = user.T.drop(labels=['userId', 'gender', 'zipCode']).to_numpy().flatten()
-        result = np.concatenate([result, tmp])
+        tmp = user.T.drop(labels=['userId', 'gender', 'zipCode', 'age']).to_numpy().flatten()
+        result = np.concatenate([result, [float(i) for i in tmp]])
 
-        # add user gender to the context
-        result = np.append(result, 1 if user['gender'].item() == 'F' else -1)
+        # add user gender to the context (one-hot encoding)
+        result = np.append(result, 1.0 if user['gender'].item() == 'F' else 0.0)
+        result = np.append(result, 1.0 if user['gender'].item() != 'F' else 0.0)
 
         poly = PolynomialFeatures(2)
         result = poly.fit_transform(result.reshape(-1, 1))
@@ -194,7 +175,7 @@ class EvalToolContext(AEvalTool):
 
         # recompute context - previous user doesn't have to be the same as current
         # TODO: Performace improvement: check if user changed -> do not recompute context if not?
-        self._context = self._calculateContext(userID)
+        self._context = self.calculateContext(userID)
 
         # get relevances
         methodsResultDict = evaluationDict[self.ARG_RELEVANCE]
@@ -206,32 +187,13 @@ class EvalToolContext(AEvalTool):
             for recommendedItemID, votes in rItemIDsWithResponsibility:
                 if recommendedItemID in methodsResultDict[recommender].index:
                     relevanceSum += methodsResultDict[recommender][recommendedItemID]
-            self._A[recommender] += self._context.dot(self._context.T) * relevanceSum
+            self._A[recommender] += np.outer(self._context.T, self._context) * relevanceSum
 
         # recompute inverse A's if threshold is hit
         if self._inverseCounter > self._INVERSE_CALCULATION_THRESHOLD:
+            print('=============================RECALCULATE INVERSE MATRIX!=================')
             for recommender, value in self._inverseA.items():
                 self._inverseA[recommender] = np.linalg.inv(self._A[recommender])
             self._inverseCounter = 0
+            self._INVERSE_CALCULATION_THRESHOLD *= 2
         self._inverseCounter += 1
-
-        # update recommender's votes
-        updatedVotes = dict()
-        totalOriginalVotes = 0
-        totalUpdatedVotes = 0
-        for recommender, votes in portfolioModel.iterrows():
-            # Calculate change rate
-            ridgeRegression = self._inverseA[recommender].dot(self._b[recommender])
-            UCB = self._context.T.dot(self._inverseA[recommender]).dot(self._context)
-            change_rate = (ridgeRegression.T.dot(self._context) + math.sqrt(UCB))
-
-            # update votes
-            updatedVotes[recommender] = change_rate
-            totalOriginalVotes += portfolioModel.at[recommender, 'votes']
-            totalUpdatedVotes += updatedVotes[recommender]
-
-        # normalize updated votes and save it to modelDF
-        rate = (totalOriginalVotes / totalUpdatedVotes)
-
-        for recommender, votes in portfolioModel.iterrows():
-            portfolioModel.at[recommender, 'votes'] = round(updatedVotes[recommender] * rate)

@@ -5,6 +5,7 @@ from typing import List
 import os
 
 from pandas.core.frame import DataFrame #class
+from pandas.core.frame import Series #class
 
 import pandas as pd
 
@@ -12,9 +13,23 @@ from evaluationTool.evalToolContext import EvalToolContext #class
 
 from datasets.ml.users import Users #class
 from datasets.ml.items import Items #class
+from datasets.aDataset import ADataset #class
+from datasets.datasetML import DatasetML #class
+
+from recommender.aRecommender import ARecommender #class
+from recommender.recommenderItemBasedKNN import RecommenderItemBasedKNN #class
+from recommender.recommenderTheMostPopular import RecommenderTheMostPopular #class
 
 from history.aHistory import AHistory #class
 from history.historyDF import HistoryDF #class
+
+from datasets.ml.users import Users #class
+from datasets.ml.items import Items #class
+from datasets.ml.ratings import Ratings #class
+
+from aggregation.aggrContextFuzzyDHondt import AggrContextFuzzyDHondt #class
+from aggregation.aggrFuzzyDHondt import AggrFuzzyDHondt
+from aggregation.operators.theMostVotedItemSelector import TheMostVotedItemSelector #class
 
 def test01():
     print("Test 01")
@@ -93,7 +108,110 @@ def sumMethods(methods):
         sum += m[0]
     return sum
 
+def test02(repetitions = 1):
+    N = 100
+
+    # get dataset
+    itemsDF: DataFrame = Items.readFromFileMl1m()
+    usersDF: DataFrame = Users.readFromFileMl1m()
+    ratingsDF: DataFrame = Ratings.readFromFileMl1m()
+
+    ratingsDFTrain = ratingsDF[:50000]
+    ratingsDFUpdate: DataFrame = ratingsDF.iloc[50001:50100]
+
+    trainDataset: ADataset = DatasetML(ratingsDFTrain, usersDF, itemsDF)
+
+    historyDF: AHistory = HistoryDF("test01")
+
+    # train KNN
+    rec1: ARecommender = RecommenderItemBasedKNN("run", {})
+    rec1.train(HistoryDF("test01"), trainDataset)
+
+    # train Most Popular
+    rec2: ARecommender = RecommenderTheMostPopular("run", {})
+    rec2.train(historyDF, trainDataset)
+
+    # methods parametes
+    methodsParamsData: List[tuple] = [['ItembasedKNN', 0.4], ['MostPopular', 0.6]]
+    methodsParamsDF: DataFrame = pd.DataFrame(methodsParamsData, columns=["methodID", "votes"])
+    methodsParamsDF.set_index("methodID", inplace=True)
+
+    userID = 352
+
+    historyDF: AHistory = HistoryDF("test01")
+    ratingsDFuserID = ratingsDF[ratingsDF['userId'] == 352]
+    itemID = ratingsDFuserID.iloc[0]['movieId']
+    historyDF.insertRecommendation(userID, itemID, 1, True, 10)
+
+    r1: Series = rec1.recommend(userID, N, {})
+    r2: Series = rec2.recommend(userID, N, {})
+    methodsResultDict: dict = {
+        "ItembasedKNN": r1,
+        "MostPopular": r2
+    }
+    evaluationDict: dict = {EvalToolContext.ARG_USER_ID: userID,
+                            EvalToolContext.ARG_RELEVANCE: methodsResultDict}
+    evalToolDHondt = EvalToolContext(
+        {EvalToolContext.ARG_USERS: usersDF,
+         EvalToolContext.ARG_ITEMS: itemsDF,
+         EvalToolContext.ARG_DATASET: "ml",
+         EvalToolContext.ARG_HISTORY: historyDF}
+    )
+
+    aggr: AggrContextFuzzyDHondt = AggrContextFuzzyDHondt(historyDF, {
+        AggrContextFuzzyDHondt.ARG_EVAL_TOOL: evalToolDHondt,
+        AggrContextFuzzyDHondt.ARG_SELECTOR: TheMostVotedItemSelector({})
+    })
+    aggrInit: AggrFuzzyDHondt = AggrFuzzyDHondt(historyDF, {
+        AggrFuzzyDHondt.ARG_SELECTOR: TheMostVotedItemSelector({})
+    })
+    l1 = aggrInit.runWithResponsibility(methodsResultDict, methodsParamsDF, userID, N)
+    import random
+
+    evalToolDHondt.displayed(l1, methodsParamsDF, evaluationDict)
+    evalToolDHondt.click(l1, random.choice(l1)[0], methodsParamsDF, evaluationDict)
+    timestamp = 10
+    counter = 0
+    r1c = 0
+    r2c = 0
+    for _ in range(repetitions):
+        for index, row in ratingsDFuserID.iterrows():
+            r1: Series = rec1.recommend(userID, N, {})
+            r2: Series = rec2.recommend(userID, N, {})
+            methodsResultDict: dict = {
+                "ItembasedKNN": r1,
+                "MostPopular": r2
+            }
+            historyDF.insertRecommendation(userID, row['movieId'], 1, True, timestamp)
+            timestamp += 1
+            l1 = aggr.runWithResponsibility(methodsResultDict, methodsParamsDF, userID, N)
+
+            for itemID, votes in l1:
+                film_info: DataFrame = itemsDF[itemsDF['movieId'] == itemID]
+                #print('\t', film_info['movieTitle'].to_string(header=False),
+                #      film_info['Genres'].to_string(header=False))
+            import random
+            randomItem = random.choice(l1)[0]
+            if randomItem in r1.index:
+                r1c += 1
+            if randomItem in r2.index:
+                r2c += 1
+            evaluationDict: dict = {EvalToolContext.ARG_USER_ID: userID,
+                                    EvalToolContext.ARG_RELEVANCE: methodsResultDict}
+            print("votes Items: ", r1c)
+            print("votes mostPopular ", r2c)
+            evalToolDHondt.displayed(l1, methodsParamsDF, evaluationDict)
+            evalToolDHondt.click(l1, randomItem, methodsParamsDF, evaluationDict)
+            rec1.update(ratingsDFuserID.loc[[index]])
+            # rec2.update(ratingsDFuserID.loc[index]) Not implemented
+            #print("Counter = ", counter, "; All = ", len(ratingsDFuserID.iloc[800:]), "; Index: ", index)
+            print(methodsParamsDF)
+            counter += 1
+
+
+
 
 if __name__ == "__main__":
     os.chdir("..")
-    test01()
+    #test01()
+    test02(repetitions=1000)
