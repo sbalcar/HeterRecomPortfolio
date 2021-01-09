@@ -35,7 +35,7 @@ class MixinContextAggregation(AAgregation):
         for recommender, votes in modelDF.iterrows():
             # Calculate change rate
             ridgeRegression = self.eTool._inverseA[recommender].dot(self.eTool._b[recommender])
-            UCB_secondpart = 0.01 * self._context.T.dot(self.eTool._inverseA[recommender]).dot(self._context)
+            UCB_secondpart = 0.1 * self._context.T.dot(self.eTool._inverseA[recommender]).dot(self._context)
             UCB = (ridgeRegression.T.dot(self.eTool._context) + math.sqrt(UCB_secondpart))
             print("UCB: ", UCB)
             # update votes
