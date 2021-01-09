@@ -3,6 +3,8 @@
 import os
 import sys
 
+from typing import Dict #class
+
 from pandas.core.frame import DataFrame #class
 from pandas.core.series import Series #class
 
@@ -33,7 +35,7 @@ def test01():
 
     trainDataset:ADataset = DatasetML("ml1mDiv90", ratingsDFTrain, pd.DataFrame(), pd.DataFrame())
 
-    argsDict:dict = {
+    argsDict:Dict[str,str] = {
         RecommenderW2V.ARG_ITERATIONS: 50000,
         RecommenderW2V.ARG_TRAIN_VARIANT: 'positive',
         RecommenderW2V.ARG_USER_PROFILE_SIZE: -1,
@@ -45,7 +47,7 @@ def test01():
     rec.train(HistoryDF("w2v"), trainDataset)
 
     ratingsDFUpdate:DataFrame = ratingsDF.iloc[50003:50004]
-    rec.update(ratingsDFUpdate)
+    rec.update(ratingsDFUpdate, {})
 
     print(len(rec.userProfiles[331]))
 
@@ -74,7 +76,7 @@ def test02():
     eventsDF:DataFrame = dataset.eventsDF
 
     # train recommender
-    argsDict: dict = {
+    argsDict:Dict[str,str] = {
         RecommenderW2V.ARG_ITERATIONS: 50000,
         RecommenderW2V.ARG_TRAIN_VARIANT: 'posneg',
         RecommenderW2V.ARG_USER_PROFILE_SIZE: -1,
@@ -87,7 +89,7 @@ def test02():
 
     uDF:DataFrame = DataFrame([eventsDF.iloc[9000]])
     print(uDF)
-    rec.update(uDF)
+    rec.update(uDF, {})
 
     r:Series = rec.recommend(23, 50, {})
     print(r)
@@ -105,7 +107,7 @@ def test03():
     eventsDF:DataFrame = dataset.eventsDF
 
     # train recommender
-    argsDict: dict = {
+    argsDict:Dict[str,str] = {
         RecommenderW2V.ARG_ITERATIONS: 50000,
         RecommenderW2V.ARG_TRAIN_VARIANT: 'posneg',
         RecommenderW2V.ARG_USER_PROFILE_SIZE: -1,
@@ -118,7 +120,7 @@ def test03():
 
     uDF:DataFrame = DataFrame([eventsDF.iloc[9000]])
     print(uDF)
-    rec.update(uDF)
+    rec.update(uDF, {})
 
     r:Series = rec.recommend(23, 50, {})
     print(r)

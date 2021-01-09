@@ -4,6 +4,7 @@ import numpy as np
 import pandas as pd
 
 from typing import List
+from typing import Dict #class
 
 from pandas.core.frame import DataFrame #class
 from pandas.core.series import Series #class
@@ -33,7 +34,7 @@ class AggrDHondtThompsonSamplingINF(AggrDHondtThompsonSampling):
         self._penaltyTool = argumentsDict[self.ARG_PENALTY_TOOL]
 
 
-    def update(self, ratingsUpdateDF:DataFrame):
+    def update(self, ratingsUpdateDF:DataFrame, argumentsDict:Dict[str,object]):
         pass
 
 

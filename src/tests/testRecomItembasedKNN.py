@@ -48,7 +48,7 @@ def test01():
     print("Recommendations before update")
     r:Series = rec.recommend(ratingsDFUpdate['userId'].iloc[0], 50, {})
 
-    rec.update(ratingsDFUpdate)
+    rec.update(ratingsDFUpdate, {})
 
     print("Recommendations after update")
     r: Series = rec.recommend(ratingsDFUpdate['userId'].iloc[0], 50, {})
@@ -114,7 +114,7 @@ def test03():
     uDdata = [[23, 10, 4, 10000]]
     uDF: DataFrame = pd.DataFrame(uDdata, columns=[Ratings.COL_USERID, Ratings.COL_MOVIEID, Ratings.COL_RATING, Ratings.COL_TIMESTAMP])
 
-    rec.update(uDF)
+    rec.update(uDF, {})
 
 
     r:Series = rec.recommend(23, 10, {})
@@ -143,7 +143,7 @@ def test04():
 
     uDF:DataFrame = DataFrame([eventsDF.iloc[9000]])
     print(uDF)
-    rec.update(uDF)
+    rec.update(uDF, {})
 
     recommendation = rec.recommend(1, 20, {})
     print(recommendation)
@@ -166,7 +166,7 @@ def test05():
 
     uDF:DataFrame = DataFrame([eventsDF.iloc[9000]])
     print(uDF)
-    rec.update(uDF)
+    rec.update(uDF, {})
 
     r = rec.recommend(3325463, 20, {})
     print(r)
@@ -206,13 +206,13 @@ def test06():
     updateEvents1DF:DataFrame = DataFrame(columns=trainEventsDF.columns)
     updateEvents1DF.loc[0] = [userID1, 105]
     print(updateEvents1DF.head())
-    rec.update(updateEvents1DF)
+    rec.update(updateEvents1DF, {})
 
     print("update 2:")
     updateEvents2DF:DataFrame = DataFrame(columns=trainEventsDF.columns)
     updateEvents2DF.loc[0] = [userID3, 106]
     print(updateEvents2DF.head())
-    rec.update(updateEvents2DF)
+    rec.update(updateEvents2DF, {})
 
 
     print("recommend:")

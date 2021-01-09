@@ -6,6 +6,7 @@ import pandas as pd
 
 from numpy.random import beta
 from typing import List
+from typing import Dict #class
 
 from pandas.core.frame import DataFrame #class
 from pandas.core.series import Series #class
@@ -34,7 +35,7 @@ class AggrFuzzyDHondt(AAgregation):
         self._selector = argumentsDict[self.ARG_SELECTOR]
 
 
-    def update(self, ratingsUpdateDF:DataFrame):
+    def update(self, ratingsUpdateDF:DataFrame, argumentsDict:Dict[str,object]):
         pass
 
 

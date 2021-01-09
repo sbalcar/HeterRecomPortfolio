@@ -58,7 +58,7 @@ def test01():
     print(r);
     for i in range(ratingsDFUpdate.shape[0]):
         rUp = ratingsDFUpdate.iloc[i:i+1,:]
-        rec.update(rUp)
+        rec.update(rUp, {})
 
     print("Recommendations after update")
     print(rec._movieFeaturesMatrixLIL[:,ratingsDFUpdate['userId'].iloc[0]  ].getnnz() )
@@ -122,7 +122,7 @@ def test03():
 
     uDF:DataFrame = DataFrame([eventsDF.iloc[9000]])
     print(uDF)
-    rec.update(uDF)
+    rec.update(uDF, {})
 
     r:Series = rec.recommend(23, 50, {})
     print(r)
@@ -156,7 +156,7 @@ def test04():
 
     uDF1:DataFrame = DataFrame([eventsDF.iloc[9000]])
     print(uDF1)
-    rec.update(uDF1)
+    rec.update(uDF1, {})
 
     userID1:int = uIDMax + 1
     itemID1:int = iIDMax + 1
@@ -166,13 +166,13 @@ def test04():
     uDF2:DataFrame = DataFrame(columns=[Events.COL_USER_ID, Events.COL_OBJECT_ID])
     uDF2.loc[0] = [userID1, itemID1]
     print(uDF2)
-    rec.update(uDF2)
+    rec.update(uDF2, {})
 
     # update with unknown item
     uDF3:DataFrame = DataFrame(columns=[Events.COL_USER_ID, Events.COL_OBJECT_ID])
     uDF3.loc[0] = [userID1, itemID2]
     print(uDF3)
-    rec.update(uDF3)
+    rec.update(uDF3, {})
 
     r:Series = rec.recommend(23, 50, {})
     print(r)

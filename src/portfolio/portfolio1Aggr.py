@@ -3,6 +3,7 @@
 from pandas.core.frame import DataFrame #class
 
 from typing import List
+from typing import Dict #class
 
 from datasets.aDataset import ADataset #class
 
@@ -56,19 +57,21 @@ class Portfolio1Aggr(APortfolio):
         for recommenderI in self._recommenders:
             recommenderI.train(history, dataset)
 
-    def update(self, ratingsUpdateDF:DataFrame):
+    def update(self, ratingsUpdateDF:DataFrame, argumentsDict:Dict[str,object]):
         if type(ratingsUpdateDF) is not DataFrame:
            raise ValueError("Argument ratingsUpdateDF isn't type DataFrame.")
+        if type(argumentsDict) is not dict:
+           raise ValueError("Argument argumentsDict isn't type dict.")
 
-        self._aggregation.update(ratingsUpdateDF)
+        self._aggregation.update(ratingsUpdateDF, argumentsDict)
 
         recommenderI:ARecommender
         for recommenderI in self._recommenders:
-           recommenderI.update(ratingsUpdateDF)
+           recommenderI.update(ratingsUpdateDF, argumentsDict)
 
 
     # portFolioModel:DataFrame<(methodID, votes)>
-    def recommend(self, userID:int, portFolioModel:DataFrame, argumentsDict:dict):
+    def recommend(self, userID:int, portFolioModel:DataFrame, argumentsDict:Dict[str,object]):
        #print("userID: " + str(userID))
        if type(userID) is not int and type(userID) is not np.int64:
            raise ValueError("Argument userID isn't type int.")

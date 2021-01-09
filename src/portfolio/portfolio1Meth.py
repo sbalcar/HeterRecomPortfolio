@@ -3,6 +3,7 @@
 import numpy as np
 
 from typing import List #class
+from typing import Dict #class
 
 from pandas.core.frame import DataFrame #class
 from pandas.core.series import Series #class
@@ -43,11 +44,12 @@ class Portfolio1Meth(APortfolio):
 
         self._recommender.train(history, dataset)
 
-   def update(self, ratingsUpdateDF:DataFrame):
+   def update(self, ratingsUpdateDF:DataFrame, argumentsDict:Dict[str,object]):
         if type(ratingsUpdateDF) is not DataFrame:
             raise ValueError("Argument ratingsUpdateDF isn't type DataFrame.")
-
-        self._recommender.update(ratingsUpdateDF)
+        if type(argumentsDict) is not dict:
+            raise ValueError("Argument argumentsDict is not type dict.")
+        self._recommender.update(ratingsUpdateDF, argumentsDict)
 
 
    def recommend(self, userID:int, portFolioModel:DataFrame, argumentsDict:dict):

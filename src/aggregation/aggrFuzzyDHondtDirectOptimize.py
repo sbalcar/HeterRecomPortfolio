@@ -6,6 +6,7 @@ import pandas as pd
 
 from numpy.random import beta
 from typing import List
+from typing import Dict #class
 
 from pandas.core.frame import DataFrame  # class
 from pandas.core.series import Series  # class
@@ -24,7 +25,7 @@ class AggrFuzzyDHondtDirectOptimize(AAgregation):
 
     ARG_SELECTOR:str = "selector"
 
-    def __init__(self, history:AHistory, argumentsDict:dict):
+    def __init__(self, history:AHistory, argumentsDict:Dict[str,object]):
         if not isinstance(history, AHistory):
             raise ValueError("Argument history isn't type AHistory.")
         if type(argumentsDict) is not dict:
@@ -34,7 +35,7 @@ class AggrFuzzyDHondtDirectOptimize(AAgregation):
         self._selector = argumentsDict[self.ARG_SELECTOR]
 
 
-    def update(self, ratingsUpdateDF:DataFrame):
+    def update(self, ratingsUpdateDF:DataFrame, argumentsDict:Dict[str,object]):
         pass
 
 

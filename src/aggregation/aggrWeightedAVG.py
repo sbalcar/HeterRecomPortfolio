@@ -6,6 +6,7 @@ import pandas as pd
 
 from numpy.random import beta
 from typing import List
+from typing import Dict #class
 
 from pandas.core.frame import DataFrame #class
 from pandas.core.series import Series #class
@@ -24,7 +25,7 @@ class AggrWeightedAVG(AAgregation):
 
     ARG_SELECTOR:str = "selector"
 
-    def __init__(self, history:AHistory, argumentsDict:dict):
+    def __init__(self, history:AHistory, argumentsDict:Dict[str,object]):
         if not isinstance(history, AHistory):
             raise ValueError("Argument history isn't type AHistory.")
         if type(argumentsDict) is not dict:
@@ -34,13 +35,13 @@ class AggrWeightedAVG(AAgregation):
         self._selector = argumentsDict[self.ARG_SELECTOR]
 
 
-    def update(self, ratingsUpdateDF:DataFrame):
+    def update(self, ratingsUpdateDF:DataFrame, argumentsDict:Dict[str,object]):
         pass
 
 
     # methodsResultDict:{String:pd.Series(rating:float[], itemID:int[])},
     # modelDF:pd.DataFrame[numberOfVotes:int], numberOfItems:int
-    def run(self, methodsResultDict:dict, modelDF:DataFrame, userID:int, numberOfItems:int = 20):
+    def run(self, methodsResultDict:dict, modelDF:DataFrame, userID:int, numberOfItems:int):
 
       # testing types of parameters
       if type(methodsResultDict) is not dict:
@@ -85,7 +86,7 @@ class AggrWeightedAVG(AAgregation):
 
     # methodsResultDict:{String:Series(rating:float[], itemID:int[])},
     # modelDF:DataFrame<(methodID:str, votes:int)>, numberOfItems:int
-    def runWithResponsibility(self, methodsResultDict:dict, modelDF:DataFrame, userID:int, numberOfItems:int=20):
+    def runWithResponsibility(self, methodsResultDict:dict, modelDF:DataFrame, userID:int, numberOfItems:int):
 
         # testing types of parameters
         if type(methodsResultDict) is not dict:

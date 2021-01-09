@@ -1,5 +1,7 @@
 #!/usr/bin/python3
 
+from typing import Dict #class
+
 from pandas.core.frame import DataFrame #class
 from pandas.core.series import Series #class
 
@@ -11,11 +13,11 @@ from userBehaviourDescription.userBehaviourDescription import UserBehaviourDescr
 class AAgregation(ABC):
 
     @abstractmethod
-    def __init__(self, aHistory:AHistory, argumentsDict:dict):
+    def __init__(self, aHistory:AHistory, argumentsDict:Dict[str,object]):
        raise Exception("AAgregation is abstract class, can't be instanced")
 
     @abstractmethod
-    def update(self, ratingsUpdateDF:DataFrame):
+    def update(self, ratingsUpdateDF:DataFrame, argumentsDict:Dict[str,object]):
         assert False, "this needs to be overridden"
 
     # userDef:DataFrame<(methodID:str, votes:int)>

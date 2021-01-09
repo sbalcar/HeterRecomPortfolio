@@ -133,9 +133,11 @@ class RecommenderBPRMF(ARecommender):
         self.model.fit(self._itemFeaturesMatrix)
         
 
-    def update(self, ratingsUpdateDF:DataFrame):
+    def update(self, ratingsUpdateDF:DataFrame, argumentsDict:Dict[str,object]):
         if type(ratingsUpdateDF) is not DataFrame:
             raise ValueError("Argument ratingsTrainDF isn't type DataFrame.")
+        if type(argumentsDict) is not dict:
+            raise ValueError("Argument argumentsDict isn't type dict.")
 
         # ratingsUpdateDF has only one row
         row = ratingsUpdateDF.iloc[0]
@@ -196,7 +198,7 @@ class RecommenderBPRMF(ARecommender):
 
  
 
-    def recommend(self, userID:int, numberOfItems:int=20, argumentsDict:dict={}):
+    def recommend(self, userID:int, numberOfItems:int, argumentsDict:Dict[str,object]):
         #print("userID: " + str(userID))
         if type(userID) is not int and type(userID) is not np.int64:
             raise ValueError("Argument userID isn't type int.")

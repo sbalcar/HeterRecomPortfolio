@@ -8,13 +8,15 @@ from datasets.aDataset import ADataset #class
 from history.aHistory import AHistory #class
 from abc import ABC, abstractmethod
 
+from typing import Dict
+
 class ARecommender(ABC):
 
     UPDT_CLICK:str = "click"
     UPDT_VIEW:str = "view"
 
     @abstractmethod
-    def __init__(self, jobID:str, argumentsDict:dict):
+    def __init__(self, jobID:str, argumentsDict:Dict[str,object]):
         raise Exception("ARecommender is abstract class, can't be instanced")
 
     @abstractmethod
@@ -22,10 +24,10 @@ class ARecommender(ABC):
         assert False, "this needs to be overridden"
 
     @abstractmethod
-    def update(self, ratingsUpdateDF:DataFrame):
+    def update(self, ratingsUpdateDF:DataFrame, argumentsDict:Dict[str,object]):
         assert False, "this needs to be overridden"
 
     @abstractmethod
-    def recommend(self, userID:int, numberOfItems:int=20, argumentsDict:dict={}):
+    def recommend(self, userID:int, numberOfItems, argumentsDict:Dict[str,object]):
         assert False, "this needs to be overridden"
 

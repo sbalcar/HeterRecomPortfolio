@@ -3,6 +3,7 @@
 from pandas.core.frame import DataFrame #class
 
 from typing import List
+from typing import Dict #class
 
 from aggregation.aAggregation import AAgregation #class
 
@@ -33,10 +34,10 @@ class APortfolio(ABC):
         assert False, "this needs to be overridden"
 
     @abstractmethod
-    def update(self, ratingsUpdateDF:DataFrame):
+    def update(self, ratingsUpdateDF:DataFrame, argumentsDict:Dict[str,object]):
         assert False, "this needs to be overridden"
 
     @abstractmethod
     # portFolioModel:DataFrame<(methodID, votes)>
-    def recommend(self, userID:int, portFolioModel:DataFrame, argumentsDict:dict):
+    def recommend(self, userID:int, portFolioModel:DataFrame, argumentsDict:Dict[str,object]):
         assert False, "this needs to be overridden"

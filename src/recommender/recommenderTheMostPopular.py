@@ -3,6 +3,7 @@
 from pandas.core.frame import DataFrame #class
 
 from typing import List
+from typing import Dict
 from pandas.core.series import Series #class
 
 from sklearn.preprocessing import normalize
@@ -21,7 +22,7 @@ import numpy as np
 
 class RecommenderTheMostPopular(ARecommender):
 
-    def __init__(self, jobID:str, argumentsDict:dict):
+    def __init__(self, jobID:str, argumentsDict:Dict[str,object]):
         if type(argumentsDict) is not dict:
             raise ValueError("Argument argumentsDict is not type dict.")
 
@@ -31,7 +32,7 @@ class RecommenderTheMostPopular(ARecommender):
         self.result:Series = None
 
     # ratingsSum:Dataframe<(userId:int, movieId:int, ratings:int, timestamp:int)>
-    def train(self, history:AHistory, dataset:DatasetML):
+    def train(self, history:AHistory, dataset:ADataset):
         if not isinstance(history, AHistory):
             raise ValueError("Argument history isn't type AHistory.")
         if not isinstance(dataset, ADataset):
@@ -50,13 +51,16 @@ class RecommenderTheMostPopular(ARecommender):
         else:
             raise ValueError("Argument dataset isn't of expected type.")
 
-    def update(self, ratingsUpdateDF:DataFrame):
+    def update(self, ratingsUpdateDF:DataFrame, argumentsDict:Dict[str,object]):
         if type(ratingsUpdateDF) is not DataFrame:
             raise ValueError("Argument ratingsTrainDF isn't type DataFrame.")
+        if type(argumentsDict) is not dict:
+            raise ValueError("Argument argumentsDict is not type dict.")
 
 
-    def recommend(self, userID:int, numberOfItems:int=20, argumentsDict:dict={}):
-        #print("userID: " + str(userID))
+    def recommend(self, userID:int, numberOfItems:int, argumentsDict:Dict[str,object]):
+        if type(argumentsDict) is not dict:
+            raise ValueError("Argument argumentsDict is not type dict.")
 
         if not self.result is None:
             if self.numberOfItems == numberOfItems:

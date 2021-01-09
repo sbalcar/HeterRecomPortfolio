@@ -115,9 +115,11 @@ class RecommenderItemBasedKNN(ARecommender):
             self._lastRatedItemPerUser = trainRatingsDF.loc[trainRatingsDF[Events.COL_OBJECT_ID] != 0]\
                 .groupby(Events.COL_USER_ID).tail(1).set_index(Events.COL_USER_ID)
 
-    def update(self, ratingsUpdateDF:DataFrame):
+    def update(self, ratingsUpdateDF:DataFrame, argumentsDict:Dict[str,object]):
         if type(ratingsUpdateDF) is not DataFrame:
             raise ValueError("Argument ratingsTrainDF isn't type DataFrame.")
+        if type(argumentsDict) is not dict:
+            raise ValueError("Argument argumentsDict isn't type dict.")
 
         row:DataFrame = ratingsUpdateDF.iloc[0]
         if type(self._trainDataset) is DatasetML:
@@ -166,7 +168,10 @@ class RecommenderItemBasedKNN(ARecommender):
             self.counter += 1
 
 
-    def recommend(self, userID: int, numberOfItems: int = 20, argumentsDict: dict = {}):
+    def recommend(self, userID: int, numberOfItems:int, argumentsDict:Dict[str,object]):
+        if type(argumentsDict) is not dict:
+            raise ValueError("Argument argumentsDict isn't type dict.")
+
         # Check if user is known
         if userID not in self._lastRatedItemPerUser.index:
             # TODO: How to behave if yet no rating from user was recorded? Maybe return TOP-N most popular items?

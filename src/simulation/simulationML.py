@@ -131,7 +131,7 @@ class SimulationML(ASequentialSimulation):
             for portfolioI in portfolios:
 
                 dfI:DataFrame = DataFrame([testRatingsDF.loc[currentDFIndexI]], columns=testRatingsDF.keys())
-                portfolioI.update(dfI)
+                portfolioI.update(dfI, {})
 
 
             windowOfItemIDsI:int = model.getNextRelevantItemIDsExceptItemIDs(currentDFIndexI,

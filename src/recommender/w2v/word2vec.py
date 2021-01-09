@@ -142,8 +142,7 @@ def word2vecRun(window_size = 3, embedding_size = 64, generations = 100000, text
             sim = sess.run(similarity, feed_dict=feed_dict)
             for j in range(len(valid_words)):
                 valid_word = word_dictionary_rev[valid_examples[j]]
-                t
-                op_k = 5 # number of nearest neighbors
+                top_k = 5 # number of nearest neighbors
                 nearest = (-sim[j, :]).argsort()[1:top_k+1]
                 log_str = "Nearest to {}:".format(valid_word)
                 for k in range(top_k):

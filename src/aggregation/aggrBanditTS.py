@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 from typing import List
+from typing import Dict
 
 import random
 import numpy as np
@@ -26,7 +27,7 @@ class AggrBanditTS(AAgregation):
 
     ARG_SELECTOR:str = "selector"
 
-    def __init__(self, history:AHistory, argumentsDict:dict):
+    def __init__(self, history:AHistory, argumentsDict:Dict[str,object]):
         if not isinstance(history, AHistory):
             raise ValueError("Argument history isn't type AHistory.")
         if type(argumentsDict) is not dict:
@@ -36,7 +37,7 @@ class AggrBanditTS(AAgregation):
         self._selector = argumentsDict[self.ARG_SELECTOR]
 
 
-    def update(self, ratingsUpdateDF:DataFrame):
+    def update(self, ratingsUpdateDF:DataFrame, argumentsDict:Dict[str,object]):
         pass
 
 

@@ -4,6 +4,7 @@ import numpy as np
 from pandas.core.frame import DataFrame #class
 
 from typing import List
+from typing import Dict
 
 from sklearn.metrics import *
 from sklearn.preprocessing import normalize
@@ -80,9 +81,11 @@ class RecommenderCosineCB(ARecommender):
         self.userProfiles:dict = userProfileDF.to_dict()
         s = ""
 
-    def update(self, ratingsUpdateDF:DataFrame):
+    def update(self, ratingsUpdateDF:DataFrame, argumentsDict:Dict[str,object]):
         if type(ratingsUpdateDF) is not DataFrame:
             raise ValueError("Argument ratingsTrainDF isn't type DataFrame.")
+        if type(argumentsDict) is not dict:
+            raise ValueError("Argument argumentsDict isn't type dict.")
 
         # ratingsUpdateDF has only one row
         row = ratingsUpdateDF.iloc[0]
@@ -139,7 +142,7 @@ class RecommenderCosineCB(ARecommender):
 
         return ([], [], "")
 
-    def recommend(self, userID:int, numberOfItems:int=20, argumentsDict:dict={}):
+    def recommend(self, userID:int, numberOfItems:int, argumentsDict:Dict[str,object]):
         #print("userID: " + str(userID))
         if type(userID) is not int and type(userID) is not np.int64:
             raise ValueError("Argument userID isn't type int.")

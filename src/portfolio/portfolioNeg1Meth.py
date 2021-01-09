@@ -3,6 +3,7 @@
 import numpy as np
 
 from typing import List #class
+from  typing import Dict #class
 
 from pandas.core.frame import DataFrame #class
 from pandas.core.series import Series #class
@@ -37,7 +38,7 @@ class PortfolioNeg1Meth(Portfolio1Meth):
        self._penaltyTool:APenalization = penaltyTool
 
 
-   def recommend(self, userID:int, portFolioModel:DataFrame, argumentsDict:dict):
+   def recommend(self, userID:int, portFolioModel:DataFrame, argumentsDict:Dict[str,object]):
         if type(userID) is not int and type(userID) is not np.int64:
             raise ValueError("Argument userID isn't type int.")
         if type(portFolioModel) is not DataFrame:

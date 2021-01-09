@@ -9,6 +9,7 @@ import numpy as np
 from configuration.configuration import Configuration #class
 
 from typing import List
+from typing import Dict
 
 from datasets.aDataset import ADataset #class
 from datasets.datasetML import DatasetML #class
@@ -42,7 +43,7 @@ class RecommenderW2V(ARecommender):
     DEBUG_MODE = False
 
     # ratingsSum:Dataframe<(userId:int, movieId:int, ratings:int, timestamp:int)>
-    def __init__(self, jobID:str, argumentsDict:dict):
+    def __init__(self, jobID:str, argumentsDict:Dict[str,object]):
         if type(argumentsDict) is not dict:
             raise ValueError("Argument argumentsDict is not type dict.")
         self._jobID:str = jobID
@@ -73,7 +74,7 @@ class RecommenderW2V(ARecommender):
 #        self.__save_obj(rev_dict, "rev_dict", datasetID, self.trainVariant, self.vectorSize, self.windowSize, i)
     
     
-    def train(self, history:AHistory, dataset:DatasetML):
+    def train(self, history:AHistory, dataset:ADataset):
         if not isinstance(history, AHistory):
             raise ValueError("Argument history isn't type AHistory.")
         if not isinstance(dataset, ADataset):
@@ -130,9 +131,11 @@ class RecommenderW2V(ARecommender):
         userProfileDF:DataFrame = self.ratingsGroupDF.aggregate(lambda x: list(x))
         self.userProfiles = userProfileDF.to_dict()
 
-    def update(self, ratingsUpdateDF:DataFrame):
+    def update(self, ratingsUpdateDF:DataFrame, argumentsDict:Dict[str,object]):
         if type(ratingsUpdateDF) is not DataFrame:
             raise ValueError("Argument ratingsTrainDF isn't type DataFrame.")
+        if type(argumentsDict) is not dict:
+            raise ValueError("Argument argumentsDict isn't type dict.")
 
         if type(self._trainDataset) is DatasetML:
             COL_USERID:str = Ratings.COL_USERID
@@ -186,7 +189,7 @@ class RecommenderW2V(ARecommender):
         return ([], [], "")     
         
 
-    def recommend(self, userID:int, numberOfItems:int, argumentsDict:dict):
+    def recommend(self, userID:int, numberOfItems:int, argumentsDict:Dict[str,object]):
         #print("userID: " + str(userID))
         if type(userID) is not int and type(userID) is not np.int64:
             raise ValueError("Argument userID isn't type int.")
