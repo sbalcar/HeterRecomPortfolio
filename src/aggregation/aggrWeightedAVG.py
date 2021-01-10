@@ -106,7 +106,7 @@ class AggrWeightedAVG(AAgregation):
             raise ValueError("Argument numberOfItems must be positive value.")
 
 
-        aggregatedItemIDs:List[int] = self.run(methodsResultDict, modelDF, numberOfItems)
+        aggregatedItemIDs:List[int] = self.run(methodsResultDict, modelDF, userID, numberOfItems)
         itemsWithResposibilityOfRecommenders = []
         for item in  aggregatedItemIDs:
             votesOfItemDictI:dict[str,float] = {mI:methodsResultDict[mI].get(key = item, default = 0) for mI in modelDF.index}
