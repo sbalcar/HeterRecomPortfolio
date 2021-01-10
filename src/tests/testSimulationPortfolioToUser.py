@@ -28,7 +28,7 @@ from pandas.core.frame import DataFrame #class
 
 from portfolioDescription.portfolio1MethDescription import Portfolio1MethDescription #class
 
-from input.inputRecomDefinition import InputRecomDefinition #class
+from input.inputRecomMLDefinition import InputRecomMLDefinition #class
 
 from portfolioDescription.aPortfolioDescription import APortfolioDescription #class
 
@@ -100,10 +100,10 @@ def test01():
 
     print("Simulation: ML TheMostPopular")
 
-    rDescr:RecommenderDescription = InputRecomDefinition.exportRDescTheMostPopular()
+    rDescr:RecommenderDescription = InputRecomMLDefinition.exportRDescTheMostPopular()
 
-    pDescr:APortfolioDescription = Portfolio1MethDescription(InputRecomDefinition.THE_MOST_POPULAR.title(),
-                                    InputRecomDefinition.THE_MOST_POPULAR, rDescr)
+    pDescr:APortfolioDescription = Portfolio1MethDescription(InputRecomMLDefinition.THE_MOST_POPULAR.title(),
+                                                             InputRecomMLDefinition.THE_MOST_POPULAR, rDescr)
 
     batchID:str = "ml1mDiv90Ulinear0109R1"
     dataset:DatasetML = DatasetML.readDatasets()
@@ -128,7 +128,7 @@ def test02():
 
     print("Simulation: ML W2V")
 
-    rDescr:RecommenderDescription = InputRecomDefinition.exportRDescW2vPositiveMax()
+    rDescr:RecommenderDescription = InputRecomMLDefinition.exportRDescW2vPositiveMax()
 
     pDescr:APortfolioDescription = Portfolio1MethDescription("W2vPositiveMax",
                                     "w2vPositiveMax", rDescr)
@@ -147,10 +147,10 @@ def test03():
 
     print("Simulation: ML KNN")
 
-    rDescr:RecommenderDescription = InputRecomDefinition.exportRDescKNN()
+    rDescr:RecommenderDescription = InputRecomMLDefinition.exportRDescKNN()
 
-    pDescr:APortfolioDescription = Portfolio1MethDescription(InputRecomDefinition.KNN.title(),
-                                    InputRecomDefinition.KNN, rDescr)
+    pDescr:APortfolioDescription = Portfolio1MethDescription(InputRecomMLDefinition.KNN.title(),
+                                                             InputRecomMLDefinition.KNN, rDescr)
 
     batchID:str = "ml1mDiv90Ulinear0109R1"
     dataset:DatasetML = DatasetML.readDatasets()
@@ -166,14 +166,14 @@ def test04():
 
     print("Simulation: ML CB")
 
-    #rDescr:RecommenderDescription = InputRecomDefinition.exportRDescCBmean()
-    rDescr:RecommenderDescription = InputRecomDefinition.exportRDescCBwindow3()
+    #rDescr:RecommenderDescription = InputRecomMLDefinition.exportRDescCBmean()
+    rDescr:RecommenderDescription = InputRecomMLDefinition.exportRDescCBwindow3()
 
 
-    #pDescr:APortfolioDescription = Portfolio1MethDescription(InputRecomDefinition.COS_CB_MEAN.title(),
-    #                                InputRecomDefinition.COS_CB_MEAN, rDescr)
-    pDescr:APortfolioDescription = Portfolio1MethDescription(InputRecomDefinition.COS_CB_WINDOW3.title(),
-                                    InputRecomDefinition.COS_CB_WINDOW3, rDescr)
+    #pDescr:APortfolioDescription = Portfolio1MethDescription(InputRecomMLDefinition.COS_CB_MEAN.title(),
+    #                                InputRecomMLDefinition.COS_CB_MEAN, rDescr)
+    pDescr:APortfolioDescription = Portfolio1MethDescription(InputRecomMLDefinition.COS_CB_WINDOW3.title(),
+                                                             InputRecomMLDefinition.COS_CB_WINDOW3, rDescr)
 
 
     batchID:str = "ml1mDiv90Ulinear0109R1"
@@ -190,10 +190,10 @@ def test05():
 
     print("Simulation: ML MF")
 
-    rDescr:RecommenderDescription = InputRecomDefinition.exportRDescBPRMF()
+    rDescr:RecommenderDescription = InputRecomMLDefinition.exportRDescBPRMF()
 
-    pDescr:APortfolioDescription = Portfolio1MethDescription(InputRecomDefinition.BPRMF.title(),
-                                    InputRecomDefinition.BPRMF, rDescr)
+    pDescr:APortfolioDescription = Portfolio1MethDescription(InputRecomMLDefinition.BPRMF.title(),
+                                                             InputRecomMLDefinition.BPRMF, rDescr)
 
 
     batchID:str = "ml1mDiv90Ulinear0109R1"
@@ -210,10 +210,10 @@ def test11():
 
     print("Simulation: RR TheMostPopular")
 
-    rDescr:RecommenderDescription = InputRecomDefinition.exportRDescTheMostPopular()
+    rDescr:RecommenderDescription = InputRecomMLDefinition.exportRDescTheMostPopular()
 
-    pDescr:APortfolioDescription = Portfolio1MethDescription(InputRecomDefinition.THE_MOST_POPULAR.title(),
-                                    InputRecomDefinition.THE_MOST_POPULAR, rDescr)
+    pDescr:APortfolioDescription = Portfolio1MethDescription(InputRecomMLDefinition.THE_MOST_POPULAR.title(),
+                                                             InputRecomMLDefinition.THE_MOST_POPULAR, rDescr)
 
     batchID:str = "retailrocketDiv90Ulinear0109R1"
     dataset:DatasetRetailRocket = DatasetRetailRocket.readDatasets()
@@ -231,10 +231,10 @@ def test21():
 
     print("Simulation: ST TheMostPopular")
 
-    rDescr:RecommenderDescription = InputRecomDefinition.exportRDescTheMostPopular()
+    rDescr:RecommenderDescription = InputRecomMLDefinition.exportRDescTheMostPopular()
 
-    pDescr:APortfolioDescription = Portfolio1MethDescription(InputRecomDefinition.THE_MOST_POPULAR.title(),
-                                    InputRecomDefinition.THE_MOST_POPULAR, rDescr)
+    pDescr:APortfolioDescription = Portfolio1MethDescription(InputRecomMLDefinition.THE_MOST_POPULAR.title(),
+                                                             InputRecomMLDefinition.THE_MOST_POPULAR, rDescr)
 
     batchID:str = "slantourDiv90Ulinear0109R1"
     dataset:DatasetST = DatasetST.readDatasets()
@@ -250,10 +250,10 @@ def test22():
 
     print("Simulation: ST W2V")
 
-    rDescr:RecommenderDescription = InputRecomDefinition.exportRDescW2vPosnegMean()
+    rDescr:RecommenderDescription = InputRecomMLDefinition.exportRDescW2vPosnegMean()
 
-    pDescr:APortfolioDescription = Portfolio1MethDescription(InputRecomDefinition.W2V_POSNEG_MEAN.title(),
-                                    InputRecomDefinition.W2V_POSNEG_MEAN, rDescr)
+    pDescr:APortfolioDescription = Portfolio1MethDescription(InputRecomMLDefinition.W2V_POSNEG_MEAN.title(),
+                                                             InputRecomMLDefinition.W2V_POSNEG_MEAN, rDescr)
 
     batchID:str = "slantourDiv90Ulinear0109R1"
     dataset:DatasetST = DatasetST.readDatasets()
@@ -269,10 +269,10 @@ def test23():
 
     print("Simulation: ST KNN")
 
-    rDescr:RecommenderDescription = InputRecomDefinition.exportRDescKNN()
+    rDescr:RecommenderDescription = InputRecomMLDefinition.exportRDescKNN()
 
-    pDescr:APortfolioDescription = Portfolio1MethDescription(InputRecomDefinition.KNN.title(),
-                                    InputRecomDefinition.KNN, rDescr)
+    pDescr:APortfolioDescription = Portfolio1MethDescription(InputRecomMLDefinition.KNN.title(),
+                                                             InputRecomMLDefinition.KNN, rDescr)
 
     batchID:str = "slantourDiv90Ulinear0109R1"
     dataset:DatasetST = DatasetST.readDatasets()
@@ -288,10 +288,10 @@ def test24():
 
     print("Simulation: ST CB")
 
-    rDescr:RecommenderDescription = InputRecomDefinition.exportRDescCBmean()
+    rDescr:RecommenderDescription = InputRecomMLDefinition.exportRDescCBmean()
 
-    pDescr:APortfolioDescription = Portfolio1MethDescription(InputRecomDefinition.COS_CB_MEAN.title(),
-                                    InputRecomDefinition.COS_CB_MEAN, rDescr)
+    pDescr:APortfolioDescription = Portfolio1MethDescription(InputRecomMLDefinition.COS_CB_MEAN.title(),
+                                                             InputRecomMLDefinition.COS_CB_MEAN, rDescr)
 
     batchID:str = "slantourDiv90Ulinear0109R1"
     dataset:DatasetST = DatasetST.readDatasets()
@@ -307,10 +307,10 @@ def test25():
 
     print("Simulation: ST MF")
 
-    rDescr:RecommenderDescription = InputRecomDefinition.exportRDescBPRMF()
+    rDescr:RecommenderDescription = InputRecomMLDefinition.exportRDescBPRMF()
 
-    pDescr:APortfolioDescription = Portfolio1MethDescription(InputRecomDefinition.BPRMF.title(),
-                                    InputRecomDefinition.BPRMF, rDescr)
+    pDescr:APortfolioDescription = Portfolio1MethDescription(InputRecomMLDefinition.BPRMF.title(),
+                                                             InputRecomMLDefinition.BPRMF, rDescr)
 
     batchID:str = "slantourDiv90Ulinear0109R1"
     dataset:DatasetST = DatasetST.readDatasets()

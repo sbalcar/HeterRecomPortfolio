@@ -3,6 +3,7 @@
 import os
 
 from typing import List
+from typing import Dict #class
 
 from pandas.core.frame import DataFrame #class
 
@@ -15,7 +16,7 @@ from aggregationDescription.aggregationDescription import AggregationDescription
 
 from input.inputAggrDefinition import InputAggrDefinition, ModelDefinition  # class
 
-from input.inputRecomDefinition import InputRecomDefinition #class
+from input.inputRecomMLDefinition import InputRecomMLDefinition #class
 
 from aggregation.operators.aDHondtSelector import ADHondtSelector #class
 from aggregation.operators.rouletteWheelSelector import RouletteWheelSelector #class
@@ -45,7 +46,7 @@ class BatchMLFuzzyDHondt(ABatchML):
         selectorRoulette3:ADHondtSelector = RouletteWheelSelector({RouletteWheelSelector.ARG_EXPONENT:3})
         selectorFixed:ADHondtSelector = TheMostVotedItemSelector({})
 
-        aDict:dict = {}
+        aDict:Dict[str,object] = {}
         aDict[BatchMLFuzzyDHondt.SLCTR_ROULETTE1] = selectorRoulette1
         aDict[BatchMLFuzzyDHondt.SLCTR_ROULETTE2] = selectorRoulette3
         aDict[BatchMLFuzzyDHondt.SLCTR_FIXED] = selectorFixed
@@ -85,7 +86,7 @@ class BatchMLFuzzyDHondt(ABatchML):
 
         datasetID:str = "ml1m" + "Div" + str(divisionDatasetPercentualSize)
 
-        rIDs, rDescs = InputRecomDefinition.exportPairOfRecomIdsAndRecomDescrsML()
+        rIDs, rDescs = InputRecomMLDefinition.exportPairOfRecomIdsAndRecomDescrs()
 
         aDescDHont:AggregationDescription = InputAggrDefinition.exportADescDHont(selector)
 

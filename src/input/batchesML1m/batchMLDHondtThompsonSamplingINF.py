@@ -15,10 +15,10 @@ from aggregationDescription.aggregationDescription import AggregationDescription
 
 from input.inputAggrDefinition import InputAggrDefinition, ModelDefinition  #class
 
-from input.inputRecomDefinition import InputRecomDefinition #class
+from input.inputRecomMLDefinition import InputRecomMLDefinition #class
 
 from input.batchesML1m.batchMLFuzzyDHondt import BatchMLFuzzyDHondt #class
-from input.batchesML1m.batchFuzzyDHondtINF import BatchFuzzyDHondtINF #class
+from input.batchesML1m.batchMLFuzzyDHondtINF import BatchFuzzyDHondtINF #class
 
 from aggregation.negImplFeedback.aPenalization import APenalization #class
 
@@ -69,7 +69,7 @@ class BatchMLDHondtThompsonSamplingINF(ABatchML):
 
         datasetID:str = "ml1m" + "Div" + str(divisionDatasetPercentualSize)
 
-        rIDs, rDescs = InputRecomDefinition.exportPairOfRecomIdsAndRecomDescrsML()
+        rIDs, rDescs = InputRecomMLDefinition.exportPairOfRecomIdsAndRecomDescrs()
 
         aDescNegDHontThompsonSamplingI:AggregationDescription = InputAggrDefinition.exportADescDHontThompsonSamplingINF(selector, nImplFeedback)
 

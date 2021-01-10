@@ -8,7 +8,7 @@ from pandas.core.frame import DataFrame #class
 
 from portfolioDescription.portfolio1MethDescription import Portfolio1MethDescription #class
 
-from input.inputRecomDefinition import InputRecomDefinition #class
+from input.inputRecomMLDefinition import InputRecomMLDefinition #class
 
 from portfolioDescription.aPortfolioDescription import APortfolioDescription #class
 
@@ -33,13 +33,13 @@ class BatchMLSingle(ABatchML):
     def getParameters():
 
         aDict:dict = {}
-        aDict[InputRecomDefinition.COS_CB_MEAN] = InputRecomDefinition.COS_CB_MEAN
-        aDict[InputRecomDefinition.COS_CB_WINDOW3] = InputRecomDefinition.COS_CB_WINDOW3
-        aDict[InputRecomDefinition.THE_MOST_POPULAR] = InputRecomDefinition.THE_MOST_POPULAR
-        aDict[InputRecomDefinition.W2V_POSNEG_MEAN] = InputRecomDefinition.W2V_POSNEG_MEAN
-        aDict[InputRecomDefinition.W2V_POSNEG_WINDOW3] = InputRecomDefinition.W2V_POSNEG_WINDOW3
-        aDict[InputRecomDefinition.KNN] = InputRecomDefinition.KNN
-        aDict[InputRecomDefinition.BPRMF] = InputRecomDefinition.BPRMF
+        aDict[InputRecomMLDefinition.COS_CB_MEAN] = InputRecomMLDefinition.COS_CB_MEAN
+        aDict[InputRecomMLDefinition.COS_CB_WINDOW3] = InputRecomMLDefinition.COS_CB_WINDOW3
+        aDict[InputRecomMLDefinition.THE_MOST_POPULAR] = InputRecomMLDefinition.THE_MOST_POPULAR
+        aDict[InputRecomMLDefinition.W2V_POSNEG_MEAN] = InputRecomMLDefinition.W2V_POSNEG_MEAN
+        aDict[InputRecomMLDefinition.W2V_POSNEG_WINDOW3] = InputRecomMLDefinition.W2V_POSNEG_WINDOW3
+        aDict[InputRecomMLDefinition.KNN] = InputRecomMLDefinition.KNN
+        aDict[InputRecomMLDefinition.BPRMF] = InputRecomMLDefinition.BPRMF
 
         return aDict
 
@@ -55,7 +55,7 @@ class BatchMLSingle(ABatchML):
 
         recommenderID:str = self.getParameters()[jobID]
 
-        rDescr:RecommenderDescription = InputRecomDefinition.exportInputRecomDefinition(recommenderID)
+        rDescr:RecommenderDescription = InputRecomMLDefinition.exportInputRecomDefinition(recommenderID)
 
         pDescr:APortfolioDescription = Portfolio1MethDescription(recommenderID.title(), recommenderID, rDescr)
 

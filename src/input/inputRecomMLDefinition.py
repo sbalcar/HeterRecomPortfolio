@@ -13,7 +13,7 @@ from recommender.recommenderBPRMF import RecommenderBPRMF #class
 from configuration.configuration import Configuration #class
 
 
-class InputRecomDefinition:
+class InputRecomMLDefinition:
 
     # ML methods
     COS_CB_MEAN:str = "cosCBmean"
@@ -100,29 +100,29 @@ class InputRecomDefinition:
                 RecommenderBPRMF.ARG_REGULARIZATION: 0.003})
 
     @staticmethod
-    def exportPairOfRecomIdsAndRecomDescrsML():
+    def exportPairOfRecomIdsAndRecomDescrs():
 
         recom:str = "Recom"
 
-        rIDsCB:List[str] = [recom + InputRecomDefinition.COS_CB_MEAN.title(), recom + InputRecomDefinition.COS_CB_WINDOW3.title()]
-        rDescsCB:List[RecommenderDescription] = [InputRecomDefinition.exportRDescCBmean(), InputRecomDefinition.exportRDescCBwindow3()]
+        rIDsCB:List[str] = [recom + InputRecomMLDefinition.COS_CB_MEAN.title(), recom + InputRecomMLDefinition.COS_CB_WINDOW3.title()]
+        rDescsCB:List[RecommenderDescription] = [InputRecomMLDefinition.exportRDescCBmean(), InputRecomMLDefinition.exportRDescCBwindow3()]
 
         #rIDsW2V:List[str] = ["RecomW2vPositiveMax", "RecomW2vPositiveWindow10", "RecomW2vPosnegMean", "RecomW2vPosnegWindow10"]
         #rDescsW2V:List[RecommenderDescription] = [rDescW2vPositiveMax, rDescW2vPositiveWindow10, rDescW2vPosnegMean, rDescW2vPosnegWindow10]
         #rIDsW2V:List[str] = ["RecomW2vPositiveMax", "RecomW2vPosnegMax", "RecomW2vPosnegWindow10"]
         #rDescsW2V:List[RecommenderDescription] = [rDescW2vPosnegMax, rDescW2vPosnegMax, rDescW2vPosnegWindow10]
 
-        rIDsW2V:List[str] = [recom + InputRecomDefinition.W2V_POSNEG_MEAN.title(), recom + InputRecomDefinition.W2V_POSNEG_WINDOW3.title()]
-        rDescsW2V:List[RecommenderDescription] = [InputRecomDefinition.exportRDescW2vPosnegMean(), InputRecomDefinition.exportRDescW2vPosnegWindow3()]
+        rIDsW2V:List[str] = [recom + InputRecomMLDefinition.W2V_POSNEG_MEAN.title(), recom + InputRecomMLDefinition.W2V_POSNEG_WINDOW3.title()]
+        rDescsW2V:List[RecommenderDescription] = [InputRecomMLDefinition.exportRDescW2vPosnegMean(), InputRecomMLDefinition.exportRDescW2vPosnegWindow3()]
 
-        rIDsKNN:List[str] = [recom + InputRecomDefinition.KNN.title()]
-        rDescsKNN:List[RecommenderDescription] = [InputRecomDefinition.exportRDescKNN()]
+        rIDsKNN:List[str] = [recom + InputRecomMLDefinition.KNN.title()]
+        rDescsKNN:List[RecommenderDescription] = [InputRecomMLDefinition.exportRDescKNN()]
 
-        rIDsBPRMF:List[str] = [recom + InputRecomDefinition.BPRMF.title()]
-        rDescsBPRMF:List[RecommenderDescription] = [InputRecomDefinition.exportRDescBPRMF()]
+        rIDsBPRMF:List[str] = [recom + InputRecomMLDefinition.BPRMF.title()]
+        rDescsBPRMF:List[RecommenderDescription] = [InputRecomMLDefinition.exportRDescBPRMF()]
 
-        rIDsPop:List[str] = [recom + InputRecomDefinition.THE_MOST_POPULAR.title()]
-        rDescsPop:List[RecommenderDescription] = [InputRecomDefinition.exportRDescTheMostPopular()]
+        rIDsPop:List[str] = [recom + InputRecomMLDefinition.THE_MOST_POPULAR.title()]
+        rDescsPop:List[RecommenderDescription] = [InputRecomMLDefinition.exportRDescTheMostPopular()]
 
         rIDs:List[str] = rIDsCB + rIDsW2V + rIDsKNN + rIDsBPRMF + rIDsPop
         rDescs:List[RecommenderDescription] = rDescsCB + rDescsW2V + rDescsKNN + rDescsBPRMF + rDescsPop
@@ -137,8 +137,8 @@ class InputRecomDefinition:
 
         recom:str = "Recom"
 
-        rIDs:List[str] = [recom + InputRecomDefinition.THE_MOST_POPULAR.title()]
-        rDescs:List[RecommenderDescription] = [InputRecomDefinition.exportRDescTheMostPopular()]
+        rIDs:List[str] = [recom + InputRecomMLDefinition.THE_MOST_POPULAR.title()]
+        rDescs:List[RecommenderDescription] = [InputRecomMLDefinition.exportRDescTheMostPopular()]
 
         return (rIDs, rDescs)
 
@@ -146,17 +146,17 @@ class InputRecomDefinition:
 
     @staticmethod
     def exportInputRecomDefinition(recommenderID:str):
-        if recommenderID == InputRecomDefinition.COS_CB_MEAN:
-            return InputRecomDefinition.exportRDescCBmean()
-        elif recommenderID == InputRecomDefinition.COS_CB_WINDOW3:
-            return InputRecomDefinition.exportRDescCBwindow3()
-        elif recommenderID == InputRecomDefinition.THE_MOST_POPULAR:
-            return InputRecomDefinition.exportRDescTheMostPopular()
-        elif recommenderID == InputRecomDefinition.W2V_POSNEG_MEAN:
-            return InputRecomDefinition.exportRDescW2vPosnegMean()
-        elif recommenderID == InputRecomDefinition.W2V_POSNEG_WINDOW3:
-            return InputRecomDefinition.exportRDescW2vPosnegWindow3()
-        elif recommenderID == InputRecomDefinition.KNN:
-            return InputRecomDefinition.exportRDescKNN()
-        elif recommenderID == InputRecomDefinition.BPRMF:
-            return InputRecomDefinition.exportRDescBPRMF()
+        if recommenderID == InputRecomMLDefinition.COS_CB_MEAN:
+            return InputRecomMLDefinition.exportRDescCBmean()
+        elif recommenderID == InputRecomMLDefinition.COS_CB_WINDOW3:
+            return InputRecomMLDefinition.exportRDescCBwindow3()
+        elif recommenderID == InputRecomMLDefinition.THE_MOST_POPULAR:
+            return InputRecomMLDefinition.exportRDescTheMostPopular()
+        elif recommenderID == InputRecomMLDefinition.W2V_POSNEG_MEAN:
+            return InputRecomMLDefinition.exportRDescW2vPosnegMean()
+        elif recommenderID == InputRecomMLDefinition.W2V_POSNEG_WINDOW3:
+            return InputRecomMLDefinition.exportRDescW2vPosnegWindow3()
+        elif recommenderID == InputRecomMLDefinition.KNN:
+            return InputRecomMLDefinition.exportRDescKNN()
+        elif recommenderID == InputRecomMLDefinition.BPRMF:
+            return InputRecomMLDefinition.exportRDescBPRMF()

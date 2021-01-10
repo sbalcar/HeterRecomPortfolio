@@ -10,7 +10,7 @@ from pandas.core.frame import DataFrame #class
 from portfolioDescription.portfolio1MethDescription import Portfolio1MethDescription #class
 from portfolioDescription.portfolioNeg1MethDescription import PortfolioNeg1MethDescription #class
 
-from input.inputRecomDefinition import InputRecomDefinition #class
+from input.inputRecomMLDefinition import InputRecomMLDefinition #class
 
 from portfolioDescription.aPortfolioDescription import APortfolioDescription #class
 
@@ -20,7 +20,7 @@ from input.aBatch import BatchParameters #class
 
 from input.aBatchML import ABatchML #class
 from input.batchesML1m.batchMLSingle import BatchMLSingle #class
-from input.batchesML1m.batchFuzzyDHondtINF import BatchFuzzyDHondtINF #class
+from input.batchesML1m.batchMLFuzzyDHondtINF import BatchFuzzyDHondtINF #class
 
 from aggregation.negImplFeedback.aPenalization import APenalization #class
 
@@ -66,7 +66,7 @@ class BatchMLSingleINF(ABatchML):
         nImplFeedback:APenalization
         recommenderID, nImplFeedback = self.getParameters()[jobID]
 
-        rDescr:RecommenderDescription = InputRecomDefinition.exportInputRecomDefinition(recommenderID)
+        rDescr:RecommenderDescription = InputRecomMLDefinition.exportInputRecomDefinition(recommenderID)
 
         pDescr:APortfolioDescription = PortfolioNeg1MethDescription(jobID.title(), recommenderID, rDescr, nImplFeedback)
 

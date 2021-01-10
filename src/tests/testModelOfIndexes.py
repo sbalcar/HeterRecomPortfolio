@@ -28,7 +28,7 @@ from pandas.core.frame import DataFrame #class
 
 from portfolioDescription.portfolio1MethDescription import Portfolio1MethDescription #class
 
-from input.inputRecomDefinition import InputRecomDefinition #class
+from input.inputRecomMLDefinition import InputRecomMLDefinition #class
 
 from portfolioDescription.aPortfolioDescription import APortfolioDescription #class
 

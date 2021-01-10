@@ -15,7 +15,7 @@ from aggregationDescription.aggregationDescription import AggregationDescription
 
 from input.inputAggrDefinition import InputAggrDefinition, ModelDefinition  # class
 
-from input.inputRecomDefinition import InputRecomDefinition #class
+from input.inputRecomMLDefinition import InputRecomMLDefinition #class
 
 from aggregation.operators.aDHondtSelector import ADHondtSelector #class
 from aggregation.operators.rouletteWheelSelector import RouletteWheelSelector #class
@@ -84,7 +84,7 @@ class BatchMLFuzzyDHondtDirectOptimize(ABatchML):
 
         datasetID:str = "ml1m" + "Div" + str(divisionDatasetPercentualSize)
 
-        rIDs, rDescs = InputRecomDefinition.exportPairOfRecomIdsAndRecomDescrsML()
+        rIDs, rDescs = InputRecomMLDefinition.exportPairOfRecomIdsAndRecomDescrs()
 
         aDescDHont:AggregationDescription = InputAggrDefinition.exportADescDHontDirectOptimize(selector)
 

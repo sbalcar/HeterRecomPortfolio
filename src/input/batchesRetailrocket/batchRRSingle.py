@@ -8,7 +8,7 @@ from pandas.core.frame import DataFrame #class
 
 from portfolioDescription.portfolio1MethDescription import Portfolio1MethDescription #class
 
-from input.inputRecomDefinition import InputRecomDefinition #class
+from input.inputRecomMLDefinition import InputRecomMLDefinition #class
 
 from portfolioDescription.aPortfolioDescription import APortfolioDescription #class
 
@@ -35,8 +35,8 @@ class BatchRRSingle(ABatchRR):
     def getParameters():
 
         aDict:dict = {}
-        aDict[InputRecomDefinition.THE_MOST_POPULAR] = InputRecomDefinition.THE_MOST_POPULAR
-        aDict[InputRecomDefinition.BPRMF] = InputRecomDefinition.BPRMF
+        aDict[InputRecomMLDefinition.THE_MOST_POPULAR] = InputRecomMLDefinition.THE_MOST_POPULAR
+        aDict[InputRecomMLDefinition.BPRMF] = InputRecomMLDefinition.BPRMF
 
         return aDict
 
@@ -52,7 +52,7 @@ class BatchRRSingle(ABatchRR):
 
         recommenderID:str = self.getParameters()[jobID]
 
-        rDescr:RecommenderDescription = InputRecomDefinition.exportInputRecomDefinition(recommenderID)
+        rDescr:RecommenderDescription = InputRecomMLDefinition.exportInputRecomDefinition(recommenderID)
 
         pDescr:APortfolioDescription = Portfolio1MethDescription(recommenderID.title(), recommenderID, rDescr)
 

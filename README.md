@@ -128,7 +128,7 @@ $ ./run.sh
 
 #### How to add new Recommender:
 - create new child class of [ARecommender](src/recommender/aRecommender.py)
-- we recommend adding recommender definition with default parameters to the class [InputRecomDefinition](src/input/inputRecomDefinition.py)
+- we recommend adding recommender definition with default parameters to the class [InputRecomMLDefinition](src/input/inputRecomDefinition.py)
 
 #### How to add new Agregator:
 - create new child class of [AAgreggation](src/portfolio/aPortfolio.py)
