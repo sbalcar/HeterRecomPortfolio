@@ -78,7 +78,7 @@ def test02():
     #aggr:AggrDHont = AggrDHont(HistoryDF(), {AggrDHont.ARG_SELECTORFNC:(AggrDHont.selectorOfRouletteWheelRatedItem,[])})
     #aggr:AggrDHont = AggrDHont(HistoryDF(), {AggrDHont.ARG_SELECTORFNC:(AggrDHont.selectorOfRouletteWheelExpRatedItem,[1])})
 
-    pToolOLin0802HLin1002: APenalization = InputAggrDefinition.exportAPenaltyToolOLin0802HLin1002(20)
+    pToolOLin0802HLin1002: APenalization = InputAggrDefinition.exportPenaltyToolOLin0802HLin1002(20)
 
     aggr:AggrFuzzyDHondt = AggrFuzzyDHondtINF(HistoryDF(""),
                                               {AggrFuzzyDHondtINF.ARG_SELECTOR:RouletteWheelSelector({RouletteWheelSelector.ARG_EXPONENT:1}),

@@ -21,6 +21,7 @@ from pandas.core.frame import DataFrame #class
 from aggregation.negImplFeedback.aPenalization import APenalization #class
 from aggregation.negImplFeedback.penalUsingFiltering import PenalUsingFiltering #class
 from aggregation.negImplFeedback.penalUsingReduceRelevance import PenalUsingReduceRelevance #class
+from aggregation.negImplFeedback.penalUsingProbability import PenalUsingProbability #class
 from aggregation.negImplFeedback.penalUsingReduceRelevance import penaltyStatic #function
 from aggregation.negImplFeedback.penalUsingReduceRelevance import penaltyLinear #function
 
@@ -88,15 +89,23 @@ class InputAggrDefinition:
 
 
     @staticmethod
-    def exportAPenaltyToolOStat08HLin1002(numberOfAggrItems:int):
+    def exportPenaltyToolOStat08HLin1002(numberOfAggrItems:int):
         return PenalUsingReduceRelevance(penaltyStatic, [1.0], penaltyLinear, [1.0, 0.2, 100], 100)
 
     @staticmethod
-    def exportAPenaltyToolOLin0802HLin1002(numberOfAggrItems:int):
+    def exportPenaltyToolOLin0802HLin1002(numberOfAggrItems:int):
         return PenalUsingReduceRelevance(penaltyLinear, [0.8, 0.2, numberOfAggrItems], penaltyLinear, [1.0, 0.2, 100], 100)
 
     @staticmethod
-    def exportAPenaltyToolFiltering():
+    def exportProbPenaltyToolOStat08HLin1002(numberOfAggrItems:int):
+        return PenalUsingProbability(penaltyStatic, [1.0], penaltyLinear, [1.0, 0.2, 100], 100)
+
+    @staticmethod
+    def exportProbPenaltyToolOLin0802HLin1002(numberOfAggrItems:int):
+        return PenalUsingProbability(penaltyLinear, [0.8, 0.2, numberOfAggrItems], penaltyLinear, [1.0, 0.2, 100], 100)
+
+    @staticmethod
+    def exportPenaltyToolFiltering():
         return PenalUsingFiltering(1.5, 100)
 
 

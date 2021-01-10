@@ -23,6 +23,7 @@ from aggregation.negImplFeedback.aPenalization import APenalization #class
 
 from aggregation.operators.aDHondtSelector import ADHondtSelector #class
 from aggregation.negImplFeedback.penalUsingFiltering import PenalUsingFiltering #class
+from aggregation.negImplFeedback.penalUsingProbability import PenalUsingProbability #class
 
 from input.aBatch import BatchParameters #class
 from input.aBatchML import ABatchML #class
@@ -39,16 +40,19 @@ class BatchMLFuzzyDHondtINF(ABatchML):
     @staticmethod
     def getNegativeImplFeedbackParameters():
 
-        pToolOLin0802HLin1002:APenalization = InputAggrDefinition.exportAPenaltyToolOLin0802HLin1002(InputSimulatorDefinition.numberOfAggrItems)
+        pToolOLin0802HLin1002:APenalization = InputAggrDefinition.exportPenaltyToolOLin0802HLin1002(InputSimulatorDefinition.numberOfAggrItems)
 
-        pToolOStat08HLin1002:APenalization = InputAggrDefinition.exportAPenaltyToolOStat08HLin1002(InputSimulatorDefinition.numberOfAggrItems)
+        pToolOStat08HLin1002:APenalization = InputAggrDefinition.exportPenaltyToolOStat08HLin1002(InputSimulatorDefinition.numberOfAggrItems)
 
-        pToolFilterBord3Lengt100:PenalUsingFiltering = InputAggrDefinition.exportAPenaltyToolFiltering()
+        pToolFilterBord3Lengt100:APenalization = InputAggrDefinition.exportPenaltyToolFiltering()
+
+        #a:APenalization = PenalUsingProbability()
 
         aDict:dict = {}
         aDict["OLin0802HLin1002"] = pToolOLin0802HLin1002
         aDict["OStat08HLin1002"] = pToolOStat08HLin1002
         aDict["FilterBord3Lengt100"] = pToolFilterBord3Lengt100
+        #aDict["PenalUsingProbability"] = a
         return aDict
 
     @staticmethod
