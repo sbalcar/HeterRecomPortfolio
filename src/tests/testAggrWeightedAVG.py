@@ -18,7 +18,8 @@ from aggregation.operators.aDHondtSelector import ADHondtSelector #class
 from aggregation.operators.rouletteWheelSelector import RouletteWheelSelector #class
 from aggregation.operators.theMostVotedItemSelector import TheMostVotedItemSelector #class
 
-from input.inputAggrDefinition import InputAggrDefinition, ModelDefinition  #class
+from input.inputAggrDefinition import InputAggrDefinition  #class
+from input.modelDefinition import ModelDefinition
 
 from aggregation.negImplFeedback.aPenalization import APenalization #class
 

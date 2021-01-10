@@ -1,7 +1,5 @@
 #!/usr/bin/python3
 
-from typing import List
-
 from aggregationDescription.aggregationDescription import AggregationDescription #class
 from aggregation.aggrWeightedAVG import AggrWeightedAVG #class
 from aggregation.aggrBanditTS import AggrBanditTS #class
@@ -11,12 +9,6 @@ from aggregation.aggrFuzzyDHondtINF import AggrFuzzyDHondtINF #class
 from aggregation.aggrDHondtThompsonSamplingINF import AggrDHondtThompsonSamplingINF #class
 from aggregation.aggrFuzzyDHondtDirectOptimize import AggrFuzzyDHondtDirectOptimize #class
 from aggregation.aggrFuzzyDHondtDirectOptimizeINF import AggrFuzzyDHondtDirectOptimizeINF #class
-
-from evaluationTool.evalToolDHondt import EvalToolDHondt #class
-
-import pandas as pd
-
-from pandas.core.frame import DataFrame #class
 
 from aggregation.negImplFeedback.aPenalization import APenalization #class
 from aggregation.negImplFeedback.penalUsingFiltering import PenalUsingFiltering #class
@@ -84,9 +76,7 @@ class InputAggrDefinition:
 
 
 
-
-
-
+class PenalizationToolDefinition:
 
     @staticmethod
     def exportPenaltyToolOStat08HLin1002(numberOfAggrItems:int):
@@ -109,24 +99,3 @@ class InputAggrDefinition:
         return PenalUsingFiltering(1.5, 100)
 
 
-class ModelDefinition:
-
-    def createDHontModel(recommendersIDs: List[str]):
-        modelDHontData:List[List] = [[rIdI, 1] for rIdI in recommendersIDs]
-        modelDHontDF:DataFrame = pd.DataFrame(modelDHontData, columns=["methodID", "votes"])
-        modelDHontDF.set_index("methodID", inplace=True)
-        EvalToolDHondt.linearNormalizingPortfolioModelDHont(modelDHontDF)
-        return modelDHontDF
-    
-    def createDHondtBanditsVotesModel(recommendersIDs: List[str]):
-        modelDHondtBanditsVotesData:List = [[rIdI, 1.0, 1.0, 1.0, 1.0] for rIdI in recommendersIDs]
-        modelDHondtBanditsVotesDF:DataFrame = pd.DataFrame(modelDHondtBanditsVotesData, columns=["methodID", "r", "n", "alpha0", "beta0"])
-        modelDHondtBanditsVotesDF.set_index("methodID", inplace=True)
-        #EvalToolDHont.linearNormalizingPortfolioModelDHont(modelDHontDF)
-        return modelDHondtBanditsVotesDF    
-
-    def createBanditModel(recommendersIDs:List[str]):
-        modelBanditTSData:List = [[rIdI, 1, 1, 1, 1] for rIdI in recommendersIDs]
-        modelBanditTSDF:DataFrame = pd.DataFrame(modelBanditTSData, columns=["methodID", "r", "n", "alpha0", "beta0"])
-        modelBanditTSDF.set_index("methodID", inplace=True)
-        return modelBanditTSDF

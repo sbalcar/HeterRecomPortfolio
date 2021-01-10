@@ -14,7 +14,8 @@ from evaluationTool.evalToolDHondt import EvalToolDHondt #class
 
 from aggregationDescription.aggregationDescription import AggregationDescription #class
 
-from input.inputAggrDefinition import InputAggrDefinition, ModelDefinition  # class
+from input.inputAggrDefinition import InputAggrDefinition  # class
+from input.modelDefinition import ModelDefinition
 
 from input.inputRecomSTDefinition import InputRecomSTDefinition #class
 

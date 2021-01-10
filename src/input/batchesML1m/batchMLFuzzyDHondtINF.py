@@ -13,7 +13,8 @@ from evaluationTool.evalToolDHondt import EvalToolDHondt #class
 
 from aggregationDescription.aggregationDescription import AggregationDescription #class
 
-from input.inputAggrDefinition import InputAggrDefinition, ModelDefinition  #class
+from input.inputAggrDefinition import InputAggrDefinition  #class
+from input.modelDefinition import ModelDefinition
 
 from input.inputRecomMLDefinition import InputRecomMLDefinition #class
 
@@ -30,6 +31,8 @@ from input.aBatchML import ABatchML #class
 
 from input.inputSimulatorDefinition import InputSimulatorDefinition #class
 
+from input.inputAggrDefinition import PenalizationToolDefinition #class
+
 from simulator.simulator import Simulator #class
 
 from history.historyHierDF import HistoryHierDF #class
@@ -40,19 +43,25 @@ class BatchMLFuzzyDHondtINF(ABatchML):
     @staticmethod
     def getNegativeImplFeedbackParameters():
 
-        pToolOLin0802HLin1002:APenalization = InputAggrDefinition.exportPenaltyToolOLin0802HLin1002(InputSimulatorDefinition.numberOfAggrItems)
+        pToolOLin0802HLin1002:APenalization = PenalizationToolDefinition.exportPenaltyToolOLin0802HLin1002(InputSimulatorDefinition.numberOfAggrItems)
 
-        pToolOStat08HLin1002:APenalization = InputAggrDefinition.exportPenaltyToolOStat08HLin1002(InputSimulatorDefinition.numberOfAggrItems)
+        pToolOStat08HLin1002:APenalization = PenalizationToolDefinition.exportPenaltyToolOStat08HLin1002(InputSimulatorDefinition.numberOfAggrItems)
 
-        pToolFilterBord3Lengt100:APenalization = InputAggrDefinition.exportPenaltyToolFiltering()
+        pProbToolOLin0802HLin1002:APenalization = PenalizationToolDefinition.exportProbPenaltyToolOStat08HLin1002(InputSimulatorDefinition.numberOfAggrItems)
 
-        #a:APenalization = PenalUsingProbability()
+        pProbToolOStat08HLin1002:APenalization = PenalizationToolDefinition.exportProbPenaltyToolOLin0802HLin1002(InputSimulatorDefinition.numberOfAggrItems)
+
+        pToolFilterBord3Lengt100:APenalization = PenalizationToolDefinition.exportPenaltyToolFiltering()
+
 
         aDict:dict = {}
-        aDict["OLin0802HLin1002"] = pToolOLin0802HLin1002
-        aDict["OStat08HLin1002"] = pToolOStat08HLin1002
-        aDict["FilterBord3Lengt100"] = pToolFilterBord3Lengt100
-        #aDict["PenalUsingProbability"] = a
+        aDict["TOLin0802HLin1002"] = pToolOLin0802HLin1002
+        aDict["TOStat08HLin1002"] = pToolOStat08HLin1002
+        aDict["ProbTOLin0802HLin1002"] = pProbToolOLin0802HLin1002
+        aDict["ProbTOStat08HLin1002"] = pProbToolOStat08HLin1002
+
+        aDict["TFilterBord3Lengt100"] = pToolFilterBord3Lengt100
+
         return aDict
 
     @staticmethod

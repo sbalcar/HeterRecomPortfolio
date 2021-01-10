@@ -10,7 +10,8 @@ from portfolioDescription.portfolio1AggrDescription import Portfolio1AggrDescrip
 from evaluationTool.aEvalTool import AEvalTool #class
 from evaluationTool.evalToolBanditTS import EvalToolBanditTS #class
 
-from input.inputAggrDefinition import InputAggrDefinition, ModelDefinition  # class
+from input.inputAggrDefinition import InputAggrDefinition  # class
+from input.modelDefinition import ModelDefinition
 
 from input.inputRecomMLDefinition import InputRecomMLDefinition #class
 
