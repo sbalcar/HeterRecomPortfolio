@@ -119,7 +119,7 @@ def test02(repetitions = 1):
     ratingsDFTrain = ratingsDF[:50000]
     ratingsDFUpdate: DataFrame = ratingsDF.iloc[50001:50100]
 
-    trainDataset: ADataset = DatasetML(ratingsDFTrain, usersDF, itemsDF)
+    trainDataset: ADataset = DatasetML("ml",ratingsDFTrain, usersDF, itemsDF)
 
     historyDF: AHistory = HistoryDF("test01")
 
@@ -202,7 +202,7 @@ def test02(repetitions = 1):
             print("votes mostPopular ", r2c)
             evalToolDHondt.displayed(l1, methodsParamsDF, evaluationDict)
             evalToolDHondt.click(l1, randomItem, methodsParamsDF, evaluationDict)
-            rec1.update(ratingsDFuserID.loc[[index]])
+            rec1.update(ratingsDFuserID.loc[[index]], {})
             # rec2.update(ratingsDFuserID.loc[index]) Not implemented
             #print("Counter = ", counter, "; All = ", len(ratingsDFuserID.iloc[800:]), "; Index: ", index)
             print(methodsParamsDF)
