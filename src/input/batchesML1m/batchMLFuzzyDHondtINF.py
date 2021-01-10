@@ -34,7 +34,7 @@ from simulator.simulator import Simulator #class
 from history.historyHierDF import HistoryHierDF #class
 
 
-class BatchFuzzyDHondtINF(ABatchML):
+class BatchMLFuzzyDHondtINF(ABatchML):
 
     @staticmethod
     def getNegativeImplFeedbackParameters():
@@ -54,7 +54,7 @@ class BatchFuzzyDHondtINF(ABatchML):
     @staticmethod
     def getParameters():
         selectorIDs:List[str] = BatchMLFuzzyDHondt().getSelectorParameters().keys()
-        negativeImplFeedback:List[str] = BatchFuzzyDHondtINF.getNegativeImplFeedbackParameters().keys()
+        negativeImplFeedback:List[str] = BatchMLFuzzyDHondtINF.getNegativeImplFeedbackParameters().keys()
         #lrClicks:List[float] = [0.2, 0.1, 0.02, 0.005]
         lrClicks:List[float] = [0.1]
         #lrViewDivisors:List[float] = [200, 500, 1000]
@@ -69,7 +69,7 @@ class BatchFuzzyDHondtINF(ABatchML):
                         lrViewIJK:float = lrClickJ / lrViewDivisorK
                         eTool:AEvalTool = EvalToolDHondt({EvalToolDHondt.ARG_LEARNING_RATE_CLICKS: lrClickJ,
                                                           EvalToolDHondt.ARG_LEARNING_RATE_VIEWS: lrViewIJK})
-                        nImplFeedback:APenalization = BatchFuzzyDHondtINF.getNegativeImplFeedbackParameters()[nImplFeedbackI]
+                        nImplFeedback:APenalization = BatchMLFuzzyDHondtINF.getNegativeImplFeedbackParameters()[nImplFeedbackI]
                         selectorH:ADHondtSelector = BatchMLFuzzyDHondt().getSelectorParameters()[selectorIDH]
 
                         aDict[keyIJ] = (selectorH, nImplFeedback, eTool)
@@ -85,8 +85,6 @@ class BatchFuzzyDHondtINF(ABatchML):
 
         #eTool:AEvalTool
         selector, nImplFeedback, eTool = self.getParameters()[jobID]
-
-        datasetID:str = "ml1m" + "Div" + str(divisionDatasetPercentualSize)
 
         rIDs, rDescs = InputRecomMLDefinition.exportPairOfRecomIdsAndRecomDescrs()
 
@@ -108,4 +106,4 @@ if __name__ == "__main__":
    os.chdir("..")
    os.chdir("..")
    print(os.getcwd())
-   BatchFuzzyDHondtINF.generateBatches()
+   BatchMLFuzzyDHondtINF.generateBatches()

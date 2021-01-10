@@ -18,7 +18,7 @@ from input.inputAggrDefinition import InputAggrDefinition, ModelDefinition  #cla
 from input.inputRecomMLDefinition import InputRecomMLDefinition #class
 
 from input.batchesML1m.batchMLFuzzyDHondt import BatchMLFuzzyDHondt #class
-from input.batchesML1m.batchMLFuzzyDHondtINF import BatchFuzzyDHondtINF #class
+from input.batchesML1m.batchMLFuzzyDHondtINF import BatchMLFuzzyDHondtINF #class
 
 from aggregation.negImplFeedback.aPenalization import APenalization #class
 
@@ -42,14 +42,14 @@ class BatchMLDHondtThompsonSamplingINF(ABatchML):
     @staticmethod
     def getParameters():
         selectorIDs:List[str] = BatchMLFuzzyDHondt().getSelectorParameters().keys()
-        negativeImplFeedback:List[str] = BatchFuzzyDHondtINF().getNegativeImplFeedbackParameters().keys()
+        negativeImplFeedback:List[str] = BatchMLFuzzyDHondtINF().getNegativeImplFeedbackParameters().keys()
 
         aDict:dict = {}
         for selectorIDH in selectorIDs:
             for nImplFeedbackI in negativeImplFeedback:
                 keyIJ:str = str(selectorIDH) + nImplFeedbackI
 
-                nImplFeedback:APenalization = BatchFuzzyDHondtINF().getNegativeImplFeedbackParameters()[nImplFeedbackI]
+                nImplFeedback:APenalization = BatchMLFuzzyDHondtINF().getNegativeImplFeedbackParameters()[nImplFeedbackI]
                 selectorH:ADHondtSelector = BatchMLFuzzyDHondt().getSelectorParameters()[selectorIDH]
 
                 aDict[keyIJ] = (selectorH, nImplFeedback)
@@ -66,8 +66,6 @@ class BatchMLDHondtThompsonSamplingINF(ABatchML):
         selector, nImplFeedback = self.getParameters()[jobID]
 
         eTool:AEvalTool = EvalToolDHondtBanditVotes({})
-
-        datasetID:str = "ml1m" + "Div" + str(divisionDatasetPercentualSize)
 
         rIDs, rDescs = InputRecomMLDefinition.exportPairOfRecomIdsAndRecomDescrs()
 

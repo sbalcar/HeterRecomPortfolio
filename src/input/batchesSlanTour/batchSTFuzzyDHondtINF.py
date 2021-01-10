@@ -3,47 +3,43 @@
 import os
 
 from typing import List
+from typing import Dict #class
 
 from pandas.core.frame import DataFrame #class
 
 from portfolioDescription.portfolio1AggrDescription import Portfolio1AggrDescription #class
 
 from evaluationTool.aEvalTool import AEvalTool #class
-from evaluationTool.evalToolDHondtBanditVotes import EvalToolDHondtBanditVotes #class
+from evaluationTool.evalToolDHondt import EvalToolDHondt #class
 
 from aggregationDescription.aggregationDescription import AggregationDescription #class
 
 from input.inputAggrDefinition import InputAggrDefinition, ModelDefinition  # class
 
-from input.inputRecomMLDefinition import InputRecomMLDefinition #class
-
-from input.batchesML1m.batchMLFuzzyDHondt import BatchMLFuzzyDHondt #class
+from input.inputRecomSTDefinition import InputRecomSTDefinition #class
 
 from aggregation.operators.aDHondtSelector import ADHondtSelector #class
+from aggregation.operators.rouletteWheelSelector import RouletteWheelSelector #class
+from aggregation.operators.theMostVotedItemSelector import TheMostVotedItemSelector #class
 
 from input.aBatch import BatchParameters #class
-from input.aBatchML import ABatchML #class
+from input.aBatchST import ABatchST #class
+
 from input.inputSimulatorDefinition import InputSimulatorDefinition #class
 
 from simulator.simulator import Simulator #class
 
 from history.historyHierDF import HistoryHierDF #class
 
+from input.batchesML1m.batchMLFuzzyDHondt import BatchMLFuzzyDHondt #class
+from input.batchesML1m.batchMLFuzzyDHondtINF import BatchMLFuzzyDHondtINF #class
 
 
-class BatchMLDHondtThompsonSampling(ABatchML):
+class BatchSTFuzzyDHondtINF(ABatchST):
 
     @staticmethod
     def getParameters():
-        selectorIDs:List[str] = BatchMLFuzzyDHondt().getSelectorParameters().keys()
-
-        aDict:dict = {}
-        for selectorIDI in selectorIDs:
-            keyIJ:str = str(selectorIDI)
-            eTool:AEvalTool = EvalToolDHondtBanditVotes({})
-            selectorIJK:ADHondtSelector = BatchMLFuzzyDHondt().getSelectorParameters()[selectorIDI]
-            aDict[keyIJ] = (selectorIJK, eTool)
-        return aDict
+        return BatchMLFuzzyDHondtINF.getParameters()
 
 
     def run(self, batchID:str, jobID:str):
@@ -53,20 +49,21 @@ class BatchMLDHondtThompsonSampling(ABatchML):
         repetition:int
         divisionDatasetPercentualSize, uBehaviour, repetition = BatchParameters.getBatchParameters(self.datasetID)[batchID]
 
+        selector, nImplFeedback = self.getParameters()[jobID]
 
-        #eTool:AEvalTool
-        selector, eTool = self.getParameters()[jobID]
+        eTool:AEvalTool = EvalToolDHondt({EvalToolDHondt.ARG_LEARNING_RATE_CLICKS: 0.02,
+                                           EvalToolDHondt.ARG_LEARNING_RATE_VIEWS: 1000})
 
-        rIDs, rDescs = InputRecomMLDefinition.exportPairOfRecomIdsAndRecomDescrs()
+        rIDs, rDescs = InputRecomSTDefinition.exportPairOfRecomIdsAndRecomDescrs()
 
-        aDescDHontThompsonSamplingI:AggregationDescription = InputAggrDefinition.exportADescDHontThompsonSampling(selector)
+        aDescDHontINF:AggregationDescription = InputAggrDefinition.exportADescDHontINF(selector, nImplFeedback)
 
         pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
-            "DHondtThompsonSampling" + jobID, rIDs, rDescs, aDescDHontThompsonSamplingI)
+            "FDHontINF" + jobID, rIDs, rDescs, aDescDHontINF)
 
-        model:DataFrame = ModelDefinition.createDHondtBanditsVotesModel(pDescr.getRecommendersIDs())
+        model:DataFrame = ModelDefinition.createDHontModel(pDescr.getRecommendersIDs())
 
-        simulator:Simulator = InputSimulatorDefinition.exportSimulatorML1M(
+        simulator:Simulator = InputSimulatorDefinition.exportSimulatorSlantour(
                 batchID, divisionDatasetPercentualSize, uBehaviour, repetition)
         simulator.simulate([pDescr], [model], [eTool], HistoryHierDF)
 
@@ -77,4 +74,4 @@ if __name__ == "__main__":
     os.chdir("..")
     os.chdir("..")
     print(os.getcwd())
-    BatchMLDHondtThompsonSampling.generateBatches()
+    BatchSTFuzzyDHondtINF.generateBatches()

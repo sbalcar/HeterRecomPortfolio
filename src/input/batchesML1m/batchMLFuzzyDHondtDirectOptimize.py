@@ -82,8 +82,6 @@ class BatchMLFuzzyDHondtDirectOptimize(ABatchML):
         #eTool:AEvalTool
         selector, eTool = self.getParameters()[jobID]
 
-        datasetID:str = "ml1m" + "Div" + str(divisionDatasetPercentualSize)
-
         rIDs, rDescs = InputRecomMLDefinition.exportPairOfRecomIdsAndRecomDescrs()
 
         aDescDHont:AggregationDescription = InputAggrDefinition.exportADescDHontDirectOptimize(selector)

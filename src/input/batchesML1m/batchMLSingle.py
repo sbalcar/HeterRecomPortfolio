@@ -51,8 +51,6 @@ class BatchMLSingle(ABatchML):
         repetition:int
         divisionDatasetPercentualSize, uBehaviour, repetition = BatchParameters.getBatchParameters(self.datasetID)[batchID]
 
-        datasetID:str = "ml1m" + "Div" + str(divisionDatasetPercentualSize)
-
         recommenderID:str = self.getParameters()[jobID]
 
         rDescr:RecommenderDescription = InputRecomMLDefinition.exportInputRecomDefinition(recommenderID)

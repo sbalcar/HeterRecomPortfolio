@@ -10,10 +10,10 @@ from input.batchesML1m.batchMLDHondtThompsonSampling import BatchMLDHondtThompso
 from input.batchesML1m.batchMLDHondtThompsonSamplingINF import BatchMLDHondtThompsonSamplingINF #class
 
 from input.batchesML1m.batchMLFuzzyDHondt import BatchMLFuzzyDHondt #class
-from input.batchesML1m.batchMLFuzzyDHondtINF import BatchFuzzyDHondtINF #class
+from input.batchesML1m.batchMLFuzzyDHondtINF import BatchMLFuzzyDHondtINF #class
 
 from input.batchesML1m.batchMLFuzzyDHondtDirectOptimize import BatchMLFuzzyDHondtDirectOptimize #class
-from input.batchesML1m.batchMLFuzzyDHondtDirectOptimizeINF import BatchFuzzyDHondtDirectOptimizeINF #class
+from input.batchesML1m.batchMLFuzzyDHondtDirectOptimizeINF import BatchMLFuzzyDHondtDirectOptimizeINF #class
 
 from input.batchesML1m.batchMLWeightedAVG import BatchMLWeightedAVG #class
 
@@ -28,7 +28,7 @@ from input.batchesML1m.batchMLSingleCosineCBHT import BatchMLSingleCosineCBHT #c
 from input.batchesRetailrocket.batchRRSingle import BatchRRSingle #class
 from input.batchesRetailrocket.batchRRSingleW2VHT import BatchRRSingleW2VHT #class
 
-
+from input.batchesSlanTour.batchSTFuzzyDHondtINF import BatchSTFuzzyDHondtINF #class
 from input.batchesSlanTour.batchSTFuzzyDHondt import BatchSTFuzzyDHondt #class
 from input.batchesSlanTour.batchSTWeightedAVG import BatchSTWeightedAVG #class
 
@@ -45,13 +45,13 @@ def generateBatches():
 #    BatchMLBanditTS.generateBatches()
 
 #    BatchMLFuzzyDHondt.generateBatches()
-#    BatchFuzzyDHondtINF.generateBatches()
+#    BatchMLFuzzyDHondtINF.generateBatches()
 
 #    BatchMLDHondtThompsonSampling.generateBatches()
 #    BatchMLDHondtThompsonSamplingINF.generateBatches()
 
 #    BatchMLFuzzyDHondtDirectOptimize.generateBatches()
-#    BatchFuzzyDHondtDirectOptimizeINF.generateBatches()
+#    BatchMLFuzzyDHondtDirectOptimizeINF.generateBatches()
 
 #    BatchMLWeightedAVG.generateBatches()
 
@@ -69,6 +69,7 @@ def generateBatches():
 
     #ST
     BatchSTFuzzyDHondt.generateBatches()
+    BatchSTFuzzyDHondtINF.generateBatches()
     BatchSTWeightedAVG.generateBatches()
 
 #    BatchSTSingle.generateBatches()

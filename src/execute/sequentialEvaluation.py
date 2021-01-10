@@ -13,10 +13,10 @@ from typing import List
 from input.batchesML1m.batchMLBanditTS import BatchMLBanditTS #class
 from input.batchesML1m.batchMLFuzzyDHondt import BatchMLFuzzyDHondt #class
 from input.batchesML1m.batchMLDHondtThompsonSampling import BatchMLDHondtThompsonSampling #class
-from input.batchesML1m.batchMLFuzzyDHondtINF import BatchFuzzyDHondtINF #class
+from input.batchesML1m.batchMLFuzzyDHondtINF import BatchMLFuzzyDHondtINF #class
 from input.batchesML1m.batchMLDHondtThompsonSamplingINF import BatchMLDHondtThompsonSamplingINF #class
 from input.batchesML1m.batchMLFuzzyDHondtDirectOptimize import BatchMLFuzzyDHondtDirectOptimize #class
-from input.batchesML1m.batchMLFuzzyDHondtDirectOptimizeINF import BatchFuzzyDHondtDirectOptimizeINF #class
+from input.batchesML1m.batchMLFuzzyDHondtDirectOptimizeINF import BatchMLFuzzyDHondtDirectOptimizeINF #class
 from input.batchesML1m.batchMLSingle import BatchMLSingle #class
 from input.batchesML1m.batchMLSingleINF import BatchMLSingleINF #class
 
@@ -31,6 +31,7 @@ from input.batchesRetailrocket.batchRRSingle import BatchRRSingle #class
 from input.batchesRetailrocket.batchRRSingleW2VHT import BatchRRSingleW2VHT #class
 
 from input.batchesSlanTour.batchSTFuzzyDHondt import BatchSTFuzzyDHondt #class
+from input.batchesSlanTour.batchSTFuzzyDHondtINF import BatchSTFuzzyDHondtINF #class
 from input.batchesSlanTour.batchSTWeightedAVG import BatchSTWeightedAVG #class
 
 from input.batchesSlanTour.batchSTSingle import BatchSTSingle #class

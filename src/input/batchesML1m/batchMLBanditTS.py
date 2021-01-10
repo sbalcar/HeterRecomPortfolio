@@ -51,8 +51,6 @@ class BatchMLBanditTS(ABatchML):
 
         selector:ADHondtSelector = self.getParameters()[jobID]
 
-        datasetID:str = "ml1m" + "Div" + str(divisionDatasetPercentualSize)
-
         rIDs, rDescs = InputRecomMLDefinition.exportPairOfRecomIdsAndRecomDescrs()
 
         pDescr: Portfolio1AggrDescription = Portfolio1AggrDescription(

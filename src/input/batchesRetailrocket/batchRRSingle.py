@@ -48,8 +48,6 @@ class BatchRRSingle(ABatchRR):
         repetition:int
         divisionDatasetPercentualSize, uBehaviour, repetition = BatchParameters.getBatchParameters(self.datasetID)[batchID]
 
-        #datasetID:str = "retailrocket" + "Div" + str(divisionDatasetPercentualSize)
-
         recommenderID:str = self.getParameters()[jobID]
 
         rDescr:RecommenderDescription = InputRecomMLDefinition.exportInputRecomDefinition(recommenderID)

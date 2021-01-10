@@ -37,7 +37,7 @@ from history.historyHierDF import HistoryHierDF #class
 
 
 
-class BatchFuzzyDHondtDirectOptimizeINF(ABatchML):
+class BatchMLFuzzyDHondtDirectOptimizeINF(ABatchML):
 
     @staticmethod
     def getParameters():
@@ -55,8 +55,6 @@ class BatchFuzzyDHondtDirectOptimizeINF(ABatchML):
 
         eTool:AEvalTool = EvalToolDHondt({EvalToolDHondt.ARG_LEARNING_RATE_CLICKS: 0.02,
                                            EvalToolDHondt.ARG_LEARNING_RATE_VIEWS: 1000})
-
-        datasetID:str = "ml1m" + "Div" + str(divisionDatasetPercentualSize)
 
         rIDs, rDescs = InputRecomMLDefinition.exportPairOfRecomIdsAndRecomDescrs()
 
