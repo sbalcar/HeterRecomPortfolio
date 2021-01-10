@@ -38,7 +38,7 @@ class AggrFuzzyDHondtINF(AggrFuzzyDHondt):
 
     # methodsResultDict:{String:pd.Series(rating:float[], itemID:int[])},
     # modelDF:pd.DataFrame[numberOfVotes:int], numberOfItems:int
-    def run(self, methodsResultDict:dict, modelDF:DataFrame, userID:int, numberOfItems:int):
+    def run(self, methodsResultDict:dict, modelDF:DataFrame, userID:int, numberOfItems:int, argumentsDict:Dict[str,object]={}):
 
         # testing types of parameters
         if type(methodsResultDict) is not dict:
@@ -57,6 +57,8 @@ class AggrFuzzyDHondtINF(AggrFuzzyDHondt):
               raise ValueError("Argument modelDF contains in ome method an empty list of items.")
         if numberOfItems < 0:
             raise ValueError("Argument numberOfItems must be positive value.")
+        if type(argumentsDict) is not dict:
+            raise ValueError("Argument argumentsDict isn't type dict.")
 
         methodsResultNewDict: dict[str, pd.Series] = self._penaltyTool.runPenalization(
                 userID, methodsResultDict, self._history)
@@ -70,7 +72,7 @@ class AggrFuzzyDHondtINF(AggrFuzzyDHondt):
 
     # methodsResultDict:{String:Series(rating:float[], itemID:int[])},
     # modelDF:DataFrame<(methodID:str, votes:int)>, numberOfItems:int
-    def runWithResponsibility(self, methodsResultDict:dict, modelDF:DataFrame, userID:int, numberOfItems:int):
+    def runWithResponsibility(self, methodsResultDict:dict, modelDF:DataFrame, userID:int, numberOfItems:int, argumentsDict:Dict[str,object]={}):
 
         # testing types of parameters
         if type(methodsResultDict) is not dict:
@@ -92,6 +94,8 @@ class AggrFuzzyDHondtINF(AggrFuzzyDHondt):
                 raise ValueError("Argument modelDF contains in ome method an empty list of items.")
         if numberOfItems < 0:
             raise ValueError("Argument numberOfItems must be positive value.")
+        if type(argumentsDict) is not dict:
+            raise ValueError("Argument argumentsDict isn't type dict.")
 
         methodsResultNewDict: dict[str, pd.Series] = self._penaltyTool.runPenalization(
                 userID, methodsResultDict, self._history)

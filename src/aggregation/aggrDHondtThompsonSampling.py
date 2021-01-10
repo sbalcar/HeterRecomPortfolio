@@ -43,7 +43,7 @@ class AggrDHondtThompsonSampling(AAgregation):
 
     # methodsResultDict:{String:pd.Series(rating:float[], itemID:int[])},
     # modelDF:pd.DataFrame[numberOfVotes:int], numberOfItems:int
-    def run(self, methodsResultDict:dict, modelDF:DataFrame, userID:int, numberOfItems:int):
+    def run(self, methodsResultDict:dict, modelDF:DataFrame, userID:int, numberOfItems:int, argumentsDict:Dict[str,object]={}):
 
       # testing types of parameters
       if type(methodsResultDict) is not dict:
@@ -62,17 +62,19 @@ class AggrDHondtThompsonSampling(AAgregation):
               raise ValueError("Argument modelDF contains in ome method an empty list of items.")
       if numberOfItems < 0:
         raise ValueError("Argument numberOfItems must be positive value.")
+      if type(argumentsDict) is not dict:
+        raise ValueError("Argument argumentsDict isn't type dict.")
 
       candidatesOfMethods:np.asarray[str] = np.asarray([cI.keys() for cI in methodsResultDict.values()])
       uniqueCandidatesI:List[int] = list(set(np.concatenate(candidatesOfMethods)))
       #print("UniqueCandidatesI: ", uniqueCandidatesI)
 
       # numbers of elected candidates of parties
-      electedOfPartyDictI:dict[str,int] = {mI:1 for mI in modelDF.index}
+      electedOfPartyDictI:Dict[str,int] = {mI:1 for mI in modelDF.index}
       #print("ElectedForPartyI: ", electedOfPartyDictI)
 
       # votes number of parties - calculated via Thompson Sampling, unique for every inquiry
-      votesOfPartiesDictI:dict[str,float] = {}
+      votesOfPartiesDictI:Dict[str,float] = {}
       for mI in methodsResultDict.keys():
         pI:float = beta(modelDF.alpha0.loc[mI] + modelDF.r.loc[mI], modelDF.beta0.loc[mI] + (modelDF.n.loc[mI] - modelDF.r.loc[mI]), size=1)[0]
         votesOfPartiesDictI[mI] = pI
@@ -126,7 +128,7 @@ class AggrDHondtThompsonSampling(AAgregation):
 
     # methodsResultDict:{String:Series(rating:float[], itemID:int[])},
     # modelDF:DataFrame<(methodID:str, votes:int)>, numberOfItems:int
-    def runWithResponsibility(self, methodsResultDict:dict, modelDF:DataFrame, userID:int, numberOfItems:int=20):
+    def runWithResponsibility(self, methodsResultDict:dict, modelDF:DataFrame, userID:int, numberOfItems:int, argumentsDict:Dict[str,object]={}):
 
         # testing types of parameters
         if type(methodsResultDict) is not dict:
@@ -149,7 +151,8 @@ class AggrDHondtThompsonSampling(AAgregation):
                 raise ValueError("Argument modelDF contains in ome method an empty list of items.")
         if numberOfItems < 0:
             raise ValueError("Argument numberOfItems must be positive value.")
-
+        if type(argumentsDict) is not dict:
+            raise ValueError("Argument argumentsDict isn't type dict.")
 
         (aggregatedItemIDs, votes) = self.run(methodsResultDict, modelDF, numberOfItems)
 

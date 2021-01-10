@@ -12,9 +12,6 @@ from typing import Dict
 
 class ARecommender(ABC):
 
-    #UPDT_CLICK:str = "click"
-    #UPDT_VIEW:str = "view"
-
     @abstractmethod
     def __init__(self, jobID:str, argumentsDict:Dict[str,object]):
         raise Exception("ARecommender is abstract class, can't be instanced")

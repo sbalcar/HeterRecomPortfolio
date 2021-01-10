@@ -18,8 +18,6 @@ class APortfolio(ABC):
     ARG_NUMBER_OF_RECOMM_ITEMS:str = "numberOfRecomItems"
     ARG_NUMBER_OF_AGGR_ITEMS:str = "numberOfAggrItems"
 
-    UPDT_CLICK:str = "click"
-    UPDT_VIEW:str = "view"
 
     @abstractmethod
     def __init__(self, recommIDs: List[str], recommenders: List[ARecommender], agregation:AAgregation):
