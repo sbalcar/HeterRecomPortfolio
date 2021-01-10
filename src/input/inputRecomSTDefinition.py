@@ -106,10 +106,10 @@ class InputRecomSTDefinition:
         rDescsBPRMF:List[RecommenderDescription] = [cls.exportRDescBPRMFf50i20lr01r003(), cls.exportRDescBPRMFf20i50lr01r001()]
 
         rIDsCOSCB:List[str] = [recom + cls.COS_CB_OHE_MEAN1.title(), recom + cls.COS_CB_OHE_WEIGHTEDMEAN5.title()]
-        rDescsCOSCB:List[RecommenderDescription] = [cls.exportRDescCosineCBcbdOHEupsmeanups1() + cls.exportRDescCosineCBcbdOHEupsweightedMeanups5()]
+        rDescsCOSCB:List[RecommenderDescription] = [cls.exportRDescCosineCBcbdOHEupsmeanups1(), cls.exportRDescCosineCBcbdOHEupsweightedMeanups5()]
 
         rIDsW2V:List[str] = [recom + cls.W2V_ALL100000WS1VS32_MAX1.title(), recom + cls.W2V_ALL200000WS1VS64_WEIGHTEDMEAN5.title()]
-        rDescsW2V:List[RecommenderDescription] = [cls.exportRDescW2Vtalli100000ws1vs32upsmaxups1(), cls.w2vtalli200000ws1vs64upsweightedMeanups5()]
+        rDescsW2V:List[RecommenderDescription] = [cls.exportRDescW2Vtalli100000ws1vs32upsmaxups1(), cls.exportRDescW2talli200000ws1vs64upsweightedMeanups5()]
 
         rIDs:List[str] = rIDsPop + rIDsKNN + rIDsBPRMF + rIDsCOSCB + rIDsW2V
         rDescs:List[RecommenderDescription] = rDescsPop + rDescsKNN + rDescsBPRMF + rDescsCOSCB + rDescsW2V
