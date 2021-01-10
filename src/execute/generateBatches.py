@@ -15,6 +15,8 @@ from input.batchesML1m.batchMLFuzzyDHondtINF import BatchFuzzyDHondtINF #class
 from input.batchesML1m.batchMLFuzzyDHondtDirectOptimize import BatchMLFuzzyDHondtDirectOptimize #class
 from input.batchesML1m.batchMLFuzzyDHondtDirectOptimizeINF import BatchFuzzyDHondtDirectOptimizeINF #class
 
+from input.batchesML1m.batchMLWeightedAVG import BatchMLWeightedAVG #class
+
 from input.batchesML1m.batchMLSingle import BatchMLSingle #class
 from input.batchesML1m.batchMLSingleINF import BatchMLSingleINF #class
 
@@ -27,12 +29,13 @@ from input.batchesRetailrocket.batchRRSingle import BatchRRSingle #class
 from input.batchesRetailrocket.batchRRSingleW2VHT import BatchRRSingleW2VHT #class
 
 
-from input.batchSlanTour.batchSTFuzzyDHondt import BatchSTFuzzyDHondt #class
+from input.batchesSlanTour.batchSTFuzzyDHondt import BatchSTFuzzyDHondt #class
+from input.batchesSlanTour.batchSTWeightedAVG import BatchSTWeightedAVG #class
 
-from input.batchSlanTour.batchSTSingleBPRMFHT import BatchSTSingleBPRMFHT #class
-from input.batchSlanTour.batchSTSingle import BatchSTSingle #class
-from input.batchSlanTour.batchSTSingleW2VHT import BatchSTSingleW2VHT #class
-from input.batchSlanTour.batchSTSingleCosineCBHT import BatchSTSingleCosineCBHT #class
+from input.batchesSlanTour.batchSTSingleBPRMFHT import BatchSTSingleBPRMFHT #class
+from input.batchesSlanTour.batchSTSingle import BatchSTSingle #class
+from input.batchesSlanTour.batchSTSingleW2VHT import BatchSTSingleW2VHT #class
+from input.batchesSlanTour.batchSTSingleCosineCBHT import BatchSTSingleCosineCBHT #class
 
 
 def generateBatches():
@@ -50,6 +53,8 @@ def generateBatches():
 #    BatchMLFuzzyDHondtDirectOptimize.generateBatches()
 #    BatchFuzzyDHondtDirectOptimizeINF.generateBatches()
 
+#    BatchMLWeightedAVG.generateBatches()
+
 #    BatchMLSingle.generateBatches()
 #    BatchMLSingleINF.generateBatches()
 
@@ -64,10 +69,12 @@ def generateBatches():
 
     #ST
     BatchSTFuzzyDHondt.generateBatches()
-    BatchSTSingle.generateBatches()
-    BatchSTSingleBPRMFHT.generateBatches()
-    BatchSTSingleW2VHT.generateBatches()
-    BatchSTSingleCosineCBHT.generateBatches()
+    BatchSTWeightedAVG.generateBatches()
+
+#    BatchSTSingle.generateBatches()
+#    BatchSTSingleBPRMFHT.generateBatches()
+#    BatchSTSingleW2VHT.generateBatches()
+#    BatchSTSingleCosineCBHT.generateBatches()
 
 
 if __name__ == "__main__":

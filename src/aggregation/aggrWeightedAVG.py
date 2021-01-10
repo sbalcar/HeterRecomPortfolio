@@ -23,8 +23,6 @@ from userBehaviourDescription.userBehaviourDescription import UserBehaviourDescr
 
 class AggrWeightedAVG(AAgregation):
 
-    ARG_SELECTOR:str = "selector"
-
     def __init__(self, history:AHistory, argumentsDict:Dict[str,object]):
         if not isinstance(history, AHistory):
             raise ValueError("Argument history isn't type AHistory.")
@@ -32,8 +30,6 @@ class AggrWeightedAVG(AAgregation):
             raise ValueError("Argument argumentsDict isn't type dict.")
 
         self._history = history
-        self._selector = argumentsDict[self.ARG_SELECTOR]
-
 
     def update(self, ratingsUpdateDF:DataFrame, argumentsDict:Dict[str,object]):
         pass

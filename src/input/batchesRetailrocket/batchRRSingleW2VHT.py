@@ -31,7 +31,7 @@ import pandas as pd
 from input.aBatch import BatchParameters #class
 from input.aBatchRR import ABatchRR #class
 
-from input.batchSlanTour.batchSTSingleW2VHT import BatchSTSingleW2VHT #class
+from input.batchesSlanTour.batchSTSingleW2VHT import BatchSTSingleW2VHT #class
 
 from configuration.configuration import Configuration #class
 
