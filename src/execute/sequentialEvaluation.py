@@ -34,6 +34,7 @@ from input.batchesSlanTour.batchSTFuzzyDHondt import BatchSTFuzzyDHondt #class
 from input.batchesSlanTour.batchSTFuzzyDHondtINF import BatchSTFuzzyDHondtINF #class
 from input.batchesSlanTour.batchSTWeightedAVG import BatchSTWeightedAVG #class
 
+from input.batchesSlanTour.batchSTVMContextKNN import BatchSTVMContextKNN #class
 from input.batchesSlanTour.batchSTSingle import BatchSTSingle #class
 from input.batchesSlanTour.batchSTSingleBPRMFHT import BatchSTSingleBPRMFHT #class
 from input.batchesSlanTour.batchSTSingleW2VHT import BatchSTSingleW2VHT #class

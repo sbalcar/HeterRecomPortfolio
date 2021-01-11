@@ -48,7 +48,7 @@ The portfolio can be used by both the simulator (sequential evaluation) and the 
 - requires Python 3.7
 
 ```sh
-$ pip install numpy pandas sklearn tensorflow implicit
+$ pip install numpy pandas sklearn tensorflow implicit pympler
 ```
 
 ### How to run it:

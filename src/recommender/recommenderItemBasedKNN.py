@@ -30,6 +30,8 @@ import pandas as pd
 
 class RecommenderItemBasedKNN(ARecommender):
 
+    ARG_K:str = "k"
+
     def __init__(self, jobID:str, argumentsDict:Dict[str,str]):
         if type(argumentsDict) is not dict:
             raise ValueError("Argument argumentsDict is not type dict.")
