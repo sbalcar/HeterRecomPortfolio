@@ -32,7 +32,7 @@ from input.aBatch import BatchParameters #class
 from input.aBatchST import ABatchST #class
 
 
-class BatchSTVMContextKNN(ABatchST):
+class BatchSTVMContextKNNHT(ABatchST):
 
     @staticmethod
     def getParameters():
@@ -54,9 +54,9 @@ class BatchSTVMContextKNN(ABatchST):
 
         kI:str = self.getParameters()[jobID]
 
-        recommenderID:str = "vmContextKNN" + "K " + str(kI)
+        recommenderID:str = "RecommendervmContextKNN" + "K" + str(kI)
 
-        rVMCtKNN:RecommenderDescription = RecommenderDescription(recommenderID, RecommenderVMContextKNN, {
+        rVMCtKNN:RecommenderDescription = RecommenderDescription(RecommenderVMContextKNN, {
                     RecommenderVMContextKNN.ARG_K: kI})
 
         pDescr:APortfolioDescription = Portfolio1MethDescription(recommenderID.title(), recommenderID, rVMCtKNN)
@@ -72,4 +72,4 @@ if __name__ == "__main__":
    os.chdir("..")
    #print(os.getcwd())
 
-   BatchSTVMContextKNN.generateBatches()
+   BatchSTVMContextKNNHT.generateBatches()

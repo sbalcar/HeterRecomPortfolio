@@ -118,7 +118,7 @@ class RecommenderVMContextKNN(ARecommender):
 
         self.sim_time = 0
 
-    def train(self, history: AHistory, dataset: ADataset):
+    def train(self, history:AHistory, dataset:ADataset):
         if not isinstance(history, AHistory):
             raise ValueError("Argument history isn't type AHistory.")
         if not isinstance(dataset, ADataset):
@@ -220,7 +220,7 @@ class RecommenderVMContextKNN(ARecommender):
             self._lastRatedItemPerSession = self._lastRatedItemPerSession.to_dict()
         """
         
-    def update(self, ratingsUpdateDF:DataFrame):
+    def update(self, ratingsUpdateDF:DataFrame, argumentsDict:Dict[str,object]):
 
         if type(ratingsUpdateDF) is not DataFrame:
             raise ValueError("Argument ratingsTrainDF isn't type DataFrame.")
@@ -266,7 +266,7 @@ class RecommenderVMContextKNN(ARecommender):
          
          
 
-    def recommend(self, userID: int, numberOfItems: int = 20, argumentsDict: dict = {}):
+    def recommend(self, userID: int, numberOfItems:int,  argumentsDict:Dict[str,object]):
 
             
         # Get recommendations for user
