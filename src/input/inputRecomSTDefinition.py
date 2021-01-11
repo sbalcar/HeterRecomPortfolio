@@ -10,6 +10,7 @@ from recommender.recommenderTheMostPopular import RecommenderTheMostPopular #cla
 from recommender.recommenderCosineCB import RecommenderCosineCB #class
 from recommender.recommenderW2V import RecommenderW2V #class
 from recommender.recommenderItemBasedKNN import RecommenderItemBasedKNN #class
+from recommender.recommenderVSKNN import RecommenderVMContextKNN #class
 from recommender.recommenderBPRMF import RecommenderBPRMF #class
 
 from configuration.configuration import Configuration #class
@@ -19,6 +20,7 @@ class InputRecomSTDefinition:
 
     THE_MOST_POPULAR:str = InputRecomMLDefinition.THE_MOST_POPULAR
     KNN:str = InputRecomMLDefinition.KNN
+    VMC_KNN:str = "vmContextKNN"
 
     COS_CB_OHE_MEAN1:str = "cosCBoneMean1"   # the best
     COS_CB_OHE_WEIGHTEDMEAN5:str = "cosCBoneWeightedMean5"  # the second best
@@ -39,6 +41,11 @@ class InputRecomSTDefinition:
     def exportRDescKNN():
         return RecommenderDescription(RecommenderItemBasedKNN,
                 {})
+
+    @staticmethod
+    def exportRDescVMContextKNN():
+        return RecommenderDescription(RecommenderVMContextKNN, {
+            RecommenderVMContextKNN.ARG_K: 50})
 
     @staticmethod
     def exportRDescCosineCBcbdOHEupsmeanups1():

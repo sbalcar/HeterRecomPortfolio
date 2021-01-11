@@ -3,6 +3,8 @@
 import os
 import time
 
+from typing import List #class
+from typing import Dict #class
 from configuration.configuration import Configuration #class
 
 from pandas.core.frame import DataFrame #class
@@ -100,8 +102,12 @@ def test03():
 
     print("Running RecommenderVSKNN ST:")
 
+    from datasets.slantour.events import Events  # class
+
     dataset:DatasetST = DatasetST.readDatasets()
     dataset.eventsDF = dataset.eventsDF.iloc[0:200000]
+
+    maxUserID:List[int] = dataset.eventsDF[Events.COL_USER_ID].max()
 
     # train recommender
     rec:ARecommender = RecommenderVMContextKNN("test", {RecommenderVMContextKNN.ARG_K:50})
@@ -111,7 +117,7 @@ def test03():
     print("Time to train: " + str(end - start))   
 
     eventsDFDFUpdate:DataFrame = dataset.eventsDF.iloc[5003:5004]
-    rec.update(eventsDFDFUpdate)
+    #rec.update(eventsDFDFUpdate, {})
 
 
     r:Series = rec.recommend(3342336, 20, {})
@@ -127,7 +133,7 @@ def test03():
     print(r)
 
     # testing of a non-existent user
-    r:Series =rec.recommend(10000, 50, {})
+    r:Series =rec.recommend(maxUserID+1, 50, {})
     print(type(r))
     print(r)
 

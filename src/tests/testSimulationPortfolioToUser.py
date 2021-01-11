@@ -6,14 +6,12 @@ from typing import List
 from datasets.aDataset import ADataset #class
 from datasets.datasetML import DatasetML #class
 from datasets.datasetRetailrocket import DatasetRetailRocket #class
+from datasets.datasetST import DatasetST #class
 
 from datasets.ml.ratings import Ratings #class
 from datasets.ml.behaviours import Behaviours #class
 from datasets.retailrocket.behavioursRR import BehavioursRR #class
 from datasets.slantour.behavioursST import BehavioursST #class
-
-
-from datasets.datasetST import DatasetST #class
 
 from pandas.core.frame import DataFrame #class
 
@@ -29,6 +27,7 @@ from pandas.core.frame import DataFrame #class
 from portfolioDescription.portfolio1MethDescription import Portfolio1MethDescription #class
 
 from input.inputRecomMLDefinition import InputRecomMLDefinition #class
+from input.inputRecomSTDefinition import InputRecomSTDefinition #class
 
 from portfolioDescription.aPortfolioDescription import APortfolioDescription #class
 
@@ -322,6 +321,25 @@ def test25():
     simulator.simulate([pDescr], [DataFrame()], [EToolSingleMethod({})], HistoryHierDF)
 
 
+def test26():
+
+    print("Simulation: ST MF")
+
+    rDescr:RecommenderDescription = InputRecomSTDefinition.exportRDescVMContextKNN()
+
+    pDescr:APortfolioDescription = Portfolio1MethDescription(InputRecomSTDefinition.VMC_KNN.title(),
+                                                             InputRecomSTDefinition.VMC_KNN, rDescr)
+
+    batchID:str = "slantourDiv90Ulinear0109R1"
+    dataset:DatasetST = DatasetST.readDatasets()
+    behaviourFile:str = BehavioursST.getFile(BehavioursST.BHVR_LINEAR0109)
+    behavioursDF:DataFrame = BehavioursST.readFromFileST(behaviourFile)
+
+    # simulation of portfolio
+    simulator:Simulator = Simulator(batchID, SimulationST, argsSimulationDict, dataset, behavioursDF)
+    simulator.simulate([pDescr], [DataFrame()], [EToolSingleMethod({})], HistoryHierDF)
+
+
 
 if __name__ == "__main__":
     os.chdir("..")
@@ -343,4 +361,5 @@ if __name__ == "__main__":
     #test22()  # W2V
     #test23()  # KNN
     #test24()  # CB
-    test25()  # MF
+    #test25()  # MF
+    test26()   # VMContextKNN

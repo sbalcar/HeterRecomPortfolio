@@ -256,7 +256,7 @@ class RecommenderVMContextKNN(ARecommender):
             map_is = set()
             self.item_session_map.update({row[index_item]: map_is})
         map_is.add(row[index_session])
-        
+
         map_si = self.session_item_map.get(row[index_session])
         if map_si is None:
             map_si = set()
@@ -652,7 +652,10 @@ class RecommenderVMContextKNN(ARecommender):
         out : set
         '''
         sessions = set()
-        for item in self.items_for_session(session_id):
+        print("session_id: " + str(session_id))
+        a = self.items_for_session(session_id)
+        print(a)
+        for item in a:
             for session in self.item_session_map.get(item) if item in self.item_session_map else ():
                 sessions.add(session)
         #print(sessions)
