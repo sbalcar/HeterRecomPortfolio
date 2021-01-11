@@ -3,6 +3,7 @@
 import numpy as np
 import math
 
+from typing import Dict #class
 from typing import List
 
 from pandas.core.frame import DataFrame  # class
@@ -25,9 +26,9 @@ class MixinContextAggregation(AAgregation):
         self.eTool = argumentsDict[self.ARG_EVAL_TOOL]
 
 
-    def run(self, methodsResultDict: dict, modelDF: DataFrame, userID: int, numberOfItems: int = 20):
+    def run(self, methodsResultDict: dict, modelDF: DataFrame, userID: int, numberOfItems: int = 20, argumentsDict:Dict[str,object]={}):
 
-        self._context = self.eTool.calculateContext(userID)
+        self._context = self.eTool.calculateContext(userID, argumentsDict)
 
         # update recommender's votes
         updatedVotes = dict()
@@ -46,15 +47,15 @@ class MixinContextAggregation(AAgregation):
             modelDF.at[recommender, 'votes'] = updatedVotes[recommender] / totalUpdatedVotes
 
         itemsWithResposibilityOfRecommenders: List[int, np.Series[int, str]] = \
-            super().run(methodsResultDict, modelDF, userID, numberOfItems=numberOfItems)
+            super().run(methodsResultDict, modelDF, userID, numberOfItems=numberOfItems, argumentsDict=argumentsDict)
         return itemsWithResposibilityOfRecommenders
 
-    def runWithResponsibility(self, methodsResultDict: dict, modelDF: DataFrame, userID: int, numberOfItems: int = 20):
+    def runWithResponsibility(self, methodsResultDict: dict, modelDF: DataFrame, userID: int, numberOfItems: int = 20, argumentsDict:Dict[str,object]={}):
         # TODO: CHECK DATA INTEGRITY!
         # methodsResultNewDict: dict[str, pd.Series] = self._penaltyTool.runPenalization(
         #        userID, methodsResultDict, self._history)
 
         itemsWithResposibilityOfRecommenders: List[int, Series[int, str]] = super().runWithResponsibility(
-            methodsResultDict, modelDF, userID, numberOfItems=numberOfItems)
+            methodsResultDict, modelDF, userID, numberOfItems=numberOfItems, argumentsDict=argumentsDict)
 
         return itemsWithResposibilityOfRecommenders

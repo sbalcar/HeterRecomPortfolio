@@ -8,6 +8,7 @@ import math
 from sklearn.preprocessing import PolynomialFeatures
 
 from typing import List
+from typing import Dict #class
 
 from pandas.core.frame import DataFrame  # class
 
@@ -20,6 +21,10 @@ class EvalToolContext(AEvalTool):
     ARG_USER_ID: str = "userID"
     ARG_RELEVANCE = "relevance"
     ARG_HISTORY = "history"
+    ARG_SENIORITY = "seniority"
+    ARG_PAGE_TYPE = "page_type"
+    ARG_ITEMS_SHOWN = "items_shown"
+    ARG_ITEM_ID = "itemID"
 
     def __init__(self, argsDict:dict):
         if type(argsDict) is not dict:
@@ -42,6 +47,8 @@ class EvalToolContext(AEvalTool):
     def _preprocessUsers(self, users: DataFrame):
         if self.dataset_name == "ml":
             return self._onehotUsersOccupationML(users)
+        elif self.dataset_name == "st":
+            return users
         else:
             raise ValueError("Dataset " + self.dataset_name + " is not supported!")
 
@@ -53,8 +60,54 @@ class EvalToolContext(AEvalTool):
     def _preprocessItems(self, items: DataFrame):
         if self.dataset_name == "ml":
             return self._onehotItemsGenresML(items)
+        elif self.dataset_name == "st":
+            return self._preprocessItemsST(items)
         else:
             raise ValueError("Dataset " + self.dataset_name + " is not supported!")
+
+    def _preprocessItemsST(self, items: DataFrame):
+        self.items = items[['delka']]
+
+        log_price = items[['prumerna_cena_noc']].apply(lambda x: math.log(x[0]), axis=1)
+        self.items = self.items.join(pd.DataFrame(data=log_price, columns=['prumerna_cena_noc']))
+
+        # onehot country
+        oneHot = pd.get_dummies(items['zeme'])
+        self.items = self.items.join(oneHot)
+
+        # onehot accomodation
+        oneHot = pd.get_dummies(items['ubytovani'], prefix=['ubytovani'])
+        self.items = self.items.join(oneHot)
+
+        # onehot transport
+        oneHot = pd.get_dummies(items['doprava'], prefix=['doprava'])
+        self.items = self.items.join(oneHot)
+
+        # onehot food
+        oneHot = pd.get_dummies(items['strava'], prefix=['strava'])
+        self.items = self.items.join(oneHot)
+
+        #onehot id_type
+        oneHot = pd.get_dummies(items['id_typ'], prefix=['typ'])
+        self.items = self.items.join(oneHot)
+
+        # add months
+        for i in range(1, 13):
+            self.items.insert(0, "month_" + str(i), 0)
+
+        # populate months
+        dfMonths = items[['od', 'do']]
+        for index, row in dfMonths.iterrows():
+            i = int(row["od"].split('-')[1])
+            j = int(row["do"].split('-')[1])
+            while True:
+                self.items.loc[index, "month_" + str(i)] = 1
+
+                if (i == j) or (j <= 0) or (j > 12):
+                    break
+                else:
+                    i = (i % 12) + 1
+        return self.items
 
     def _onehotItemsGenresML(self, items: DataFrame):
         one_hot_encoding = items["Genres"].str.get_dummies(sep='|')
@@ -78,7 +131,7 @@ class EvalToolContext(AEvalTool):
         userID = evaluationDict[self.ARG_USER_ID]
 
         # compute context for selected user
-        self._context = self.calculateContext(userID)
+        self._context = self.calculateContext(userID, evaluationDict)
 
         # check for each recommender method that it has A, b, inverseA
         for recommender, row in portfolioModel.iterrows():
@@ -97,11 +150,31 @@ class EvalToolContext(AEvalTool):
                 reward = relevances.loc[clickedItemID]
                 self._b[recommender] = self._b[recommender] + (reward * self._context)
 
-    def calculateContext(self, userID):
+    def calculateContext(self, userID, argumentsDict:Dict[str,object]):
         if self.dataset_name == "ml":
             return self._calculateContextML(userID)
+        elif self.dataset_name == "st":
+            return self._calculateContextST(userID, argumentsDict)
         else:
             raise ValueError("Dataset " + self.dataset_name + " is not supported!")
+
+    def _calculateContextST(self, userID, argumentsDict):
+        result = np.zeros(2)
+        if argumentsDict[self.ARG_PAGE_TYPE] == 'zobrazit':
+            itemID = argumentsDict[self.ARG_ITEM_ID]
+
+            item = self.items.loc[itemID]
+
+            result = np.append(result, item)
+
+        else:
+            pass
+        result[0] = math.log(argumentsDict[self.ARG_SENIORITY])
+        result[1] = argumentsDict[self.ARG_ITEMS_SHOWN]
+
+        self._contextDim = len(result)
+
+        return result
 
     def _calculateContextML(self, userID):
 
@@ -175,7 +248,14 @@ class EvalToolContext(AEvalTool):
 
         # recompute context - previous user doesn't have to be the same as current
         # TODO: Performace improvement: check if user changed -> do not recompute context if not?
-        self._context = self.calculateContext(userID)
+        self._context = self.calculateContext(userID, evaluationDict)
+
+        # check for each recommender method that it has A, b, inverseA
+        for recommender, row in portfolioModel.iterrows():
+            if recommender not in self._A:
+                self._b[recommender] = np.zeros(self._contextDim)
+                self._A[recommender] = np.identity(self._contextDim)
+                self._inverseA[recommender] = np.identity(self._contextDim)
 
         # get relevances
         methodsResultDict = evaluationDict[self.ARG_RELEVANCE]

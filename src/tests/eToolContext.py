@@ -15,6 +15,8 @@ from datasets.ml.users import Users #class
 from datasets.ml.items import Items #class
 from datasets.aDataset import ADataset #class
 from datasets.datasetML import DatasetML #class
+from datasets.datasetST import DatasetST #class
+
 
 from recommender.aRecommender import ARecommender #class
 from recommender.recommenderItemBasedKNN import RecommenderItemBasedKNN #class
@@ -30,6 +32,47 @@ from datasets.ml.ratings import Ratings #class
 from aggregation.aggrContextFuzzyDHondt import AggrContextFuzzyDHondt #class
 from aggregation.aggrFuzzyDHondt import AggrFuzzyDHondt
 from aggregation.operators.theMostVotedItemSelector import TheMostVotedItemSelector #class
+
+def test03():
+    dataset:ADataset = DatasetST.readDatasets()
+    events = dataset.eventsDF
+    serials = dataset.serialsDF
+
+    methodsResultDict: dict = {
+        "metoda1": pd.Series([0.2, 0.1, 0.3, 0.3, 0.1], [32, 2, 8, 1, 4], name="rating"),
+        "metoda2": pd.Series([0.1, 0.1, 0.2, 0.3, 0.3], [1, 5, 32, 6, 7], name="rating")
+    }
+    rItemsWithResponsibility = [(7, {'metoda1': 0.0, 'metoda2': 0.1505441022698901}), (5, {'metoda1': 0.0, 'metoda2': 0.13059247425821793}), (6, {'metoda1': 0.0, 'metoda2': 0.12877868989352043}), (4, {'metoda1': 0.0, 'metoda2': 0.12787179771117171}), (3, {'metoda1': 0.0, 'metoda2': 0.11426841497594067}), (2571, {'metoda1': 0.0, 'metoda2': 0.10882706188184826}), (2, {'metoda1': 0.0, 'metoda2': 0.10792016969949952}), (1, {'metoda1': 0.0, 'metoda2': 0.10701327751715078})]
+
+    portfolioModelData = [['metoda1', 0.6], ['metoda2', 0.4]]
+    portfolioModelDF:DataFrame = pd.DataFrame(portfolioModelData, columns=["methodID","votes"])
+    portfolioModelDF.set_index("methodID", inplace=True)
+
+
+    userID = 1
+    itemID = 2
+    historyDF: AHistory = HistoryDF("test01")
+
+    evaluationDict: dict = {EvalToolContext.ARG_USER_ID: userID,
+                            EvalToolContext.ARG_RELEVANCE: methodsResultDict,
+                            EvalToolContext.ARG_ITEM_ID: itemID,
+                            EvalToolContext.ARG_SENIORITY: 5,
+                            EvalToolContext.ARG_PAGE_TYPE: "zobrazit",
+                            EvalToolContext.ARG_ITEMS_SHOWN: 10
+                            }
+    eToolContext = EvalToolContext(
+        {EvalToolContext.ARG_USERS: pd.DataFrame(),
+         EvalToolContext.ARG_ITEMS: serials,
+         EvalToolContext.ARG_DATASET: "st",
+         EvalToolContext.ARG_HISTORY: historyDF}
+    )
+    aggr: AggrContextFuzzyDHondt = AggrContextFuzzyDHondt(historyDF, {
+        AggrContextFuzzyDHondt.ARG_EVAL_TOOL: eToolContext,
+        AggrContextFuzzyDHondt.ARG_SELECTOR: TheMostVotedItemSelector({})
+    })
+    l1 = eToolContext.click(rItemsWithResponsibility,1,portfolioModelDF,evaluationDict)
+
+
 
 def test01():
     print("Test 01")
@@ -137,14 +180,15 @@ def test02(repetitions = 1):
     methodsParamsDF.set_index("methodID", inplace=True)
 
     userID = 352
+    ratingsDFuserID = ratingsDF[ratingsDF['userId'] == userID]
+    itemID = ratingsDFuserID.iloc[0]['movieId']
 
     historyDF: AHistory = HistoryDF("test01")
-    ratingsDFuserID = ratingsDF[ratingsDF['userId'] == 352]
-    itemID = ratingsDFuserID.iloc[0]['movieId']
     historyDF.insertRecommendation(userID, itemID, 1, True, 10)
 
     r1: Series = rec1.recommend(userID, N, {})
     r2: Series = rec2.recommend(userID, N, {})
+
     methodsResultDict: dict = {
         "ItembasedKNN": r1,
         "MostPopular": r2
@@ -182,14 +226,10 @@ def test02(repetitions = 1):
                 "ItembasedKNN": r1,
                 "MostPopular": r2
             }
+            evalDict = {"a" : 1}
             historyDF.insertRecommendation(userID, row['movieId'], 1, True, timestamp)
             timestamp += 1
-            l1 = aggr.runWithResponsibility(methodsResultDict, methodsParamsDF, userID, N)
-
-            for itemID, votes in l1:
-                film_info: DataFrame = itemsDF[itemsDF['movieId'] == itemID]
-                #print('\t', film_info['movieTitle'].to_string(header=False),
-                #      film_info['Genres'].to_string(header=False))
+            l1 = aggr.runWithResponsibility(methodsResultDict, methodsParamsDF, userID, argumentsDict=evalDict, numberOfItems=N)
             import random
             randomItem = random.choice(l1)[0]
             if randomItem in r1.index:
@@ -214,4 +254,5 @@ def test02(repetitions = 1):
 if __name__ == "__main__":
     os.chdir("..")
     #test01()
-    test02(repetitions=1000)
+    #test02(repetitions=1000)
+    test03()
