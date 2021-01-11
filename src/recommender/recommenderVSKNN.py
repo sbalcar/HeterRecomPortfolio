@@ -263,7 +263,8 @@ class RecommenderVMContextKNN(ARecommender):
             self.session_item_map.update({row[index_session]: map_si})
         map_si.add(row[index_item]) 
          
-         
+        time = row[index_time]
+        self.session_time.update({row[index_session]: time})
          
 
     def recommend(self, userID: int, numberOfItems:int,  argumentsDict:Dict[str,object]):
