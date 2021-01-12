@@ -31,6 +31,7 @@ from input.batchesRetailrocket.batchRRSingleW2VHT import BatchRRSingleW2VHT #cla
 from input.batchesSlanTour.batchSTFuzzyDHondtINF import BatchSTFuzzyDHondtINF #class
 from input.batchesSlanTour.batchSTFuzzyDHondt import BatchSTFuzzyDHondt #class
 from input.batchesSlanTour.batchSTWeightedAVG import BatchSTWeightedAVG #class
+from input.batchesSlanTour.batchSTBanditTS import BatchSTBanditTS #class
 
 from input.batchesSlanTour.batchSTSingleVMContextKNNHT import BatchSTVMContextKNNHT #class
 from input.batchesSlanTour.batchSTSingleBPRMFHT import BatchSTSingleBPRMFHT #class
@@ -72,8 +73,9 @@ def generateBatches():
 #    BatchSTFuzzyDHondt.generateBatches()
 #    BatchSTFuzzyDHondtINF.generateBatches()
 #    BatchSTWeightedAVG.generateBatches()
+    BatchSTBanditTS.generateBatches()
 
-    BatchSTVMContextKNNHT.generateBatches()
+#    BatchSTVMContextKNNHT.generateBatches()
 #    BatchSTSingle.generateBatches()
 #    BatchSTSingleBPRMFHT.generateBatches()
 #    BatchSTSingleW2VHT.generateBatches()
