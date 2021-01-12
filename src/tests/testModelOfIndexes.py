@@ -8,7 +8,7 @@ from datasets.datasetML import DatasetML #class
 from datasets.datasetRetailrocket import DatasetRetailRocket #class
 
 from datasets.ml.ratings import Ratings #class
-from datasets.ml.behaviours import Behaviours #class
+from datasets.ml.behavioursML import BehavioursML #class
 from datasets.retailrocket.behavioursRR import BehavioursRR #class
 from datasets.slantour.behavioursST import BehavioursST #class
 

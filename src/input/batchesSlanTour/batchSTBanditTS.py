@@ -14,6 +14,7 @@ from input.inputAggrDefinition import InputAggrDefinition  # class
 from input.modelDefinition import ModelDefinition
 
 from input.inputRecomMLDefinition import InputRecomMLDefinition #class
+from input.inputRecomSTDefinition import InputRecomSTDefinition #class
 
 from input.batchesML1m.batchMLBanditTS import BatchMLBanditTS #class
 
@@ -45,15 +46,15 @@ class BatchSTBanditTS(ABatchST):
 
         selector:ADHondtSelector = self.getParameters()[jobID]
 
-        rIDs, rDescs = InputRecomMLDefinition.exportPairOfRecomIdsAndRecomDescrs()
+        rIDs, rDescs = InputRecomSTDefinition.exportPairOfRecomIdsAndRecomDescrs()
 
-        pDescr: Portfolio1AggrDescription = Portfolio1AggrDescription(
+        pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
             "BanditTS" + jobID, rIDs, rDescs, InputAggrDefinition.exportADescBanditTS(selector))
 
         eTool:AEvalTool = EvalToolBanditTS({})
         model:DataFrame = ModelDefinition.createBanditModel(pDescr.getRecommendersIDs())
 
-        simulator:Simulator = InputSimulatorDefinition.exportSimulatorML1M(
+        simulator:Simulator = InputSimulatorDefinition.exportSimulatorSlantour(
                 batchID, divisionDatasetPercentualSize, uBehaviour, repetition)
         simulator.simulate([pDescr], [model], [eTool], HistoryHierDF)
 

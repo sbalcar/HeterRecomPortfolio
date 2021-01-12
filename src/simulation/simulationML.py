@@ -25,7 +25,7 @@ from pandas.core.frame import DataFrame #class
 from history.aHistory import AHistory #class
 from evaluationTool.aEvalTool import AEvalTool #class
 
-from datasets.ml.behaviours import Behaviours #class
+from datasets.ml.behavioursML import BehavioursML #class
 
 from simulation.tools.modelOfIndexes import ModelOfIndexes #class
 
@@ -33,7 +33,7 @@ from simulation.tools.modelOfIndexes import ModelOfIndexes #class
 class SimulationML(ASequentialSimulation):
 
     _ratingClass = Ratings
-    _behaviourClass = Behaviours
+    _behaviourClass = BehavioursML
 
 
     @staticmethod
@@ -68,7 +68,7 @@ class SimulationML(ASequentialSimulation):
 
 
         # create behaviour dictionary of DataFrame indexed by recomRepetition
-        recomRepetitionCountInDataset:int = behaviourDF[Behaviours.COL_REPETITION].max() +1
+        recomRepetitionCountInDataset:int = behaviourDF[BehavioursML.COL_REPETITION].max() + 1
 
         testRepeatedBehaviourDict:dict = {}
         bIndexes:List[int] = list([recomRepetitionCountInDataset*i for i in testRatingsDF.index])

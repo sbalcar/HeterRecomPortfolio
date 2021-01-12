@@ -41,7 +41,8 @@ def test01():
 
     aggr:AggrBanditTS = AggrBanditTS(HistoryDF(""), {AggrBanditTS.ARG_SELECTOR:RouletteWheelSelector({RouletteWheelSelector.ARG_EXPONENT:1})})
 
-    itemIDs:List[tuple] = aggr.runWithResponsibility(methodsResultDict, methodsParamsDF, N)
+    userID:int = 101
+    itemIDs:List[tuple] = aggr.runWithResponsibility(methodsResultDict, methodsParamsDF, userID, N)
     #itemIDs:List[tuple] = aggr.run(methodsResultDict, methodsParamsDF, N)
     print(itemIDs)
 

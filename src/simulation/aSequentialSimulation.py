@@ -18,7 +18,7 @@ from history.aHistory import AHistory #class
 from evaluationTool.aEvalTool import AEvalTool #class
 
 from datasets.aDataset import ADataset #class
-from datasets.ml.behaviours import Behaviours #class
+from datasets.ml.behavioursML import BehavioursML #class
 
 from pandas.core.frame import DataFrame #class
 
@@ -210,7 +210,7 @@ class ASequentialSimulation(ABC):
         print("repetition: " + str(repetition))
 
         uObservationStrI:str = testBehaviourDict[repetition].loc[currentDFIndex][COL_BEHAVIOUR]
-        uObservation:List[bool] = Behaviours.convertToListOfBoolean(uObservationStrI)
+        uObservation:List[bool] = BehavioursML.convertToListOfBoolean(uObservationStrI)
 
         print("uObservation: " + str(uObservation))
 

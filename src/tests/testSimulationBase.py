@@ -9,7 +9,7 @@ from datasets.datasetML import DatasetML #class
 from datasets.datasetRetailrocket import DatasetRetailRocket #class
 
 from datasets.ml.ratings import Ratings #class
-from datasets.ml.behaviours import Behaviours #class
+from datasets.ml.behavioursML import BehavioursML #class
 from datasets.retailrocket.behavioursRR import BehavioursRR #class
 from datasets.slantour.behavioursST import BehavioursST #class
 
@@ -123,7 +123,7 @@ def test01():
 
     datasetMy:ADataset = DatasetML("", testRatingsDF, dataset.usersDF, dataset.itemsDF)
 
-    behavioursDF:DataFrame = DataFrame(columns=[Behaviours.COL_REPETITION, Behaviours.COL_BEHAVIOUR])
+    behavioursDF:DataFrame = DataFrame(columns=[BehavioursML.COL_REPETITION, BehavioursML.COL_BEHAVIOUR])
     for ratingIndexI in range(len(testRatingsDF)):
         for repetitionI in range(5):
             behavioursDF.loc[ratingIndexI*5 + repetitionI] = list([repetitionI, [True]*20])
