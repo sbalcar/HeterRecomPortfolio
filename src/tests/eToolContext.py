@@ -59,7 +59,7 @@ def test03():
     # WHAT EVALUATIOR NEEDS into dictionary!
     evaluationDict: dict = {EvalToolContext.ARG_USER_ID: userID,    # USERID
                             EvalToolContext.ARG_RELEVANCE: methodsResultDict,   # EACH RECOMMENDER VOTES
-                            EvalToolContext.ARG_ITEM_ID: itemID,    # ITEMID (not mandatory if EvalToolContext.ARG_PAGE_TYPE: "zobrazit")
+                            EvalToolContext.ARG_ITEM_ID: itemID,    # ITEMID (not mandatory if EvalToolContext.ARG_PAGE_TYPE != "zobrazit")
                             EvalToolContext.ARG_SENIORITY: 5,   # SENIORITY OF USER
                             EvalToolContext.ARG_PAGE_TYPE: "zobrazit",  #   TYPE OF PAGE ("zobrazit", "index" or "katalog)
                             EvalToolContext.ARG_ITEMS_SHOWN: 10 # HOW MANY ITEMS ARE SHOWN TO USER
