@@ -25,6 +25,7 @@ class EvalToolContext(AEvalTool):
     ARG_PAGE_TYPE = "page_type"
     ARG_ITEMS_SHOWN = "items_shown"
     ARG_ITEM_ID = "itemID"
+    ARG_EVENTS = "events"
 
     def __init__(self, argsDict:dict):
         if type(argsDict) is not dict:
@@ -34,7 +35,7 @@ class EvalToolContext(AEvalTool):
         self.minVotesConst:float = 0.01
         self.dataset_name: str = argsDict[self.ARG_DATASET]
         self.items: DataFrame = self._preprocessItems(argsDict[self.ARG_ITEMS])
-        self.users: DataFrame = self._preprocessUsers(argsDict[self.ARG_USERS])
+        self.users: DataFrame = self._preprocessUsers(argsDict)
         self.history = argsDict[self.ARG_HISTORY]
         self._contextDim: int = 0
         self._b: dict = {}
@@ -44,13 +45,24 @@ class EvalToolContext(AEvalTool):
         self._INVERSE_CALCULATION_THRESHOLD: int = 2
         self._inverseCounter: int = 0
 
-    def _preprocessUsers(self, users: DataFrame):
+    def _preprocessUsers(self, argsDict: dict):
         if self.dataset_name == "ml":
-            return self._onehotUsersOccupationML(users)
+            return self._onehotUsersOccupationML(argsDict[self.ARG_USERS])
         elif self.dataset_name == "st":
-            return users
+            return self._preprocessEventsST(argsDict[self.ARG_EVENTS])
         else:
             raise ValueError("Dataset " + self.dataset_name + " is not supported!")
+
+    def _preprocessEventsST(self, events: DataFrame):
+        self.users = {}
+        for index, row in events.iterrows():
+            if row.loc['pageType'] == "zobrazit":
+                if row.loc['userID'] not in self.users:
+                    self.users[row.loc['userID']] = [row.loc['objectID']]
+                else:
+                    if row.loc['objectID'] not in self.users[row.loc['userID']]:
+                        self.users[row.loc['userID']].append(row.loc['objectID'])
+        return self.users
 
     def _onehotUsersOccupationML(self, users: DataFrame):
         one_hot_encoding = pd.get_dummies(users['occupation'])
@@ -66,11 +78,14 @@ class EvalToolContext(AEvalTool):
             raise ValueError("Dataset " + self.dataset_name + " is not supported!")
 
     def _preprocessItemsST(self, items: DataFrame):
-        self.items = items[['delka']]
+        self.items = items[['delka', 'id_serial']]
 
         log_price = items[['prumerna_cena_noc']].apply(lambda x: math.log(x[0]), axis=1)
         self.items = self.items.join(pd.DataFrame(data=log_price, columns=['prumerna_cena_noc']))
 
+        # TODO: weird format of 'zeme' column->think about spliting the values
+        #  (f.e. if value is "Anglie:Sport" -> in OHE into 2 columns "Anglie", "Sport",
+        #  not into one column "Anglie:Sport")
         # onehot country
         oneHot = pd.get_dummies(items['zeme'])
         self.items = self.items.join(oneHot)
@@ -107,6 +122,7 @@ class EvalToolContext(AEvalTool):
                     break
                 else:
                     i = (i % 12) + 1
+        self.items.set_index('id_serial', inplace=True)
         return self.items
 
     def _onehotItemsGenresML(self, items: DataFrame):
@@ -159,18 +175,41 @@ class EvalToolContext(AEvalTool):
             raise ValueError("Dataset " + self.dataset_name + " is not supported!")
 
     def _calculateContextST(self, userID, argumentsDict):
-        result = np.zeros(2)
+        result = np.zeros(5)
         if argumentsDict[self.ARG_PAGE_TYPE] == 'zobrazit':
             itemID = argumentsDict[self.ARG_ITEM_ID]
 
             item = self.items.loc[itemID]
 
+            if userID not in self.users:
+                self.users[userID] = [itemID]
+            else:
+                if itemID not in self.users[userID]:
+                    self.users[userID].append(itemID)
+
             result = np.append(result, item)
+            result[3] = 1
 
         else:
-            pass
+            if argumentsDict[self.ARG_PAGE_TYPE] == 'index':
+                result[4] = 1
+            else:
+                result[5] = 1
+            AggregationOfItems = np.array([0] * self.items.shape[1], dtype=float)
+
+            # if we even know the user
+            if userID in self.users:
+                for objectID in self.users[userID]:
+                    AggregationOfItems += self.items.loc[objectID]
+                AggregationOfItems.to_numpy()
+            result = np.append(result, AggregationOfItems)
+
         result[0] = math.log(argumentsDict[self.ARG_SENIORITY])
         result[1] = argumentsDict[self.ARG_ITEMS_SHOWN]
+
+        poly = PolynomialFeatures(2)
+        result = poly.fit_transform(result.reshape(-1, 1))
+        result = result.flatten()
 
         self._contextDim = len(result)
 

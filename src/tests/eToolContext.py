@@ -34,16 +34,19 @@ from aggregation.aggrFuzzyDHondt import AggrFuzzyDHondt
 from aggregation.operators.theMostVotedItemSelector import TheMostVotedItemSelector #class
 
 def test03():
+    # First get Dataset Data
     dataset:ADataset = DatasetST.readDatasets()
     events = dataset.eventsDF
     serials = dataset.serialsDF
 
+    # I created some dummy data, but each key,value pair should be result list from a recommender
+    #   (=what recommender recommended)
     methodsResultDict: dict = {
         "metoda1": pd.Series([0.2, 0.1, 0.3, 0.3, 0.1], [32, 2, 8, 1, 4], name="rating"),
         "metoda2": pd.Series([0.1, 0.1, 0.2, 0.3, 0.3], [1, 5, 32, 6, 7], name="rating")
     }
-    rItemsWithResponsibility = [(7, {'metoda1': 0.0, 'metoda2': 0.1505441022698901}), (5, {'metoda1': 0.0, 'metoda2': 0.13059247425821793}), (6, {'metoda1': 0.0, 'metoda2': 0.12877868989352043}), (4, {'metoda1': 0.0, 'metoda2': 0.12787179771117171}), (3, {'metoda1': 0.0, 'metoda2': 0.11426841497594067}), (2571, {'metoda1': 0.0, 'metoda2': 0.10882706188184826}), (2, {'metoda1': 0.0, 'metoda2': 0.10792016969949952}), (1, {'metoda1': 0.0, 'metoda2': 0.10701327751715078})]
 
+    # init votes for each recommender
     portfolioModelData = [['metoda1', 0.6], ['metoda2', 0.4]]
     portfolioModelDF:DataFrame = pd.DataFrame(portfolioModelData, columns=["methodID","votes"])
     portfolioModelDF.set_index("methodID", inplace=True)
@@ -53,25 +56,48 @@ def test03():
     itemID = 2
     historyDF: AHistory = HistoryDF("test01")
 
-    evaluationDict: dict = {EvalToolContext.ARG_USER_ID: userID,
-                            EvalToolContext.ARG_RELEVANCE: methodsResultDict,
-                            EvalToolContext.ARG_ITEM_ID: itemID,
-                            EvalToolContext.ARG_SENIORITY: 5,
-                            EvalToolContext.ARG_PAGE_TYPE: "zobrazit",
-                            EvalToolContext.ARG_ITEMS_SHOWN: 10
+    # WHAT EVALUATIOR NEEDS into dictionary!
+    evaluationDict: dict = {EvalToolContext.ARG_USER_ID: userID,    # USERID
+                            EvalToolContext.ARG_RELEVANCE: methodsResultDict,   # EACH RECOMMENDER VOTES
+                            EvalToolContext.ARG_ITEM_ID: itemID,    # ITEMID (not mandatory if EvalToolContext.ARG_PAGE_TYPE: "zobrazit")
+                            EvalToolContext.ARG_SENIORITY: 5,   # SENIORITY OF USER
+                            EvalToolContext.ARG_PAGE_TYPE: "zobrazit",  #   TYPE OF PAGE ("zobrazit", "index" or "katalog)
+                            EvalToolContext.ARG_ITEMS_SHOWN: 10 # HOW MANY ITEMS ARE SHOWN TO USER
                             }
+    # Init eTool
     eToolContext = EvalToolContext(
-        {EvalToolContext.ARG_USERS: pd.DataFrame(),
-         EvalToolContext.ARG_ITEMS: serials,
-         EvalToolContext.ARG_DATASET: "st",
-         EvalToolContext.ARG_HISTORY: historyDF}
+        {
+         EvalToolContext.ARG_ITEMS: serials,    # ITEMS
+         EvalToolContext.ARG_EVENTS: events,    # EVENTS (FOR CALCULATING HISTORY OF USER)
+         EvalToolContext.ARG_DATASET: "st",     # WHAT DATASET ARE WE IN
+         EvalToolContext.ARG_HISTORY: historyDF} # empty instance of AHistory is OK for ST dataset
     )
-    aggr: AggrContextFuzzyDHondt = AggrContextFuzzyDHondt(historyDF, {
-        AggrContextFuzzyDHondt.ARG_EVAL_TOOL: eToolContext,
-        AggrContextFuzzyDHondt.ARG_SELECTOR: TheMostVotedItemSelector({})
+    aggr: AggrContextFuzzyDHondt = AggrContextFuzzyDHondt(historyDF, {  # empty instance of AHistory is OK for ST dataset
+        AggrContextFuzzyDHondt.ARG_EVAL_TOOL: eToolContext, # eTool
+        AggrContextFuzzyDHondt.ARG_SELECTOR: TheMostVotedItemSelector({}) # ? FuzzyDHondt needs this, not contextAggr
     })
-    l1 = eToolContext.click(rItemsWithResponsibility,1,portfolioModelDF,evaluationDict)
 
+    # Get data from aggregator
+    rItemsWithResponsibility = aggr.runWithResponsibility(methodsResultDict, portfolioModelDF, userID, numberOfItems=5, argumentsDict=evaluationDict)
+    # call click & displayed methods
+    l1 = eToolContext.displayed(rItemsWithResponsibility, portfolioModelDF, evaluationDict)
+    # rItemsWithResponsibility[0][0] is clicked item
+    l1 = eToolContext.click(rItemsWithResponsibility,rItemsWithResponsibility[0][0],portfolioModelDF,evaluationDict)
+
+    # ...
+    # ...
+    # ...
+    # user is now on "index" page type, so we have to change page type in evaluationDict (!)
+    evaluationDict[EvalToolContext.ARG_PAGE_TYPE] = "index"
+
+    # same as before
+    # Get data from aggregator
+    rItemsWithResponsibility = aggr.runWithResponsibility(methodsResultDict, portfolioModelDF, userID, numberOfItems=5,
+                                                          argumentsDict=evaluationDict)
+    # call click & displayed methods
+    l1 = eToolContext.displayed(rItemsWithResponsibility, portfolioModelDF, evaluationDict)
+    # rItemsWithResponsibility[0][0] is clicked item
+    l1 = eToolContext.click(rItemsWithResponsibility, rItemsWithResponsibility[0][0], portfolioModelDF, evaluationDict)
 
 
 def test01():

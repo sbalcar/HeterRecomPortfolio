@@ -28,7 +28,13 @@ class MixinContextAggregation(AAgregation):
 
     def run(self, methodsResultDict: dict, modelDF: DataFrame, userID: int, numberOfItems: int = 20, argumentsDict:Dict[str,object]={}):
 
-        self._context = self.eTool.calculateContext(userID, argumentsDict)
+        self.eTool._context = self.eTool.calculateContext(userID, argumentsDict)
+
+        for recommender, row in modelDF.iterrows():
+            if recommender not in self.eTool._A:
+                self.eTool._b[recommender] = np.zeros(self.eTool._contextDim)
+                self.eTool._A[recommender] = np.identity(self.eTool._contextDim)
+                self.eTool._inverseA[recommender] = np.identity(self.eTool._contextDim)
 
         # update recommender's votes
         updatedVotes = dict()
@@ -36,7 +42,7 @@ class MixinContextAggregation(AAgregation):
         for recommender, votes in modelDF.iterrows():
             # Calculate change rate
             ridgeRegression = self.eTool._inverseA[recommender].dot(self.eTool._b[recommender])
-            UCB_secondpart = 0.1 * self._context.T.dot(self.eTool._inverseA[recommender]).dot(self._context)
+            UCB_secondpart = 0.1 * self.eTool._context.T.dot(self.eTool._inverseA[recommender]).dot(self.eTool._context)
             UCB = (ridgeRegression.T.dot(self.eTool._context) + math.sqrt(UCB_secondpart))
             print("UCB: ", UCB)
             # update votes
