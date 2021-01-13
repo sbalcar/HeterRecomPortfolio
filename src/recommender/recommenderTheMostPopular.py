@@ -62,6 +62,8 @@ class RecommenderTheMostPopular(ARecommender):
         if type(argumentsDict) is not dict:
             raise ValueError("Argument argumentsDict is not type dict.")
 
+        print("AllowedItemIDs=" + str(argumentsDict[ARecommender.ARG_ALLOWED_ITEMIDS]))
+
         if not self.result is None:
             if self.numberOfItems == numberOfItems:
                 return self.result

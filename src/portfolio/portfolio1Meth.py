@@ -62,7 +62,11 @@ class Portfolio1Meth(APortfolio):
 
         numberOfItems:int = argumentsDict[self.ARG_NUMBER_OF_AGGR_ITEMS]
 
-        recomItemIDsWithResponsibility:Series = self._recommender.recommend(userID, numberOfItems=numberOfItems, argumentsDict=self._recomDesc.getArguments())
+        arguments2Dict:Dict[str,object] = {}
+        arguments2Dict.update(self._recomDesc.getArguments())
+        arguments2Dict.update(argumentsDict)
+
+        recomItemIDsWithResponsibility:Series = self._recommender.recommend(userID, numberOfItems=numberOfItems, argumentsDict=arguments2Dict)
         #print(recomItemIDsWithResponsibility)
 
         recomItemIDs:List[int] = list(recomItemIDsWithResponsibility.index)

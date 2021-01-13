@@ -83,18 +83,21 @@ class Portfolio1Aggr(APortfolio):
        numberOfRecomItems:int = argumentsDict[self.ARG_NUMBER_OF_RECOMM_ITEMS]
        numberOfAggrItems:int = argumentsDict[self.ARG_NUMBER_OF_AGGR_ITEMS]
 
+       arguments2Dict:Dict[str, object] = {}
+       arguments2Dict.update(self._recomDesc.getArguments())
+       arguments2Dict.update(argumentsDict)
 
        resultsOfRecommendations:dict = {}
 
        for recomI, recomIdI, recomDescsI in zip(self._recommenders, self._recommIDs, self._recomDescs):
            resultOfRecommendationI:List[int] = recomI.recommend(
-               userID, numberOfItems=numberOfRecomItems, argumentsDict=recomDescsI.getArguments())
+               userID, numberOfItems=numberOfRecomItems, argumentsDict=arguments2Dict)
            resultsOfRecommendations[recomIdI] = resultOfRecommendationI
 
 
        aggItemIDsWithResponsibility:List = self._aggregation.runWithResponsibility(
            resultsOfRecommendations, portFolioModel, userID, numberOfItems=numberOfAggrItems,
-           argumentsDict=argumentsDict)
+           argumentsDict=arguments2Dict)
        #print(aggregatedItemIDsWithResponsibility)
 
        aggItemIDs:List[int] = list(map(lambda rs: rs[0], aggItemIDsWithResponsibility))

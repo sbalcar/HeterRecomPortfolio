@@ -89,7 +89,8 @@ def test01():
                    HeterRecomHTTPHandler.ARG_VARIANTID + "=" + HeterRecomHTTPHandler.VARIANT_A + "&" + \
                    HeterRecomHTTPHandler.ARG_USERID + "=" + str(userID) + "&" + \
                    HeterRecomHTTPHandler.ARG_ITEMID + "=" + str(itemID) + "&" + \
-                   HeterRecomHTTPHandler.ARG_NUMBER_OF_ITEMS + "=20" + "'"
+                   HeterRecomHTTPHandler.ARG_NUMBER_OF_ITEMS + "=20" + "&" + \
+                   HeterRecomHTTPHandler.ARG_ALLOWED_ITEMIDS + "=None" + "'"
 
     print("IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII")
     print(command0)

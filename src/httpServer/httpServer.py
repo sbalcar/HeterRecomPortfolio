@@ -23,6 +23,8 @@ from datasets.ml.ratings import Ratings #class
 from evaluationTool.aEvalTool import AEvalTool #class
 from evaluationTool.evalToolSingleMethod import EToolSingleMethod #class
 
+from recommender.aRecommender import ARecommender #class
+
 import pandas as pd
 
 class HeterRecomHTTPHandler(BaseHTTPRequestHandler):
@@ -38,6 +40,7 @@ class HeterRecomHTTPHandler(BaseHTTPRequestHandler):
     ARG_ITEMID:str = "itemID"
     ARG_NUMBER_OF_ITEMS:str = "numberOfItems"
     ARG_RITEMIDS_WITH_RESP:str = "rItemIDsWithResponsibility"
+    ARG_ALLOWED_ITEMIDS:str = ARecommender.ARG_ALLOWED_ITEMIDS
 
     VARIANT_A:str = "a"
     VARIANT_B:str = "b"
@@ -98,8 +101,11 @@ class HeterRecomHTTPHandler(BaseHTTPRequestHandler):
                 self.send_error(404)
                 return
             numberOfItems:int = int(params[self.ARG_NUMBER_OF_ITEMS])
+            allowedItemIDsStr:str = params[self.ARG_ALLOWED_ITEMIDS]
+            allowedItemIDs:List[int] = ast.literal_eval(allowedItemIDsStr)
+
             print("numberOfItems: " + str(numberOfItems))
-            self.__visit(variant, userID, itemID, numberOfItems)
+            self.__visit(variant, userID, itemID, numberOfItems, allowedItemIDs)
             return
 
         else:
@@ -125,7 +131,7 @@ class HeterRecomHTTPHandler(BaseHTTPRequestHandler):
         self.wfile.write(b'\n')
 
 
-    def __visit(self, variant:str, userID:int, itemID:int, numberOfItems:int):
+    def __visit(self, variant:str, userID:int, itemID:int, numberOfItems:int, allowedItemIDs:List[int]):
         print("visit")
         if not variant in self.portfolioDict:
             self.send_error(404)
@@ -149,7 +155,7 @@ class HeterRecomHTTPHandler(BaseHTTPRequestHandler):
         portfolio.update(updateDF, {})
 
         model:DataFrame = self.modelsDict[variant]
-        rec, resp = portfolio.recommend(userID, model, {APortfolio.ARG_NUMBER_OF_AGGR_ITEMS:numberOfItems})
+        rec, resp = portfolio.recommend(userID, model, {APortfolio.ARG_NUMBER_OF_AGGR_ITEMS:numberOfItems, ARecommender.ARG_ALLOWED_ITEMIDS:allowedItemIDs})
         #print(rec)
         #print(resp)
 
