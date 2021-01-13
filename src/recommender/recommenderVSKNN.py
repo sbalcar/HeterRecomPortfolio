@@ -274,23 +274,32 @@ class RecommenderVMContextKNN(ARecommender):
         usersData = self._trainDataset.eventsDF.loc[self._trainDataset.eventsDF[self.user_key] == userID]
         if len(usersData) == 0:
             return Series([], index=[])
-        print(len(usersData))    
+        #print(len(usersData))    
         lastUserSession = usersData.sort_values(by=self.session_key, ascending=False).iloc[0][self.session_key]
-        print(lastUserSession)
+        #print(lastUserSession)
         
         sessionData =  usersData.loc[usersData[self.session_key] == lastUserSession].sort_values(by=self.time_key)   
         sessionItems = sessionData[self.item_key]
         sessionTime = sessionData[self.time_key]
         items = sessionItems.values.tolist()
         timestamp = sessionTime.values.tolist()
-        print(items,timestamp)
+        #print(items,timestamp)
         #items = self.session_items if self.last_n_clicks is None else self.session_items[-self.last_n_clicks:]
         neighbors = self.find_neighbors(items, items[-1], lastUserSession, self.dwelling_times, timestamp)
+        if len(neighbors) <=0:    #no similar sessions found
+            return Series([], index=[])
+        
         scores = self.score_items(neighbors, items, timestamp)
-        print(neighbors, scores)
+        #print(neighbors, scores)
         sortedScores = sorted(scores.items(), key=lambda item: item[1], reverse=True)
-        print(sortedScores)
+        #print(sortedScores)
         sortedNewScores = {key: value for key, value in sortedScores if key not in self.items_for_session(lastUserSession)}
+        
+        if argumentsDict.get(self.ARG_ALLOWED_ITEMIDS) is not None:
+            # ARG_ALLOWED_ITEMIDS contains a list of allowed IDs
+            # TODO check type of ARG_ALLOWED_ITEMIDS, should be list
+            sortedNewScores = {key: value for key, value in sortedScores if key in argumentsDict[self.ARG_ALLOWED_ITEMIDS]}
+        
         result: Series = Series(list(sortedNewScores.keys())[:numberOfItems])
         finalScores = Series(list(sortedNewScores.values())[:numberOfItems])
         #print(result)
@@ -299,7 +308,7 @@ class RecommenderVMContextKNN(ARecommender):
         if len(finalScores) == 0: #no valid result
             return Series([], index=[])                 
         finalScores = normalize(np.expand_dims(finalScores, axis=0))[0, :]
-        print(Series(finalScores.tolist(), index=list(result)))
+        #print(Series(finalScores.tolist(), index=list(result)))
         
         return Series(finalScores.tolist(), index=list(result))
 
@@ -652,9 +661,12 @@ class RecommenderVMContextKNN(ARecommender):
         out : set
         '''
         sessions = set()
-        print("session_id: " + str(session_id))
+        #print("session_id: " + str(session_id))
         a = self.items_for_session(session_id)
-        print(a)
+        if a is None:
+            print("None in items_for_session")
+            return set()
+        #print(a)
         for item in a:
             for session in self.item_session_map.get(item) if item in self.item_session_map else ():
                 sessions.add(session)
@@ -680,6 +692,7 @@ class RecommenderVMContextKNN(ARecommender):
             time = self.session_time.get(session)
             if time is None:
                 print(' EMPTY TIMESTAMP!! ', session)
+                time = 0 #fck-off patch
             tuples.append((session, time))
 
         tuples = sorted(tuples, key=itemgetter(1), reverse=True)
@@ -823,6 +836,9 @@ class RecommenderVMContextKNN(ARecommender):
         out : list of tuple (session_id, similarity)
         '''
         possible_neighbors = self.possible_neighbor_sessions(session_items, input_item_id, session_id)
+        if len(possible_neighbors)  <=0:
+            print("emptyNeighbors")
+            return []
         possible_neighbors = self.calc_similarity(session_items, possible_neighbors, dwelling_times, timestamp)
 
         possible_neighbors = sorted(possible_neighbors, reverse=True, key=lambda x: x[1])

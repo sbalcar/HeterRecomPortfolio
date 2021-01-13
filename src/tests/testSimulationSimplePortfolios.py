@@ -324,7 +324,7 @@ def test25():
 
 def test26():
 
-    print("Simulation: ST MF")
+    print("Simulation: ST VMCMF")
 
     rDescr:RecommenderDescription = InputRecomSTDefinition.exportRDescVMContextKNN()
 
