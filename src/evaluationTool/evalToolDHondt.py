@@ -33,6 +33,7 @@ class EvalToolDHondt(AEvalTool):
 
     def click(self, rItemIDsWithResponsibility:List, clickedItemID:int, portfolioModel:DataFrame, evaluationDict:dict):
         if type(rItemIDsWithResponsibility) is not list:
+            print(rItemIDsWithResponsibility)
             raise ValueError("Argument rItemIDsWithResponsibility isn't type list.")
         if type(clickedItemID) is not int and type(clickedItemID) is not np.int64:
             raise ValueError("Argument clickedItemID isn't type int.")

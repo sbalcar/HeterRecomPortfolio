@@ -96,9 +96,9 @@ class Portfolio1Aggr(APortfolio):
            resultsOfRecommendations[recomIdI] = resultOfRecommendationI
 
 
-       aggItemIDsWithResponsibility:List = self._aggregation.runWithResponsibility(
-           resultsOfRecommendations, portFolioModel, userID, numberOfItems=numberOfAggrItems,
-           argumentsDict=argumentsDict)
+       aggItemIDsWithResponsibility:List
+       aggItemIDsWithResponsibility = self._aggregation.runWithResponsibility(
+           resultsOfRecommendations, portFolioModel, userID, numberOfAggrItems, argumentsDict)
        #print(aggregatedItemIDsWithResponsibility)
 
        aggItemIDs:List[int] = list(map(lambda rs: rs[0], aggItemIDsWithResponsibility))

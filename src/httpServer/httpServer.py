@@ -89,11 +89,11 @@ class HeterRecomHTTPHandler(BaseHTTPRequestHandler):
             if not self.ARG_RITEMIDS_WITH_RESP in params:
                 self.send_error(404)
                 return
-            rItemIdsStr:str = params[self.ARG_RITEMIDS_WITH_RESP]
-            print("rItemIds: " + str(rItemIdsStr))
-            rItemIds = ast.literal_eval(rItemIdsStr)
+            rItemIdsWithRespStr:str = params[self.ARG_RITEMIDS_WITH_RESP]
+            print("rItemIdsWithResp: " + str(rItemIdsWithRespStr))
+            rItemIdsWithResp = ast.literal_eval(rItemIdsWithRespStr)
 
-            self.__click(variant, userID, itemID, rItemIds)
+            self.__click(variant, userID, itemID, rItemIdsWithResp)
             return
 
         elif action == self.ACTION_VISIT:
@@ -119,7 +119,7 @@ class HeterRecomHTTPHandler(BaseHTTPRequestHandler):
             return
 
         evalTool:AEvalTool = self.evalToolsDict[variant]
-        evalTool.click(Series(rItemIDsWithResponsibility), itemID, self.modelsDict[variant], self.evaluation)
+        evalTool.click(rItemIDsWithResponsibility, itemID, self.modelsDict[variant], self.evaluation)
 
         #print("evaluation: ", str(self.evaluation))
 
@@ -155,17 +155,20 @@ class HeterRecomHTTPHandler(BaseHTTPRequestHandler):
         portfolio.update(updateDF, {})
 
         model:DataFrame = self.modelsDict[variant]
-        rec, resp = portfolio.recommend(userID, model, {APortfolio.ARG_NUMBER_OF_AGGR_ITEMS:numberOfItems, ARecommender.ARG_ALLOWED_ITEMIDS:allowedItemIDs})
-        #print(rec)
-        #print(resp)
+        rItemIDs, rItemIDsWithtResp = portfolio.recommend(userID, model, {
+                        APortfolio.ARG_NUMBER_OF_AGGR_ITEMS:numberOfItems,
+                        APortfolio.ARG_NUMBER_OF_RECOMM_ITEMS:100,
+                        ARecommender.ARG_ALLOWED_ITEMIDS:allowedItemIDs})
+        print(rItemIDs)
+        print(rItemIDsWithtResp)
 
         evalTool:AEvalTool = self.evalToolsDict[variant]
-        evalTool.displayed(Series(resp), self.modelsDict[variant], self.evaluation)
+        evalTool.displayed(rItemIDsWithtResp, self.modelsDict[variant], self.evaluation)
 
         self.send_response(200)
         self.send_header('Content-Type', 'text/plain; charset=utf-8')
         self.end_headers()
-        message:str = "recommendation: userID=" + str(userID) + ", r=" + str(rec) + ", resp=" + str(resp)
+        message:str = "recommendation: userID=" + str(userID) + ", rItemIDs=" + str(rItemIDs) + ", rItemIDsWithtResp=" + str(rItemIDsWithtResp)
         self.wfile.write(message.encode('utf-8'))
         self.wfile.write(b'\n')
 

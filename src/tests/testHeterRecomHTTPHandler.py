@@ -62,7 +62,7 @@ def test01():
     HeterRecomHTTPHandler.modelsDict = modelsDict
     HeterRecomHTTPHandler.evalToolsDict = evalToolsDict
     HeterRecomHTTPHandler.evaluation = evaluationDict
-    HeterRecomHTTPHandler.datasetClass = DatasetML
+    HeterRecomHTTPHandler.datasetClass = DatasetST
 
     # Run HTTP in separate thread
     try:
@@ -77,7 +77,7 @@ def test01():
 
     rItemIDsWithResponsibility:List = [(7, {'metoda1': 0, 'metoda2': 24.0, 'metoda3': 18.0}), (1, {'metoda1': 30.0, 'metoda2': 8.0, 'metoda3': 0}), (32, {'metoda1': 20.0, 'metoda2': 16.0, 'metoda3': 0}), (8, {'metoda1': 30.0, 'metoda2': 0, 'metoda3': 0}), (6, {'metoda1': 0, 'metoda2': 24.0, 'metoda3': 0}), (64, {'metoda1': 0, 'metoda2': 0, 'metoda3': 18.0}), (2, {'metoda1': 10.0, 'metoda2': 0, 'metoda3': 6.0}), (77, {'metoda1': 0, 'metoda2': 0, 'metoda3': 12.0}), (4, {'metoda1': 10.0, 'metoda2': 0, 'metoda3': 0}), (5, {'metoda1': 0, 'metoda2': 8.0, 'metoda3': 0}), (12, {'metoda1': 0, 'metoda2': 0, 'metoda3': 6.0})]
     #rItemIDsWithResponsibility = "\[1,2,3,\{\}\]"
-    rItemIDsWithResponsibility = "\[(1,\{\"metoda1\":0\})\]"
+    rItemIDsWithResponsibility = "\[(555,\{\"RecomKnn\":1.0\})\]"
 
 
     command0:str = "curl -sS 'http://127.0.0.1:8080/?" + \
