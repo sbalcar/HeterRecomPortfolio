@@ -2,6 +2,7 @@
 
 import os
 from typing import List
+from typing import Dict
 
 from pandas.core.frame import DataFrame #class
 
@@ -9,6 +10,9 @@ import pandas as pd
 
 from evaluationTool.aEvalTool import AEvalTool #class
 from evaluationTool.evalToolDHondt import EvalToolDHondt #class
+
+from input.inputRecomSTDefinition import InputRecomSTDefinition #class
+from input.modelDefinition import ModelDefinition
 
 
 def test01():
@@ -35,7 +39,7 @@ def test01():
     print()
 
     # linearly normalizing to unit sum of votes
-    #EvalToolDHont.linearNormalizingPortfolioModelDHont(portfolioModelDF)
+    EvalToolDHondt.linearNormalizingPortfolioModelDHont(portfolioModelDF)
 
     print("Linearly normalizing:")
     print(portfolioModelDF)
@@ -64,8 +68,32 @@ def test01():
     print()
 
 
+def test02():
+    print("Test 02")
+
+    rIDs, rDescr = InputRecomSTDefinition.exportPairOfRecomIdsAndRecomDescrs()
+
+    model:DataFrame = ModelDefinition.createDHontModel(rIDs)
+    print(model)
+
+    rItemIDsWithResponsibility:List[(int, Dict)] = [(1,
+            {rIDs[0]:0.05, rIDs[1]:0.05, rIDs[2]:0.05, rIDs[3]:0.05,
+             rIDs[4]:0.05, rIDs[5]:0.05, rIDs[6]:0.05, rIDs[7]:0.65})
+            ]
+
+    lrClick:float = 0.03
+    lrView:float = lrClick / 500
+    evalTool:AEvalTool = EvalToolDHondt({EvalToolDHondt.ARG_LEARNING_RATE_CLICKS:lrClick, EvalToolDHondt.ARG_LEARNING_RATE_VIEWS:lrView})
+    evalTool.click(rItemIDsWithResponsibility, 1, model, {})
+
+    for i in range(555):
+        evalTool.displayed(rItemIDsWithResponsibility, model, {})
+
+    print(model)
+
 
 if __name__ == '__main__':
     os.chdir("..")
 
-    test01()
+#    test01()
+    test02()

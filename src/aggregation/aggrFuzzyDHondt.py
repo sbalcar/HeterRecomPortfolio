@@ -147,7 +147,7 @@ class AggrFuzzyDHondt(AAgregation):
         if type(argumentsDict) is not dict:
             raise ValueError("Argument argumentsDict isn't type dict.")
 
-        aggregatedItemIDs:List[int] = self.run(methodsResultDict, modelDF, numberOfItems)
+        aggregatedItemIDs:List[int] = self.run(methodsResultDict, modelDF, userID, numberOfItems, argumentsDict)
 
         itemsWithResposibilityOfRecommenders:List[int,np.Series[int,str]] = countDHontResponsibility(
             aggregatedItemIDs, methodsResultDict, modelDF, numberOfItems)

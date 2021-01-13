@@ -30,6 +30,10 @@ from portfolioDescription.portfolio1AggrDescription import Portfolio1AggrDescrip
 
 #from evaluationTool.evalToolSingleMethod import EToolSingleMethod #class
 from evaluationTool.evalToolBanditTS import EvalToolBanditTS #class
+from evaluationTool.evalToolDHondt import EvalToolDHondt #class
+
+from evaluationTool.aEvalTool import AEvalTool #class
+
 
 from recommenderDescription.recommenderDescription import RecommenderDescription #class
 
@@ -80,16 +84,16 @@ argsSimulationDict:Dict[str,object] = {SimulationST.ARG_WINDOW_SIZE: 5,
 
 def test01():
 
-    print("Simulation: ML BanditTS")
+    print("Simulation: ML FuzzyDHondt")
 
-    jobID:str = "BanditTS"
+    jobID:str = "FuzzyDHondt"
 
     selector = RouletteWheelSelector({RouletteWheelSelector.ARG_EXPONENT:1})
 
     rIDs, rDescs = InputRecomSTDefinition.exportPairOfRecomIdsAndRecomDescrs()
 
     pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
-        "BanditTS" + jobID, rIDs, rDescs, InputAggrDefinition.exportADescBanditTS(selector))
+        "FuzzyDHondt" + jobID, rIDs, rDescs, InputAggrDefinition.exportADescDHont(selector))
 
 
     batchID:str = "ml1mDiv90Ulinear0109R1"
@@ -97,25 +101,30 @@ def test01():
     behaviourFile:str = BehavioursML.getFile(BehavioursML.BHVR_LINEAR0109)
     behavioursDF:DataFrame = BehavioursML.readFromFileMl1m(behaviourFile)
 
-    model:DataFrame = ModelDefinition.createBanditModel(pDescr.getRecommendersIDs())
+    model:DataFrame = ModelDefinition.createDHontModel(pDescr.getRecommendersIDs())
+
+    lrClick:float = 0.03
+    lrView:float = lrClick / 500
+    eTool:AEvalTool = EvalToolDHondt({EvalToolDHondt.ARG_LEARNING_RATE_CLICKS: lrClick,
+                                      EvalToolDHondt.ARG_LEARNING_RATE_VIEWS: lrView})
 
     # simulation of portfolio
     simulator:Simulator = Simulator(batchID, SimulationML, argsSimulationDict, dataset, behavioursDF)
-    simulator.simulate([pDescr], [model], [EvalToolBanditTS({})], HistoryHierDF)
+    simulator.simulate([pDescr], [model], [eTool], HistoryHierDF)
 
 
 def test21():
 
-    print("Simulation: ST BanditTS")
+    print("Simulation: ST FuzzyDHondt")
 
-    jobID:str = "BanditTS"
+    jobID:str = "FuzzyDHondt"
 
     selector = RouletteWheelSelector({RouletteWheelSelector.ARG_EXPONENT:1})
 
     rIDs, rDescs = InputRecomSTDefinition.exportPairOfRecomIdsAndRecomDescrs()
 
     pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
-        "BanditTS" + jobID, rIDs, rDescs, InputAggrDefinition.exportADescBanditTS(selector))
+        "FuzzyDHondt" + jobID, rIDs, rDescs, InputAggrDefinition.exportADescDHont(selector))
 
 
     batchID:str = "stDiv90Ulinear0109R1"
@@ -123,11 +132,17 @@ def test21():
     behaviourFile:str = BehavioursST.getFile(BehavioursST.BHVR_LINEAR0109)
     behavioursDF:DataFrame = BehavioursST.readFromFileST(behaviourFile)
 
-    model:DataFrame = ModelDefinition.createBanditModel(pDescr.getRecommendersIDs())
+    model:DataFrame = ModelDefinition.createDHontModel(pDescr.getRecommendersIDs())
+    print(model)
+
+    lrClick:float = 0.1
+    lrView:float = lrClick / 300
+    evalTool:AEvalTool = EvalToolDHondt({EvalToolDHondt.ARG_LEARNING_RATE_CLICKS: lrClick,
+                                         EvalToolDHondt.ARG_LEARNING_RATE_VIEWS: lrView})
 
     # simulation of portfolio
     simulator:Simulator = Simulator(batchID, SimulationST, argsSimulationDict, dataset, behavioursDF)
-    simulator.simulate([pDescr], [model], [EvalToolBanditTS({})], HistoryHierDF)
+    simulator.simulate([pDescr], [model], [evalTool], HistoryHierDF)
 
 
 if __name__ == "__main__":

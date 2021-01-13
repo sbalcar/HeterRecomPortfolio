@@ -42,8 +42,9 @@ class EvalToolDHondt(AEvalTool):
             raise ValueError("Argument pModelDF doen't contain rights columns.")
         if type(evaluationDict) is not dict:
             raise ValueError("Argument evaluationDict isn't type dict.")
+        print(rItemIDsWithResponsibility)
 
-        aggrItemIDsWithRespDF: DataFrame = DataFrame(rItemIDsWithResponsibility, columns=["itemId", "responsibility"])
+        aggrItemIDsWithRespDF:DataFrame = DataFrame(rItemIDsWithResponsibility, columns=["itemId", "responsibility"])
         aggrItemIDsWithRespDF.set_index("itemId", inplace=True)
 
         #EvalToolDHont.linearNormalizingPortfolioModelDHont(portfolioModel)
@@ -60,6 +61,7 @@ class EvalToolDHondt(AEvalTool):
             relevance_this = responsibilityDict[methodIdI]
             relevance_others = sumMethodsVotes - relevance_this
             update_step = self.learningRateClicks * (relevance_this - relevance_others)
+            print("update_step: " + str(update_step))
             # elif action == "storeViews":
             #    update_step = -1 * learningRateViews * (relevance_this - relevance_others)
             #    pos_step = 0
