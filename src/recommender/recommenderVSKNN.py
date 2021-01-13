@@ -75,6 +75,9 @@ class RecommenderVMContextKNN(ARecommender):
             raise ValueError("Argument argumentsDict is not type dict.")
         self._jobID = jobID
         self._argumentsDict:Dict[str,object] = argumentsDict
+        if argumentsDict.get(self.ARG_K) is None:
+            argumentsDict[self.ARG_K] = 50 #default val
+            
         self.k = argumentsDict[self.ARG_K]
         self.sample_size = 500
         self.sampling = 'recent'

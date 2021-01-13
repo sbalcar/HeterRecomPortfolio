@@ -62,8 +62,6 @@ class RecommenderTheMostPopular(ARecommender):
         if type(argumentsDict) is not dict:
             raise ValueError("Argument argumentsDict is not type dict.")
 
-        print("AllowedItemIDs=" + str(argumentsDict[ARecommender.ARG_ALLOWED_ITEMIDS]))
-
         if not self.result is None:
             if self.numberOfItems == numberOfItems:
                 return self.result
@@ -79,7 +77,16 @@ class RecommenderTheMostPopular(ARecommender):
 
         elif type(self.trainDataset) is DatasetST:
             from datasets.slantour.events import Events #class
-            ratingsDF:DataFrame = self._sortedTheMostCommon[Events.COL_USER_ID].head(numberOfItems)
+            
+            #print(self._sortedTheMostCommon)
+            if argumentsDict.get(self.ARG_ALLOWED_ITEMIDS) is not None:
+                # ARG_ALLOWED_ITEMIDS contains a list of allowed IDs
+                # TODO check type of ARG_ALLOWED_ITEMIDS, should be list
+                reducedList = self._sortedTheMostCommon.loc[self._sortedTheMostCommon.index.intersection(argumentsDict[self.ARG_ALLOWED_ITEMIDS])]   
+            else:
+                reducedList = self._sortedTheMostCommon 
+            
+            ratingsDF:DataFrame = reducedList[Events.COL_USER_ID].head(numberOfItems)
 
         else:
             raise ValueError("Argument dataset isn't of expected type.")

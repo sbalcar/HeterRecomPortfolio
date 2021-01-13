@@ -43,7 +43,7 @@ def test01():
     rec.train(HistoryDF("test"), trainDataset)
 
     ratingsDFUpdate:DataFrame = ratingsDF.iloc[50003:50004]
-    rec.update(ratingsDFUpdate, {})
+    rec.update(ARecommender.UPDT_CLICK, ratingsDFUpdate)
 
     r:Series = rec.recommend(331, 50, {})
     print(type(r))
@@ -85,15 +85,14 @@ def test03():
     rec:ARecommender = RecommenderTheMostPopular("rTheMostPopular", {})
     rec.train(HistoryDF("test"), dataset)
 
-    recommendation = rec.recommend(1, 20, {})
+    recommendation = rec.recommend(1, 20, {rec.ARG_ALLOWED_ITEMIDS: list(range(0,1000))})
     print(recommendation)
 
 
 if __name__ == "__main__":
 
-    os.chdir("..")
 
-    test01()
+    #test01()
     #test02()
-    #test03()
+    test03()
 

@@ -217,8 +217,14 @@ class RecommenderW2V(ARecommender):
                 print(type(results))
             # check for a variant with negative preference (only positive objects recommended)
             # approximative solution - might result in less objects
-            resultList = (-results).argsort()[0:(numberOfItems * 3)]
+            resultList = (-results).argsort()[0:(numberOfItems * 10)]
             resultingOIDs = [self.rev_dict[i] for i in resultList if self.rev_dict[i] > 0]
+            
+            if argumentsDict.get(self.ARG_ALLOWED_ITEMIDS) is not None:
+                # ARG_ALLOWED_ITEMIDS contains a list of allowed IDs
+                # TODO check type of ARG_ALLOWED_ITEMIDS, should be list
+                resultingOIDs = [key for key in resultingOIDs if key in argumentsDict[self.ARG_ALLOWED_ITEMIDS]]          
+            
             resultingOIDs = resultingOIDs[0:numberOfItems]
             resultList = [self.dictionary[i] for i in resultingOIDs]
 
