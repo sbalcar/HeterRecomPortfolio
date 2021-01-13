@@ -304,7 +304,7 @@ class RecommenderVMContextKNN(ARecommender):
             sortedNewScores = {key: value for key, value in sortedScores if key in argumentsDict[self.ARG_ALLOWED_ITEMIDS]}
         
         result: Series = Series(list(sortedNewScores.keys())[:numberOfItems])
-        finalScores = Series(list(sortedNewScores.values())[:numberOfItems])
+        finalScores = Series(list(sortedNewScores.values())[:numberOfItems])           
         #print(result)
 
 
@@ -847,6 +847,9 @@ class RecommenderVMContextKNN(ARecommender):
         possible_neighbors = sorted(possible_neighbors, reverse=True, key=lambda x: x[1])
         possible_neighbors = possible_neighbors[:self.k]
         #print(possible_neighbors)
+        if len(possible_neighbors)  <=0:
+            print("emptyNeighbors")
+            return []
         possible_neighbors = self.padding_possible_neighbors(possible_neighbors)
         
         return possible_neighbors
