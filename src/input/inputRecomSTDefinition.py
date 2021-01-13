@@ -109,6 +109,9 @@ class InputRecomSTDefinition:
         rIDsKNN:List[str] = [recom + cls.KNN.title()]
         rDescsKNN:List[RecommenderDescription] = [cls.exportRDescKNN()]
 
+        rIDsVMCKNN:List[str] = [recom + cls.VMC_KNN.title()]
+        rDescsVMCKNN:List[RecommenderDescription] = [cls.exportRDescVMContextKNN()]
+
         rIDsBPRMF:List[str] = [recom + cls.BPRMF_F50I20LR01R003.title(), recom + cls.BPRMF_F50I20LR01R001.title()]
         rDescsBPRMF:List[RecommenderDescription] = [cls.exportRDescBPRMFf50i20lr01r003(), cls.exportRDescBPRMFf20i50lr01r001()]
 
@@ -118,12 +121,10 @@ class InputRecomSTDefinition:
         rIDsW2V:List[str] = [recom + cls.W2V_ALL100000WS1VS32_MAX1.title(), recom + cls.W2V_ALL200000WS1VS64_WEIGHTEDMEAN5.title()]
         rDescsW2V:List[RecommenderDescription] = [cls.exportRDescW2Vtalli100000ws1vs32upsmaxups1(), cls.exportRDescW2talli200000ws1vs64upsweightedMeanups5()]
 
-        rIDs:List[str] = rIDsPop + rIDsKNN + rIDsBPRMF + rIDsCOSCB + rIDsW2V
-        rDescs:List[RecommenderDescription] = rDescsPop + rDescsKNN + rDescsBPRMF + rDescsCOSCB + rDescsW2V
+        rIDs:List[str] = rIDsPop + rIDsKNN + rIDsVMCKNN + rIDsBPRMF + rIDsCOSCB + rIDsW2V
+        rDescs:List[RecommenderDescription] = rDescsPop + rDescsKNN + rDescsVMCKNN + rDescsBPRMF + rDescsCOSCB + rDescsW2V
 
         return (rIDs, rDescs)
-
-
 
 
     @staticmethod
@@ -143,6 +144,8 @@ class InputRecomSTDefinition:
             return cls.exportRDescTheMostPopular()
         elif recommenderID == cls.KNN:
             return cls.exportRDescKNN()
+        elif recommenderID == cls.VMC_KNN:
+            return cls.exportRDescVMContextKNN()
         elif recommenderID == cls.COS_CB_OHE_MEAN1:
             return cls.exportRDescCosineCBcbdOHEupsmeanups1()
         elif recommenderID == cls.COS_CB_OHE_WEIGHTEDMEAN5:
@@ -155,3 +158,4 @@ class InputRecomSTDefinition:
             return cls.exportRDescBPRMFf50i20lr01r003()
         elif recommenderID == cls.BPRMF_F50I20LR01R001:
             return cls.exportRDescBPRMFf20i50lr01r001()
+

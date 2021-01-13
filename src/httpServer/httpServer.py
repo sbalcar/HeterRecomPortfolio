@@ -146,17 +146,20 @@ class HeterRecomHTTPHandler(BaseHTTPRequestHandler):
             COL_ITEMID:str = Events.COL_OBJECT_ID
 
         updateDF:DataFrame = DataFrame([[userID, itemID]], columns=[COL_USERID, COL_ITEMID])
-        portfolio.update(updateDF)
+        portfolio.update(updateDF, {})
 
         model:DataFrame = self.modelsDict[variant]
         rec, resp = portfolio.recommend(userID, model, {APortfolio.ARG_NUMBER_OF_AGGR_ITEMS:numberOfItems})
         #print(rec)
         #print(resp)
 
+        evalTool:AEvalTool = self.evalToolsDict[variant]
+        evalTool.displayed(Series(resp), self.modelsDict[variant], self.evaluation)
+
         self.send_response(200)
         self.send_header('Content-Type', 'text/plain; charset=utf-8')
         self.end_headers()
-        message:str = "recommendation: userID=" + str(userID) + ", r=" + str(rec)
+        message:str = "recommendation: userID=" + str(userID) + ", r=" + str(rec) + ", resp=" + str(resp)
         self.wfile.write(message.encode('utf-8'))
         self.wfile.write(b'\n')
 

@@ -154,7 +154,7 @@ class AggrDHondtThompsonSampling(AAgregation):
         if type(argumentsDict) is not dict:
             raise ValueError("Argument argumentsDict isn't type dict.")
 
-        (aggregatedItemIDs, votes) = self.run(methodsResultDict, modelDF, numberOfItems)
+        (aggregatedItemIDs, votes) = self.run(methodsResultDict, modelDF, userID, numberOfItems, argumentsDict)
 
         itemsWithResposibilityOfRecommenders:List[int,np.Series[int,str]] = countDHontResponsibility(
             aggregatedItemIDs, methodsResultDict, modelDF, numberOfItems, votes)

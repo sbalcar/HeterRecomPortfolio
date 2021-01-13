@@ -90,8 +90,14 @@ def test01():
                    HeterRecomHTTPHandler.ARG_USERID + "=" + str(userID) + "&" + \
                    HeterRecomHTTPHandler.ARG_ITEMID + "=" + str(itemID) + "&" + \
                    HeterRecomHTTPHandler.ARG_NUMBER_OF_ITEMS + "=20" + "'"
+
+    print("IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII")
     print(command0)
-    os.system(command0)
+    print("IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII")
+    cmdResult:str = os.popen(command0).read()
+    print("OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO")
+    print(cmdResult)
+    print("OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO")
 
 
     command1:str = "curl -sS 'http://127.0.0.1:8080/?" + \
@@ -101,9 +107,14 @@ def test01():
                    HeterRecomHTTPHandler.ARG_ITEMID + "=" + str(itemID) + "&" + \
                    HeterRecomHTTPHandler.ARG_USERID + "=" + str(userID) + "&" + \
                    HeterRecomHTTPHandler.ARG_RITEMIDS_WITH_RESP + "=" + str(rItemIDsWithResponsibility) + "'"
-    print(command1)
-    os.system(command1)
 
+    print("IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII")
+    print(command1)
+    print("IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII")
+    cmdResult:str = os.popen(command1).read()
+    print("OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO")
+    print(cmdResult)
+    print("OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO")
 
     print("evaluationDict: " + str(evaluationDict))
 
