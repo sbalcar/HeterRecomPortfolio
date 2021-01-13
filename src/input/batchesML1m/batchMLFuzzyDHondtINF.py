@@ -104,7 +104,7 @@ class BatchMLFuzzyDHondtINF(ABatchML):
         aDescNegDHont:AggregationDescription = InputAggrDefinition.exportADescDHontINF(selector, nImplFeedback)
 
         pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
-            "FDHontINF" + jobID, rIDs, rDescs, aDescNegDHont)
+            "FDHondtINF" + jobID, rIDs, rDescs, aDescNegDHont)
 
         model:DataFrame = ModelDefinition.createDHontModel(pDescr.getRecommendersIDs())
 

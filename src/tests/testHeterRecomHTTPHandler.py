@@ -36,6 +36,10 @@ from recommenderDescription.recommenderDescription import RecommenderDescription
 from evaluationTool.aEvalTool import AEvalTool #class
 from evaluationTool.evalToolSingleMethod import EToolSingleMethod #class
 
+from execute.startHttpServer import getTheMostPopular #function
+from execute.startHttpServer import getFuzzyDHont #function
+
+
 
 def startS():
     print("Starting Http server")
@@ -46,20 +50,12 @@ def startS():
 def test01():
     print("Test 01")
 
-    rDescr:RecommenderDescription = RecommenderDescription(RecommenderTheMostPopular, {})
+    #portA, modelA, evalToolA = getTheMostPopular()
+    portA, modelA, evalToolA = getFuzzyDHont()
 
-    recommenderID:str = "TheMostPopular"
-    pDescr:Portfolio1MethDescription = Portfolio1MethDescription(recommenderID.title(), recommenderID, rDescr)
-
-    dataset: ADataset = DatasetST.readDatasets()
-
-    history:AHistory = HistoryDF("test")
-    p:APortfolio = pDescr.exportPortfolio("jobID", history)
-    p.train(history, dataset)
-
-    portfolioDict:Dict[str, APortfolio] = {HeterRecomHTTPHandler.VARIANT_A: p}
-    modelsDict:Dict[str, int] = {HeterRecomHTTPHandler.VARIANT_A: DataFrame()}
-    evalToolsDict:Dict[str, AEvalTool] = {HeterRecomHTTPHandler.VARIANT_A: EToolSingleMethod({})}
+    portfolioDict:Dict[str, APortfolio] = {HeterRecomHTTPHandler.VARIANT_A: portA}
+    modelsDict:Dict[str, int] = {HeterRecomHTTPHandler.VARIANT_A: modelA}
+    evalToolsDict:Dict[str, AEvalTool] = {HeterRecomHTTPHandler.VARIANT_A: evalToolA}
     evaluationDict:Dict[str,object] = {}
 
     HeterRecomHTTPHandler.portfolioDict = portfolioDict
