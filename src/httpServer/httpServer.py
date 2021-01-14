@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 import ast
+import time
 
 from typing import Dict
 from typing import List
@@ -142,16 +143,19 @@ class HeterRecomHTTPHandler(BaseHTTPRequestHandler):
         if self.datasetClass is DatasetML:
             COL_USERID:str = Ratings.COL_USERID
             COL_ITEMID:str = Ratings.COL_MOVIEID
+            COL_START_DATE_TIME:str = Ratings.COL_TIMESTAMP
         elif self.datasetClass is DatasetRetailRocket:
             from datasets.retailrocket.events import Events  # class
             COL_USERID:str = Events.COL_VISITOR_ID
             COL_ITEMID:str = Events.COL_ITEM_ID
+            COL_START_DATE_TIME:str = Events.COL_TIME_STAMP
         elif self.datasetClass is DatasetST:
             from datasets.slantour.events import Events  # class
             COL_USERID:str = Events.COL_USER_ID
             COL_ITEMID:str = Events.COL_OBJECT_ID
+            COL_START_DATE_TIME:str = Events.COL_START_DATE_TIME
 
-        updateDF:DataFrame = DataFrame([[userID, itemID]], columns=[COL_USERID, COL_ITEMID])
+        updateDF:DataFrame = DataFrame([[userID, itemID, time.time()]], columns=[COL_USERID, COL_ITEMID, COL_START_DATE_TIME])
         portfolio.update(updateDF, {})
 
         model:DataFrame = self.modelsDict[variant]
