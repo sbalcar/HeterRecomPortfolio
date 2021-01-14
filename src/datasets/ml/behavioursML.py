@@ -19,7 +19,7 @@ from userBehaviourDescription.userBehaviourDescription import observationalLinea
 
 
 
-class Behaviours:
+class BehavioursML:
 
   COL_USERID = Ratings.COL_USERID
   COL_MOVIEID = Ratings.COL_MOVIEID
@@ -35,19 +35,19 @@ class Behaviours:
 
   @staticmethod
   def getColNameUserID():
-    return Behaviours.COL_USERID
+    return BehavioursML.COL_USERID
 
   @staticmethod
   def getColNameItemID():
-    return Behaviours.COL_MOVIEID
+    return BehavioursML.COL_MOVIEID
 
   @staticmethod
   def getColNameRepetition():
-    return Behaviours.COL_REPETITION
+    return BehavioursML.COL_REPETITION
 
   @staticmethod
   def getColNameBehaviour():
-    return Behaviours.COL_BEHAVIOUR
+    return BehavioursML.COL_BEHAVIOUR
 
 
   @staticmethod
@@ -63,26 +63,26 @@ class Behaviours:
 
       print("Generate Behaviour ML " + behaviourID)
 
-      behaviourFile:str = Behaviours.getFile(behaviourID)
+      behaviourFile:str = BehavioursML.getFile(behaviourID)
 
       ratingsDF:DataFrame = Ratings.readFromFileMl1m()
 
       ratingsCopyDF:DataFrame = ratingsDF[[Ratings.COL_USERID, Ratings.COL_MOVIEID]].copy()
-      ratingsCopyDF[Behaviours.COL_REPETITION] = [range(countOfRepetitions)] * len(ratingsCopyDF)
+      ratingsCopyDF[BehavioursML.COL_REPETITION] = [range(countOfRepetitions)] * len(ratingsCopyDF)
 
-      behavioursDF:DataFrame = ratingsCopyDF.explode(Behaviours.COL_REPETITION)
-      behavioursDF[Behaviours.COL_BEHAVIOUR] = [None]*len(behavioursDF)
+      behavioursDF:DataFrame = ratingsCopyDF.explode(BehavioursML.COL_REPETITION)
+      behavioursDF[BehavioursML.COL_BEHAVIOUR] = [None] * len(behavioursDF)
       behavioursDF.reset_index(inplace=True)
 
-      if behaviourID is Behaviours.BHVR_LINEAR0109:
+      if behaviourID is BehavioursML.BHVR_LINEAR0109:
           #print(Behaviours.BHVR_LINEAR0109)
-          Behaviours.__generateLinear0109BehaviourMl1m(behavioursDF, numberOfItems, countOfRepetitions, uBehavDesc)
-      elif behaviourID is Behaviours.BHVR_STATIC08:
+          BehavioursML.__generateLinear0109BehaviourMl1m(behavioursDF, numberOfItems, countOfRepetitions, uBehavDesc)
+      elif behaviourID is BehavioursML.BHVR_STATIC08:
           #print(Behaviours.BHVR_STATIC08)
-          Behaviours.__generateStatic08BehaviourMl1m(behavioursDF, numberOfItems, countOfRepetitions, uBehavDesc)
+          BehavioursML.__generateStatic08BehaviourMl1m(behavioursDF, numberOfItems, countOfRepetitions, uBehavDesc)
       else:
           #print("General")
-          Behaviours.__generateGeneralBehaviourMl1m(behavioursDF, numberOfItems, countOfRepetitions, uBehavDesc)
+          BehavioursML.__generateGeneralBehaviourMl1m(behavioursDF, numberOfItems, countOfRepetitions, uBehavDesc)
 
       print(behavioursDF.head(10))
       del behavioursDF['index']
@@ -103,7 +103,7 @@ class Behaviours:
               if indexJ % 1000 == 0:
                   print("Generating repetition " + str(numberOfRepetitionI) + "   " + str(indexJ) + " / " + str(behavioursDF.shape[0]))
 
-              repetitionIJ:int = rowJ[Behaviours.COL_REPETITION]
+              repetitionIJ:int = rowJ[BehavioursML.COL_REPETITION]
               if numberOfRepetitionI != repetitionIJ:
                   continue
 
@@ -112,9 +112,9 @@ class Behaviours:
               if ubStatic08IJ is None: print("aaa")
               ubLinear0109IJ:List[bool] = uBehavLinear0109Desc.getBehaviour(numberOfItems)
 
-              strLinear0109IJ:str =  Behaviours.__convertToString(ubLinear0109IJ)
+              strLinear0109IJ:str =  BehavioursML.__convertToString(ubLinear0109IJ)
               #print(strLinear0109IJ)
-              behavioursDF.at[indexJ, Behaviours.COL_BEHAVIOUR] = strLinear0109IJ
+              behavioursDF.at[indexJ, BehavioursML.COL_BEHAVIOUR] = strLinear0109IJ
 
 
   @staticmethod
@@ -129,7 +129,7 @@ class Behaviours:
               if indexJ % 1000 == 0:
                   print("Generating repetition " + str(numberOfRepetitionI) + "   " + str(indexJ) + " / " + str(behavioursDF.shape[0]))
 
-              repetitionIJ:int = rowJ[Behaviours.COL_REPETITION]
+              repetitionIJ:int = rowJ[BehavioursML.COL_REPETITION]
               if numberOfRepetitionI != repetitionIJ:
                   continue
 
@@ -138,10 +138,10 @@ class Behaviours:
               ubLinear0109IJ:List[bool] = uBehavLinear0109Desc.getBehaviour(numberOfItems)
               if ubLinear0109IJ is None: print("aaa")
 
-              strStatic08IJ:str = Behaviours.__convertToString(ubStatic08IJ)
+              strStatic08IJ:str = BehavioursML.__convertToString(ubStatic08IJ)
               #print(strStatic08IJ)
 
-              behavioursDF.at[indexJ, Behaviours.COL_BEHAVIOUR] = strStatic08IJ
+              behavioursDF.at[indexJ, BehavioursML.COL_BEHAVIOUR] = strStatic08IJ
 
 
   @staticmethod
@@ -153,13 +153,13 @@ class Behaviours:
               if indexJ % 1000 == 0:
                   print("Generating repetition " + str(numberOfRepetitionI) + "   " + str(indexJ) + " / " + str(behavioursDF.shape[0]))
 
-              repetitionIJ:int = rowJ[Behaviours.COL_REPETITION]
+              repetitionIJ:int = rowJ[BehavioursML.COL_REPETITION]
               if numberOfRepetitionI != repetitionIJ:
                   continue
 
               uBehavIJ:List[bool] = uBehavDesc.getBehaviour(numberOfItems)
-              strBehavIJ:str = Behaviours.__convertToString(uBehavIJ)
-              behavioursDF.at[indexJ, Behaviours.COL_BEHAVIOUR] = strBehavIJ
+              strBehavIJ:str = BehavioursML.__convertToString(uBehavIJ)
+              behavioursDF.at[indexJ, BehavioursML.COL_BEHAVIOUR] = strBehavIJ
 
 
   @staticmethod
@@ -189,8 +189,8 @@ class Behaviours:
   def readFromFileMl1m(behavioursFile:str):
 
     behavioursDF:DataFrame = pd.read_csv(behavioursFile, sep='\t', header=0, encoding="ISO-8859-1")
-    behavioursDF.columns = [Behaviours.COL_USERID, Behaviours.COL_MOVIEID, Behaviours.COL_REPETITION,
-                            Behaviours.COL_BEHAVIOUR]
+    behavioursDF.columns = [BehavioursML.COL_USERID, BehavioursML.COL_MOVIEID, BehavioursML.COL_REPETITION,
+                            BehavioursML.COL_BEHAVIOUR]
 
     return behavioursDF
 

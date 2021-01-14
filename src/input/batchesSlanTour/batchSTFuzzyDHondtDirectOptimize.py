@@ -2,7 +2,7 @@
 
 import os
 
-from typing import List
+from typing import List #class
 from typing import Dict #class
 
 from pandas.core.frame import DataFrame #class
@@ -32,15 +32,19 @@ from simulator.simulator import Simulator #class
 
 from history.historyHierDF import HistoryHierDF #class
 
-from input.batchesML1m.batchMLFuzzyDHondt import BatchMLFuzzyDHondt #class
-from input.batchesML1m.batchMLFuzzyDHondtINF import BatchMLFuzzyDHondtINF #class
+from input.batchesML1m.batchMLFuzzyDHondtDirectOptimize import BatchMLFuzzyDHondtDirectOptimize #clas
 
 
-class BatchSTFuzzyDHondtINF(ABatchST):
+
+class BatchSTFuzzyDHondtDirectOptimize(ABatchST):
+
+    SLCTR_ROULETTE1:str = BatchMLFuzzyDHondtDirectOptimize.SLCTR_ROULETTE1
+    SLCTR_ROULETTE2:str = BatchMLFuzzyDHondtDirectOptimize.SLCTR_ROULETTE2
+    SLCTR_FIXED:str = BatchMLFuzzyDHondtDirectOptimize.SLCTR_FIXED
 
     @staticmethod
     def getParameters():
-        return BatchMLFuzzyDHondtINF.getParameters()
+        return BatchMLFuzzyDHondtDirectOptimize.getParameters()
 
 
     def run(self, batchID:str, jobID:str):
@@ -50,17 +54,15 @@ class BatchSTFuzzyDHondtINF(ABatchST):
         repetition:int
         divisionDatasetPercentualSize, uBehaviour, repetition = BatchParameters.getBatchParameters(self.datasetID)[batchID]
 
-        selector, nImplFeedback = self.getParameters()[jobID]
-
-        eTool:AEvalTool = EvalToolDHondt({EvalToolDHondt.ARG_LEARNING_RATE_CLICKS: 0.02,
-                                           EvalToolDHondt.ARG_LEARNING_RATE_VIEWS: 0.02 / 1000})
+        #eTool:AEvalTool
+        selector, eTool = self.getParameters()[jobID]
 
         rIDs, rDescs = InputRecomSTDefinition.exportPairOfRecomIdsAndRecomDescrs()
 
-        aDescDHontINF:AggregationDescription = InputAggrDefinition.exportADescDHontINF(selector, nImplFeedback)
+        aDescDHont:AggregationDescription = InputAggrDefinition.exportADescDHontDirectOptimize(selector)
 
         pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
-            "FuzzyDHondtINF" + jobID, rIDs, rDescs, aDescDHontINF)
+            "FDHondtDirectOptimize" + jobID, rIDs, rDescs, aDescDHont)
 
         model:DataFrame = ModelDefinition.createDHontModel(pDescr.getRecommendersIDs())
 
@@ -70,9 +72,8 @@ class BatchSTFuzzyDHondtINF(ABatchST):
 
 
 
-
 if __name__ == "__main__":
     os.chdir("..")
     os.chdir("..")
     print(os.getcwd())
-    BatchSTFuzzyDHondtINF.generateBatches()
+    BatchSTFuzzyDHondtDirectOptimize.generateBatches()

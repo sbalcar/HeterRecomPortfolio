@@ -8,7 +8,7 @@ from pandas.core.frame import DataFrame #class
 
 from abc import ABC, abstractmethod
 
-from datasets.ml.behaviours import Behaviours #class
+from datasets.ml.behavioursML import BehavioursML #class
 
 class BatchParameters:
 
@@ -16,9 +16,9 @@ class BatchParameters:
     def getBatchParameters(datasetID:str):
 
         divisionsDatasetPercentualSize:List[int] = [80, 90]
-        uBehaviours:List[str] = [Behaviours.BHVR_LINEAR0109, Behaviours.BHVR_STATIC08,
-                                  Behaviours.BHVR_STATIC06, Behaviours.BHVR_STATIC04,
-                                  Behaviours.BHVR_STATIC02]
+        uBehaviours:List[str] = [BehavioursML.BHVR_LINEAR0109, BehavioursML.BHVR_STATIC08,
+                                 BehavioursML.BHVR_STATIC06, BehavioursML.BHVR_STATIC04,
+                                 BehavioursML.BHVR_STATIC02]
         repetitions:List[int] = [1, 2, 3, 5]
 
         aDict:dict = {}

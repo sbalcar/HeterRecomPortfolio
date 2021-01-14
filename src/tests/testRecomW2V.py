@@ -109,20 +109,21 @@ def test03():
     # train recommender
     argsDict:Dict[str,str] = {
         RecommenderW2V.ARG_ITERATIONS: 50000,
-        RecommenderW2V.ARG_TRAIN_VARIANT: 'posneg',
-        RecommenderW2V.ARG_USER_PROFILE_SIZE: -1,
+        RecommenderW2V.ARG_TRAIN_VARIANT: 'all',
+        RecommenderW2V.ARG_USER_PROFILE_SIZE: 5,
         RecommenderW2V.ARG_USER_PROFILE_STRATEGY: 'weightedMean',
-        RecommenderW2V.ARG_VECTOR_SIZE: 128,
-        RecommenderW2V.ARG_WINDOW_SIZE: 5}
+        RecommenderW2V.ARG_VECTOR_SIZE: 32,
+        RecommenderW2V.ARG_WINDOW_SIZE: 1,
+        RecommenderW2V.ARG_ALLOWED_ITEMIDS: list(range(0,1000))}
     rec: ARecommender = RecommenderW2V("RecommenderW2V", argsDict)
 
     rec.train(HistoryDF("test03"), trainDataset)
 
     uDF:DataFrame = DataFrame([eventsDF.iloc[9000]])
     print(uDF)
-    rec.update(uDF, {})
+    rec.update(uDF, argsDict)
 
-    r:Series = rec.recommend(23, 50, {})
+    r:Series = rec.recommend(2760420, 50, argsDict)
     print(r)
 
 
@@ -130,7 +131,7 @@ def test03():
 
 
 if __name__ == "__main__":
-    os.chdir("..")
+
 
 
 #    test01()

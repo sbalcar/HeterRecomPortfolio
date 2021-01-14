@@ -33,6 +33,7 @@ class EvalToolDHondt(AEvalTool):
 
     def click(self, rItemIDsWithResponsibility:List, clickedItemID:int, portfolioModel:DataFrame, evaluationDict:dict):
         if type(rItemIDsWithResponsibility) is not list:
+            print(rItemIDsWithResponsibility)
             raise ValueError("Argument rItemIDsWithResponsibility isn't type list.")
         if type(clickedItemID) is not int and type(clickedItemID) is not np.int64:
             raise ValueError("Argument clickedItemID isn't type int.")
@@ -42,8 +43,9 @@ class EvalToolDHondt(AEvalTool):
             raise ValueError("Argument pModelDF doen't contain rights columns.")
         if type(evaluationDict) is not dict:
             raise ValueError("Argument evaluationDict isn't type dict.")
+        print(rItemIDsWithResponsibility)
 
-        aggrItemIDsWithRespDF: DataFrame = DataFrame(rItemIDsWithResponsibility, columns=["itemId", "responsibility"])
+        aggrItemIDsWithRespDF:DataFrame = DataFrame(rItemIDsWithResponsibility, columns=["itemId", "responsibility"])
         aggrItemIDsWithRespDF.set_index("itemId", inplace=True)
 
         #EvalToolDHont.linearNormalizingPortfolioModelDHont(portfolioModel)
@@ -60,6 +62,7 @@ class EvalToolDHondt(AEvalTool):
             relevance_this = responsibilityDict[methodIdI]
             relevance_others = sumMethodsVotes - relevance_this
             update_step = self.learningRateClicks * (relevance_this - relevance_others)
+            print("update_step: " + str(update_step))
             # elif action == "storeViews":
             #    update_step = -1 * learningRateViews * (relevance_this - relevance_others)
             #    pos_step = 0

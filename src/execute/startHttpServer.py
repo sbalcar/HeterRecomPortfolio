@@ -55,6 +55,7 @@ from recommender.recommenderBPRMF import RecommenderBPRMF #class
 
 from portfolio.aPortfolio import APortfolio #class
 from portfolioDescription.portfolio1MethDescription import Portfolio1MethDescription #class
+from portfolioDescription.portfolio1AggrDescription import Portfolio1AggrDescription #class
 
 from evaluationTool.aEvalTool import AEvalTool #class
 from evaluationTool.evalToolSingleMethod import EToolSingleMethod #class
@@ -62,6 +63,17 @@ from evaluationTool.evalToolSingleMethod import EToolSingleMethod #class
 from httpServer.httpServer import HeterRecomHTTPHandler #class
 from http.server import BaseHTTPRequestHandler, HTTPServer
 
+from input.inputAggrDefinition import InputAggrDefinition  # class
+from input.inputRecomSTDefinition import InputRecomSTDefinition #class
+from input.modelDefinition import ModelDefinition
+
+from aggregationDescription.aggregationDescription import AggregationDescription #class
+
+from evaluationTool.evalToolDHondt import EvalToolDHondt #class
+
+from aggregation.operators.aDHondtSelector import ADHondtSelector #class
+from aggregation.operators.rouletteWheelSelector import RouletteWheelSelector #class
+from aggregation.operators.theMostVotedItemSelector import TheMostVotedItemSelector #class
 
 
 def startHttpServer():
@@ -71,22 +83,12 @@ def startHttpServer():
 
   print("StartHTTPServer")
 
+  #portA, modelA, evalToolA = getTheMostPopular()
+  portA, modelA, evalToolA = getFuzzyDHont()
 
-  rDescr:RecommenderDescription = RecommenderDescription(RecommenderTheMostPopular, {})
-
-  recommenderID:str = "TheMostPopular"
-  pDescr:Portfolio1MethDescription = Portfolio1MethDescription(recommenderID.title(), recommenderID, rDescr)
-
-  dataset:ADataset = DatasetST.readDatasets()
-
-  history:AHistory = HistoryDF("test")
-  p:APortfolio = pDescr.exportPortfolio("jobID", history)
-  p.train(history, dataset)
-
-
-  portfolioDict:Dict[str,APortfolio] = {HeterRecomHTTPHandler.VARIANT_A:p}
-  modelsDict:Dict[str,int] = {HeterRecomHTTPHandler.VARIANT_A:DataFrame()}
-  evalToolsDict:Dict[str, AEvalTool] = {HeterRecomHTTPHandler.VARIANT_A:EToolSingleMethod({})}
+  portfolioDict:Dict[str,APortfolio] = {HeterRecomHTTPHandler.VARIANT_A:portA}
+  modelsDict:Dict[str,int] = {HeterRecomHTTPHandler.VARIANT_A:modelA}
+  evalToolsDict:Dict[str, AEvalTool] = {HeterRecomHTTPHandler.VARIANT_A:evalToolA}
 
 
   HeterRecomHTTPHandler.portfolioDict = portfolioDict
@@ -98,6 +100,52 @@ def startHttpServer():
 
   server = HTTPServer(('', 8080), HeterRecomHTTPHandler)
   server.serve_forever()
+
+
+
+def getTheMostPopular():
+
+  rDescr:RecommenderDescription = RecommenderDescription(RecommenderTheMostPopular, {})
+
+  recommenderID:str = "TheMostPopular"
+  pDescr:Portfolio1MethDescription = Portfolio1MethDescription(recommenderID.title(), recommenderID, rDescr)
+
+  dataset:ADataset = DatasetST.readDatasets()
+
+  history:AHistory = HistoryDF("test")
+  port:APortfolio = pDescr.exportPortfolio("jobID", history)
+  port.train(history, dataset)
+
+  model:DataFrame = DataFrame()
+  evalTool:AEvalTool = EToolSingleMethod({})
+
+  return (port, model, evalTool)
+
+def getFuzzyDHont():
+
+  dataset:ADataset = DatasetST.readDatasets()
+
+  selector:ADHondtSelector = RouletteWheelSelector({RouletteWheelSelector.ARG_EXPONENT: 1})
+
+  aDescDHont:AggregationDescription = InputAggrDefinition.exportADescDHont(selector)
+
+  rIDs, rDescs = InputRecomSTDefinition.exportPairOfRecomIdsAndRecomDescrs()
+
+  pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
+    "FuzzyDHondt", rIDs, rDescs, aDescDHont)
+
+  history:AHistory = HistoryDF("test")
+
+  port:APortfolio = pDescr.exportPortfolio("jobID", history)
+  port.train(history, dataset)
+
+  model:DataFrame = ModelDefinition.createDHontModel(pDescr.getRecommendersIDs())
+
+  evalTool:AEvalTool = EvalToolDHondt({EvalToolDHondt.ARG_LEARNING_RATE_CLICKS: 0.03,
+                                        EvalToolDHondt.ARG_LEARNING_RATE_VIEWS: 0.03 / 500})
+
+  return (port, model, evalTool)
+
 
 
 

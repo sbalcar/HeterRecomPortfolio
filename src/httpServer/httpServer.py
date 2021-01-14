@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 import ast
+import time
 
 from typing import Dict
 from typing import List
@@ -23,6 +24,8 @@ from datasets.ml.ratings import Ratings #class
 from evaluationTool.aEvalTool import AEvalTool #class
 from evaluationTool.evalToolSingleMethod import EToolSingleMethod #class
 
+from recommender.aRecommender import ARecommender #class
+
 import pandas as pd
 
 class HeterRecomHTTPHandler(BaseHTTPRequestHandler):
@@ -38,6 +41,7 @@ class HeterRecomHTTPHandler(BaseHTTPRequestHandler):
     ARG_ITEMID:str = "itemID"
     ARG_NUMBER_OF_ITEMS:str = "numberOfItems"
     ARG_RITEMIDS_WITH_RESP:str = "rItemIDsWithResponsibility"
+    ARG_ALLOWED_ITEMIDS:str = ARecommender.ARG_ALLOWED_ITEMIDS
 
     VARIANT_A:str = "a"
     VARIANT_B:str = "b"
@@ -86,11 +90,11 @@ class HeterRecomHTTPHandler(BaseHTTPRequestHandler):
             if not self.ARG_RITEMIDS_WITH_RESP in params:
                 self.send_error(404)
                 return
-            rItemIdsStr:str = params[self.ARG_RITEMIDS_WITH_RESP]
-            print("rItemIds: " + str(rItemIdsStr))
-            rItemIds = ast.literal_eval(rItemIdsStr)
+            rItemIdsWithRespStr:str = params[self.ARG_RITEMIDS_WITH_RESP]
+            print("rItemIdsWithResp: " + str(rItemIdsWithRespStr))
+            rItemIdsWithResp = ast.literal_eval(rItemIdsWithRespStr)
 
-            self.__click(variant, userID, itemID, rItemIds)
+            self.__click(variant, userID, itemID, rItemIdsWithResp)
             return
 
         elif action == self.ACTION_VISIT:
@@ -98,8 +102,11 @@ class HeterRecomHTTPHandler(BaseHTTPRequestHandler):
                 self.send_error(404)
                 return
             numberOfItems:int = int(params[self.ARG_NUMBER_OF_ITEMS])
+            allowedItemIDsStr:str = params[self.ARG_ALLOWED_ITEMIDS]
+            allowedItemIDs:List[int] = ast.literal_eval(allowedItemIDsStr)
+
             print("numberOfItems: " + str(numberOfItems))
-            self.__visit(variant, userID, itemID, numberOfItems)
+            self.__visit(variant, userID, itemID, numberOfItems, allowedItemIDs)
             return
 
         else:
@@ -113,7 +120,7 @@ class HeterRecomHTTPHandler(BaseHTTPRequestHandler):
             return
 
         evalTool:AEvalTool = self.evalToolsDict[variant]
-        evalTool.click(Series(rItemIDsWithResponsibility), itemID, self.modelsDict[variant], self.evaluation)
+        evalTool.click(rItemIDsWithResponsibility, itemID, self.modelsDict[variant], self.evaluation)
 
         #print("evaluation: ", str(self.evaluation))
 
@@ -125,7 +132,7 @@ class HeterRecomHTTPHandler(BaseHTTPRequestHandler):
         self.wfile.write(b'\n')
 
 
-    def __visit(self, variant:str, userID:int, itemID:int, numberOfItems:int):
+    def __visit(self, variant:str, userID:int, itemID:int, numberOfItems:int, allowedItemIDs:List[int]):
         print("visit")
         if not variant in self.portfolioDict:
             self.send_error(404)
@@ -136,27 +143,36 @@ class HeterRecomHTTPHandler(BaseHTTPRequestHandler):
         if self.datasetClass is DatasetML:
             COL_USERID:str = Ratings.COL_USERID
             COL_ITEMID:str = Ratings.COL_MOVIEID
+            COL_START_DATE_TIME:str = Ratings.COL_TIMESTAMP
         elif self.datasetClass is DatasetRetailRocket:
             from datasets.retailrocket.events import Events  # class
             COL_USERID:str = Events.COL_VISITOR_ID
             COL_ITEMID:str = Events.COL_ITEM_ID
+            COL_START_DATE_TIME:str = Events.COL_TIME_STAMP
         elif self.datasetClass is DatasetST:
             from datasets.slantour.events import Events  # class
             COL_USERID:str = Events.COL_USER_ID
             COL_ITEMID:str = Events.COL_OBJECT_ID
+            COL_START_DATE_TIME:str = Events.COL_START_DATE_TIME
 
-        updateDF:DataFrame = DataFrame([[userID, itemID]], columns=[COL_USERID, COL_ITEMID])
-        portfolio.update(updateDF)
+        updateDF:DataFrame = DataFrame([[userID, itemID, time.time()]], columns=[COL_USERID, COL_ITEMID, COL_START_DATE_TIME])
+        portfolio.update(updateDF, {})
 
         model:DataFrame = self.modelsDict[variant]
-        rec, resp = portfolio.recommend(userID, model, {APortfolio.ARG_NUMBER_OF_AGGR_ITEMS:numberOfItems})
-        #print(rec)
-        #print(resp)
+        rItemIDs, rItemIDsWithtResp = portfolio.recommend(userID, model, {
+                        APortfolio.ARG_NUMBER_OF_AGGR_ITEMS:numberOfItems,
+                        APortfolio.ARG_NUMBER_OF_RECOMM_ITEMS:100,
+                        ARecommender.ARG_ALLOWED_ITEMIDS:allowedItemIDs})
+        print(rItemIDs)
+        print(rItemIDsWithtResp)
+
+        evalTool:AEvalTool = self.evalToolsDict[variant]
+        evalTool.displayed(rItemIDsWithtResp, self.modelsDict[variant], self.evaluation)
 
         self.send_response(200)
         self.send_header('Content-Type', 'text/plain; charset=utf-8')
         self.end_headers()
-        message:str = "recommendation: userID=" + str(userID) + ", r=" + str(rec)
+        message:str = "recommendation: userID=" + str(userID) + ", rItemIDs=" + str(rItemIDs) + ", rItemIDsWithtResp=" + str(rItemIDsWithtResp)
         self.wfile.write(message.encode('utf-8'))
         self.wfile.write(b'\n')
 
