@@ -9,6 +9,8 @@ from datasets.datasetML import DatasetML #class
 from datasets.datasetRetailrocket import DatasetRetailRocket #class
 from datasets.datasetST import DatasetST #class
 
+from datasets.ml.users import Users #class
+from datasets.ml.items import Items #class
 from datasets.ml.ratings import Ratings #class
 from datasets.ml.behavioursML import BehavioursML #class
 from datasets.retailrocket.behavioursRR import BehavioursRR #class
@@ -33,6 +35,7 @@ from evaluationTool.evalToolBanditTS import EvalToolBanditTS #class
 from evaluationTool.evalToolDHondt import EvalToolDHondt #class
 
 from evaluationTool.aEvalTool import AEvalTool #class
+from evaluationTool.evalToolContext import EvalToolContext  # class
 
 from recommenderDescription.recommenderDescription import RecommenderDescription #class
 
@@ -62,16 +65,18 @@ from history.historyHierDF import HistoryHierDF #class
 
 
 from aggregation.aggrBanditTS import AggrBanditTS #class
-from aggregation.operators.aDHondtSelector import ADHondtSelector #class
+from aggregation.mixinContextAggregation import MixinContextAggregation #class
 from aggregation.operators.rouletteWheelSelector import RouletteWheelSelector #class
+
+#import pandas as pd
+#from history.historyDF import HistoryDF #class
 
 from userBehaviourDescription.userBehaviourDescription import UserBehaviourDescription #class
 from userBehaviourDescription.userBehaviourDescription import observationalStaticProbabilityFnc #function
 from userBehaviourDescription.userBehaviourDescription import observationalLinearProbabilityFnc #function
 
-from aggregation.negImplFeedback.aPenalization import APenalization #class
-from input.inputAggrDefinition import PenalizationToolDefinition #class
-
+from history.aHistory import AHistory #class
+from history.historyDF import HistoryDF #class
 
 
 argsSimulationDict:Dict[str,object] = {SimulationST.ARG_WINDOW_SIZE: 5,
@@ -84,19 +89,29 @@ argsSimulationDict:Dict[str,object] = {SimulationST.ARG_WINDOW_SIZE: 5,
 
 def test01():
 
-    print("Simulation: ML FuzzyDHondtINF")
+    print("Simulation: ML ContextDHondt")
 
     jobID:str = "Roulette1"
-
-    pProbToolOLin0802HLin1002:APenalization = PenalizationToolDefinition.exportProbPenaltyToolOStat08HLin1002(
-        InputSimulatorDefinition.numberOfAggrItems)
 
     selector = RouletteWheelSelector({RouletteWheelSelector.ARG_EXPONENT:1})
 
     rIDs, rDescs = InputRecomSTDefinition.exportPairOfRecomIdsAndRecomDescrs()
 
     pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
-        "FuzzyDHondtINF" + jobID, rIDs, rDescs, InputAggrDefinition.exportADescDHondtINF(selector, pProbToolOLin0802HLin1002))
+        "ContextDHondt" + jobID, rIDs, rDescs, InputAggrDefinition.exportADescDContextHondt(selector))
+
+
+    itemsDF:DataFrame = Items.readFromFileMl1m()
+    usersDF:DataFrame = Users.readFromFileMl1m()
+
+    historyDF:AHistory = HistoryDF("test01")
+
+    eTool:AEvalTool = EvalToolContext(
+        {EvalToolContext.ARG_USERS: usersDF,
+         EvalToolContext.ARG_ITEMS: itemsDF,
+         EvalToolContext.ARG_DATASET: "ml",
+         EvalToolContext.ARG_HISTORY: historyDF}
+    )
 
 
     batchID:str = "ml1mDiv90Ulinear0109R1"
@@ -106,11 +121,6 @@ def test01():
 
     model:DataFrame = ModelDefinition.createDHontModel(pDescr.getRecommendersIDs())
 
-    lrClick:float = 0.03
-    lrView:float = lrClick / 500
-    eTool:AEvalTool = EvalToolDHondt({EvalToolDHondt.ARG_LEARNING_RATE_CLICKS: lrClick,
-                                      EvalToolDHondt.ARG_LEARNING_RATE_VIEWS: lrView})
-
     # simulation of portfolio
     simulator:Simulator = Simulator(batchID, SimulationML, argsSimulationDict, dataset, behavioursDF)
     simulator.simulate([pDescr], [model], [eTool], HistoryHierDF)
@@ -118,21 +128,28 @@ def test01():
 
 def test21():
 
-    print("Simulation: ST FuzzyDHondtINF")
+    print("Simulation: ST ContextDHondt")
 
     jobID:str = "Roulette1"
-
-    #pProbToolOLin0802HLin1002:APenalization = PenalizationToolDefinition.exportProbPenaltyToolOStat08HLin1002(
-    #    InputSimulatorDefinition.numberOfAggrItems)
-    pToolOLin0802HLin1002: APenalization = PenalizationToolDefinition.exportPenaltyToolOLin0802HLin1002(
-        InputSimulatorDefinition.numberOfAggrItems)
 
     selector = RouletteWheelSelector({RouletteWheelSelector.ARG_EXPONENT:1})
 
     rIDs, rDescs = InputRecomSTDefinition.exportPairOfRecomIdsAndRecomDescrs()
 
+
+#    evaluationDict:dict = {EvalToolContext.ARG_USER_ID: userID,
+#                           EvalToolContext.ARG_RELEVANCE: methodsResultDict}
+#    evalToolDHondt = EvalToolContext(
+#        {EvalToolContext.ARG_USERS: usersDF,
+#         EvalToolContext.ARG_ITEMS: itemsDF,
+#         EvalToolContext.ARG_DATASET: "ml",
+#         EvalToolContext.ARG_HISTORY: historyDF}
+#    )
+
+
+
     pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
-        "FuzzyDHondtINF" + jobID, rIDs, rDescs, InputAggrDefinition.exportADescDHondtINF(selector, pToolOLin0802HLin1002))
+        "ContextDHondt" + jobID, rIDs, rDescs, InputAggrDefinition.exportADescDContextHondt(selector))
 
 
     batchID:str = "stDiv90Ulinear0109R1"
@@ -157,7 +174,7 @@ if __name__ == "__main__":
     os.chdir("..")
 
     # Simulation ML
-#    test01()  # FuzzyDHondtINF
+    test01()  # ContextFuzzyDHondt
 
     # Simulation ST
-    test21()  # FuzzyDHondtINF
+#    test21()  # ContextFuzzyDHondt

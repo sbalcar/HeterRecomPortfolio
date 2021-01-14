@@ -70,7 +70,7 @@ class BatchMLDHondtThompsonSamplingINF(ABatchML):
 
         rIDs, rDescs = InputRecomMLDefinition.exportPairOfRecomIdsAndRecomDescrs()
 
-        aDescNegDHontThompsonSamplingI:AggregationDescription = InputAggrDefinition.exportADescDHontThompsonSamplingINF(selector, nImplFeedback)
+        aDescNegDHontThompsonSamplingI:AggregationDescription = InputAggrDefinition.exportADescDHondtThompsonSamplingINF(selector, nImplFeedback)
 
         pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
             "DHondtThompsonSamplingINF" + jobID, rIDs, rDescs, aDescNegDHontThompsonSamplingI)

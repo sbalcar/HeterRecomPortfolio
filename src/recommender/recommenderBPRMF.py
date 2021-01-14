@@ -36,7 +36,7 @@ class RecommenderBPRMF(ARecommender):
 
     DEBUG_MODE = False
 
-    def __init__(self, jobID:str, argumentsDict:dict):
+    def __init__(self, jobID:str, argumentsDict:Dict[str,object]):
         if type(jobID) is not str:
             raise ValueError("Argument jobID is not type strt.")
         if type(argumentsDict) is not dict:

@@ -358,9 +358,9 @@ if __name__ == "__main__":
     #test11()  # TheMostPopular
 
     # Simulation ST
-    #test21()  # TheMostPopular
+    test21()  # TheMostPopular
     #test22()  # W2V
     #test23()  # KNN
     #test24()  # CB
     #test25()  # MF
-    test26()   # VMContextKNN
+    #test26()  # VMContextKNN

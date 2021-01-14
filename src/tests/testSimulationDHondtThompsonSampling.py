@@ -94,7 +94,7 @@ def test01():
     rIDs, rDescs = InputRecomSTDefinition.exportPairOfRecomIdsAndRecomDescrs()
 
     pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
-        "DHontThompsonSampling" + jobID, rIDs, rDescs, InputAggrDefinition.exportADescDHontThompsonSampling(selector))
+        "DHontThompsonSampling" + jobID, rIDs, rDescs, InputAggrDefinition.exportADescDHondtThompsonSampling(selector))
 
 
     batchID:str = "ml1mDiv90Ulinear0109R1"
@@ -122,7 +122,7 @@ def test21():
     rIDs, rDescs = InputRecomSTDefinition.exportPairOfRecomIdsAndRecomDescrs()
 
     pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
-        "DHontThompsonSampling" + jobID, rIDs, rDescs, InputAggrDefinition.exportADescDHontThompsonSampling(selector))
+        "DHontThompsonSampling" + jobID, rIDs, rDescs, InputAggrDefinition.exportADescDHondtThompsonSampling(selector))
 
 
     batchID:str = "stDiv90Ulinear0109R1"

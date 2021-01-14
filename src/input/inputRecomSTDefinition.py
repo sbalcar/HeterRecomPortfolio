@@ -109,8 +109,11 @@ class InputRecomSTDefinition:
         rIDsKNN:List[str] = [recom + cls.KNN.title()]
         rDescsKNN:List[RecommenderDescription] = [cls.exportRDescKNN()]
 
-        rIDsVMCKNN:List[str] = [recom + cls.VMC_KNN.title()]
-        rDescsVMCKNN:List[RecommenderDescription] = [cls.exportRDescVMContextKNN()]
+        #rIDsVMCKNN:List[str] = [recom + cls.VMC_KNN.title()]
+        #rDescsVMCKNN:List[RecommenderDescription] = [cls.exportRDescVMContextKNN()]
+        rIDsVMCKNN:List[str] = []
+        rDescsVMCKNN:List[RecommenderDescription] = []
+
 
         rIDsBPRMF:List[str] = [recom + cls.BPRMF_F50I20LR01R003.title(), recom + cls.BPRMF_F50I20LR01R001.title()]
         rDescsBPRMF:List[RecommenderDescription] = [cls.exportRDescBPRMFf50i20lr01r003(), cls.exportRDescBPRMFf20i50lr01r001()]

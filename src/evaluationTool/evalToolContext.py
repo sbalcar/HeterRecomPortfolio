@@ -27,16 +27,16 @@ class EvalToolContext(AEvalTool):
     ARG_ITEM_ID = "itemID"
     ARG_EVENTS = "events"
 
-    def __init__(self, argsDict:dict):
-        if type(argsDict) is not dict:
+    def __init__(self, argumentsDict:Dict[str,object]):
+        if type(argumentsDict) is not dict:
             raise ValueError("Argument argsDict isn't type dict.")
 
         self.maxVotesConst:float = 0.99
         self.minVotesConst:float = 0.01
-        self.dataset_name: str = argsDict[self.ARG_DATASET]
-        self.items: DataFrame = self._preprocessItems(argsDict[self.ARG_ITEMS])
-        self.users: DataFrame = self._preprocessUsers(argsDict)
-        self.history = argsDict[self.ARG_HISTORY]
+        self.dataset_name: str = argumentsDict[self.ARG_DATASET]
+        self.items: DataFrame = self._preprocessItems(argumentsDict[self.ARG_ITEMS])
+        self.users: DataFrame = self._preprocessUsers(argumentsDict)
+        self.history = argumentsDict[self.ARG_HISTORY]
         self._contextDim: int = 0
         self._b: dict = {}
         self._A: dict = {}
@@ -131,7 +131,7 @@ class EvalToolContext(AEvalTool):
         tmp = items.drop(['Genres'], axis=1, inplace=False)
         return pd.concat([tmp, one_hot_encoding], axis=1)
 
-    def click(self, rItemIDsWithResponsibility:List, clickedItemID:int, portfolioModel:DataFrame, evaluationDict:dict):
+    def click(self, rItemIDsWithResponsibility:List, clickedItemID:int, portfolioModel:DataFrame, argumentsDict:Dict[str,object]):
         if type(rItemIDsWithResponsibility) is not list:
             raise ValueError("Argument rItemIDsWithResponsibility isn't type list.")
         if type(clickedItemID) is not int and type(clickedItemID) is not np.int64:
@@ -140,14 +140,14 @@ class EvalToolContext(AEvalTool):
             raise ValueError("Argument pModelDF isn't type DataFrame.")
         if list(portfolioModel.columns) != ['votes']:
             raise ValueError("Argument pModelDF doen't contain rights columns.")
-        if type(evaluationDict) is not dict:
-            raise ValueError("Argument evaluationDict isn't type dict.")
+        if type(argumentsDict) is not dict:
+            raise ValueError("Argument argumentsDict isn't type dict.")
 
         # get userID from dict
-        userID = evaluationDict[self.ARG_USER_ID]
+        userID = argumentsDict[self.ARG_USER_ID]
 
         # compute context for selected user
-        self._context = self.calculateContext(userID, evaluationDict)
+        self._context = self.calculateContext(userID, argumentsDict)
 
         # check for each recommender method that it has A, b, inverseA
         for recommender, row in portfolioModel.iterrows():
@@ -157,7 +157,7 @@ class EvalToolContext(AEvalTool):
                 self._inverseA[recommender] = np.identity(self._contextDim)
 
         # get relevances
-        methodsResultDict = evaluationDict[self.ARG_RELEVANCE]
+        methodsResultDict = argumentsDict[self.ARG_RELEVANCE]
 
         # update b's
         for recommender, relevances in methodsResultDict.items():
@@ -273,21 +273,21 @@ class EvalToolContext(AEvalTool):
 
         return result
 
-    def displayed(self, rItemIDsWithResponsibility:List, portfolioModel:DataFrame, evaluationDict:dict):
+    def displayed(self, rItemIDsWithResponsibility:List, portfolioModel:DataFrame, argumentsDict:Dict[str,object]):
         if type(rItemIDsWithResponsibility) is not list:
             raise ValueError("Argument rItemIDsWithResponsibility isn't type list.")
         if type(portfolioModel) is not DataFrame:
             raise ValueError("Argument pModelDF isn't type DataFrame.")
         if list(portfolioModel.columns) != ['votes']:
             raise ValueError("Argument pModelDF doen't contain rights columns.")
-        if type(evaluationDict) is not dict:
-            raise ValueError("Argument evaluationDict isn't type dict.")
+        if type(argumentsDict) is not dict:
+            raise ValueError("Argument argumentsDict isn't type dict.")
 
-        userID = evaluationDict[self.ARG_USER_ID]
+        userID = argumentsDict[self.ARG_USER_ID]
 
         # recompute context - previous user doesn't have to be the same as current
         # TODO: Performace improvement: check if user changed -> do not recompute context if not?
-        self._context = self.calculateContext(userID, evaluationDict)
+        self._context = self.calculateContext(userID, argumentsDict)
 
         # check for each recommender method that it has A, b, inverseA
         for recommender, row in portfolioModel.iterrows():
@@ -297,7 +297,7 @@ class EvalToolContext(AEvalTool):
                 self._inverseA[recommender] = np.identity(self._contextDim)
 
         # get relevances
-        methodsResultDict = evaluationDict[self.ARG_RELEVANCE]
+        methodsResultDict = argumentsDict[self.ARG_RELEVANCE]
 
         for recommender, value in self._A.items():
             # get relevance of items, which were recommended by recommender and are in itemsWithResposibilityOfRecommenders

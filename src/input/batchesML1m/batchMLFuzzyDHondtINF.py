@@ -101,7 +101,7 @@ class BatchMLFuzzyDHondtINF(ABatchML):
 
         rIDs, rDescs = InputRecomMLDefinition.exportPairOfRecomIdsAndRecomDescrs()
 
-        aDescNegDHont:AggregationDescription = InputAggrDefinition.exportADescDHontINF(selector, nImplFeedback)
+        aDescNegDHont:AggregationDescription = InputAggrDefinition.exportADescDHondtINF(selector, nImplFeedback)
 
         pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
             "FDHondtINF" + jobID, rIDs, rDescs, aDescNegDHont)

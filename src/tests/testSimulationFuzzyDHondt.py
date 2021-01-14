@@ -93,7 +93,7 @@ def test01():
     rIDs, rDescs = InputRecomSTDefinition.exportPairOfRecomIdsAndRecomDescrs()
 
     pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
-        "FuzzyDHondt" + jobID, rIDs, rDescs, InputAggrDefinition.exportADescDHont(selector))
+        "FuzzyDHondt" + jobID, rIDs, rDescs, InputAggrDefinition.exportADescDHondt(selector))
 
 
     batchID:str = "ml1mDiv90Ulinear0109R1"
@@ -124,7 +124,7 @@ def test21():
     rIDs, rDescs = InputRecomSTDefinition.exportPairOfRecomIdsAndRecomDescrs()
 
     pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
-        "FuzzyDHondt" + jobID, rIDs, rDescs, InputAggrDefinition.exportADescDHont(selector))
+        "FuzzyDHondt" + jobID, rIDs, rDescs, InputAggrDefinition.exportADescDHondt(selector))
 
 
     batchID:str = "stDiv90Ulinear0109R1"

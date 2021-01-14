@@ -59,7 +59,7 @@ class BatchSTFuzzyDHondtDirectOptimize(ABatchST):
 
         rIDs, rDescs = InputRecomSTDefinition.exportPairOfRecomIdsAndRecomDescrs()
 
-        aDescDHont:AggregationDescription = InputAggrDefinition.exportADescDHontDirectOptimize(selector)
+        aDescDHont:AggregationDescription = InputAggrDefinition.exportADescDHondtDirectOptimize(selector)
 
         pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
             "FDHondtDirectOptimize" + jobID, rIDs, rDescs, aDescDHont)

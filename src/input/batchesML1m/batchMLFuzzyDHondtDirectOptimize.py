@@ -85,7 +85,7 @@ class BatchMLFuzzyDHondtDirectOptimize(ABatchML):
 
         rIDs, rDescs = InputRecomMLDefinition.exportPairOfRecomIdsAndRecomDescrs()
 
-        aDescDHont:AggregationDescription = InputAggrDefinition.exportADescDHontDirectOptimize(selector)
+        aDescDHont:AggregationDescription = InputAggrDefinition.exportADescDHondtDirectOptimize(selector)
 
         pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
             "FDHondtDirectOptimize" + jobID, rIDs, rDescs, aDescDHont)

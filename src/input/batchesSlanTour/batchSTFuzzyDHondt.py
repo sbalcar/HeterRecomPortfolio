@@ -54,7 +54,7 @@ class BatchSTFuzzyDHondt(ABatchST):
 
         rIDs, rDescs = InputRecomSTDefinition.exportPairOfRecomIdsAndRecomDescrs()
 
-        aDescDHont:AggregationDescription = InputAggrDefinition.exportADescDHont(selector)
+        aDescDHont:AggregationDescription = InputAggrDefinition.exportADescDHondt(selector)
 
         pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
             "FDHondt" + jobID, rIDs, rDescs, aDescDHont)

@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
-from typing import List
+from typing import List #class
+from typing import Dict #class
 
 from pandas.core.frame import DataFrame #class
 from abc import ABC, abstractmethod
@@ -14,9 +15,9 @@ class AEvalTool(ABC):
        raise Exception("AAgregation is abstract class, can't be instanced")
 
     @abstractmethod
-    def click(self, rItemIDsWithResponsibility:List, clickedItemID:int, portfolioModel:DataFrame, evaluationDict:dict):
+    def click(self, rItemIDsWithResponsibility:List, clickedItemID:int, portfolioModel:DataFrame, argumentsDict:Dict[str,object]):
         assert False, "this needs to be overridden"
 
     @abstractmethod
-    def displayed(self, rItemIDsWithResponsibility:List, portfolioModel:DataFrame, evaluationDict:dict):
+    def displayed(self, rItemIDsWithResponsibility:List, portfolioModel:DataFrame, argumentsDict:Dict[str,object]):
         assert False, "this needs to be overridden"

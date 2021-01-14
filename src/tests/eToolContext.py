@@ -279,6 +279,6 @@ def test02(repetitions = 1):
 
 if __name__ == "__main__":
     os.chdir("..")
-    #test01()
+    test01()
     #test02(repetitions=1000)
-    test03()
+    #test03()

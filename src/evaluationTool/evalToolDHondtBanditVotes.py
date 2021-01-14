@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 from typing import List
+from typing import Dict #class
 
 from evaluationTool.aEvalTool import AEvalTool #class
 
@@ -9,11 +10,11 @@ from pandas.core.frame import DataFrame #class
 import numpy as np
 
 class EvalToolDHondtBanditVotes(AEvalTool):
-    def __init__(self, argsDict:dict):
-        if type(argsDict) is not dict:
-            raise ValueError("Argument argsDict isn't type dict.")
+    def __init__(self, argumentsDict:Dict[str,object]):
+        if type(argumentsDict) is not dict:
+            raise ValueError("Argument argumentsDict isn't type dict.")
 
-    def click(self, rItemIDsWithResponsibility:List, clickedItemID:int, portfolioModel:DataFrame, evaluationDict:dict):
+    def click(self, rItemIDsWithResponsibility:List, clickedItemID:int, portfolioModel:DataFrame, argumentsDict:Dict[str,object]):
         if type(rItemIDsWithResponsibility) is not list:
             raise ValueError("Argument rItemIDsWithResponsibility isn't type list.")
         if type(clickedItemID) is not int and type(clickedItemID) is not np.int64:
@@ -22,15 +23,15 @@ class EvalToolDHondtBanditVotes(AEvalTool):
             raise ValueError("Argument pModelDF isn't type DataFrame.")
         if list(portfolioModel.columns) != ['r', 'n', 'alpha0', 'beta0']:
             raise ValueError("Argument pModelDF doen't contain rights columns.")
-        if type(evaluationDict) is not dict:
-            raise ValueError("Argument evaluationDict isn't type dict.")
+        if type(argumentsDict) is not dict:
+            raise ValueError("Argument argumentsDict isn't type dict.")
 
         aggrItemIDsWithRespDF:DataFrame = DataFrame(rItemIDsWithResponsibility, columns=["itemId", "responsibility"])
         aggrItemIDsWithRespDF.set_index("itemId", inplace=True)
 
         #EvalToolDHont.linearNormalizingPortfolioModelDHont(portfolioModel)
 
-        evaluationDict[AEvalTool.CLICKS] = evaluationDict.get(AEvalTool.CLICKS, 0) + 1
+        #evaluationDict[AEvalTool.CLICKS] = evaluationDict.get(AEvalTool.CLICKS, 0) + 1
 
         # responsibilityDict:dict[methodID:str, votes:float]
         responsibilityDict:dict[str, float] = aggrItemIDsWithRespDF.loc[clickedItemID]["responsibility"]
@@ -60,15 +61,15 @@ class EvalToolDHondtBanditVotes(AEvalTool):
         print("clickedItemID: " + str(clickedItemID))
         print(portfolioModel)
 
-    def displayed(self, rItemIDsWithResponsibility:List, portfolioModel:DataFrame, evaluationDict:dict):
+    def displayed(self, rItemIDsWithResponsibility:List, portfolioModel:DataFrame, argumentsDict:Dict[str,object]):
         if type(rItemIDsWithResponsibility) is not list:
             raise ValueError("Argument rItemIDsWithResponsibility isn't type list.")
         if type(portfolioModel) is not DataFrame:
             raise ValueError("Argument pModelDF isn't type DataFrame.")
         if list(portfolioModel.columns) != ['r', 'n', 'alpha0', 'beta0']:
             raise ValueError("Argument pModelDF doen't contain rights columns.")
-        if type(evaluationDict) is not dict:
-            raise ValueError("Argument evaluationDict isn't type dict.")
+        if type(argumentsDict) is not dict:
+            raise ValueError("Argument argumentsDict isn't type dict.")
 
         aggrItemIDsWithRespDF:DataFrame = DataFrame(rItemIDsWithResponsibility, columns=["itemId", "responsibility"])
         aggrItemIDsWithRespDF.set_index("itemId", inplace=True)

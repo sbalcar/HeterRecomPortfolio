@@ -127,7 +127,7 @@ def getFuzzyDHont():
 
   selector:ADHondtSelector = RouletteWheelSelector({RouletteWheelSelector.ARG_EXPONENT: 1})
 
-  aDescDHont:AggregationDescription = InputAggrDefinition.exportADescDHont(selector)
+  aDescDHont:AggregationDescription = InputAggrDefinition.exportADescDHondt(selector)
 
   rIDs, rDescs = InputRecomSTDefinition.exportPairOfRecomIdsAndRecomDescrs()
 

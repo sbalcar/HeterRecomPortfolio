@@ -63,16 +63,6 @@ class RecommenderW2V(ARecommender):
             return trainDF.loc[trainDF[Ratings.COL_RATING] >= 4]
         elif trainVariant == "posneg":
             return trainDF
-            
-            
-#    def saveModel(self, i, model, rev_dict, dictionary):
-#        dictionary = dict([((int(i), j) if i != "RARE" else (-1, j)) for i, j in dictionary.items()])
-#        rev_dict = dict(zip(dictionary.values(), dictionary.keys()))
-#        datasetID:str = self._trainDataset.datasetID
-#        self.__save_obj(model, "model", datasetID, self.trainVariant, self.vectorSize, self.windowSize, i )
-#        self.__save_obj(dictionary, "dictionary", datasetID, self.trainVariant, self.vectorSize, self.windowSize, i)
-#        self.__save_obj(rev_dict, "rev_dict", datasetID, self.trainVariant, self.vectorSize, self.windowSize, i)
-    
     
     def train(self, history:AHistory, dataset:ADataset):
         if not isinstance(history, AHistory):
