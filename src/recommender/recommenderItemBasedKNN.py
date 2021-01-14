@@ -95,7 +95,7 @@ class RecommenderItemBasedKNN(ARecommender):
 
         self._modelKNN.fit(sparseRatingsCSR)
 
-        self._distances, self.KNNs = self._modelKNN.kneighbors(n_neighbors=5)
+        self._distances, self.KNNs = self._modelKNN.kneighbors(n_neighbors=100)
 
         self._sparseRatings = sparseRatingsCSR.tolil()
 

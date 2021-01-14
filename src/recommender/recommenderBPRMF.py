@@ -217,12 +217,15 @@ class RecommenderBPRMF(ARecommender):
             # cannot recommend for unknown user
             return pd.Series([], index=[])
 
-        # recommendationOfIndexes:Series
-        recommendationOfIndexesListOfTuple:List[tuple] = self.model.recommend(userIndex, self._userFeaturesMatrix, N = numberOfItems)
+        recommendationOfIndexesListOfTuple:List[tuple] = self.model.recommend(userIndex, self._userFeaturesMatrix, N = 5*numberOfItems)
 
         recommendations:List[tuple] = [(self._itemIndexToItemIdDict.get(itemIndexI, -1), rI) for itemIndexI, rI in recommendationOfIndexesListOfTuple]
-        recommendations = [(itemIndexI, rI) for itemIndexI, rI in recommendations if itemIndexI != -1]
+        recommendations = [(itemIdI, rI) for itemIdI, rI in recommendations if itemIdI != -1]
 
+        if argumentsDict.get(self.ARG_ALLOWED_ITEMIDS) is not None:
+            recommendations = [(itemIdI, rI) for itemIdI, rI in recommendations if itemIdI in argumentsDict[self.ARG_ALLOWED_ITEMIDS]]
+
+        recommendations = recommendations[:numberOfItems]
 
         # provedu agregaci dle zvolené metody
         if len(recommendations) == 0:
