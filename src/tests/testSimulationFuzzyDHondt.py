@@ -86,7 +86,7 @@ def test01():
 
     print("Simulation: ML FuzzyDHondt")
 
-    jobID:str = "FuzzyDHondt"
+    jobID:str = "Roulette1"
 
     selector = RouletteWheelSelector({RouletteWheelSelector.ARG_EXPONENT:1})
 
@@ -117,7 +117,7 @@ def test21():
 
     print("Simulation: ST FuzzyDHondt")
 
-    jobID:str = "FuzzyDHondt"
+    jobID:str = "Roulette1"
 
     selector = RouletteWheelSelector({RouletteWheelSelector.ARG_EXPONENT:1})
 

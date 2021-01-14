@@ -34,7 +34,6 @@ from evaluationTool.evalToolDHondt import EvalToolDHondt #class
 
 from evaluationTool.aEvalTool import AEvalTool #class
 
-
 from recommenderDescription.recommenderDescription import RecommenderDescription #class
 
 from input.inputSimulatorDefinition import InputSimulatorDefinition #class
@@ -63,14 +62,15 @@ from history.historyHierDF import HistoryHierDF #class
 
 
 from aggregation.aggrBanditTS import AggrBanditTS #class
+from aggregation.operators.aDHondtSelector import ADHondtSelector #class
 from aggregation.operators.rouletteWheelSelector import RouletteWheelSelector #class
-
-#import pandas as pd
-#from history.historyDF import HistoryDF #class
 
 from userBehaviourDescription.userBehaviourDescription import UserBehaviourDescription #class
 from userBehaviourDescription.userBehaviourDescription import observationalStaticProbabilityFnc #function
 from userBehaviourDescription.userBehaviourDescription import observationalLinearProbabilityFnc #function
+
+from aggregation.negImplFeedback.aPenalization import APenalization #class
+from input.inputAggrDefinition import PenalizationToolDefinition #class
 
 
 
@@ -84,16 +84,19 @@ argsSimulationDict:Dict[str,object] = {SimulationST.ARG_WINDOW_SIZE: 5,
 
 def test01():
 
-    print("Simulation: ML FuzzyDHondtDirectOptimize")
+    print("Simulation: ML FuzzyDHondtINF")
 
     jobID:str = "Roulette1"
+
+    pProbToolOLin0802HLin1002:APenalization = PenalizationToolDefinition.exportProbPenaltyToolOStat08HLin1002(
+        InputSimulatorDefinition.numberOfAggrItems)
 
     selector = RouletteWheelSelector({RouletteWheelSelector.ARG_EXPONENT:1})
 
     rIDs, rDescs = InputRecomSTDefinition.exportPairOfRecomIdsAndRecomDescrs()
 
     pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
-        "FuzzyDHondtDirectOptimize" + jobID, rIDs, rDescs, InputAggrDefinition.exportADescDHontDirectOptimize(selector))
+        "FuzzyDHondtINF" + jobID, rIDs, rDescs, InputAggrDefinition.exportADescDHontINF(selector, pProbToolOLin0802HLin1002))
 
 
     batchID:str = "ml1mDiv90Ulinear0109R1"
@@ -115,16 +118,21 @@ def test01():
 
 def test21():
 
-    print("Simulation: ST FuzzyDHondtDirectOptimize")
+    print("Simulation: ST FuzzyDHondtINF")
 
     jobID:str = "Roulette1"
+
+    #pProbToolOLin0802HLin1002:APenalization = PenalizationToolDefinition.exportProbPenaltyToolOStat08HLin1002(
+    #    InputSimulatorDefinition.numberOfAggrItems)
+    pToolOLin0802HLin1002: APenalization = PenalizationToolDefinition.exportPenaltyToolOLin0802HLin1002(
+        InputSimulatorDefinition.numberOfAggrItems)
 
     selector = RouletteWheelSelector({RouletteWheelSelector.ARG_EXPONENT:1})
 
     rIDs, rDescs = InputRecomSTDefinition.exportPairOfRecomIdsAndRecomDescrs()
 
     pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
-        "FuzzyDHondtDirectOptimize" + jobID, rIDs, rDescs, InputAggrDefinition.exportADescDHontDirectOptimize(selector))
+        "FuzzyDHondtINF" + jobID, rIDs, rDescs, InputAggrDefinition.exportADescDHontINF(selector, pToolOLin0802HLin1002))
 
 
     batchID:str = "stDiv90Ulinear0109R1"
@@ -149,7 +157,7 @@ if __name__ == "__main__":
     os.chdir("..")
 
     # Simulation ML
-#    test01()  # FuzzyDHondtDirectOptimize
+#    test01()  # FuzzyDHondtINF
 
     # Simulation ST
-    test21()  # FuzzyDHondtDirectOptimize
+    test21()  # FuzzyDHondtINF

@@ -87,7 +87,7 @@ def test01():
 
     print("Simulation: ML DHontThompsonSampling")
 
-    jobID:str = ""
+    jobID:str = "Roulette1"
 
     selector = RouletteWheelSelector({RouletteWheelSelector.ARG_EXPONENT:1})
 
@@ -115,7 +115,7 @@ def test21():
 
     print("Simulation: ST DHontThompsonSampling")
 
-    jobID:str = ""
+    jobID:str = "Roulette1"
 
     selector = RouletteWheelSelector({RouletteWheelSelector.ARG_EXPONENT:1})
 

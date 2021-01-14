@@ -60,7 +60,7 @@ class BatchSTFuzzyDHondtINF(ABatchST):
         aDescDHontINF:AggregationDescription = InputAggrDefinition.exportADescDHontINF(selector, nImplFeedback)
 
         pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
-            "FDHondtINF" + jobID, rIDs, rDescs, aDescDHontINF)
+            "FuzzyDHondtINF" + jobID, rIDs, rDescs, aDescDHontINF)
 
         model:DataFrame = ModelDefinition.createDHontModel(pDescr.getRecommendersIDs())
 

@@ -106,7 +106,8 @@ class AggrFuzzyDHondt(AAgregation):
         recommendedItemIDs.append(selectedCandidateI);
 
         # removing elected candidate from list of candidates
-        uniqueCandidatesI.remove(selectedCandidateI)
+        if selectedCandidateI is not None:
+            uniqueCandidatesI.remove(selectedCandidateI)
 
         # updating number of elected candidates of parties
         electedOfPartyDictI:dict = {partyIDI:electedOfPartyDictI[partyIDI] + methodsResultDict[partyIDI].get(selectedCandidateI, 0) for partyIDI in electedOfPartyDictI.keys()}
