@@ -109,10 +109,10 @@ class InputRecomSTDefinition:
         rIDsKNN:List[str] = [recom + cls.KNN.title()]
         rDescsKNN:List[RecommenderDescription] = [cls.exportRDescKNN()]
 
-        #rIDsVMCKNN:List[str] = [recom + cls.VMC_KNN.title()]
-        #rDescsVMCKNN:List[RecommenderDescription] = [cls.exportRDescVMContextKNN()]
-        rIDsVMCKNN:List[str] = []
-        rDescsVMCKNN:List[RecommenderDescription] = []
+        rIDsVMCKNN:List[str] = [recom + cls.VMC_KNN.title()]
+        rDescsVMCKNN:List[RecommenderDescription] = [cls.exportRDescVMContextKNN()]
+        #rIDsVMCKNN:List[str] = []
+        #rDescsVMCKNN:List[RecommenderDescription] = []
 
 
         rIDsBPRMF:List[str] = [recom + cls.BPRMF_F50I20LR01R003.title(), recom + cls.BPRMF_F50I20LR01R001.title()]
@@ -123,6 +123,8 @@ class InputRecomSTDefinition:
 
         rIDsW2V:List[str] = [recom + cls.W2V_ALL100000WS1VS32_MAX1.title(), recom + cls.W2V_ALL200000WS1VS64_WEIGHTEDMEAN5.title()]
         rDescsW2V:List[RecommenderDescription] = [cls.exportRDescW2Vtalli100000ws1vs32upsmaxups1(), cls.exportRDescW2talli200000ws1vs64upsweightedMeanups5()]
+        #rIDsW2V: List[str] = []
+        #rDescsW2V: List[RecommenderDescription] = []
 
         rIDs:List[str] = rIDsPop + rIDsKNN + rIDsVMCKNN + rIDsBPRMF + rIDsCOSCB + rIDsW2V
         rDescs:List[RecommenderDescription] = rDescsPop + rDescsKNN + rDescsVMCKNN + rDescsBPRMF + rDescsCOSCB + rDescsW2V

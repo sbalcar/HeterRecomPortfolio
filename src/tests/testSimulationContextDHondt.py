@@ -68,9 +68,6 @@ from aggregation.aggrBanditTS import AggrBanditTS #class
 from aggregation.mixinContextAggregation import MixinContextAggregation #class
 from aggregation.operators.rouletteWheelSelector import RouletteWheelSelector #class
 
-#import pandas as pd
-#from history.historyDF import HistoryDF #class
-
 from userBehaviourDescription.userBehaviourDescription import UserBehaviourDescription #class
 from userBehaviourDescription.userBehaviourDescription import observationalStaticProbabilityFnc #function
 from userBehaviourDescription.userBehaviourDescription import observationalLinearProbabilityFnc #function
@@ -95,23 +92,23 @@ def test01():
 
     selector = RouletteWheelSelector({RouletteWheelSelector.ARG_EXPONENT:1})
 
-    rIDs, rDescs = InputRecomSTDefinition.exportPairOfRecomIdsAndRecomDescrs()
-
-    pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
-        "ContextDHondt" + jobID, rIDs, rDescs, InputAggrDefinition.exportADescDContextHondt(selector))
-
 
     itemsDF:DataFrame = Items.readFromFileMl1m()
     usersDF:DataFrame = Users.readFromFileMl1m()
 
     historyDF:AHistory = HistoryDF("test01")
 
-    eTool:AEvalTool = EvalToolContext(
-        {EvalToolContext.ARG_USERS: usersDF,
-         EvalToolContext.ARG_ITEMS: itemsDF,
-         EvalToolContext.ARG_DATASET: "ml",
-         EvalToolContext.ARG_HISTORY: historyDF}
-    )
+    eTool:AEvalTool = EvalToolContext({
+            EvalToolContext.ARG_USERS: usersDF,
+            EvalToolContext.ARG_ITEMS: itemsDF,
+            EvalToolContext.ARG_DATASET: "ml",
+            EvalToolContext.ARG_HISTORY: historyDF})
+
+
+    rIDs, rDescs = InputRecomSTDefinition.exportPairOfRecomIdsAndRecomDescrs()
+
+    pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
+        "ContextDHondt" + jobID, rIDs, rDescs, InputAggrDefinition.exportADescDContextHondt(selector, eTool))
 
 
     batchID:str = "ml1mDiv90Ulinear0109R1"
@@ -137,19 +134,22 @@ def test21():
     rIDs, rDescs = InputRecomSTDefinition.exportPairOfRecomIdsAndRecomDescrs()
 
 
-#    evaluationDict:dict = {EvalToolContext.ARG_USER_ID: userID,
-#                           EvalToolContext.ARG_RELEVANCE: methodsResultDict}
-#    evalToolDHondt = EvalToolContext(
-#        {EvalToolContext.ARG_USERS: usersDF,
-#         EvalToolContext.ARG_ITEMS: itemsDF,
-#         EvalToolContext.ARG_DATASET: "ml",
-#         EvalToolContext.ARG_HISTORY: historyDF}
-#    )
+    dataset:ADataset = DatasetST.readDatasets()
+    events = dataset.eventsDF
+    serials = dataset.serialsDF
 
+    historyDF: AHistory = HistoryDF("test01")
+
+    # Init eTool
+    eTool:AEvalTool = EvalToolContext({
+         EvalToolContext.ARG_ITEMS: serials,      # ITEMS
+         EvalToolContext.ARG_EVENTS: events,      # EVENTS (FOR CALCULATING HISTORY OF USER)
+         EvalToolContext.ARG_DATASET: "st",       # WHAT DATASET ARE WE IN
+         EvalToolContext.ARG_HISTORY: historyDF}) # empty instance of AHistory is OK for ST dataset
 
 
     pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
-        "ContextDHondt" + jobID, rIDs, rDescs, InputAggrDefinition.exportADescDContextHondt(selector))
+        "ContextDHondt" + jobID, rIDs, rDescs, InputAggrDefinition.exportADescDContextHondt(selector, eTool))
 
 
     batchID:str = "stDiv90Ulinear0109R1"
@@ -174,7 +174,7 @@ if __name__ == "__main__":
     os.chdir("..")
 
     # Simulation ML
-    test01()  # ContextFuzzyDHondt
+#    test01()  # ContextFuzzyDHondt
 
     # Simulation ST
-#    test21()  # ContextFuzzyDHondt
+    test21()  # ContextFuzzyDHondt

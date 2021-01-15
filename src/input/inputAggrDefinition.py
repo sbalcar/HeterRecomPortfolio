@@ -21,6 +21,8 @@ from aggregation.negImplFeedback.penalUsingReduceRelevance import penaltyLinear 
 
 from aggregation.operators.aDHondtSelector import ADHondtSelector #class
 
+from evaluationTool.aEvalTool import AEvalTool #class
+
 
 
 class InputAggrDefinition:
@@ -79,9 +81,10 @@ class InputAggrDefinition:
 
 
     @staticmethod
-    def exportADescDContextHondt(selector:ADHondtSelector):
+    def exportADescDContextHondt(selector:ADHondtSelector, eTool:AEvalTool):
         return AggregationDescription(AggrContextFuzzyDHondt, {
-                                            AggrFuzzyDHondtDirectOptimizeINF.ARG_SELECTOR:selector})
+                                            AggrContextFuzzyDHondt.ARG_SELECTOR:selector,
+                                            AggrContextFuzzyDHondt.ARG_EVAL_TOOL:eTool})
 
 
 

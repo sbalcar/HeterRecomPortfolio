@@ -16,6 +16,7 @@ from portfolio.portfolio1Aggr import Portfolio1Aggr #class
 
 from history.aHistory import AHistory #class
 from evaluationTool.aEvalTool import AEvalTool #class
+from evaluationTool.evalToolContext import EvalToolContext #class
 
 from datasets.aDataset import ADataset #class
 from datasets.ml.behavioursML import BehavioursML #class
@@ -241,7 +242,7 @@ class ASequentialSimulation(ABC):
         rItemIDsWithResponsibility:List[tuple[int, Series[int, str]]]
         rItemIDs, rItemIDsWithResponsibility = portfolio.recommend(userID, portfolioModel, args)
 
-        evaluatonTool.displayed(rItemIDsWithResponsibility, portfolioModel, {})
+        evaluatonTool.displayed(rItemIDsWithResponsibility, portfolioModel, {EvalToolContext.ARG_USER_ID:userID, EvalToolContext.ARG_RELEVANCE:rItemIDsWithResponsibility})
 
         candidatesToClick: List[int] = [itemIDI for itemIDI, observedI in zip(rItemIDs, uObservation[:len(rItemIDs)]) if observedI]
         clickedItemIDs:List[int] = list(set(candidatesToClick) & set(windowOfItemIDsI))
@@ -258,7 +259,7 @@ class ASequentialSimulation(ABC):
         for clickedNewItemIdI in clickedNewItemIDs:
             evaluationDict[AEvalTool.CLICKS] = evaluationDict.get(AEvalTool.CLICKS, 0) + 1
 
-            evaluatonTool.click(rItemIDsWithResponsibility, clickedNewItemIdI, portfolioModel, {})
+            evaluatonTool.click(rItemIDsWithResponsibility, clickedNewItemIdI, portfolioModel, {EvalToolContext.ARG_USER_ID:userID, EvalToolContext.ARG_RELEVANCE:rItemIDsWithResponsibility})
 
             self._clickedItems[userID].append(clickedNewItemIdI)
 
