@@ -27,7 +27,23 @@ from evaluationTool.evalToolSingleMethod import EToolSingleMethod #class
 from recommender.aRecommender import ARecommender #class
 
 import pandas as pd
+import numpy as np
 import json
+
+class NpEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, np.integer):
+            return int(obj)
+        elif isinstance(obj, np.floating):
+            return float(obj)
+        elif isinstance(obj, np.ndarray):
+            return obj.tolist()
+        else:
+            return super(NpEncoder, self).default(obj)
+
+
+
+
 class HeterRecomHTTPHandler(BaseHTTPRequestHandler):
 
     #ACTION_INIT:str = "init"
@@ -48,9 +64,6 @@ class HeterRecomHTTPHandler(BaseHTTPRequestHandler):
 
     VARIANT_1:str = "1"
     VARIANT_2:str = "2"
-
-    #UPDT_CLICK:str = "click"
-    #UPDT_VIEW:str = "view"
 
     #portfolioDict:Dict[]
     #modelsDict:Dict[]
@@ -287,7 +300,7 @@ class HeterRecomHTTPHandler(BaseHTTPRequestHandler):
         self.send_header('Content-Type', 'text/plain; charset=utf-8')
         self.end_headers()
         #message:str = "{'rItemIDs':" + json.dumps(rItemIDs) + ", 'rItemIDsWithtResp':" + json.dumps(rItemIDsWithtResp) +"}"
-        message:str = json.dumps(rItemIDsWithtResp)
+        message:str = json.dumps(rItemIDsWithtResp, cls=NpEncoder)
         self.wfile.write(message.encode('utf-8'))
         #self.wfile.write(b'\n')
 

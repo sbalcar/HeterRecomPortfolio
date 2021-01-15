@@ -50,12 +50,12 @@ def startS():
 def test01():
     print("Test 01")
 
-    #portA, modelA, evalToolA = getTheMostPopular()
-    portA, modelA, evalToolA = getFuzzyDHont()
+    #port1, model1, evalTool1 = getTheMostPopular()
+    port1, model1, evalTool1 = getFuzzyDHont()
 
-    portfolioDict:Dict[str, APortfolio] = {HeterRecomHTTPHandler.VARIANT_1: portA}
-    modelsDict:Dict[str, int] = {HeterRecomHTTPHandler.VARIANT_1: modelA}
-    evalToolsDict:Dict[str, AEvalTool] = {HeterRecomHTTPHandler.VARIANT_1: evalToolA}
+    portfolioDict:Dict[str, APortfolio] = {HeterRecomHTTPHandler.VARIANT_1: port1}
+    modelsDict:Dict[str, int] = {HeterRecomHTTPHandler.VARIANT_1: model1}
+    evalToolsDict:Dict[str, AEvalTool] = {HeterRecomHTTPHandler.VARIANT_1: evalTool1}
     evaluationDict:Dict[str,object] = {}
 
     HeterRecomHTTPHandler.portfolioDict = portfolioDict

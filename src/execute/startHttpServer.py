@@ -107,9 +107,10 @@ def startHttpServer():
 
   print("StartHTTPServer")
 
-  server = HTTPServer(('', 8080), HeterRecomHTTPHandler)
+  server = HTTPServer(('', 5003), HeterRecomHTTPHandler)
   server.serve_forever()
 
+  print("Serving forever")
 
 
 def getTheMostPopular():
@@ -134,21 +135,23 @@ def getTheMostPopular():
 
 def getFuzzyDHont():
 
-  jobID:str = "FuzzyDHondt" + "Roulette1"
+  #taskID:str = "FuzzyDHondt" + "Roulette1"
+  taskID:str = "FuzzyDHondt" + "Fixed"
   dataset:ADataset = DatasetST.readDatasets()
 
-  selector:ADHondtSelector = RouletteWheelSelector({RouletteWheelSelector.ARG_EXPONENT: 1})
+  #selector:ADHondtSelector = RouletteWheelSelector({RouletteWheelSelector.ARG_EXPONENT: 1})
+  selector:ADHondtSelector = TheMostVotedItemSelector({})
 
   aDescDHont:AggregationDescription = InputAggrDefinition.exportADescDHondt(selector)
 
   rIDs, rDescs = InputRecomSTDefinition.exportPairOfRecomIdsAndRecomDescrs()
 
   pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
-    jobID, rIDs, rDescs, aDescDHont)
+    taskID, rIDs, rDescs, aDescDHont)
 
-  history:AHistory = HistoryDF(jobID)
+  history:AHistory = HistoryDF(taskID)
 
-  port:APortfolio = pDescr.exportPortfolio(jobID, history)
+  port:APortfolio = pDescr.exportPortfolio(taskID, history)
   port.train(history, dataset)
 
   model:DataFrame = ModelDefinition.createDHontModel(pDescr.getRecommendersIDs())
@@ -161,10 +164,12 @@ def getFuzzyDHont():
 
 def getFuzzyDHontINF():
 
-  jobID:str = "FuzzyDHondtINF" + "Roulette1"
+  #taskID:str = "FuzzyDHondtINF" + "Roulette1"
+  taskID:str = "FuzzyDHondt" + "Fixed"
   dataset:ADataset = DatasetST.readDatasets()
 
-  selector:ADHondtSelector = RouletteWheelSelector({RouletteWheelSelector.ARG_EXPONENT: 1})
+  #selector:ADHondtSelector = RouletteWheelSelector({RouletteWheelSelector.ARG_EXPONENT: 1})
+  selector:ADHondtSelector = TheMostVotedItemSelector({})
 
   pToolOLin0802HLin1002:APenalization = PenalizationToolDefinition.exportPenaltyToolOLin0802HLin1002(
     InputSimulatorDefinition.numberOfAggrItems)
@@ -174,11 +179,11 @@ def getFuzzyDHontINF():
   rIDs, rDescs = InputRecomSTDefinition.exportPairOfRecomIdsAndRecomDescrs()
 
   pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
-    jobID, rIDs, rDescs, aDescDHont)
+    taskID, rIDs, rDescs, aDescDHont)
 
-  history:AHistory = HistoryDF(jobID)
+  history:AHistory = HistoryDF(taskID)
 
-  port:APortfolio = pDescr.exportPortfolio(jobID, history)
+  port:APortfolio = pDescr.exportPortfolio(taskID, history)
   port.train(history, dataset)
 
   model:DataFrame = ModelDefinition.createDHontModel(pDescr.getRecommendersIDs())
