@@ -11,6 +11,7 @@ import numpy as np
 from typing import List
 
 from input.batchesML1m.batchMLBanditTS import BatchMLBanditTS #class
+from input.batchesML1m.batchMLContextDHondt import BatchMLContextDHondt #class
 from input.batchesML1m.batchMLFuzzyDHondt import BatchMLFuzzyDHondt #class
 from input.batchesML1m.batchMLDHondtThompsonSampling import BatchMLDHondtThompsonSampling #class
 from input.batchesML1m.batchMLFuzzyDHondtINF import BatchMLFuzzyDHondtINF #class

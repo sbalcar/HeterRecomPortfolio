@@ -72,7 +72,7 @@ class BatchMLSingleINF(ABatchML):
 
         simulator:Simulator = InputSimulatorDefinition.exportSimulatorML1M(
                 batchID, divisionDatasetPercentualSize, uBehaviour, repetition)
-        simulator.simulate([pDescr], [DataFrame()], [EToolSingleMethod({})], HistoryHierDF)
+        simulator.simulate([pDescr], [DataFrame()], [EToolSingleMethod({})], [HistoryHierDF(pDescr.getPortfolioID())])
 
 
 

@@ -108,7 +108,7 @@ def test01():
 
     # simulation of portfolio
     simulator:Simulator = Simulator(batchID, SimulationML, argsSimulationDict, dataset, behavioursDF)
-    simulator.simulate([pDescr], [model], [eTool], HistoryHierDF)
+    simulator.simulate([pDescr], [model], [eTool], [HistoryHierDF(pDescr.getPortfolioID())])
 
 
 def test21():
@@ -137,7 +137,7 @@ def test21():
 
     # simulation of portfolio
     simulator:Simulator = Simulator(batchID, SimulationST, argsSimulationDict, dataset, behavioursDF)
-    simulator.simulate([pDescr], [model], [evalTool], HistoryHierDF)
+    simulator.simulate([pDescr], [model], [evalTool], [HistoryHierDF(pDescr.getPortfolioID())])
 
 
 if __name__ == "__main__":

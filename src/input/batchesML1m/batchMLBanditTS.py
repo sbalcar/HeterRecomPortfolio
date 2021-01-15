@@ -1,7 +1,8 @@
 #!/usr/bin/python3
 
 import os
-from typing import List
+from typing import List #class
+from typing import Dict #class
 
 from pandas.core.frame import DataFrame #class
 
@@ -36,7 +37,7 @@ class BatchMLBanditTS(ABatchML):
     def getParameters():
         selectorIDs:List[str] = BatchMLFuzzyDHondt().getSelectorParameters().keys()
 
-        aDict:dict = {}
+        aDict:Dict[str,ADHondtSelector] = {}
         for selectorIDI in selectorIDs:
             keyI:str = selectorIDI
             selectorI:ADHondtSelector = BatchMLFuzzyDHondt().getSelectorParameters()[selectorIDI]
@@ -62,7 +63,7 @@ class BatchMLBanditTS(ABatchML):
 
         simulator:Simulator = InputSimulatorDefinition.exportSimulatorML1M(
                 batchID, divisionDatasetPercentualSize, uBehaviour, repetition)
-        simulator.simulate([pDescr], [model], [eTool], HistoryHierDF)
+        simulator.simulate([pDescr], [model], [eTool], [HistoryHierDF(pDescr.getPortfolioID())])
 
 
 

@@ -6,6 +6,8 @@ import numpy as np
 
 from input.batchesML1m.batchMLBanditTS import BatchMLBanditTS #class
 
+from input.batchesML1m.batchMLContextDHondt import BatchMLContextDHondt #class
+
 from input.batchesML1m.batchMLDHondtThompsonSampling import BatchMLDHondtThompsonSampling #class
 from input.batchesML1m.batchMLDHondtThompsonSamplingINF import BatchMLDHondtThompsonSamplingINF #class
 
@@ -56,6 +58,8 @@ def generateBatches():
 #    BatchMLFuzzyDHondtDirectOptimize.generateBatches()
 #    BatchMLFuzzyDHondtDirectOptimizeINF.generateBatches()
 
+    BatchMLContextDHondt.generateBatches()
+
 #    BatchMLWeightedAVG.generateBatches()
 
 #    BatchMLSingle.generateBatches()
@@ -71,7 +75,7 @@ def generateBatches():
 #    BatchRRSingleW2VHT.generateBatches()
 
     #ST
-    BatchSTFuzzyDHondtDirectOptimize.generateBatches()
+#    BatchSTFuzzyDHondtDirectOptimize.generateBatches()
 #    BatchSTFuzzyDHondt.generateBatches()
 #    BatchSTFuzzyDHondtINF.generateBatches()
 #    BatchSTWeightedAVG.generateBatches()

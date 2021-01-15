@@ -56,7 +56,7 @@ class BatchRRSingle(ABatchRR):
 
         simulator:Simulator = InputSimulatorDefinition.exportSimulatorRetailRocket(
                 batchID, divisionDatasetPercentualSize, uBehaviour, repetition)
-        simulator.simulate([pDescr], [DataFrame()], [EToolSingleMethod({})], HistoryHierDF)
+        simulator.simulate([pDescr], [DataFrame()], [EToolSingleMethod({})], [HistoryHierDF(pDescr.getPortfolioID())])
 
 
 

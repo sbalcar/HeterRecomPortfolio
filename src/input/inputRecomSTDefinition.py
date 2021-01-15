@@ -132,8 +132,8 @@ class InputRecomSTDefinition:
         return (rIDs, rDescs)
 
 
-    @staticmethod
-    def exportPairOfRecomIdsAndRecomDescrsRetailRocket():
+    @classmethod
+    def exportPairOfRecomIdsAndRecomDescrsRetailRocket(cls):
 
         recom:str = "Recom"
 

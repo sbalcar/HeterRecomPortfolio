@@ -79,4 +79,4 @@ class BatchMLDHondtThompsonSamplingINF(ABatchML):
 
         simulator:Simulator = InputSimulatorDefinition.exportSimulatorML1M(
                 batchID, divisionDatasetPercentualSize, uBehaviour, repetition)
-        simulator.simulate([pDescr], [model], [eTool], HistoryHierDF)
+        simulator.simulate([pDescr], [model], [eTool], [HistoryHierDF(pDescr.getPortfolioID())])
