@@ -301,7 +301,8 @@ class HeterRecomHTTPHandler(BaseHTTPRequestHandler):
 
         self.historiesDict[variant].insertRecomAndClickedItemIDs(userID, rItemIDs, [])
         # delete log of history
-        lengthOfHistory:int = 10 * self._recomRepetitionCount * self._numberOfAggrItems
+        #lengthOfHistory:int = 10 * self._recomRepetitionCount * self._numberOfAggrItems
+        lengthOfHistory:int = 100
         #print("lengthOfHistory: " + str(lengthOfHistory))
         self.historiesDict[variant].deletePreviousRecomOfUser(userID, lengthOfHistory)
 
