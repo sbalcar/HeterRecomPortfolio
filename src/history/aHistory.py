@@ -17,21 +17,12 @@ class AHistory(ABC):
     def insertRecommendation(self, userID:int, rItemID:int, position:int, clicked:bool, timestamp=datetime.datetime.now()):
         assert False, "this needs to be overridden"
 
-    def insertRecomAndClickedItemID(self, userID:int, recommendedItemIDs:List[int], clickedItemID:int):
-
-        position:List[int] = range(0, len(recommendedItemIDs))
-
-        for rItemIdI, positionI, uObservationI in zip(recommendedItemIDs, position):
-
-            clickedI:bool = rItemIdI == clickedItemID
-            self.insertRecommendation(userID, rItemIdI, positionI, clickedI)
+    def insertRecom(self, userID:int, recommendedItemIDs:List[int]):
+        for positionI, rItemIdI in enumerate(recommendedItemIDs):
+            self.insertRecommendation(userID, rItemIdI, positionI, False)
 
     def insertRecomAndClickedItemIDs(self, userID:int, recommendedItemIDs:List[int], clickedItemIDs:List[int]):
-
-        position:List[int] = range(0, len(recommendedItemIDs))
-
-        for rItemIdI, positionI in zip(recommendedItemIDs, position):
-
+        for positionI, rItemIdI in enumerate(recommendedItemIDs):
             clickedI:bool = rItemIdI in clickedItemIDs
             self.insertRecommendation(userID, rItemIdI, positionI, clickedI)
 

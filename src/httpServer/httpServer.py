@@ -297,6 +297,14 @@ class HeterRecomHTTPHandler(BaseHTTPRequestHandler):
         evalTool:AEvalTool = self.evalToolsDict[variant]
         evalTool.displayed(rItemIDsWithtResp, self.modelsDict[variant], self.evaluation)
 
+
+        self.history[variant].insertRecomAndClickedItemIDs(userID, rItemIDs, [])
+        # delete log of history
+        lengthOfHistory:int = 10 * self._recomRepetitionCount * self._numberOfAggrItems
+        #print("lengthOfHistory: " + str(lengthOfHistory))
+        self.history[variant].deletePreviousRecomOfUser(userID, lengthOfHistory)
+
+
         self.send_response(200)
         self.send_header('Content-Type', 'text/plain; charset=utf-8')
         self.end_headers()

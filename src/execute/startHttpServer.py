@@ -39,6 +39,7 @@ from input.batchesSlanTour.batchSTSingleCosineCBHT import BatchSTSingleCosineCBH
 
 from history.aHistory import AHistory #class
 from history.historyDF import HistoryDF #class
+from history.historyHierDF import HistoryHierDF #class
 
 from datasets.aDataset import ADataset #class
 from datasets.datasetML import DatasetML
@@ -125,7 +126,7 @@ def getTheMostPopular():
 
   dataset:ADataset = DatasetST.readDatasets()
 
-  history:AHistory = HistoryDF(taskID)
+  history:AHistory = HistoryHierDF(taskID)
   port:APortfolio = pDescr.exportPortfolio(taskID, history)
   port.train(history, dataset)
 
@@ -151,7 +152,7 @@ def getFuzzyDHont():
   pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
     taskID, rIDs, rDescs, aDescDHont)
 
-  history:AHistory = HistoryDF(taskID)
+  history:AHistory = HistoryHierDF(taskID)
 
   port:APortfolio = pDescr.exportPortfolio(taskID, history)
   port.train(history, dataset)
@@ -180,7 +181,7 @@ def getFuzzyDHontThompsonSamplingINF():
   pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
     taskID, rIDs, rDescs, aDescDHont)
 
-  history:AHistory = HistoryDF(taskID)
+  history:AHistory = HistoryHierDF(taskID)
 
   dataset:ADataset = DatasetST.readDatasets()
 
@@ -214,7 +215,7 @@ def getFuzzyDHontINF():
   pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
     taskID, rIDs, rDescs, aDescDHont)
 
-  history:AHistory = HistoryDF(taskID)
+  history:AHistory = HistoryHierDF(taskID)
 
   port:APortfolio = pDescr.exportPortfolio(taskID, history)
   port.train(history, dataset)

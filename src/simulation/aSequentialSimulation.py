@@ -277,12 +277,14 @@ class ASequentialSimulation(ABC):
         self.historyOfRecommendationFiles[portfolioDesc.getPortfolioID()].write("clickedItemIDs: " + str(clickedItemIDs) + "\n\n")
         self.historyOfRecommendationFiles[portfolioDesc.getPortfolioID()].write("clickedNewItemIDs: " + str(clickedNewItemIDs) + "\n\n")
 
-#TODO historie
+
         # save log of history
         history.insertRecomAndClickedItemIDs(userID, rItemIDs, clickedItemIDs)
 
         # delete log of history
-        history.deletePreviousRecomOfUser(userID, self._recomRepetitionCount * self._numberOfRecommItems)
+        lengthOfHistory:int = 10 * self._recomRepetitionCount * self._numberOfAggrItems
+        #print("lengthOfHistory: " + str(lengthOfHistory))
+        history.deletePreviousRecomOfUser(userID, lengthOfHistory)
 
 
 
