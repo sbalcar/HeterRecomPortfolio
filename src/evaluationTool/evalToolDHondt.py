@@ -19,12 +19,12 @@ class EvalToolDHondt(AEvalTool):
     ARG_LEARNING_RATE_VIEWS:str = "learningRateViews"
 
 
-    def __init__(self, argumentsDict:Dict[str,object]):
-        if type(argumentsDict) is not dict:
-            raise ValueError("Argument argumentsDict isn't type dict.")
+    def __init__(self, argsDict:dict):
+        if type(argsDict) is not dict:
+            raise ValueError("Argument argsDict isn't type dict.")
 
-        self.learningRateClicks:float = argumentsDict[EvalToolDHondt.ARG_LEARNING_RATE_CLICKS]
-        self.learningRateViews:float = argumentsDict[EvalToolDHondt.ARG_LEARNING_RATE_VIEWS]
+        self.learningRateClicks:float = argsDict[EvalToolDHondt.ARG_LEARNING_RATE_CLICKS]
+        self.learningRateViews:float = argsDict[EvalToolDHondt.ARG_LEARNING_RATE_VIEWS]
         self.maxVotesConst:float = 0.99
         self.minVotesConst:float = 0.01
 

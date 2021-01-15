@@ -87,7 +87,7 @@ def startHttpServer():
   np.random.seed(42)
   random.seed(42)
 
-  print("StartHTTPServer")
+  print("TrainingPortfolios")
 
   #port1, model1, evalTool1 = getTheMostPopular()
   port1, model1, evalTool1 = getFuzzyDHont()
@@ -104,6 +104,8 @@ def startHttpServer():
   HeterRecomHTTPHandler.evaluation:Dict = {}
   #HeterRecomHTTPHandler.datasetClass = DatasetML
   HeterRecomHTTPHandler.datasetClass = DatasetST
+
+  print("StartHTTPServer")
 
   server = HTTPServer(('', 8080), HeterRecomHTTPHandler)
   server.serve_forever()
