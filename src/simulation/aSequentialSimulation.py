@@ -240,9 +240,10 @@ class ASequentialSimulation(ABC):
 
         rItemIDs:List[int]
         rItemIDsWithResponsibility:List[tuple[int, Series[int, str]]]
-        rItemIDs, rItemIDsWithResponsibility = portfolio.recommend(userID, portfolioModel, args)
+        resultsOfBaseRecommendersDict:Dict[str,object]
+        rItemIDs, rItemIDsWithResponsibility, resultsOfBaseRecommendersDict = portfolio.recommend(userID, portfolioModel, args)
 
-        evaluatonTool.displayed(rItemIDsWithResponsibility, portfolioModel, {EvalToolContext.ARG_USER_ID:userID, EvalToolContext.ARG_RELEVANCE:rItemIDsWithResponsibility})
+        evaluatonTool.displayed(rItemIDsWithResponsibility, portfolioModel, {EvalToolContext.ARG_USER_ID:userID, EvalToolContext.ARG_RELEVANCE:resultsOfBaseRecommendersDict})
 
         candidatesToClick: List[int] = [itemIDI for itemIDI, observedI in zip(rItemIDs, uObservation[:len(rItemIDs)]) if observedI]
         clickedItemIDs:List[int] = list(set(candidatesToClick) & set(windowOfItemIDsI))
@@ -259,7 +260,7 @@ class ASequentialSimulation(ABC):
         for clickedNewItemIdI in clickedNewItemIDs:
             evaluationDict[AEvalTool.CLICKS] = evaluationDict.get(AEvalTool.CLICKS, 0) + 1
 
-            evaluatonTool.click(rItemIDsWithResponsibility, clickedNewItemIdI, portfolioModel, {EvalToolContext.ARG_USER_ID:userID, EvalToolContext.ARG_RELEVANCE:rItemIDsWithResponsibility})
+            evaluatonTool.click(rItemIDsWithResponsibility, clickedNewItemIdI, portfolioModel, {EvalToolContext.ARG_USER_ID:userID, EvalToolContext.ARG_RELEVANCE:resultsOfBaseRecommendersDict})
 
             self._clickedItems[userID].append(clickedNewItemIdI)
 

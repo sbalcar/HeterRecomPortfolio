@@ -71,4 +71,4 @@ class Portfolio1Meth(APortfolio):
 
         recomItemIDs:List[int] = list(recomItemIDsWithResponsibility.index)
 
-        return (recomItemIDs, recomItemIDsWithResponsibility)
+        return (recomItemIDs, recomItemIDsWithResponsibility, None)

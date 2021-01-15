@@ -82,6 +82,7 @@ def test03():
     # call click & displayed methods
     l1 = eToolContext.displayed(rItemsWithResponsibility, portfolioModelDF, evaluationDict)
     # rItemsWithResponsibility[0][0] is clicked item
+    print(rItemsWithResponsibility)
     l1 = eToolContext.click(rItemsWithResponsibility,rItemsWithResponsibility[0][0],portfolioModelDF,evaluationDict)
 
     # ...
@@ -147,6 +148,7 @@ def test01():
     )
 
     print("Clicked:")
+    #print("rItemIDsWithResponsibility: " + str(rItemIDsWithResponsibility))
     evalToolDHondt.click(rItemIDsWithResponsibility, 7, portfolioModelDF, evaluationDict)
     evalToolDHondt.click(rItemIDsWithResponsibility, 1, portfolioModelDF, evaluationDict)
     evalToolDHondt.click(rItemIDsWithResponsibility, 7, portfolioModelDF, evaluationDict)
@@ -156,6 +158,7 @@ def test01():
 
     print("Displayed - start:")
     for i in range(100):
+        print("rItemIDsWithResponsibility: " + str(rItemIDsWithResponsibility))
         evalToolDHondt.displayed(rItemIDsWithResponsibility, portfolioModelDF, evaluationDict)
         print(portfolioModelDF)
         print(sumMethods(portfolioModelDF))
@@ -238,6 +241,7 @@ def test02(repetitions = 1):
     l1 = aggrInit.runWithResponsibility(methodsResultDict, methodsParamsDF, userID, N)
     import random
 
+    print("l1:" + str(l1))
     evalToolDHondt.displayed(l1, methodsParamsDF, evaluationDict)
     evalToolDHondt.click(l1, random.choice(l1)[0], methodsParamsDF, evaluationDict)
     timestamp = 10
@@ -279,6 +283,6 @@ def test02(repetitions = 1):
 
 if __name__ == "__main__":
     os.chdir("..")
-    test01()
+    #test01()
     #test02(repetitions=1000)
-    #test03()
+    test03()

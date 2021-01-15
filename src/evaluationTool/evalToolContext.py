@@ -77,7 +77,8 @@ class EvalToolContext(AEvalTool):
         else:
             raise ValueError("Dataset " + self.dataset_name + " is not supported!")
 
-    def _preprocessItemsST(self, items: DataFrame):
+    def _preprocessItemsST(self, items:DataFrame):
+        #print(items['prumerna_cena_noc'].head(10))
         self.items = items[['delka', 'id_serial']]
 
         log_price = items[['prumerna_cena_noc']].apply(lambda x: math.log(x[0]), axis=1)
@@ -159,6 +160,7 @@ class EvalToolContext(AEvalTool):
         # get relevances
         methodsResultDict = argumentsDict[self.ARG_RELEVANCE]
 
+        print("methodsResultDict: " + str(methodsResultDict))
         # update b's
         for recommender, relevances in methodsResultDict.items():
             if clickedItemID in relevances:
@@ -298,12 +300,15 @@ class EvalToolContext(AEvalTool):
 
         # get relevances
         methodsResultDict = argumentsDict[self.ARG_RELEVANCE]
+        print("methodsResultDict: " + str(methodsResultDict))
 
         for recommender, value in self._A.items():
             # get relevance of items, which were recommended by recommender and are in itemsWithResposibilityOfRecommenders
             relevanceSum = 0
 
             for recommendedItemID, votes in rItemIDsWithResponsibility:
+                #print("methodsResultDict: " + str(methodsResultDict))
+                #print("recommender: " + str(recommender))
                 if recommendedItemID in methodsResultDict[recommender].index:
                     relevanceSum += methodsResultDict[recommender][recommendedItemID]
             self._A[recommender] += np.outer(self._context.T, self._context) * relevanceSum

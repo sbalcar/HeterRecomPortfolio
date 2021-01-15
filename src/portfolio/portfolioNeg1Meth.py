@@ -65,4 +65,4 @@ class PortfolioNeg1Meth(Portfolio1Meth):
 
         cuttedRecomItemIDs:List[int] = list(cuttedRecomItemIDsWithRating.index)
 
-        return (cuttedRecomItemIDs, cuttedRecomItemIDsWithRating)
+        return (cuttedRecomItemIDs, cuttedRecomItemIDsWithRating, None)
