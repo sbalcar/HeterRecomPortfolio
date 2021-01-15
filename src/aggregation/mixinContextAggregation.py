@@ -44,7 +44,7 @@ class MixinContextAggregation(AAgregation):
             ridgeRegression = self.eTool._inverseA[recommender].dot(self.eTool._b[recommender])
             UCB_secondpart = 0.1 * self.eTool._context.T.dot(self.eTool._inverseA[recommender]).dot(self.eTool._context)
             UCB = (ridgeRegression.T.dot(self.eTool._context) + math.sqrt(UCB_secondpart))
-            print("UCB: ", UCB)
+            # print("UCB: ", UCB)
             # update votes
             updatedVotes[recommender] = UCB
             totalUpdatedVotes += updatedVotes[recommender]

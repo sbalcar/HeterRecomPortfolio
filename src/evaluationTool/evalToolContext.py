@@ -156,14 +156,11 @@ class EvalToolContext(AEvalTool):
                 self._A[recommender] = np.identity(self._contextDim)
                 self._inverseA[recommender] = np.identity(self._contextDim)
 
-        # get relevances
-        methodsResultDict = evaluationDict[self.ARG_RELEVANCE]
-
         # update b's
-        for recommender, relevances in methodsResultDict.items():
-            if clickedItemID in relevances:
+        for recommendedItemID, votes in rItemIDsWithResponsibility:
+            for recommender, _ in self._b.items():
                 # TODO: Maybe sum of rewards should be 1? (now it is below 1)
-                reward = relevances.loc[clickedItemID]
+                reward = votes[recommender]
                 self._b[recommender] = self._b[recommender] + (reward * self._context)
 
     def calculateContext(self, userID, argumentsDict:Dict[str,object]):
@@ -179,13 +176,20 @@ class EvalToolContext(AEvalTool):
         if argumentsDict[self.ARG_PAGE_TYPE] == 'zobrazit':
             itemID = argumentsDict[self.ARG_ITEM_ID]
 
-            item = self.items.loc[itemID]
+            # check if item is in items
+            if itemID in self.items.index:
+                item = self.items.loc[itemID]
 
-            if userID not in self.users:
-                self.users[userID] = [itemID]
+                # if this is new user
+                if userID not in self.users:
+                    self.users[userID] = [itemID]
+                else:
+                    if itemID not in self.users[userID]:
+                        self.users[userID].append(itemID)
+
+            # if item not present in items -> init empty list
             else:
-                if itemID not in self.users[userID]:
-                    self.users[userID].append(itemID)
+                item = np.array([0] * self.items.shape[1], dtype=float)
 
             result = np.append(result, item)
             result[3] = 1
@@ -200,8 +204,14 @@ class EvalToolContext(AEvalTool):
             # if we even know the user
             if userID in self.users:
                 for objectID in self.users[userID]:
-                    AggregationOfItems += self.items.loc[objectID]
+                    # check if itemID is in items
+                    if objectID in self.items.index:
+                        AggregationOfItems += self.items.loc[objectID]
                 AggregationOfItems.to_numpy()
+
+            # do nothing if we don't know user (leave context empty)
+
+            # append aggregation to results
             result = np.append(result, AggregationOfItems)
 
         result[0] = math.log(argumentsDict[self.ARG_SENIORITY])
@@ -296,16 +306,12 @@ class EvalToolContext(AEvalTool):
                 self._A[recommender] = np.identity(self._contextDim)
                 self._inverseA[recommender] = np.identity(self._contextDim)
 
-        # get relevances
-        methodsResultDict = evaluationDict[self.ARG_RELEVANCE]
-
         for recommender, value in self._A.items():
             # get relevance of items, which were recommended by recommender and are in itemsWithResposibilityOfRecommenders
             relevanceSum = 0
 
             for recommendedItemID, votes in rItemIDsWithResponsibility:
-                if recommendedItemID in methodsResultDict[recommender].index:
-                    relevanceSum += methodsResultDict[recommender][recommendedItemID]
+                relevanceSum += votes[recommender]
             self._A[recommender] += np.outer(self._context.T, self._context) * relevanceSum
 
         # recompute inverse A's if threshold is hit
