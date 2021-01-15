@@ -174,7 +174,7 @@ if __name__ == "__main__":
     os.chdir("..")
 
     # Simulation ML
-    test01()  # ContextFuzzyDHondt
+#    test01()  # ContextFuzzyDHondt
 
     # Simulation ST
-#    test21()  # ContextFuzzyDHondt
+    test21()  # ContextFuzzyDHondt

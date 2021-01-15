@@ -59,6 +59,7 @@ from portfolioDescription.portfolio1AggrDescription import Portfolio1AggrDescrip
 
 from evaluationTool.aEvalTool import AEvalTool #class
 from evaluationTool.evalToolSingleMethod import EToolSingleMethod #class
+from evaluationTool.evalToolDHondtBanditVotes import EvalToolDHondtBanditVotes #class
 
 from httpServer.httpServer import HeterRecomHTTPHandler #class
 from http.server import BaseHTTPRequestHandler, HTTPServer
@@ -92,10 +93,11 @@ def startHttpServer():
   #port1, model1, evalTool1 = getTheMostPopular()
   port1, model1, evalTool1 = getFuzzyDHont()
   port2, model2, evalTool2 = getFuzzyDHontINF()
+  port3, model3, evalTool3 = getFuzzyDHontThompsonSamplingINF()
 
-  portfolioDict:Dict[str,APortfolio] = {HeterRecomHTTPHandler.VARIANT_1:port1, HeterRecomHTTPHandler.VARIANT_2:port2}
-  modelsDict:Dict[str,int] = {HeterRecomHTTPHandler.VARIANT_1:model1, HeterRecomHTTPHandler.VARIANT_2:model2}
-  evalToolsDict:Dict[str, AEvalTool] = {HeterRecomHTTPHandler.VARIANT_1:evalTool1, HeterRecomHTTPHandler.VARIANT_2:evalTool2}
+  portfolioDict:Dict[str,APortfolio] = {HeterRecomHTTPHandler.VARIANT_1:port1, HeterRecomHTTPHandler.VARIANT_2:port2, HeterRecomHTTPHandler.VARIANT_3:port3}
+  modelsDict:Dict[str,int] = {HeterRecomHTTPHandler.VARIANT_1:model1, HeterRecomHTTPHandler.VARIANT_2:model2, HeterRecomHTTPHandler.VARIANT_3:model3}
+  evalToolsDict:Dict[str, AEvalTool] = {HeterRecomHTTPHandler.VARIANT_1:evalTool1, HeterRecomHTTPHandler.VARIANT_2:evalTool2, HeterRecomHTTPHandler.VARIANT_3:evalTool3}
 
 
   HeterRecomHTTPHandler.portfolioDict = portfolioDict
@@ -160,6 +162,37 @@ def getFuzzyDHont():
                                         EvalToolDHondt.ARG_LEARNING_RATE_VIEWS: 0.03 / 500})
 
   return (port, model, evalTool)
+
+
+
+def getFuzzyDHontThompsonSamplingINF():
+
+  taskID:str = "FuzzyDHondtThompsonSamplingINF" + "Fixed" + "OLin0802HLin1002"
+
+  selector:ADHondtSelector = TheMostVotedItemSelector({})
+
+  penalization:APenalization = PenalizationToolDefinition.exportProbPenaltyToolOLin0802HLin1002(20)
+
+  aDescDHont:AggregationDescription = InputAggrDefinition.exportADescDHondtThompsonSamplingINF(selector, penalization)
+
+  rIDs, rDescs = InputRecomSTDefinition.exportPairOfRecomIdsAndRecomDescrs()
+
+  pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
+    taskID, rIDs, rDescs, aDescDHont)
+
+  history:AHistory = HistoryDF(taskID)
+
+  dataset:ADataset = DatasetST.readDatasets()
+
+  port:APortfolio = pDescr.exportPortfolio(taskID, history)
+  port.train(history, dataset)
+
+  model:DataFrame = ModelDefinition.createDHondtBanditsVotesModel(pDescr.getRecommendersIDs())
+
+  evalTool:AEvalTool = EvalToolDHondtBanditVotes({})
+
+  return (port, model, evalTool)
+
 
 
 def getFuzzyDHontINF():

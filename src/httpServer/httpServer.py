@@ -64,6 +64,7 @@ class HeterRecomHTTPHandler(BaseHTTPRequestHandler):
 
     VARIANT_1:str = "1"
     VARIANT_2:str = "2"
+    VARIANT_3:str = "3"
 
     #portfolioDict:Dict[]
     #modelsDict:Dict[]
