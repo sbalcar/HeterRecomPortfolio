@@ -53,12 +53,11 @@ def test03():
 
 
     userID = 1
-    itemID = 2
+    itemID = 20
     historyDF: AHistory = HistoryDF("test01")
 
     # WHAT EVALUATIOR NEEDS into dictionary!
-    evaluationDict: dict = {EvalToolContext.ARG_USER_ID: userID,    # USERID
-                            EvalToolContext.ARG_RELEVANCE: methodsResultDict,   # EACH RECOMMENDER VOTES
+    evaluationDict: dict = {EvalToolContext.ARG_USER_ID: userID,
                             EvalToolContext.ARG_ITEM_ID: itemID,    # ITEMID (not mandatory if EvalToolContext.ARG_PAGE_TYPE != "zobrazit")
                             EvalToolContext.ARG_SENIORITY: 5,   # SENIORITY OF USER
                             EvalToolContext.ARG_PAGE_TYPE: "zobrazit",  #   TYPE OF PAGE ("zobrazit", "index" or "katalog)
