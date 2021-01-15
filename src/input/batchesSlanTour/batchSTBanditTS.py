@@ -1,46 +1,41 @@
 #!/usr/bin/python3
 
 import os
-
 from typing import List
-from typing import Dict #class
 
 from pandas.core.frame import DataFrame #class
 
 from portfolioDescription.portfolio1AggrDescription import Portfolio1AggrDescription #class
 
 from evaluationTool.aEvalTool import AEvalTool #class
-from evaluationTool.evalToolDHondt import EvalToolDHondt #class
-
-from aggregationDescription.aggregationDescription import AggregationDescription #class
+from evaluationTool.evalToolBanditTS import EvalToolBanditTS #class
 
 from input.inputAggrDefinition import InputAggrDefinition  # class
 from input.modelDefinition import ModelDefinition
 
+from input.inputRecomMLDefinition import InputRecomMLDefinition #class
 from input.inputRecomSTDefinition import InputRecomSTDefinition #class
 
-from aggregation.operators.aDHondtSelector import ADHondtSelector #class
-from aggregation.operators.rouletteWheelSelector import RouletteWheelSelector #class
-from aggregation.operators.theMostVotedItemSelector import TheMostVotedItemSelector #class
+from input.batchesML1m.batchMLBanditTS import BatchMLBanditTS #class
 
 from input.aBatch import BatchParameters #class
 from input.aBatchST import ABatchST #class
 
+from aggregation.aggrFuzzyDHondt import AggrFuzzyDHondt #class
+from aggregation.operators.aDHondtSelector import ADHondtSelector #class
 from input.inputSimulatorDefinition import InputSimulatorDefinition #class
 
 from simulator.simulator import Simulator #class
 
 from history.historyHierDF import HistoryHierDF #class
 
-from input.batchesML1m.batchMLFuzzyDHondt import BatchMLFuzzyDHondt #class
 
 
-class BatchSTFuzzyDHondt(ABatchST):
+class BatchSTBanditTS(ABatchST):
 
     @staticmethod
     def getParameters():
-        return BatchMLFuzzyDHondt.getParameters()
-
+        return BatchMLBanditTS.getParameters()
 
     def run(self, batchID:str, jobID:str):
 
@@ -49,17 +44,15 @@ class BatchSTFuzzyDHondt(ABatchST):
         repetition:int
         divisionDatasetPercentualSize, uBehaviour, repetition = BatchParameters.getBatchParameters(self.datasetID)[batchID]
 
-        #eTool:AEvalTool
-        selector, eTool = self.getParameters()[jobID]
+        selector:ADHondtSelector = self.getParameters()[jobID]
 
         rIDs, rDescs = InputRecomSTDefinition.exportPairOfRecomIdsAndRecomDescrs()
 
-        aDescDHont:AggregationDescription = InputAggrDefinition.exportADescDHondt(selector)
-
         pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
-            "FDHondt" + jobID, rIDs, rDescs, aDescDHont)
+            "BanditTS" + jobID, rIDs, rDescs, InputAggrDefinition.exportADescBanditTS(selector))
 
-        model:DataFrame = ModelDefinition.createDHontModel(pDescr.getRecommendersIDs())
+        eTool:AEvalTool = EvalToolBanditTS({})
+        model:DataFrame = ModelDefinition.createBanditModel(pDescr.getRecommendersIDs())
 
         simulator:Simulator = InputSimulatorDefinition.exportSimulatorSlantour(
                 batchID, divisionDatasetPercentualSize, uBehaviour, repetition)
@@ -72,4 +65,5 @@ if __name__ == "__main__":
     os.chdir("..")
     os.chdir("..")
     print(os.getcwd())
-    BatchSTFuzzyDHondt.generateBatches()
+
+    BatchSTBanditTS.generateBatches()

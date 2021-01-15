@@ -16,9 +16,10 @@ from portfolio.portfolio1Aggr import Portfolio1Aggr #class
 
 from history.aHistory import AHistory #class
 from evaluationTool.aEvalTool import AEvalTool #class
+from evaluationTool.evalToolContext import EvalToolContext #class
 
 from datasets.aDataset import ADataset #class
-from datasets.ml.behaviours import Behaviours #class
+from datasets.ml.behavioursML import BehavioursML #class
 
 from pandas.core.frame import DataFrame #class
 
@@ -210,7 +211,7 @@ class ASequentialSimulation(ABC):
         print("repetition: " + str(repetition))
 
         uObservationStrI:str = testBehaviourDict[repetition].loc[currentDFIndex][COL_BEHAVIOUR]
-        uObservation:List[bool] = Behaviours.convertToListOfBoolean(uObservationStrI)
+        uObservation:List[bool] = BehavioursML.convertToListOfBoolean(uObservationStrI)
 
         print("uObservation: " + str(uObservation))
 
@@ -226,8 +227,8 @@ class ASequentialSimulation(ABC):
 
 
     def simulateRecommendation(self, portfolio:APortfolio, portfolioDesc:APortfolioDescription, portfolioModel:DataFrame,
-                                 evaluatonTool:AEvalTool, history:AHistory, evaluation:dict, currentDFIndex:int, testRatingsDF:DataFrame,
-                                 uObservation:List[bool], userID:int, windowOfItemIDsI:List[int]):
+                                 evaluatonTool:AEvalTool, history:AHistory, evaluationDict:Dict[str,object],
+                                 currentDFIndex:int, testRatingsDF:DataFrame, uObservation:List[bool], userID:int, windowOfItemIDsI:List[int]):
 
         COL_ITEMID:str = self._ratingClass.getColNameItemID()
         currentItemID:int = testRatingsDF.loc[currentDFIndex][COL_ITEMID]
@@ -239,9 +240,10 @@ class ASequentialSimulation(ABC):
 
         rItemIDs:List[int]
         rItemIDsWithResponsibility:List[tuple[int, Series[int, str]]]
-        rItemIDs, rItemIDsWithResponsibility = portfolio.recommend(userID, portfolioModel, args)
+        resultsOfBaseRecommendersDict:Dict[str,object]
+        rItemIDs, rItemIDsWithResponsibility, resultsOfBaseRecommendersDict = portfolio.recommend(userID, portfolioModel, args)
 
-        evaluatonTool.displayed(rItemIDsWithResponsibility, portfolioModel, evaluation)
+        evaluatonTool.displayed(rItemIDsWithResponsibility, portfolioModel, {EvalToolContext.ARG_USER_ID:userID, EvalToolContext.ARG_RELEVANCE:resultsOfBaseRecommendersDict})
 
         candidatesToClick: List[int] = [itemIDI for itemIDI, observedI in zip(rItemIDs, uObservation[:len(rItemIDs)]) if observedI]
         clickedItemIDs:List[int] = list(set(candidatesToClick) & set(windowOfItemIDsI))
@@ -256,7 +258,9 @@ class ASequentialSimulation(ABC):
         print("historyOfClickedItems: " + str(self._clickedItems[userID]))
 
         for clickedNewItemIdI in clickedNewItemIDs:
-            evaluatonTool.click(rItemIDsWithResponsibility, clickedNewItemIdI, portfolioModel, evaluation)
+            evaluationDict[AEvalTool.CLICKS] = evaluationDict.get(AEvalTool.CLICKS, 0) + 1
+
+            evaluatonTool.click(rItemIDsWithResponsibility, clickedNewItemIdI, portfolioModel, {EvalToolContext.ARG_USER_ID:userID, EvalToolContext.ARG_RELEVANCE:resultsOfBaseRecommendersDict})
 
             self._clickedItems[userID].append(clickedNewItemIdI)
 

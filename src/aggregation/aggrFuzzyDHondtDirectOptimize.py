@@ -41,7 +41,7 @@ class AggrFuzzyDHondtDirectOptimize(AAgregation):
 
     # methodsResultDict:{String:pd.Series(rating:float[], itemID:int[])},
     # modelDF:pd.DataFrame[numberOfVotes:int], numberOfItems:int
-    def run(self, methodsResultDict: dict, modelDF: DataFrame, userID: int, numberOfItems:int, argumentsDict:Dict[str,object]={}):
+    def run(self, methodsResultDict:Dict, modelDF:DataFrame, userID:int, numberOfItems:int, argumentsDict:Dict[str,object]={}):
 
         # testing types of parameters
         if type(methodsResultDict) is not dict:
@@ -62,19 +62,23 @@ class AggrFuzzyDHondtDirectOptimize(AAgregation):
             raise ValueError("Argument numberOfItems must be positive value.")
         if type(argumentsDict) is not dict:
             raise ValueError("Argument argumentsDict isn't type dict.")
-
+        #print(methodsResultDict)
         candidatesOfMethods = [np.array(list(cI.keys())) for cI in methodsResultDict.values()]
+        #print(candidatesOfMethods)
+        
         uniqueCandidatesI: List[int] = list(set(np.concatenate(candidatesOfMethods)))
-        # print("UniqueCandidatesI: ", uniqueCandidatesI)
+        uniqueCandidatesI: list(map(int, uniqueCandidatesI)) #failsafe - in some cases it returns float
+        
+        #print("UniqueCandidatesI: ", uniqueCandidatesI)
 
         # sum of preference the elected candidates have for each party
         electedOfPartyDictI: dict[str, float] = {mI: 0.0 for mI in modelDF.index}
-        # print("ElectedForPartyI: ", electedOfPartyDictI)
+        #print("ElectedForPartyI: ", electedOfPartyDictI)
 
         # votes number of parties
         votesOfPartiesDictI: dict[str, float] = {mI: modelDF.votes.loc[mI] for mI in modelDF.index}
         totalVotes = modelDF["votes"].sum()
-        # print("VotesOfPartiesDictI: ", votesOfPartiesDictI, totalVotes)
+        #print("VotesOfPartiesDictI: ", votesOfPartiesDictI, totalVotes)
 
         recommendedItemIDs: List[int] = []
 
@@ -111,7 +115,7 @@ class AggrFuzzyDHondtDirectOptimize(AAgregation):
                         parityIDK])  # only account the amount of votes that does not exceed proportional representation
 
                 actVotesOfCandidatesDictI[candidateIDJ] = votesOfCandidateJ
-            # print(actVotesOfCandidatesDictI)
+            #print(actVotesOfCandidatesDictI)
 
             # select candidate with highest number of votes
             # selectedCandidateI:int = AggrDHont.selectorOfTheMostVotedItem(actVotesOfCandidatesDictI)
@@ -121,7 +125,13 @@ class AggrFuzzyDHondtDirectOptimize(AAgregation):
             recommendedItemIDs.append(selectedCandidateI);
 
             # removing elected candidate from list of candidates
-            uniqueCandidatesI.remove(selectedCandidateI)
+            try:
+                uniqueCandidatesI.remove(selectedCandidateI)
+            except:
+                print("Cannot remove"+ str(selectedCandidateI) +" from "+ str(uniqueCandidatesI) )
+                print("candidate votes")                        
+                print(actVotesOfCandidatesDictI)
+                #exit(1)
 
             # updating number of elected candidates of parties
             electedOfPartyDictI: dict = {
@@ -135,7 +145,7 @@ class AggrFuzzyDHondtDirectOptimize(AAgregation):
 
     # methodsResultDict:{String:Series(rating:float[], itemID:int[])},
     # modelDF:DataFrame<(methodID:str, votes:int)>, numberOfItems:int
-    def runWithResponsibility(self, methodsResultDict: dict, modelDF: DataFrame, userID: int, numberOfItems:int, argumentsDict:Dict[str,object]={}):
+    def runWithResponsibility(self, methodsResultDict:Dict, modelDF:DataFrame, userID:int, numberOfItems:int, argumentsDict:Dict[str,object]={}):
 
         # testing types of parameters
         if type(methodsResultDict) is not dict:
@@ -160,7 +170,7 @@ class AggrFuzzyDHondtDirectOptimize(AAgregation):
         if type(argumentsDict) is not dict:
             raise ValueError("Argument argumentsDict isn't type dict.")
 
-        aggregatedItemIDs: List[int] = self.run(methodsResultDict, modelDF, numberOfItems)
+        aggregatedItemIDs: List[int] = self.run(methodsResultDict, modelDF, userID, numberOfItems)
 
         itemsWithResposibilityOfRecommenders: List[int, np.Series[int, str]] = countDHontResponsibility(
             aggregatedItemIDs, methodsResultDict, modelDF, numberOfItems)

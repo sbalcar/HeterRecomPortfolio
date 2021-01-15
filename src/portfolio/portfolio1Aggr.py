@@ -83,21 +83,29 @@ class Portfolio1Aggr(APortfolio):
        numberOfRecomItems:int = argumentsDict[self.ARG_NUMBER_OF_RECOMM_ITEMS]
        numberOfAggrItems:int = argumentsDict[self.ARG_NUMBER_OF_AGGR_ITEMS]
 
-
-       resultsOfRecommendations:dict = {}
+       resultsOfBaseRecommendersDict:Dict[str,object] = {}
 
        for recomI, recomIdI, recomDescsI in zip(self._recommenders, self._recommIDs, self._recomDescs):
+
+           arguments2Dict:Dict[str, object] = {}
+           arguments2Dict.update(recomDescsI.getArguments())
+           arguments2Dict.update(argumentsDict)
+
            resultOfRecommendationI:List[int] = recomI.recommend(
-               userID, numberOfItems=numberOfRecomItems, argumentsDict=recomDescsI.getArguments())
-           resultsOfRecommendations[recomIdI] = resultOfRecommendationI
+               userID, numberOfItems=numberOfRecomItems, argumentsDict=arguments2Dict)
+           resultsOfBaseRecommendersDict[recomIdI] = resultOfRecommendationI
 
 
-       aggItemIDsWithResponsibility:List = self._aggregation.runWithResponsibility(
-           resultsOfRecommendations, portFolioModel, userID, numberOfItems=numberOfAggrItems,
-           argumentsDict=argumentsDict)
+       aggItemIDsWithResponsibility:List
+       aggItemIDsWithResponsibility = self._aggregation.runWithResponsibility(
+           resultsOfBaseRecommendersDict, portFolioModel, userID, numberOfAggrItems, argumentsDict)
        #print(aggregatedItemIDsWithResponsibility)
 
        aggItemIDs:List[int] = list(map(lambda rs: rs[0], aggItemIDsWithResponsibility))
 
-       # list<int>
-       return (aggItemIDs, aggItemIDsWithResponsibility)
+       #print("aggItemIDs: " + str(aggItemIDs))
+       #print("aggItemIDsWithResponsibility: " + str(aggItemIDsWithResponsibility))
+       #print("resultsOfRecommendations: " + str(resultsOfBaseRecommendersDict))
+
+       # Tuple
+       return (aggItemIDs, aggItemIDsWithResponsibility, resultsOfBaseRecommendersDict)

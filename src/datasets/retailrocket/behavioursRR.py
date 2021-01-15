@@ -7,7 +7,7 @@ from datasets.ml.ratings import Ratings
 from pandas.core.frame import DataFrame #class
 from pandas.core.frame import Series #class
 
-from datasets.ml.behaviours import Behaviours
+from datasets.ml.behavioursML import BehavioursML
 
 from datasets.retailrocket.events import Events #class
 
@@ -27,14 +27,14 @@ class BehavioursRR:
 
   COL_USERID = Events.COL_VISITOR_ID
   COL_ITEMID = Events.COL_ITEM_ID
-  COL_REPETITION = Behaviours.COL_REPETITION
-  COL_BEHAVIOUR = Behaviours.COL_BEHAVIOUR
+  COL_REPETITION = BehavioursML.COL_REPETITION
+  COL_BEHAVIOUR = BehavioursML.COL_BEHAVIOUR
 
-  BHVR_LINEAR0109 = Behaviours.BHVR_LINEAR0109
-  BHVR_STATIC08 = Behaviours.BHVR_STATIC08
-  BHVR_STATIC06 = Behaviours.BHVR_STATIC06
-  BHVR_STATIC04 = Behaviours.BHVR_STATIC04
-  BHVR_STATIC02 = Behaviours.BHVR_STATIC02
+  BHVR_LINEAR0109 = BehavioursML.BHVR_LINEAR0109
+  BHVR_STATIC08 = BehavioursML.BHVR_STATIC08
+  BHVR_STATIC06 = BehavioursML.BHVR_STATIC06
+  BHVR_STATIC04 = BehavioursML.BHVR_STATIC04
+  BHVR_STATIC02 = BehavioursML.BHVR_STATIC02
 
   @staticmethod
   def getColNameUserID():
@@ -102,7 +102,7 @@ class BehavioursRR:
                 continue
 
             uBehavIJ :List[bool] = uBehavDesc.getBehaviour(numberOfItems)
-            strBehavIJ :str = Behaviours.convertToString(uBehavIJ)
+            strBehavIJ :str = BehavioursML.convertToString(uBehavIJ)
             behavioursDF.at[indexJ, BehavioursRR.COL_BEHAVIOUR] = strBehavIJ
 
 

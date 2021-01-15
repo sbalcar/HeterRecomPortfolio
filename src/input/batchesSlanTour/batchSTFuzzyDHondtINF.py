@@ -53,20 +53,20 @@ class BatchSTFuzzyDHondtINF(ABatchST):
         selector, nImplFeedback = self.getParameters()[jobID]
 
         eTool:AEvalTool = EvalToolDHondt({EvalToolDHondt.ARG_LEARNING_RATE_CLICKS: 0.02,
-                                           EvalToolDHondt.ARG_LEARNING_RATE_VIEWS: 1000})
+                                           EvalToolDHondt.ARG_LEARNING_RATE_VIEWS: 0.02 / 1000})
 
         rIDs, rDescs = InputRecomSTDefinition.exportPairOfRecomIdsAndRecomDescrs()
 
-        aDescDHontINF:AggregationDescription = InputAggrDefinition.exportADescDHontINF(selector, nImplFeedback)
+        aDescDHontINF:AggregationDescription = InputAggrDefinition.exportADescDHondtINF(selector, nImplFeedback)
 
         pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
-            "FDHontINF" + jobID, rIDs, rDescs, aDescDHontINF)
+            "FuzzyDHondtINF" + jobID, rIDs, rDescs, aDescDHontINF)
 
         model:DataFrame = ModelDefinition.createDHontModel(pDescr.getRecommendersIDs())
 
         simulator:Simulator = InputSimulatorDefinition.exportSimulatorSlantour(
                 batchID, divisionDatasetPercentualSize, uBehaviour, repetition)
-        simulator.simulate([pDescr], [model], [eTool], HistoryHierDF)
+        simulator.simulate([pDescr], [model], [eTool], [HistoryHierDF(pDescr.getPortfolioID())])
 
 
 

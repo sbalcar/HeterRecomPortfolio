@@ -2,6 +2,7 @@
 
 import os
 from typing import List
+from typing import Dict
 
 from datasets.aDataset import ADataset #class
 from datasets.datasetML import DatasetML #class
@@ -9,7 +10,7 @@ from datasets.datasetRetailrocket import DatasetRetailRocket #class
 from datasets.datasetST import DatasetST #class
 
 from datasets.ml.ratings import Ratings #class
-from datasets.ml.behaviours import Behaviours #class
+from datasets.ml.behavioursML import BehavioursML #class
 from datasets.retailrocket.behavioursRR import BehavioursRR #class
 from datasets.slantour.behavioursST import BehavioursST #class
 
@@ -55,7 +56,7 @@ def test00():
     behaviourDF:DataFrame = DataFrame({'$a':[2783,2783,2783,2783,2783,2783, 3970,3970,3970,3970], '$b':[1909,1909,1396,1396,2901,2901,2901,2901,3407,3407], '$c':[0,1,0,1,0,1,0,1,0,1],
                                        '$d':["b0000000000", "b0000000000", "b0000000000", "b0000000000", "b0000000000",
                                              "b0000000000", "b0000000000", "b0000000000", "b0000000000", "b0000000000"]})
-    behaviourDF.columns = [Behaviours.COL_USERID, Behaviours.COL_MOVIEID, Behaviours.COL_REPETITION, Behaviours.COL_BEHAVIOUR]
+    behaviourDF.columns = [BehavioursML.COL_USERID, BehavioursML.COL_MOVIEID, BehavioursML.COL_REPETITION, BehavioursML.COL_BEHAVIOUR]
     print(behaviourDF)
     print("")
 
@@ -88,7 +89,7 @@ def test00():
     print("")
 
 
-argsSimulationDict:dict = {SimulationST.ARG_WINDOW_SIZE: 5,
+argsSimulationDict:Dict[str,object] = {SimulationST.ARG_WINDOW_SIZE: 5,
                             SimulationST.ARG_RECOM_REPETITION_COUNT: 1,
                             SimulationST.ARG_NUMBER_OF_RECOMM_ITEMS: 100,
                             SimulationST.ARG_NUMBER_OF_AGGR_ITEMS: InputSimulatorDefinition.numberOfAggrItems,
@@ -106,8 +107,8 @@ def test01():
 
     batchID:str = "ml1mDiv90Ulinear0109R1"
     dataset:DatasetML = DatasetML.readDatasets()
-    behaviourFile:str = Behaviours.getFile(Behaviours.BHVR_LINEAR0109)
-    behavioursDF:DataFrame = Behaviours.readFromFileMl1m(behaviourFile)
+    behaviourFile:str = BehavioursML.getFile(BehavioursML.BHVR_LINEAR0109)
+    behavioursDF:DataFrame = BehavioursML.readFromFileMl1m(behaviourFile)
 
     # remove old results
     #path:str = ".." + os.sep + "results" + os.sep + batchID
@@ -120,7 +121,7 @@ def test01():
 
     # simulation of portfolio
     simulator:Simulator = Simulator(batchID, SimulationML, argsSimulationDict, dataset, behavioursDF)
-    simulator.simulate([pDescr], [DataFrame()], [EToolSingleMethod({})], HistoryHierDF)
+    simulator.simulate([pDescr], [DataFrame()], [EToolSingleMethod({})], [HistoryHierDF(pDescr.getPortfolioID())])
 
 
 def test02():
@@ -134,12 +135,12 @@ def test02():
 
     batchID:str = "ml1mDiv90Ulinear0109R1"
     dataset:DatasetML = DatasetML.readDatasets()
-    behaviourFile:str = Behaviours.getFile(Behaviours.BHVR_LINEAR0109)
-    behavioursDF:DataFrame = Behaviours.readFromFileMl1m(behaviourFile)
+    behaviourFile:str = BehavioursML.getFile(BehavioursML.BHVR_LINEAR0109)
+    behavioursDF:DataFrame = BehavioursML.readFromFileMl1m(behaviourFile)
 
     # simulation of portfolio
     simulator:Simulator = Simulator(batchID, SimulationML, argsSimulationDict, dataset, behavioursDF)
-    simulator.simulate([pDescr], [DataFrame()], [EToolSingleMethod({})], HistoryHierDF)
+    simulator.simulate([pDescr], [DataFrame()], [EToolSingleMethod({})], [HistoryHierDF(pDescr.getPortfolioID())])
 
 
 def test03():
@@ -153,12 +154,12 @@ def test03():
 
     batchID:str = "ml1mDiv90Ulinear0109R1"
     dataset:DatasetML = DatasetML.readDatasets()
-    behaviourFile:str = Behaviours.getFile(Behaviours.BHVR_LINEAR0109)
-    behavioursDF:DataFrame = Behaviours.readFromFileMl1m(behaviourFile)
+    behaviourFile:str = BehavioursML.getFile(BehavioursML.BHVR_LINEAR0109)
+    behavioursDF:DataFrame = BehavioursML.readFromFileMl1m(behaviourFile)
 
     # simulation of portfolio
     simulator:Simulator = Simulator(batchID, SimulationML, argsSimulationDict, dataset, behavioursDF)
-    simulator.simulate([pDescr], [DataFrame()], [EToolSingleMethod({})], HistoryHierDF)
+    simulator.simulate([pDescr], [DataFrame()], [EToolSingleMethod({})], [HistoryHierDF(pDescr.getPortfolioID())])
 
 
 def test04():
@@ -177,12 +178,12 @@ def test04():
 
     batchID:str = "ml1mDiv90Ulinear0109R1"
     dataset:DatasetML = DatasetML.readDatasets()
-    behaviourFile:str = Behaviours.getFile(Behaviours.BHVR_LINEAR0109)
-    behavioursDF:DataFrame = Behaviours.readFromFileMl1m(behaviourFile)
+    behaviourFile:str = BehavioursML.getFile(BehavioursML.BHVR_LINEAR0109)
+    behavioursDF:DataFrame = BehavioursML.readFromFileMl1m(behaviourFile)
 
     # simulation of portfolio
     simulator:Simulator = Simulator(batchID, SimulationML, argsSimulationDict, dataset, behavioursDF)
-    simulator.simulate([pDescr], [DataFrame()], [EToolSingleMethod({})], HistoryHierDF)
+    simulator.simulate([pDescr], [DataFrame()], [EToolSingleMethod({})], [HistoryHierDF(pDescr.getPortfolioID())])
 
 
 def test05():
@@ -197,12 +198,12 @@ def test05():
 
     batchID:str = "ml1mDiv90Ulinear0109R1"
     dataset:DatasetML = DatasetML.readDatasets()
-    behaviourFile:str = Behaviours.getFile(Behaviours.BHVR_LINEAR0109)
-    behavioursDF:DataFrame = Behaviours.readFromFileMl1m(behaviourFile)
+    behaviourFile:str = BehavioursML.getFile(BehavioursML.BHVR_LINEAR0109)
+    behavioursDF:DataFrame = BehavioursML.readFromFileMl1m(behaviourFile)
 
     # simulation of portfolio
     simulator:Simulator = Simulator(batchID, SimulationML, argsSimulationDict, dataset, behavioursDF)
-    simulator.simulate([pDescr], [DataFrame()], [EToolSingleMethod({})], HistoryHierDF)
+    simulator.simulate([pDescr], [DataFrame()], [EToolSingleMethod({})], [HistoryHierDF(pDescr.getPortfolioID())])
 
 
 def test11():
@@ -221,7 +222,7 @@ def test11():
 
     # simulation of portfolio
     simulator:Simulator = Simulator(batchID, SimulationRR, argsSimulationDict, dataset, behavioursDF)
-    simulator.simulate([pDescr], [DataFrame()], [EToolSingleMethod({})], HistoryHierDF)
+    simulator.simulate([pDescr], [DataFrame()], [EToolSingleMethod({})], [HistoryHierDF(pDescr.getPortfolioID())])
 
 
 
@@ -242,7 +243,7 @@ def test21():
 
     # simulation of portfolio
     simulator:Simulator = Simulator(batchID, SimulationST, argsSimulationDict, dataset, behavioursDF)
-    simulator.simulate([pDescr], [DataFrame()], [EToolSingleMethod({})], HistoryHierDF)
+    simulator.simulate([pDescr], [DataFrame()], [EToolSingleMethod({})], [HistoryHierDF(pDescr.getPortfolioID())])
 
 
 def test22():
@@ -261,7 +262,7 @@ def test22():
 
     # simulation of portfolio
     simulator:Simulator = Simulator(batchID, SimulationST, argsSimulationDict, dataset, behavioursDF)
-    simulator.simulate([pDescr], [DataFrame()], [EToolSingleMethod({})], HistoryHierDF)
+    simulator.simulate([pDescr], [DataFrame()], [EToolSingleMethod({})], [HistoryHierDF(pDescr.getPortfolioID())])
 
 
 def test23():
@@ -280,7 +281,7 @@ def test23():
 
     # simulation of portfolio
     simulator:Simulator = Simulator(batchID, SimulationST, argsSimulationDict, dataset, behavioursDF)
-    simulator.simulate([pDescr], [DataFrame()], [EToolSingleMethod({})], HistoryHierDF)
+    simulator.simulate([pDescr], [DataFrame()], [EToolSingleMethod({})], [HistoryHierDF(pDescr.getPortfolioID())])
 
 
 def test24():
@@ -299,7 +300,7 @@ def test24():
 
     # simulation of portfolio
     simulator:Simulator = Simulator(batchID, SimulationST, argsSimulationDict, dataset, behavioursDF)
-    simulator.simulate([pDescr], [DataFrame()], [EToolSingleMethod({})], HistoryHierDF)
+    simulator.simulate([pDescr], [DataFrame()], [EToolSingleMethod({})], [HistoryHierDF(pDescr.getPortfolioID())])
 
 
 def test25():
@@ -318,12 +319,12 @@ def test25():
 
     # simulation of portfolio
     simulator:Simulator = Simulator(batchID, SimulationST, argsSimulationDict, dataset, behavioursDF)
-    simulator.simulate([pDescr], [DataFrame()], [EToolSingleMethod({})], HistoryHierDF)
+    simulator.simulate([pDescr], [DataFrame()], [EToolSingleMethod({})], [HistoryHierDF(pDescr.getPortfolioID())])
 
 
 def test26():
 
-    print("Simulation: ST MF")
+    print("Simulation: ST VMCMF")
 
     rDescr:RecommenderDescription = InputRecomSTDefinition.exportRDescVMContextKNN()
 
@@ -337,7 +338,7 @@ def test26():
 
     # simulation of portfolio
     simulator:Simulator = Simulator(batchID, SimulationST, argsSimulationDict, dataset, behavioursDF)
-    simulator.simulate([pDescr], [DataFrame()], [EToolSingleMethod({})], HistoryHierDF)
+    simulator.simulate([pDescr], [DataFrame()], [EToolSingleMethod({})], [HistoryHierDF(pDescr.getPortfolioID())])
 
 
 
@@ -357,9 +358,9 @@ if __name__ == "__main__":
     #test11()  # TheMostPopular
 
     # Simulation ST
-    #test21()  # TheMostPopular
+    test21()  # TheMostPopular
     #test22()  # W2V
     #test23()  # KNN
     #test24()  # CB
     #test25()  # MF
-    test26()   # VMContextKNN
+    #test26()  # VMContextKNN

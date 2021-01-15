@@ -51,8 +51,12 @@ class PortfolioNeg1Meth(Portfolio1Meth):
         #print("ARG_NUMBER_OF_AGGR_ITEMS " + str(argumentsDict[self.ARG_NUMBER_OF_AGGR_ITEMS]))
         #print("ARG_NUMBER_OF_RECOMM_ITEMS " + str(argumentsDict[self.ARG_NUMBER_OF_RECOMM_ITEMS]))
 
+        arguments2Dict:Dict[str,object] = {}
+        arguments2Dict.update(self._recomDesc.getArguments())
+        arguments2Dict.update(argumentsDict)
+
         recomItemIDsWithRating:Series = self._recommender.recommend(
-            userID, numberOfItems=numberOfRecommItems, argumentsDict=self._recomDesc.getArguments())
+            userID, numberOfItems=numberOfRecommItems, argumentsDict=arguments2Dict)
 
         penalizedRecomItemIDsWithRating:Series = self._penaltyTool.runOneMethodPenalization(
             userID, recomItemIDsWithRating, self._history)
@@ -61,4 +65,4 @@ class PortfolioNeg1Meth(Portfolio1Meth):
 
         cuttedRecomItemIDs:List[int] = list(cuttedRecomItemIDsWithRating.index)
 
-        return (cuttedRecomItemIDs, cuttedRecomItemIDsWithRating)
+        return (cuttedRecomItemIDs, cuttedRecomItemIDsWithRating, None)

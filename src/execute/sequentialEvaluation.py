@@ -11,6 +11,7 @@ import numpy as np
 from typing import List
 
 from input.batchesML1m.batchMLBanditTS import BatchMLBanditTS #class
+from input.batchesML1m.batchMLContextDHondt import BatchMLContextDHondt #class
 from input.batchesML1m.batchMLFuzzyDHondt import BatchMLFuzzyDHondt #class
 from input.batchesML1m.batchMLDHondtThompsonSampling import BatchMLDHondtThompsonSampling #class
 from input.batchesML1m.batchMLFuzzyDHondtINF import BatchMLFuzzyDHondtINF #class
@@ -30,9 +31,11 @@ from input.batchesML1m.batchMLSingleCosineCBHT import BatchMLSingleCosineCBHT #c
 from input.batchesRetailrocket.batchRRSingle import BatchRRSingle #class
 from input.batchesRetailrocket.batchRRSingleW2VHT import BatchRRSingleW2VHT #class
 
+from input.batchesSlanTour.batchSTFuzzyDHondtDirectOptimize import BatchSTFuzzyDHondtDirectOptimize #class
 from input.batchesSlanTour.batchSTFuzzyDHondt import BatchSTFuzzyDHondt #class
 from input.batchesSlanTour.batchSTFuzzyDHondtINF import BatchSTFuzzyDHondtINF #class
 from input.batchesSlanTour.batchSTWeightedAVG import BatchSTWeightedAVG #class
+from input.batchesSlanTour.batchSTBanditTS import BatchSTBanditTS #class
 
 from input.batchesSlanTour.batchSTSingleVMContextKNNHT import BatchSTVMContextKNNHT #class
 from input.batchesSlanTour.batchSTSingle import BatchSTSingle #class
@@ -74,3 +77,4 @@ def sequentialEvaluation():
           except Exception:
               traceback.print_exc()
               print("Skiped job: " + command)
+              return

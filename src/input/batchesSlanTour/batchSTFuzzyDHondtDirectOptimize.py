@@ -2,7 +2,7 @@
 
 import os
 
-from typing import List
+from typing import List #class
 from typing import Dict #class
 
 from pandas.core.frame import DataFrame #class
@@ -32,14 +32,19 @@ from simulator.simulator import Simulator #class
 
 from history.historyHierDF import HistoryHierDF #class
 
-from input.batchesML1m.batchMLFuzzyDHondt import BatchMLFuzzyDHondt #class
+from input.batchesML1m.batchMLFuzzyDHondtDirectOptimize import BatchMLFuzzyDHondtDirectOptimize #clas
 
 
-class BatchSTFuzzyDHondt(ABatchST):
+
+class BatchSTFuzzyDHondtDirectOptimize(ABatchST):
+
+    SLCTR_ROULETTE1:str = BatchMLFuzzyDHondtDirectOptimize.SLCTR_ROULETTE1
+    SLCTR_ROULETTE2:str = BatchMLFuzzyDHondtDirectOptimize.SLCTR_ROULETTE2
+    SLCTR_FIXED:str = BatchMLFuzzyDHondtDirectOptimize.SLCTR_FIXED
 
     @staticmethod
     def getParameters():
-        return BatchMLFuzzyDHondt.getParameters()
+        return BatchMLFuzzyDHondtDirectOptimize.getParameters()
 
 
     def run(self, batchID:str, jobID:str):
@@ -54,10 +59,10 @@ class BatchSTFuzzyDHondt(ABatchST):
 
         rIDs, rDescs = InputRecomSTDefinition.exportPairOfRecomIdsAndRecomDescrs()
 
-        aDescDHont:AggregationDescription = InputAggrDefinition.exportADescDHondt(selector)
+        aDescDHont:AggregationDescription = InputAggrDefinition.exportADescDHondtDirectOptimize(selector)
 
         pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
-            "FDHondt" + jobID, rIDs, rDescs, aDescDHont)
+            "FDHondtDirectOptimize" + jobID, rIDs, rDescs, aDescDHont)
 
         model:DataFrame = ModelDefinition.createDHontModel(pDescr.getRecommendersIDs())
 
@@ -67,9 +72,8 @@ class BatchSTFuzzyDHondt(ABatchST):
 
 
 
-
 if __name__ == "__main__":
     os.chdir("..")
     os.chdir("..")
     print(os.getcwd())
-    BatchSTFuzzyDHondt.generateBatches()
+    BatchSTFuzzyDHondtDirectOptimize.generateBatches()

@@ -83,7 +83,7 @@ class BatchSTSingleCosineCBHT(ABatchST):
 
         simulator:Simulator = InputSimulatorDefinition.exportSimulatorSlantour(
             batchID, divisionDatasetPercentualSize, uBehaviour, repetition)
-        simulator.simulate([pDescr], [DataFrame()], [EToolSingleMethod({})], HistoryHierDF)
+        simulator.simulate([pDescr], [DataFrame()], [EToolSingleMethod({})], [HistoryHierDF(pDescr.getPortfolioID())])
 
 
 if __name__ == "__main__":

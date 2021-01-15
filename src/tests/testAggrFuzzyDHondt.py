@@ -20,6 +20,7 @@ from aggregation.operators.rouletteWheelSelector import RouletteWheelSelector #c
 from aggregation.operators.theMostVotedItemSelector import TheMostVotedItemSelector #class
 
 from input.inputAggrDefinition import InputAggrDefinition  #class
+from input.inputAggrDefinition import PenalizationToolDefinition #class
 from input.modelDefinition import ModelDefinition
 
 from aggregation.negImplFeedback.aPenalization import APenalization #class
@@ -37,7 +38,7 @@ def test01():
           "metoda2":pd.Series([0.1,0.1,0.2,0.3,0.3],[1,5,32,6,7],name="rating"),
           "metoda3":pd.Series([0.3,0.1,0.2,0.3,0.1],[7,2,77,64,12],name="rating")
           }
-    #print(methodsResultDict)
+    print(methodsResultDict)
 
     # methods parametes
     portfolioModelData:List[tuple] = [['metoda1',100], ['metoda2',80], ['metoda3',60]]
@@ -52,7 +53,9 @@ def test01():
     aggr:AggrFuzzyDHondt = AggrFuzzyDHondt(HistoryDF(""), {AggrFuzzyDHondt.ARG_SELECTOR:TheMostVotedItemSelector({})})
     #itemIDs:int = aggr.run(methodsResultDict, methodsParamsDF, N)
     #print(itemIDs)
-    itemIDs:List[tuple] = aggr.runWithResponsibility(methodsResultDict, portfolioModel, N)
+
+    userID:int = 101
+    itemIDs:List[tuple] = aggr.runWithResponsibility(methodsResultDict, portfolioModel, userID, N)
     print(itemIDs)
 
 
@@ -68,6 +71,7 @@ def test02():
           "metoda1":pd.Series([0.2,0.2,0.2,0.2,0.2],[1,3,5,7,9],name="rating"),
           "metoda2":pd.Series([0.2,0.2,0.2,0.2,0.2],[2,4,6,8,10],name="rating"),
           }
+    print(methodsResultDict)
 
     # methods parametes
     #methodsParamsData:List[tuple] = [['metoda1',0], ['metoda2',0]]
@@ -79,15 +83,16 @@ def test02():
     #aggr:AggrDHont = AggrDHont(HistoryDF(), {AggrDHont.ARG_SELECTORFNC:(AggrDHont.selectorOfRouletteWheelRatedItem,[])})
     #aggr:AggrDHont = AggrDHont(HistoryDF(), {AggrDHont.ARG_SELECTORFNC:(AggrDHont.selectorOfRouletteWheelExpRatedItem,[1])})
 
-    pToolOLin0802HLin1002: APenalization = InputAggrDefinition.exportPenaltyToolOLin0802HLin1002(20)
+    pToolOLin0802HLin1002:APenalization = PenalizationToolDefinition.exportPenaltyToolOLin0802HLin1002(20)
 
     aggr:AggrFuzzyDHondt = AggrFuzzyDHondtINF(HistoryDF(""),
                                               {AggrFuzzyDHondtINF.ARG_SELECTOR:RouletteWheelSelector({RouletteWheelSelector.ARG_EXPONENT:1}),
                                                AggrFuzzyDHondtINF.ARG_PENALTY_TOOL:pToolOLin0802HLin1002})
 
-    ##itemIDs:int = aggr.run(methodsResultDict, methodsParamsDF, N)
-    itemIDs:int = aggr.run(methodsResultDict, methodsParamsDF, N)
-    #itemIDs:List[tuple] = aggr.runWithResponsibility(methodsResultDict, methodsParamsDF, N)
+    userID:int = 101
+    ##itemIDs:int = aggr.run(methodsResultDict, methodsParamsDF, userID, N)
+    itemIDs:int = aggr.run(methodsResultDict, methodsParamsDF, userID, N)
+    #itemIDs:List[tuple] = aggr.runWithResponsibility(methodsResultDict, methodsParamsDF, userID, N)
     print(itemIDs)
 
 

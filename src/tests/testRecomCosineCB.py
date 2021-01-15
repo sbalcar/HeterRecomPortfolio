@@ -39,25 +39,26 @@ def test01():
     args:dict = {
             RecommenderCosineCB.ARG_CB_DATA_PATH: Configuration.cbML1MDataFileWithPathTFIDF,
             RecommenderCosineCB.ARG_USER_PROFILE_SIZE: 5,
-            RecommenderCosineCB.ARG_USER_PROFILE_STRATEGY: "max"}
+            RecommenderCosineCB.ARG_USER_PROFILE_STRATEGY: "max",
+            RecommenderCosineCB.ARG_USE_DIVERSITY: True} #True
     rec:ARecommender = RecommenderCosineCB("test", args)
 
     rec.train(HistoryDF("test"), trainDataset)
 
     ratingsDFUpdate:DataFrame = ratingsDF.iloc[50003:50004]
     #ratingsDFUpdate:DataFrame = ratingsDF.iloc[3:4]
-    rec.update(ratingsDFUpdate, {})
+    rec.update(ratingsDFUpdate)
 
     print(len(rec.userProfiles[331]))
 
     print("max")
-    r:Series = rec.recommend(331, 50, args)
+    r:Series = rec.recommend(331, 20, args)
     print(type(r))
     print(r)
 
     # testing of a non-existent user
     print("mean")
-    r:Series =rec.recommend(10000, 50, args)
+    r:Series =rec.recommend(10000, 20, args)
     print(type(r))
     print(r)
 
@@ -75,13 +76,16 @@ def test03():
             RecommenderCosineCB.ARG_CB_DATA_PATH: Configuration.cbSTDataFileWithPathTFIDF,
 #            RecommenderCosineCB.ARG_CB_DATA_PATH: Configuration.cbSTDataFileWithPathOHE,
             RecommenderCosineCB.ARG_USER_PROFILE_SIZE: 5,
-            RecommenderCosineCB.ARG_USER_PROFILE_STRATEGY: "max"}
+            RecommenderCosineCB.ARG_USER_PROFILE_STRATEGY: "max",
+            #RecommenderCosineCB.ARG_USE_DIVERSITY: False,
+            RecommenderCosineCB.ARG_ALLOWED_ITEMIDS: list(range(0,1000))
+            } #True
     rec:ARecommender = RecommenderCosineCB("test", args)
 
     rec.train(HistoryDF("test"), dataset)
 
     eventsDFDFUpdate:DataFrame = dataset.eventsDF.iloc[5003:5004]
-    rec.update(eventsDFDFUpdate, {})
+    rec.update(eventsDFDFUpdate, args)
 
     # user with very outdated profile - no recent objects
     r:Series = rec.recommend(3500678, 20, args)
@@ -100,7 +104,7 @@ def test03():
 
 
 if __name__ == "__main__":
-    os.chdir("..")
+#    os.chdir("..")
 
 #    test01()
     test03()

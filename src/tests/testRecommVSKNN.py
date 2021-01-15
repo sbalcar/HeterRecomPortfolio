@@ -3,8 +3,6 @@
 import os
 import time
 
-from typing import List #class
-from typing import Dict #class
 from configuration.configuration import Configuration #class
 
 from pandas.core.frame import DataFrame #class
@@ -43,7 +41,7 @@ def test01():
     trainDataset:ADataset = DatasetML("test", ratingsDFTrain, pd.DataFrame(), filmsDF)
 
     # train recommender
-    rec:ARecommender = RecommenderVMContextKNN("test", {RecommenderVMContextKNN.ARG_K:50})
+    rec:ARecommender = VMContextKNN("test", {})
     start = time.time()
     rec.train(HistoryDF("test01"), trainDataset)
     end = time.time()
@@ -60,7 +58,7 @@ def test01():
     end = time.time()
     print("Time to train: " + str(end - start))
     
-    rec.update(ratingsDFUpdate)
+    rec.update(ARecommender.UPDT_CLICK, ratingsDFUpdate)
 
     print("Recommendations after update")
     r: Series = rec.recommend(ratingsDFUpdate['userId'].iloc[0], 50, {})
@@ -79,12 +77,12 @@ def test02():
 
     filmsDF:DataFrame = Items.readFromFileMl1m()
 
-    ratingsDFTrain:DataFrame = ratingsDF.iloc[0:1000000]
+    ratingsDFTrain:DataFrame = ratingsDF.iloc[0:1000]
 
     trainDataset:ADataset = DatasetML("test", ratingsDFTrain, pd.DataFrame(), filmsDF)
 
     # train recommender
-    rec:ARecommender = RecommenderVMContextKNN("test", {RecommenderVMContextKNN.ARG_K:50})
+    rec:ARecommender = VMContextKNN("test", {})
     start = time.time()
     rec.train(HistoryDF("test02"), trainDataset)
     end = time.time()
@@ -102,43 +100,47 @@ def test03():
 
     print("Running RecommenderVSKNN ST:")
 
-    from datasets.slantour.events import Events  # class
-
     dataset:DatasetST = DatasetST.readDatasets()
-    dataset.eventsDF = dataset.eventsDF.iloc[0:200000]
-
-    maxUserID:List[int] = dataset.eventsDF[Events.COL_USER_ID].max()
+    testD = dataset.eventsDF.iloc[4000:10000]
+    dataset.eventsDF = dataset.eventsDF.iloc[0:4000]
 
     # train recommender
-    rec:ARecommender = RecommenderVMContextKNN("test", {RecommenderVMContextKNN.ARG_K:50})
+    rec:ARecommender = RecommenderVMContextKNN("test", {})
     start = time.time()
     rec.train(HistoryDF("test03"), dataset)
     end = time.time()
     print("Time to train: " + str(end - start))   
 
-    eventsDFDFUpdate:DataFrame = dataset.eventsDF.iloc[5003:5004]
-    #rec.update(eventsDFDFUpdate, {})
+    i = 0
+    """
+    maxI = 5990
+    while i < maxI:
+        eventsDFDFUpdate:DataFrame = dataset.eventsDF.iloc[i:i+1]
+        rec.update(rec.UPDT_CLICK, eventsDFDFUpdate)
+        i = i+1
+        if i%100 == 0:
+            print(i)
+    """
 
-
-    r:Series = rec.recommend(3342336, 20, {})
+    r:Series = rec.recommend(3342336, 20, {rec.ARG_ALLOWED_ITEMIDS: list(range(0,1000))})
     print(type(r))
     print(r)
 
-    r:Series = rec.recommend(2035310, 20, {})
+    r:Series = rec.recommend(2035310, 20, {rec.ARG_ALLOWED_ITEMIDS: list(range(0,1000))})
     print(type(r))
     print(r)
 
-    r:Series = rec.recommend(3342341, 20, {})
+    r:Series = rec.recommend(3342341, 20, {rec.ARG_ALLOWED_ITEMIDS: list(range(0,1000))})
     print(type(r))
     print(r)
 
     # testing of a non-existent user
-    r:Series =rec.recommend(maxUserID+1, 50, {})
+    r:Series =rec.recommend(10000, 50, {rec.ARG_ALLOWED_ITEMIDS: list(range(0,1000))})
     print(type(r))
     print(r)
 
 if __name__ == "__main__":
-    os.chdir("..")
+    #os.chdir("..")
 
     #test01()
     #test02()

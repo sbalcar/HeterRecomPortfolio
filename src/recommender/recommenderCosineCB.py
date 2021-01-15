@@ -31,7 +31,7 @@ class RecommenderCosineCB(ARecommender):
 
     DEBUG_MODE = False
 
-    def __init__(self, jobID:str, argumentsDict:dict):
+    def __init__(self, jobID:str, argumentsDict:Dict[str,object]):
         if type(argumentsDict) is not dict:
             raise ValueError("Argument argumentsDict is not type dict.")
 
@@ -39,11 +39,11 @@ class RecommenderCosineCB(ARecommender):
         self._arguments:dict = argumentsDict
         # "../../../../data/cbDataOHE.txt" nebo "../../../../data/cbDataTFIDF.txt"
         self.cbDataPath:str = self._arguments[self.ARG_CB_DATA_PATH]
-        print(argumentsDict)
+        #print(argumentsDict)
 
         self.dfCBFeatures = pd.read_csv(self.cbDataPath, sep=",", header=0, index_col=0)
         #self.dfCBFeatures.fillna(self.dfCBFeatures.mean(), inplace=True)
-        print(self.dfCBFeatures)
+        #print(self.dfCBFeatures)
 
 
         dfCBSim = 1 - pairwise_distances(self.dfCBFeatures, metric="cosine")
@@ -168,12 +168,12 @@ class RecommenderCosineCB(ARecommender):
             return pd.Series([], index=[])
         # print(self.cbData)
         # provedu agregaci dle zvolené metody
-        print(objectIDs)
+        #print(objectIDs)
         validObjectIDs = self.cbData.index.intersection(set(objectIDs)) #some OIDs may be missing in CB data
-        print(validObjectIDs)
+        #print(validObjectIDs)
         objectIDs = [val for (i, val) in enumerate(objectIDs) if val in validObjectIDs]
         weights = [weights[i] for (i, val) in enumerate(objectIDs) if val in validObjectIDs]
-        print(objectIDs)
+        #print(objectIDs)
         if len(objectIDs) <= 0:
             return pd.Series([], index=[])
 
@@ -191,6 +191,12 @@ class RecommenderCosineCB(ARecommender):
         if self.DEBUG_MODE:
             print(type(results))
         results.sort_values(ascending=False, inplace=True, ignore_index=False)
+        
+        if argumentsDict.get(self.ARG_ALLOWED_ITEMIDS) is not None:
+            # ARG_ALLOWED_ITEMIDS contains a list of allowed IDs
+            # TODO check type of ARG_ALLOWED_ITEMIDS, should be list
+            #reducedList = self._sortedTheMostCommon.loc[self._sortedTheMostCommon.index.intersection(argumentsDict[self.ARG_ALLOWED_ITEMIDS])]   
+            results = results.loc[results.index.intersection(argumentsDict[self.ARG_ALLOWED_ITEMIDS])]
         resultList = results.iloc[0:numberOfItems]
 
         #print(resultList)

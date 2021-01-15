@@ -106,7 +106,8 @@ class AggrFuzzyDHondt(AAgregation):
         recommendedItemIDs.append(selectedCandidateI);
 
         # removing elected candidate from list of candidates
-        uniqueCandidatesI.remove(selectedCandidateI)
+        if selectedCandidateI is not None:
+            uniqueCandidatesI.remove(selectedCandidateI)
 
         # updating number of elected candidates of parties
         electedOfPartyDictI:dict = {partyIDI:electedOfPartyDictI[partyIDI] + methodsResultDict[partyIDI].get(selectedCandidateI, 0) for partyIDI in electedOfPartyDictI.keys()}
@@ -147,7 +148,8 @@ class AggrFuzzyDHondt(AAgregation):
         if type(argumentsDict) is not dict:
             raise ValueError("Argument argumentsDict isn't type dict.")
 
-        aggregatedItemIDs:List[int] = self.run(methodsResultDict, modelDF, userID, numberOfItems, argumentsDict=argumentsDict)
+        aggregatedItemIDs:List[int] = self.run(methodsResultDict, modelDF, userID, numberOfItems, argumentsDict)
+
 
         itemsWithResposibilityOfRecommenders:List[int,np.Series[int,str]] = countDHontResponsibility(
             aggregatedItemIDs, methodsResultDict, modelDF, numberOfItems)

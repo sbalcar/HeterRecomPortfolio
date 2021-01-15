@@ -194,15 +194,24 @@ class RecommenderItemBasedKNN(ARecommender):
         lastRatedItemFromUser:int = self._lastRatedItemPerUser.loc[userID][COL_ITEMID]
         lastRatedIndex:int = self._itemIdToItemIndexDict[lastRatedItemFromUser]
 
-        rItemIndexes:Series = Series(self.KNNs[lastRatedIndex][:numberOfItems])
-        rDistances:List[int] = self._distances[lastRatedIndex][:numberOfItems]
+        rItemIndexes:Series = Series(self.KNNs[lastRatedIndex][:5*numberOfItems])
+        rDistances:List[int] = self._distances[lastRatedIndex][:5*numberOfItems]
         # maping Indexes to IDs
-        rItemIDs:Series = Series([self._itemIndexToItemIdDict.get(rItemIndexI,-1) for rItemIndexI in rItemIndexes])
-        rRatings:Series = Series([1- dI for dI in rDistances])
+        rItemIDsSrs:Series = Series([self._itemIndexToItemIdDict.get(rItemIndexI,-1) for rItemIndexI in rItemIndexes])
+        rRatingsSrs:Series = Series([1- dI for dI in rDistances])
 
-        nanIndexes:List[int] = [i for i, v in enumerate(rItemIDs.tolist()) if v == -1]
-        rItemIDs = rItemIDs.drop(rItemIDs.index[nanIndexes])
-        rRatings = rRatings.drop(rRatings.index[nanIndexes])
+        nanIndexes:List[int] = [i for i, v in enumerate(rItemIDsSrs.tolist()) if v == -1]
+        rItemIDs:List[int] = rItemIDsSrs.drop(rItemIDsSrs.index[nanIndexes]).tolist()
+        rRatings:List[int] = rRatingsSrs.drop(rRatingsSrs.index[nanIndexes]).tolist()
+
+        if argumentsDict.get(self.ARG_ALLOWED_ITEMIDS) is not None:
+            allowedIndexes:List[int] = [eI for eI, rItemIdI in enumerate(rItemIDs)
+                                        if rItemIdI in argumentsDict[self.ARG_ALLOWED_ITEMIDS]]
+            rItemIDs = [rItemIDs[i] for i in allowedIndexes]
+            rRatings = [rRatings[i] for i in allowedIndexes]
+
+        rItemIDs = rItemIDs[:numberOfItems]
+        rRatings = rRatings[:numberOfItems]
 
         if self._jobID == 'test' and type(self._trainDataset) is DatasetML:
             print("Last visited film:")
@@ -210,11 +219,11 @@ class RecommenderItemBasedKNN(ARecommender):
             print(itemsDF[itemsDF['movieId'] == lastRatedItemFromUser])
             print("List of recommendations:")
             for filmI in rItemIndexes:
-                film_info: DataFrame = itemsDF[itemsDF['movieId'] == filmI]
+                film_info:DataFrame = itemsDF[itemsDF[Ratings.COL_MOVIEID] == filmI]
                 print('\t', film_info['movieTitle'].to_string(header=False),
                       film_info['Genres'].to_string(header=False))
 
         if len(rItemIDs) == 0:
             return Series([], index=[])
-        rRatings = normalize(np.expand_dims(rRatings.tolist(), axis=0))[0, :]
-        return Series(rRatings.tolist(), index=list(rItemIDs))
+        rRatings = normalize(np.expand_dims(rRatings, axis=0))[0, :]
+        return Series(rRatings, index=rItemIDs)
