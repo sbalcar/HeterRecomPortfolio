@@ -107,7 +107,28 @@ class PenalUsingReduceRelevance(APenalization):
         return normalizedNewMethodsResultSrs
         # return Series<(rating:int, itemID:int)>
 
+    def __getPenaltiesOfItemIDs(self, userID:int, itemIDs:List[int], history:AHistory):
+        prevRecomendations:List[tuple] = history.getPreviousRecomOfUser(userID, self._lengthOfHistory)
+        i:int = len(prevRecomendations)   #self._lengthOfHistory#
+        #print(prevRecomendations)
+        penalties:dict = {}
+        for indexJ, userIdJ, itemIdJ, positionJ, clickedJ, timestampJ in prevRecomendations:
+            actPenalty = penalties.get(itemIdJ, 0) #init with one
+            penaltyPositionJ:float = self._penalPositionFnc(positionJ, *self._argumentsPositionList)
+            penaltyHistoryJ:float = self._penalHistoryFnc(i, *self._argumentsHistoryList)
+            
+            
+            prob_implicit_rejection:float = self._penalPositionFnc(positionJ, *self._argumentsPositionList)
+            prob_stable_pref:float = self._penalHistoryFnc(i, *self._argumentsHistoryList)
+            prob_couldBeRelevant = (1-(prob_implicit_rejection * prob_stable_pref)  )
 
+            penalties[itemIdJ]  =  actPenalty + (penaltyPositionJ * penaltyHistoryJ)
+            
+            i = i-1
+        print(penalties)
+        return penalties
+        
+    """    
     def __getPenaltiesOfItemIDs(self, userID:int, itemIDs:List[int], history:AHistory):
 
         penalties:dict = {}
@@ -121,14 +142,14 @@ class PenalUsingReduceRelevance(APenalization):
             for indexJ, userIdJ, itemIdJ, positionJ, clickedJ, timestampJ in prevRecomendations:
                 penaltyPositionJ:float = self._penalPositionFnc(positionJ, *self._argumentsPositionList)
 
-                penaltyHistoryJ:float = self._penalHistoryFnc(i, *self._argumentsHistoryList)
+                penaltyHistoryJ:float = self._penalHistoryFnc(indexJ, *self._argumentsHistoryList)
 
                 penaltyI += penaltyPositionJ * penaltyHistoryJ
                 i += 1
             penalties[itemIdI] = penaltyI
 
         return penalties
-
+     """
 
 
 def penaltyStatic(xDistance:int, value:float):

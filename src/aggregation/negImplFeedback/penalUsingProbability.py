@@ -52,7 +52,7 @@ class PenalUsingProbability(APenalization):
         itemIDs:List[int] = list(set(itertools.chain(*[rI.index for mI, rI in methodsResultDict.items()])))
 
         # dictionary of float penalization indexed by itemIDs
-        penalties:dict = self.__getPenaltiesOfItemIDs(userID, itemIDs, history)
+        prob_couldBeRelevant:dict = self.__getPenaltiesOfItemIDs(userID, itemIDs, history)
 
 
         penalizedResultsDict:dict = {}
@@ -68,7 +68,7 @@ class PenalUsingProbability(APenalization):
                 #print("candidateIdJ: " + str(candidateIdJ))
                 #print("votesOfCandidateJ: " + str(votesOfCandidateJ))
 
-                penalizedResultDictI[itemIdJ] = ratingJ * penalties.get(itemIdJ, 1) #The only difference in application of penalty for prob vs. reduce relevance
+                penalizedResultDictI[itemIdJ] = ratingJ * prob_couldBeRelevant.get(itemIdJ, 1) #The only difference in application of penalty for prob vs. reduce relevance
 
             penalizedResultsDict[methodIdI] = Series(penalizedResultDictI, name="rating")
 
@@ -87,13 +87,13 @@ class PenalUsingProbability(APenalization):
         itemIDs:List[int] = methodsResultSrs.keys()
 
         # dictionary of float penalization indexed by itemIDs
-        penalties:dict = self.__getPenaltiesOfItemIDs(userID, itemIDs, history)
+        prob_couldBeRelevant:dict = self.__getPenaltiesOfItemIDs(userID, itemIDs, history)
 
         penalizedRatings:List[float] = []
         itemIdI:int
         ratingI:int
         for itemIdI, ratingI in methodsResultSrs.items():
-            penalizedRatings.append(ratingI / (1 + penalties.get(itemIdI, 0)))
+            penalizedRatings.append(ratingI * prob_couldBeRelevant.get(itemIdI, 1))
 
         penalizedItemIDswithRatingsSrs:Series = Series(penalizedRatings, index=methodsResultSrs.keys())
 
@@ -109,13 +109,34 @@ class PenalUsingProbability(APenalization):
 
 
     def __getPenaltiesOfItemIDs(self, userID:int, itemIDs:List[int], history:AHistory):
+        prevRecomendations:List[tuple] = history.getPreviousRecomOfUser(userID, self._lengthOfHistory)
+        i:int = len(prevRecomendations)   #self._lengthOfHistory#
+        #print(prevRecomendations)
+        probabilities:dict = {}
+        for indexJ, userIdJ, itemIdJ, positionJ, clickedJ, timestampJ in prevRecomendations:
+            actProbability = probabilities.get(itemIdJ, 1) #init with one
+            
+            prob_implicit_rejection:float = self._penalPositionFnc(positionJ, *self._argumentsPositionList)
+            prob_stable_pref:float = self._penalHistoryFnc(i, *self._argumentsHistoryList)
+            prob_couldBeRelevant = (1-(prob_implicit_rejection * prob_stable_pref)  )
 
+            probabilities[itemIdJ]  =  actProbability*prob_couldBeRelevant
+            
+            i = i-1
+        print(probabilities)
+        return probabilities
+        
+        
+        """
+        print(self._penalHistoryFnc)
+        print(self._argumentsHistoryList)
         penalties:dict = {}
         for itemIdI in itemIDs:
+            print(history.getPreviousRecomOfUserAndItem(userID, itemIdI, self._lengthOfHistory))
             prevRecomendations:List[tuple] = history.getPreviousRecomOfUserAndItem(userID, itemIdI, self._lengthOfHistory)
-            prevRecomendations.reverse()
+            #prevRecomendations.reverse()
 
-            penaltyI: float = 0
+            prob_couldBeRelevant: float = 1
             i:int = 0
             #print(prevRecomendations)
             for indexJ, userIdJ, itemIdJ, positionJ, clickedJ, timestampJ in prevRecomendations:
@@ -123,9 +144,15 @@ class PenalUsingProbability(APenalization):
                 #prob_implicit_rejection: probability that by ignoring an item, user expressed an implicit rejection
                 prob_implicit_rejection:float = self._penalPositionFnc(positionJ, *self._argumentsPositionList)
                 #prob_changed_mind: probability that during the time between now and the implicit rejection event, user changed his/her mind
-                prob_changed_mind:float = self._penalHistoryFnc(i, *self._argumentsHistoryList)
-                penaltyI *= (prob_implicit_rejection * (1-prob_changed_mind))
+                prob_changed_mind:float = self._penalHistoryFnc(indexJ, *self._argumentsHistoryList)
+                
+                
+                prob_couldBeRelevant *= (1-(prob_implicit_rejection * (1-prob_changed_mind))  )
+                #print(itemIdI, positionJ, indexJ, prob_implicit_rejection, prob_changed_mind, (1-(prob_implicit_rejection * (1-prob_changed_mind))))
+                
                 i += 1
-            penalties[itemIdI] = penaltyI
-
+            print(itemIdI, prob_couldBeRelevant)
+            penalties[itemIdI] = prob_couldBeRelevant
+            
         return penalties
+        """
