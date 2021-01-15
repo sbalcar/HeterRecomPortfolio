@@ -75,6 +75,12 @@ from aggregation.operators.aDHondtSelector import ADHondtSelector #class
 from aggregation.operators.rouletteWheelSelector import RouletteWheelSelector #class
 from aggregation.operators.theMostVotedItemSelector import TheMostVotedItemSelector #class
 
+from aggregation.negImplFeedback.aPenalization import APenalization #class
+
+from input.inputAggrDefinition import PenalizationToolDefinition #class
+
+from input.inputSimulatorDefinition import InputSimulatorDefinition #class
+
 
 def startHttpServer():
 
@@ -83,12 +89,13 @@ def startHttpServer():
 
   print("StartHTTPServer")
 
-  #portA, modelA, evalToolA = getTheMostPopular()
-  portA, modelA, evalToolA = getFuzzyDHont()
+  #port1, model1, evalTool1 = getTheMostPopular()
+  port1, model1, evalTool1 = getFuzzyDHont()
+  port2, model2, evalTool2 = getFuzzyDHontINF()
 
-  portfolioDict:Dict[str,APortfolio] = {HeterRecomHTTPHandler.VARIANT_A:portA}
-  modelsDict:Dict[str,int] = {HeterRecomHTTPHandler.VARIANT_A:modelA}
-  evalToolsDict:Dict[str, AEvalTool] = {HeterRecomHTTPHandler.VARIANT_A:evalToolA}
+  portfolioDict:Dict[str,APortfolio] = {HeterRecomHTTPHandler.VARIANT_1:port1, HeterRecomHTTPHandler.VARIANT_2:port2}
+  modelsDict:Dict[str,int] = {HeterRecomHTTPHandler.VARIANT_1:model1, HeterRecomHTTPHandler.VARIANT_2:model2}
+  evalToolsDict:Dict[str, AEvalTool] = {HeterRecomHTTPHandler.VARIANT_1:evalTool1, HeterRecomHTTPHandler.VARIANT_2:evalTool2}
 
 
   HeterRecomHTTPHandler.portfolioDict = portfolioDict
@@ -105,15 +112,16 @@ def startHttpServer():
 
 def getTheMostPopular():
 
-  rDescr:RecommenderDescription = RecommenderDescription(RecommenderTheMostPopular, {})
+  taskID:str = "TheMostPopular"
+  rDescr:RecommenderDescription = InputRecomSTDefinition.exportRDescTheMostPopular()
 
   recommenderID:str = "TheMostPopular"
   pDescr:Portfolio1MethDescription = Portfolio1MethDescription(recommenderID.title(), recommenderID, rDescr)
 
   dataset:ADataset = DatasetST.readDatasets()
 
-  history:AHistory = HistoryDF("test")
-  port:APortfolio = pDescr.exportPortfolio("jobID", history)
+  history:AHistory = HistoryDF(taskID)
+  port:APortfolio = pDescr.exportPortfolio(taskID, history)
   port.train(history, dataset)
 
   model:DataFrame = DataFrame()
@@ -121,8 +129,10 @@ def getTheMostPopular():
 
   return (port, model, evalTool)
 
+
 def getFuzzyDHont():
 
+  jobID:str = "FuzzyDHondt" + "Roulette1"
   dataset:ADataset = DatasetST.readDatasets()
 
   selector:ADHondtSelector = RouletteWheelSelector({RouletteWheelSelector.ARG_EXPONENT: 1})
@@ -132,11 +142,11 @@ def getFuzzyDHont():
   rIDs, rDescs = InputRecomSTDefinition.exportPairOfRecomIdsAndRecomDescrs()
 
   pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
-    "FuzzyDHondt", rIDs, rDescs, aDescDHont)
+    jobID, rIDs, rDescs, aDescDHont)
 
-  history:AHistory = HistoryDF("test")
+  history:AHistory = HistoryDF(jobID)
 
-  port:APortfolio = pDescr.exportPortfolio("jobID", history)
+  port:APortfolio = pDescr.exportPortfolio(jobID, history)
   port.train(history, dataset)
 
   model:DataFrame = ModelDefinition.createDHontModel(pDescr.getRecommendersIDs())
@@ -146,6 +156,35 @@ def getFuzzyDHont():
 
   return (port, model, evalTool)
 
+
+def getFuzzyDHontINF():
+
+  jobID:str = "FuzzyDHondtINF" + "Roulette1"
+  dataset:ADataset = DatasetST.readDatasets()
+
+  selector:ADHondtSelector = RouletteWheelSelector({RouletteWheelSelector.ARG_EXPONENT: 1})
+
+  pToolOLin0802HLin1002:APenalization = PenalizationToolDefinition.exportPenaltyToolOLin0802HLin1002(
+    InputSimulatorDefinition.numberOfAggrItems)
+
+  aDescDHont:AggregationDescription = InputAggrDefinition.exportADescDHondtINF(selector, pToolOLin0802HLin1002)
+
+  rIDs, rDescs = InputRecomSTDefinition.exportPairOfRecomIdsAndRecomDescrs()
+
+  pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
+    jobID, rIDs, rDescs, aDescDHont)
+
+  history:AHistory = HistoryDF(jobID)
+
+  port:APortfolio = pDescr.exportPortfolio(jobID, history)
+  port.train(history, dataset)
+
+  model:DataFrame = ModelDefinition.createDHontModel(pDescr.getRecommendersIDs())
+
+  evalTool:AEvalTool = EvalToolDHondt({EvalToolDHondt.ARG_LEARNING_RATE_CLICKS: 0.03,
+                                        EvalToolDHondt.ARG_LEARNING_RATE_VIEWS: 0.03 / 500})
+
+  return (port, model, evalTool)
 
 
 

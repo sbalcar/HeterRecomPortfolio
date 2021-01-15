@@ -46,11 +46,11 @@ class HeterRecomHTTPHandler(BaseHTTPRequestHandler):
     ARG_RITEMIDS_WITH_RESP:str = "rItemIDsWithResponsibility"
     ARG_ALLOWED_ITEMIDS:str = ARecommender.ARG_ALLOWED_ITEMIDS
 
-    VARIANT_A:str = "a"
-    VARIANT_B:str = "b"
+    VARIANT_1:str = "1"
+    VARIANT_2:str = "2"
 
-    UPDT_CLICK:str = "click"
-    UPDT_VIEW:str = "view"
+    #UPDT_CLICK:str = "click"
+    #UPDT_VIEW:str = "view"
 
     #portfolioDict:Dict[]
     #modelsDict:Dict[]

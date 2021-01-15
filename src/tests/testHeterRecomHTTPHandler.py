@@ -53,9 +53,9 @@ def test01():
     #portA, modelA, evalToolA = getTheMostPopular()
     portA, modelA, evalToolA = getFuzzyDHont()
 
-    portfolioDict:Dict[str, APortfolio] = {HeterRecomHTTPHandler.VARIANT_A: portA}
-    modelsDict:Dict[str, int] = {HeterRecomHTTPHandler.VARIANT_A: modelA}
-    evalToolsDict:Dict[str, AEvalTool] = {HeterRecomHTTPHandler.VARIANT_A: evalToolA}
+    portfolioDict:Dict[str, APortfolio] = {HeterRecomHTTPHandler.VARIANT_1: portA}
+    modelsDict:Dict[str, int] = {HeterRecomHTTPHandler.VARIANT_1: modelA}
+    evalToolsDict:Dict[str, AEvalTool] = {HeterRecomHTTPHandler.VARIANT_1: evalToolA}
     evaluationDict:Dict[str,object] = {}
 
     HeterRecomHTTPHandler.portfolioDict = portfolioDict
@@ -82,7 +82,7 @@ def test01():
 
     command0:str = "curl -sS 'http://127.0.0.1:8080/?" + \
                    HeterRecomHTTPHandler.ARG_ACTIONID + "=" + HeterRecomHTTPHandler.ACTION_VISIT + "&" + \
-                   HeterRecomHTTPHandler.ARG_VARIANTID + "=" + HeterRecomHTTPHandler.VARIANT_A + "&" + \
+                   HeterRecomHTTPHandler.ARG_VARIANTID + "=" + HeterRecomHTTPHandler.VARIANT_1 + "&" + \
                    HeterRecomHTTPHandler.ARG_USERID + "=" + str(userID) + "&" + \
                    HeterRecomHTTPHandler.ARG_ITEMID + "=" + str(itemID) + "&" + \
                    HeterRecomHTTPHandler.ARG_NUMBER_OF_ITEMS + "=20" + "&" + \
@@ -99,7 +99,7 @@ def test01():
 
     command1:str = "curl -sS 'http://127.0.0.1:8080/?" + \
                    HeterRecomHTTPHandler.ARG_ACTIONID + "=" + HeterRecomHTTPHandler.ACTION_CLICK + "&" + \
-                   HeterRecomHTTPHandler.ARG_VARIANTID + "=" + HeterRecomHTTPHandler.VARIANT_A + "&" + \
+                   HeterRecomHTTPHandler.ARG_VARIANTID + "=" + HeterRecomHTTPHandler.VARIANT_1 + "&" + \
                    HeterRecomHTTPHandler.ARG_UPDU_TYPE + "=" + HeterRecomHTTPHandler.UPDT_CLICK + "&" + \
                    HeterRecomHTTPHandler.ARG_ITEMID + "=" + str(itemID) + "&" + \
                    HeterRecomHTTPHandler.ARG_USERID + "=" + str(userID) + "&" + \
