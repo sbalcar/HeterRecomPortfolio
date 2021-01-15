@@ -108,4 +108,4 @@ class Portfolio1Aggr(APortfolio):
        #print("resultsOfRecommendations: " + str(resultsOfBaseRecommendersDict))
 
        # Tuple
-       return (aggItemIDs, aggItemIDsWithResponsibility, resultsOfBaseRecommendersDict)
+       return (aggItemIDs, aggItemIDsWithResponsibility)
