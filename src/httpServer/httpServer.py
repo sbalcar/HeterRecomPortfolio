@@ -69,6 +69,7 @@ class HeterRecomHTTPHandler(BaseHTTPRequestHandler):
     #portfolioDict:Dict[]
     #modelsDict:Dict[]
     #evalToolsDict:Dict[]
+    #historiesDict:Dict[]
     #evaluation
     #datasetClass
     def do_POST(self):
@@ -298,11 +299,11 @@ class HeterRecomHTTPHandler(BaseHTTPRequestHandler):
         evalTool.displayed(rItemIDsWithtResp, self.modelsDict[variant], self.evaluation)
 
 
-        self.history[variant].insertRecomAndClickedItemIDs(userID, rItemIDs, [])
+        self.historiesDict[variant].insertRecomAndClickedItemIDs(userID, rItemIDs, [])
         # delete log of history
         lengthOfHistory:int = 10 * self._recomRepetitionCount * self._numberOfAggrItems
         #print("lengthOfHistory: " + str(lengthOfHistory))
-        self.history[variant].deletePreviousRecomOfUser(userID, lengthOfHistory)
+        self.historiesDict[variant].deletePreviousRecomOfUser(userID, lengthOfHistory)
 
 
         self.send_response(200)

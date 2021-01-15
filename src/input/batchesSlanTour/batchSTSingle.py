@@ -2,13 +2,14 @@
 
 import os
 
-from typing import List
+from typing import List #class
+from typing import Dict #class
 
 from pandas.core.frame import DataFrame #class
 
 from portfolioDescription.portfolio1MethDescription import Portfolio1MethDescription #class
 
-from input.inputRecomMLDefinition import InputRecomMLDefinition #class
+from input.inputRecomSTDefinition import InputRecomSTDefinition #class
 
 from portfolioDescription.aPortfolioDescription import APortfolioDescription #class
 
@@ -34,9 +35,10 @@ class BatchSTSingle(ABatchST):
     @staticmethod
     def getParameters():
 
-        aDict:dict = {}
-        aDict[InputRecomMLDefinition.THE_MOST_POPULAR] = InputRecomMLDefinition.THE_MOST_POPULAR
-        aDict[InputRecomMLDefinition.KNN] = InputRecomMLDefinition.KNN
+        aDict:Dict[str,object] = {}
+        aDict[InputRecomSTDefinition.THE_MOST_POPULAR] = InputRecomSTDefinition.THE_MOST_POPULAR
+        aDict[InputRecomSTDefinition.KNN] = InputRecomSTDefinition.KNN
+        #aDict[InputRecomSTDefinition.VMC_KNN] = InputRecomSTDefinition.VMC_KNN
 
         return aDict
 
@@ -50,7 +52,7 @@ class BatchSTSingle(ABatchST):
 
         recommenderID:str = self.getParameters()[jobID]
 
-        rDescr:RecommenderDescription = InputRecomMLDefinition.exportInputRecomDefinition(recommenderID)
+        rDescr:RecommenderDescription = InputRecomSTDefinition.exportInputRecomDefinition(recommenderID)
 
         pDescr:APortfolioDescription = Portfolio1MethDescription(recommenderID.title(), recommenderID, rDescr)
 

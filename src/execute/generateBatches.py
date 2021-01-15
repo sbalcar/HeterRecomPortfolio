@@ -30,6 +30,7 @@ from input.batchesML1m.batchMLSingleCosineCBHT import BatchMLSingleCosineCBHT #c
 from input.batchesRetailrocket.batchRRSingle import BatchRRSingle #class
 from input.batchesRetailrocket.batchRRSingleW2VHT import BatchRRSingleW2VHT #class
 
+from input.batchesSlanTour.batchSTDHondtThompsonSampling import BatchSTDHondtThompsonSampling #class
 from input.batchesSlanTour.batchSTFuzzyDHondtDirectOptimize import BatchSTFuzzyDHondtDirectOptimize #class
 from input.batchesSlanTour.batchSTFuzzyDHondtINF import BatchSTFuzzyDHondtINF #class
 from input.batchesSlanTour.batchSTFuzzyDHondt import BatchSTFuzzyDHondt #class
@@ -75,6 +76,7 @@ def generateBatches():
 #    BatchRRSingleW2VHT.generateBatches()
 
     #ST
+    BatchSTDHondtThompsonSampling.generateBatches()
 #    BatchSTFuzzyDHondtDirectOptimize.generateBatches()
 #    BatchSTFuzzyDHondt.generateBatches()
 #    BatchSTFuzzyDHondtINF.generateBatches()

@@ -92,18 +92,21 @@ def startHttpServer():
   print("TrainingPortfolios")
 
   #port1, model1, evalTool1 = getTheMostPopular()
-  port1, model1, evalTool1 = getFuzzyDHont()
-  port2, model2, evalTool2 = getFuzzyDHontINF()
-  port3, model3, evalTool3 = getFuzzyDHontThompsonSamplingINF()
+  port1, model1, evalTool1, history1 = getFuzzyDHont()
+  port2, model2, evalTool2, history2 = getFuzzyDHontINF()
+  port3, model3, evalTool3, history3 = getFuzzyDHontThompsonSamplingINF()
 
-  portfolioDict:Dict[str,APortfolio] = {HeterRecomHTTPHandler.VARIANT_1:port1, HeterRecomHTTPHandler.VARIANT_2:port2, HeterRecomHTTPHandler.VARIANT_3:port3}
-  modelsDict:Dict[str,int] = {HeterRecomHTTPHandler.VARIANT_1:model1, HeterRecomHTTPHandler.VARIANT_2:model2, HeterRecomHTTPHandler.VARIANT_3:model3}
-  evalToolsDict:Dict[str, AEvalTool] = {HeterRecomHTTPHandler.VARIANT_1:evalTool1, HeterRecomHTTPHandler.VARIANT_2:evalTool2, HeterRecomHTTPHandler.VARIANT_3:evalTool3}
-
+  s = HeterRecomHTTPHandler
+  portfolioDict:Dict[str,APortfolio] = {s.VARIANT_1:port1, s.VARIANT_2:port2, s.VARIANT_3:port3}
+  modelsDict:Dict[str,int] = {s.VARIANT_1:model1, s.VARIANT_2:model2, s.VARIANT_3:model3}
+  evalToolsDict:Dict[str, AEvalTool] = {s.VARIANT_1:evalTool1, s.VARIANT_2:evalTool2, s.VARIANT_3:evalTool3}
+  historiesDict:Dict[str, AEvalTool] = {s.VARIANT_1:history1, s.VARIANT_2:history2, s.VARIANT_3:history3}
 
   HeterRecomHTTPHandler.portfolioDict = portfolioDict
   HeterRecomHTTPHandler.modelsDict = modelsDict
   HeterRecomHTTPHandler.evalToolsDict = evalToolsDict
+  HeterRecomHTTPHandler.historiesDict = historiesDict
+
   HeterRecomHTTPHandler.evaluation:Dict = {}
   #HeterRecomHTTPHandler.datasetClass = DatasetML
   HeterRecomHTTPHandler.datasetClass = DatasetST
@@ -133,7 +136,7 @@ def getTheMostPopular():
   model:DataFrame = DataFrame()
   evalTool:AEvalTool = EToolSingleMethod({})
 
-  return (port, model, evalTool)
+  return (port, model, evalTool, history)
 
 
 def getFuzzyDHont():
@@ -162,7 +165,7 @@ def getFuzzyDHont():
   evalTool:AEvalTool = EvalToolDHondt({EvalToolDHondt.ARG_LEARNING_RATE_CLICKS: 0.03,
                                         EvalToolDHondt.ARG_LEARNING_RATE_VIEWS: 0.03 / 500})
 
-  return (port, model, evalTool)
+  return (port, model, evalTool, history)
 
 
 
@@ -192,7 +195,7 @@ def getFuzzyDHontThompsonSamplingINF():
 
   evalTool:AEvalTool = EvalToolDHondtBanditVotes({})
 
-  return (port, model, evalTool)
+  return (port, model, evalTool, history)
 
 
 
@@ -225,7 +228,7 @@ def getFuzzyDHontINF():
   evalTool:AEvalTool = EvalToolDHondt({EvalToolDHondt.ARG_LEARNING_RATE_CLICKS: 0.03,
                                         EvalToolDHondt.ARG_LEARNING_RATE_VIEWS: 0.03 / 500})
 
-  return (port, model, evalTool)
+  return (port, model, evalTool, history)
 
 
 
