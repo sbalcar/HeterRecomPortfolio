@@ -27,6 +27,7 @@ from history.aHistory import AHistory #class
 
 from portfolioDescription.aPortfolioDescription import APortfolioDescription #class
 
+from evaluationTool.evalToolContext import EvalToolContext #class
 
 class ASequentialSimulation(ABC):
 
@@ -196,8 +197,9 @@ class ASequentialSimulation(ABC):
 
     def simulateRecommendations(self, portfolios:List[APortfolio], portfolioDescs:List[APortfolioDescription],
                                   portFolioModels:List[DataFrame], evaluatonTools:List[AEvalTool], histories:List[AHistory],
-                                  evaluations:List[dict], currentDFIndex:int, userID:int, repetition:int,
-                                  testRatingsDF:DataFrame, testBehaviourDict:Dict[int, DataFrame], windowOfItemIDsI:List[int]):
+                                  evaluations:List[dict], currentDFIndex:int, userID:int, sessionID:int, repetition:int,
+                                  testRatingsDF:DataFrame, testBehaviourDict:Dict[int, DataFrame], windowOfItemIDsI:List[int],
+                                  currentPageType:object):
 
         COL_BEHAVIOUR:str = self._behaviourClass.getColNameBehaviour()
         COL_ITEMID:str = self._ratingClass.getColNameItemID()
@@ -212,6 +214,7 @@ class ASequentialSimulation(ABC):
 
         uObservationStrI:str = testBehaviourDict[repetition].loc[currentDFIndex][COL_BEHAVIOUR]
         uObservation:List[bool] = BehavioursML.convertToListOfBoolean(uObservationStrI)
+        #uObservation: List[bool] = [True]*20
 
         print("uObservation: " + str(uObservation))
 
@@ -223,20 +226,26 @@ class ASequentialSimulation(ABC):
 
             self.simulateRecommendation(portfolioI, portfolioDescI, portFolioModelI, evaluatonToolI, historyI,
                                         evaluationI, currentDFIndex, testRatingsDF, uObservation, userID,
-                                        windowOfItemIDsI)
+                                        sessionID, windowOfItemIDsI, currentPageType)
 
 
     def simulateRecommendation(self, portfolio:APortfolio, portfolioDesc:APortfolioDescription, portfolioModel:DataFrame,
                                  evaluatonTool:AEvalTool, history:AHistory, evaluationDict:Dict[str,object],
-                                 currentDFIndex:int, testRatingsDF:DataFrame, uObservation:List[bool], userID:int, windowOfItemIDsI:List[int]):
+                                 currentDFIndex:int, testRatingsDF:DataFrame, uObservation:List[bool], userID:int,
+                                 sessionID:int, windowOfItemIDsI:List[int], currentPageType:object):
 
+        from datasets.slantour.events import Events #class
         COL_ITEMID:str = self._ratingClass.getColNameItemID()
         currentItemID:int = testRatingsDF.loc[currentDFIndex][COL_ITEMID]
 
         print("userID: " + str(userID))
         portId:str = portfolioDesc.getPortfolioID()
 
-        args:Dict[str, object] = {APortfolio.ARG_NUMBER_OF_RECOMM_ITEMS:self._numberOfRecommItems, Portfolio1Aggr.ARG_NUMBER_OF_AGGR_ITEMS:self._numberOfAggrItems}
+        args:Dict[str, object] = {APortfolio.ARG_NUMBER_OF_RECOMM_ITEMS:self._numberOfRecommItems,
+                                  Portfolio1Aggr.ARG_NUMBER_OF_AGGR_ITEMS:self._numberOfAggrItems,
+                                  EvalToolContext.ARG_PAGE_TYPE:currentPageType,
+                                  EvalToolContext.ARG_ITEM_ID:currentItemID,
+                                  EvalToolContext.ARG_SENIORITY:sessionID}
 
         rItemIDs:List[int]
         rItemIDsWithResponsibility:List[tuple[int, Series[int, str]]]
@@ -244,7 +253,7 @@ class ASequentialSimulation(ABC):
 
         evaluatonTool.displayed(rItemIDsWithResponsibility, portfolioModel, {EvalToolContext.ARG_USER_ID:userID})
 
-        candidatesToClick: List[int] = [itemIDI for itemIDI, observedI in zip(rItemIDs, uObservation[:len(rItemIDs)]) if observedI]
+        candidatesToClick:List[int] = [itemIDI for itemIDI, observedI in zip(rItemIDs, uObservation[:len(rItemIDs)]) if observedI]
         clickedItemIDs:List[int] = list(set(candidatesToClick) & set(windowOfItemIDsI))
         clickedNewItemIDs:List[int] = [itemIdI for itemIdI in clickedItemIDs if itemIdI not in self._clickedItems[userID]]
 

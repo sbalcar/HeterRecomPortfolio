@@ -126,6 +126,8 @@ class SimulationML(ASequentialSimulation):
             currentItemIdI:int = testRatingsDF.loc[currentDFIndexI][Ratings.COL_MOVIEID]
             currentRatingI:int = testRatingsDF.loc[currentDFIndexI][Ratings.COL_RATING]
             currentUserIdI:int = testRatingsDF.loc[currentDFIndexI][Ratings.COL_USERID]
+            currentSessionIdI:int = None
+            currentPageTypeI:object = None
 
             portfolioI:APortfolio
             for portfolioI in portfolios:
@@ -141,7 +143,8 @@ class SimulationML(ASequentialSimulation):
             repetitionI:int
             for repetitionI in range(self._recomRepetitionCount):
                 self.simulateRecommendations(portfolios, portfolioDescs, portFolioModels, evaluatonTools,
-                                             histories, evaluations, currentDFIndexI, currentUserIdI, repetitionI,
-                                             testRatingsDF, testBehaviourDict, windowOfItemIDsI)
+                                             histories, evaluations, currentDFIndexI, currentUserIdI,
+                                             currentSessionIdI, repetitionI,
+                                             testRatingsDF, testBehaviourDict, windowOfItemIDsI, currentPageTypeI)
 
         return evaluations

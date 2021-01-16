@@ -248,10 +248,7 @@ def getContextFuzzyDHondt():
   #selector:ADHondtSelector = RouletteWheelSelector({RouletteWheelSelector.ARG_EXPONENT: 1})
   selector:ADHondtSelector = TheMostVotedItemSelector({})
 
-  pToolOLin0802HLin1002:APenalization = PenalizationToolDefinition.exportPenaltyToolOLin0802HLin1002(
-    InputSimulatorDefinition.numberOfAggrItems)
-
-  aDescDHont:AggregationDescription = InputAggrDefinition.exportADescDContextHondt(selector, pToolOLin0802HLin1002)
+  aDescDHont:AggregationDescription = InputAggrDefinition.exportADescDContextHondt(selector)
 
   rIDs, rDescs = InputRecomSTDefinition.exportPairOfRecomIdsAndRecomDescrs()
 

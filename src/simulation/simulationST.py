@@ -123,10 +123,11 @@ class SimulationST(ASequentialSimulation):
 
             currentItemIdI:int = testRatingsDF.loc[currentDFIndexI][Events.COL_OBJECT_ID]
             currentUserIdI:int = testRatingsDF.loc[currentDFIndexI][Events.COL_USER_ID]
-
+            currentSessionIdI:int = testRatingsDF.loc[currentDFIndexI][Events.COL_SESSION_ID]
+            currentPageTypeI:object = testRatingsDF.loc[currentDFIndexI][Events.COL_PAGE_TYPE]
 
             windowOfItemIDsI:int = model.getNextRelevantItemIDsExceptItemIDs(currentDFIndexI,
-                                                                             self._clickedItems[currentUserIdI], self._windowSize)
+                                            self._clickedItems[currentUserIdI], self._windowSize)
             portfolioI:APortfolio
             for portfolioI in portfolios:
 
@@ -136,8 +137,9 @@ class SimulationST(ASequentialSimulation):
             repetitionI:int
             for repetitionI in range(self._recomRepetitionCount):
                 self.simulateRecommendations(portfolios, portfolioDescs, portFolioModels, evaluatonTools,
-                                             histories, evaluations, currentDFIndexI, currentUserIdI, repetitionI,
-                                             testRatingsDF, testBehaviourDict, windowOfItemIDsI)
+                                             histories, evaluations, currentDFIndexI, currentUserIdI,
+                                             repetitionI, currentSessionIdI,
+                                             testRatingsDF, testBehaviourDict, windowOfItemIDsI, currentPageTypeI)
 
         return evaluations
 
