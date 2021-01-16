@@ -39,9 +39,32 @@ class Serials:
 
     @staticmethod
     def readFromFile():
-        serialFile: str = ".." + os.sep + "datasets" + os.sep + "slantour" + os.sep + "new_serial_table.csv"
-
-        serialsDF: DataFrame = pd.read_csv(serialFile, sep=',', usecols=range(23), header=0, encoding="ISO-8859-1", engine='python')
-        #serialsDF.columns = [Items.COL_MOVIEID, Items.COL_MOVIETITLE, Items.COL_GENRES]
-
+        serialFile: str = ".." + os.sep + "datasets" + os.sep + "slantour" + os.sep + "serial_only_data_from_2018.csv"
+        serialsDF: pd.DataFrame = pd.read_csv(serialFile, sep=';', header=0)
+        serialsDF.rename(columns={"AVG(prumerna_cena)": "prumerna_cena", "AVG(prumerna_cena_noc)": "prumerna_cena_noc", "AVG(delka)": "delka"}, inplace=True)
+        serialsDF.set_index("id_serial", drop=False, inplace=True)
+        serialFileMonths: str = ".." + os.sep + "datasets" + os.sep + "slantour" + os.sep + "serial_months_from_2018.csv"
+        serialsDFMonths: pd.DataFrame = pd.read_csv(serialFileMonths, sep=';', header=0, index_col = 0)
+        
+        #print(serialsDFMonths.shape)
+        
+        for i in range(1,13):
+            serialsDF.insert(0, "month_"+str(i),0)
+        
+        for index, row in serialsDFMonths.iterrows():
+            i = int(row["month_from"])
+            j = int(row["month_to"])
+            while True:   
+                try:      
+                    serialsDF.loc[index, "month_"+str(i)] = 1
+                except:
+                    pass
+            
+                if (i == j) or (j <= 0) or (j > 12):
+                    break
+                else:            
+                    i = (i%12) + 1
+        
+        #print(serialsDF.describe())
+        
         return serialsDF

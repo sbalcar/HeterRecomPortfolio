@@ -79,11 +79,15 @@ class EvalToolContext(AEvalTool):
 
     def _preprocessItemsST(self, items:DataFrame):
         #print(items['prumerna_cena_noc'].head(10))
-        self.items = items[['delka', 'id_serial']]
-
+        listMonths = ["month_" + str(i) for i in range(1,13)]
+        listMonths.extend(['delka', 'id_serial'])
+        print(listMonths)
+        self.items = items[listMonths]
+        items.loc[items['prumerna_cena_noc']<=0,'prumerna_cena_noc'] = 1
+        #print(items[['delka', 'id_serial','prumerna_cena_noc']].describe())
         log_price = items[['prumerna_cena_noc']].apply(lambda x: math.log(x[0]), axis=1)
         self.items = self.items.join(pd.DataFrame(data=log_price, columns=['prumerna_cena_noc']))
-
+        #print(self.items.head())
         # TODO: weird format of 'zeme' column->think about spliting the values
         #  (f.e. if value is "Anglie:Sport" -> in OHE into 2 columns "Anglie", "Sport",
         #  not into one column "Anglie:Sport")
@@ -94,7 +98,7 @@ class EvalToolContext(AEvalTool):
         # onehot accomodation
         oneHot = pd.get_dummies(items['ubytovani'], prefix=['ubytovani'])
         self.items = self.items.join(oneHot)
-
+        #print(self.items.head())
         # onehot transport
         oneHot = pd.get_dummies(items['doprava'], prefix=['doprava'])
         self.items = self.items.join(oneHot)
@@ -106,8 +110,10 @@ class EvalToolContext(AEvalTool):
         #onehot id_type
         oneHot = pd.get_dummies(items['id_typ'], prefix=['typ'])
         self.items = self.items.join(oneHot)
-
+        #print(self.items.head())
         # add months
+        
+        """
         for i in range(1, 13):
             self.items.insert(0, "month_" + str(i), 0)
 
@@ -123,6 +129,8 @@ class EvalToolContext(AEvalTool):
                     break
                 else:
                     i = (i % 12) + 1
+        """
+        print(self.items.shape)
         self.items.set_index('id_serial', inplace=True)
         return self.items
 
