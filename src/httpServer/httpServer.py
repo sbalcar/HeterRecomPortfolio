@@ -23,6 +23,7 @@ from datasets.ml.ratings import Ratings #class
 
 from evaluationTool.aEvalTool import AEvalTool #class
 from evaluationTool.evalToolSingleMethod import EToolSingleMethod #class
+from evaluationTool.evalToolContext import EvalToolContext #class
 
 from recommender.aRecommender import ARecommender #class
 
@@ -286,12 +287,17 @@ class HeterRecomHTTPHandler(BaseHTTPRequestHandler):
 
         portfolio:APortfolio = self.portfolioDict[variant]
 
-
         model:DataFrame = self.modelsDict[variant]
-        rItemIDs, rItemIDsWithtResp = portfolio.recommend(userID, model, {
-                        APortfolio.ARG_NUMBER_OF_AGGR_ITEMS:numberOfItems,
-                        APortfolio.ARG_NUMBER_OF_RECOMM_ITEMS:100,
-                        ARecommender.ARG_ALLOWED_ITEMIDS:allowedItemIDs})
+
+        currentPageType:object = None
+        args:Dict[str, object] = {APortfolio.ARG_NUMBER_OF_AGGR_ITEMS: numberOfItems,
+                                  APortfolio.ARG_NUMBER_OF_RECOMM_ITEMS: 100,
+                                  ARecommender.ARG_ALLOWED_ITEMIDS: allowedItemIDs,
+                                  EvalToolContext.ARG_PAGE_TYPE:currentPageType,
+                                  EvalToolContext.ARG_ITEM_ID:itemID,
+                                  EvalToolContext.ARG_SENIORITY:sessionID}
+
+        rItemIDs, rItemIDsWithtResp = portfolio.recommend(userID, model, args)
         #print(rItemIDs)
         #print(rItemIDsWithtResp)
 
@@ -303,7 +309,6 @@ class HeterRecomHTTPHandler(BaseHTTPRequestHandler):
         # delete log of history
         #lengthOfHistory:int = 10 * self._recomRepetitionCount * self._numberOfAggrItems
         lengthOfHistory:int = 100
-        #print("lengthOfHistory: " + str(lengthOfHistory))
         self.historiesDict[variant].deletePreviousRecomOfUser(userID, lengthOfHistory)
 
 

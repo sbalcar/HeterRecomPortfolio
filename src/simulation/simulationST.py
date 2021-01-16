@@ -138,7 +138,7 @@ class SimulationST(ASequentialSimulation):
             for repetitionI in range(self._recomRepetitionCount):
                 self.simulateRecommendations(portfolios, portfolioDescs, portFolioModels, evaluatonTools,
                                              histories, evaluations, currentDFIndexI, currentUserIdI,
-                                             repetitionI, currentSessionIdI,
+                                             currentSessionIdI, repetitionI,
                                              testRatingsDF, testBehaviourDict, windowOfItemIDsI, currentPageTypeI)
 
         return evaluations
