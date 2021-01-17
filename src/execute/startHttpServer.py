@@ -99,36 +99,19 @@ def startHttpServer():
   port4, model4, evalTool4, history4 = getContextFuzzyDHondt()
   port5, model5, evalTool5, history5 = getContextFuzzyDHondtINF()
 
-  s = HeterRecomHTTPHandler
-  portfolioDict:Dict[str,APortfolio] = { s.VARIANT_2:port4}
-  modelsDict:Dict[str,int] = {s.VARIANT_2:model4}
-  evalToolsDict:Dict[str, AEvalTool] = {s.VARIANT_2:evalTool4}
-  historiesDict:Dict[str, AEvalTool] = {s.VARIANT_2:history4}
-  
-  #portfolioDict:Dict[str,APortfolio] = {s.VARIANT_1:port1, s.VARIANT_2:port2, s.VARIANT_3:port3}
-  #modelsDict:Dict[str,int] = {s.VARIANT_1:model1, s.VARIANT_2:model2, s.VARIANT_3:model3}
-  #evalToolsDict:Dict[str, AEvalTool] = {s.VARIANT_1:evalTool1, s.VARIANT_2:evalTool2, s.VARIANT_3:evalTool3}
-  #historiesDict:Dict[str, AEvalTool] = {s.VARIANT_1:history1, s.VARIANT_2:history2, s.VARIANT_3:history3}
 
-  #portfolioDict:Dict[str,APortfolio] = {s.VARIANT_1:port1, s.VARIANT_2:port2, s.VARIANT_3:port3, s.VARIANT_4:port4}
-  #modelsDict:Dict[str,int] = {s.VARIANT_1:model1, s.VARIANT_2:model2, s.VARIANT_4:model4}
-  #evalToolsDict:Dict[str, AEvalTool] = {s.VARIANT_1:evalTool1, s.VARIANT_2:evalTool2, s.VARIANT_4:evalTool4}
-  #historiesDict:Dict[str, AEvalTool] = {s.VARIANT_1:history1, s.VARIANT_2:history2, s.VARIANT_4:history4}
+  portfolios:List[APortfolio] = [port4]
+  models:List[DataFrame] = [model4]
+  evalTools:List[AEvalTool] = [evalTool4]
+  histories:List[AHistory] = [history4]
 
-  #portfolioDict:Dict[str,APortfolio] = {s.VARIANT_1:port1, s.VARIANT_2:port2, s.VARIANT_3:port3, s.VARIANT_4:port4, s.VARIANT_5:port5}
-  #modelsDict:Dict[str,int] = {s.VARIANT_1:model1, s.VARIANT_2:model2, s.VARIANT_3:model3, s.VARIANT_4:model4, s.VARIANT_5:model5}
-  #evalToolsDict:Dict[str, AEvalTool] = {s.VARIANT_1:evalTool1, s.VARIANT_2:evalTool2, s.VARIANT_3:evalTool3, s.VARIANT_4:evalTool4, s.VARIANT_5:evalTool5}
-  #historiesDict:Dict[str, AEvalTool] = {s.VARIANT_1:history1, s.VARIANT_2:history2, s.VARIANT_3:history3, s.VARIANT_4:history4, s.VARIANT_5:history5}
+#  portfolios:List[APortfolio] = [port4, port5]
+#  models:List[DataFrame] = [model4, model5]
+#  evalTools:List[AEvalTool] = [evalTool4, evalTool5]
+#  histories:List[AHistory] = [history4, history5]
 
 
-  HeterRecomHTTPHandler.portfolioDict = portfolioDict
-  HeterRecomHTTPHandler.modelsDict = modelsDict
-  HeterRecomHTTPHandler.evalToolsDict = evalToolsDict
-  HeterRecomHTTPHandler.historiesDict = historiesDict
-
-  HeterRecomHTTPHandler.evaluation:Dict = {}
-  #HeterRecomHTTPHandler.datasetClass = DatasetML
-  HeterRecomHTTPHandler.datasetClass = DatasetST
+  HeterRecomHTTPHandler.initialization(portfolios, models, evalTools, histories, DatasetST)
 
   print("StartHTTPServer")
 
@@ -160,8 +143,8 @@ def getTheMostPopular():
 
 def getFuzzyDHont():
 
-  #taskID:str = "FuzzyDHondt" + "Roulette1"
-  taskID:str = "FuzzyDHondt" + "Fixed"
+  #taskID:str = "Web" + "FuzzyDHondt" + "Roulette1"
+  taskID:str = "Web" + "FuzzyDHondt" + "Fixed"
   dataset:ADataset = DatasetST.readDatasets()
 
   #selector:ADHondtSelector = RouletteWheelSelector({RouletteWheelSelector.ARG_EXPONENT: 1})
@@ -190,7 +173,7 @@ def getFuzzyDHont():
 
 def getFuzzyDHontThompsonSamplingINF():
 
-  taskID:str = "FuzzyDHondtThompsonSamplingINF" + "Fixed" + "OLin0802HLin1002"
+  taskID:str = "Web" + "FuzzyDHondtThompsonSamplingINF" + "Fixed" + "OLin0802HLin1002"
 
   selector:ADHondtSelector = TheMostVotedItemSelector({})
 
@@ -220,8 +203,8 @@ def getFuzzyDHontThompsonSamplingINF():
 
 def getFuzzyDHontINF():
 
-  #taskID:str = "FuzzyDHondtINF" + "Roulette1"
-  taskID:str = "FuzzyDHondt" + "Fixed"
+  #taskID:str = "Web" + "FuzzyDHondtINF" + "Roulette1"
+  taskID:str = "Web" + "FuzzyDHondt" + "Fixed"
   dataset:ADataset = DatasetST.readDatasets()
 
   #selector:ADHondtSelector = RouletteWheelSelector({RouletteWheelSelector.ARG_EXPONENT: 1})
@@ -252,8 +235,8 @@ def getFuzzyDHontINF():
 
 def getContextFuzzyDHondt():
 
-  #taskID:str = "ContextFuzzyDHondt" + "Roulette1"
-  taskID:str = "ContextFuzzyDHondt" + "Fixed"
+  #taskID:str = "Web" + "ContextFuzzyDHondt" + "Roulette1"
+  taskID:str = "Web" + "ContextFuzzyDHondt" + "Fixed"
   dataset:ADataset = DatasetST.readDatasets()
 
   #selector:ADHondtSelector = RouletteWheelSelector({RouletteWheelSelector.ARG_EXPONENT: 1})
@@ -289,8 +272,8 @@ def getContextFuzzyDHondt():
 
 
 def getContextFuzzyDHondtINF():
-  # taskID:str = "ContextFuzzyDHondtINF" + "Roulette1"
-  taskID:str = "ContextFuzzyDHondtINF" + "Fixed"
+  # taskID:str = "Web" + "ContextFuzzyDHondtINF" + "Roulette1"
+  taskID:str = "Web" + "ContextFuzzyDHondtINF" + "Fixed"
   dataset:ADataset = DatasetST.readDatasets()
 
   # selector:ADHondtSelector = RouletteWheelSelector({RouletteWheelSelector.ARG_EXPONENT: 1})

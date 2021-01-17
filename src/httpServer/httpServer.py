@@ -1,6 +1,8 @@
 #!/usr/bin/python3
 import ast
 import time
+import os
+from datetime import datetime
 
 from typing import Dict
 from typing import List
@@ -26,9 +28,12 @@ from evaluationTool.evalToolSingleMethod import EToolSingleMethod #class
 from evaluationTool.evalToolContext import EvalToolContext #class
 from recommender.aRecommender import ARecommender #class
 
+from history.aHistory import AHistory #class
+
 import pandas as pd
 import numpy as np
 import json
+
 
 class NpEncoder(json.JSONEncoder):
     def default(self, obj):
@@ -46,7 +51,6 @@ class NpEncoder(json.JSONEncoder):
 
 class HeterRecomHTTPHandler(BaseHTTPRequestHandler):
 
-    #ACTION_INIT:str = "init"
     ACTION_CLICK:str = "click"
     ACTION_VISIT:str = "visit"
     ACTION_RECOMMEND:str = "recommend"
@@ -66,12 +70,50 @@ class HeterRecomHTTPHandler(BaseHTTPRequestHandler):
     VARIANT_1:str = "1"
     VARIANT_2:str = "2"
     VARIANT_3:str = "3"
+    VARIANT_4:str = "4"
+    VARIANT_5:str = "5"
 
     #portfolioDict:Dict[]
     #modelsDict:Dict[]
     #evalToolsDict:Dict[]
     #evaluation
+
+    #computationFileDict:Dict[str,file]
+    #portModelTimeEvolutionFilesDict:Dict[str,file]
+    #historyOfRecommendationFilesDict:Dict[str,file]
+
     #datasetClass
+
+
+    def initialization(cls, portfolio:List[APortfolio], models:List[DataFrame], evalTools:List[AEvalTool],
+                       histories:List[AHistory], datasetClass):
+        print("Initialization")
+
+        types:List[str] = [cls.VARIANT_1, cls.VARIANT_2, cls.VARIANT_3, cls.VARIANT_4, cls.VARIANT_5]
+        types = types[:len(portfolio)]
+
+        cls.portfolioDict = dict(zip(types,portfolio))
+        cls.modelsDict = dict(zip(types,models))
+        cls.evalToolsDict = dict(zip(types,evalTools))
+        cls.historiesDict = dict(zip(types,histories))
+
+        #  HeterRecomHTTPHandler.evaluation:Dict = {}
+        cls.datasetClass = datasetClass
+
+        for typeIdI, portfolioI in zip(types, portfolio):
+            fileNameI:str = dir + os.sep + "computation-" + portfolioI.getPortfolioID() + ".txt"
+            cls.computationFileDict[typeIdI] = open(fileNameI, "a")
+
+        for typeIdI, portfolioI in zip(types, portfolio):
+            fileNameI:str = dir + os.sep + "portfModelTimeEvolution-" + portfolioI.getPortfolioID() + ".txt"
+            cls.portModelTimeEvolutionFilesDict[typeIdI] = open(fileNameI, "a")
+
+        for typeIdI, portfolioI in zip(types, portfolio):
+            fileNameI:str = dir + os.sep + "historyOfRecommendation-" + portfolioI.getPortfolioID() + ".txt"
+            cls.historyOfRecommendationFilesDict[typeIdI] = open(fileNameI, "a")
+
+
+
     def do_POST(self):
         print("doPOST")
         query = urlparse(self.path).query
@@ -117,8 +159,7 @@ class HeterRecomHTTPHandler(BaseHTTPRequestHandler):
             print("sessionID: " + str(sessionID))
             
             pageType:str = params[self.ARG_PAGETYPE] 
-            print("pageType: " + str(pageType))                 
-
+            print("pageType: " + str(pageType))
             
             rItemIdsWithRespStr:str = data.get(self.ARG_RITEMIDS_WITH_RESP)
             print(rItemIdsWithRespStr)  
@@ -243,6 +284,16 @@ class HeterRecomHTTPHandler(BaseHTTPRequestHandler):
 
         print("evaluation: ", str(self.evaluation))
 
+        self.portModelTimeEvolutionFilesDict[variant].write("currentItemID: " + str(itemID) + "\n")
+        self.portModelTimeEvolutionFilesDict[variant].write("userID: " + str(userID) + "\n")
+        self.portModelTimeEvolutionFilesDict[variant].write(str(self.modelsDict[variant]) + "\n\n")
+        self.portModelTimeEvolutionFilesDict[variant].flush()
+
+        self.computationFileDict[variant].write("RatingI: " + str(datetime.now().strftime("%H:%M:%S")) + "\n")
+        self.computationFileDict[variant].write("PortfolioIds: " + str(variant) + "\n")
+        #self.computationFileDict[variant].write("Evaluations: " + str(evaluations) + "\n")
+        self.computationFileDict[variant].flush()
+
         self.send_response(200)
         self.send_header('Content-Type', 'text/plain; charset=utf-8')
         self.end_headers()
@@ -332,7 +383,12 @@ class HeterRecomHTTPHandler(BaseHTTPRequestHandler):
         self.historiesDict[variant].deletePreviousRecomOfUser(userID, lengthOfHistory)
 
 
-
+        self.historyOfRecommendationFilesDict[variant].write("userID: " + str(userID) + "\n")
+        self.historyOfRecommendationFilesDict[variant].write("currentItemID: " + str(itemID) + "\n")
+        self.historyOfRecommendationFilesDict[variant].write("sessionID: " + str(sessionID) + "\n")
+        self.historyOfRecommendationFilesDict[variant].write("pageType: " + str(pageType) + "\n\n")
+        self.historyOfRecommendationFilesDict[variant].write("rItemIDs: " + str(rItemIDs) + "\n")
+        self.historyOfRecommendationFilesDict[variant].flush()
 
         self.send_response(200)
         self.send_header('Content-Type', 'text/plain; charset=utf-8')
