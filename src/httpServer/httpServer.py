@@ -24,7 +24,6 @@ from datasets.ml.ratings import Ratings #class
 from evaluationTool.aEvalTool import AEvalTool #class
 from evaluationTool.evalToolSingleMethod import EToolSingleMethod #class
 from evaluationTool.evalToolContext import EvalToolContext #class
-
 from recommender.aRecommender import ARecommender #class
 
 import pandas as pd
@@ -63,6 +62,7 @@ class HeterRecomHTTPHandler(BaseHTTPRequestHandler):
     ARG_RITEMIDS_WITH_RESP:str = "rItemIDsWithResponsibility"
     ARG_ALLOWED_ITEMIDS:str = ARecommender.ARG_ALLOWED_ITEMIDS
 
+
     VARIANT_1:str = "1"
     VARIANT_2:str = "2"
     VARIANT_3:str = "3"
@@ -70,7 +70,6 @@ class HeterRecomHTTPHandler(BaseHTTPRequestHandler):
     #portfolioDict:Dict[]
     #modelsDict:Dict[]
     #evalToolsDict:Dict[]
-    #historiesDict:Dict[]
     #evaluation
     #datasetClass
     def do_POST(self):
@@ -92,6 +91,7 @@ class HeterRecomHTTPHandler(BaseHTTPRequestHandler):
 
 
         variant:str = params[self.ARG_VARIANTID]
+        variant = "2"
         print("variant: " + variant)
 
         action:str = params[self.ARG_ACTIONID]
@@ -113,7 +113,11 @@ class HeterRecomHTTPHandler(BaseHTTPRequestHandler):
             #print(post_data)  
             data = dict(qc.split("=") for qc in post_data.split("&"))  
                       
-                
+            sessionID:int = int(params[self.ARG_SESSIONID])
+            print("sessionID: " + str(sessionID))
+            
+            pageType:str = params[self.ARG_PAGETYPE] 
+            print("pageType: " + str(pageType))                 
 
             
             rItemIdsWithRespStr:str = data.get(self.ARG_RITEMIDS_WITH_RESP)
@@ -129,7 +133,7 @@ class HeterRecomHTTPHandler(BaseHTTPRequestHandler):
             rItemIdsWithResp = [[itemID, rItemIds]]
             print("rItemIdsWithResp: " + str(rItemIdsWithResp))
 
-            self.__click(variant, userID, itemID, rItemIdsWithResp)
+            self.__click(variant, userID, itemID, sessionID, pageType, rItemIdsWithResp)
             return
             
         elif action == self.ACTION_RECOMMEND:
@@ -137,9 +141,11 @@ class HeterRecomHTTPHandler(BaseHTTPRequestHandler):
                 params[self.ARG_NUMBER_OF_ITEMS] = 20
                 
             if not self.ARG_SESSIONID in params:
+                print("error in "+self.ARG_SESSIONID )
                 self.send_error(404)
                 return
             if not self.ARG_PAGETYPE in params:
+                print("error in "+self.ARG_PAGETYPE )
                 self.send_error(404)
                 return    
                 
@@ -170,6 +176,7 @@ class HeterRecomHTTPHandler(BaseHTTPRequestHandler):
             return
             
         else:
+            print("error in action type")
             self.send_error(404)
     
     def do_GET(self):
@@ -191,6 +198,7 @@ class HeterRecomHTTPHandler(BaseHTTPRequestHandler):
 
 
         variant:str = params[self.ARG_VARIANTID]
+        variant = "2"
         print("variant: " + variant)
 
         action:str = params[self.ARG_ACTIONID]
@@ -220,16 +228,20 @@ class HeterRecomHTTPHandler(BaseHTTPRequestHandler):
             self.send_error(404)
 
 
-    def __click(self, variant:str, userID:int, itemID:int, rItemIDsWithResponsibility:List[tuple]):
+    def __click(self, variant:str, userID:int, itemID:int, sessionID:int, pageType:str, rItemIDsWithResponsibility:List[tuple]):
         print("click")
         if not variant in self.portfolioDict:
             self.send_error(404)
             return
 
         evalTool:AEvalTool = self.evalToolsDict[variant]
-        evalTool.click(rItemIDsWithResponsibility, itemID, self.modelsDict[variant], self.evaluation)
+        evalTool.click(rItemIDsWithResponsibility, itemID, self.modelsDict[variant], {EvalToolContext.ARG_USER_ID: userID,
+                        EvalToolContext.ARG_ITEM_ID: itemID,
+                        EvalToolContext.ARG_SENIORITY: sessionID,
+                        EvalToolContext.ARG_PAGE_TYPE: pageType
+                        })
 
-        #print("evaluation: ", str(self.evaluation))
+        print("evaluation: ", str(self.evaluation))
 
         self.send_response(200)
         self.send_header('Content-Type', 'text/plain; charset=utf-8')
@@ -287,29 +299,39 @@ class HeterRecomHTTPHandler(BaseHTTPRequestHandler):
 
         portfolio:APortfolio = self.portfolioDict[variant]
 
+
         model:DataFrame = self.modelsDict[variant]
-
-        currentPageType:object = None
-        args:Dict[str, object] = {APortfolio.ARG_NUMBER_OF_AGGR_ITEMS: numberOfItems,
-                                  APortfolio.ARG_NUMBER_OF_RECOMM_ITEMS: 100,
-                                  ARecommender.ARG_ALLOWED_ITEMIDS: allowedItemIDs,
-                                  EvalToolContext.ARG_PAGE_TYPE:currentPageType,
-                                  EvalToolContext.ARG_ITEM_ID:itemID,
-                                  EvalToolContext.ARG_SENIORITY:sessionID}
-
-        rItemIDs, rItemIDsWithtResp = portfolio.recommend(userID, model, args)
+        rItemIDs, rItemIDsWithtResp = portfolio.recommend(userID, model, {
+                        APortfolio.ARG_NUMBER_OF_AGGR_ITEMS:numberOfItems,
+                        APortfolio.ARG_NUMBER_OF_RECOMM_ITEMS:100,
+                        ARecommender.ARG_ALLOWED_ITEMIDS:allowedItemIDs,
+                        EvalToolContext.ARG_USER_ID: userID,
+                        EvalToolContext.ARG_ITEM_ID: itemID,
+                        EvalToolContext.ARG_SENIORITY: sessionID,
+                        EvalToolContext.ARG_PAGE_TYPE: pageType
+                        })
         #print(rItemIDs)
         #print(rItemIDsWithtResp)
 
         evalTool:AEvalTool = self.evalToolsDict[variant]
-        evalTool.displayed(rItemIDsWithtResp, self.modelsDict[variant], self.evaluation)
+        evalTool.displayed(rItemIDsWithtResp, self.modelsDict[variant], {
+                        APortfolio.ARG_NUMBER_OF_AGGR_ITEMS:numberOfItems,
+                        APortfolio.ARG_NUMBER_OF_RECOMM_ITEMS:100,
+                        ARecommender.ARG_ALLOWED_ITEMIDS:allowedItemIDs,
+                        EvalToolContext.ARG_USER_ID: userID,
+                        EvalToolContext.ARG_ITEM_ID: itemID,
+                        EvalToolContext.ARG_SENIORITY: sessionID,
+                        EvalToolContext.ARG_PAGE_TYPE: pageType
+                        })#self.evaluation)
 
 
         self.historiesDict[variant].insertRecomAndClickedItemIDs(userID, rItemIDs, [])
         # delete log of history
-        #lengthOfHistory:int = 10 * self._recomRepetitionCount * self._numberOfAggrItems
-        lengthOfHistory:int = 100
+        lengthOfHistory:int = 100 # * self._recomRepetitionCount * self._numberOfAggrItems
+        #print("lengthOfHistory: " + str(lengthOfHistory))
         self.historiesDict[variant].deletePreviousRecomOfUser(userID, lengthOfHistory)
+
+
 
 
         self.send_response(200)

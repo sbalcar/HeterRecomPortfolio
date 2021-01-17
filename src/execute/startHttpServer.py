@@ -93,16 +93,21 @@ def startHttpServer():
   print("TrainingPortfolios")
 
   #port1, model1, evalTool1 = getTheMostPopular()
-  port1, model1, evalTool1, history1 = getFuzzyDHont()
-  port2, model2, evalTool2, history2 = getFuzzyDHontINF()
-  port3, model3, evalTool3, history3 = getFuzzyDHontThompsonSamplingINF()
+  #port1, model1, evalTool1, history1 = getFuzzyDHont()
+  #port2, model2, evalTool2, history2 = getFuzzyDHontINF()
+  #port3, model3, evalTool3, history3 = getFuzzyDHontThompsonSamplingINF()
   port4, model4, evalTool4, history4 = getContextFuzzyDHondt()
 
   s = HeterRecomHTTPHandler
-  portfolioDict:Dict[str,APortfolio] = {s.VARIANT_1:port1, s.VARIANT_2:port2, s.VARIANT_3:port3}
-  modelsDict:Dict[str,int] = {s.VARIANT_1:model1, s.VARIANT_2:model2, s.VARIANT_3:model3}
-  evalToolsDict:Dict[str, AEvalTool] = {s.VARIANT_1:evalTool1, s.VARIANT_2:evalTool2, s.VARIANT_3:evalTool3}
-  historiesDict:Dict[str, AEvalTool] = {s.VARIANT_1:history1, s.VARIANT_2:history2, s.VARIANT_3:history3}
+  portfolioDict:Dict[str,APortfolio] = { s.VARIANT_2:port4}
+  modelsDict:Dict[str,int] = {s.VARIANT_2:model4}
+  evalToolsDict:Dict[str, AEvalTool] = {s.VARIANT_2:evalTool4}
+  historiesDict:Dict[str, AEvalTool] = {s.VARIANT_2:history4}
+  
+  #portfolioDict:Dict[str,APortfolio] = {s.VARIANT_1:port1, s.VARIANT_2:port2, s.VARIANT_3:port3}
+  #modelsDict:Dict[str,int] = {s.VARIANT_1:model1, s.VARIANT_2:model2, s.VARIANT_3:model3}
+  #evalToolsDict:Dict[str, AEvalTool] = {s.VARIANT_1:evalTool1, s.VARIANT_2:evalTool2, s.VARIANT_3:evalTool3}
+  #historiesDict:Dict[str, AEvalTool] = {s.VARIANT_1:history1, s.VARIANT_2:history2, s.VARIANT_3:history3}
 
   #portfolioDict:Dict[str,APortfolio] = {s.VARIANT_1:port1, s.VARIANT_2:port2, s.VARIANT_3:port3, s.VARIANT_4:port4}
   #modelsDict:Dict[str,int] = {s.VARIANT_1:model1, s.VARIANT_2:model2, s.VARIANT_4:model4}
@@ -248,8 +253,9 @@ def getContextFuzzyDHondt():
   #selector:ADHondtSelector = RouletteWheelSelector({RouletteWheelSelector.ARG_EXPONENT: 1})
   selector:ADHondtSelector = TheMostVotedItemSelector({})
 
-  aDescDHont:AggregationDescription = InputAggrDefinition.exportADescDContextHondt(selector)
-
+  #pToolOLin0802HLin1002:APenalization = PenalizationToolDefinition.exportPenaltyToolOLin0802HLin1002(
+  #  InputSimulatorDefinition.numberOfAggrItems)
+    
   rIDs, rDescs = InputRecomSTDefinition.exportPairOfRecomIdsAndRecomDescrs()
 
   history:AHistory = HistoryHierDF(taskID)
@@ -260,6 +266,10 @@ def getContextFuzzyDHondt():
     EvalToolContext.ARG_EVENTS: dataset.eventsDF,  # EVENTS (FOR CALCULATING HISTORY OF USER)
     EvalToolContext.ARG_DATASET: "st",  # WHAT DATASET ARE WE IN
     EvalToolContext.ARG_HISTORY: history})  # empty instance of AHistory is OK for ST dataset
+
+
+  aDescDHont:AggregationDescription = InputAggrDefinition.exportADescDContextHondt(selector, evalTool)
+
 
   pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
     taskID, rIDs, rDescs, aDescDHont)
