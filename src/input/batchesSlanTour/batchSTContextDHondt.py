@@ -31,7 +31,7 @@ from input.batchesML1m.batchMLFuzzyDHondt import BatchMLFuzzyDHondt #class
 
 from input.aBatch import BatchParameters #class
 from input.batchesML1m.batchMLBanditTS import BatchMLBanditTS #class
-from input.aBatchML import ABatchML #class
+from input.aBatchST import ABatchST #class
 
 from input.inputSimulatorDefinition import InputSimulatorDefinition #class
 
@@ -43,12 +43,14 @@ from history.aHistory import AHistory #class
 from history.historyDF import HistoryDF #class
 from history.historyHierDF import HistoryHierDF #class
 
+from datasets.aDataset import ADataset #class
+from datasets.datasetST import DatasetST #class
 from datasets.ml.users import Users #class
 from datasets.ml.items import Items #class
 from datasets.ml.ratings import Ratings #class
 
 
-class BatchMLContextDHondt(ABatchML):
+class BatchSTContextDHondt(ABatchST):
 
     @staticmethod
     def getParameters():
@@ -68,18 +70,22 @@ class BatchMLContextDHondt(ABatchML):
 
         history:AHistory = HistoryHierDF(portfolioID)
 
-        itemsDF:DataFrame = Items.readFromFileMl1m()
-        usersDF:DataFrame = Users.readFromFileMl1m()
+        dataset:ADataset = DatasetST.readDatasets()
+        events = dataset.eventsDF
+        serials = dataset.serialsDF
 
-        eTool:AEvalTool = EvalToolContext({
-            EvalToolContext.ARG_USERS: usersDF,
-            EvalToolContext.ARG_ITEMS: itemsDF,
-            EvalToolContext.ARG_DATASET: "ml",
-            EvalToolContext.ARG_HISTORY: history})
+        historyDF: AHistory = HistoryDF("test01")
+
+        # Init evalTool
+        evalTool:AEvalTool = EvalToolContext({
+            EvalToolContext.ARG_ITEMS: serials,  # ITEMS
+            EvalToolContext.ARG_EVENTS: events,  # EVENTS (FOR CALCULATING HISTORY OF USER)
+            EvalToolContext.ARG_DATASET: "st",  # WHAT DATASET ARE WE IN
+            EvalToolContext.ARG_HISTORY: historyDF})  # empty instance of AHistory is OK for ST dataset
 
         rIDs, rDescs = InputRecomMLDefinition.exportPairOfRecomIdsAndRecomDescrs()
 
-        aDescContextDHont:AggregationDescription = InputAggrDefinition.exportADescDContextHondt(selector, eTool)
+        aDescContextDHont:AggregationDescription = InputAggrDefinition.exportADescDContextHondt(selector, evalTool)
 
         pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
             portfolioID, rIDs, rDescs, aDescContextDHont)
@@ -88,7 +94,7 @@ class BatchMLContextDHondt(ABatchML):
 
         simulator:Simulator = InputSimulatorDefinition.exportSimulatorSlantour(
                 batchID, divisionDatasetPercentualSize, uBehaviour, repetition)
-        simulator.simulate([pDescr], [model], [eTool], [history])
+        simulator.simulate([pDescr], [model], [evalTool], [history])
 
 
 
@@ -97,4 +103,4 @@ if __name__ == "__main__":
    os.chdir("..")
    os.chdir("..")
    print(os.getcwd())
-   BatchMLContextDHondt.generateBatches()
+   BatchSTContextDHondt.generateBatches()

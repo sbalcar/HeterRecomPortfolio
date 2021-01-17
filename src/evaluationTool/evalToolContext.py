@@ -181,7 +181,9 @@ class EvalToolContext(AEvalTool):
             raise ValueError("Dataset " + self.dataset_name + " is not supported!")
 
     def _calculateContextST(self, userID, argumentsDict):
-        result = np.zeros(5)
+        #max items to calculate context
+        maxItems = -5
+        result = np.zeros(6)
         if argumentsDict[self.ARG_PAGE_TYPE] == 'zobrazit':
             itemID = argumentsDict[self.ARG_ITEM_ID]
 
@@ -195,7 +197,7 @@ class EvalToolContext(AEvalTool):
                 else:
                     if itemID not in self.users[userID]:
                         self.users[userID].append(itemID)
-
+                        self.users[userID] = self.users[userID][maxItems:]
             # if item not present in items -> init empty list
             else:
                 item = np.array([0] * self.items.shape[1], dtype=float)
@@ -224,7 +226,7 @@ class EvalToolContext(AEvalTool):
             result = np.append(result, AggregationOfItems)
 
         result[0] = math.log(argumentsDict[self.ARG_SENIORITY])
-        result[1] = argumentsDict[self.ARG_ITEMS_SHOWN]
+        #result[1] = argumentsDict[self.ARG_ITEMS_SHOWN] #     TODO: this does not work through arguments dictionary - no easy way to supply this directly from SLAN tour
 
         poly = PolynomialFeatures(2)
         result = poly.fit_transform(result.reshape(-1, 1))

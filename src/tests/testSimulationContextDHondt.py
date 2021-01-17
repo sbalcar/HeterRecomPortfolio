@@ -140,8 +140,8 @@ def test21():
 
     historyDF: AHistory = HistoryDF("test01")
 
-    # Init eTool
-    eTool:AEvalTool = EvalToolContext({
+    # Init evalTool
+    evalTool:AEvalTool = EvalToolContext({
          EvalToolContext.ARG_ITEMS: serials,      # ITEMS
          EvalToolContext.ARG_EVENTS: events,      # EVENTS (FOR CALCULATING HISTORY OF USER)
          EvalToolContext.ARG_DATASET: "st",       # WHAT DATASET ARE WE IN
@@ -160,10 +160,10 @@ def test21():
     model:DataFrame = ModelDefinition.createDHontModel(pDescr.getRecommendersIDs())
     print(model)
 
-    lrClick:float = 0.1
-    lrView:float = lrClick / 300
-    evalTool:AEvalTool = EvalToolDHondt({EvalToolDHondt.ARG_LEARNING_RATE_CLICKS: lrClick,
-                                         EvalToolDHondt.ARG_LEARNING_RATE_VIEWS: lrView})
+#    lrClick:float = 0.1
+#    lrView:float = lrClick / 300
+#    evalTool:AEvalTool = EvalToolDHondt({EvalToolDHondt.ARG_LEARNING_RATE_CLICKS: lrClick,
+#                                         EvalToolDHondt.ARG_LEARNING_RATE_VIEWS: lrView})
 
     # simulation of portfolio
     simulator:Simulator = Simulator(batchID, SimulationST, argsSimulationDict, dataset, behavioursDF)
