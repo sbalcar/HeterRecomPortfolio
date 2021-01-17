@@ -73,6 +73,7 @@ from input.modelDefinition import ModelDefinition
 from aggregationDescription.aggregationDescription import AggregationDescription #class
 
 from evaluationTool.evalToolDHondt import EvalToolDHondt #class
+from evaluationTool.evalToolBanditTS import EvalToolBanditTS #class
 
 from aggregation.operators.aDHondtSelector import ADHondtSelector #class
 from aggregation.operators.rouletteWheelSelector import RouletteWheelSelector #class
@@ -93,8 +94,10 @@ def startHttpServer():
   print("TrainingPortfolios")
 
   #port1, model1, evalTool1 = getTheMostPopular()
+  port1, model1, evalTool1 = getW2Vtalli100000ws1vs32upsmaxups1()
   #port1, model1, evalTool1, history1 = getFuzzyDHont()
   #port2, model2, evalTool2, history2 = getFuzzyDHontINF()
+  port2, model2, evalTool2, history2 = getBanditTS()
   #port3, model3, evalTool3, history3 = getFuzzyDHontThompsonSamplingINF()
   port4, model4, evalTool4, history4 = getContextFuzzyDHondt()
   port5, model5, evalTool5, history5 = getContextFuzzyDHondtINF()
@@ -105,10 +108,10 @@ def startHttpServer():
   evalTools:List[AEvalTool] = [evalTool4]
   histories:List[AHistory] = [history4]
 
-#  portfolios:List[APortfolio] = [port4, port5]
-#  models:List[DataFrame] = [model4, model5]
-#  evalTools:List[AEvalTool] = [evalTool4, evalTool5]
-#  histories:List[AHistory] = [history4, history5]
+#  portfolios:List[APortfolio] = [port1, port2, port3, port4, port5]
+#  models:List[DataFrame] = [model1, model2, model3, model4, model5]
+#  evalTools:List[AEvalTool] = [evalTool1, evalTool2, evalTool3, evalTool4, evalTool5]
+#  histories:List[AHistory] = [history1, history2, history3, history4, history5]
 
 
   HeterRecomHTTPHandler.initialization(portfolios, models, evalTools, histories, DatasetST)
@@ -137,6 +140,48 @@ def getTheMostPopular():
 
   model:DataFrame = DataFrame()
   evalTool:AEvalTool = EToolSingleMethod({})
+
+  return (port, model, evalTool, history)
+
+
+def getW2Vtalli100000ws1vs32upsmaxups1():
+
+  taskID:str = "W2Vtalli100000ws1vs32upsmaxups1"
+  rDescr:RecommenderDescription = InputRecomSTDefinition.exportRDescW2Vtalli100000ws1vs32upsmaxups1()
+
+  recommenderID:str = "W2V"
+  pDescr:Portfolio1MethDescription = Portfolio1MethDescription(recommenderID.title(), recommenderID, rDescr)
+
+  dataset:ADataset = DatasetST.readDatasets()
+
+  history:AHistory = HistoryHierDF(taskID)
+  port:APortfolio = pDescr.exportPortfolio(taskID, history)
+  port.train(history, dataset)
+
+  model:DataFrame = DataFrame()
+  evalTool:AEvalTool = EToolSingleMethod({})
+
+  return (port, model, evalTool, history)
+
+
+def getBanditTS():
+  taskID:str = "Web" + "BanditTS" + "Roulette1"
+
+  selector = RouletteWheelSelector({RouletteWheelSelector.ARG_EXPONENT: 1})
+
+  rIDs, rDescs = InputRecomSTDefinition.exportPairOfRecomIdsAndRecomDescrs()
+
+  pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
+    taskID, rIDs, rDescs, InputAggrDefinition.exportADescBanditTS(selector))
+
+  dataset:DatasetST = DatasetST.readDatasets()
+  history:AHistory = HistoryHierDF(taskID)
+
+  port:APortfolio = pDescr.exportPortfolio(taskID, history)
+  port.train(history, dataset)
+
+  model:DataFrame = ModelDefinition.createBanditModel(pDescr.getRecommendersIDs())
+  evalTool:AEvalTool = EvalToolBanditTS({})
 
   return (port, model, evalTool, history)
 
