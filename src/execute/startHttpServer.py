@@ -128,7 +128,7 @@ def startHttpServer():
 
 def getTheMostPopular():
 
-  taskID:str = "TheMostPopular"
+  taskID:str = "Web" + "TheMostPopular"
   rDescr:RecommenderDescription = InputRecomSTDefinition.exportRDescTheMostPopular()
 
   recommenderID:str = "TheMostPopular"
@@ -148,7 +148,7 @@ def getTheMostPopular():
 
 def getW2Vtalli100000ws1vs32upsmaxups1():
 
-  taskID:str = "W2Vtalli100000ws1vs32upsmaxups1"
+  taskID:str = "Web" + "W2Vtalli100000ws1vs32upsmaxups1"
   rDescr:RecommenderDescription = InputRecomSTDefinition.exportRDescW2Vtalli100000ws1vs32upsmaxups1()
 
   recommenderID:str = "W2V"
@@ -190,8 +190,8 @@ def getBanditTS():
 
 def getFuzzyDHont():
 
-  #taskID:str = "FuzzyDHondt" + "Roulette1"
-  taskID:str = "FuzzyDHondt" + "Fixed"
+  #taskID:str = "Web" + "FuzzyDHondt" + "Roulette1"
+  taskID:str = "Web" + "FuzzyDHondt" + "Fixed"
   dataset:ADataset = DatasetST.readDatasets()
 
   #selector:ADHondtSelector = RouletteWheelSelector({RouletteWheelSelector.ARG_EXPONENT: 1})
@@ -220,7 +220,7 @@ def getFuzzyDHont():
 
 def getFuzzyDHontThompsonSamplingINF():
 
-  taskID:str = "FuzzyDHondtThompsonSamplingINF" + "Fixed" + "OLin0802HLin1002"
+  taskID:str = "Web" + "FuzzyDHondtThompsonSamplingINF" + "Fixed" + "OLin0802HLin1002"
 
   selector:ADHondtSelector = TheMostVotedItemSelector({})
 
@@ -248,7 +248,7 @@ def getFuzzyDHontThompsonSamplingINF():
 
 def getFuzzyDHontThompsonSamplingDirectOptimizeINF():
 
-  taskID:str = "FuzzyDHondtThompsonSamplingDirectOptimizeINF" + "Fixed" + "OLin0802HLin1002"
+  taskID:str = "Web" + "FuzzyDHondtThompsonSamplingDirectOptimizeINF" + "Fixed" + "OLin0802HLin1002"
   selector:ADHondtSelector = TheMostVotedItemSelector({})
   penalization:APenalization = PenalizationToolDefinition.exportProbPenaltyToolOLin0802HLin1002(20)
   aDescDHont:AggregationDescription = InputAggrDefinition.exportADescDHondtThompsonSamplingDirectOptimizeINF(selector, penalization)
@@ -271,8 +271,8 @@ def getFuzzyDHontThompsonSamplingDirectOptimizeINF():
 
 def getFuzzyDHontINF():
 
-  #taskID:str = "FuzzyDHondtINF" + "Roulette1"
-  taskID:str = "FuzzyDHondt" + "Fixed"
+  #taskID:str = "Web" + "FuzzyDHondtINF" + "Roulette1"
+  taskID:str = "Web" + "FuzzyDHondt" + "Fixed"
   dataset:ADataset = DatasetST.readDatasets()
 
   #selector:ADHondtSelector = RouletteWheelSelector({RouletteWheelSelector.ARG_EXPONENT: 1})
@@ -303,8 +303,8 @@ def getFuzzyDHontINF():
 
 def getContextFuzzyDHondt():
 
-  #taskID:str = "ContextFuzzyDHondt" + "Roulette1"
-  taskID:str = "ContextFuzzyDHondt" + "Fixed"
+  #taskID:str = "Web" + "ContextFuzzyDHondt" + "Roulette1"
+  taskID:str = "Web" + "ContextFuzzyDHondt" + "Fixed"
   dataset:ADataset = DatasetST.readDatasets()
 
   #selector:ADHondtSelector = RouletteWheelSelector({RouletteWheelSelector.ARG_EXPONENT: 1})
@@ -340,8 +340,8 @@ def getContextFuzzyDHondt():
 
 
 def getContextFuzzyDHondtINF():
-  # taskID:str = "ContextFuzzyDHondtINF" + "Roulette1"
-  taskID:str = "ContextFuzzyDHondtINF" + "Fixed"
+  # taskID:str = "Web" + "ContextFuzzyDHondtINF" + "Roulette1"
+  taskID:str = "Web" + "ContextFuzzyDHondtINF" + "Fixed"
   dataset:ADataset = DatasetST.readDatasets()
 
   # selector:ADHondtSelector = RouletteWheelSelector({RouletteWheelSelector.ARG_EXPONENT: 1})
@@ -375,8 +375,8 @@ def getContextFuzzyDHondtINF():
 
 
 def getContextFuzzyDHondtDirectOptimizeINF():
-  # taskID:str = "ContextFuzzyDHondtDirectOptimizeINF" + "Roulette1"
-  taskID:str = "ContextFuzzyDHondtDirectOptimizeINF" + "Fixed"
+  # taskID:str = "Web" + "ContextFuzzyDHondtDirectOptimizeINF" + "Roulette1"
+  taskID:str = "Web" + "ContextFuzzyDHondtDirectOptimizeINF" + "Fixed"
   dataset:ADataset = DatasetST.readDatasets()
 
   # selector:ADHondtSelector = RouletteWheelSelector({RouletteWheelSelector.ARG_EXPONENT: 1})
