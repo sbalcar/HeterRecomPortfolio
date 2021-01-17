@@ -27,7 +27,7 @@ class MixinContextAggregation(AAgregation):
 
 
     def run(self, methodsResultDict: dict, modelDF: DataFrame, userID: int, numberOfItems: int = 20, argumentsDict:Dict[str,object]={}):
-
+        #print(argumentsDict)
         self.eTool._context = self.eTool.calculateContext(userID, argumentsDict)
 
         for recommender, row in modelDF.iterrows():
@@ -63,7 +63,7 @@ class MixinContextAggregation(AAgregation):
         # TODO: CHECK DATA INTEGRITY!
         # methodsResultNewDict: dict[str, pd.Series] = self._penaltyTool.runPenalization(
         #        userID, methodsResultDict, self._history)
-
+        #
         itemsWithResposibilityOfRecommenders: List[int, Series[int, str]] = super().runWithResponsibility(
             methodsResultDict, modelDF, userID, numberOfItems=numberOfItems, argumentsDict=argumentsDict)
 

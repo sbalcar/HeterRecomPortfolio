@@ -146,7 +146,7 @@ class AggrFuzzyDHondtDirectOptimize(AAgregation):
     # methodsResultDict:{String:Series(rating:float[], itemID:int[])},
     # modelDF:DataFrame<(methodID:str, votes:int)>, numberOfItems:int
     def runWithResponsibility(self, methodsResultDict:Dict, modelDF:DataFrame, userID:int, numberOfItems:int, argumentsDict:Dict[str,object]={}):
-
+        #print(argumentsDict["pageType"])
         # testing types of parameters
         if type(methodsResultDict) is not dict:
             raise ValueError("Type of methodsResultDict isn't dict.")
@@ -170,7 +170,7 @@ class AggrFuzzyDHondtDirectOptimize(AAgregation):
         if type(argumentsDict) is not dict:
             raise ValueError("Argument argumentsDict isn't type dict.")
 
-        aggregatedItemIDs: List[int] = self.run(methodsResultDict, modelDF, userID, numberOfItems)
+        aggregatedItemIDs: List[int] = self.run(methodsResultDict, modelDF, userID, numberOfItems, argumentsDict)
 
         itemsWithResposibilityOfRecommenders: List[int, np.Series[int, str]] = countDHontResponsibility(
             aggregatedItemIDs, methodsResultDict, modelDF, numberOfItems)

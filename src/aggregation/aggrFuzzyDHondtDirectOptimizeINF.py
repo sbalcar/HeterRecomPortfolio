@@ -69,7 +69,7 @@ class AggrFuzzyDHondtDirectOptimizeINF(AggrFuzzyDHondtDirectOptimize):
                 userID, methodsResultDict, self._history)
 
         itemsWithResposibilityOfRecommenders:List[int,np.Series[int,str]] =\
-            super().run(methodsResultNewDict, modelDF, userID, numberOfItems=numberOfItems)
+            super().run(methodsResultNewDict, modelDF, userID, numberOfItems=numberOfItems, argumentsDict=argumentsDict)
 
         # list<(itemID:int, Series<(rating:int, methodID:str)>)>
         return itemsWithResposibilityOfRecommenders
@@ -78,7 +78,7 @@ class AggrFuzzyDHondtDirectOptimizeINF(AggrFuzzyDHondtDirectOptimize):
     # methodsResultDict:{String:Series(rating:float[], itemID:int[])},
     # modelDF:DataFrame<(methodID:str, votes:int)>, numberOfItems:int
     def runWithResponsibility(self, methodsResultDict:dict, modelDF:DataFrame, userID:int, numberOfItems:int, argumentsDict:Dict[str,object]={}):
-
+        #
         # testing types of parameters
         if type(methodsResultDict) is not dict:
             raise ValueError("Type of methodsResultDict isn't dict.")
@@ -106,7 +106,7 @@ class AggrFuzzyDHondtDirectOptimizeINF(AggrFuzzyDHondtDirectOptimize):
                 userID, methodsResultDict, self._history)
 
         itemsWithResposibilityOfRecommenders:List[int,Series[int,str]] = super().runWithResponsibility(
-            methodsResultNewDict, modelDF, userID, numberOfItems=numberOfItems)
+            methodsResultNewDict, modelDF, userID, numberOfItems=numberOfItems, argumentsDict = argumentsDict)
 
         # list<(itemID:int, Series<(rating:int, methodID:str)>)>
         return itemsWithResposibilityOfRecommenders
