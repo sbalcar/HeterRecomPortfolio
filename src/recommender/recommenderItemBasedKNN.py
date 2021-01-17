@@ -192,6 +192,12 @@ class RecommenderItemBasedKNN(ARecommender):
 
         # Get recommendations for user
         lastRatedItemFromUser:int = self._lastRatedItemPerUser.loc[userID][COL_ITEMID]
+        
+        #adding currently viewed item (if any) into the user profile
+        itemID = argumentsDict.get("itemID", 0)
+        if itemID > 0:
+           lastRatedItemFromUser = itemID
+        
         lastRatedIndex:int = self._itemIdToItemIndexDict[lastRatedItemFromUser]
 
         rItemIndexes:Series = Series(self.KNNs[lastRatedIndex][:5*numberOfItems])

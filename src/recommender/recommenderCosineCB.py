@@ -156,6 +156,12 @@ class RecommenderCosineCB(ARecommender):
         
 
         userTrainData:List[int] = self.userProfiles.get(userID, [])
+        
+        #adding currently viewed item (if any) into the user profile
+        itemID = argumentsDict.get("itemID", 0)
+        if itemID > 0:
+           userTrainData.append(itemID)
+        
         objectIDs:List[int]
         weights:List[float]
         objectIDs, weights, aggregation = self.resolveUserProfile(userProfileStrategy, userProfileSize, userTrainData)

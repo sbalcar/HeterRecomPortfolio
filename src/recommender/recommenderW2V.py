@@ -192,6 +192,12 @@ class RecommenderW2V(ARecommender):
         userProfileSize:str = argumentsDict[self.ARG_USER_PROFILE_SIZE]
 
         userTrainData = self.userProfiles.get(userID, [])
+        
+        #adding currently viewed item (if any) into the user profile
+        itemID = argumentsDict.get("itemID", 0)
+        if itemID > 0:
+           userTrainData.append(itemID)
+        
         w2vObjects, weights, aggregation = self.__resolveUserProfile(userProfileStrategy, userProfileSize, userTrainData)
 
         # provedu agregaci dle zvolené metody

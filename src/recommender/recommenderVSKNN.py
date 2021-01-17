@@ -286,6 +286,13 @@ class RecommenderVMContextKNN(ARecommender):
         sessionTime = sessionData[self.time_key]
         items = sessionItems.values.tolist()
         timestamp = sessionTime.values.tolist()
+        
+        #adding currently viewed item (if any) into the user profile
+        itemID = argumentsDict.get("itemID", 0)
+        if itemID > 0:
+           items.append(itemID)
+           timestamp.append(time.time())
+        
         #print(items,timestamp)
         #items = self.session_items if self.last_n_clicks is None else self.session_items[-self.last_n_clicks:]
         neighbors = self.find_neighbors(items, items[-1], lastUserSession, self.dwelling_times, timestamp)
