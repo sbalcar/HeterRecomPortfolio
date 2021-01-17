@@ -97,6 +97,7 @@ def startHttpServer():
   #port2, model2, evalTool2, history2 = getFuzzyDHontINF()
   #port3, model3, evalTool3, history3 = getFuzzyDHontThompsonSamplingINF()
   port4, model4, evalTool4, history4 = getContextFuzzyDHondt()
+  port5, model5, evalTool5, history5 = getContextFuzzyDHondtINF()
 
   s = HeterRecomHTTPHandler
   portfolioDict:Dict[str,APortfolio] = { s.VARIANT_2:port4}
@@ -113,6 +114,11 @@ def startHttpServer():
   #modelsDict:Dict[str,int] = {s.VARIANT_1:model1, s.VARIANT_2:model2, s.VARIANT_4:model4}
   #evalToolsDict:Dict[str, AEvalTool] = {s.VARIANT_1:evalTool1, s.VARIANT_2:evalTool2, s.VARIANT_4:evalTool4}
   #historiesDict:Dict[str, AEvalTool] = {s.VARIANT_1:history1, s.VARIANT_2:history2, s.VARIANT_4:history4}
+
+  #portfolioDict:Dict[str,APortfolio] = {s.VARIANT_1:port1, s.VARIANT_2:port2, s.VARIANT_3:port3, s.VARIANT_4:port4, s.VARIANT_5:port5}
+  #modelsDict:Dict[str,int] = {s.VARIANT_1:model1, s.VARIANT_2:model2, s.VARIANT_3:model3, s.VARIANT_4:model4, s.VARIANT_5:model5}
+  #evalToolsDict:Dict[str, AEvalTool] = {s.VARIANT_1:evalTool1, s.VARIANT_2:evalTool2, s.VARIANT_3:evalTool3, s.VARIANT_4:evalTool4, s.VARIANT_5:evalTool5}
+  #historiesDict:Dict[str, AEvalTool] = {s.VARIANT_1:history1, s.VARIANT_2:history2, s.VARIANT_3:history3, s.VARIANT_4:history4, s.VARIANT_5:history5}
 
 
   HeterRecomHTTPHandler.portfolioDict = portfolioDict
@@ -281,6 +287,40 @@ def getContextFuzzyDHondt():
 
   return (port, model, evalTool, history)
 
+
+def getContextFuzzyDHondtINF():
+  # taskID:str = "ContextFuzzyDHondtINF" + "Roulette1"
+  taskID:str = "ContextFuzzyDHondtINF" + "Fixed"
+  dataset:ADataset = DatasetST.readDatasets()
+
+  # selector:ADHondtSelector = RouletteWheelSelector({RouletteWheelSelector.ARG_EXPONENT: 1})
+  selector:ADHondtSelector = TheMostVotedItemSelector({})
+
+  pToolOLin0802HLin1002:APenalization = PenalizationToolDefinition.exportProbPenaltyToolOLin0802HLin1002(
+    InputSimulatorDefinition.numberOfAggrItems)
+
+  rIDs, rDescs = InputRecomSTDefinition.exportPairOfRecomIdsAndRecomDescrs()
+
+  history:AHistory = HistoryHierDF(taskID)
+
+  # Init eTool
+  evalTool:AEvalTool = EvalToolContext({
+    EvalToolContext.ARG_ITEMS: dataset.serialsDF,  # ITEMS
+    EvalToolContext.ARG_EVENTS: dataset.eventsDF,  # EVENTS (FOR CALCULATING HISTORY OF USER)
+    EvalToolContext.ARG_DATASET: "st",  # WHAT DATASET ARE WE IN
+    EvalToolContext.ARG_HISTORY: history})  # empty instance of AHistory is OK for ST dataset
+
+  aDescDHont:AggregationDescription = InputAggrDefinition.exportADescDContextHondtINF(selector, pToolOLin0802HLin1002, evalTool)
+
+  pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
+    taskID, rIDs, rDescs, aDescDHont)
+
+  port:APortfolio = pDescr.exportPortfolio(taskID, history)
+  port.train(history, dataset)
+
+  model:DataFrame = ModelDefinition.createDHontModel(pDescr.getRecommendersIDs())
+
+  return (port, model, evalTool, history)
 
 
 if __name__ == "__main__":

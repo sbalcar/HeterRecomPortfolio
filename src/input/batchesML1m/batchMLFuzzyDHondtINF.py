@@ -2,7 +2,8 @@
 
 import os
 
-from typing import List
+from typing import List #class
+from typing import Dict #class
 
 from pandas.core.frame import DataFrame #class
 
@@ -54,7 +55,7 @@ class BatchMLFuzzyDHondtINF(ABatchML):
         pToolFilterBord3Lengt100:APenalization = PenalizationToolDefinition.exportPenaltyToolFiltering()
 
 
-        aDict:dict = {}
+        aDict:Dict[str,object] = {}
         aDict["TOLin0802HLin1002"] = pToolOLin0802HLin1002
         aDict["TOStat08HLin1002"] = pToolOStat08HLin1002
         aDict["ProbTOLin0802HLin1002"] = pProbToolOLin0802HLin1002

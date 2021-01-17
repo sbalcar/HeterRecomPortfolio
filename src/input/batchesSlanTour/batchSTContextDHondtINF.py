@@ -2,7 +2,8 @@
 
 import os
 
-from typing import List
+from typing import List #class
+from typing import Dict #class
 
 from pandas.core.frame import DataFrame #class
 
@@ -28,6 +29,7 @@ from aggregation.negImplFeedback.penalUsingFiltering import PenalUsingFiltering 
 from aggregation.negImplFeedback.penalUsingProbability import PenalUsingProbability #class
 
 from input.batchesML1m.batchMLFuzzyDHondt import BatchMLFuzzyDHondt #class
+from input.batchesML1m.batchMLFuzzyDHondtINF import BatchMLFuzzyDHondtINF #class
 
 from input.aBatch import BatchParameters #class
 from input.batchesML1m.batchMLBanditTS import BatchMLBanditTS #class
@@ -54,7 +56,19 @@ class BatchSTContextDHondtINF(ABatchST):
 
     @staticmethod
     def getParameters():
-        return BatchMLBanditTS.getParameters()
+        negativeImplFeedbackDict:Dict[str,object] = BatchMLFuzzyDHondtINF.getNegativeImplFeedbackParameters()
+        selectorDict:Dict[str,object] = BatchMLFuzzyDHondt().getSelectorParameters()
+
+        aDict:Dict[str,object] = {}
+        for selectorIdI in selectorDict.keys():
+            for nImplFeedbackIdJ in negativeImplFeedbackDict.keys():
+
+                selectorI = selectorDict[selectorIdI]
+                negativeImplFeedbackJ = negativeImplFeedbackDict[nImplFeedbackIdJ]
+
+                keyIJ:str = str(selectorIdI) + nImplFeedbackIdJ
+                aDict[keyIJ] = (selectorI, negativeImplFeedbackJ)
+        return aDict
 
 
     def run(self, batchID:str, jobID:str):
@@ -74,7 +88,7 @@ class BatchSTContextDHondtINF(ABatchST):
         events = dataset.eventsDF
         serials = dataset.serialsDF
 
-        historyDF: AHistory = HistoryDF("test01")
+        historyDF:AHistory = HistoryHierDF("test01")
 
         # Init evalTool
         evalTool:AEvalTool = EvalToolContext({
