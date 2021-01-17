@@ -88,10 +88,10 @@ def test01():
 
     jobID:str = "Roulette1"
 
+    selector = RouletteWheelSelector({RouletteWheelSelector.ARG_EXPONENT:1})
+
     pProbToolOLin0802HLin1002:APenalization = PenalizationToolDefinition.exportProbPenaltyToolOStat08HLin1002(
         InputSimulatorDefinition.numberOfAggrItems)
-
-    selector = RouletteWheelSelector({RouletteWheelSelector.ARG_EXPONENT:1})
 
     rIDs, rDescs = InputRecomSTDefinition.exportPairOfRecomIdsAndRecomDescrs()
 
@@ -122,12 +122,12 @@ def test21():
 
     jobID:str = "Roulette1"
 
+    selector = RouletteWheelSelector({RouletteWheelSelector.ARG_EXPONENT:1})
+
     #pProbToolOLin0802HLin1002:APenalization = PenalizationToolDefinition.exportProbPenaltyToolOStat08HLin1002(
     #    InputSimulatorDefinition.numberOfAggrItems)
     pToolOLin0802HLin1002: APenalization = PenalizationToolDefinition.exportPenaltyToolOLin0802HLin1002(
         InputSimulatorDefinition.numberOfAggrItems)
-
-    selector = RouletteWheelSelector({RouletteWheelSelector.ARG_EXPONENT:1})
 
     rIDs, rDescs = InputRecomSTDefinition.exportPairOfRecomIdsAndRecomDescrs()
 

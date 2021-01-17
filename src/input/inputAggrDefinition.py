@@ -11,6 +11,7 @@ from aggregation.aggrDHondtThompsonSamplingINF import AggrDHondtThompsonSampling
 from aggregation.aggrFuzzyDHondtDirectOptimize import AggrFuzzyDHondtDirectOptimize #class
 from aggregation.aggrFuzzyDHondtDirectOptimizeINF import AggrFuzzyDHondtDirectOptimizeINF #class
 from aggregation.aggrContextFuzzyDHondt import AggrContextFuzzyDHondt #class
+from aggregation.aggrContextFuzzyDHondtINF import AggrContextFuzzyDHondtINF #class
 
 from aggregation.negImplFeedback.aPenalization import APenalization #class
 from aggregation.negImplFeedback.penalUsingFiltering import PenalUsingFiltering #class
@@ -86,6 +87,13 @@ class InputAggrDefinition:
                                             AggrContextFuzzyDHondt.ARG_SELECTOR:selector,
                                             AggrContextFuzzyDHondt.ARG_EVAL_TOOL:eTool})
 
+
+    @staticmethod
+    def exportADescDContextHondtINF(selector:ADHondtSelector, nImplFeedback:APenalization, eTool:AEvalTool):
+        return AggregationDescription(AggrContextFuzzyDHondtINF, {
+                                            AggrContextFuzzyDHondtINF.ARG_SELECTOR:selector,
+                                            AggrContextFuzzyDHondtINF.ARG_EVAL_TOOL:eTool,
+                                            AggrFuzzyDHondtDirectOptimizeINF.ARG_PENALTY_TOOL: nImplFeedback})
 
 
 class PenalizationToolDefinition:

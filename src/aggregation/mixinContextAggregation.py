@@ -51,7 +51,10 @@ class MixinContextAggregation(AAgregation):
 
         for recommender, votes in modelDF.iterrows():
             modelDF.at[recommender, 'votes'] = updatedVotes[recommender] / totalUpdatedVotes
-
+        
+        print("Context-assigned votes:")
+        print(modelDF)
+        
         itemsWithResposibilityOfRecommenders: List[int, np.Series[int, str]] = \
             super().run(methodsResultDict, modelDF, userID, numberOfItems=numberOfItems, argumentsDict=argumentsDict)
         return itemsWithResposibilityOfRecommenders

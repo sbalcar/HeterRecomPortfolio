@@ -63,7 +63,6 @@ from simulator.simulator import Simulator #class
 
 from history.historyHierDF import HistoryHierDF #class
 
-
 from aggregation.aggrBanditTS import AggrBanditTS #class
 from aggregation.mixinContextAggregation import MixinContextAggregation #class
 from aggregation.operators.rouletteWheelSelector import RouletteWheelSelector #class
@@ -74,6 +73,9 @@ from userBehaviourDescription.userBehaviourDescription import observationalLinea
 
 from history.aHistory import AHistory #class
 from history.historyDF import HistoryDF #class
+
+from aggregation.negImplFeedback.aPenalization import APenalization #class
+from input.inputAggrDefinition import PenalizationToolDefinition #class
 
 
 argsSimulationDict:Dict[str,object] = {SimulationST.ARG_WINDOW_SIZE: 5,
@@ -86,29 +88,34 @@ argsSimulationDict:Dict[str,object] = {SimulationST.ARG_WINDOW_SIZE: 5,
 
 def test01():
 
-    print("Simulation: ML ContextDHondt")
+    print("Simulation: ML ContextDHondtINF")
 
     jobID:str = "Roulette1"
 
     selector = RouletteWheelSelector({RouletteWheelSelector.ARG_EXPONENT:1})
 
+    #pProbToolOLin0802HLin1002:APenalization = PenalizationToolDefinition.exportProbPenaltyToolOStat08HLin1002(
+    #    InputSimulatorDefinition.numberOfAggrItems)
+    pToolOLin0802HLin1002:APenalization = PenalizationToolDefinition.exportPenaltyToolOLin0802HLin1002(
+        InputSimulatorDefinition.numberOfAggrItems)
+
 
     itemsDF:DataFrame = Items.readFromFileMl1m()
     usersDF:DataFrame = Users.readFromFileMl1m()
 
-    history:AHistory = HistoryHierDF("test01")
+    historyDF:AHistory = HistoryDF("test01")
 
     eTool:AEvalTool = EvalToolContext({
             EvalToolContext.ARG_USERS: usersDF,
             EvalToolContext.ARG_ITEMS: itemsDF,
             EvalToolContext.ARG_DATASET: "ml",
-            EvalToolContext.ARG_HISTORY: history})
+            EvalToolContext.ARG_HISTORY: historyDF})
 
 
     rIDs, rDescs = InputRecomSTDefinition.exportPairOfRecomIdsAndRecomDescrs()
 
     pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
-        "ContextDHondt" + jobID, rIDs, rDescs, InputAggrDefinition.exportADescDContextHondt(selector, eTool))
+        "ContextDHondtINF" + jobID, rIDs, rDescs, InputAggrDefinition.exportADescDContextHondtINF(selector, pToolOLin0802HLin1002, eTool))
 
 
     batchID:str = "ml1mDiv90Ulinear0109R1"
@@ -125,11 +132,16 @@ def test01():
 
 def test21():
 
-    print("Simulation: ST ContextDHondt")
+    print("Simulation: ST ContextDHondtINF")
 
     jobID:str = "Roulette1"
 
     selector = RouletteWheelSelector({RouletteWheelSelector.ARG_EXPONENT:1})
+
+    #pProbToolOLin0802HLin1002:APenalization = PenalizationToolDefinition.exportProbPenaltyToolOStat08HLin1002(
+    #    InputSimulatorDefinition.numberOfAggrItems)
+    pToolOLin0802HLin1002:APenalization = PenalizationToolDefinition.exportPenaltyToolOLin0802HLin1002(
+        InputSimulatorDefinition.numberOfAggrItems)
 
     rIDs, rDescs = InputRecomSTDefinition.exportPairOfRecomIdsAndRecomDescrs()
 
@@ -138,18 +150,18 @@ def test21():
     events = dataset.eventsDF
     serials = dataset.serialsDF
 
-    history:AHistory = HistoryHierDF("test01")
+    historyDF: AHistory = HistoryDF("test01")
 
     # Init evalTool
     evalTool:AEvalTool = EvalToolContext({
          EvalToolContext.ARG_ITEMS: serials,      # ITEMS
          EvalToolContext.ARG_EVENTS: events,      # EVENTS (FOR CALCULATING HISTORY OF USER)
          EvalToolContext.ARG_DATASET: "st",       # WHAT DATASET ARE WE IN
-         EvalToolContext.ARG_HISTORY: history}) # empty instance of AHistory is OK for ST dataset
+         EvalToolContext.ARG_HISTORY: historyDF}) # empty instance of AHistory is OK for ST dataset
 
 
     pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
-        "ContextDHondt" + jobID, rIDs, rDescs, InputAggrDefinition.exportADescDContextHondt(selector, evalTool))
+        "ContextDHondtNIF" + jobID, rIDs, rDescs, InputAggrDefinition.exportADescDContextHondtINF(selector, pToolOLin0802HLin1002, evalTool))
 
 
     batchID:str = "stDiv90Ulinear0109R1"
@@ -158,7 +170,7 @@ def test21():
     behavioursDF:DataFrame = BehavioursST.readFromFileST(behaviourFile)
 
     model:DataFrame = ModelDefinition.createDHontModel(pDescr.getRecommendersIDs())
-    #print(model)
+    print(model)
 
     # simulation of portfolio
     simulator:Simulator = Simulator(batchID, SimulationST, argsSimulationDict, dataset, behavioursDF)

@@ -110,7 +110,7 @@ class PenalUsingReduceRelevance(APenalization):
     def __getPenaltiesOfItemIDs(self, userID:int, itemIDs:List[int], history:AHistory):
         prevRecomendations:List[tuple] = history.getPreviousRecomOfUser(userID, self._lengthOfHistory)
         i:int = len(prevRecomendations)   #self._lengthOfHistory#
-        #print(prevRecomendations)
+        print("PenaltyReduceRelevance, item penalties:")
         penalties:dict = {}
         for indexJ, userIdJ, itemIdJ, positionJ, clickedJ, timestampJ in prevRecomendations:
             actPenalty = penalties.get(itemIdJ, 0) #init with one
