@@ -93,20 +93,22 @@ def startHttpServer():
 
   print("TrainingPortfolios")
 
-  #port1, model1, evalTool1, history1 = getTheMostPopular()
-  port1, model1, evalTool1, history1 = getW2Vtalli100000ws1vs32upsmaxups1()
-  port2, model2, evalTool2, history2 = getBanditTS()
-  #port2, model2, evalTool2, history2 = getFuzzyDHont()
-  #port2, model2, evalTool2, history2 = getFuzzyDHontINF()
-  #port3, model3, evalTool3, history3 = getFuzzyDHontThompsonSamplingINF()
-  port4, model4, evalTool4, history4 = getFuzzyDHontThompsonSamplingDirectOptimizeINF()#getContextFuzzyDHondtDirectOptimizeINF()
-  #port5, model5, evalTool5, history5 = getContextFuzzyDHondtINF()
+  #portId1, port1, model1, evalTool1, history1 = getTheMostPopular()
+  portId1, port1, model1, evalTool1, history1 = getW2Vtalli100000ws1vs32upsmaxups1()
+  portId2, port2, model2, evalTool2, history2 = getBanditTS()
+  #portId2, port2, model2, evalTool2, history2 = getFuzzyDHont()
+  #portId2, port2, model2, evalTool2, history2 = getFuzzyDHontINF()
+  #portId3, port3, model3, evalTool3, history3 = getFuzzyDHontThompsonSamplingINF()
+  portId4, port4, model4, evalTool4, history4 = getFuzzyDHontThompsonSamplingDirectOptimizeINF()#getContextFuzzyDHondtDirectOptimizeINF()
+  #portId5, port5, model5, evalTool5, history5 = getContextFuzzyDHondtINF()
 
-  portfolios: List[APortfolio] = [port4]
-  models: List[DataFrame] = [model4]
-  evalTools: List[AEvalTool] = [evalTool4]
-  histories: List[AHistory] = [history4]
+  portfolioIds:List[str] = [portId1]
+  portfolios:List[APortfolio] = [port4]
+  models:List[DataFrame] = [model4]
+  evalTools:List[AEvalTool] = [evalTool4]
+  histories:List[AHistory] = [history4]
 
+  #  portfolios:List[str] = [portId1, portId2, portId3, portId4, portId5]
   #  portfolios:List[APortfolio] = [port1, port2, port3, port4, port5]
   #  models:List[DataFrame] = [model1, model2, model3, model4, model5]
   #  evalTools:List[AEvalTool] = [evalTool1, evalTool2, evalTool3, evalTool4, evalTool5]
@@ -143,7 +145,7 @@ def getTheMostPopular():
   model:DataFrame = DataFrame()
   evalTool:AEvalTool = EToolSingleMethod({})
 
-  return (port, model, evalTool, history)
+  return (taskID, port, model, evalTool, history)
 
 
 def getW2Vtalli100000ws1vs32upsmaxups1():
@@ -163,7 +165,7 @@ def getW2Vtalli100000ws1vs32upsmaxups1():
   model:DataFrame = DataFrame()
   evalTool:AEvalTool = EToolSingleMethod({})
 
-  return (port, model, evalTool, history)
+  return (taskID, port, model, evalTool, history)
 
 
 def getBanditTS():
@@ -185,7 +187,7 @@ def getBanditTS():
   model:DataFrame = ModelDefinition.createBanditModel(pDescr.getRecommendersIDs())
   evalTool:AEvalTool = EvalToolBanditTS({})
 
-  return (port, model, evalTool, history)
+  return (taskID, port, model, evalTool, history)
 
 
 def getFuzzyDHont():
@@ -214,7 +216,7 @@ def getFuzzyDHont():
   evalTool:AEvalTool = EvalToolDHondt({EvalToolDHondt.ARG_LEARNING_RATE_CLICKS: 0.03,
                                         EvalToolDHondt.ARG_LEARNING_RATE_VIEWS: 0.03 / 500})
 
-  return (port, model, evalTool, history)
+  return (taskID, port, model, evalTool, history)
 
 
 
@@ -244,7 +246,8 @@ def getFuzzyDHontThompsonSamplingINF():
 
   evalTool:AEvalTool = EvalToolDHondtBanditVotes({})
 
-  return (port, model, evalTool, history)
+  return (taskID, port, model, evalTool, history)
+
 
 def getFuzzyDHontThompsonSamplingDirectOptimizeINF():
 
@@ -264,9 +267,7 @@ def getFuzzyDHontThompsonSamplingDirectOptimizeINF():
   model:DataFrame = ModelDefinition.createDHondtBanditsVotesModel(pDescr.getRecommendersIDs())
   evalTool:AEvalTool = EvalToolDHondtBanditVotes({})
 
-  return (port, model, evalTool, history)
-
-
+  return (taskID, port, model, evalTool, history)
 
 
 def getFuzzyDHontINF():
@@ -298,7 +299,7 @@ def getFuzzyDHontINF():
   evalTool:AEvalTool = EvalToolDHondt({EvalToolDHondt.ARG_LEARNING_RATE_CLICKS: 0.03,
                                         EvalToolDHondt.ARG_LEARNING_RATE_VIEWS: 0.03 / 500})
 
-  return (port, model, evalTool, history)
+  return (taskID, port, model, evalTool, history)
 
 
 def getContextFuzzyDHondt():
@@ -336,7 +337,7 @@ def getContextFuzzyDHondt():
 
   model:DataFrame = ModelDefinition.createDHontModel(pDescr.getRecommendersIDs())
 
-  return (port, model, evalTool, history)
+  return (taskID, port, model, evalTool, history)
 
 
 def getContextFuzzyDHondtINF():
@@ -371,7 +372,7 @@ def getContextFuzzyDHondtINF():
 
   model:DataFrame = ModelDefinition.createDHontModel(pDescr.getRecommendersIDs())
 
-  return (port, model, evalTool, history)
+  return (taskID, port, model, evalTool, history)
 
 
 def getContextFuzzyDHondtDirectOptimizeINF():
@@ -406,7 +407,7 @@ def getContextFuzzyDHondtDirectOptimizeINF():
 
   model:DataFrame = ModelDefinition.createDHontModel(pDescr.getRecommendersIDs())
 
-  return (port, model, evalTool, history)
+  return (taskID, port, model, evalTool, history)
 
 
 

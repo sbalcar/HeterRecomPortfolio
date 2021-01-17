@@ -84,14 +84,15 @@ class HeterRecomHTTPHandler(BaseHTTPRequestHandler):
 
     #datasetClass
 
-
-    def initialization(cls, portfolio:List[APortfolio], models:List[DataFrame], evalTools:List[AEvalTool],
-                       histories:List[AHistory], datasetClass):
+    @classmethod
+    def initialization(cls, portfolioIds:List[str], portfolio:List[APortfolio], models:List[DataFrame],
+                       evalTools:List[AEvalTool], histories:List[AHistory], datasetClass):
         print("Initialization")
 
         types:List[str] = [cls.VARIANT_1, cls.VARIANT_2, cls.VARIANT_3, cls.VARIANT_4, cls.VARIANT_5]
         types = types[:len(portfolio)]
 
+        cls.portfolioIdsDict = dict(zip(types,portfolioIds))
         cls.portfolioDict = dict(zip(types,portfolio))
         cls.modelsDict = dict(zip(types,models))
         cls.evalToolsDict = dict(zip(types,evalTools))
@@ -100,16 +101,16 @@ class HeterRecomHTTPHandler(BaseHTTPRequestHandler):
 
         cls.datasetClass = datasetClass
 
-        for typeIdI, portfolioI in zip(types, portfolio):
-            fileNameI:str = dir + os.sep + "computation-" + portfolioI.getPortfolioID() + ".txt"
+        for typeIdI, portfolioIdI, portfolioI in zip(types, portfolioIds, portfolio):
+            fileNameI:str = dir + os.sep + "computation-" + str(portfolioIdI) + ".txt"
             cls.computationFileDict[typeIdI] = open(fileNameI, "a")
 
-        for typeIdI, portfolioI in zip(types, portfolio):
-            fileNameI:str = dir + os.sep + "portfModelTimeEvolution-" + portfolioI.getPortfolioID() + ".txt"
+        for typeIdI, portfolioIdI, portfolioI in zip(types, portfolioIds, portfolio):
+            fileNameI:str = dir + os.sep + "portfModelTimeEvolution-" + str(portfolioIdI) + ".txt"
             cls.portModelTimeEvolutionFilesDict[typeIdI] = open(fileNameI, "a")
 
-        for typeIdI, portfolioI in zip(types, portfolio):
-            fileNameI:str = dir + os.sep + "historyOfRecommendation-" + portfolioI.getPortfolioID() + ".txt"
+        for typeIdI, portfolioIdI, portfolioI in zip(types, portfolioIds, portfolio):
+            fileNameI:str = dir + os.sep + "historyOfRecommendation-" + str(portfolioIdI) + ".txt"
             cls.historyOfRecommendationFilesDict[typeIdI] = open(fileNameI, "a")
 
 
