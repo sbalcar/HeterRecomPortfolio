@@ -64,7 +64,7 @@ class AggrFuzzyDHondtINF(AggrFuzzyDHondt):
                 userID, methodsResultDict, self._history)
 
         itemsWithResposibilityOfRecommenders:List[int,np.Series[int,str]] =\
-            super().run(methodsResultNewDict, modelDF, userID, numberOfItems=numberOfItems)
+            super().run(methodsResultNewDict, modelDF, userID, numberOfItems=numberOfItems, argumentsDict=argumentsDict)
 
         # list<(itemID:int, Series<(rating:int, methodID:str)>)>
         return itemsWithResposibilityOfRecommenders
@@ -101,7 +101,7 @@ class AggrFuzzyDHondtINF(AggrFuzzyDHondt):
                 userID, methodsResultDict, self._history)
 
         itemsWithResposibilityOfRecommenders:List[int,Series[int,str]] = super().runWithResponsibility(
-            methodsResultNewDict, modelDF, userID, numberOfItems=numberOfItems)
+            methodsResultNewDict, modelDF, userID, numberOfItems=numberOfItems, argumentsDict=argumentsDict)
 
         # list<(itemID:int, Series<(rating:int, methodID:str)>)>
         return itemsWithResposibilityOfRecommenders
