@@ -67,8 +67,16 @@ class BatchSTDHondtThompsonSamplingINF(ABatchST):
         for penalClassI in [PenalUsingReduceRelevance, PenalUsingProbability]:
             for staticFncI in cls.getParamsForStaticFncs():
                 for linerFncI in cls.getParamsForLinerFncs():
+                    rI:str = ""
+                    if penalClassI == PenalUsingReduceRelevance:
+                        rI = "Reduce"
+                    elif penalClassI == PenalUsingProbability:
+                        rI = "ReduceProb"
+                    else:
+                        raise ValueError("That is not a positive!")
+
                     pFncI = penalClassI(penaltyStatic, [staticFncI], penaltyLinear, [linerFncI[0], linerFncI[1], 100], 100)
-                    keyI: str = "OStat" + str(staticFncI).replace(".", "") + "HLin" + str(linerFncI[0]).replace(".", "") + str(linerFncI[1]).replace(".", "")
+                    keyI: str = rI + "OStat" + str(staticFncI).replace(".", "") + "HLin" + str(linerFncI[0]).replace(".", "") + str(linerFncI[1]).replace(".", "")
                     print(keyI)
 
                     functionsDict[keyI] = pFncI
@@ -82,8 +90,16 @@ class BatchSTDHondtThompsonSamplingINF(ABatchST):
         for penalClassI in [PenalUsingReduceRelevance, PenalUsingProbability]:
             for linerFncI in cls.getParamsForLinerFncs():
                 for linerFncJ in cls.getParamsForLinerFncs():
+                    rI:str = ""
+                    if penalClassI == PenalUsingReduceRelevance:
+                        rI = "Reduce"
+                    elif penalClassI == PenalUsingProbability:
+                        rI = "ReduceProb"
+                    else:
+                        raise ValueError("That is not a positive!")
+
                     pFncI = penalClassI(penaltyLinear, [linerFncI[0], linerFncI[1], 20], penaltyLinear, [linerFncJ[0], linerFncJ[1], 100], 100)
-                    keyI:str = "OLin" + str(linerFncI[0]).replace(".","") + str(linerFncI[1]).replace(".","") + "HLin" + str(linerFncJ[0]).replace(".","") + str(linerFncJ[1]).replace(".","")
+                    keyI:str = rI + "OLin" + str(linerFncI[0]).replace(".","") + str(linerFncI[1]).replace(".","") + "HLin" + str(linerFncJ[0]).replace(".","") + str(linerFncJ[1]).replace(".","")
                     print(keyI)
                     functionsDict[keyI] = pFncI
                     aI = str(penalClassI.__name__) + "(penaltyLinear, [" + str(linerFncI[0]) + ", " + str(linerFncI[1]) + ", 20], penaltyLinear, [" + str(linerFncI[0]) + ", " + str(linerFncI[1]) + ", 100], 100)"
@@ -148,8 +164,4 @@ if __name__ == "__main__":
     os.chdir("..")
     os.chdir("..")
 
-#    a = BatchSTDHondtThompsonSamplingINF.getStaticLinerFncs()
-#    a = BatchSTDHondtThompsonSamplingINF.getLinearLinerFncs()
-
     BatchSTDHondtThompsonSamplingINF.generateBatches()
-    #print(a)
