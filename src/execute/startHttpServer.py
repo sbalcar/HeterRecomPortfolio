@@ -60,6 +60,7 @@ from portfolioDescription.portfolio1AggrDescription import Portfolio1AggrDescrip
 
 from evaluationTool.aEvalTool import AEvalTool #class
 from evaluationTool.evalToolSingleMethod import EToolSingleMethod #class
+from evaluationTool.evalToolBanditTS import EvalToolBanditTS #class
 from evaluationTool.evalToolDHondtBanditVotes import EvalToolDHondtBanditVotes #class
 from evaluationTool.evalToolContext import EvalToolContext  # class
 
@@ -73,7 +74,6 @@ from input.modelDefinition import ModelDefinition
 from aggregationDescription.aggregationDescription import AggregationDescription #class
 
 from evaluationTool.evalToolDHondt import EvalToolDHondt #class
-from evaluationTool.evalToolBanditTS import EvalToolBanditTS #class
 
 from aggregation.operators.aDHondtSelector import ADHondtSelector #class
 from aggregation.operators.rouletteWheelSelector import RouletteWheelSelector #class
@@ -93,28 +93,30 @@ def startHttpServer():
 
   print("TrainingPortfolios")
 
-  #port1, model1, evalTool1 = getTheMostPopular()
-  port1, model1, evalTool1 = getW2Vtalli100000ws1vs32upsmaxups1()
-  #port1, model1, evalTool1, history1 = getFuzzyDHont()
-  #port2, model2, evalTool2, history2 = getFuzzyDHontINF()
+  #port1, model1, evalTool1, history1 = getTheMostPopular()
+  port1, model1, evalTool1, history1 = getW2Vtalli100000ws1vs32upsmaxups1()
   port2, model2, evalTool2, history2 = getBanditTS()
+  #port2, model2, evalTool2, history2 = getFuzzyDHont()
+  #port2, model2, evalTool2, history2 = getFuzzyDHontINF()
   #port3, model3, evalTool3, history3 = getFuzzyDHontThompsonSamplingINF()
-  port4, model4, evalTool4, history4 = getContextFuzzyDHondt()
-  port5, model5, evalTool5, history5 = getContextFuzzyDHondtINF()
+  port4, model4, evalTool4, history4 = getFuzzyDHontThompsonSamplingDirectOptimizeINF()#getContextFuzzyDHondtDirectOptimizeINF()
+  #port5, model5, evalTool5, history5 = getContextFuzzyDHondtINF()
 
+  portfolios: List[APortfolio] = [port4]
+  models: List[DataFrame] = [model4]
+  evalTools: List[AEvalTool] = [evalTool4]
+  histories: List[AHistory] = [history4]
 
-  portfolios:List[APortfolio] = [port4]
-  models:List[DataFrame] = [model4]
-  evalTools:List[AEvalTool] = [evalTool4]
-  histories:List[AHistory] = [history4]
-
-#  portfolios:List[APortfolio] = [port1, port2, port3, port4, port5]
-#  models:List[DataFrame] = [model1, model2, model3, model4, model5]
-#  evalTools:List[AEvalTool] = [evalTool1, evalTool2, evalTool3, evalTool4, evalTool5]
-#  histories:List[AHistory] = [history1, history2, history3, history4, history5]
-
+  #  portfolios:List[APortfolio] = [port1, port2, port3, port4, port5]
+  #  models:List[DataFrame] = [model1, model2, model3, model4, model5]
+  #  evalTools:List[AEvalTool] = [evalTool1, evalTool2, evalTool3, evalTool4, evalTool5]
+  #  histories:List[AHistory] = [history1, history2, history3, history4, history5]
 
   HeterRecomHTTPHandler.initialization(portfolios, models, evalTools, histories, DatasetST)
+
+#  HeterRecomHTTPHandler.evaluation:Dict = {}
+#  #HeterRecomHTTPHandler.datasetClass = DatasetML
+#  HeterRecomHTTPHandler.datasetClass = DatasetST
 
   print("StartHTTPServer")
 
@@ -188,8 +190,8 @@ def getBanditTS():
 
 def getFuzzyDHont():
 
-  #taskID:str = "Web" + "FuzzyDHondt" + "Roulette1"
-  taskID:str = "Web" + "FuzzyDHondt" + "Fixed"
+  #taskID:str = "FuzzyDHondt" + "Roulette1"
+  taskID:str = "FuzzyDHondt" + "Fixed"
   dataset:ADataset = DatasetST.readDatasets()
 
   #selector:ADHondtSelector = RouletteWheelSelector({RouletteWheelSelector.ARG_EXPONENT: 1})
@@ -218,7 +220,7 @@ def getFuzzyDHont():
 
 def getFuzzyDHontThompsonSamplingINF():
 
-  taskID:str = "Web" + "FuzzyDHondtThompsonSamplingINF" + "Fixed" + "OLin0802HLin1002"
+  taskID:str = "FuzzyDHondtThompsonSamplingINF" + "Fixed" + "OLin0802HLin1002"
 
   selector:ADHondtSelector = TheMostVotedItemSelector({})
 
@@ -244,12 +246,33 @@ def getFuzzyDHontThompsonSamplingINF():
 
   return (port, model, evalTool, history)
 
+def getFuzzyDHontThompsonSamplingDirectOptimizeINF():
+
+  taskID:str = "FuzzyDHondtThompsonSamplingDirectOptimizeINF" + "Fixed" + "OLin0802HLin1002"
+  selector:ADHondtSelector = TheMostVotedItemSelector({})
+  penalization:APenalization = PenalizationToolDefinition.exportProbPenaltyToolOLin0802HLin1002(20)
+  aDescDHont:AggregationDescription = InputAggrDefinition.exportADescDHondtThompsonSamplingDirectOptimizeINF(selector, penalization)
+
+  rIDs, rDescs = InputRecomSTDefinition.exportPairOfRecomIdsAndRecomDescrs()
+
+  pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
+    taskID, rIDs, rDescs, aDescDHont)
+  history:AHistory = HistoryHierDF(taskID)
+  dataset:ADataset = DatasetST.readDatasets()
+  port:APortfolio = pDescr.exportPortfolio(taskID, history)
+  port.train(history, dataset)
+  model:DataFrame = ModelDefinition.createDHondtBanditsVotesModel(pDescr.getRecommendersIDs())
+  evalTool:AEvalTool = EvalToolDHondtBanditVotes({})
+
+  return (port, model, evalTool, history)
+
+
 
 
 def getFuzzyDHontINF():
 
-  #taskID:str = "Web" + "FuzzyDHondtINF" + "Roulette1"
-  taskID:str = "Web" + "FuzzyDHondt" + "Fixed"
+  #taskID:str = "FuzzyDHondtINF" + "Roulette1"
+  taskID:str = "FuzzyDHondt" + "Fixed"
   dataset:ADataset = DatasetST.readDatasets()
 
   #selector:ADHondtSelector = RouletteWheelSelector({RouletteWheelSelector.ARG_EXPONENT: 1})
@@ -280,8 +303,8 @@ def getFuzzyDHontINF():
 
 def getContextFuzzyDHondt():
 
-  #taskID:str = "Web" + "ContextFuzzyDHondt" + "Roulette1"
-  taskID:str = "Web" + "ContextFuzzyDHondt" + "Fixed"
+  #taskID:str = "ContextFuzzyDHondt" + "Roulette1"
+  taskID:str = "ContextFuzzyDHondt" + "Fixed"
   dataset:ADataset = DatasetST.readDatasets()
 
   #selector:ADHondtSelector = RouletteWheelSelector({RouletteWheelSelector.ARG_EXPONENT: 1})
@@ -317,8 +340,8 @@ def getContextFuzzyDHondt():
 
 
 def getContextFuzzyDHondtINF():
-  # taskID:str = "Web" + "ContextFuzzyDHondtINF" + "Roulette1"
-  taskID:str = "Web" + "ContextFuzzyDHondtINF" + "Fixed"
+  # taskID:str = "ContextFuzzyDHondtINF" + "Roulette1"
+  taskID:str = "ContextFuzzyDHondtINF" + "Fixed"
   dataset:ADataset = DatasetST.readDatasets()
 
   # selector:ADHondtSelector = RouletteWheelSelector({RouletteWheelSelector.ARG_EXPONENT: 1})
@@ -349,6 +372,42 @@ def getContextFuzzyDHondtINF():
   model:DataFrame = ModelDefinition.createDHontModel(pDescr.getRecommendersIDs())
 
   return (port, model, evalTool, history)
+
+
+def getContextFuzzyDHondtDirectOptimizeINF():
+  # taskID:str = "ContextFuzzyDHondtDirectOptimizeINF" + "Roulette1"
+  taskID:str = "ContextFuzzyDHondtDirectOptimizeINF" + "Fixed"
+  dataset:ADataset = DatasetST.readDatasets()
+
+  # selector:ADHondtSelector = RouletteWheelSelector({RouletteWheelSelector.ARG_EXPONENT: 1})
+  selector:ADHondtSelector = TheMostVotedItemSelector({})
+
+  pToolOLin0802HLin1002:APenalization = PenalizationToolDefinition.exportProbPenaltyToolOLin0802HLin1002(
+    InputSimulatorDefinition.numberOfAggrItems)
+
+  rIDs, rDescs = InputRecomSTDefinition.exportPairOfRecomIdsAndRecomDescrs()
+
+  history:AHistory = HistoryHierDF(taskID)
+
+  # Init eTool
+  evalTool:AEvalTool = EvalToolContext({
+    EvalToolContext.ARG_ITEMS: dataset.serialsDF,  # ITEMS
+    EvalToolContext.ARG_EVENTS: dataset.eventsDF,  # EVENTS (FOR CALCULATING HISTORY OF USER)
+    EvalToolContext.ARG_DATASET: "st",  # WHAT DATASET ARE WE IN
+    EvalToolContext.ARG_HISTORY: history})  # empty instance of AHistory is OK for ST dataset
+
+  aDescDHont:AggregationDescription = InputAggrDefinition.exportADescDContextHondtDirectOptimizeINF(selector, pToolOLin0802HLin1002, evalTool)
+
+  pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
+    taskID, rIDs, rDescs, aDescDHont)
+
+  port:APortfolio = pDescr.exportPortfolio(taskID, history)
+  port.train(history, dataset)
+
+  model:DataFrame = ModelDefinition.createDHontModel(pDescr.getRecommendersIDs())
+
+  return (port, model, evalTool, history)
+
 
 
 if __name__ == "__main__":

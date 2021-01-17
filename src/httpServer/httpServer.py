@@ -96,8 +96,8 @@ class HeterRecomHTTPHandler(BaseHTTPRequestHandler):
         cls.modelsDict = dict(zip(types,models))
         cls.evalToolsDict = dict(zip(types,evalTools))
         cls.historiesDict = dict(zip(types,histories))
+        cls.evaluationDict:Dict = dict(zip(types,[0]*len(types)))
 
-        #  HeterRecomHTTPHandler.evaluation:Dict = {}
         cls.datasetClass = datasetClass
 
         for typeIdI, portfolioI in zip(types, portfolio):
@@ -281,8 +281,10 @@ class HeterRecomHTTPHandler(BaseHTTPRequestHandler):
                         EvalToolContext.ARG_SENIORITY: sessionID,
                         EvalToolContext.ARG_PAGE_TYPE: pageType
                         })
+        numberOfClicks:int = self.evaluationDict[variant] +1
+        self.evaluationDict[variant] = numberOfClicks
 
-        print("evaluation: ", str(self.evaluation))
+        print("evaluation: ", str(numberOfClicks))
 
         self.portModelTimeEvolutionFilesDict[variant].write("currentItemID: " + str(itemID) + "\n")
         self.portModelTimeEvolutionFilesDict[variant].write("userID: " + str(userID) + "\n")
@@ -291,7 +293,7 @@ class HeterRecomHTTPHandler(BaseHTTPRequestHandler):
 
         self.computationFileDict[variant].write("RatingI: " + str(datetime.now().strftime("%H:%M:%S")) + "\n")
         self.computationFileDict[variant].write("PortfolioIds: " + str(variant) + "\n")
-        #self.computationFileDict[variant].write("Evaluations: " + str(evaluations) + "\n")
+        self.computationFileDict[variant].write("Evaluations: " + str(numberOfClicks) + "\n")
         self.computationFileDict[variant].flush()
 
         self.send_response(200)
@@ -373,7 +375,7 @@ class HeterRecomHTTPHandler(BaseHTTPRequestHandler):
                         EvalToolContext.ARG_ITEM_ID: itemID,
                         EvalToolContext.ARG_SENIORITY: sessionID,
                         EvalToolContext.ARG_PAGE_TYPE: pageType
-                        })#self.evaluation)
+                        })
 
 
         self.historiesDict[variant].insertRecomAndClickedItemIDs(userID, rItemIDs, [])
