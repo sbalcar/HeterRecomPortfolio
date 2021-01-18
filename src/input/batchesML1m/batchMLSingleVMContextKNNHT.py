@@ -22,26 +22,27 @@ from simulator.simulator import Simulator #class
 
 from history.historyHierDF import HistoryHierDF #class
 
+from recommender.aRecommender import ARecommender #class
+from recommender.recommenderVSKNN import RecommenderVMContextKNN #class
+
 import pandas as pd
+from input.aBatch import ABatch #class
 from input.aBatch import BatchParameters #class
-from input.aBatchML import ABatchML #class
+
+from input.aBatchST import ABatchST #class
 
 
-class BatchMLSingle(ABatchML):
+class BatchMLVMContextKNNHT(ABatchST):
 
     @staticmethod
     def getParameters():
 
         aDict:dict = {}
-        #aDict[InputRecomMLDefinition.COS_CB_MEAN] = InputRecomMLDefinition.COS_CB_MEAN
-        #aDict[InputRecomMLDefinition.COS_CB_WINDOW3] = InputRecomMLDefinition.COS_CB_WINDOW3
-        aDict[InputRecomMLDefinition.THE_MOST_POPULAR] = InputRecomMLDefinition.THE_MOST_POPULAR
-        #aDict[InputRecomMLDefinition.W2V_POSNEG_MEAN] = InputRecomMLDefinition.W2V_POSNEG_MEAN
-        #aDict[InputRecomMLDefinition.W2V_POSNEG_WINDOW3] = InputRecomMLDefinition.W2V_POSNEG_WINDOW3
-        aDict[InputRecomMLDefinition.KNN] = InputRecomMLDefinition.KNN
-        #aDict[InputRecomMLDefinition.BPRMF] = InputRecomMLDefinition.BPRMF
-
+        for kI in [25, 50, 75]:
+            keyI:str = "K" + str(kI)
+            aDict[keyI] = kI
         return aDict
+
 
 
     def run(self, batchID:str, jobID:str):
@@ -51,11 +52,14 @@ class BatchMLSingle(ABatchML):
         repetition:int
         divisionDatasetPercentualSize, uBehaviour, repetition = BatchParameters.getBatchParameters(self.datasetID)[batchID]
 
-        recommenderID:str = self.getParameters()[jobID]
+        kI:str = self.getParameters()[jobID]
 
-        rDescr:RecommenderDescription = InputRecomMLDefinition.exportInputRecomDefinition(recommenderID)
+        recommenderID:str = "RecommendervmContextKNN" + "K" + str(kI)
 
-        pDescr:APortfolioDescription = Portfolio1MethDescription(recommenderID.title(), recommenderID, rDescr)
+        rVMCtKNN:RecommenderDescription = RecommenderDescription(RecommenderVMContextKNN, {
+                    RecommenderVMContextKNN.ARG_K: kI})
+
+        pDescr:APortfolioDescription = Portfolio1MethDescription(recommenderID.title(), recommenderID, rVMCtKNN)
 
         simulator:Simulator = InputSimulatorDefinition.exportSimulatorML1M(
                 batchID, divisionDatasetPercentualSize, uBehaviour, repetition)
@@ -66,5 +70,6 @@ class BatchMLSingle(ABatchML):
 if __name__ == "__main__":
    os.chdir("..")
    os.chdir("..")
-   print(os.getcwd())
-   BatchMLSingle.generateBatches()
+   #print(os.getcwd())
+
+   BatchMLVMContextKNNHT.generateBatches()

@@ -39,37 +39,7 @@ class BatchSTSingleW2VHT(ABatchST):
 
     @staticmethod
     def getParameters():
-
-        trainVariants:List[str] = ["all"]
-        iterations:List[int] = [50000, 100000, 200000]
-        windowSizes:List[int] = [5, 3, 1]
-        vectorSizes:List[int] = [32, 64, 128]
-        userProfileStrategies:List[str] =  ["mean", "max", "weightedMean"]
-        userProfileSizes:List[int] = [-1, 1, 3, 5, 7, 10]
-
-        aDict:dict = {}
-        for trainVariantI in trainVariants:
-            for iterationI in iterations:
-                for windowSizeI in windowSizes:
-                    for vectorSizeI in vectorSizes:
-                        for userProfileStrategyI in userProfileStrategies:
-                            for userProfileSizeI in userProfileSizes:
-
-                                keyI:str = "RecommenderW2V" + "t" + str(trainVariantI) + "i" + str(iterationI) +\
-                                            "ws" + str(windowSizeI) + "vs" + str(vectorSizeI) +\
-                                            "ups" + userProfileStrategyI + "ups" + str(userProfileSizeI)
-
-                                rW2V:ARecommender = RecommenderDescription(RecommenderW2V, {
-                                    RecommenderW2V.ARG_ITERATIONS: iterationI,
-                                    RecommenderW2V.ARG_TRAIN_VARIANT: trainVariantI,
-                                    RecommenderW2V.ARG_USER_PROFILE_SIZE: userProfileSizeI,
-                                    RecommenderW2V.ARG_USER_PROFILE_STRATEGY: userProfileStrategyI,
-                                    RecommenderW2V.ARG_VECTOR_SIZE: vectorSizeI,
-                                    RecommenderW2V.ARG_WINDOW_SIZE: windowSizeI})
-
-                                aDict[keyI] = rW2V
-        return aDict
-
+        return BatchMLSingleW2VHT.getParameters()
 
 
     def run(self, batchID: str, jobID: str):

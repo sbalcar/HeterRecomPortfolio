@@ -26,6 +26,8 @@ from input.batchesML1m.batchMLSingle2 import BatchMLSingle2 #class
 from input.batchesML1m.batchMLSingleBPRMFHT import BatchMLSingleBPRMFHT #class
 from input.batchesML1m.batchMLSingleW2VHT import BatchMLSingleW2VHT #class
 from input.batchesML1m.batchMLSingleCosineCBHT import BatchMLSingleCosineCBHT #class
+from input.batchesML1m.batchMLSingleBPRMFHT import BatchMLSingleBPRMFHT  #class
+from input.batchesML1m.batchMLSingleVMContextKNNHT import BatchMLVMContextKNNHT #class
 
 from input.batchesRetailrocket.batchRRSingle import BatchRRSingle #class
 from input.batchesRetailrocket.batchRRSingleW2VHT import BatchRRSingleW2VHT #class
@@ -66,20 +68,21 @@ def generateBatches():
 
 #    BatchMLWeightedAVG.generateBatches()
 
-#    BatchMLSingle.generateBatches()
+    BatchMLSingle.generateBatches()
 #    BatchMLSingleINF.generateBatches()
 
 #    BatchMLSingle2.generateBatches()
-#    BatchMLSingleBPRMFHT.generateBatches()
-#    BatchMLSingleW2VHT.generateBatches()
-#    BatchMLSingleCosineCBHT.generateBatches()
+    BatchMLSingleBPRMFHT.generateBatches()
+    BatchMLSingleW2VHT.generateBatches()
+    BatchMLSingleCosineCBHT.generateBatches()
+    BatchMLVMContextKNNHT.generateBatches()
 
     # RR
 #    BatchRRSingle.generateBatches()
 #    BatchRRSingleW2VHT.generateBatches()
 
     #ST
-    BatchSTContextDHondtINF.generateBatches()
+#    BatchSTContextDHondtINF.generateBatches()
 #    BatchSTContextDHondt.generateBatches()
 #    BatchSTDHondtThompsonSampling.generateBatches()
 #    BatchSTFuzzyDHondtDirectOptimize.generateBatches()
@@ -88,12 +91,11 @@ def generateBatches():
 #    BatchSTWeightedAVG.generateBatches()
 #    BatchSTBanditTS.generateBatches()
 
-#    BatchSTVMContextKNNHT.generateBatches()
 #    BatchSTSingle.generateBatches()
 #    BatchSTSingleBPRMFHT.generateBatches()
 #    BatchSTSingleW2VHT.generateBatches()
 #    BatchSTSingleCosineCBHT.generateBatches()
-
+#    BatchSTVMContextKNNHT.generateBatches()
 
 if __name__ == "__main__":
 

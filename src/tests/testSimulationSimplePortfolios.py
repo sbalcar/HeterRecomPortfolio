@@ -352,7 +352,7 @@ if __name__ == "__main__":
     #test02()  # W2V
     #test03()  # KNNN
     #test04()  # CB
-    #test05()  # MF
+    test05()  # MF
 
     # Simulation RR
     #test11()  # TheMostPopular

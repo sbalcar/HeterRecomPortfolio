@@ -30,18 +30,14 @@ from input.aBatch import ABatch #class
 from input.aBatch import BatchParameters #class
 
 from input.aBatchST import ABatchST #class
+from input.batchesML1m.batchMLSingleVMContextKNNHT import BatchMLVMContextKNNHT #class
 
 
 class BatchSTVMContextKNNHT(ABatchST):
 
     @staticmethod
     def getParameters():
-
-        aDict:dict = {}
-        for kI in [25, 50, 75]:
-            keyI:str = "K" + str(kI)
-            aDict[keyI] = kI
-        return aDict
+        return BatchMLVMContextKNNHT.getParameters()
 
 
 
