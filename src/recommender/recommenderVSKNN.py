@@ -132,6 +132,7 @@ class RecommenderVMContextKNN(ARecommender):
             # ratingsSum:Dataframe<(userId:int, movieId:int, ratings:int, timestamp:int)>
             dataset.ratingsDF.sort_values(by=Ratings.COL_USERID,inplace=True)
             ratingsDF:DataFrame = dataset.ratingsDF.loc[dataset.ratingsDF[Ratings.COL_RATING] >= 4]
+            self.user_key = Ratings.COL_USERID
 
         elif type(dataset) is DatasetRetailRocket:
             from datasets.retailrocket.events import Events  # class
@@ -272,9 +273,12 @@ class RecommenderVMContextKNN(ARecommender):
 
     def recommend(self, userID: int, numberOfItems:int,  argumentsDict:Dict[str,object]):
 
-            
         # Get recommendations for user
-        usersData = self._trainDataset.eventsDF.loc[self._trainDataset.eventsDF[self.user_key] == userID]
+        if type(self._trainDataset) is DatasetML:
+            usersData = self._trainDataset.ratingsDF.loc[self._trainDataset.ratingsDF[self.user_key] == userID]
+        elif type(self._trainDataset) is DatasetST:
+            usersData = self._trainDataset.eventsDF.loc[self._trainDataset.eventsDF[self.user_key] == userID]
+
         if len(usersData) == 0:
             return Series([], index=[])
         #print(len(usersData))    
