@@ -29,10 +29,10 @@ import pandas as pd
 from input.aBatch import ABatch #class
 from input.aBatch import BatchParameters #class
 
-from input.aBatchST import ABatchST #class
+from input.aBatchML import ABatchML #class
 
 
-class BatchMLVMContextKNNHT(ABatchST):
+class BatchMLVMContextKNNHT(ABatchML):
 
     @staticmethod
     def getParameters():
