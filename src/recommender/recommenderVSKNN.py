@@ -130,7 +130,7 @@ class RecommenderVMContextKNN(ARecommender):
         
         if type(dataset) is DatasetML:
             # ratingsSum:Dataframe<(userId:int, movieId:int, ratings:int, timestamp:int)>
-            dataset.ratingsDF.sort_values(by=Ratings.COL_USER_ID,inplace=True)
+            dataset.ratingsDF.sort_values(by=Ratings.COL_USERID,inplace=True)
             ratingsDF:DataFrame = dataset.ratingsDF.loc[dataset.ratingsDF[Ratings.COL_RATING] >= 4]
 
         elif type(dataset) is DatasetRetailRocket:
