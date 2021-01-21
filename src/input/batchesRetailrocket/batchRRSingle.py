@@ -36,7 +36,7 @@ class BatchRRSingle(ABatchRR):
 
         aDict:dict = {}
         aDict[InputRecomMLDefinition.THE_MOST_POPULAR] = InputRecomMLDefinition.THE_MOST_POPULAR
-        aDict[InputRecomMLDefinition.BPRMF] = InputRecomMLDefinition.BPRMF
+        aDict[InputRecomMLDefinition.BPRMFf100i10lr0003r01] = InputRecomMLDefinition.BPRMFf100i10lr0003r01
 
         return aDict
 

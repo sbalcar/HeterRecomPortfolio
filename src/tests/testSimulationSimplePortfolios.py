@@ -128,7 +128,7 @@ def test02():
 
     print("Simulation: ML W2V")
 
-    rDescr:RecommenderDescription = InputRecomMLDefinition.exportRDescW2vPositiveMax()
+    rDescr:RecommenderDescription = InputRecomMLDefinition.exportRDescW2Vtpositivei50000ws1vs32upsweightedMeanups3()
 
     pDescr:APortfolioDescription = Portfolio1MethDescription("W2vPositiveMax",
                                     "w2vPositiveMax", rDescr)
@@ -167,7 +167,7 @@ def test04():
     print("Simulation: ML CB")
 
     #rDescr:RecommenderDescription = InputRecomMLDefinition.exportRDescCBmean()
-    rDescr:RecommenderDescription = InputRecomMLDefinition.exportRDescCBwindow3()
+    rDescr:RecommenderDescription = InputRecomMLDefinition.exportRDescCosineCBcbdOHEupsmaxups1()
 
 
     #pDescr:APortfolioDescription = Portfolio1MethDescription(InputRecomMLDefinition.COS_CB_MEAN.title(),
@@ -190,10 +190,10 @@ def test05():
 
     print("Simulation: ML MF")
 
-    rDescr:RecommenderDescription = InputRecomMLDefinition.exportRDescBPRMF()
+    rDescr:RecommenderDescription = InputRecomMLDefinition.exportRDescBPRMFf100i10lr0003r01()
 
-    pDescr:APortfolioDescription = Portfolio1MethDescription(InputRecomMLDefinition.BPRMF.title(),
-                                                             InputRecomMLDefinition.BPRMF, rDescr)
+    pDescr:APortfolioDescription = Portfolio1MethDescription(InputRecomMLDefinition.BPRMFf100i10lr0003r01.title(),
+                                                             InputRecomMLDefinition.BPRMFf100i10lr0003r01, rDescr)
 
 
     batchID:str = "ml1mDiv90Ulinear0109R1"
@@ -204,6 +204,25 @@ def test05():
     # simulation of portfolio
     simulator:Simulator = Simulator(batchID, SimulationML, argsSimulationDict, dataset, behavioursDF)
     simulator.simulate([pDescr], [DataFrame()], [EToolSingleMethod({})], [HistoryHierDF(pDescr.getPortfolioID())])
+
+def test06():
+
+    print("Simulation: ML VMCMF")
+
+    rDescr:RecommenderDescription = InputRecomSTDefinition.exportRDescVMContextKNN()
+
+    pDescr:APortfolioDescription = Portfolio1MethDescription(InputRecomSTDefinition.VMC_KNN.title(),
+                                                             InputRecomSTDefinition.VMC_KNN, rDescr)
+
+    batchID:str = "mlDiv90Ulinear0109R1"
+    dataset:DatasetML = DatasetML.readDatasets()
+    behaviourFile:str = BehavioursML.getFile(BehavioursML.BHVR_LINEAR0109)
+    behavioursDF:DataFrame = BehavioursML.readFromFileMl1m(behaviourFile)
+
+    # simulation of portfolio
+    simulator:Simulator = Simulator(batchID, SimulationML, argsSimulationDict, dataset, behavioursDF)
+    simulator.simulate([pDescr], [DataFrame()], [EToolSingleMethod({})], [HistoryHierDF(pDescr.getPortfolioID())])
+
 
 
 def test11():
@@ -288,7 +307,7 @@ def test24():
 
     print("Simulation: ST CB")
 
-    rDescr:RecommenderDescription = InputRecomMLDefinition.exportRDescCBmean()
+    rDescr:RecommenderDescription = InputRecomMLDefinition.exportRDescCosineCBcbdOHEupsweightedMeanups3()
 
     pDescr:APortfolioDescription = Portfolio1MethDescription(InputRecomMLDefinition.COS_CB_MEAN.title(),
                                                              InputRecomMLDefinition.COS_CB_MEAN, rDescr)
@@ -307,10 +326,10 @@ def test25():
 
     print("Simulation: ST MF")
 
-    rDescr:RecommenderDescription = InputRecomMLDefinition.exportRDescBPRMF()
+    rDescr:RecommenderDescription = InputRecomMLDefinition.exportRDescBPRMFf100i10lr0003r01()
 
-    pDescr:APortfolioDescription = Portfolio1MethDescription(InputRecomMLDefinition.BPRMF.title(),
-                                                             InputRecomMLDefinition.BPRMF, rDescr)
+    pDescr:APortfolioDescription = Portfolio1MethDescription(InputRecomMLDefinition.BPRMFf100i10lr0003r01.title(),
+                                                             InputRecomMLDefinition.BPRMFf100i10lr0003r01, rDescr)
 
     batchID:str = "slantourDiv90Ulinear0109R1"
     dataset:DatasetST = DatasetST.readDatasets()
@@ -352,13 +371,14 @@ if __name__ == "__main__":
     #test02()  # W2V
     #test03()  # KNNN
     #test04()  # CB
-    test05()  # MF
+    #test05()  # MF
+    test06()
 
     # Simulation RR
     #test11()  # TheMostPopular
 
     # Simulation ST
-    test21()  # TheMostPopular
+    #test21()  # TheMostPopular
     #test22()  # W2V
     #test23()  # KNN
     #test24()  # CB

@@ -59,7 +59,7 @@ def generateBatches():
 #    BatchMLFuzzyDHondtINF.generateBatches()
 
 #    BatchMLDHondtThompsonSampling.generateBatches()
-#    BatchMLDHondtThompsonSamplingINF.generateBatches()
+    BatchMLDHondtThompsonSamplingINF.generateBatches()
 
 #    BatchMLFuzzyDHondtDirectOptimize.generateBatches()
 #    BatchMLFuzzyDHondtDirectOptimizeINF.generateBatches()
@@ -68,14 +68,14 @@ def generateBatches():
 
 #    BatchMLWeightedAVG.generateBatches()
 
-    BatchMLSingle.generateBatches()
+##    BatchMLSingle.generateBatches()
 #    BatchMLSingleINF.generateBatches()
 
 #    BatchMLSingle2.generateBatches()
-    BatchMLSingleBPRMFHT.generateBatches()
-    BatchMLSingleW2VHT.generateBatches()
-    BatchMLSingleCosineCBHT.generateBatches()
-    BatchMLVMContextKNNHT.generateBatches()
+##    BatchMLSingleBPRMFHT.generateBatches()
+##    BatchMLSingleW2VHT.generateBatches()
+##    BatchMLSingleCosineCBHT.generateBatches()
+##    BatchMLVMContextKNNHT.generateBatches()
 
     # RR
 #    BatchRRSingle.generateBatches()
@@ -85,6 +85,7 @@ def generateBatches():
 #    BatchSTContextDHondtINF.generateBatches()
 #    BatchSTContextDHondt.generateBatches()
 #    BatchSTDHondtThompsonSampling.generateBatches()
+#    BatchSTDHondtThompsonSamplingINF.generateBatches()
 #    BatchSTFuzzyDHondtDirectOptimize.generateBatches()
 #    BatchSTFuzzyDHondt.generateBatches()
 #    BatchSTFuzzyDHondtINF.generateBatches()

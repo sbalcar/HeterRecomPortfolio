@@ -54,7 +54,7 @@ class BatchMLSingleW2VHT(ABatchML):
                         for userProfileStrategyI in userProfileStrategies:
                             for userProfileSizeI in userProfileSizes:
 
-                                keyI:str = "RecommenderW2V" + "t" + str(trainVariantI) + "i" + str(iterationI) +\
+                                keyI:str = "t" + str(trainVariantI) + "i" + str(iterationI) +\
                                             "ws" + str(windowSizeI) + "vs" + str(vectorSizeI) +\
                                             "ups" + userProfileStrategyI + "ups" + str(userProfileSizeI)
 

@@ -150,7 +150,7 @@ class InputRecomSTDefinition:
         elif recommenderID == cls.KNN:
             return cls.exportRDescKNN()
         elif recommenderID == cls.VMC_KNN:
-            return cls.exportRDescVMContextKNN()
+            return cls.exportRDescVMContextKNNk25()
         elif recommenderID == cls.COS_CB_OHE_MEAN1:
             return cls.exportRDescCosineCBcbdOHEupsmeanups1()
         elif recommenderID == cls.COS_CB_OHE_WEIGHTEDMEAN5:

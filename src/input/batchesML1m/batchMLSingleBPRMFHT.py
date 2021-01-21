@@ -49,7 +49,7 @@ class BatchMLSingleBPRMFHT(ABatchML):
             for iterationI in iterations:
                 for learningRateI in learningRates:
                     for regularizationI in regularizations:
-                        keyI:str = "RecommenderBPRMF" + "f" + str(factorI) + "i" + str(iterationI) +\
+                        keyI:str = "f" + str(factorI) + "i" + str(iterationI) +\
                                    "lr" + str(learningRateI).replace('.', '') + "r" + str(regularizationI).replace('.', '')
 
                         rBPRMFI:ARecommender = RecommenderDescription(RecommenderBPRMF, {

@@ -56,7 +56,7 @@ class BatchMLSingleCosineCBHT(ABatchML):
                     else:
                         print("error")
 
-                    keyI:str = "RecommenderCosineCB" + "cbd" + str(cbDataPathStrI) + "ups" + str(userProfileStrategyI) +\
+                    keyI:str = "cbd" + str(cbDataPathStrI) + "ups" + str(userProfileStrategyI) +\
                                "ups" + str(userProfileSizeI)
 
                     rCBI: ARecommender = RecommenderDescription(RecommenderCosineCB, {

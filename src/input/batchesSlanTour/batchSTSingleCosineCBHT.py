@@ -2,7 +2,8 @@
 
 import os
 
-from typing import List
+from typing import List #class
+from typing import Dict #class
 
 from pandas.core.frame import DataFrame #class
 
@@ -45,7 +46,7 @@ class BatchSTSingleCosineCBHT(ABatchST):
         userProfileStrategies:List[str] = ["mean", "max", "weightedMean"]
         userProfileSizes:List[int] = [-1, 1, 3, 5, 7, 10]
 
-        aDict:dict = {}
+        aDict:Dict[str,object] = {}
         for cbDataPathI in cbDataPaths:
             for userProfileStrategyI in userProfileStrategies:
                 for userProfileSizeI in userProfileSizes:
@@ -58,7 +59,7 @@ class BatchSTSingleCosineCBHT(ABatchST):
                     else:
                         print("error")
 
-                    keyI:str = "RecommenderCosineCB" + "cbd" + str(cbDataPathStrI) + "ups" + str(userProfileStrategyI) +\
+                    keyI:str = "cbd" + str(cbDataPathStrI) + "ups" + str(userProfileStrategyI) +\
                                "ups" + str(userProfileSizeI)
 
                     rCBI: ARecommender = RecommenderDescription(RecommenderCosineCB, {

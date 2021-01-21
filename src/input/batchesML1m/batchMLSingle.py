@@ -2,7 +2,8 @@
 
 import os
 
-from typing import List
+from typing import List #class
+from typing import Dict #class
 
 from pandas.core.frame import DataFrame #class
 
@@ -32,14 +33,9 @@ class BatchMLSingle(ABatchML):
     @staticmethod
     def getParameters():
 
-        aDict:dict = {}
-        #aDict[InputRecomMLDefinition.COS_CB_MEAN] = InputRecomMLDefinition.COS_CB_MEAN
-        #aDict[InputRecomMLDefinition.COS_CB_WINDOW3] = InputRecomMLDefinition.COS_CB_WINDOW3
+        aDict:Dict[str,object] = {}
         aDict[InputRecomMLDefinition.THE_MOST_POPULAR] = InputRecomMLDefinition.THE_MOST_POPULAR
-        #aDict[InputRecomMLDefinition.W2V_POSNEG_MEAN] = InputRecomMLDefinition.W2V_POSNEG_MEAN
-        #aDict[InputRecomMLDefinition.W2V_POSNEG_WINDOW3] = InputRecomMLDefinition.W2V_POSNEG_WINDOW3
         aDict[InputRecomMLDefinition.KNN] = InputRecomMLDefinition.KNN
-        #aDict[InputRecomMLDefinition.BPRMF] = InputRecomMLDefinition.BPRMF
 
         return aDict
 
