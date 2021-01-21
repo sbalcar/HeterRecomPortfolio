@@ -106,7 +106,7 @@ class RecommenderW2V(ARecommender):
         self.dictionary = self.__load_obj("dictionary", dataset.datasetID, self.trainVariant, e, w, i)
         self.rev_dict = self.__load_obj("rev_dict", dataset.datasetID, self.trainVariant, e, w, i)
 
-        if self.model is None:
+        if self.model is None or self.dictionary is None or self.rev_dict is None:
             model, rev_dict, dictionary = word2vec.word2vecRun(w, e, i, w2vTrainData)
             dictionary = dict([((int(i), j) if i != "RARE" else (-1, j)) for i, j in dictionary.items()])
             rev_dict = dict(zip(dictionary.values(), dictionary.keys()))
