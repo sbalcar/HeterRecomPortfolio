@@ -51,40 +51,89 @@ from input.batchesSlanTour.batchSTSingleW2VHT import BatchSTSingleW2VHT #class
 from input.batchesSlanTour.batchSTSingleCosineCBHT import BatchSTSingleCosineCBHT #class
 
 
+def filter():
+    # ML
+    #iJobIds:List[str] = list(BatchMLSingle.getParameters().keys()) +\
+    #                 ["RecommenderW2V" + rIdI for rIdI in BatchMLSingleW2VHT.getParameters().keys()] + \
+    #                 ["RecommenderBPRMF" + rIdI for rIdI in BatchMLSingleBPRMFHT.getParameters().keys()] +\
+    #                 ["RecommendervmContextKNN" + rIdI for rIdI in BatchMLVMContextKNNHT.getParameters().keys()] +\
+    #                 ["RecommenderCosineCB" + rIdI for rIdI in BatchMLSingleCosineCBHT.getParameters().keys()]
 
-
-if __name__ == "__main__":
-   os.chdir("..")
-
-   iJobIds:List[str] = list(BatchMLSingle.getParameters().keys()) +\
-                     ["RecommenderW2V" + rIdI for rIdI in BatchMLSingleW2VHT.getParameters().keys()] + \
+    # ST
+    iJobIds:List[str] = list(BatchSTSingle.getParameters().keys()) +\
+                     ["RecommenderW2V" + rIdI for rIdI in BatchSTSingleW2VHT.getParameters().keys()] + \
                      ["RecommenderBPRMF" + rIdI for rIdI in BatchSTSingleBPRMFHT.getParameters().keys()] +\
                      ["RecommendervmContextKNN" + rIdI for rIdI in BatchSTVMContextKNNHT.getParameters().keys()] +\
                      ["RecommenderCosineCB" + rIdI for rIdI in BatchSTSingleCosineCBHT.getParameters().keys()]
 
 
-   dir:str = "/home/stepan/aaa/ml1mDiv80Ulinear0109R1"
+    #iJobIds:List[str] = ["DHondtThompsonSamplingINF" + rIdI for rIdI in BatchMLDHondtThompsonSamplingINF.getParameters().keys()]
+    #iJobIds:List[str] = ["DHondtThompsonSamplingINF" + rIdI for rIdI in BatchSTDHondtThompsonSamplingINF.getParameters().keys()]
+    #print(iJobIds)
 
-   # reading evaluation
-   evaluationFile = open(dir + os.sep + 'evaluation.txt', 'r')
-   eLines:List[str] = [eLineI.replace("\n", "") for eLineI in evaluationFile.readlines()]
-   eRows:List[int] = [(
+
+
+    #dir:str = "/home/stepan/aaa/ml1mDiv80Ulinear0109R1"
+    dir:str = "/home/stepan/aaa/stDiv80Ulinear0109R1"
+    #dir:str = "/home/stepan/aaa/stDiv80Ulinear0109R2"
+
+    # reading evaluation
+    evaluationFile = open(dir + os.sep + 'evaluation.txt', 'r')
+    eLines:List[str] = [eLineI.replace("\n", "") for eLineI in evaluationFile.readlines()]
+    eRows:List[int] = [(
          eLines[i*3].replace("ids: ['", "").replace("']", ""),
          eLines[i*3+1].replace("[[{'clicks': ", "").replace("}]]", ""))
          for i in range(int(len(eLines)/3.0))]
 
-   eJobIds:List[str] = [fileIdI for fileIdI, clicksI in eRows]
-   #print(eJobIds[200])
+    eJobIds:List[str] = [fileIdI for fileIdI, clicksI in eRows]
+    #print(eJobIds[200])
 
-   selectedFiles:List[str] = []
-   for fileNameI in iJobIds:
+    print(eJobIds)
+    #print(len(eJobIds))
+
+    selectedFiles:List[str] = []
+    for fileNameI in iJobIds:
       if not fileNameI in eJobIds:
          selectedFiles.append(fileNameI)
          #print(fileNameI)
 
+    jobFiles:List[str] = [jobIdI for jobIdI in selectedFiles]
+    print("Chybejici: " + str(len(jobFiles)) + " / " + str(len(iJobIds)))
 
-   jobFiles:List[str] = ["BatchMLSingle" + jobIdI + ".txt" for jobIdI in selectedFiles]
-   print(len(jobFiles))
+    for jobFileI in jobFiles:
+        print(jobFileI)
 
-   for jobFileI in jobFiles:
-    print(jobFileI)
+def rename():
+    dir:str = "/home/stepan/aaa/stDiv80Ulinear0109R2_"
+
+    # reading evaluation
+    evaluationFile = open(dir + os.sep + 'evaluation.txt', 'r')
+    eLines:List[str] = [eLineI.replace("\n", "") for eLineI in evaluationFile.readlines()]
+    eRows:List[int] = [(
+         eLines[i*3].replace("ids: ['", "").replace("']", ""),
+         eLines[i*3+1].replace("[[{'clicks': ", "").replace("}]]", ""))
+         for i in range(int(len(eLines)/3.0))]
+
+    fileNames:List[str] = [fileIdI + ".txt" for fileIdI, clicksI in eRows]
+    fileNames.remove("ContextDHondtFixed.txt")
+    fileNames.remove("ContextDHondtRoulette1.txt")
+    fileNames.remove("ContextDHondtRoulette3.txt")
+
+    print(len(fileNames))
+
+    for fileNameI in fileNames:
+        fileNameNewI = fileNameI.replace("ReduceOLin", "ReduceProbOLin")
+        fileNameNewI = fileNameNewI.replace("ReduceOStat", "ReduceProbOStat")
+
+        cmd1I:str = "mv " + "computation-" + fileNameI + " " + "computation-" + fileNameNewI
+        cmd2I:str = "mv " + "portfModelTimeEvolution-" + fileNameI + " " + "portfModelTimeEvolution-" + fileNameNewI
+        cmd3I:str = "mv " + "historyOfRecommendation-" + fileNameI + " " + "historyOfRecommendation-" + fileNameNewI
+        print(cmd1I)
+        print(cmd2I)
+        print(cmd3I)
+
+if __name__ == "__main__":
+   os.chdir("..")
+
+   filter()
+   #rename()

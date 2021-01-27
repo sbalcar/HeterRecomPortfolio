@@ -43,6 +43,9 @@ from input.batchesSlanTour.batchSTFuzzyDHondt import BatchSTFuzzyDHondt #class
 from input.batchesSlanTour.batchSTFuzzyDHondtINF import BatchSTFuzzyDHondtINF #class
 from input.batchesSlanTour.batchSTWeightedAVG import BatchSTWeightedAVG #class
 from input.batchesSlanTour.batchSTBanditTS import BatchSTBanditTS #class
+from input.batchesSlanTour.batchSTRandomRecsSwitching import BatchSTRandomRecsSwitching #class
+from input.batchesSlanTour.batchSTRandomKfromN import BatchSTRandomKfromN #class
+
 
 from input.batchesSlanTour.batchSTSingleVMContextKNNHT import BatchSTVMContextKNNHT #class
 from input.batchesSlanTour.batchSTSingle import BatchSTSingle #class

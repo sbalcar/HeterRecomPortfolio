@@ -14,6 +14,8 @@ from aggregation.aggrDHondtThompsonSamplingDirectOptimizeINF import AggrDHondtTh
 from aggregation.aggrContextFuzzyDHondt import AggrContextFuzzyDHondt #class
 from aggregation.aggrContextFuzzyDHondtINF import AggrContextFuzzyDHondtINF #class
 from aggregation.aggrContextFuzzyDHondtDirectOptimizeINF import AggrContextFuzzyDHondtDirectOptimizeINF #class
+from aggregation.aggrRandomKfromN import AggrRandomKfromN #class
+from aggregation.aggrRandomRecsSwitching import AggrRandomRecsSwitching #class
 
 from aggregation.negImplFeedback.aPenalization import APenalization #class
 from aggregation.negImplFeedback.penalUsingFiltering import PenalUsingFiltering #class
@@ -107,6 +109,20 @@ class InputAggrDefinition:
                                             AggrContextFuzzyDHondtINF.ARG_SELECTOR:selector,
                                             AggrContextFuzzyDHondtINF.ARG_EVAL_TOOL:eTool,
                                             AggrFuzzyDHondtDirectOptimizeINF.ARG_PENALTY_TOOL: nImplFeedback})
+
+
+
+    @staticmethod
+    def exportADescRandomKfromN(mainMethodID:str):
+        return AggregationDescription(AggrRandomKfromN, {
+            AggrRandomKfromN.ARG_MAIN_METHOD: mainMethodID,
+            AggrRandomKfromN.ARG_MAX_REC_SIZE: 100})
+
+
+    @staticmethod
+    def exportADescRandomRecsSwitching(mainMethodID:str):
+        return AggregationDescription(AggrRandomRecsSwitching, {
+            AggrRandomRecsSwitching.ARG_MAIN_METHOD: mainMethodID})
 
 
 class PenalizationToolDefinition:

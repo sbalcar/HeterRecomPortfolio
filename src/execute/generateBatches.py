@@ -18,6 +18,9 @@ from input.batchesML1m.batchMLFuzzyDHondtDirectOptimize import BatchMLFuzzyDHond
 from input.batchesML1m.batchMLFuzzyDHondtDirectOptimizeINF import BatchMLFuzzyDHondtDirectOptimizeINF #class
 
 from input.batchesML1m.batchMLWeightedAVG import BatchMLWeightedAVG #class
+from input.batchesML1m.batchMLRandomRecsSwitching import BatchMLRandomRecsSwitching #class
+from input.batchesML1m.batchMLRandomKfromN import BatchMLRandomKfromN #class
+
 
 from input.batchesML1m.batchMLSingle import BatchMLSingle #class
 from input.batchesML1m.batchMLSingleINF import BatchMLSingleINF #class
@@ -41,6 +44,8 @@ from input.batchesSlanTour.batchSTFuzzyDHondtINF import BatchSTFuzzyDHondtINF #c
 from input.batchesSlanTour.batchSTFuzzyDHondt import BatchSTFuzzyDHondt #class
 from input.batchesSlanTour.batchSTWeightedAVG import BatchSTWeightedAVG #class
 from input.batchesSlanTour.batchSTBanditTS import BatchSTBanditTS #class
+from input.batchesSlanTour.batchSTRandomRecsSwitching import BatchSTRandomRecsSwitching #class
+from input.batchesSlanTour.batchSTRandomKfromN import BatchSTRandomKfromN #class
 
 from input.batchesSlanTour.batchSTSingleVMContextKNNHT import BatchSTVMContextKNNHT #class
 from input.batchesSlanTour.batchSTSingleBPRMFHT import BatchSTSingleBPRMFHT #class
@@ -59,7 +64,7 @@ def generateBatches():
 #    BatchMLFuzzyDHondtINF.generateBatches()
 
 #    BatchMLDHondtThompsonSampling.generateBatches()
-    BatchMLDHondtThompsonSamplingINF.generateBatches()
+#    BatchMLDHondtThompsonSamplingINF.generateBatches()
 
 #    BatchMLFuzzyDHondtDirectOptimize.generateBatches()
 #    BatchMLFuzzyDHondtDirectOptimizeINF.generateBatches()
@@ -68,14 +73,17 @@ def generateBatches():
 
 #    BatchMLWeightedAVG.generateBatches()
 
-##    BatchMLSingle.generateBatches()
+    BatchMLRandomRecsSwitching.generateBatches()
+    BatchMLRandomKfromN.generateBatches()
+
+#    BatchMLSingle.generateBatches()
 #    BatchMLSingleINF.generateBatches()
 
 #    BatchMLSingle2.generateBatches()
-##    BatchMLSingleBPRMFHT.generateBatches()
-##    BatchMLSingleW2VHT.generateBatches()
-##    BatchMLSingleCosineCBHT.generateBatches()
-##    BatchMLVMContextKNNHT.generateBatches()
+#    BatchMLSingleBPRMFHT.generateBatches()
+#    BatchMLSingleW2VHT.generateBatches()
+#    BatchMLSingleCosineCBHT.generateBatches()
+#    BatchMLVMContextKNNHT.generateBatches()
 
     # RR
 #    BatchRRSingle.generateBatches()
@@ -91,6 +99,8 @@ def generateBatches():
 #    BatchSTFuzzyDHondtINF.generateBatches()
 #    BatchSTWeightedAVG.generateBatches()
 #    BatchSTBanditTS.generateBatches()
+    BatchSTRandomRecsSwitching.generateBatches()
+    BatchSTRandomKfromN.generateBatches()
 
 #    BatchSTSingle.generateBatches()
 #    BatchSTSingleBPRMFHT.generateBatches()

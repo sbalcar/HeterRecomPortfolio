@@ -78,11 +78,11 @@ class BatchMLDHondtThompsonSamplingINF(ABatchML):
 
                     pFncI = penalClassI(penaltyStatic, [staticFncI], penaltyLinear, [linerFncI[0], linerFncI[1], 100], 100)
                     keyI: str = rI + "OStat" + str(staticFncI).replace(".", "") + "HLin" + str(linerFncI[0]).replace(".", "") + str(linerFncI[1]).replace(".", "")
-                    print(keyI)
+                    #print(keyI)
 
                     functionsDict[keyI] = pFncI
                     aI = str(penalClassI.__name__) + "(penaltyStatic, [" + str(staticFncI) + "], penaltyLinear, [" + str(linerFncI[0]) + ", " + str(linerFncI[1]) + ", 100], 100)"
-                    print(aI)
+                    #print(aI)
         return functionsDict
 
     @classmethod
@@ -101,10 +101,10 @@ class BatchMLDHondtThompsonSamplingINF(ABatchML):
 
                     pFncI = penalClassI(penaltyLinear, [linerFncI[0], linerFncI[1], 20], penaltyLinear, [linerFncJ[0], linerFncJ[1], 100], 100)
                     keyI:str = rI + "OLin" + str(linerFncI[0]).replace(".","") + str(linerFncI[1]).replace(".","") + "HLin" + str(linerFncJ[0]).replace(".","") + str(linerFncJ[1]).replace(".","")
-                    print(keyI)
+                    #print(keyI)
                     functionsDict[keyI] = pFncI
                     aI = str(penalClassI.__name__) + "(penaltyLinear, [" + str(linerFncI[0]) + ", " + str(linerFncI[1]) + ", 20], penaltyLinear, [" + str(linerFncI[0]) + ", " + str(linerFncI[1]) + ", 100], 100)"
-                    print(aI)
+                    #print(aI)
         return functionsDict
 
 
