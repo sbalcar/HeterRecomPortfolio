@@ -31,8 +31,6 @@ class EToolSingleMethod(AEvalTool):
         print("HOP")
         print("clickedItemID: " + str(clickedItemID))
 
-        #evaluationDict[AEvalTool.CLICKS] = evaluationDict.get(AEvalTool.CLICKS, 0) + 1
-
     def displayed(self, rItemIDsWithResponsibility:List, portfolioModel:DataFrame, argumentsDict:Dict[str,object]):
         if type(rItemIDsWithResponsibility) is not Series:
             raise ValueError("Argument rItemIDsWithResponsibility isn't type Series.")

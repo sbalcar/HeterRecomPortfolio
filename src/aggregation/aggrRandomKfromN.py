@@ -75,6 +75,7 @@ class AggrRandomKfromN(AAgregation):
         methodsParamsDFI:DataFrame = modelDF
         
         recommenderID = self.mainMethod
+        print(methodsResultDictI)
         results = methodsResultDictI[recommenderID] #pd.Series
         results.sort_values(ascending=False,inplace=True)
                     
