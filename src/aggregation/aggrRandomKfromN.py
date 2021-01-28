@@ -103,5 +103,5 @@ class AggrRandomKfromN(AAgregation):
 
 
 
-        return [(itemIdI, None) for itemIdI in resList]
+        return [(itemIdI[0], recommenderID) for itemIdI in resList]
 

@@ -91,4 +91,4 @@ class AggrRandomRecsSwitching(AAgregation):
         resList = list(results.iteritems())[:numberOfItems]
 
 
-        return [(itemIdI, None) for itemIdI in resList]
+        return [(itemIdI[0], recommenderID) for itemIdI in resList]
