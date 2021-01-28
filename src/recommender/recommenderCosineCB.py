@@ -196,7 +196,7 @@ class RecommenderCosineCB(ARecommender):
         #print(results.shape)
         if self.DEBUG_MODE:
             print(type(results))
-        results.sort_values(ascending=False, inplace=True, ignore_index=False)
+        results.sort_values(ascending=False, inplace=True)
         
         if argumentsDict.get(self.ARG_ALLOWED_ITEMIDS) is not None:
             # ARG_ALLOWED_ITEMIDS contains a list of allowed IDs
