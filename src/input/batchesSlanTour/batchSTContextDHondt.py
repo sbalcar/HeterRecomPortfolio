@@ -17,7 +17,7 @@ from aggregationDescription.aggregationDescription import AggregationDescription
 from input.inputAggrDefinition import InputAggrDefinition  #class
 from input.modelDefinition import ModelDefinition
 
-from input.inputRecomMLDefinition import InputRecomMLDefinition #class
+from input.inputRecomSTDefinition import InputRecomSTDefinition #class
 
 from input.batchesML1m.batchMLFuzzyDHondt import BatchMLFuzzyDHondt #class
 
@@ -83,7 +83,7 @@ class BatchSTContextDHondt(ABatchST):
             EvalToolContext.ARG_DATASET: "st",  # WHAT DATASET ARE WE IN
             EvalToolContext.ARG_HISTORY: historyDF})  # empty instance of AHistory is OK for ST dataset
 
-        rIDs, rDescs = InputRecomMLDefinition.exportPairOfRecomIdsAndRecomDescrs()
+        rIDs, rDescs = InputRecomSTDefinition.exportPairOfRecomIdsAndRecomDescrs()
 
         aDescContextDHont:AggregationDescription = InputAggrDefinition.exportADescDContextHondt(selector, evalTool)
 
