@@ -12,7 +12,7 @@ from datasets.slantour.behavioursST import BehavioursST #class
 from userBehaviourDescription.userBehaviourDescription import UserBehaviourDescription #class
 from userBehaviourDescription.userBehaviourDescription import observationalStaticProbabilityFnc #function
 from userBehaviourDescription.userBehaviourDescription import observationalLinearProbabilityFnc #function
-
+from userBehaviourDescription.userBehaviourDescription import observationalPowerLawFnc #function
 
 def generateBehaviour():
    print("Generate Behaviours")
@@ -30,28 +30,35 @@ def generateBehaviour():
 
    uBehavLinear0109Desc:UserBehaviourDescription = UserBehaviourDescription(observationalLinearProbabilityFnc, [0.1, 0.9])
 
-   # ML
-#   Behaviours.generateFileMl1m(countOfItems, countOfRepetitions, Behaviours.BHVR_STATIC08, uBehavStatic08Desc)
-#   Behaviours.generateFileMl1m(countOfItems, countOfRepetitions, Behaviours.BHVR_STATIC06, uBehavStatic06Desc)
-#   Behaviours.generateFileMl1m(countOfItems, countOfRepetitions, Behaviours.BHVR_STATIC04, uBehavStatic04Desc)
-#   Behaviours.generateFileMl1m(countOfItems, countOfRepetitions, Behaviours.BHVR_STATIC02, uBehavStatic02Desc)
+   uBehavPowerlaw054min048:UserBehaviourDescription = UserBehaviourDescription(observationalPowerLawFnc, [0.54, -0.48])
 
-#   Behaviours.generateFileMl1m(countOfItems, countOfRepetitions, Behaviours.BHVR_LINEAR0109, uBehavLinear0109Desc)
+
+# ML
+#   BehavioursML.generateFileMl1m(countOfItems, countOfRepetitions, BehavioursML.BHVR_STATIC08, uBehavStatic08Desc)
+#   BehavioursML.generateFileMl1m(countOfItems, countOfRepetitions, BehavioursML.BHVR_STATIC06, uBehavStatic06Desc)
+#   BehavioursML.generateFileMl1m(countOfItems, countOfRepetitions, BehavioursML.BHVR_STATIC04, uBehavStatic04Desc)
+#   BehavioursML.generateFileMl1m(countOfItems, countOfRepetitions, BehavioursML.BHVR_STATIC02, uBehavStatic02Desc)
+
+#   BehavioursML.generateFileMl1m(countOfItems, countOfRepetitions, BehavioursML.BHVR_LINEAR0109, uBehavLinear0109Desc)
+#   BehavioursML.generateFileMl1m(countOfItems, countOfRepetitions, BehavioursML.BHVR_POWERLAW054MIN048, uBehavPowerlaw054min048)
 
    # RR
 #   BehavioursRR.generateFileRR(countOfItems, countOfRepetitions, BehavioursRR.BHVR_STATIC08, uBehavStatic08Desc)
 #   BehavioursRR.generateFileRR(countOfItems, countOfRepetitions, BehavioursRR.BHVR_STATIC06, uBehavStatic06Desc)
 #   BehavioursRR.generateFileRR(countOfItems, countOfRepetitions, BehavioursRR.BHVR_STATIC04, uBehavStatic04Desc)
-   BehavioursRR.generateFileRR(countOfItems, countOfRepetitions, BehavioursRR.BHVR_STATIC02, uBehavStatic02Desc)
+#   BehavioursRR.generateFileRR(countOfItems, countOfRepetitions, BehavioursRR.BHVR_STATIC02, uBehavStatic02Desc)
 
 #   BehavioursRR.generateFileRR(countOfItems, countOfRepetitions, BehavioursRR.BHVR_LINEAR0109, uBehavLinear0109Desc)
 
    # ST
 #   BehavioursST.generateFileST(countOfItems, countOfRepetitions, BehavioursST.BHVR_LINEAR0109, uBehavLinear0109Desc)
+#   BehavioursST.generateFileST(countOfItems, countOfRepetitions, BehavioursST.BHVR_STATIC08, uBehavStatic08Desc)
 #   BehavioursST.generateFileST(countOfItems, countOfRepetitions, BehavioursST.BHVR_STATIC06, uBehavStatic06Desc)
 #   BehavioursST.generateFileST(countOfItems, countOfRepetitions, BehavioursST.BHVR_STATIC04, uBehavStatic04Desc)
 #   BehavioursST.generateFileST(countOfItems, countOfRepetitions, BehavioursST.BHVR_STATIC02, uBehavStatic02Desc)
+
 #   BehavioursST.generateFileST(countOfItems, countOfRepetitions, BehavioursST.BHVR_LINEAR0109, uBehavLinear0109Desc)
+#   BehavioursST.generateFileST(countOfItems, countOfRepetitions, BehavioursST.BHVR_POWERLAW054MIN048, uBehavPowerlaw054min048)
 
 
 if __name__ == "__main__":

@@ -108,6 +108,35 @@ def generateBatches():
 #    BatchSTSingleCosineCBHT.generateBatches()
 #    BatchSTVMContextKNNHT.generateBatches()
 
+
+
+def generateBatchesJournal():
+    print("Generate Batches")
+
+    # ML
+    BatchMLSingle.generateBatches()
+    BatchMLSingle2.generateBatches()
+
+    BatchMLBanditTS.generateBatches()  # only Fixed selector
+    BatchMLWeightedAVG.generateBatches()
+
+    BatchMLRandomRecsSwitching.generateBatches()
+    BatchMLRandomKfromN.generateBatches()
+
+
+    #ST
+    BatchSTSingle.generateBatches()
+    #BatchMLSingle2.generateBatches()
+
+    BatchSTBanditTS.generateBatches()  # only Fixed selector
+    BatchSTWeightedAVG.generateBatches()
+
+    BatchSTRandomRecsSwitching.generateBatches()
+    BatchSTRandomKfromN.generateBatches()
+
+
+
+
 if __name__ == "__main__":
 
   np.random.seed(42)
@@ -115,4 +144,5 @@ if __name__ == "__main__":
 
   os.chdir("..")
   print(os.getcwd())
-  generateBatches()
+  #generateBatches()
+  generateBatchesJournal()

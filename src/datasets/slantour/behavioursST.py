@@ -35,6 +35,8 @@ class BehavioursST:
   BHVR_STATIC04 = BehavioursML.BHVR_STATIC04
   BHVR_STATIC02 = BehavioursML.BHVR_STATIC02
 
+  BHVR_POWERLAW054MIN048 = BehavioursML.BHVR_POWERLAW054MIN048
+
 #  @staticmethod
 #  def getColNameUserID():
 #    return BehavioursST.COL_USERID

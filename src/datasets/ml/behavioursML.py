@@ -32,6 +32,8 @@ class BehavioursML:
   BHVR_STATIC04 = 'static04'
   BHVR_STATIC02 = 'static02'
 
+  BHVR_POWERLAW054MIN048 = 'powerlaw054min048'
+
 
   @staticmethod
   def getColNameUserID():
@@ -158,7 +160,7 @@ class BehavioursML:
                   continue
 
               uBehavIJ:List[bool] = uBehavDesc.getBehaviour(numberOfItems)
-              strBehavIJ:str = BehavioursML.__convertToString(uBehavIJ)
+              strBehavIJ:str = BehavioursML.convertToString(uBehavIJ)
               behavioursDF.at[indexJ, BehavioursML.COL_BEHAVIOUR] = strBehavIJ
 
 

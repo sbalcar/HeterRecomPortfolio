@@ -15,10 +15,11 @@ class BatchParameters:
     @abstractmethod
     def getBatchParameters(datasetID:str):
 
-        divisionsDatasetPercentualSize:List[int] = [80, 90]
-        uBehaviours:List[str] = [BehavioursML.BHVR_LINEAR0109, BehavioursML.BHVR_STATIC08,
-                                 BehavioursML.BHVR_STATIC06, BehavioursML.BHVR_STATIC04,
-                                 BehavioursML.BHVR_STATIC02]
+        divisionsDatasetPercentualSize:List[int] = [90]
+        uBehaviours:List[str] = [BehavioursML.BHVR_LINEAR0109,
+                                 BehavioursML.BHVR_STATIC08, BehavioursML.BHVR_STATIC06,
+                                 BehavioursML.BHVR_STATIC04, BehavioursML.BHVR_STATIC02,
+                                 BehavioursML.BHVR_POWERLAW054MIN048]
         repetitions:List[int] = [1, 2, 3, 5]
 
         aDict:dict = {}
@@ -35,7 +36,7 @@ class BatchParameters:
 
 class ABatch(ABC):
 
-    @abstractmethod
+    @staticmethod
     def getParameters():
         pass
 

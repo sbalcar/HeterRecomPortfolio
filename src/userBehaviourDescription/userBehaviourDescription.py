@@ -29,6 +29,19 @@ def observationalLinearProbabilityFnc(minProbability: float, maxProbability: flo
     return probabilities
 
 
+
+def observationalPowerLawFnc(a:float, k:float, numberOfItems:int):
+    if numberOfItems < 0:
+        raise ValueError("Argument numberOfItems can't contain negative value.")
+
+    #return 0.54 * np.power(x, -0.48)
+
+    probabilities:List[float] = [a * np.power(indexI +1, k) for indexI in range(numberOfItems)]
+    #probabilities.reverse()
+
+    return probabilities
+
+
 class UserBehaviourDescription:
 
     def __init__(self, uObservationalProbFnc, arguments:List):
