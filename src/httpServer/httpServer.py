@@ -24,7 +24,7 @@ from datasets.slantour.events import Events #class
 from datasets.ml.ratings import Ratings #class
 
 from evaluationTool.aEvalTool import AEvalTool #class
-from evaluationTool.evalToolSingleMethod import EToolSingleMethod #class
+from evaluationTool.evalToolDoNothing import EToolDoNothing #class
 from evaluationTool.evalToolContext import EvalToolContext #class
 from recommender.aRecommender import ARecommender #class
 

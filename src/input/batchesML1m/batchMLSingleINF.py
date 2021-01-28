@@ -14,7 +14,7 @@ from input.inputRecomMLDefinition import InputRecomMLDefinition #class
 
 from portfolioDescription.aPortfolioDescription import APortfolioDescription #class
 
-from evaluationTool.evalToolSingleMethod import EToolSingleMethod #class
+from evaluationTool.evalToolDoNothing import EToolDoNothing #class
 
 from input.aBatch import BatchParameters #class
 
@@ -72,7 +72,7 @@ class BatchMLSingleINF(ABatchML):
 
         simulator:Simulator = InputSimulatorDefinition.exportSimulatorML1M(
                 batchID, divisionDatasetPercentualSize, uBehaviour, repetition)
-        simulator.simulate([pDescr], [DataFrame()], [EToolSingleMethod({})], [HistoryHierDF(pDescr.getPortfolioID())])
+        simulator.simulate([pDescr], [DataFrame()], [EToolDoNothing({})], [HistoryHierDF(pDescr.getPortfolioID())])
 
 
 

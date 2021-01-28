@@ -22,6 +22,8 @@ from userBehaviourDescription.userBehaviourDescription import UserBehaviourDescr
 
 
 class AggrRandomRecsSwitching(AAgregation):
+    DEBUG:bool = False
+
     ARG_MAIN_METHOD:str = "mainMethod"
     
     def __init__(self, history:AHistory, argumentsDict:Dict[str,object]):
@@ -79,13 +81,14 @@ class AggrRandomRecsSwitching(AAgregation):
             recommenderID = np.random.choice(availableRecommenders)       
         else:
             recommenderID = self.mainMethod
-        
-        print(recommenderID)
+
+        if self.DEBUG:
+            print(recommenderID)
             
         self.lastUsersRecommender[userID] = recommenderID
         results = methodsResultDictI[recommenderID] #pd.Series
         results.sort_values(ascending=False,inplace=True)
         resList = list(results.iteritems())[:numberOfItems]
-        
-        return resList
 
+
+        return [(itemIdI, None) for itemIdI in resList]

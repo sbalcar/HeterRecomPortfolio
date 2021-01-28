@@ -34,7 +34,7 @@ from input.inputRecomMLDefinition import InputRecomMLDefinition #class
 
 from portfolioDescription.aPortfolioDescription import APortfolioDescription #class
 
-from evaluationTool.evalToolSingleMethod import EToolSingleMethod #class
+from evaluationTool.evalToolDoNothing import EToolDoNothing #class
 
 from recommenderDescription.recommenderDescription import RecommenderDescription #class
 
@@ -139,7 +139,7 @@ def test01():
 
     # simulation of portfolio
     simulator:Simulator = Simulator("test", SimulationML, argsSimulationDict, datasetMy, behavioursDF)
-    simulator.simulate([pDescr], [DataFrame()], [EToolSingleMethod({})], HistoryHierDF)
+    simulator.simulate([pDescr], [DataFrame()], [EToolDoNothing({})], HistoryHierDF)
 
 
 if __name__ == "__main__":

@@ -34,7 +34,7 @@ from portfolioDescription.portfolio1MethDescription import Portfolio1MethDescrip
 from recommenderDescription.recommenderDescription import RecommenderDescription #class
 
 from evaluationTool.aEvalTool import AEvalTool #class
-from evaluationTool.evalToolSingleMethod import EToolSingleMethod #class
+from evaluationTool.evalToolDoNothing import EToolDoNothing #class
 
 from execute.startHttpServer import getTheMostPopular #function
 from execute.startHttpServer import getFuzzyDHont #function

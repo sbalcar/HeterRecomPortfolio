@@ -47,11 +47,12 @@ def test01():
     for methodIdI in portfolioModel.index:
         portfolioModel.loc[methodIdI, "votes"] = portfolioModel.loc[methodIdI, "votes"] / sumMethodsVotes
 
+    userID:int = 1
 
-    aggr:AggrWeightedAVG = AggrWeightedAVG(HistoryDF(""), {AggrWeightedAVG.ARG_SELECTOR:TheMostVotedItemSelector({})})
+    aggr:AggrWeightedAVG = AggrWeightedAVG(HistoryDF(""), {})
     #itemIDs:int = aggr.run(methodsResultDict, methodsParamsDF, N)
     #print(itemIDs)
-    itemIDs:List[tuple] = aggr.runWithResponsibility(methodsResultDict, portfolioModel, N)
+    itemIDs:List[tuple] = aggr.runWithResponsibility(methodsResultDict, portfolioModel, userID, N)
     print(itemIDs)
 
 

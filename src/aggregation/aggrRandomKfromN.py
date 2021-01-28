@@ -22,6 +22,8 @@ from userBehaviourDescription.userBehaviourDescription import UserBehaviourDescr
 
 
 class AggrRandomKfromN(AAgregation):
+    DEBUG:bool = False
+
     ARG_MAIN_METHOD:str = "mainMethod"
     ARG_MAX_REC_SIZE:str = "maxRecSize"
     
@@ -62,6 +64,8 @@ class AggrRandomKfromN(AAgregation):
     def runWithResponsibility(self, methodsResultDict:dict, modelDF:DataFrame, userID:int, numberOfItems:int, argumentsDict:Dict[str,object]={}):
         #print("userID: " + str(userID))
 
+        #print(methodsResultDict)
+
         if type(methodsResultDict) is not dict:
             raise ValueError("Argument methodsResultDict isn't type dict.")
         if type(numberOfItems) is not int:
@@ -80,20 +84,24 @@ class AggrRandomKfromN(AAgregation):
         results.sort_values(ascending=False,inplace=True)
                     
         if self.lastUsersRecommender.get(userID) is None:
-            print("Main vetev")
+            if self.DEBUG:
+                print("Main vetev")
             #repeated recommendation, use different recommender  
             resList = list(results.iteritems())[:numberOfItems]
                    
         else:
-            print("Else vetev")
+            if self.DEBUG:
+                print("Else vetev")
             results = results.iloc[0:self.maxRecSize]
             randResults = results.sample(numberOfItems)
             resList = list(randResults.iteritems())
-        
-        print(recommenderID)
+
+        if self.DEBUG:
+            print(recommenderID)
             
         self.lastUsersRecommender[userID] = 1
-        
-        
-        return resList
+
+
+
+        return [(itemIdI, None) for itemIdI in resList]
 

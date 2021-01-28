@@ -59,7 +59,7 @@ from portfolioDescription.portfolio1MethDescription import Portfolio1MethDescrip
 from portfolioDescription.portfolio1AggrDescription import Portfolio1AggrDescription #class
 
 from evaluationTool.aEvalTool import AEvalTool #class
-from evaluationTool.evalToolSingleMethod import EToolSingleMethod #class
+from evaluationTool.evalToolDoNothing import EToolDoNothing #class
 from evaluationTool.evalToolBanditTS import EvalToolBanditTS #class
 from evaluationTool.evalToolDHondtBanditVotes import EvalToolDHondtBanditVotes #class
 from evaluationTool.evalToolContext import EvalToolContext  # class
@@ -143,7 +143,7 @@ def getTheMostPopular():
   port.train(history, dataset)
 
   model:DataFrame = DataFrame()
-  evalTool:AEvalTool = EToolSingleMethod({})
+  evalTool:AEvalTool = EToolDoNothing({})
 
   return (taskID, port, model, evalTool, history)
 
@@ -163,7 +163,7 @@ def getW2Vtalli100000ws1vs32upsmaxups1():
   port.train(history, dataset)
 
   model:DataFrame = DataFrame()
-  evalTool:AEvalTool = EToolSingleMethod({})
+  evalTool:AEvalTool = EToolDoNothing({})
 
   return (taskID, port, model, evalTool, history)
 

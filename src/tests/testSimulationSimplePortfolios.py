@@ -32,7 +32,7 @@ from input.inputRecomSTDefinition import InputRecomSTDefinition #class
 
 from portfolioDescription.aPortfolioDescription import APortfolioDescription #class
 
-from evaluationTool.evalToolSingleMethod import EToolSingleMethod #class
+from evaluationTool.evalToolDoNothing import EToolDoNothing #class
 
 from recommenderDescription.recommenderDescription import RecommenderDescription #class
 
@@ -121,7 +121,7 @@ def test01():
 
     # simulation of portfolio
     simulator:Simulator = Simulator(batchID, SimulationML, argsSimulationDict, dataset, behavioursDF)
-    simulator.simulate([pDescr], [DataFrame()], [EToolSingleMethod({})], [HistoryHierDF(pDescr.getPortfolioID())])
+    simulator.simulate([pDescr], [DataFrame()], [EToolDoNothing({})], [HistoryHierDF(pDescr.getPortfolioID())])
 
 
 def test02():
@@ -140,7 +140,7 @@ def test02():
 
     # simulation of portfolio
     simulator:Simulator = Simulator(batchID, SimulationML, argsSimulationDict, dataset, behavioursDF)
-    simulator.simulate([pDescr], [DataFrame()], [EToolSingleMethod({})], [HistoryHierDF(pDescr.getPortfolioID())])
+    simulator.simulate([pDescr], [DataFrame()], [EToolDoNothing({})], [HistoryHierDF(pDescr.getPortfolioID())])
 
 
 def test03():
@@ -159,7 +159,7 @@ def test03():
 
     # simulation of portfolio
     simulator:Simulator = Simulator(batchID, SimulationML, argsSimulationDict, dataset, behavioursDF)
-    simulator.simulate([pDescr], [DataFrame()], [EToolSingleMethod({})], [HistoryHierDF(pDescr.getPortfolioID())])
+    simulator.simulate([pDescr], [DataFrame()], [EToolDoNothing({})], [HistoryHierDF(pDescr.getPortfolioID())])
 
 
 def test04():
@@ -183,7 +183,7 @@ def test04():
 
     # simulation of portfolio
     simulator:Simulator = Simulator(batchID, SimulationML, argsSimulationDict, dataset, behavioursDF)
-    simulator.simulate([pDescr], [DataFrame()], [EToolSingleMethod({})], [HistoryHierDF(pDescr.getPortfolioID())])
+    simulator.simulate([pDescr], [DataFrame()], [EToolDoNothing({})], [HistoryHierDF(pDescr.getPortfolioID())])
 
 
 def test05():
@@ -203,7 +203,7 @@ def test05():
 
     # simulation of portfolio
     simulator:Simulator = Simulator(batchID, SimulationML, argsSimulationDict, dataset, behavioursDF)
-    simulator.simulate([pDescr], [DataFrame()], [EToolSingleMethod({})], [HistoryHierDF(pDescr.getPortfolioID())])
+    simulator.simulate([pDescr], [DataFrame()], [EToolDoNothing({})], [HistoryHierDF(pDescr.getPortfolioID())])
 
 def test06():
 
@@ -221,7 +221,7 @@ def test06():
 
     # simulation of portfolio
     simulator:Simulator = Simulator(batchID, SimulationML, argsSimulationDict, dataset, behavioursDF)
-    simulator.simulate([pDescr], [DataFrame()], [EToolSingleMethod({})], [HistoryHierDF(pDescr.getPortfolioID())])
+    simulator.simulate([pDescr], [DataFrame()], [EToolDoNothing({})], [HistoryHierDF(pDescr.getPortfolioID())])
 
 
 
@@ -241,7 +241,7 @@ def test11():
 
     # simulation of portfolio
     simulator:Simulator = Simulator(batchID, SimulationRR, argsSimulationDict, dataset, behavioursDF)
-    simulator.simulate([pDescr], [DataFrame()], [EToolSingleMethod({})], [HistoryHierDF(pDescr.getPortfolioID())])
+    simulator.simulate([pDescr], [DataFrame()], [EToolDoNothing({})], [HistoryHierDF(pDescr.getPortfolioID())])
 
 
 
@@ -262,7 +262,7 @@ def test21():
 
     # simulation of portfolio
     simulator:Simulator = Simulator(batchID, SimulationST, argsSimulationDict, dataset, behavioursDF)
-    simulator.simulate([pDescr], [DataFrame()], [EToolSingleMethod({})], [HistoryHierDF(pDescr.getPortfolioID())])
+    simulator.simulate([pDescr], [DataFrame()], [EToolDoNothing({})], [HistoryHierDF(pDescr.getPortfolioID())])
 
 
 def test22():
@@ -281,7 +281,7 @@ def test22():
 
     # simulation of portfolio
     simulator:Simulator = Simulator(batchID, SimulationST, argsSimulationDict, dataset, behavioursDF)
-    simulator.simulate([pDescr], [DataFrame()], [EToolSingleMethod({})], [HistoryHierDF(pDescr.getPortfolioID())])
+    simulator.simulate([pDescr], [DataFrame()], [EToolDoNothing({})], [HistoryHierDF(pDescr.getPortfolioID())])
 
 
 def test23():
@@ -300,7 +300,7 @@ def test23():
 
     # simulation of portfolio
     simulator:Simulator = Simulator(batchID, SimulationST, argsSimulationDict, dataset, behavioursDF)
-    simulator.simulate([pDescr], [DataFrame()], [EToolSingleMethod({})], [HistoryHierDF(pDescr.getPortfolioID())])
+    simulator.simulate([pDescr], [DataFrame()], [EToolDoNothing({})], [HistoryHierDF(pDescr.getPortfolioID())])
 
 
 def test24():
@@ -319,7 +319,7 @@ def test24():
 
     # simulation of portfolio
     simulator:Simulator = Simulator(batchID, SimulationST, argsSimulationDict, dataset, behavioursDF)
-    simulator.simulate([pDescr], [DataFrame()], [EToolSingleMethod({})], [HistoryHierDF(pDescr.getPortfolioID())])
+    simulator.simulate([pDescr], [DataFrame()], [EToolDoNothing({})], [HistoryHierDF(pDescr.getPortfolioID())])
 
 
 def test25():
@@ -338,7 +338,7 @@ def test25():
 
     # simulation of portfolio
     simulator:Simulator = Simulator(batchID, SimulationST, argsSimulationDict, dataset, behavioursDF)
-    simulator.simulate([pDescr], [DataFrame()], [EToolSingleMethod({})], [HistoryHierDF(pDescr.getPortfolioID())])
+    simulator.simulate([pDescr], [DataFrame()], [EToolDoNothing({})], [HistoryHierDF(pDescr.getPortfolioID())])
 
 
 def test26():
@@ -357,7 +357,7 @@ def test26():
 
     # simulation of portfolio
     simulator:Simulator = Simulator(batchID, SimulationST, argsSimulationDict, dataset, behavioursDF)
-    simulator.simulate([pDescr], [DataFrame()], [EToolSingleMethod({})], [HistoryHierDF(pDescr.getPortfolioID())])
+    simulator.simulate([pDescr], [DataFrame()], [EToolDoNothing({})], [HistoryHierDF(pDescr.getPortfolioID())])
 
 
 

@@ -13,7 +13,7 @@ from input.inputRecomMLDefinition import InputRecomMLDefinition #class
 
 from portfolioDescription.aPortfolioDescription import APortfolioDescription #class
 
-from evaluationTool.evalToolSingleMethod import EToolSingleMethod #class
+from evaluationTool.evalToolDoNothing import EToolDoNothing #class
 
 from recommenderDescription.recommenderDescription import RecommenderDescription #class
 
@@ -84,7 +84,7 @@ class BatchSTSingleCosineCBHT(ABatchST):
 
         simulator:Simulator = InputSimulatorDefinition.exportSimulatorSlantour(
             batchID, divisionDatasetPercentualSize, uBehaviour, repetition)
-        simulator.simulate([pDescr], [DataFrame()], [EToolSingleMethod({})], [HistoryHierDF(pDescr.getPortfolioID())])
+        simulator.simulate([pDescr], [DataFrame()], [EToolDoNothing({})], [HistoryHierDF(pDescr.getPortfolioID())])
 
 
 if __name__ == "__main__":

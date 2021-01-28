@@ -9,7 +9,7 @@ from pandas.core.frame import DataFrame #class
 from portfolioDescription.portfolio1AggrDescription import Portfolio1AggrDescription #class
 
 from evaluationTool.aEvalTool import AEvalTool #class
-from evaluationTool.evalToolSingleMethod import EToolSingleMethod #class
+from evaluationTool.evalToolDoNothing import EToolDoNothing #class
 
 from input.inputAggrDefinition import InputAggrDefinition  # class
 from input.modelDefinition import ModelDefinition
@@ -47,7 +47,7 @@ class BatchMLRandomKfromN(ABatchML):
         repetition:int
         divisionDatasetPercentualSize, uBehaviour, repetition = BatchParameters.getBatchParameters(self.datasetID)[batchID]
 
-        eTool:AEvalTool = EToolSingleMethod({})
+        eTool:AEvalTool = EToolDoNothing({})
 
         rIDs, rDescs = InputRecomMLDefinition.exportPairOfRecomIdsAndRecomDescrs()
 
