@@ -39,6 +39,9 @@ class BatchMLFuzzyDHondtDirectOptimize(ABatchML):
     SLCTR_ROULETTE2:str = "Roulette3"
     SLCTR_FIXED:str = "Fixed"
 
+    lrClicks: List[float] = [0.2, 0.1, 0.03, 0.005]
+    lrViewDivisors: List[float] = [250, 500, 1000]
+
     @staticmethod
     def getSelectorParameters():
 
@@ -55,15 +58,10 @@ class BatchMLFuzzyDHondtDirectOptimize(ABatchML):
     @staticmethod
     def getParameters():
         selectorIDs:List[str] = BatchMLFuzzyDHondtDirectOptimize.getSelectorParameters().keys()
-        lrClicks:List[float] = [0.2, 0.1, 0.02, 0.005]
-        #lrClicks:List[float] = [0.1]
-        lrViewDivisors:List[float] = [200, 500, 1000]
-        #lrViewDivisors:List[float] = [500]
-
         aDict:dict = {}
         for selectorIDI in selectorIDs:
-            for lrClickJ in lrClicks:
-                for lrViewDivisorK in lrViewDivisors:
+            for lrClickJ in BatchMLFuzzyDHondtDirectOptimize.lrClicks:
+                for lrViewDivisorK in BatchMLFuzzyDHondtDirectOptimize.lrViewDivisors:
                     keyIJ:str = selectorIDI + "Clk" + str(lrClickJ).replace(".", "") + "ViewDivisor" + str(lrViewDivisorK).replace(".", "")
                     lrViewIJK:float = lrClickJ / lrViewDivisorK
                     eToolIJK:AEvalTool = EvalToolDHondt({EvalToolDHondt.ARG_LEARNING_RATE_CLICKS: lrClickJ,

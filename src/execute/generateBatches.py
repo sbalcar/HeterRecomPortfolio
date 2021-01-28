@@ -56,7 +56,7 @@ from input.batchesSlanTour.batchSTSingleW2VHT import BatchSTSingleW2VHT #class
 from input.batchesSlanTour.batchSTSingleCosineCBHT import BatchSTSingleCosineCBHT #class
 
 
-def generateBatches():
+def generateAllBatches():
     print("Generate Batches")
 
     # ML
@@ -128,6 +128,17 @@ def generateBatchesJournal():
     BatchMLRandomRecsSwitching.generateBatches()
     BatchMLRandomKfromN.generateBatches()
 
+    BatchMLFuzzyDHondt.lrClicks:List[float] = [0.03]
+    BatchMLFuzzyDHondt.lrViewDivisors:List[float] = [250]
+    BatchMLFuzzyDHondt.generateBatches()
+
+    BatchMLDHondtThompsonSampling.generateBatches()
+    BatchMLContextDHondt.generateBatches()
+
+    BatchMLFuzzyDHondtDirectOptimize.lrClicks:List[float] = [0.03]
+    BatchMLFuzzyDHondtDirectOptimize.lrViewDivisors:List[float] = [250]
+    BatchMLFuzzyDHondtDirectOptimize.generateBatches()
+
 
     #ST
     #BatchSTSingle.generateBatches()
@@ -138,6 +149,21 @@ def generateBatchesJournal():
 
     BatchSTRandomRecsSwitching.generateBatches()
     BatchSTRandomKfromN.generateBatches()
+
+    BatchSTFuzzyDHondt.generateBatches()
+
+    BatchSTDHondtThompsonSampling.generateBatches()
+    BatchSTContextDHondt.generateBatches()
+    BatchSTFuzzyDHondtDirectOptimize.generateBatches()
+
+    BatchSTFuzzyDHondtDirectOptimize.lrClicks:List[float] = [0.03]
+    BatchSTFuzzyDHondtDirectOptimize.lrViewDivisors:List[float] = [250]
+    BatchSTFuzzyDHondtDirectOptimize.generateBatches()
+
+def generateBatches():
+
+    #generateAllBatches()
+    generateBatchesJournal()
 
 
 

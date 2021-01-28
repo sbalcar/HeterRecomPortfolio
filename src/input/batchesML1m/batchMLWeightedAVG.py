@@ -37,15 +37,13 @@ from input.batchesML1m.batchMLFuzzyDHondt import BatchMLFuzzyDHondt #class
 
 class BatchMLWeightedAVG(ABatchML):
 
-    lrClicks:List[float] = [0.2, 0.1, 0.02, 0.005]
-    lrViewDivisors:List[float] = [200, 500, 1000]
+    lrClicks:List[float] = [0.2, 0.1, 0.03, 0.005]
+    lrViewDivisors:List[float] = [250, 500, 1000]
 
     @staticmethod
     def getParameters():
         #lrClicks:List[float] = [0.2, 0.1, 0.02, 0.005]
-        #lrClicks:List[float] = [0.03]
         #lrViewDivisors:List[float] = [200, 500, 1000]
-        #lrViewDivisors:List[float] = [250]
 
         aDict:Dict[str,object] = {}
         for lrClickI in BatchMLWeightedAVG.lrClicks:
