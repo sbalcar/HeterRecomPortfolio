@@ -4,6 +4,8 @@ import os
 import random
 import numpy as np
 
+from typing import List #class
+
 from input.batchesML1m.batchMLBanditTS import BatchMLBanditTS #class
 
 from input.batchesML1m.batchMLContextDHondt import BatchMLContextDHondt #class
@@ -114,10 +116,13 @@ def generateBatchesJournal():
     print("Generate Batches")
 
     # ML
-    BatchMLSingle.generateBatches()
-    BatchMLSingle2.generateBatches()
+    #BatchMLSingle.generateBatches()
+    #BatchMLSingle2.generateBatches()
 
     BatchMLBanditTS.generateBatches()  # only Fixed selector
+
+    BatchMLWeightedAVG.lrClicks:List[float] = [0.03]
+    BatchMLWeightedAVG.lrViewDivisors:List[float] = [250]
     BatchMLWeightedAVG.generateBatches()
 
     BatchMLRandomRecsSwitching.generateBatches()
@@ -125,7 +130,7 @@ def generateBatchesJournal():
 
 
     #ST
-    BatchSTSingle.generateBatches()
+    #BatchSTSingle.generateBatches()
     #BatchMLSingle2.generateBatches()
 
     BatchSTBanditTS.generateBatches()  # only Fixed selector
