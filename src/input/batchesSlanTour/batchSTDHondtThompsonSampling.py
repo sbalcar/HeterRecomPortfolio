@@ -16,7 +16,7 @@ from aggregationDescription.aggregationDescription import AggregationDescription
 from input.inputAggrDefinition import InputAggrDefinition  # class
 from input.modelDefinition import ModelDefinition
 
-from input.inputRecomMLDefinition import InputRecomMLDefinition #class
+from input.inputRecomSTDefinition import InputRecomSTDefinition #class
 
 from input.batchesML1m.batchMLDHondtThompsonSampling import BatchMLDHondtThompsonSampling #class
 
@@ -48,7 +48,7 @@ class BatchSTDHondtThompsonSampling(ABatchST):
         #eTool:AEvalTool
         selector, eTool = self.getParameters()[jobID]
 
-        rIDs, rDescs = InputRecomMLDefinition.exportPairOfRecomIdsAndRecomDescrs()
+        rIDs, rDescs = InputRecomSTDefinition.exportPairOfRecomIdsAndRecomDescrs()
 
         aDescDHontThompsonSamplingI:AggregationDescription = InputAggrDefinition.exportADescDHondtThompsonSampling(selector)
 
