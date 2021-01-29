@@ -90,9 +90,10 @@ def test03():
 
 
 if __name__ == "__main__":
-
+    os.chdir("..")
+    print(os.getcwd())
 
     #test01()
-    #test02()
-    test03()
+    test02()
+    #test03()
 

@@ -145,6 +145,11 @@ def generateBatchesJournal():
     BatchMLFuzzyDHondtDirectOptimizeThompsonSampling.selectorIds = [BatchMLFuzzyDHondtDirectOptimizeThompsonSampling.SLCTR_FIXED]
     BatchMLFuzzyDHondtDirectOptimizeThompsonSampling.generateBatches()
 
+    # RR
+    BatchRRSingle.generateBatches()
+    #BatchRRSingleW2VHT.generateBatches()
+
+
     #ST
     BatchSTSingle.generateBatches()
 

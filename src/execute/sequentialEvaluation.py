@@ -10,7 +10,7 @@ import numpy as np
 
 from typing import List
 
-
+from input.batchesML1m.batchMLFuzzyDHondtDirectOptimizeThompsonSampling import BatchMLFuzzyDHondtDirectOptimizeThompsonSampling #class
 from input.batchesML1m.batchMLContextDHondt import BatchMLContextDHondt #class
 from input.batchesML1m.batchMLFuzzyDHondt import BatchMLFuzzyDHondt #class
 from input.batchesML1m.batchMLFuzzyDHondtThompsonSampling import BatchMLFuzzyDHondtThompsonSampling #class
@@ -34,6 +34,7 @@ from input.batchesML1m.batchMLSingleVMContextKNNHT import BatchMLVMContextKNNHT 
 from input.batchesRetailrocket.batchRRSingle import BatchRRSingle #class
 from input.batchesRetailrocket.batchRRSingleW2VHT import BatchRRSingleW2VHT #class
 
+from input.batchesSlanTour.batchSTFuzzyDHondtDirectOptimizeThompsonSampling import BatchSTFuzzyDHondtDirectOptimizeThompsonSampling #class
 from input.batchesSlanTour.batchSTContextDHondtINF import BatchSTContextDHondtINF #class
 from input.batchesSlanTour.batchSTContextDHondt import BatchSTContextDHondt #class
 from input.batchesSlanTour.batchSTDHondtThompsonSamplingINF import BatchSTDHondtThompsonSamplingINF #class
