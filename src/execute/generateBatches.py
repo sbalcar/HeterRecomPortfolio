@@ -160,6 +160,9 @@ def generateBatchesJournal():
 
 def generateBatches():
 
+    np.random.seed(42)
+    random.seed(42)
+
     #generateAllBatches()
     generateBatchesJournal()
 
@@ -168,10 +171,8 @@ def generateBatches():
 
 if __name__ == "__main__":
 
-  np.random.seed(42)
-  random.seed(42)
-
   os.chdir("..")
   print(os.getcwd())
+
   #generateBatches()
   generateBatchesJournal()

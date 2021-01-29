@@ -28,9 +28,6 @@ def main2():
 
 if __name__ == "__main__":
 
-  np.random.seed(42)
-  random.seed(42)
-
   if len(sys.argv) == 2 and sys.argv[1] == "-generateBatches":
       generateBatches()
 

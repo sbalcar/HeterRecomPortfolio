@@ -57,6 +57,10 @@ from input.batchesSlanTour.batchSTSingleCosineCBHT import BatchSTSingleCosineCBH
 
 def sequentialEvaluation():
 
+  timeDelays:float = random.uniform(0.0, 5.0)
+  print("TimeDelays: " + str(timeDelays))
+  time.sleep(timeDelays)
+
   np.random.seed(42)
   random.seed(42)
 
