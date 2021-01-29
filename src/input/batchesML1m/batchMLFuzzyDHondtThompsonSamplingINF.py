@@ -46,7 +46,7 @@ from aggregation.negImplFeedback.penalUsingReduceRelevance import penaltyLinear 
 
 
 
-class BatchMLDHondtThompsonSamplingINF(ABatchML):
+class BatchMLFuzzyDHondtThompsonSamplingINF(ABatchML):
 
     @classmethod
     def getParamsForLinerFncs(cls):
@@ -121,14 +121,14 @@ class BatchMLDHondtThompsonSamplingINF(ABatchML):
     @staticmethod
     def getParameters():
         selectorIDs:List[str] = BatchMLFuzzyDHondt().getSelectorParameters().keys()
-        negativeImplFeedback:List[str] = BatchMLDHondtThompsonSamplingINF().getPenalFncs().keys()
+        negativeImplFeedback:List[str] = BatchMLFuzzyDHondtThompsonSamplingINF().getPenalFncs().keys()
 
         aDict:dict = {}
         for selectorIDH in selectorIDs:
             for nImplFeedbackI in negativeImplFeedback:
                 keyIJ:str = str(selectorIDH) + nImplFeedbackI
 
-                nImplFeedback:APenalization = BatchMLDHondtThompsonSamplingINF().getPenalFncs()[nImplFeedbackI]
+                nImplFeedback:APenalization = BatchMLFuzzyDHondtThompsonSamplingINF().getPenalFncs()[nImplFeedbackI]
                 selectorH:ADHondtSelector = BatchMLFuzzyDHondt().getSelectorParameters()[selectorIDH]
 
                 aDict[keyIJ] = (selectorH, nImplFeedback)
@@ -168,7 +168,7 @@ class BatchMLDHondtThompsonSamplingINF(ABatchML):
         aDescNegDHontThompsonSamplingI:AggregationDescription = InputAggrDefinition.exportADescDHondtThompsonSamplingINF(selector, nImplFeedback)
 
         pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
-            "DHondtThompsonSamplingINF" + jobID, rIDs, rDescs, aDescNegDHontThompsonSamplingI)
+            "FuzzyDHondtThompsonSamplingINF" + jobID, rIDs, rDescs, aDescNegDHontThompsonSamplingI)
 
         model:DataFrame = ModelDefinition.createDHondtBanditsVotesModel(pDescr.getRecommendersIDs())
 
@@ -183,4 +183,4 @@ if __name__ == "__main__":
     os.chdir("..")
     os.chdir("..")
 
-    BatchMLDHondtThompsonSamplingINF.generateBatches()
+    BatchMLFuzzyDHondtThompsonSamplingINF.generateBatches()

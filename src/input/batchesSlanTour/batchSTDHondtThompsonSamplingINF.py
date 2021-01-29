@@ -21,7 +21,7 @@ from input.inputRecomSTDefinition import InputRecomSTDefinition #class
 
 from input.batchesML1m.batchMLFuzzyDHondt import BatchMLFuzzyDHondt #class
 from input.batchesML1m.batchMLFuzzyDHondtINF import BatchMLFuzzyDHondtINF #class
-from input.batchesML1m.batchMLDHondtThompsonSamplingINF import BatchMLDHondtThompsonSamplingINF #class
+from input.batchesML1m.batchMLFuzzyDHondtThompsonSamplingINF import BatchMLFuzzyDHondtThompsonSamplingINF #class
 from aggregation.negImplFeedback.aPenalization import APenalization #class
 
 from aggregation.operators.aDHondtSelector import ADHondtSelector #class
@@ -50,7 +50,7 @@ class BatchSTDHondtThompsonSamplingINF(ABatchST):
 
     @staticmethod
     def getParameters():
-        return BatchMLDHondtThompsonSamplingINF.getParameters()
+        return BatchMLFuzzyDHondtThompsonSamplingINF.getParameters()
 
 
     def run(self, batchID:str, jobID:str):

@@ -11,12 +11,12 @@ from pandas.core.series import Series #class
 
 from aggregation.aggrFuzzyDHondt import AggrFuzzyDHondt #class
 from aggregation.aggrFuzzyDHondtINF import AggrFuzzyDHondtINF #class
-from aggregation.aggrDHondtThompsonSamplingDirectOptimize import AggrDHondtThompsonSamplingDirectOptimize #class
+from aggregation.aggrDHondtDirectOptimizeThompsonSampling import AggrDHondtDirectOptimizeThompsonSampling #class
 
 from history.aHistory import AHistory #class
 
 
-class AggrDHondtThompsonSamplingDirectOptimizeINF(AggrDHondtThompsonSamplingDirectOptimize):
+class AggrDHondtThompsonSamplingDirectOptimizeINF(AggrDHondtDirectOptimizeThompsonSampling):
 
     ARG_SELECTOR:str = "selector"
     ARG_PENALTY_TOOL:str = "penaltyTool"

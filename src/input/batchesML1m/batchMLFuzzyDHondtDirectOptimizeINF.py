@@ -19,7 +19,7 @@ from input.modelDefinition import ModelDefinition
 from input.inputRecomMLDefinition import InputRecomMLDefinition #class
 
 from input.batchesML1m.batchMLFuzzyDHondtDirectOptimize import BatchMLFuzzyDHondtDirectOptimize #class
-from input.batchesML1m.batchMLDHondtThompsonSamplingINF import BatchMLDHondtThompsonSamplingINF #class
+from input.batchesML1m.batchMLFuzzyDHondtThompsonSamplingINF import BatchMLFuzzyDHondtThompsonSamplingINF #class
 
 from aggregation.negImplFeedback.aPenalization import APenalization #class
 
@@ -42,7 +42,7 @@ class BatchMLFuzzyDHondtDirectOptimizeINF(ABatchML):
 
     @staticmethod
     def getParameters():
-        return BatchMLDHondtThompsonSamplingINF().getParameters()
+        return BatchMLFuzzyDHondtThompsonSamplingINF().getParameters()
 
 
     def run(self, batchID:str, jobID:str):

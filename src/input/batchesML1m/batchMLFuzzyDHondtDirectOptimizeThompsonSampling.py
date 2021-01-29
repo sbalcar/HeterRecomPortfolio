@@ -2,7 +2,7 @@
 
 import os
 
-from typing import List
+from typing import List #class
 from typing import Dict #class
 
 from pandas.core.frame import DataFrame #class
@@ -33,8 +33,7 @@ from simulator.simulator import Simulator #class
 from history.historyHierDF import HistoryHierDF #class
 
 
-
-class BatchMLFuzzyDHondt(ABatchML):
+class BatchMLFuzzyDHondtDirectOptimizeThompsonSampling(ABatchML):
 
     SLCTR_ROULETTE1:str = "Roulette1"
     SLCTR_ROULETTE2:str = "Roulette3"
@@ -52,26 +51,25 @@ class BatchMLFuzzyDHondt(ABatchML):
         selectorFixed:ADHondtSelector = TheMostVotedItemSelector({})
 
         aDict:Dict[str,object] = {}
-        aDict[BatchMLFuzzyDHondt.SLCTR_ROULETTE1] = selectorRoulette1
-        aDict[BatchMLFuzzyDHondt.SLCTR_ROULETTE2] = selectorRoulette3
-        aDict[BatchMLFuzzyDHondt.SLCTR_FIXED] = selectorFixed
+        aDict[cls.SLCTR_ROULETTE1] = selectorRoulette1
+        aDict[cls.SLCTR_ROULETTE2] = selectorRoulette3
+        aDict[cls.SLCTR_FIXED] = selectorFixed
 
         aSubDict:Dict[str,object] = {selIdI: aDict[selIdI] for selIdI in aDict.keys() if selIdI in cls.selectorIds}
         return aSubDict
 
-    @staticmethod
-    def getParameters():
-        selectorIDs:List[str] = BatchMLFuzzyDHondt.getSelectorParameters().keys()
-
+    @classmethod
+    def getParameters(cls):
+        selectorIDs:List[str] = cls.getSelectorParameters().keys()
         aDict:dict = {}
         for selectorIDI in selectorIDs:
-            for lrClickJ in BatchMLFuzzyDHondt.lrClicks:
-                for lrViewDivisorK in BatchMLFuzzyDHondt.lrViewDivisors:
+            for lrClickJ in cls.lrClicks:
+                for lrViewDivisorK in cls.lrViewDivisors:
                     keyIJ:str = selectorIDI + "Clk" + str(lrClickJ).replace(".", "") + "ViewDivisor" + str(lrViewDivisorK).replace(".", "")
                     lrViewIJK:float = lrClickJ / lrViewDivisorK
                     eToolIJK:AEvalTool = EvalToolDHondt({EvalToolDHondt.ARG_LEARNING_RATE_CLICKS: lrClickJ,
                                                       EvalToolDHondt.ARG_LEARNING_RATE_VIEWS: lrViewIJK})
-                    selectorIJK:ADHondtSelector = BatchMLFuzzyDHondt.getSelectorParameters()[selectorIDI]
+                    selectorIJK:ADHondtSelector = cls.getSelectorParameters()[selectorIDI]
                     aDict[keyIJ] = (selectorIJK, eToolIJK)
         return aDict
 
@@ -88,10 +86,10 @@ class BatchMLFuzzyDHondt(ABatchML):
 
         rIDs, rDescs = InputRecomMLDefinition.exportPairOfRecomIdsAndRecomDescrs()
 
-        aDescDHont:AggregationDescription = InputAggrDefinition.exportADescDHondt(selector)
+        aDescDHont:AggregationDescription = InputAggrDefinition.exportADescDHondtDirectOptimizeThompsonSampling(selector)
 
         pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
-            "FDHondt" + jobID, rIDs, rDescs, aDescDHont)
+            "FDHondtDirectOptimizeThompsonSampling" + jobID, rIDs, rDescs, aDescDHont)
 
         model:DataFrame = ModelDefinition.createDHontModel(pDescr.getRecommendersIDs())
 
@@ -101,9 +99,9 @@ class BatchMLFuzzyDHondt(ABatchML):
 
 
 
-
 if __name__ == "__main__":
     os.chdir("..")
     os.chdir("..")
     print(os.getcwd())
-    BatchMLFuzzyDHondt.generateBatches()
+
+    BatchMLFuzzyDHondtDirectOptimizeThompsonSampling.generateBatches()

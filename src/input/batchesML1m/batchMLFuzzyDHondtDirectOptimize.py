@@ -2,7 +2,8 @@
 
 import os
 
-from typing import List
+from typing import List #class
+from typing import Dict #class
 
 from pandas.core.frame import DataFrame #class
 
@@ -41,19 +42,22 @@ class BatchMLFuzzyDHondtDirectOptimize(ABatchML):
 
     lrClicks: List[float] = [0.2, 0.1, 0.03, 0.005]
     lrViewDivisors: List[float] = [250, 500, 1000]
+    selectorIds: List[str] = [SLCTR_ROULETTE1, SLCTR_ROULETTE2, SLCTR_FIXED]
 
-    @staticmethod
-    def getSelectorParameters():
+    @classmethod
+    def getSelectorParameters(cls):
 
         selectorRoulette1:ADHondtSelector = RouletteWheelSelector({RouletteWheelSelector.ARG_EXPONENT:1})
         selectorRoulette3:ADHondtSelector = RouletteWheelSelector({RouletteWheelSelector.ARG_EXPONENT:3})
         selectorFixed:ADHondtSelector = TheMostVotedItemSelector({})
 
-        aDict:dict = {}
+        aDict:Dict[str,object] = {}
         aDict[BatchMLFuzzyDHondtDirectOptimize.SLCTR_ROULETTE1] = selectorRoulette1
         aDict[BatchMLFuzzyDHondtDirectOptimize.SLCTR_ROULETTE2] = selectorRoulette3
         aDict[BatchMLFuzzyDHondtDirectOptimize.SLCTR_FIXED] = selectorFixed
-        return aDict
+
+        aSubDict:Dict[str,object] = {selIdI: aDict[selIdI] for selIdI in aDict.keys() if selIdI in cls.selectorIds}
+        return aSubDict
 
     @staticmethod
     def getParameters():

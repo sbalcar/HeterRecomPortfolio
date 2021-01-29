@@ -10,8 +10,8 @@ from input.batchesML1m.batchMLBanditTS import BatchMLBanditTS #class
 
 from input.batchesML1m.batchMLContextDHondt import BatchMLContextDHondt #class
 
-from input.batchesML1m.batchMLDHondtThompsonSampling import BatchMLDHondtThompsonSampling #class
-from input.batchesML1m.batchMLDHondtThompsonSamplingINF import BatchMLDHondtThompsonSamplingINF #class
+from input.batchesML1m.batchMLFuzzyDHondtThompsonSampling import BatchMLFuzzyDHondtThompsonSampling #class
+from input.batchesML1m.batchMLFuzzyDHondtThompsonSamplingINF import BatchMLFuzzyDHondtThompsonSamplingINF #class
 
 from input.batchesML1m.batchMLFuzzyDHondt import BatchMLFuzzyDHondt #class
 from input.batchesML1m.batchMLFuzzyDHondtINF import BatchMLFuzzyDHondtINF #class
@@ -23,6 +23,7 @@ from input.batchesML1m.batchMLWeightedAVG import BatchMLWeightedAVG #class
 from input.batchesML1m.batchMLRandomRecsSwitching import BatchMLRandomRecsSwitching #class
 from input.batchesML1m.batchMLRandomKfromN import BatchMLRandomKfromN #class
 
+from input.batchesML1m.batchMLFuzzyDHondtDirectOptimizeThompsonSampling import BatchMLFuzzyDHondtDirectOptimizeThompsonSampling #class
 
 from input.batchesML1m.batchMLSingle import BatchMLSingle #class
 from input.batchesML1m.batchMLSingleINF import BatchMLSingleINF #class
@@ -36,6 +37,7 @@ from input.batchesML1m.batchMLSingleVMContextKNNHT import BatchMLVMContextKNNHT 
 from input.batchesRetailrocket.batchRRSingle import BatchRRSingle #class
 from input.batchesRetailrocket.batchRRSingleW2VHT import BatchRRSingleW2VHT #class
 
+from input.batchesSlanTour.batchSTFuzzyDHondtDirectOptimizeThompsonSampling import BatchSTFuzzyDHondtDirectOptimizeThompsonSampling #class
 from input.batchesSlanTour.batchSTContextDHondt import BatchSTContextDHondt #class
 from input.batchesSlanTour.batchSTContextDHondtINF import BatchSTContextDHondtINF #class
 from input.batchesSlanTour.batchSTDHondtThompsonSampling import BatchSTDHondtThompsonSampling #class
@@ -116,7 +118,10 @@ def generateBatchesJournal():
     # ML
     BatchMLSingle.generateBatches()
 
-    BatchMLBanditTS.generateBatches()  # only Fixed selector
+    BatchMLFuzzyDHondt.lrClicks:List[float] = [0.03]
+    BatchMLFuzzyDHondt.lrViewDivisors:List[float] = [250]
+    BatchMLFuzzyDHondt.selectorIds = [BatchMLFuzzyDHondt.SLCTR_FIXED]
+    BatchMLBanditTS.generateBatches()
 
     BatchMLWeightedAVG.lrClicks:List[float] = [0.03]
     BatchMLWeightedAVG.lrViewDivisors:List[float] = [250]
@@ -125,17 +130,20 @@ def generateBatchesJournal():
     BatchMLRandomRecsSwitching.generateBatches()
     BatchMLRandomKfromN.generateBatches()
 
-    BatchMLFuzzyDHondt.lrClicks:List[float] = [0.03]
-    BatchMLFuzzyDHondt.lrViewDivisors:List[float] = [250]
     BatchMLFuzzyDHondt.generateBatches()
 
-    BatchMLDHondtThompsonSampling.generateBatches()
+    BatchMLFuzzyDHondtThompsonSampling.generateBatches()
     BatchMLContextDHondt.generateBatches()
 
     BatchMLFuzzyDHondtDirectOptimize.lrClicks:List[float] = [0.03]
     BatchMLFuzzyDHondtDirectOptimize.lrViewDivisors:List[float] = [250]
+    BatchMLFuzzyDHondtDirectOptimize.selectorIds = [BatchMLFuzzyDHondtDirectOptimize.SLCTR_FIXED]
     BatchMLFuzzyDHondtDirectOptimize.generateBatches()
 
+    BatchMLFuzzyDHondtDirectOptimizeThompsonSampling.lrClicks:List[float] = [0.03]
+    BatchMLFuzzyDHondtDirectOptimizeThompsonSampling.lrViewDivisors:List[float] = [250]
+    BatchMLFuzzyDHondtDirectOptimizeThompsonSampling.selectorIds = [BatchMLFuzzyDHondtDirectOptimizeThompsonSampling.SLCTR_FIXED]
+    BatchMLFuzzyDHondtDirectOptimizeThompsonSampling.generateBatches()
 
     #ST
     BatchSTSingle.generateBatches()
@@ -150,11 +158,10 @@ def generateBatchesJournal():
 
     BatchSTDHondtThompsonSampling.generateBatches()
     BatchSTContextDHondt.generateBatches()
+
     BatchSTFuzzyDHondtDirectOptimize.generateBatches()
 
-    BatchSTFuzzyDHondtDirectOptimize.lrClicks:List[float] = [0.03]
-    BatchSTFuzzyDHondtDirectOptimize.lrViewDivisors:List[float] = [250]
-    BatchSTFuzzyDHondtDirectOptimize.generateBatches()
+    BatchSTFuzzyDHondtDirectOptimizeThompsonSampling.generateBatches()
 
 
 

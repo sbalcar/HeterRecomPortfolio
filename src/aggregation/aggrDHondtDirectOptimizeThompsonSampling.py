@@ -23,7 +23,7 @@ from userBehaviourDescription.userBehaviourDescription import UserBehaviourDescr
 from aggregation.operators.aDHondtSelector import ADHondtSelector #class
 
 
-class AggrDHondtThompsonSamplingDirectOptimize(AAgregation):
+class AggrDHondtDirectOptimizeThompsonSampling(AAgregation):
 
     ARG_SELECTOR:str = "selector"
 

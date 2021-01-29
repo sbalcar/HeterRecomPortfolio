@@ -18,7 +18,7 @@ from input.modelDefinition import ModelDefinition
 
 from input.inputRecomSTDefinition import InputRecomSTDefinition #class
 
-from input.batchesML1m.batchMLDHondtThompsonSampling import BatchMLDHondtThompsonSampling #class
+from input.batchesML1m.batchMLFuzzyDHondtThompsonSampling import BatchMLFuzzyDHondtThompsonSampling #class
 
 from aggregation.operators.aDHondtSelector import ADHondtSelector #class
 
@@ -35,7 +35,7 @@ class BatchSTDHondtThompsonSampling(ABatchST):
 
     @staticmethod
     def getParameters():
-        return BatchMLDHondtThompsonSampling.getParameters()
+        return BatchMLFuzzyDHondtThompsonSampling.getParameters()
 
     def run(self, batchID:str, jobID:str):
 

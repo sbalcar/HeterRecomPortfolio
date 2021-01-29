@@ -2,49 +2,49 @@
 
 import os
 
-from typing import List
+from typing import List #class
+from typing import Dict #class
 
 from pandas.core.frame import DataFrame #class
 
 from portfolioDescription.portfolio1AggrDescription import Portfolio1AggrDescription #class
 
 from evaluationTool.aEvalTool import AEvalTool #class
-from evaluationTool.evalToolDHondtBanditVotes import EvalToolDHondtBanditVotes #class
+from evaluationTool.evalToolDHondt import EvalToolDHondt #class
 
 from aggregationDescription.aggregationDescription import AggregationDescription #class
 
 from input.inputAggrDefinition import InputAggrDefinition  # class
 from input.modelDefinition import ModelDefinition
 
-from input.inputRecomMLDefinition import InputRecomMLDefinition #class
-
-from input.batchesML1m.batchMLFuzzyDHondt import BatchMLFuzzyDHondt #class
+from input.inputRecomSTDefinition import InputRecomSTDefinition #class
 
 from aggregation.operators.aDHondtSelector import ADHondtSelector #class
+from aggregation.operators.rouletteWheelSelector import RouletteWheelSelector #class
+from aggregation.operators.theMostVotedItemSelector import TheMostVotedItemSelector #class
 
 from input.aBatch import BatchParameters #class
-from input.aBatchML import ABatchML #class
+from input.aBatchST import ABatchST #class
+
 from input.inputSimulatorDefinition import InputSimulatorDefinition #class
 
 from simulator.simulator import Simulator #class
 
 from history.historyHierDF import HistoryHierDF #class
 
+from input.batchesML1m.batchMLFuzzyDHondtDirectOptimize import BatchMLFuzzyDHondtDirectOptimize #clas
 
 
-class BatchMLDHondtThompsonSampling(ABatchML):
+
+class BatchSTFuzzyDHondtDirectOptimizeThompsonSampling(ABatchST):
+
+    SLCTR_ROULETTE1:str = BatchMLFuzzyDHondtDirectOptimize.SLCTR_ROULETTE1
+    SLCTR_ROULETTE2:str = BatchMLFuzzyDHondtDirectOptimize.SLCTR_ROULETTE2
+    SLCTR_FIXED:str = BatchMLFuzzyDHondtDirectOptimize.SLCTR_FIXED
 
     @staticmethod
     def getParameters():
-        selectorIDs:List[str] = BatchMLFuzzyDHondt().getSelectorParameters().keys()
-
-        aDict:dict = {}
-        for selectorIDI in selectorIDs:
-            keyIJ:str = str(selectorIDI)
-            eTool:AEvalTool = EvalToolDHondtBanditVotes({})
-            selectorIJK:ADHondtSelector = BatchMLFuzzyDHondt().getSelectorParameters()[selectorIDI]
-            aDict[keyIJ] = (selectorIJK, eTool)
-        return aDict
+        return BatchMLFuzzyDHondtDirectOptimize.getParameters()
 
 
     def run(self, batchID:str, jobID:str):
@@ -54,23 +54,21 @@ class BatchMLDHondtThompsonSampling(ABatchML):
         repetition:int
         divisionDatasetPercentualSize, uBehaviour, repetition = BatchParameters.getBatchParameters(self.datasetID)[batchID]
 
-
         #eTool:AEvalTool
         selector, eTool = self.getParameters()[jobID]
 
-        rIDs, rDescs = InputRecomMLDefinition.exportPairOfRecomIdsAndRecomDescrs()
+        rIDs, rDescs = InputRecomSTDefinition.exportPairOfRecomIdsAndRecomDescrs()
 
-        aDescDHontThompsonSamplingI:AggregationDescription = InputAggrDefinition.exportADescDHondtThompsonSampling(selector)
+        aDescDHont:AggregationDescription = InputAggrDefinition.exportADescDHondtDirectOptimizeThompsonSampling(selector)
 
         pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
-            "DHondtThompsonSampling" + jobID, rIDs, rDescs, aDescDHontThompsonSamplingI)
+            "FDHondtDirectOptimizeThompsonSampling" + jobID, rIDs, rDescs, aDescDHont)
 
-        model:DataFrame = ModelDefinition.createDHondtBanditsVotesModel(pDescr.getRecommendersIDs())
+        model:DataFrame = ModelDefinition.createDHontModel(pDescr.getRecommendersIDs())
 
-        simulator:Simulator = InputSimulatorDefinition.exportSimulatorML1M(
+        simulator:Simulator = InputSimulatorDefinition.exportSimulatorSlantour(
                 batchID, divisionDatasetPercentualSize, uBehaviour, repetition)
         simulator.simulate([pDescr], [model], [eTool], [HistoryHierDF(pDescr.getPortfolioID())])
-
 
 
 
@@ -78,4 +76,5 @@ if __name__ == "__main__":
     os.chdir("..")
     os.chdir("..")
     print(os.getcwd())
-    BatchMLDHondtThompsonSampling.generateBatches()
+
+    BatchSTFuzzyDHondtDirectOptimizeThompsonSampling.generateBatches()

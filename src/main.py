@@ -12,8 +12,6 @@ from execute.generateBatches import generateBatches #function
 from execute.generateBehaviour import generateBehaviour #function
 from execute.startHttpServer import startHttpServer #function
 
-from tests.testSimulationSimplePortfolios import test22 #function
-
 def main2():
 
   start = time.time()

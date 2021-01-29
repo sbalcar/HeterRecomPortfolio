@@ -1,15 +1,17 @@
 #!/usr/bin/python3
 
 import os
-from typing import List #class
-from typing import Dict #class
+
+from typing import List
 
 from pandas.core.frame import DataFrame #class
 
 from portfolioDescription.portfolio1AggrDescription import Portfolio1AggrDescription #class
 
 from evaluationTool.aEvalTool import AEvalTool #class
-from evaluationTool.evalToolBanditTS import EvalToolBanditTS #class
+from evaluationTool.evalToolDHondtBanditVotes import EvalToolDHondtBanditVotes #class
+
+from aggregationDescription.aggregationDescription import AggregationDescription #class
 
 from input.inputAggrDefinition import InputAggrDefinition  # class
 from input.modelDefinition import ModelDefinition
@@ -18,11 +20,10 @@ from input.inputRecomMLDefinition import InputRecomMLDefinition #class
 
 from input.batchesML1m.batchMLFuzzyDHondt import BatchMLFuzzyDHondt #class
 
+from aggregation.operators.aDHondtSelector import ADHondtSelector #class
+
 from input.aBatch import BatchParameters #class
 from input.aBatchML import ABatchML #class
-
-from aggregation.aggrFuzzyDHondt import AggrFuzzyDHondt #class
-from aggregation.operators.aDHondtSelector import ADHondtSelector #class
 from input.inputSimulatorDefinition import InputSimulatorDefinition #class
 
 from simulator.simulator import Simulator #class
@@ -31,11 +32,19 @@ from history.historyHierDF import HistoryHierDF #class
 
 
 
-class BatchMLBanditTS(ABatchML):
+class BatchMLFuzzyDHondtThompsonSampling(ABatchML):
 
-    @classmethod
-    def getParameters(cls):
-        return BatchMLFuzzyDHondt().getSelectorParameters()
+    @staticmethod
+    def getParameters():
+        selectorIDs:List[str] = BatchMLFuzzyDHondt().getSelectorParameters().keys()
+
+        aDict:dict = {}
+        for selectorIDI in selectorIDs:
+            keyIJ:str = str(selectorIDI)
+            eTool:AEvalTool = EvalToolDHondtBanditVotes({})
+            selectorIJK:ADHondtSelector = BatchMLFuzzyDHondt().getSelectorParameters()[selectorIDI]
+            aDict[keyIJ] = (selectorIJK, eTool)
+        return aDict
 
 
     def run(self, batchID:str, jobID:str):
@@ -45,15 +54,18 @@ class BatchMLBanditTS(ABatchML):
         repetition:int
         divisionDatasetPercentualSize, uBehaviour, repetition = BatchParameters.getBatchParameters(self.datasetID)[batchID]
 
-        selector:ADHondtSelector = self.getParameters()[jobID]
+
+        #eTool:AEvalTool
+        selector, eTool = self.getParameters()[jobID]
 
         rIDs, rDescs = InputRecomMLDefinition.exportPairOfRecomIdsAndRecomDescrs()
 
-        pDescr: Portfolio1AggrDescription = Portfolio1AggrDescription(
-            "BanditTS" + jobID, rIDs, rDescs, InputAggrDefinition.exportADescBanditTS(selector))
+        aDescDHontThompsonSamplingI:AggregationDescription = InputAggrDefinition.exportADescDHondtThompsonSampling(selector)
 
-        eTool:AEvalTool = EvalToolBanditTS({})
-        model:DataFrame = ModelDefinition.createBanditModel(pDescr.getRecommendersIDs())
+        pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
+            "FuzzyDHondtThompsonSampling" + jobID, rIDs, rDescs, aDescDHontThompsonSamplingI)
+
+        model:DataFrame = ModelDefinition.createDHondtBanditsVotesModel(pDescr.getRecommendersIDs())
 
         simulator:Simulator = InputSimulatorDefinition.exportSimulatorML1M(
                 batchID, divisionDatasetPercentualSize, uBehaviour, repetition)
@@ -66,5 +78,4 @@ if __name__ == "__main__":
     os.chdir("..")
     os.chdir("..")
     print(os.getcwd())
-
-    BatchMLBanditTS.generateBatches()
+    BatchMLFuzzyDHondtThompsonSampling.generateBatches()
