@@ -35,10 +35,9 @@ class BatchSTSingle(ABatchST):
     @staticmethod
     def getParameters():
 
-        aDict:Dict[str,object] = {}
-        aDict[InputRecomSTDefinition.THE_MOST_POPULAR] = InputRecomSTDefinition.THE_MOST_POPULAR
-        aDict[InputRecomSTDefinition.KNN] = InputRecomSTDefinition.KNN
-        #aDict[InputRecomSTDefinition.VMC_KNN] = InputRecomSTDefinition.VMC_KNN
+        rIDs, rDescr = InputRecomSTDefinition.exportPairOfRecomIdsAndRecomDescrs()
+
+        aDict:Dict[str,object] = dict(zip(rIDs, rDescr))
 
         return aDict
 
@@ -50,11 +49,10 @@ class BatchSTSingle(ABatchST):
         repetition:int
         divisionDatasetPercentualSize, uBehaviour, repetition = BatchParameters.getBatchParameters(self.datasetID)[batchID]
 
-        recommenderID:str = self.getParameters()[jobID]
+        rDescr:str = self.getParameters()[jobID]
+        recommenderID:str = jobID
 
-        rDescr:RecommenderDescription = InputRecomSTDefinition.exportInputRecomDefinition(recommenderID)
-
-        pDescr:APortfolioDescription = Portfolio1MethDescription(recommenderID.title(), recommenderID, rDescr)
+        pDescr:APortfolioDescription = Portfolio1MethDescription("Single" + recommenderID.title(), recommenderID, rDescr)
 
         simulator:Simulator = InputSimulatorDefinition.exportSimulatorSlantour(
                 batchID, divisionDatasetPercentualSize, uBehaviour, repetition)
