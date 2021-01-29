@@ -33,9 +33,9 @@ class BatchMLSingle(ABatchML):
     @staticmethod
     def getParameters():
 
-        aDict:Dict[str,object] = {}
-        aDict[InputRecomMLDefinition.THE_MOST_POPULAR] = InputRecomMLDefinition.THE_MOST_POPULAR
-        aDict[InputRecomMLDefinition.KNN] = InputRecomMLDefinition.KNN
+        rIDs, rDescr = InputRecomMLDefinition.exportPairOfRecomIdsAndRecomDescrs()
+
+        aDict:Dict[str,object] = dict(zip(rIDs, rDescr))
 
         return aDict
 
@@ -47,11 +47,10 @@ class BatchMLSingle(ABatchML):
         repetition:int
         divisionDatasetPercentualSize, uBehaviour, repetition = BatchParameters.getBatchParameters(self.datasetID)[batchID]
 
-        recommenderID:str = self.getParameters()[jobID]
+        rDescr:str = self.getParameters()[jobID]
+        recommenderID:str = jobID
 
-        rDescr:RecommenderDescription = InputRecomMLDefinition.exportInputRecomDefinition(recommenderID)
-
-        pDescr:APortfolioDescription = Portfolio1MethDescription(recommenderID.title(), recommenderID, rDescr)
+        pDescr:APortfolioDescription = Portfolio1MethDescription("Single" + recommenderID.title(), recommenderID, rDescr)
 
         simulator:Simulator = InputSimulatorDefinition.exportSimulatorML1M(
                 batchID, divisionDatasetPercentualSize, uBehaviour, repetition)

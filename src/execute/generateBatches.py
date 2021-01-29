@@ -27,7 +27,6 @@ from input.batchesML1m.batchMLRandomKfromN import BatchMLRandomKfromN #class
 from input.batchesML1m.batchMLSingle import BatchMLSingle #class
 from input.batchesML1m.batchMLSingleINF import BatchMLSingleINF #class
 
-from input.batchesML1m.batchMLSingle2 import BatchMLSingle2 #class
 from input.batchesML1m.batchMLSingleBPRMFHT import BatchMLSingleBPRMFHT #class
 from input.batchesML1m.batchMLSingleW2VHT import BatchMLSingleW2VHT #class
 from input.batchesML1m.batchMLSingleCosineCBHT import BatchMLSingleCosineCBHT #class
@@ -81,7 +80,6 @@ def generateAllBatches():
 #    BatchMLSingle.generateBatches()
 #    BatchMLSingleINF.generateBatches()
 
-#    BatchMLSingle2.generateBatches()
 #    BatchMLSingleBPRMFHT.generateBatches()
 #    BatchMLSingleW2VHT.generateBatches()
 #    BatchMLSingleCosineCBHT.generateBatches()
@@ -116,8 +114,7 @@ def generateBatchesJournal():
     print("Generate Batches")
 
     # ML
-    #BatchMLSingle.generateBatches()
-    #BatchMLSingle2.generateBatches()
+    BatchMLSingle.generateBatches()
 
     BatchMLBanditTS.generateBatches()  # only Fixed selector
 
@@ -141,8 +138,7 @@ def generateBatchesJournal():
 
 
     #ST
-    #BatchSTSingle.generateBatches()
-    #BatchMLSingle2.generateBatches()
+    BatchSTSingle.generateBatches()
 
     BatchSTBanditTS.generateBatches()  # only Fixed selector
     BatchSTWeightedAVG.generateBatches()
@@ -159,6 +155,8 @@ def generateBatchesJournal():
     BatchSTFuzzyDHondtDirectOptimize.lrClicks:List[float] = [0.03]
     BatchSTFuzzyDHondtDirectOptimize.lrViewDivisors:List[float] = [250]
     BatchSTFuzzyDHondtDirectOptimize.generateBatches()
+
+
 
 def generateBatches():
 

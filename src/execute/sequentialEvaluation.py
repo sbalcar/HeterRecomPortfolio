@@ -26,7 +26,6 @@ from input.batchesML1m.batchMLRandomRecsSwitching import BatchMLRandomRecsSwitch
 from input.batchesML1m.batchMLRandomKfromN import BatchMLRandomKfromN #class
 
 from input.batchesML1m.batchMLSingle import BatchMLSingle #class
-from input.batchesML1m.batchMLSingle2 import BatchMLSingle2 #class
 from input.batchesML1m.batchMLSingleW2VHT import BatchMLSingleW2VHT #class
 from input.batchesML1m.batchMLSingleCosineCBHT import BatchMLSingleCosineCBHT #class
 from input.batchesML1m.batchMLSingleBPRMFHT import BatchMLSingleBPRMFHT  #class
