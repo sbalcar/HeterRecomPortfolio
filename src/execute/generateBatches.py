@@ -140,9 +140,6 @@ def generateBatchesJournal():
     BatchMLFuzzyDHondtDirectOptimize.selectorIds = [BatchMLFuzzyDHondtDirectOptimize.SLCTR_FIXED]
     BatchMLFuzzyDHondtDirectOptimize.generateBatches()
 
-    BatchMLFuzzyDHondtDirectOptimizeThompsonSampling.lrClicks:List[float] = [0.03]
-    BatchMLFuzzyDHondtDirectOptimizeThompsonSampling.lrViewDivisors:List[float] = [250]
-    BatchMLFuzzyDHondtDirectOptimizeThompsonSampling.selectorIds = [BatchMLFuzzyDHondtDirectOptimizeThompsonSampling.SLCTR_FIXED]
     BatchMLFuzzyDHondtDirectOptimizeThompsonSampling.generateBatches()
 
     # RR

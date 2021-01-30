@@ -10,7 +10,7 @@ from pandas.core.frame import DataFrame #class
 from portfolioDescription.portfolio1AggrDescription import Portfolio1AggrDescription #class
 
 from evaluationTool.aEvalTool import AEvalTool #class
-from evaluationTool.evalToolDHondt import EvalToolDHondt #class
+from evaluationTool.evalToolDHondtBanditVotes import EvalToolDHondtBanditVotes #class
 
 from aggregationDescription.aggregationDescription import AggregationDescription #class
 
@@ -25,6 +25,7 @@ from aggregation.operators.theMostVotedItemSelector import TheMostVotedItemSelec
 
 from input.aBatch import BatchParameters #class
 from input.aBatchML import ABatchML #class
+from input.batchesML1m.batchMLFuzzyDHondtThompsonSampling import BatchMLFuzzyDHondtThompsonSampling #class
 
 from input.inputSimulatorDefinition import InputSimulatorDefinition #class
 
@@ -39,40 +40,9 @@ class BatchMLFuzzyDHondtDirectOptimizeThompsonSampling(ABatchML):
     SLCTR_ROULETTE2:str = "Roulette3"
     SLCTR_FIXED:str = "Fixed"
 
-    lrClicks:List[float] = [0.2, 0.1, 0.03, 0.005]
-    lrViewDivisors:List[float] = [250, 500, 1000]
-    selectorIds:List[str] = [SLCTR_ROULETTE1, SLCTR_ROULETTE2, SLCTR_FIXED]
-
-    @classmethod
-    def getSelectorParameters(cls):
-
-        selectorRoulette1:ADHondtSelector = RouletteWheelSelector({RouletteWheelSelector.ARG_EXPONENT:1})
-        selectorRoulette3:ADHondtSelector = RouletteWheelSelector({RouletteWheelSelector.ARG_EXPONENT:3})
-        selectorFixed:ADHondtSelector = TheMostVotedItemSelector({})
-
-        aDict:Dict[str,object] = {}
-        aDict[cls.SLCTR_ROULETTE1] = selectorRoulette1
-        aDict[cls.SLCTR_ROULETTE2] = selectorRoulette3
-        aDict[cls.SLCTR_FIXED] = selectorFixed
-
-        aSubDict:Dict[str,object] = {selIdI: aDict[selIdI] for selIdI in aDict.keys() if selIdI in cls.selectorIds}
-        return aSubDict
-
     @classmethod
     def getParameters(cls):
-        selectorIDs:List[str] = cls.getSelectorParameters().keys()
-        aDict:dict = {}
-        for selectorIDI in selectorIDs:
-            for lrClickJ in cls.lrClicks:
-                for lrViewDivisorK in cls.lrViewDivisors:
-                    keyIJ:str = selectorIDI + "Clk" + str(lrClickJ).replace(".", "") + "ViewDivisor" + str(lrViewDivisorK).replace(".", "")
-                    lrViewIJK:float = lrClickJ / lrViewDivisorK
-                    eToolIJK:AEvalTool = EvalToolDHondt({EvalToolDHondt.ARG_LEARNING_RATE_CLICKS: lrClickJ,
-                                                      EvalToolDHondt.ARG_LEARNING_RATE_VIEWS: lrViewIJK})
-                    selectorIJK:ADHondtSelector = cls.getSelectorParameters()[selectorIDI]
-                    aDict[keyIJ] = (selectorIJK, eToolIJK)
-        return aDict
-
+        return BatchMLFuzzyDHondtThompsonSampling.getParameters()
 
     def run(self, batchID:str, jobID:str):
 
