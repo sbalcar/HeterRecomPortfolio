@@ -61,7 +61,6 @@ class BatchMLFuzzyDHondtDirectOptimizeThompsonSampling(ABatchML):
         pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
             "FDHondtDirectOptimizeThompsonSampling" + jobID, rIDs, rDescs, aDescDHont)
 
-        #model:DataFrame = ModelDefinition.createDHontModel(pDescr.getRecommendersIDs())
         model:DataFrame = ModelDefinition.createDHondtBanditsVotesModel(pDescr.getRecommendersIDs())
 
         simulator:Simulator = InputSimulatorDefinition.exportSimulatorML1M(

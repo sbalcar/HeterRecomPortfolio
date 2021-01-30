@@ -32,19 +32,18 @@ from simulator.simulator import Simulator #class
 
 from history.historyHierDF import HistoryHierDF #class
 
-from input.batchesML1m.batchMLFuzzyDHondtDirectOptimize import BatchMLFuzzyDHondtDirectOptimize #clas
-
+from input.batchesML1m.batchMLFuzzyDHondtDirectOptimizeThompsonSampling import BatchMLFuzzyDHondtDirectOptimizeThompsonSampling #class
 
 
 class BatchSTFuzzyDHondtDirectOptimizeThompsonSampling(ABatchST):
 
-    SLCTR_ROULETTE1:str = BatchMLFuzzyDHondtDirectOptimize.SLCTR_ROULETTE1
-    SLCTR_ROULETTE2:str = BatchMLFuzzyDHondtDirectOptimize.SLCTR_ROULETTE2
-    SLCTR_FIXED:str = BatchMLFuzzyDHondtDirectOptimize.SLCTR_FIXED
+    SLCTR_ROULETTE1:str = BatchMLFuzzyDHondtDirectOptimizeThompsonSampling.SLCTR_ROULETTE1
+    SLCTR_ROULETTE2:str = BatchMLFuzzyDHondtDirectOptimizeThompsonSampling.SLCTR_ROULETTE2
+    SLCTR_FIXED:str = BatchMLFuzzyDHondtDirectOptimizeThompsonSampling.SLCTR_FIXED
 
     @staticmethod
     def getParameters():
-        return BatchMLFuzzyDHondtDirectOptimize.getParameters()
+        return BatchMLFuzzyDHondtDirectOptimizeThompsonSampling.getParameters()
 
 
     def run(self, batchID:str, jobID:str):
@@ -64,7 +63,6 @@ class BatchSTFuzzyDHondtDirectOptimizeThompsonSampling(ABatchST):
         pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
             "FDHondtDirectOptimizeThompsonSampling" + jobID, rIDs, rDescs, aDescDHont)
 
-        #model:DataFrame = ModelDefinition.createDHontModel(pDescr.getRecommendersIDs())
         model:DataFrame = ModelDefinition.createDHondtBanditsVotesModel(pDescr.getRecommendersIDs())
 
         simulator:Simulator = InputSimulatorDefinition.exportSimulatorSlantour(
