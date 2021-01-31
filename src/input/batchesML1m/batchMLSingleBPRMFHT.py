@@ -2,7 +2,8 @@
 
 import os
 
-from typing import List
+from typing import List #class
+from typing import Dict #class
 
 from pandas.core.frame import DataFrame #class
 
@@ -36,19 +37,18 @@ from configuration.configuration import Configuration #class
 
 class BatchMLSingleBPRMFHT(ABatchML):
 
-    @staticmethod
-    def getParameters():
+    factors:List[int] = [5, 10, 20, 50, 100]
+    iterations:List[int] = [5, 10, 20, 50]
+    learningRates:List[int] = [0.1, 0.03, 0.01, 0.003]
+    regularizations:List[int] = [0.1, 0.03, 0.01, 0.003]
 
-        factors:List[int] = [5, 10, 20, 50, 100]
-        iterations:List[int] = [5, 10, 20, 50]
-        learningRates:List[int] = [0.1, 0.03, 0.01, 0.003]
-        regularizations:List[int] = [0.1, 0.03, 0.01, 0.003]
-
-        aDict:dict = {}
-        for factorI in factors:
-            for iterationI in iterations:
-                for learningRateI in learningRates:
-                    for regularizationI in regularizations:
+    @classmethod
+    def getParameters(cls):
+        aDict:Dict[str,object] = {}
+        for factorI in cls.factors:
+            for iterationI in cls.iterations:
+                for learningRateI in cls.learningRates:
+                    for regularizationI in cls.regularizations:
                         keyI:str = "f" + str(factorI) + "i" + str(iterationI) +\
                                    "lr" + str(learningRateI).replace('.', '') + "r" + str(regularizationI).replace('.', '')
 

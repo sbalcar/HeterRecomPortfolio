@@ -127,8 +127,8 @@ def test03():
     print("================== END OF TEST 03 ======================\n\n\n\n\n")
 
 
-def test04():
-    print("Test 04")
+def test11():
+    print("Test 11")
 
     print("Running RecommenderItemBasedKNN RR:")
 
@@ -151,8 +151,8 @@ def test04():
     print("================== END OF TEST 04 ======================\n\n\n\n\n")
 
 
-def test05():
-    print("Test 05")
+def test21():
+    print("Test 21")
 
     print("Running RecommenderItemBasedKNN ST:")
 
@@ -174,8 +174,8 @@ def test05():
     print("================== END OF TEST 05 ======================\n\n\n\n\n")
 
 
-def test06():
-    print("Test 06")
+def test22():
+    print("Test 22")
 
     print("Running RecommenderItemBasedKNN ST:")
 
@@ -225,9 +225,14 @@ def test06():
 if __name__ == "__main__":
     os.chdir("..")
 
+    # ML
     #test01()
     #test02()
     #test03()
-    #test04()
-    #test05()
-    test06()
+
+    # RR
+    test11()
+
+    # ST
+    #test21()
+    #test22()

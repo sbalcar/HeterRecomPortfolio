@@ -36,6 +36,7 @@ from input.batchesML1m.batchMLSingleVMContextKNNHT import BatchMLVMContextKNNHT 
 
 from input.batchesRetailrocket.batchRRSingle import BatchRRSingle #class
 from input.batchesRetailrocket.batchRRSingleW2VHT import BatchRRSingleW2VHT #class
+from input.batchesRetailrocket.batchRRSingleVMContextKNNHT import BatchRRVMContextKNNHT #class
 
 from input.batchesSlanTour.batchSTFuzzyDHondtDirectOptimizeThompsonSampling import BatchSTFuzzyDHondtDirectOptimizeThompsonSampling #class
 from input.batchesSlanTour.batchSTContextDHondt import BatchSTContextDHondt #class
@@ -118,6 +119,8 @@ def generateBatchesJournal():
     # RR
     #BatchRRSingle.generateBatches()
     BatchRRSingleW2VHT.generateBatches()
+
+    BatchRRVMContextKNNHT.generateBatches()
 
     return
 

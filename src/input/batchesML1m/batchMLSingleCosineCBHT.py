@@ -2,7 +2,8 @@
 
 import os
 
-from typing import List
+from typing import List #class
+from typing import Dict #class
 
 from pandas.core.frame import DataFrame #class
 
@@ -36,17 +37,17 @@ from configuration.configuration import Configuration #class
 
 class BatchMLSingleCosineCBHT(ABatchML):
 
-    @staticmethod
-    def getParameters():
+    cbDataPaths:List[str] = [Configuration.cbML1MDataFileWithPathTFIDF, Configuration.cbML1MDataFileWithPathOHE]
+    userProfileStrategies:List[str] = ["mean", "max", "weightedMean"]
+    userProfileSizes:List[int] = [-1, 1, 3, 5, 7, 10]
 
-        cbDataPaths:List[str] = [Configuration.cbML1MDataFileWithPathTFIDF, Configuration.cbML1MDataFileWithPathOHE]
-        userProfileStrategies:List[str] = ["mean", "max", "weightedMean"]
-        userProfileSizes:List[int] = [-1, 1, 3, 5, 7, 10]
+    @classmethod
+    def getParameters(cls):
 
-        aDict:dict = {}
-        for cbDataPathI in cbDataPaths:
-            for userProfileStrategyI in userProfileStrategies:
-                for userProfileSizeI in userProfileSizes:
+        aDict:Dict[str,object] = {}
+        for cbDataPathI in cls.cbDataPaths:
+            for userProfileStrategyI in cls.userProfileStrategies:
+                for userProfileSizeI in cls.userProfileSizes:
 
                     cbDataPathStrI:str = ""
                     if cbDataPathI == Configuration.cbML1MDataFileWithPathTFIDF:

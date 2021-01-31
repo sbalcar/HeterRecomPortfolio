@@ -30,22 +30,16 @@ import pandas as pd
 from input.aBatch import ABatch #class
 from input.aBatch import BatchParameters #class
 
-from input.aBatchML import ABatchML #class
+from input.aBatchRR import ABatchRR #class
+
+from input.batchesML1m.batchMLSingleVMContextKNNHT import BatchMLVMContextKNNHT #class
 
 
-class BatchMLVMContextKNNHT(ABatchML):
-
-    ks:List[int] = [25, 50, 75]
+class BatchRRVMContextKNNHT(ABatchRR):
 
     @classmethod
     def getParameters(cls):
-
-        aDict:Dict[str,object] = {}
-        for kI in cls.ks:
-            keyI:str = "K" + str(kI)
-            aDict[keyI] = kI
-        return aDict
-
+        return BatchMLVMContextKNNHT.getParameters()
 
 
     def run(self, batchID:str, jobID:str):
@@ -64,7 +58,7 @@ class BatchMLVMContextKNNHT(ABatchML):
 
         pDescr:APortfolioDescription = Portfolio1MethDescription(recommenderID.title(), recommenderID, rVMCtKNN)
 
-        simulator:Simulator = InputSimulatorDefinition.exportSimulatorML1M(
+        simulator:Simulator = InputSimulatorDefinition.exportSimulatorRetailRocket(
                 batchID, divisionDatasetPercentualSize, uBehaviour, repetition)
         simulator.simulate([pDescr], [DataFrame()], [EToolDoNothing({})], [HistoryHierDF(pDescr.getPortfolioID())])
 
@@ -75,4 +69,4 @@ if __name__ == "__main__":
    os.chdir("..")
    #print(os.getcwd())
 
-   BatchMLVMContextKNNHT.generateBatches()
+   BatchRRVMContextKNNHT.generateBatches()
