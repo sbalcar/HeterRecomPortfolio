@@ -2,7 +2,8 @@
 
 import os
 
-from typing import List
+from typing import List #class
+from typing import Dict #class
 
 from pandas.core.frame import DataFrame #class
 
@@ -31,7 +32,7 @@ import pandas as pd
 from input.aBatch import BatchParameters #class
 from input.aBatchRR import ABatchRR #class
 
-from input.batchesSlanTour.batchSTSingleW2VHT import BatchSTSingleW2VHT #class
+from input.batchesML1m.batchMLSingleW2VHT import BatchMLSingleW2VHT #class
 
 from configuration.configuration import Configuration #class
 
@@ -40,7 +41,11 @@ class BatchRRSingleW2VHT(ABatchRR):
 
     @staticmethod
     def getParameters():
-        return BatchSTSingleW2VHT.getParameters()
+        oldValue:List[str] = BatchMLSingleW2VHT.trainVariants
+        BatchMLSingleW2VHT.trainVariants = ["all"]
+        paramsDict:Dict[str, object] = BatchMLSingleW2VHT.getParameters()
+        BatchMLSingleW2VHT.trainVariants = oldValue
+        return paramsDict
 
     def run(self, batchID: str, jobID: str):
         divisionDatasetPercentualSize: int

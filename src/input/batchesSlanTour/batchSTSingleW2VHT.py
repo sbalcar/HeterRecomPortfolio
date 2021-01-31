@@ -2,7 +2,8 @@
 
 import os
 
-from typing import List
+from typing import List #class
+from typing import Dict #class
 
 from pandas.core.frame import DataFrame #class
 
@@ -39,7 +40,11 @@ class BatchSTSingleW2VHT(ABatchST):
 
     @staticmethod
     def getParameters():
-        return BatchMLSingleW2VHT.getParameters()
+        oldValue:List[str] = BatchMLSingleW2VHT.trainVariants
+        BatchMLSingleW2VHT.trainVariants = ["all"]
+        paramsDict:Dict[str,object] = BatchMLSingleW2VHT.getParameters()
+        BatchMLSingleW2VHT.trainVariants = oldValue
+        return paramsDict
 
 
     def run(self, batchID: str, jobID: str):

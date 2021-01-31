@@ -2,7 +2,8 @@
 
 import os
 
-from typing import List
+from typing import List #class
+from typing import Dict #class
 
 from pandas.core.frame import DataFrame #class
 
@@ -36,23 +37,23 @@ from configuration.configuration import Configuration #class
 
 class BatchMLSingleW2VHT(ABatchML):
 
-    @staticmethod
-    def getParameters():
+    trainVariants:List[str] = ["positive"]
+    iterations:List[int] = [50000, 100000, 200000]
+    windowSizes:List[int] = [5, 3, 1]
+    vectorSizes:List[int] = [32, 64, 128]
+    userProfileStrategies:List[str] = ["mean", "max", "weightedMean"]
+    userProfileSizes:List[int] = [-1, 1, 3, 5, 7, 10]
 
-        trainVariants:List[str] = ["positive"]
-        iterations:List[int] = [50000, 100000, 200000]
-        windowSizes:List[int] = [5, 3, 1]
-        vectorSizes:List[int] = [32, 64, 128]
-        userProfileStrategies:List[str] =  ["mean", "max", "weightedMean"]
-        userProfileSizes:List[int] = [-1, 1, 3, 5, 7, 10]
+    @classmethod
+    def getParameters(cls):
 
-        aDict:dict = {}
-        for trainVariantI in trainVariants:
-            for iterationI in iterations:
-                for windowSizeI in windowSizes:
-                    for vectorSizeI in vectorSizes:
-                        for userProfileStrategyI in userProfileStrategies:
-                            for userProfileSizeI in userProfileSizes:
+        aDict:Dict[str,object] = {}
+        for trainVariantI in cls.trainVariants:
+            for iterationI in cls.iterations:
+                for windowSizeI in cls.windowSizes:
+                    for vectorSizeI in cls.vectorSizes:
+                        for userProfileStrategyI in cls.userProfileStrategies:
+                            for userProfileSizeI in cls.userProfileSizes:
 
                                 keyI:str = "t" + str(trainVariantI) + "i" + str(iterationI) +\
                                             "ws" + str(windowSizeI) + "vs" + str(vectorSizeI) +\

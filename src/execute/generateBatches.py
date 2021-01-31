@@ -115,6 +115,12 @@ def generateAllBatches():
 def generateBatchesJournal():
     print("Generate Batches")
 
+    # RR
+    #BatchRRSingle.generateBatches()
+    BatchRRSingleW2VHT.generateBatches()
+
+    return
+
     # ML
     BatchMLSingle.generateBatches()
 
@@ -141,11 +147,6 @@ def generateBatchesJournal():
     BatchMLFuzzyDHondtDirectOptimize.generateBatches()
 
     BatchMLFuzzyDHondtDirectOptimizeThompsonSampling.generateBatches()
-
-    # RR
-    BatchRRSingle.generateBatches()
-    #BatchRRSingleW2VHT.generateBatches()
-
 
     #ST
     BatchSTSingle.generateBatches()
