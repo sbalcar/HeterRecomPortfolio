@@ -45,7 +45,7 @@ class BatchMLFuzzyDHondtINF(ABatchML):
     lrViewDivisors:List[float] = [250, 500, 1000]
 
     @staticmethod
-    def getNegativeImplFeedbackParameters():
+    def getNegativeImplFeedbackParameters_():
 
         pToolOLin0802HLin1002:APenalization = PenalizationToolDefinition.exportPenaltyToolOLin0802HLin1002(InputSimulatorDefinition.numberOfAggrItems)
 
@@ -68,10 +68,17 @@ class BatchMLFuzzyDHondtINF(ABatchML):
 
         return aDict
 
+
+    @classmethod
+    def getNegativeImplFeedbackParameters(cls):
+        from input.batchesML1m.batchMLFuzzyDHondtThompsonSamplingINF import BatchMLFuzzyDHondtThompsonSamplingINF #class
+        return BatchMLFuzzyDHondtThompsonSamplingINF.getPenalFncs()
+
+
     @classmethod
     def getParameters(cls):
         selectorIDs:List[str] = BatchMLFuzzyDHondt().getSelectorParameters().keys()
-        negativeImplFeedback:List[str] = BatchMLFuzzyDHondtINF.getNegativeImplFeedbackParameters().keys()
+        negativeImplFeedback:List[str] = cls.getNegativeImplFeedbackParameters().keys()
 
         aDict:Dict[str,object] = {}
         for selectorIDH in selectorIDs:
@@ -79,11 +86,11 @@ class BatchMLFuzzyDHondtINF(ABatchML):
                 for lrClickJ in cls.lrClicks:
                     for lrViewDivisorK in cls.lrViewDivisors:
 
-                        keyIJ:str = str(selectorIDH) + "Clk" + str(lrClickJ).replace(".", "") + "ViewDivisor" + str(lrViewDivisorK).replace(".", "") + "Reduce" + nImplFeedbackI
+                        keyIJ:str = str(selectorIDH) + "Clk" + str(lrClickJ).replace(".", "") + "ViewDivisor" + str(lrViewDivisorK).replace(".", "") + nImplFeedbackI
                         lrViewIJK:float = lrClickJ / lrViewDivisorK
                         eTool:AEvalTool = EvalToolDHondt({EvalToolDHondt.ARG_LEARNING_RATE_CLICKS: lrClickJ,
                                                           EvalToolDHondt.ARG_LEARNING_RATE_VIEWS: lrViewIJK})
-                        nImplFeedback:APenalization = BatchMLFuzzyDHondtINF.getNegativeImplFeedbackParameters()[nImplFeedbackI]
+                        nImplFeedback:APenalization = cls.getNegativeImplFeedbackParameters()[nImplFeedbackI]
                         selectorH:ADHondtSelector = BatchMLFuzzyDHondt().getSelectorParameters()[selectorIDH]
 
                         aDict[keyIJ] = (selectorH, nImplFeedback, eTool)

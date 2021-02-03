@@ -116,14 +116,33 @@ def generateAllBatches():
 def generateBatchesJournal():
     print("Generate Batches")
 
-    #BatchSTFuzzyDHondtINF.lrClicks:List[float] = [0.03]
-    #BatchSTFuzzyDHondtINF.learningRateViews:List[float] = [250]
-    #BatchMLFuzzyDHondt.selectorIds = [BatchMLFuzzyDHondt.SLCTR_FIXED]
-    #BatchSTFuzzyDHondtINF.generateSelectedBatches(["FixedReduceOLin07500HLin05025"])
+    jobIdST01:str = "FixedReduceOLin07500HLin05025"
+    jobIdST02:str = "FixedReduceOLin0500HLin1005"
+    jobIdST03:str = "FixedReduceOLin1000HLin1005"
+    jobIdST04:str = "FixedReduceOLin1005HLin1005"
 
-    BatchSTDHondtThompsonSamplingINF.generateSelectedBatches(["FixedReduceOLin07500HLin05025"])
+    jobIdST05:str = "FixedReduceProbOLin07500HLin07500"
+    jobIdST06:str = "FixedReduceProbOLin07500HLin075025"
+    jobIdST07:str = "FixedReduceProbOLin1000HLin1005"
+    jobIdST08:str = "FixedReduceProbOLin1005HLin1005"
+
+    BatchMLFuzzyDHondtINF.lrClicks:List[float] = [0.03]
+    BatchMLFuzzyDHondtINF.lrViewDivisors:List[float] = [250]
+    BatchMLFuzzyDHondt.selectorIds = [BatchMLFuzzyDHondt.SLCTR_FIXED]
+    BatchSTFuzzyDHondtINF.generateSelectedBatches([jobIdST01.replace("Reduce", "Clk003ViewDivisor250Reduce"),
+                                                   jobIdST02.replace("Reduce", "Clk003ViewDivisor250Reduce"),
+                                                   jobIdST03.replace("Reduce", "Clk003ViewDivisor250Reduce"),
+                                                   jobIdST04.replace("Reduce", "Clk003ViewDivisor250Reduce"),
+                                                   jobIdST05.replace("Reduce", "Clk003ViewDivisor250Reduce"),
+                                                   jobIdST06.replace("Reduce", "Clk003ViewDivisor250Reduce"),
+                                                   jobIdST07.replace("Reduce", "Clk003ViewDivisor250Reduce"),
+                                                   jobIdST08.replace("Reduce", "Clk003ViewDivisor250Reduce")])
 
     return
+    
+    BatchSTDHondtThompsonSamplingINF.generateSelectedBatches([
+        jobIdST01, jobIdST02, jobIdST03, jobIdST04, jobIdST05, jobIdST06, jobIdST07, jobIdST08])
+
 
     # ML
     BatchMLSingle.generateAllBatches()

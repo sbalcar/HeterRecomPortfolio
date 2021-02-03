@@ -108,6 +108,7 @@ class BatchMLFuzzyDHondtThompsonSamplingINF(ABatchML):
         return functionsDict
 
 
+    @classmethod
     def getPenalFncs(cls):
         d1 = cls.getStaticLinearFncs()
         d2 = cls.getLinearLinerFncs()
