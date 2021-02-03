@@ -11,7 +11,7 @@ class InputABatchDefinition:
     @abstractmethod
     def getBatchParameters(datasetID:str):
 
-        divisionsDatasetPercentualSize:List[int] = [80]
+        divisionsDatasetPercentualSize:List[int] = [90]
         uBehaviours:List[str] = [BehavioursML.BHVR_LINEAR0109,
                                  BehavioursML.BHVR_STATIC08,
                                  #BehavioursML.BHVR_STATIC06,

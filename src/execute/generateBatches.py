@@ -24,6 +24,7 @@ from input.batchesML1m.batchMLRandomRecsSwitching import BatchMLRandomRecsSwitch
 from input.batchesML1m.batchMLRandomKfromN import BatchMLRandomKfromN #class
 
 from input.batchesML1m.batchMLFuzzyDHondtDirectOptimizeThompsonSampling import BatchMLFuzzyDHondtDirectOptimizeThompsonSampling #class
+from input.batchesML1m.batchMLFuzzyDHondtDirectOptimizeThompsonSamplingINF import BatchMLFuzzyDHondtDirectOptimizeThompsonSamplingINF #class
 
 from input.batchesML1m.batchMLSingle import BatchMLSingle #class
 from input.batchesML1m.batchMLSingleINF import BatchMLSingleINF #class
@@ -39,6 +40,8 @@ from input.batchesRetailrocket.batchRRSingleW2VHT import BatchRRSingleW2VHT #cla
 from input.batchesRetailrocket.batchRRSingleVMContextKNNHT import BatchRRVMContextKNNHT #class
 
 from input.batchesSlanTour.batchSTFuzzyDHondtDirectOptimizeThompsonSampling import BatchSTFuzzyDHondtDirectOptimizeThompsonSampling #class
+from input.batchesSlanTour.batchSTFuzzyDHondtDirectOptimizeThompsonSamplingINF import BatchSTFuzzyDHondtDirectOptimizeThompsonSamplingINF #class
+
 from input.batchesSlanTour.batchSTContextDHondt import BatchSTContextDHondt #class
 from input.batchesSlanTour.batchSTContextDHondtINF import BatchSTContextDHondtINF #class
 from input.batchesSlanTour.batchSTDHondtThompsonSampling import BatchSTDHondtThompsonSampling #class
@@ -116,6 +119,17 @@ def generateAllBatches():
 def generateBatchesJournal():
     print("Generate Batches")
 
+    jobIdML01:str = "FixedReduceOLin07500HLin07500"
+    jobIdML02:str = "FixedReduceOLin10075HLin0500"
+    jobIdML03:str = "FixedReduceOLin1000HLin1005"
+    jobIdML04:str = "FixedReduceOLin1005HLin1005"
+
+    jobIdML05:str = "FixedReduceProbOLin07500HLin07500"
+    jobIdML06:str = "FixedReduceProbOLin075025HLin05025"
+    jobIdML07:str = "FixedReduceProbOLin1000HLin1005"
+    jobIdML08:str = "FixedReduceProbOLin1005HLin1005"
+
+
     jobIdST01:str = "FixedReduceOLin07500HLin05025"
     jobIdST02:str = "FixedReduceOLin0500HLin1005"
     jobIdST03:str = "FixedReduceOLin1000HLin1005"
@@ -126,75 +140,78 @@ def generateBatchesJournal():
     jobIdST07:str = "FixedReduceProbOLin1000HLin1005"
     jobIdST08:str = "FixedReduceProbOLin1005HLin1005"
 
-    BatchMLFuzzyDHondtINF.lrClicks:List[float] = [0.03]
-    BatchMLFuzzyDHondtINF.lrViewDivisors:List[float] = [250]
-    BatchMLFuzzyDHondt.selectorIds = [BatchMLFuzzyDHondt.SLCTR_FIXED]
-    BatchSTFuzzyDHondtINF.generateSelectedBatches([jobIdST01.replace("Reduce", "Clk003ViewDivisor250Reduce"),
-                                                   jobIdST02.replace("Reduce", "Clk003ViewDivisor250Reduce"),
-                                                   jobIdST03.replace("Reduce", "Clk003ViewDivisor250Reduce"),
-                                                   jobIdST04.replace("Reduce", "Clk003ViewDivisor250Reduce"),
-                                                   jobIdST05.replace("Reduce", "Clk003ViewDivisor250Reduce"),
-                                                   jobIdST06.replace("Reduce", "Clk003ViewDivisor250Reduce"),
-                                                   jobIdST07.replace("Reduce", "Clk003ViewDivisor250Reduce"),
-                                                   jobIdST08.replace("Reduce", "Clk003ViewDivisor250Reduce")])
 
-    return
-    
-    BatchSTDHondtThompsonSamplingINF.generateSelectedBatches([
+#    BatchMLFuzzyDHondtINF.lrClicks:List[float] = [0.03]
+#    BatchMLFuzzyDHondtINF.lrViewDivisors:List[float] = [250]
+#    BatchMLFuzzyDHondt.selectorIds = [BatchMLFuzzyDHondt.SLCTR_FIXED]
+#    BatchSTFuzzyDHondtINF.generateSelectedBatches([jobIdST01.replace("Reduce", "Clk003ViewDivisor250Reduce"),
+#                                                   jobIdST02.replace("Reduce", "Clk003ViewDivisor250Reduce"),
+#                                                   jobIdST03.replace("Reduce", "Clk003ViewDivisor250Reduce"),
+#                                                   jobIdST04.replace("Reduce", "Clk003ViewDivisor250Reduce"),
+#                                                   jobIdST05.replace("Reduce", "Clk003ViewDivisor250Reduce"),
+#                                                   jobIdST06.replace("Reduce", "Clk003ViewDivisor250Reduce"),
+#                                                   jobIdST07.replace("Reduce", "Clk003ViewDivisor250Reduce"),
+#                                                   jobIdST08.replace("Reduce", "Clk003ViewDivisor250Reduce")])
+
+
+    # ML #############################################################################
+#    BatchMLSingle.generateAllBatches()
+
+#    BatchMLFuzzyDHondt.lrClicks:List[float] = [0.03]
+#    BatchMLFuzzyDHondt.lrViewDivisors:List[float] = [250]
+#    BatchMLFuzzyDHondt.selectorIds = [BatchMLFuzzyDHondt.SLCTR_FIXED]
+#    BatchMLBanditTS.generateAllBatches()
+
+#    BatchMLWeightedAVG.lrClicks:List[float] = [0.03]
+#    BatchMLWeightedAVG.lrViewDivisors:List[float] = [250]
+#    BatchMLWeightedAVG.generateAllBatches()
+
+#    BatchMLRandomRecsSwitching.generateAllBatches()
+#    BatchMLRandomKfromN.generateAllBatches()
+
+#    BatchMLFuzzyDHondt.generateAllBatches()
+
+#    BatchMLFuzzyDHondtThompsonSampling.generateAllBatches()
+#    BatchMLContextDHondt.generateAllBatches()
+
+#    BatchMLFuzzyDHondtDirectOptimize.lrClicks:List[float] = [0.03]
+#    BatchMLFuzzyDHondtDirectOptimize.lrViewDivisors:List[float] = [250]
+#    BatchMLFuzzyDHondtDirectOptimize.selectorIds = [BatchMLFuzzyDHondtDirectOptimize.SLCTR_FIXED]
+#    BatchMLFuzzyDHondtDirectOptimize.generateAllBatches()
+
+#    BatchMLFuzzyDHondtDirectOptimizeThompsonSampling.generateAllBatches()
+
+    # INF
+    BatchMLFuzzyDHondtDirectOptimizeThompsonSamplingINF.generateSelectedBatches([
+        jobIdML01, jobIdML02, jobIdML03, jobIdML04, jobIdML05, jobIdML06, jobIdML07, jobIdML08])
+
+
+    # RR #############################################################################
+#    BatchRRSingle.generateAllBatches()
+#    BatchRRSingleW2VHT.generateAllBatches()
+#    BatchRRVMContextKNNHT.generateAllBatches()
+
+
+    # ST #############################################################################
+#    BatchSTSingle.generateAllBatches()
+
+#    BatchSTBanditTS.generateAllBatches()  # only Fixed selector
+#    BatchSTWeightedAVG.generateAllBatches()
+
+#    BatchSTRandomRecsSwitching.generateAllBatches()
+#    BatchSTRandomKfromN.generateAllBatches()
+
+#    BatchSTFuzzyDHondt.generateAllBatches()
+
+#    BatchSTDHondtThompsonSampling.generateAllBatches()
+#    BatchSTContextDHondt.generateAllBatches()
+
+#    BatchSTFuzzyDHondtDirectOptimize.generateAllBatches()
+
+#    BatchSTFuzzyDHondtDirectOptimizeThompsonSampling.generateAllBatches()
+
+    BatchSTFuzzyDHondtDirectOptimizeThompsonSamplingINF.generateSelectedBatches([
         jobIdST01, jobIdST02, jobIdST03, jobIdST04, jobIdST05, jobIdST06, jobIdST07, jobIdST08])
-
-
-    # ML
-    BatchMLSingle.generateAllBatches()
-
-    BatchMLFuzzyDHondt.lrClicks:List[float] = [0.03]
-    BatchMLFuzzyDHondt.lrViewDivisors:List[float] = [250]
-    BatchMLFuzzyDHondt.selectorIds = [BatchMLFuzzyDHondt.SLCTR_FIXED]
-    BatchMLBanditTS.generateAllBatches()
-
-    BatchMLWeightedAVG.lrClicks:List[float] = [0.03]
-    BatchMLWeightedAVG.lrViewDivisors:List[float] = [250]
-    BatchMLWeightedAVG.generateAllBatches()
-
-    BatchMLRandomRecsSwitching.generateAllBatches()
-    BatchMLRandomKfromN.generateAllBatches()
-
-    BatchMLFuzzyDHondt.generateAllBatches()
-
-    BatchMLFuzzyDHondtThompsonSampling.generateAllBatches()
-    BatchMLContextDHondt.generateAllBatches()
-
-    BatchMLFuzzyDHondtDirectOptimize.lrClicks:List[float] = [0.03]
-    BatchMLFuzzyDHondtDirectOptimize.lrViewDivisors:List[float] = [250]
-    BatchMLFuzzyDHondtDirectOptimize.selectorIds = [BatchMLFuzzyDHondtDirectOptimize.SLCTR_FIXED]
-    BatchMLFuzzyDHondtDirectOptimize.generateAllBatches()
-
-    BatchMLFuzzyDHondtDirectOptimizeThompsonSampling.generateAllBatches()
-
-
-    # RR
-    BatchRRSingle.generateAllBatches()
-    BatchRRSingleW2VHT.generateAllBatches()
-    BatchRRVMContextKNNHT.generateAllBatches()
-
-
-    #ST
-    BatchSTSingle.generateAllBatches()
-
-    BatchSTBanditTS.generateAllBatches()  # only Fixed selector
-    BatchSTWeightedAVG.generateAllBatches()
-
-    BatchSTRandomRecsSwitching.generateAllBatches()
-    BatchSTRandomKfromN.generateAllBatches()
-
-    BatchSTFuzzyDHondt.generateAllBatches()
-
-    BatchSTDHondtThompsonSampling.generateAllBatches()
-    BatchSTContextDHondt.generateAllBatches()
-
-    BatchSTFuzzyDHondtDirectOptimize.generateAllBatches()
-
-    BatchSTFuzzyDHondtDirectOptimizeThompsonSampling.generateAllBatches()
 
 
 
