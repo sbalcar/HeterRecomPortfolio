@@ -27,7 +27,7 @@ from recommender.recommenderVSKNN import RecommenderVMContextKNN #class
 
 import pandas as pd
 from input.aBatch import ABatch #class
-from input.aBatch import BatchParameters #class
+from input.inputABatchDefinition import InputABatchDefinition
 
 from input.aBatchST import ABatchST #class
 from input.batchesML1m.batchMLSingleVMContextKNNHT import BatchMLVMContextKNNHT #class
@@ -46,7 +46,7 @@ class BatchSTVMContextKNNHT(ABatchST):
         divisionDatasetPercentualSize:int
         uBehaviour:str
         repetition:int
-        divisionDatasetPercentualSize, uBehaviour, repetition = BatchParameters.getBatchParameters(self.datasetID)[batchID]
+        divisionDatasetPercentualSize, uBehaviour, repetition = InputABatchDefinition.getBatchParameters(self.datasetID)[batchID]
 
         kI:str = self.getParameters()[jobID]
 
@@ -68,4 +68,4 @@ if __name__ == "__main__":
    os.chdir("..")
    #print(os.getcwd())
 
-   BatchSTVMContextKNNHT.generateBatches()
+   BatchSTVMContextKNNHT.generateAllBatches()

@@ -41,7 +41,7 @@ from input.inputSimulatorDefinition import InputSimulatorDefinition #class
 from history.historyHierDF import HistoryHierDF #class
 
 import pandas as pd
-from input.aBatch import BatchParameters #class
+from input.inputABatchDefinition import InputABatchDefinition
 from input.aBatchML import ABatchML #class
 
 

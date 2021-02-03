@@ -22,7 +22,7 @@ from input.batchesML1m.batchMLFuzzyDHondt import BatchMLFuzzyDHondt #class
 
 from aggregation.operators.aDHondtSelector import ADHondtSelector #class
 
-from input.aBatch import BatchParameters #class
+from input.inputABatchDefinition import InputABatchDefinition
 from input.aBatchML import ABatchML #class
 from input.inputSimulatorDefinition import InputSimulatorDefinition #class
 
@@ -52,7 +52,7 @@ class BatchMLFuzzyDHondtThompsonSampling(ABatchML):
         divisionDatasetPercentualSize:int
         uBehaviour:str
         repetition:int
-        divisionDatasetPercentualSize, uBehaviour, repetition = BatchParameters.getBatchParameters(self.datasetID)[batchID]
+        divisionDatasetPercentualSize, uBehaviour, repetition = InputABatchDefinition.getBatchParameters(self.datasetID)[batchID]
 
 
         #eTool:AEvalTool
@@ -78,4 +78,4 @@ if __name__ == "__main__":
     os.chdir("..")
     os.chdir("..")
     print(os.getcwd())
-    BatchMLFuzzyDHondtThompsonSampling.generateBatches()
+    BatchMLFuzzyDHondtThompsonSampling.generateAllBatches()

@@ -16,7 +16,7 @@ from portfolioDescription.aPortfolioDescription import APortfolioDescription #cl
 
 from evaluationTool.evalToolDoNothing import EToolDoNothing #class
 
-from input.aBatch import BatchParameters #class
+from input.inputABatchDefinition import InputABatchDefinition
 
 from input.aBatchML import ABatchML #class
 from input.batchesML1m.batchMLSingle import BatchMLSingle #class
@@ -58,7 +58,7 @@ class BatchMLSingleINF(ABatchML):
         divisionDatasetPercentualSize:int
         uBehaviour:str
         repetition:int
-        divisionDatasetPercentualSize, uBehaviour, repetition = BatchParameters.getBatchParameters(self.datasetID)[batchID]
+        divisionDatasetPercentualSize, uBehaviour, repetition = InputABatchDefinition.getBatchParameters(self.datasetID)[batchID]
 
         datasetID:str = "ml1m" + "Div" + str(divisionDatasetPercentualSize)
 
@@ -81,4 +81,4 @@ if __name__ == "__main__":
    os.chdir("..")
    os.chdir("..")
    print(os.getcwd())
-   BatchMLSingle.generateBatches()
+   BatchMLSingle.generateAllBatches()

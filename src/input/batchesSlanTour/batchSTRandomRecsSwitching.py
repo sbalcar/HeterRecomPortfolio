@@ -23,7 +23,7 @@ from aggregation.operators.aDHondtSelector import ADHondtSelector #class
 from aggregation.operators.rouletteWheelSelector import RouletteWheelSelector #class
 from aggregation.operators.theMostVotedItemSelector import TheMostVotedItemSelector #class
 
-from input.aBatch import BatchParameters #class
+from input.inputABatchDefinition import InputABatchDefinition
 from input.aBatchST import ABatchST #class
 
 from input.inputSimulatorDefinition import InputSimulatorDefinition #class
@@ -48,7 +48,7 @@ class BatchSTRandomRecsSwitching(ABatchST):
         divisionDatasetPercentualSize:int
         uBehaviour:str
         repetition:int
-        divisionDatasetPercentualSize, uBehaviour, repetition = BatchParameters.getBatchParameters(self.datasetID)[batchID]
+        divisionDatasetPercentualSize, uBehaviour, repetition = InputABatchDefinition.getBatchParameters(self.datasetID)[batchID]
 
         eTool:AEvalTool = EToolDoNothing({})
 
@@ -74,4 +74,4 @@ if __name__ == "__main__":
     os.chdir("..")
     print(os.getcwd())
 
-    BatchSTRandomRecsSwitching.generateBatches()
+    BatchSTRandomRecsSwitching.generateAllBatches()

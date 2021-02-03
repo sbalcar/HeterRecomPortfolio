@@ -29,7 +29,7 @@ from simulator.simulator import Simulator #class
 from history.historyHierDF import HistoryHierDF #class
 
 import pandas as pd
-from input.aBatch import BatchParameters #class
+from input.inputABatchDefinition import InputABatchDefinition
 from input.aBatchRR import ABatchRR #class
 
 from input.batchesML1m.batchMLSingleW2VHT import BatchMLSingleW2VHT #class
@@ -51,7 +51,7 @@ class BatchRRSingleW2VHT(ABatchRR):
         divisionDatasetPercentualSize: int
         uBehaviour: str
         repetition: int
-        divisionDatasetPercentualSize, uBehaviour, repetition = BatchParameters.getBatchParameters(self.datasetID)[batchID]
+        divisionDatasetPercentualSize, uBehaviour, repetition = InputABatchDefinition.getBatchParameters(self.datasetID)[batchID]
 
         rDescr:RecommenderDescription = self.getParameters()[jobID]
         recommenderID:str = jobID
@@ -68,4 +68,4 @@ if __name__ == "__main__":
     os.chdir("..")
     print(os.getcwd())
 
-    BatchRRSingleW2VHT.generateBatches()
+    BatchRRSingleW2VHT.generateAllBatches()

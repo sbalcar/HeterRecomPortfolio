@@ -32,9 +32,9 @@ class RecommenderW2V(ARecommender):
 
     # mandatory argument
     ARG_TRAIN_VARIANT:str = "trainVariant"
-    ARG_VECTOR_SIZE:int = "vectorSize"
-    ARG_WINDOW_SIZE:int = "windowSize"
-    ARG_ITERATIONS:int = "iterations"
+    ARG_VECTOR_SIZE:str = "vectorSize"
+    ARG_WINDOW_SIZE:str = "windowSize"
+    ARG_ITERATIONS:str = "iterations"
 
     # mandatory argument
     ARG_USER_PROFILE_STRATEGY:str = "userProfileStrategy"

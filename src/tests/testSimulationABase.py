@@ -48,7 +48,7 @@ from recommender.aRecommender import ARecommender #class
 from recommender.recommenderTheMostPopular import RecommenderTheMostPopular #class
 
 import pandas as pd
-from input.aBatch import BatchParameters #class
+from input.inputABatchDefinition import InputABatchDefinition
 from input.aBatchML import ABatchML #class
 
 import pandas as pd

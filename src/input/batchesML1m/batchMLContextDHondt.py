@@ -29,7 +29,7 @@ from aggregation.negImplFeedback.penalUsingProbability import PenalUsingProbabil
 
 from input.batchesML1m.batchMLFuzzyDHondt import BatchMLFuzzyDHondt #class
 
-from input.aBatch import BatchParameters #class
+from input.inputABatchDefinition import InputABatchDefinition
 from input.batchesML1m.batchMLBanditTS import BatchMLBanditTS #class
 from input.aBatchML import ABatchML #class
 
@@ -60,7 +60,7 @@ class BatchMLContextDHondt(ABatchML):
         divisionDatasetPercentualSize:int
         uBehaviour:str
         repetition:int
-        divisionDatasetPercentualSize, uBehaviour, repetition = BatchParameters.getBatchParameters(self.datasetID)[batchID]
+        divisionDatasetPercentualSize, uBehaviour, repetition = InputABatchDefinition.getBatchParameters(self.datasetID)[batchID]
 
         selector:ADHondtSelector = self.getParameters()[jobID]
 
@@ -97,4 +97,4 @@ if __name__ == "__main__":
    os.chdir("..")
    os.chdir("..")
    print(os.getcwd())
-   BatchMLContextDHondt.generateBatches()
+   BatchMLContextDHondt.generateAllBatches()

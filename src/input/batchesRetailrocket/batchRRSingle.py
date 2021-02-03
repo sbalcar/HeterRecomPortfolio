@@ -24,7 +24,7 @@ from history.historyHierDF import HistoryHierDF #class
 
 import pandas as pd
 from input.aBatch import ABatch #class
-from input.aBatch import BatchParameters #class
+from input.inputABatchDefinition import InputABatchDefinition
 
 from input.aBatchRR import ABatchRR #class
 
@@ -46,7 +46,7 @@ class BatchRRSingle(ABatchRR):
         divisionDatasetPercentualSize:int
         uBehaviour:str
         repetition:int
-        divisionDatasetPercentualSize, uBehaviour, repetition = BatchParameters.getBatchParameters(self.datasetID)[batchID]
+        divisionDatasetPercentualSize, uBehaviour, repetition = InputABatchDefinition.getBatchParameters(self.datasetID)[batchID]
 
         recommenderID:str = self.getParameters()[jobID]
 
@@ -64,4 +64,4 @@ if __name__ == "__main__":
    os.chdir("..")
    os.chdir("..")
    print(os.getcwd())
-   BatchRRSingle.generateBatches()
+   BatchRRSingle.generateAllBatches()

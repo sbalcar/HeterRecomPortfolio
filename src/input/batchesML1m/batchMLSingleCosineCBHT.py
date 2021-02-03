@@ -29,7 +29,7 @@ from simulator.simulator import Simulator #class
 from history.historyHierDF import HistoryHierDF #class
 
 import pandas as pd
-from input.aBatch import BatchParameters #class
+from input.inputABatchDefinition import InputABatchDefinition
 from input.aBatchML import ABatchML #class
 
 from configuration.configuration import Configuration #class
@@ -73,7 +73,7 @@ class BatchMLSingleCosineCBHT(ABatchML):
         divisionDatasetPercentualSize: int
         uBehaviour: str
         repetition: int
-        divisionDatasetPercentualSize, uBehaviour, repetition = BatchParameters.getBatchParameters(self.datasetID)[batchID]
+        divisionDatasetPercentualSize, uBehaviour, repetition = InputABatchDefinition.getBatchParameters(self.datasetID)[batchID]
 
         rDescr:RecommenderDescription = self.getParameters()[jobID]
         recommenderID:str = jobID
@@ -90,4 +90,4 @@ if __name__ == "__main__":
     os.chdir("..")
     print(os.getcwd())
 
-    BatchMLSingleCosineCBHT.generateBatches()
+    BatchMLSingleCosineCBHT.generateAllBatches()

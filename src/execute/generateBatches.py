@@ -62,112 +62,116 @@ def generateAllBatches():
     print("Generate Batches")
 
     # ML
-#    BatchMLBanditTS.generateBatches()
+    BatchMLBanditTS.generateAllBatches()
 
-#    BatchMLFuzzyDHondt.generateBatches()
-#    BatchMLFuzzyDHondtINF.generateBatches()
+    BatchMLFuzzyDHondt.generateAllBatches()
+    BatchMLFuzzyDHondtINF.generateAllBatches()
 
-#    BatchMLDHondtThompsonSampling.generateBatches()
-#    BatchMLDHondtThompsonSamplingINF.generateBatches()
+    BatchMLFuzzyDHondtThompsonSampling.generateAllBatches()
+    BatchMLFuzzyDHondtThompsonSamplingINF.generateAllBatches()
 
-#    BatchMLFuzzyDHondtDirectOptimize.generateBatches()
-#    BatchMLFuzzyDHondtDirectOptimizeINF.generateBatches()
+    BatchMLFuzzyDHondtDirectOptimize.generateAllBatches()
+    BatchMLFuzzyDHondtDirectOptimizeINF.generateAllBatches()
 
-#    BatchMLContextDHondt.generateBatches()
+    BatchMLContextDHondt.generateAllBatches()
 
-#    BatchMLWeightedAVG.generateBatches()
+    BatchMLWeightedAVG.generateAllBatches()
 
-    BatchMLRandomRecsSwitching.generateBatches()
-    BatchMLRandomKfromN.generateBatches()
+    BatchMLRandomRecsSwitching.generateAllBatches()
+    BatchMLRandomKfromN.generateAllBatches()
 
-#    BatchMLSingle.generateBatches()
-#    BatchMLSingleINF.generateBatches()
+    BatchMLSingle.generateAllBatches()
+    BatchMLSingleINF.generateAllBatches()
 
-#    BatchMLSingleBPRMFHT.generateBatches()
-#    BatchMLSingleW2VHT.generateBatches()
-#    BatchMLSingleCosineCBHT.generateBatches()
-#    BatchMLVMContextKNNHT.generateBatches()
+    BatchMLSingleBPRMFHT.generateAllBatches()
+    BatchMLSingleW2VHT.generateAllBatches()
+    BatchMLSingleCosineCBHT.generateAllBatches()
+    BatchMLVMContextKNNHT.generateAllBatches()
 
     # RR
-#    BatchRRSingle.generateBatches()
-#    BatchRRSingleW2VHT.generateBatches()
+    BatchRRSingle.generateAllBatches()
+    BatchRRSingleW2VHT.generateAllBatches()
 
     #ST
-#    BatchSTContextDHondtINF.generateBatches()
-#    BatchSTContextDHondt.generateBatches()
-#    BatchSTDHondtThompsonSampling.generateBatches()
-#    BatchSTDHondtThompsonSamplingINF.generateBatches()
-#    BatchSTFuzzyDHondtDirectOptimize.generateBatches()
-#    BatchSTFuzzyDHondt.generateBatches()
-#    BatchSTFuzzyDHondtINF.generateBatches()
-#    BatchSTWeightedAVG.generateBatches()
-#    BatchSTBanditTS.generateBatches()
-    BatchSTRandomRecsSwitching.generateBatches()
-    BatchSTRandomKfromN.generateBatches()
+    BatchSTContextDHondtINF.generateAllBatches()
+    BatchSTContextDHondt.generateAllBatches()
+    BatchSTDHondtThompsonSampling.generateAllBatches()
+    BatchSTDHondtThompsonSamplingINF.generateAllBatches()
+    BatchSTFuzzyDHondtDirectOptimize.generateAllBatches()
+    BatchSTFuzzyDHondt.generateAllBatches()
+    BatchSTFuzzyDHondtINF.generateAllBatches()
+    BatchSTWeightedAVG.generateAllBatches()
+    BatchSTBanditTS.generateAllBatches()
+    BatchSTRandomRecsSwitching.generateAllBatches()
+    BatchSTRandomKfromN.generateAllBatches()
 
-#    BatchSTSingle.generateBatches()
-#    BatchSTSingleBPRMFHT.generateBatches()
-#    BatchSTSingleW2VHT.generateBatches()
-#    BatchSTSingleCosineCBHT.generateBatches()
-#    BatchSTVMContextKNNHT.generateBatches()
+    BatchSTSingle.generateAllBatches()
+    BatchSTSingleBPRMFHT.generateAllBatches()
+    BatchSTSingleW2VHT.generateAllBatches()
+    BatchSTSingleCosineCBHT.generateAllBatches()
+    BatchSTVMContextKNNHT.generateAllBatches()
 
 
 
 def generateBatchesJournal():
     print("Generate Batches")
 
-    # RR
-    #BatchRRSingle.generateBatches()
-    BatchRRSingleW2VHT.generateBatches()
-
-    BatchRRVMContextKNNHT.generateBatches()
+    #BatchSTContextDHondtINF.generateSelectedBatches(["FixedReduceOLin07500HLin05025"])
+    BatchMLFuzzyDHondtINF.generateSelectedBatches(["FixedReduceOLin07500HLin05025"])
 
     return
 
     # ML
-    BatchMLSingle.generateBatches()
+    BatchMLSingle.generateAllBatches()
 
     BatchMLFuzzyDHondt.lrClicks:List[float] = [0.03]
     BatchMLFuzzyDHondt.lrViewDivisors:List[float] = [250]
     BatchMLFuzzyDHondt.selectorIds = [BatchMLFuzzyDHondt.SLCTR_FIXED]
-    BatchMLBanditTS.generateBatches()
+    BatchMLBanditTS.generateAllBatches()
 
     BatchMLWeightedAVG.lrClicks:List[float] = [0.03]
     BatchMLWeightedAVG.lrViewDivisors:List[float] = [250]
-    BatchMLWeightedAVG.generateBatches()
+    BatchMLWeightedAVG.generateAllBatches()
 
-    BatchMLRandomRecsSwitching.generateBatches()
-    BatchMLRandomKfromN.generateBatches()
+    BatchMLRandomRecsSwitching.generateAllBatches()
+    BatchMLRandomKfromN.generateAllBatches()
 
-    BatchMLFuzzyDHondt.generateBatches()
+    BatchMLFuzzyDHondt.generateAllBatches()
 
-    BatchMLFuzzyDHondtThompsonSampling.generateBatches()
-    BatchMLContextDHondt.generateBatches()
+    BatchMLFuzzyDHondtThompsonSampling.generateAllBatches()
+    BatchMLContextDHondt.generateAllBatches()
 
     BatchMLFuzzyDHondtDirectOptimize.lrClicks:List[float] = [0.03]
     BatchMLFuzzyDHondtDirectOptimize.lrViewDivisors:List[float] = [250]
     BatchMLFuzzyDHondtDirectOptimize.selectorIds = [BatchMLFuzzyDHondtDirectOptimize.SLCTR_FIXED]
-    BatchMLFuzzyDHondtDirectOptimize.generateBatches()
+    BatchMLFuzzyDHondtDirectOptimize.generateAllBatches()
 
-    BatchMLFuzzyDHondtDirectOptimizeThompsonSampling.generateBatches()
+    BatchMLFuzzyDHondtDirectOptimizeThompsonSampling.generateAllBatches()
+
+
+    # RR
+    BatchRRSingle.generateAllBatches()
+    BatchRRSingleW2VHT.generateAllBatches()
+    BatchRRVMContextKNNHT.generateAllBatches()
+
 
     #ST
-    BatchSTSingle.generateBatches()
+    BatchSTSingle.generateAllBatches()
 
-    BatchSTBanditTS.generateBatches()  # only Fixed selector
-    BatchSTWeightedAVG.generateBatches()
+    BatchSTBanditTS.generateAllBatches()  # only Fixed selector
+    BatchSTWeightedAVG.generateAllBatches()
 
-    BatchSTRandomRecsSwitching.generateBatches()
-    BatchSTRandomKfromN.generateBatches()
+    BatchSTRandomRecsSwitching.generateAllBatches()
+    BatchSTRandomKfromN.generateAllBatches()
 
-    BatchSTFuzzyDHondt.generateBatches()
+    BatchSTFuzzyDHondt.generateAllBatches()
 
-    BatchSTDHondtThompsonSampling.generateBatches()
-    BatchSTContextDHondt.generateBatches()
+    BatchSTDHondtThompsonSampling.generateAllBatches()
+    BatchSTContextDHondt.generateAllBatches()
 
-    BatchSTFuzzyDHondtDirectOptimize.generateBatches()
+    BatchSTFuzzyDHondtDirectOptimize.generateAllBatches()
 
-    BatchSTFuzzyDHondtDirectOptimizeThompsonSampling.generateBatches()
+    BatchSTFuzzyDHondtDirectOptimizeThompsonSampling.generateAllBatches()
 
 
 

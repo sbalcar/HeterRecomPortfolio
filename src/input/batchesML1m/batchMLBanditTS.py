@@ -18,7 +18,7 @@ from input.inputRecomMLDefinition import InputRecomMLDefinition #class
 
 from input.batchesML1m.batchMLFuzzyDHondt import BatchMLFuzzyDHondt #class
 
-from input.aBatch import BatchParameters #class
+from input.inputABatchDefinition import InputABatchDefinition
 from input.aBatchML import ABatchML #class
 
 from aggregation.aggrFuzzyDHondt import AggrFuzzyDHondt #class
@@ -43,7 +43,7 @@ class BatchMLBanditTS(ABatchML):
         divisionDatasetPercentualSize:int
         uBehaviour:str
         repetition:int
-        divisionDatasetPercentualSize, uBehaviour, repetition = BatchParameters.getBatchParameters(self.datasetID)[batchID]
+        divisionDatasetPercentualSize, uBehaviour, repetition = InputABatchDefinition.getBatchParameters(self.datasetID)[batchID]
 
         selector:ADHondtSelector = self.getParameters()[jobID]
 
@@ -67,4 +67,4 @@ if __name__ == "__main__":
     os.chdir("..")
     print(os.getcwd())
 
-    BatchMLBanditTS.generateBatches()
+    BatchMLBanditTS.generateAllBatches()

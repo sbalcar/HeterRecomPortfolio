@@ -26,7 +26,7 @@ from aggregation.negImplFeedback.aPenalization import APenalization #class
 
 from aggregation.operators.aDHondtSelector import ADHondtSelector #class
 
-from input.aBatch import BatchParameters #class
+from input.inputABatchDefinition import InputABatchDefinition
 from input.aBatchST import ABatchST #class
 
 from evaluationTool.evalToolDHondtBanditVotes import EvalToolDHondtBanditVotes #class
@@ -58,7 +58,7 @@ class BatchSTDHondtThompsonSamplingINF(ABatchST):
         divisionDatasetPercentualSize:int
         uBehaviour:str
         repetition:int
-        divisionDatasetPercentualSize, uBehaviour, repetition = BatchParameters.getBatchParameters(self.datasetID)[batchID]
+        divisionDatasetPercentualSize, uBehaviour, repetition = InputABatchDefinition.getBatchParameters(self.datasetID)[batchID]
 
         selector, nImplFeedback = self.getParameters()[jobID]
 
@@ -83,4 +83,4 @@ if __name__ == "__main__":
     os.chdir("..")
     os.chdir("..")
 
-    BatchSTDHondtThompsonSamplingINF.generateBatches()
+    BatchSTDHondtThompsonSamplingINF.generateAllBatches()
