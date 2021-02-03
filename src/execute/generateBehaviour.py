@@ -49,6 +49,8 @@ def generateBehaviour():
 #   BehavioursRR.generateFileRR(countOfItems, countOfRepetitions, BehavioursRR.BHVR_STATIC02, uBehavStatic02Desc)
 
 #   BehavioursRR.generateFileRR(countOfItems, countOfRepetitions, BehavioursRR.BHVR_LINEAR0109, uBehavLinear0109Desc)
+   BehavioursRR.generateFileRR(countOfItems, countOfRepetitions, BehavioursRR.BHVR_POWERLAW054MIN048, uBehavPowerlaw054min048)
+
 
    # ST
 #   BehavioursST.generateFileST(countOfItems, countOfRepetitions, BehavioursST.BHVR_LINEAR0109, uBehavLinear0109Desc)

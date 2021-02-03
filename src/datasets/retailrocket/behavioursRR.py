@@ -25,16 +25,18 @@ from userBehaviourDescription.userBehaviourDescription import observationalLinea
 
 class BehavioursRR:
 
-  COL_USERID = Events.COL_VISITOR_ID
-  COL_ITEMID = Events.COL_ITEM_ID
-  COL_REPETITION = BehavioursML.COL_REPETITION
-  COL_BEHAVIOUR = BehavioursML.COL_BEHAVIOUR
+  COL_USERID:str = Events.COL_VISITOR_ID
+  COL_ITEMID:str = Events.COL_ITEM_ID
+  COL_REPETITION:str = BehavioursML.COL_REPETITION
+  COL_BEHAVIOUR:str = BehavioursML.COL_BEHAVIOUR
 
-  BHVR_LINEAR0109 = BehavioursML.BHVR_LINEAR0109
-  BHVR_STATIC08 = BehavioursML.BHVR_STATIC08
-  BHVR_STATIC06 = BehavioursML.BHVR_STATIC06
-  BHVR_STATIC04 = BehavioursML.BHVR_STATIC04
-  BHVR_STATIC02 = BehavioursML.BHVR_STATIC02
+  BHVR_LINEAR0109:str = BehavioursML.BHVR_LINEAR0109
+  BHVR_STATIC08:str = BehavioursML.BHVR_STATIC08
+  BHVR_STATIC06:str = BehavioursML.BHVR_STATIC06
+  BHVR_STATIC04:str = BehavioursML.BHVR_STATIC04
+  BHVR_STATIC02:str = BehavioursML.BHVR_STATIC02
+
+  BHVR_POWERLAW054MIN048:str = BehavioursML.BHVR_POWERLAW054MIN048
 
   @staticmethod
   def getColNameUserID():

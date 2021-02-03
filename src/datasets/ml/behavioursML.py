@@ -21,18 +21,18 @@ from userBehaviourDescription.userBehaviourDescription import observationalLinea
 
 class BehavioursML:
 
-  COL_USERID = Ratings.COL_USERID
-  COL_MOVIEID = Ratings.COL_MOVIEID
-  COL_REPETITION = 'repetition'
-  COL_BEHAVIOUR = 'behaviour'
+  COL_USERID:str = Ratings.COL_USERID
+  COL_MOVIEID:str = Ratings.COL_MOVIEID
+  COL_REPETITION:str = 'repetition'
+  COL_BEHAVIOUR:str = 'behaviour'
 
-  BHVR_LINEAR0109 = 'linear0109'
-  BHVR_STATIC08 = 'static08'
-  BHVR_STATIC06 = 'static06'
-  BHVR_STATIC04 = 'static04'
-  BHVR_STATIC02 = 'static02'
+  BHVR_LINEAR0109:str = 'linear0109'
+  BHVR_STATIC08:str = 'static08'
+  BHVR_STATIC06:str = 'static06'
+  BHVR_STATIC04:str = 'static04'
+  BHVR_STATIC02:str = 'static02'
 
-  BHVR_POWERLAW054MIN048 = 'powerlaw054min048'
+  BHVR_POWERLAW054MIN048:str = 'powerlaw054min048'
 
 
   @staticmethod

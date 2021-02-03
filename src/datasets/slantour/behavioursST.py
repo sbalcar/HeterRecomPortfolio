@@ -25,25 +25,17 @@ from userBehaviourDescription.userBehaviourDescription import observationalLinea
 
 class BehavioursST:
 
-  COL_VISIT_ID = Events.COL_VISIT_ID
-  COL_REPETITION = BehavioursML.COL_REPETITION
-  COL_BEHAVIOUR = BehavioursML.COL_BEHAVIOUR
+  COL_VISIT_ID:str = Events.COL_VISIT_ID
+  COL_REPETITION:str = BehavioursML.COL_REPETITION
+  COL_BEHAVIOUR:str = BehavioursML.COL_BEHAVIOUR
 
-  BHVR_LINEAR0109 = BehavioursML.BHVR_LINEAR0109
-  BHVR_STATIC08 = BehavioursML.BHVR_STATIC08
-  BHVR_STATIC06 = BehavioursML.BHVR_STATIC06
-  BHVR_STATIC04 = BehavioursML.BHVR_STATIC04
-  BHVR_STATIC02 = BehavioursML.BHVR_STATIC02
+  BHVR_LINEAR0109:str = BehavioursML.BHVR_LINEAR0109
+  BHVR_STATIC08:str = BehavioursML.BHVR_STATIC08
+  BHVR_STATIC06:str = BehavioursML.BHVR_STATIC06
+  BHVR_STATIC04:str = BehavioursML.BHVR_STATIC04
+  BHVR_STATIC02:str = BehavioursML.BHVR_STATIC02
 
-  BHVR_POWERLAW054MIN048 = BehavioursML.BHVR_POWERLAW054MIN048
-
-#  @staticmethod
-#  def getColNameUserID():
-#    return BehavioursST.COL_USERID
-
-#  @staticmethod
-#  def getColNameItemID():
-#    return BehavioursST.COL_ITEMID
+  BHVR_POWERLAW054MIN048:str = BehavioursML.BHVR_POWERLAW054MIN048
 
   @staticmethod
   def getColNameRepetition():
