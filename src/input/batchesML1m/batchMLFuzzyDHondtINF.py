@@ -41,6 +41,9 @@ from history.historyHierDF import HistoryHierDF #class
 
 class BatchMLFuzzyDHondtINF(ABatchML):
 
+    lrClicks:List[float] = [0.2, 0.1, 0.03, 0.005]
+    lrViewDivisors:List[float] = [250, 500, 1000]
+
     @staticmethod
     def getNegativeImplFeedbackParameters():
 
@@ -56,30 +59,27 @@ class BatchMLFuzzyDHondtINF(ABatchML):
 
 
         aDict:Dict[str,object] = {}
-        aDict["TOLin0802HLin1002"] = pToolOLin0802HLin1002
-        aDict["TOStat08HLin1002"] = pToolOStat08HLin1002
-        aDict["ProbTOLin0802HLin1002"] = pProbToolOLin0802HLin1002
-        aDict["ProbTOStat08HLin1002"] = pProbToolOStat08HLin1002
+        aDict["OLin0802HLin1002"] = pToolOLin0802HLin1002
+        aDict["OStat08HLin1002"] = pToolOStat08HLin1002
+        aDict["ProbOLin0802HLin1002"] = pProbToolOLin0802HLin1002
+        aDict["ProbOStat08HLin1002"] = pProbToolOStat08HLin1002
 
         aDict["TFilterBord3Lengt100"] = pToolFilterBord3Lengt100
 
         return aDict
 
-    @staticmethod
-    def getParameters():
+    @classmethod
+    def getParameters(cls):
         selectorIDs:List[str] = BatchMLFuzzyDHondt().getSelectorParameters().keys()
         negativeImplFeedback:List[str] = BatchMLFuzzyDHondtINF.getNegativeImplFeedbackParameters().keys()
-        #lrClicks:List[float] = [0.2, 0.1, 0.02, 0.005]
-        lrClicks:List[float] = [0.1]
-        #lrViewDivisors:List[float] = [200, 500, 1000]
-        lrViewDivisors:List[float] = [200]
 
-        aDict:dict = {}
+        aDict:Dict[str,object] = {}
         for selectorIDH in selectorIDs:
             for nImplFeedbackI in negativeImplFeedback:
-                for lrClickJ in lrClicks:
-                    for lrViewDivisorK in lrViewDivisors:
-                        keyIJ:str = str(selectorIDH) + "Clk" + str(lrClickJ).replace(".", "") + "ViewDivisor" + str(lrViewDivisorK).replace(".", "") + nImplFeedbackI
+                for lrClickJ in cls.lrClicks:
+                    for lrViewDivisorK in cls.lrViewDivisors:
+
+                        keyIJ:str = str(selectorIDH) + "Clk" + str(lrClickJ).replace(".", "") + "ViewDivisor" + str(lrViewDivisorK).replace(".", "") + "Reduce" + nImplFeedbackI
                         lrViewIJK:float = lrClickJ / lrViewDivisorK
                         eTool:AEvalTool = EvalToolDHondt({EvalToolDHondt.ARG_LEARNING_RATE_CLICKS: lrClickJ,
                                                           EvalToolDHondt.ARG_LEARNING_RATE_VIEWS: lrViewIJK})

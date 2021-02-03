@@ -50,10 +50,8 @@ class BatchSTFuzzyDHondtINF(ABatchST):
         repetition:int
         divisionDatasetPercentualSize, uBehaviour, repetition = InputABatchDefinition.getBatchParameters(self.datasetID)[batchID]
 
-        selector, nImplFeedback = self.getParameters()[jobID]
-
-        eTool:AEvalTool = EvalToolDHondt({EvalToolDHondt.ARG_LEARNING_RATE_CLICKS: 0.02,
-                                           EvalToolDHondt.ARG_LEARNING_RATE_VIEWS: 0.02 / 1000})
+        eTool:AEvalTool
+        selector, nImplFeedback, eTool = self.getParameters()[jobID]
 
         rIDs, rDescs = InputRecomSTDefinition.exportPairOfRecomIdsAndRecomDescrs()
 

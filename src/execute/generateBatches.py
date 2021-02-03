@@ -116,8 +116,12 @@ def generateAllBatches():
 def generateBatchesJournal():
     print("Generate Batches")
 
-    #BatchSTContextDHondtINF.generateSelectedBatches(["FixedReduceOLin07500HLin05025"])
-    BatchMLFuzzyDHondtINF.generateSelectedBatches(["FixedReduceOLin07500HLin05025"])
+    #BatchSTFuzzyDHondtINF.lrClicks:List[float] = [0.03]
+    #BatchSTFuzzyDHondtINF.learningRateViews:List[float] = [250]
+    #BatchMLFuzzyDHondt.selectorIds = [BatchMLFuzzyDHondt.SLCTR_FIXED]
+    #BatchSTFuzzyDHondtINF.generateSelectedBatches(["FixedReduceOLin07500HLin05025"])
+
+    BatchSTDHondtThompsonSamplingINF.generateSelectedBatches(["FixedReduceOLin07500HLin05025"])
 
     return
 
