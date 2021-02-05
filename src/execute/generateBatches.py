@@ -9,6 +9,7 @@ from typing import List #class
 from input.batchesML1m.batchMLBanditTS import BatchMLBanditTS #class
 
 from input.batchesML1m.batchMLContextDHondt import BatchMLContextDHondt #class
+from input.batchesML1m.batchMLContextDHondtINF import BatchMLContextDHondtINF #class
 
 from input.batchesML1m.batchMLFuzzyDHondtThompsonSampling import BatchMLFuzzyDHondtThompsonSampling #class
 from input.batchesML1m.batchMLFuzzyDHondtThompsonSamplingINF import BatchMLFuzzyDHondtThompsonSamplingINF #class
@@ -172,7 +173,7 @@ def generateBatchesJournal():
 #    BatchMLFuzzyDHondt.generateAllBatches()
 
 #    BatchMLFuzzyDHondtThompsonSampling.generateAllBatches()
-#    BatchMLContextDHondt.generateAllBatches()
+    BatchMLContextDHondt.generateAllBatches()
 
 #    BatchMLFuzzyDHondtDirectOptimize.lrClicks:List[float] = [0.03]
 #    BatchMLFuzzyDHondtDirectOptimize.lrViewDivisors:List[float] = [250]
@@ -185,6 +186,8 @@ def generateBatchesJournal():
     BatchMLFuzzyDHondtDirectOptimizeThompsonSamplingINF.generateSelectedBatches([
         jobIdML01, jobIdML02, jobIdML03, jobIdML04, jobIdML05, jobIdML06, jobIdML07, jobIdML08])
 
+    BatchMLContextDHondtINF.generateSelectedBatches([
+        jobIdML01, jobIdML02, jobIdML03, jobIdML04, jobIdML05, jobIdML06, jobIdML07, jobIdML08])
 
     # RR #############################################################################
 #    BatchRRSingle.generateAllBatches()
@@ -204,15 +207,18 @@ def generateBatchesJournal():
 #    BatchSTFuzzyDHondt.generateAllBatches()
 
 #    BatchSTDHondtThompsonSampling.generateAllBatches()
-#    BatchSTContextDHondt.generateAllBatches()
+    BatchSTContextDHondt.generateAllBatches()
 
 #    BatchSTFuzzyDHondtDirectOptimize.generateAllBatches()
 
 #    BatchSTFuzzyDHondtDirectOptimizeThompsonSampling.generateAllBatches()
 
+    # INF
     BatchSTFuzzyDHondtDirectOptimizeThompsonSamplingINF.generateSelectedBatches([
         jobIdST01, jobIdST02, jobIdST03, jobIdST04, jobIdST05, jobIdST06, jobIdST07, jobIdST08])
 
+    BatchSTContextDHondtINF.generateSelectedBatches([
+        jobIdST01, jobIdST02, jobIdST03, jobIdST04, jobIdST05, jobIdST06, jobIdST07, jobIdST08])
 
 
 def generateBatches():

@@ -12,6 +12,7 @@ from typing import List
 
 from input.batchesML1m.batchMLFuzzyDHondtDirectOptimizeThompsonSamplingINF import BatchMLFuzzyDHondtDirectOptimizeThompsonSamplingINF #class
 from input.batchesML1m.batchMLFuzzyDHondtDirectOptimizeThompsonSampling import BatchMLFuzzyDHondtDirectOptimizeThompsonSampling #class
+from input.batchesML1m.batchMLContextDHondtINF import BatchMLContextDHondtINF #class
 from input.batchesML1m.batchMLContextDHondt import BatchMLContextDHondt #class
 from input.batchesML1m.batchMLFuzzyDHondt import BatchMLFuzzyDHondt #class
 from input.batchesML1m.batchMLFuzzyDHondtThompsonSampling import BatchMLFuzzyDHondtThompsonSampling #class

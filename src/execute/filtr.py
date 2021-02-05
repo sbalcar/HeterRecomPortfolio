@@ -24,7 +24,6 @@ from input.batchesML1m.batchMLSingleINF import BatchMLSingleINF #class
 from input.batchesML1m.batchMLWeightedAVG import BatchMLWeightedAVG #class
 
 from input.batchesML1m.batchMLSingle import BatchMLSingle #class
-from input.batchesML1m.batchMLSingle2 import BatchMLSingle2 #class
 from input.batchesML1m.batchMLSingleW2VHT import BatchMLSingleW2VHT #class
 from input.batchesML1m.batchMLSingleCosineCBHT import BatchMLSingleCosineCBHT #class
 from input.batchesML1m.batchMLSingleBPRMFHT import BatchMLSingleBPRMFHT  #class
@@ -72,10 +71,16 @@ def filter():
     #print(iJobIds)
 
 
+    # RR
+    iJobIds:List[str] = list([]) +\
+                     ["RecommenderW2V" + rIdI for rIdI in BatchRRSingleW2VHT.getParameters().keys()]
+
+
 
     #dir:str = "/home/stepan/aaa/ml1mDiv80Ulinear0109R1"
-    dir:str = "/home/stepan/aaa/stDiv80Ulinear0109R1"
+    #dir:str = "/home/stepan/aaa/stDiv80Ulinear0109R1"
     #dir:str = "/home/stepan/aaa/stDiv80Ulinear0109R2"
+    dir:str = "/home/stepan/aaa/ddd/rrDiv80Ulinear0109R2"
 
     # reading evaluation
     evaluationFile = open(dir + os.sep + 'evaluation.txt', 'r')
@@ -85,7 +90,7 @@ def filter():
          eLines[i*3+1].replace("[[{'clicks': ", "").replace("}]]", ""))
          for i in range(int(len(eLines)/3.0))]
 
-    eJobIds:List[str] = [fileIdI for fileIdI, clicksI in eRows]
+    eJobIds:List[str] = ["RecommenderW2V" + fileIdI for fileIdI, clicksI in eRows]
     #print(eJobIds[200])
 
     print(eJobIds)
@@ -101,7 +106,7 @@ def filter():
     print("Chybejici: " + str(len(jobFiles)) + " / " + str(len(iJobIds)))
 
     for jobFileI in jobFiles:
-        print(jobFileI)
+        print("cp " + jobFileI.replace("RecommenderW2V","BatchRRSingleW2VHT") + ".txt ../chybi/")
 
 def rename():
     dir:str = "/home/stepan/aaa/stDiv80Ulinear0109R2_"
