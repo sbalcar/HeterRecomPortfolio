@@ -19,8 +19,6 @@ from simulation.aSequentialSimulation import ASequentialSimulation #class
 
 class Simulator:
 
-    OVERWRITE_RESULTS:bool = True
-
     def __init__(self, jobID:str, simulatorClass, argumentsDict:dict, dataset:ADataset, behavioursDF:DataFrame):
         if type(jobID) is not str:
             raise ValueError("Argument jobID isn't type str.")
@@ -31,7 +29,10 @@ class Simulator:
         if type(behavioursDF) is not DataFrame:
             raise ValueError("Argument behavioursDF isn't type DataFrame.")
 
-        argumentsDict[ASequentialSimulation.ARG_OVERWRITE_RESULTS] = self.OVERWRITE_RESULTS
+        argumentsDict[ASequentialSimulation.ARG_MODE_PROTECT_OLD_RESULTS] = True
+        argumentsDict[ASequentialSimulation.ARG_MODE_OVERWRITE_OLD_RESULTS] = False
+        argumentsDict[ASequentialSimulation.ARG_MODE_OVERWRITE_EMPTY_RESULTS] = False
+
         self._simulation:ASequentialSimulation = simulatorClass(
             jobID, dataset, behavioursDF, argumentsDict)
 

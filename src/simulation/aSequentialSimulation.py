@@ -42,7 +42,9 @@ class ASequentialSimulation(ABC):
 
     ARG_HISTORY_LENGTH:str = "historyLength"
 
-    ARG_OVERWRITE_RESULTS:str = "owerwriteResults"
+    ARG_MODE_PROTECT_OLD_RESULTS:str = "protectOldResults"
+    ARG_MODE_OVERWRITE_OLD_RESULTS:str = "overwriteOldResults"
+    ARG_MODE_OVERWRITE_EMPTY_RESULTS:str = "overwriteEmptyResults"
 
 
     def __init__(self, batchID:str, dataset:ADataset, behaviourDF:DataFrame, argumentsDict:dict):
@@ -55,6 +57,11 @@ class ASequentialSimulation(ABC):
             raise ValueError("Argument behaviourDF isn't type DataFrame.")
         if type(argumentsDict) is not dict:
             raise ValueError("Argument argumentsDict isn't type dict.")
+        if 1 != int(argumentsDict.get(self.ARG_MODE_PROTECT_OLD_RESULTS, False)) +\
+            int(argumentsDict.get(self.ARG_MODE_OVERWRITE_OLD_RESULTS, False)) +\
+            int(argumentsDict.get(self.ARG_MODE_OVERWRITE_EMPTY_RESULTS, False)):
+            raise ValueError("Argument argumentsDict doesn't contain mode.")
+
 
         self._batchID:str = batchID
 
@@ -71,7 +78,10 @@ class ASequentialSimulation(ABC):
 
         self._historyLength:int = argumentsDict[self.ARG_HISTORY_LENGTH]
 
-        self._owerwriteResults:bool = argumentsDict[self.ARG_OVERWRITE_RESULTS]
+
+        self._modeProtectOldResults:bool = argumentsDict.get(self.ARG_MODE_PROTECT_OLD_RESULTS, False)
+        self._modeOwerwriteOldResults:bool = argumentsDict.get(self.ARG_MODE_OVERWRITE_OLD_RESULTS, False)
+        self._modeOverwriteEmptyResults:bool = argumentsDict.get(self.ARG_MODE_OVERWRITE_EMPTY_RESULTS, False)
 
     def run(self, portfolioDescs:List[APortfolioDescription], portFolioModels:List[pd.DataFrame],
             evaluatonTools:List, histories:List[AHistory]):
@@ -103,9 +113,14 @@ class ASequentialSimulation(ABC):
 
         computationFileName:str = dir + os.sep + "computation-" + portfolioDescI.getPortfolioID() +".txt"
 
-        if (not self._owerwriteResults) and os.path.isfile(computationFileName):
+        if self._modeProtectOldResults and os.path.isfile(computationFileName):
             raise ValueError("Results directory contains old results.")
 
+        if self._modeOverwriteEmptyResults and os.path.isfile(computationFileName) and\
+                os.path.getsize(computationFileName) != 0:
+            raise ValueError("Results directory contains old non-empty results.")
+
+        # remove files
         if os.path.exists(computationFileName):
             os.remove(computationFileName)
         self.computationFile = open(computationFileName, "w+")
