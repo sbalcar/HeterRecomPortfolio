@@ -12,6 +12,8 @@ class Configuration:
     cbSTDataFileWithPathTFIDF: str = dataDirectory + os.sep + "SLANtourCBFeaturesTFIDF.txt"
     cbSTDataFileWithPathOHE:str = dataDirectory + os.sep + "SLANtourCBFeaturesOHE.txt"
 
+    cbRRDataFileWithPathOHE:str = dataDirectory + os.sep + "simMatrixRR.npz"
+
 
     modelDirectory:str =  ".." + os.sep + "models"
 
