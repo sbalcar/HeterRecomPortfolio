@@ -20,6 +20,8 @@ from datasets.ml.ratings import Ratings  #class
 
 from history.aHistory import AHistory  #class
 
+from recommender.tools.toolMMR import ToolMMR #class
+
 
 class RecommenderCosineCB(ARecommender):
     ARG_CB_DATA_PATH:str = "cbDataPath"
@@ -29,6 +31,8 @@ class RecommenderCosineCB(ARecommender):
     ARG_USER_PROFILE_SIZE:str = "userProfileSize"
 
     ARG_USE_DIVERSITY:str = "useDiversity"
+
+    ARG_MMR_LAMBDA:str = "MMRLambda"
 
     DEBUG_MODE = False
 
@@ -47,12 +51,10 @@ class RecommenderCosineCB(ARecommender):
             sparseMat.setdiag(0.0)
             sparseMat = sparseMat.transpose()
             itemIDs = np.load(self.cbDataPath.replace("simMatrixRR.npz", "itemsRR.npy"))
-            # dfCBSim = pd.SparseDataFrame(sparseMat, columns=itemIDs , index=itemIDs)¨#alternativa pro pandas <= 1.0
+            # self.cbData = pd.SparseDataFrame(sparseMat, columns=itemIDs , index=itemIDs)¨#alternativa pro pandas <= 1.0
             self.cbData = pd.DataFrame.sparse.from_spmatrix(sparseMat, columns=itemIDs, index=itemIDs)
 
-
         else:
-
             self.dfCBFeatures = pd.read_csv(self.cbDataPath, sep=",", header=0, index_col=0)
             # self.dfCBFeatures.fillna(self.dfCBFeatures.mean(), inplace=True)
             # print(self.dfCBFeatures)
@@ -63,7 +65,13 @@ class RecommenderCosineCB(ARecommender):
             self.cbData = self.cbData.transpose()
         self.userProfiles: dict = {}
 
-    def train(self, history: AHistory, dataset: ADataset):
+        self._useMMR = False
+        if self._arguments.get(self.ARG_USE_DIVERSITY, False):
+            self._useMMR = True
+            self._MMR_lambda = self._arguments.get(self.ARG_MMR_LAMBDA)
+
+
+    def train(self, history:AHistory, dataset:ADataset):
         if not isinstance(history, AHistory):
             raise ValueError("Argument history isn't type AHistory.")
         if not isinstance(dataset, ADataset):
@@ -95,6 +103,13 @@ class RecommenderCosineCB(ARecommender):
         userProfileDF: DataFrame = self.ratingsGroupDF.aggregate(lambda x: list(x))
         self.userProfiles: dict = userProfileDF.to_dict()
         s = ""
+
+
+        if self._useMMR:
+            #use MMR diversity, prepare input data
+            self._toolMMR:ToolMMR = ToolMMR()
+            self._toolMMR.init(dataset)
+
 
     def update(self, ratingsUpdateDF: DataFrame, argumentsDict: Dict[str, object]):
         if type(ratingsUpdateDF) is not DataFrame:
@@ -215,14 +230,19 @@ class RecommenderCosineCB(ARecommender):
             print(type(results))
         results.sort_values(ascending=False, inplace=True)
 
+
+        if self._useMMR:
+            resultList = self._toolMMR.mmr_sorted(self._MMR_lambda, results.iloc[0:numberOfItems*5], numberOfItems)
+        else:
+            resultList = results.iloc[0:numberOfItems]
+
+
         if argumentsDict.get(self.ARG_ALLOWED_ITEMIDS) is not None:
             # ARG_ALLOWED_ITEMIDS contains a list of allowed IDs
             # TODO check type of ARG_ALLOWED_ITEMIDS, should be list
             # reducedList = self._sortedTheMostCommon.loc[self._sortedTheMostCommon.index.intersection(argumentsDict[self.ARG_ALLOWED_ITEMIDS])]
             results = results.loc[results.index.intersection(argumentsDict[self.ARG_ALLOWED_ITEMIDS])]
         resultList = results.iloc[0:numberOfItems]
-
-        # print(resultList)
 
         # normalize scores into the unit vector (for aggregation purposes)
         # !!! tohle je zasadni a je potreba provest normalizaci u vsech recommenderu - teda i pro most popular!

@@ -36,11 +36,12 @@ def test01():
 
     trainDataset: ADataset = DatasetML("test", ratingsDFTrain, pd.DataFrame(), pd.DataFrame())
 
-    args: dict = {
+    args:dict = {
         RecommenderCosineCB.ARG_CB_DATA_PATH: Configuration.cbML1MDataFileWithPathTFIDF,
         RecommenderCosineCB.ARG_USER_PROFILE_SIZE: 5,
         RecommenderCosineCB.ARG_USER_PROFILE_STRATEGY: "max",
-        RecommenderCosineCB.ARG_USE_DIVERSITY: True}  # True
+        RecommenderCosineCB.ARG_USE_DIVERSITY: True,
+        RecommenderCosineCB.ARG_MMR_LAMBDA: 0.5}
     rec: ARecommender = RecommenderCosineCB("test", args)
 
     rec.train(HistoryDF("test"), trainDataset)
@@ -139,6 +140,6 @@ def test03():
 if __name__ == "__main__":
     os.chdir("..")
 
-    #test01()
-    test02()
+    test01()
+    #test02()
     #test03()
