@@ -66,21 +66,22 @@ def filter():
                      ["RecommenderCosineCB" + rIdI for rIdI in BatchSTSingleCosineCBHT.getParameters().keys()]
 
 
-    #iJobIds:List[str] = ["DHondtThompsonSamplingINF" + rIdI for rIdI in BatchMLDHondtThompsonSamplingINF.getParameters().keys()]
+    iJobIds:List[str] = ["FuzzyDHondtThompsonSamplingINF" + rIdI for rIdI in BatchMLFuzzyDHondtThompsonSamplingINF.getParameters().keys()]
     #iJobIds:List[str] = ["DHondtThompsonSamplingINF" + rIdI for rIdI in BatchSTDHondtThompsonSamplingINF.getParameters().keys()]
     #print(iJobIds)
 
 
     # RR
-    iJobIds:List[str] = list([]) +\
-                     ["RecommenderW2V" + rIdI for rIdI in BatchRRSingleW2VHT.getParameters().keys()]
+    #iJobIds:List[str] = list([]) +\
+    #                 ["FuzzyDHondtThompsonSamplingINF" + rIdI for rIdI in BatchRRSingleW2VHT.getParameters().keys()]
 
 
 
     #dir:str = "/home/stepan/aaa/ml1mDiv80Ulinear0109R1"
     #dir:str = "/home/stepan/aaa/stDiv80Ulinear0109R1"
     #dir:str = "/home/stepan/aaa/stDiv80Ulinear0109R2"
-    dir:str = "/home/stepan/aaa/ddd/rrDiv80Ulinear0109R2"
+    #dir:str = "/home/stepan/aaa/ddd/rrDiv80Ulinear0109R2"
+    dir:str = "/home/stepan/aaa/eee"
 
     # reading evaluation
     evaluationFile = open(dir + os.sep + 'evaluation.txt', 'r')
@@ -90,7 +91,7 @@ def filter():
          eLines[i*3+1].replace("[[{'clicks': ", "").replace("}]]", ""))
          for i in range(int(len(eLines)/3.0))]
 
-    eJobIds:List[str] = ["RecommenderW2V" + fileIdI for fileIdI, clicksI in eRows]
+    eJobIds:List[str] = [fileIdI for fileIdI, clicksI in eRows]
     #print(eJobIds[200])
 
     print(eJobIds)
@@ -98,15 +99,18 @@ def filter():
 
     selectedFiles:List[str] = []
     for fileNameI in iJobIds:
-      if not fileNameI in eJobIds:
-         selectedFiles.append(fileNameI)
-         #print(fileNameI)
+        #print("ffffffffffffffffffff")
+        print(fileNameI)
+        #print("ffffffffffffffffffff")
+        if not fileNameI in eJobIds:
+            selectedFiles.append(fileNameI)
+            #print(fileNameI)
 
     jobFiles:List[str] = [jobIdI for jobIdI in selectedFiles]
     print("Chybejici: " + str(len(jobFiles)) + " / " + str(len(iJobIds)))
 
-    for jobFileI in jobFiles:
-        print("cp " + jobFileI.replace("RecommenderW2V","BatchRRSingleW2VHT") + ".txt ../chybi/")
+    #for jobFileI in jobFiles:
+    #    print("cp " + jobFileI.replace("FuzzyDHondt","BatchMLFuzzyDHondt") + ".txt ../chybi/")
 
 def rename():
     dir:str = "/home/stepan/aaa/stDiv80Ulinear0109R2_"
@@ -137,8 +141,24 @@ def rename():
         print(cmd2I)
         print(cmd3I)
 
+
+def rename2():
+
+    iJobIds:List[str] = ["FuzzyDHondtThompsonSamplingINF" + rIdI for rIdI in BatchMLFuzzyDHondtThompsonSamplingINF.getParameters().keys()]
+
+    for iJobIdI in iJobIds:
+       fileNameI:str = iJobIdI.replace("FuzzyDHondt", "DHondt") + ".txt"
+       fileNameNewI:str = iJobIdI + ".txt"
+
+       cmd1I: str = "mv " + "computation-" + fileNameI + " " + "computation-" + fileNameNewI
+       cmd2I: str = "mv " + "portfModelTimeEvolution-" + fileNameI + " " + "portfModelTimeEvolution-" + fileNameNewI
+       cmd3I: str = "mv " + "historyOfRecommendation-" + fileNameI + " " + "historyOfRecommendation-" + fileNameNewI
+       print(cmd1I)
+       print(cmd2I)
+       print(cmd3I)
+
 if __name__ == "__main__":
    os.chdir("..")
 
    filter()
-   #rename()
+   #rename2()
