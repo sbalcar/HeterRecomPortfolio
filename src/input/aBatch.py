@@ -11,8 +11,8 @@ from input.inputABatchDefinition import InputABatchDefinition
 
 class ABatch(ABC):
 
-    @staticmethod
-    def getParameters():
+    @classmethod
+    def getParameters(cls):
         pass
 
     @abstractmethod

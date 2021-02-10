@@ -10,7 +10,7 @@ from pandas.core.frame import DataFrame #class
 from portfolioDescription.portfolio1AggrDescription import Portfolio1AggrDescription #class
 
 from evaluationTool.aEvalTool import AEvalTool #class
-from evaluationTool.evalToolDHondt import EvalToolDHondt #class
+from evaluationTool.evalToolDHondtBanditVotes import EvalToolDHondtBanditVotes #class
 
 from aggregationDescription.aggregationDescription import AggregationDescription #class
 
@@ -53,12 +53,13 @@ class BatchSTFuzzyDHondtDirectOptimizeThompsonSampling(ABatchST):
         repetition:int
         divisionDatasetPercentualSize, uBehaviour, repetition = InputABatchDefinition.getBatchParameters(self.datasetID)[batchID]
 
-        #eTool:AEvalTool
-        selector, eTool = self.getParameters()[jobID]
+        selector, discFactor = self.getParameters()[jobID]
+
+        eTool:AEvalTool = EvalToolDHondtBanditVotes({})
 
         rIDs, rDescs = InputRecomSTDefinition.exportPairOfRecomIdsAndRecomDescrs()
 
-        aDescDHont:AggregationDescription = InputAggrDefinition.exportADescDHondtDirectOptimizeThompsonSampling(selector)
+        aDescDHont:AggregationDescription = InputAggrDefinition.exportADescDHondtDirectOptimizeThompsonSampling(selector, discFactor)
 
         pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
             "FDHondtDirectOptimizeThompsonSampling" + jobID, rIDs, rDescs, aDescDHont)

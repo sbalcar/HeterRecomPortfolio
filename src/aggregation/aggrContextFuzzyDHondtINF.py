@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-from typing import List
+from typing import List #class
 from typing import Dict #class
 
 import numpy as np
@@ -12,8 +12,12 @@ from aggregation.aggrFuzzyDHondtINF import AggrFuzzyDHondtINF  # class
 from aggregation.mixinContextAggregation import MixinContextAggregation # class
 from aggregation.aAggregation import AAgregation # class
 
+from history.aHistory import AHistory #class
+
+
 class AggrContextFuzzyDHondtINF(MixinContextAggregation, AggrFuzzyDHondtINF, AAgregation):
-    def __init__(self, history, argumentsDict:dict):
+
+    def __init__(self, history:AHistory, argumentsDict:Dict[str,object]):
         AggrFuzzyDHondtINF.__init__(self, history, argumentsDict)
         MixinContextAggregation.__init__(self, history, argumentsDict)
 

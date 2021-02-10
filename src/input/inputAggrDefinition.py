@@ -10,13 +10,13 @@ from aggregation.aggrFuzzyDHondtINF import AggrFuzzyDHondtINF #class
 from aggregation.aggrDHondtThompsonSamplingINF import AggrDHondtThompsonSamplingINF #class
 from aggregation.aggrFuzzyDHondtDirectOptimize import AggrFuzzyDHondtDirectOptimize #class
 from aggregation.aggrFuzzyDHondtDirectOptimizeINF import AggrFuzzyDHondtDirectOptimizeINF #class
-from aggregation.aggrDHondtThompsonSamplingDirectOptimizeINF import AggrDHondtThompsonSamplingDirectOptimizeINF #class
+from aggregation.aggrDHondtDirectOptimizeThompsonSamplingINF import AggrDHondtDirectOptimizeThompsonSamplingINF #class
 from aggregation.aggrContextFuzzyDHondt import AggrContextFuzzyDHondt #class
 from aggregation.aggrContextFuzzyDHondtINF import AggrContextFuzzyDHondtINF #class
 from aggregation.aggrContextFuzzyDHondtDirectOptimizeINF import AggrContextFuzzyDHondtDirectOptimizeINF #class
 from aggregation.aggrRandomKfromN import AggrRandomKfromN #class
 from aggregation.aggrRandomRecsSwitching import AggrRandomRecsSwitching #class
-from aggregation.aggrDHondtThompsonSamplingDirectOptimize import AggrDHondtThompsonSamplingDirectOptimize #class
+from aggregation.aggrDHondtDirectOptimizeThompsonSampling import AggrDHondtDirectOptimizeThompsonSampling #class
 
 from aggregation.negImplFeedback.aPenalization import APenalization #class
 from aggregation.negImplFeedback.penalUsingFiltering import PenalUsingFiltering #class
@@ -36,89 +36,93 @@ class InputAggrDefinition:
     @staticmethod
     def exportADescWeightedAVG():
         return AggregationDescription(AggrWeightedAVG, {
-                                            })
+                            })
 
 
     @staticmethod
     def exportADescBanditTS(selector:ADHondtSelector):
         return AggregationDescription(AggrBanditTS, {
-                                            AggrBanditTS.ARG_SELECTOR:selector})
+                            AggrBanditTS.ARG_SELECTOR:selector})
 
 
 
     @staticmethod
     def exportADescDHondt(selector:ADHondtSelector):
         return AggregationDescription(AggrFuzzyDHondt, {
-                                            AggrFuzzyDHondt.ARG_SELECTOR:selector})
+                            AggrFuzzyDHondt.ARG_SELECTOR:selector})
 
     @staticmethod
     def exportADescDHondtINF(selector:ADHondtSelector, nImplFeedback:APenalization):
         return AggregationDescription(AggrFuzzyDHondtINF, {
-                                            AggrFuzzyDHondtINF.ARG_SELECTOR:selector,
-                                            AggrFuzzyDHondtINF.ARG_PENALTY_TOOL:nImplFeedback})
+                            AggrFuzzyDHondtINF.ARG_SELECTOR:selector,
+                            AggrFuzzyDHondtINF.ARG_PENALTY_TOOL:nImplFeedback})
 
 
 
     @staticmethod
     def exportADescDHondtThompsonSampling(nImplFeedback:APenalization):
         return AggregationDescription(AggrDHondtThompsonSampling, {
-                                            AggrDHondtThompsonSampling.ARG_SELECTOR: nImplFeedback})
+                            AggrDHondtThompsonSampling.ARG_SELECTOR: nImplFeedback})
 
     @staticmethod
     def exportADescDHondtThompsonSamplingINF(selector:ADHondtSelector, nImplFeedback:APenalization):
         return AggregationDescription(AggrDHondtThompsonSamplingINF, {
-                                            AggrDHondtThompsonSampling.ARG_SELECTOR:selector,
-                                            AggrFuzzyDHondtINF.ARG_PENALTY_TOOL: nImplFeedback})
+                            AggrDHondtThompsonSampling.ARG_SELECTOR:selector,
+                            AggrFuzzyDHondtINF.ARG_PENALTY_TOOL: nImplFeedback})
 
 
     @staticmethod
-    def exportADescDHondtDirectOptimize(selector:ADHondtSelector, discountFactor="uniform"):
+    def exportADescDHondtDirectOptimize(selector:ADHondtSelector,
+                            discountFactor=AggrDHondtDirectOptimizeThompsonSampling.DISCFACTOR_UNIFORM):
         return AggregationDescription(AggrFuzzyDHondtDirectOptimize, {
-                                            AggrFuzzyDHondtDirectOptimize.ARG_SELECTOR:selector, 
-                                            AggrDHondtDirectOptimizeThompsonSampling.ARG_DISCOUNT_FACTOR:discountFactor})
+                            AggrFuzzyDHondtDirectOptimize.ARG_SELECTOR:selector,
+                            AggrDHondtDirectOptimizeThompsonSampling.ARG_DISCOUNT_FACTOR:discountFactor})
 
 
     @staticmethod
-    def exportADescDFuzzyHondtDirectOptimizeINF(selector:ADHondtSelector, nImplFeedback:APenalization, discountFactor="uniform"):
+    def exportADescDFuzzyHondtDirectOptimizeINF(selector:ADHondtSelector, nImplFeedback:APenalization,
+                            discountFactor=AggrDHondtDirectOptimizeThompsonSampling.DISCFACTOR_UNIFORM):
         return AggregationDescription(AggrFuzzyDHondtDirectOptimizeINF, {
-                                            AggrFuzzyDHondtDirectOptimizeINF.ARG_SELECTOR:selector,
-                                            AggrFuzzyDHondtDirectOptimizeINF.ARG_PENALTY_TOOL: nImplFeedback, 
-                                            AggrDHondtDirectOptimizeThompsonSampling.ARG_DISCOUNT_FACTOR:discountFactor})
+                            AggrFuzzyDHondtDirectOptimizeINF.ARG_SELECTOR:selector,
+                            AggrFuzzyDHondtDirectOptimizeINF.ARG_PENALTY_TOOL: nImplFeedback,
+                            AggrDHondtDirectOptimizeThompsonSampling.ARG_DISCOUNT_FACTOR:discountFactor})
 
     @staticmethod
-    def exportADescDHondtDirectOptimizeThompsonSampling(selector:ADHondtSelector, discountFactor="uniform"):
-        return AggregationDescription(AggrDHondtThompsonSamplingDirectOptimize, {
-                                            AggrDHondtThompsonSamplingDirectOptimize.ARG_SELECTOR:selector, 
-                                            AggrDHondtThompsonSamplingDirectOptimize.ARG_DISCOUNT_FACTOR:discountFactor})
+    def exportADescDHondtDirectOptimizeThompsonSampling(selector:ADHondtSelector,
+                            discountFactor=AggrDHondtDirectOptimizeThompsonSampling.DISCFACTOR_UNIFORM):
+        return AggregationDescription(AggrDHondtDirectOptimizeThompsonSampling, {
+                            AggrDHondtDirectOptimizeThompsonSampling.ARG_SELECTOR:selector,
+                            AggrDHondtDirectOptimizeThompsonSampling.ARG_DISCOUNT_FACTOR:discountFactor})
 
     @staticmethod
-    def exportADescDHondtDirectOptimizeThompsonSamplingINF(selector:ADHondtSelector, nImplFeedback:APenalization, discountFactor="uniform"):
-        return AggregationDescription(AggrDHondtThompsonSamplingDirectOptimizeINF, {
-                                            AggrDHondtThompsonSampling.ARG_SELECTOR:selector,
-                                            AggrFuzzyDHondtINF.ARG_PENALTY_TOOL: nImplFeedback,
-                                            AggrDHondtThompsonSamplingDirectOptimizeINF.ARG_DISCOUNT_FACTOR:discountFactor})
+    def exportADescDHondtDirectOptimizeThompsonSamplingINF(selector:ADHondtSelector, nImplFeedback:APenalization,
+                            discountFactor=AggrDHondtDirectOptimizeThompsonSampling.DISCFACTOR_UNIFORM):
+        return AggregationDescription(AggrDHondtDirectOptimizeThompsonSamplingINF, {
+                            AggrDHondtThompsonSampling.ARG_SELECTOR:selector,
+                            AggrFuzzyDHondtINF.ARG_PENALTY_TOOL: nImplFeedback,
+                            AggrDHondtDirectOptimizeThompsonSamplingINF.ARG_DISCOUNT_FACTOR:discountFactor})
 
 
 
     @staticmethod
     def exportADescDContextHondt(selector:ADHondtSelector, eTool:AEvalTool):
         return AggregationDescription(AggrContextFuzzyDHondt, {
-                                            AggrContextFuzzyDHondt.ARG_SELECTOR:selector,
-                                            AggrContextFuzzyDHondt.ARG_EVAL_TOOL:eTool})
+                            AggrContextFuzzyDHondt.ARG_SELECTOR:selector,
+                            AggrContextFuzzyDHondt.ARG_EVAL_TOOL:eTool})
 
     @staticmethod
     def exportADescDContextHondtINF(selector:ADHondtSelector, nImplFeedback:APenalization, eTool:AEvalTool):
         return AggregationDescription(AggrContextFuzzyDHondtINF, {
-                                            AggrContextFuzzyDHondtINF.ARG_SELECTOR:selector,
-                                            AggrContextFuzzyDHondtINF.ARG_EVAL_TOOL:eTool,
-                                            AggrFuzzyDHondtDirectOptimizeINF.ARG_PENALTY_TOOL: nImplFeedback})
+                            AggrContextFuzzyDHondtINF.ARG_SELECTOR:selector,
+                            AggrContextFuzzyDHondtINF.ARG_EVAL_TOOL:eTool,
+                            AggrFuzzyDHondtDirectOptimizeINF.ARG_PENALTY_TOOL: nImplFeedback})
 
     @staticmethod
     def exportADescDContextHondtDirectOptimizeINF(selector:ADHondtSelector, nImplFeedback:APenalization, eTool:AEvalTool):
         return AggregationDescription(AggrContextFuzzyDHondtDirectOptimizeINF, {
-                                            AggrContextFuzzyDHondtINF.ARG_SELECTOR:selector,
-                                            AggrContextFuzzyDHondtINF.ARG_EVAL_TOOL:eTool,
-                                            AggrFuzzyDHondtDirectOptimizeINF.ARG_PENALTY_TOOL: nImplFeedback})
+                            AggrContextFuzzyDHondtINF.ARG_SELECTOR:selector,
+                            AggrContextFuzzyDHondtINF.ARG_EVAL_TOOL:eTool,
+                            AggrFuzzyDHondtDirectOptimizeINF.ARG_PENALTY_TOOL: nImplFeedback})
 
 
 

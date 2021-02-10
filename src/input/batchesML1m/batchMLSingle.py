@@ -15,6 +15,8 @@ from portfolioDescription.aPortfolioDescription import APortfolioDescription #cl
 
 from evaluationTool.evalToolDoNothing import EToolDoNothing #class
 
+from recommender.recommenderCosineCB import RecommenderCosineCB #class
+
 from recommenderDescription.recommenderDescription import RecommenderDescription #class
 
 from input.inputSimulatorDefinition import InputSimulatorDefinition #class
@@ -30,12 +32,24 @@ from input.aBatchML import ABatchML #class
 
 class BatchMLSingle(ABatchML):
 
-    @staticmethod
-    def getParameters():
+    @classmethod
+    def getParameters(cls):
 
         rIDs, rDescr = InputRecomMLDefinition.exportPairOfRecomIdsAndRecomDescrs()
 
-        aDict:Dict[str,object] = dict(zip(rIDs, rDescr))
+        rID1:str = "Recom" + "CosineCBcbdOHEupsweightedMeanups3" + "MMR05"
+        rID2:str = "Recom" + "CosineCBcbdOHEupsmaxups1" + "MMR05"
+
+        cosineCBMMR1:RecommenderDescription = InputRecomMLDefinition.exportRDescCosineCBcbdOHEupsweightedMeanups3()
+        cosineCBMMR1.getArguments()[RecommenderCosineCB.ARG_USE_DIVERSITY] = True
+        cosineCBMMR1.getArguments()[RecommenderCosineCB.ARG_MMR_LAMBDA] = 0.5
+
+        cosineCBMMR2:RecommenderDescription = InputRecomMLDefinition.exportRDescCosineCBcbdOHEupsmaxups1()
+        cosineCBMMR2.getArguments()[RecommenderCosineCB.ARG_USE_DIVERSITY] = True
+        cosineCBMMR2.getArguments()[RecommenderCosineCB.ARG_MMR_LAMBDA] = 0.5
+
+
+        aDict:Dict[str,object] = dict(zip(rIDs + [rID1, rID2], rDescr + [cosineCBMMR1, cosineCBMMR2]))
 
         return aDict
 

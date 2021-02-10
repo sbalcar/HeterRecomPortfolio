@@ -42,7 +42,7 @@ class BatchMLFuzzyDHondt(ABatchML):
 
     lrClicks:List[float] = [0.2, 0.1, 0.03, 0.005]
     lrViewDivisors:List[float] = [250, 500, 1000]
-    selectorIds:List[str] = [SLCTR_ROULETTE1, SLCTR_ROULETTE2, SLCTR_FIXED]
+    selectorIDs:List[str] = [SLCTR_ROULETTE1, SLCTR_ROULETTE2, SLCTR_FIXED]
 
     @classmethod
     def getSelectorParameters(cls):
@@ -59,14 +59,12 @@ class BatchMLFuzzyDHondt(ABatchML):
         aSubDict:Dict[str,object] = {selIdI: aDict[selIdI] for selIdI in aDict.keys() if selIdI in cls.selectorIds}
         return aSubDict
 
-    @staticmethod
-    def getParameters():
-        selectorIDs:List[str] = BatchMLFuzzyDHondt.getSelectorParameters().keys()
-
-        aDict:dict = {}
-        for selectorIDI in selectorIDs:
-            for lrClickJ in BatchMLFuzzyDHondt.lrClicks:
-                for lrViewDivisorK in BatchMLFuzzyDHondt.lrViewDivisors:
+    @classmethod
+    def getParameters(cls):
+        aDict:Dict[str,object] = {}
+        for selectorIDI in cls.selectorIDs:
+            for lrClickJ in cls.lrClicks:
+                for lrViewDivisorK in cls.lrViewDivisors:
                     keyIJ:str = selectorIDI + "Clk" + str(lrClickJ).replace(".", "") + "ViewDivisor" + str(lrViewDivisorK).replace(".", "")
                     lrViewIJK:float = lrClickJ / lrViewDivisorK
                     eToolIJK:AEvalTool = EvalToolDHondt({EvalToolDHondt.ARG_LEARNING_RATE_CLICKS: lrClickJ,

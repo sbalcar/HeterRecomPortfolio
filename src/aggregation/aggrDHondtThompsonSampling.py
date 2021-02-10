@@ -27,7 +27,7 @@ class AggrDHondtThompsonSampling(AAgregation):
 
     ARG_SELECTOR:str = "selector"
 
-    def __init__(self, history:AHistory, argumentsDict:dict):
+    def __init__(self, history:AHistory, argumentsDict:Dict[str,object]):
         if not isinstance(history, AHistory):
             raise ValueError("Argument history isn't type AHistory.")
         if type(argumentsDict) is not dict:

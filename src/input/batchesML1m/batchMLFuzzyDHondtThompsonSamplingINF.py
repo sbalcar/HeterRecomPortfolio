@@ -119,8 +119,8 @@ class BatchMLFuzzyDHondtThompsonSamplingINF(ABatchML):
 
         return dall
 
-    @staticmethod
-    def getParameters():
+    @classmethod
+    def getParameters(cls):
         selectorIDs:List[str] = BatchMLFuzzyDHondt().getSelectorParameters().keys()
         negativeImplFeedback:List[str] = BatchMLFuzzyDHondtThompsonSamplingINF().getPenalFncs().keys()
 

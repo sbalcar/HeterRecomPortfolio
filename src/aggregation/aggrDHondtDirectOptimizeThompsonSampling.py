@@ -29,7 +29,11 @@ class AggrDHondtDirectOptimizeThompsonSampling(AAgregation):
     ARG_SELECTOR: str = "selector"
     ARG_DISCOUNT_FACTOR: str = "discFactor"
 
-    def __init__(self, history: AHistory, argumentsDict: dict):
+    DISCFACTOR_DCG = "DCG"
+    DISCFACTOR_POWERLAW = "PowerLaw"
+    DISCFACTOR_UNIFORM = "Uniform"
+
+    def __init__(self, history:AHistory, argumentsDict:Dict[str,object]):
         if not isinstance(history, AHistory):
             raise ValueError("Argument history isn't type AHistory.")
         if type(argumentsDict) is not dict:

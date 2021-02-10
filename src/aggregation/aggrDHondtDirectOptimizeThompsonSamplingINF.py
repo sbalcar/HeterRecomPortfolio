@@ -17,13 +17,13 @@ from aggregation.aggrDHondtDirectOptimizeThompsonSampling import AggrDHondtDirec
 from history.aHistory import AHistory #class
 
 
-class AggrDHondtThompsonSamplingDirectOptimizeINF(AggrDHondtDirectOptimizeThompsonSampling):
+class AggrDHondtDirectOptimizeThompsonSamplingINF(AggrDHondtDirectOptimizeThompsonSampling):
 
     ARG_SELECTOR: str = "selector"
     ARG_DISCOUNT_FACTOR: str = "discFactor"
     ARG_PENALTY_TOOL: str = "penaltyTool"
 
-    def __init__(self, history: AHistory, argumentsDict: dict):
+    def __init__(self, history:AHistory, argumentsDict:Dict[str,object]):
         if not isinstance(history, AHistory):
             raise ValueError("Argument history isn't type AHistory.")
         if type(argumentsDict) is not dict:

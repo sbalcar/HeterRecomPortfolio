@@ -23,6 +23,8 @@ from aggregation.operators.aDHondtSelector import ADHondtSelector #class
 from aggregation.operators.rouletteWheelSelector import RouletteWheelSelector #class
 from aggregation.operators.theMostVotedItemSelector import TheMostVotedItemSelector #class
 
+from aggregation.negImplFeedback.aPenalization import APenalization #class
+
 from input.inputABatchDefinition import InputABatchDefinition
 from input.aBatchML import ABatchML #class
 from input.batchesML1m.batchMLFuzzyDHondtThompsonSamplingINF import BatchMLFuzzyDHondtThompsonSamplingINF #class
@@ -32,13 +34,30 @@ from input.inputSimulatorDefinition import InputSimulatorDefinition #class
 from simulator.simulator import Simulator #class
 
 from history.historyHierDF import HistoryHierDF #class
+from input.batchesML1m.batchMLFuzzyDHondt import BatchMLFuzzyDHondt #class
+from input.batchesML1m.batchMLFuzzyDHondtDirectOptimizeThompsonSampling import BatchMLFuzzyDHondtDirectOptimizeThompsonSampling #class
 
 
 class BatchMLFuzzyDHondtDirectOptimizeThompsonSamplingINF(ABatchML):
 
+    selectorIDs:List[str] = BatchMLFuzzyDHondt.selectorIDs
+    negativeImplFeedback:List[str] = BatchMLFuzzyDHondtThompsonSamplingINF().getPenalFncs().keys()
+    discFactors:List[str] = BatchMLFuzzyDHondtDirectOptimizeThompsonSampling.discFactors
+
     @classmethod
     def getParameters(cls):
-        return BatchMLFuzzyDHondtThompsonSamplingINF.getParameters()
+
+        aDict:Dict[str,object] = {}
+        for selectorIDH in cls.selectorIDs:
+            for discFactorI in cls.discFactors:
+                for nImplFeedbackI in cls.negativeImplFeedback:
+                    keyIJ:str = str(selectorIDH) + discFactorI + nImplFeedbackI
+
+                    nImplFeedback:APenalization = BatchMLFuzzyDHondtThompsonSamplingINF().getPenalFncs()[nImplFeedbackI]
+                    selectorH:ADHondtSelector = BatchMLFuzzyDHondt().getSelectorParameters()[selectorIDH]
+
+                    aDict[keyIJ] = (selectorH, discFactorI, nImplFeedback)
+        return aDict
 
     def run(self, batchID:str, jobID:str):
 
@@ -47,13 +66,13 @@ class BatchMLFuzzyDHondtDirectOptimizeThompsonSamplingINF(ABatchML):
         repetition:int
         divisionDatasetPercentualSize, uBehaviour, repetition = InputABatchDefinition.getBatchParameters(self.datasetID)[batchID]
 
-        selector, nImplFeedback = self.getParameters()[jobID]
+        selector, discFactor, nImplFeedback = self.getParameters()[jobID]
 
         eTool:AEvalTool = EvalToolDHondtBanditVotes({})
 
         rIDs, rDescs = InputRecomMLDefinition.exportPairOfRecomIdsAndRecomDescrs()
 
-        aDescDHont:AggregationDescription = InputAggrDefinition.exportADescDHondtDirectOptimizeThompsonSamplingINF(selector, nImplFeedback)
+        aDescDHont:AggregationDescription = InputAggrDefinition.exportADescDHondtDirectOptimizeThompsonSamplingINF(selector, nImplFeedback, discFactor)
 
         pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
             "FDHondtDirectOptimizeThompsonSamplingINF" + jobID, rIDs, rDescs, aDescDHont)

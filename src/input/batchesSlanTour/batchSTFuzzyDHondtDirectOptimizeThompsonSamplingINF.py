@@ -25,7 +25,7 @@ from aggregation.operators.theMostVotedItemSelector import TheMostVotedItemSelec
 
 from input.inputABatchDefinition import InputABatchDefinition
 from input.aBatchST import ABatchST #class
-from input.batchesML1m.batchMLFuzzyDHondtThompsonSamplingINF import BatchMLFuzzyDHondtThompsonSamplingINF #class
+from input.batchesML1m.batchMLFuzzyDHondtDirectOptimizeThompsonSamplingINF import BatchMLFuzzyDHondtDirectOptimizeThompsonSamplingINF #class
 
 from input.inputSimulatorDefinition import InputSimulatorDefinition #class
 
@@ -38,7 +38,7 @@ class BatchSTFuzzyDHondtDirectOptimizeThompsonSamplingINF(ABatchST):
 
     @classmethod
     def getParameters(cls):
-        return BatchMLFuzzyDHondtThompsonSamplingINF.getParameters()
+        return BatchMLFuzzyDHondtDirectOptimizeThompsonSamplingINF.getParameters()
 
     def run(self, batchID:str, jobID:str):
 
@@ -47,13 +47,13 @@ class BatchSTFuzzyDHondtDirectOptimizeThompsonSamplingINF(ABatchST):
         repetition:int
         divisionDatasetPercentualSize, uBehaviour, repetition = InputABatchDefinition.getBatchParameters(self.datasetID)[batchID]
 
-        selector, nImplFeedback = self.getParameters()[jobID]
+        selector, discFactor, nImplFeedback = self.getParameters()[jobID]
 
         eTool:AEvalTool = EvalToolDHondtBanditVotes({})
 
         rIDs, rDescs = InputRecomSTDefinition.exportPairOfRecomIdsAndRecomDescrs()
 
-        aDescDHont:AggregationDescription = InputAggrDefinition.exportADescDHondtDirectOptimizeThompsonSamplingINF(selector, nImplFeedback)
+        aDescDHont:AggregationDescription = InputAggrDefinition.exportADescDHondtDirectOptimizeThompsonSamplingINF(selector, nImplFeedback, discFactor)
 
         pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
             "FDHondtDirectOptimizeThompsonSamplingINF" + jobID, rIDs, rDescs, aDescDHont)

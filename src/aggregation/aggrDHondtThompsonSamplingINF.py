@@ -21,7 +21,7 @@ class AggrDHondtThompsonSamplingINF(AggrDHondtThompsonSampling):
     ARG_SELECTOR:str = "selector"
     ARG_PENALTY_TOOL:str = "penaltyTool"
 
-    def __init__(self, history:AHistory, argumentsDict:dict):
+    def __init__(self, history:AHistory, argumentsDict:Dict[str,object]):
         if not isinstance(history, AHistory):
             raise ValueError("Argument history isn't type AHistory.")
         if type(argumentsDict) is not dict:
