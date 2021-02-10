@@ -31,6 +31,7 @@ from portfolioDescription.portfolio1AggrDescription import Portfolio1AggrDescrip
 #from evaluationTool.evalToolSingleMethod import EToolSingleMethod #class
 from evaluationTool.evalToolBanditTS import EvalToolBanditTS #class
 from evaluationTool.evalToolDHondt import EvalToolDHondt #class
+from evaluationTool.evalToolDHondtBanditVotes import EvalToolDHondtBanditVotes #class
 
 from evaluationTool.aEvalTool import AEvalTool #class
 
@@ -50,7 +51,7 @@ from input.inputRecomSTDefinition import InputRecomSTDefinition #class
 
 from input.batchesML1m.batchMLBanditTS import BatchMLBanditTS #class
 
-from input.inputABatchDefinition import InputABatchDefinition
+from input.aBatch import BatchParameters #class
 from input.aBatchST import ABatchST #class
 
 from aggregation.aggrFuzzyDHondt import AggrFuzzyDHondt #class
@@ -72,6 +73,8 @@ from userBehaviourDescription.userBehaviourDescription import UserBehaviourDescr
 from userBehaviourDescription.userBehaviourDescription import observationalStaticProbabilityFnc #function
 from userBehaviourDescription.userBehaviourDescription import observationalLinearProbabilityFnc #function
 
+from aggregation.negImplFeedback.aPenalization import APenalization #class
+from input.inputAggrDefinition import PenalizationToolDefinition #class
 
 
 argsSimulationDict:Dict[str,object] = {SimulationST.ARG_WINDOW_SIZE: 5,
@@ -93,7 +96,7 @@ def test01():
     rIDs, rDescs = InputRecomSTDefinition.exportPairOfRecomIdsAndRecomDescrs()
 
     pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
-        "FuzzyDHondtDirectOptimize" + jobID, rIDs, rDescs, InputAggrDefinition.exportADescDHondtDirectOptimize(selector))
+        "FuzzyDHondtDirectOptimize" + jobID, rIDs, rDescs, InputAggrDefinition.exportADescDHondtDirectOptimizeThompsonSampling(selector,"DCG"))
 
 
     batchID:str = "ml1mDiv90Ulinear0109R1"
@@ -101,13 +104,14 @@ def test01():
     behaviourFile:str = BehavioursML.getFile(BehavioursML.BHVR_LINEAR0109)
     behavioursDF:DataFrame = BehavioursML.readFromFileMl1m(behaviourFile)
 
-    model:DataFrame = ModelDefinition.createDHontModel(pDescr.getRecommendersIDs())
+    #model:DataFrame = ModelDefinition.createDHontModel(pDescr.getRecommendersIDs())
+    model:DataFrame = ModelDefinition.createDHondtBanditsVotesModel(pDescr.getRecommendersIDs())
 
-    lrClick:float = 0.03
-    lrView:float = lrClick / 500
-    eTool:AEvalTool = EvalToolDHondt({EvalToolDHondt.ARG_LEARNING_RATE_CLICKS: lrClick,
-                                      EvalToolDHondt.ARG_LEARNING_RATE_VIEWS: lrView})
-
+    #lrClick:float = 0.03
+    #lrView:float = lrClick / 500
+    #eTool:AEvalTool = EvalToolDHondt({EvalToolDHondt.ARG_LEARNING_RATE_CLICKS: lrClick,
+    #                                  EvalToolDHondt.ARG_LEARNING_RATE_VIEWS: lrView})
+    eTool:AEvalTool = EvalToolDHondtBanditVotes({})
     # simulation of portfolio
     simulator:Simulator = Simulator(batchID, SimulationML, argsSimulationDict, dataset, behavioursDF)
     simulator.simulate([pDescr], [model], [eTool], [HistoryHierDF(pDescr.getPortfolioID())])
@@ -119,12 +123,15 @@ def test21():
 
     jobID:str = "Roulette1"
 
-    selector = RouletteWheelSelector({RouletteWheelSelector.ARG_EXPONENT:1})
-
+    selector = RouletteWheelSelector({RouletteWheelSelector.ARG_EXPONENT:3})
+    
+    pProbToolOLin0802HLin1002:APenalization = PenalizationToolDefinition.exportProbPenaltyToolOStat08HLin1002(
+        InputSimulatorDefinition.numberOfAggrItems)
+        
     rIDs, rDescs = InputRecomSTDefinition.exportPairOfRecomIdsAndRecomDescrs()
 
     pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
-        "FuzzyDHondtDirectOptimize" + jobID, rIDs, rDescs, InputAggrDefinition.exportADescDHondtDirectOptimize(selector))
+        "FuzzyDHondtDirectOptimize" + jobID, rIDs, rDescs, InputAggrDefinition.exportADescDHondtDirectOptimizeThompsonSamplingINF(selector, pProbToolOLin0802HLin1002,"DCG"))
 
 
     batchID:str = "stDiv90Ulinear0109R1"
@@ -132,21 +139,19 @@ def test21():
     behaviourFile:str = BehavioursST.getFile(BehavioursST.BHVR_LINEAR0109)
     behavioursDF:DataFrame = BehavioursST.readFromFileST(behaviourFile)
 
-    model:DataFrame = ModelDefinition.createDHontModel(pDescr.getRecommendersIDs())
-    print(model)
+    model:DataFrame = ModelDefinition.createDHondtBanditsVotesModel(pDescr.getRecommendersIDs())
 
-    lrClick:float = 0.1
-    lrView:float = lrClick / 300
-    evalTool:AEvalTool = EvalToolDHondt({EvalToolDHondt.ARG_LEARNING_RATE_CLICKS: lrClick,
-                                         EvalToolDHondt.ARG_LEARNING_RATE_VIEWS: lrView})
-
+    #lrClick:float = 0.03
+    #lrView:float = lrClick / 500
+    #eTool:AEvalTool = EvalToolDHondt({EvalToolDHondt.ARG_LEARNING_RATE_CLICKS: lrClick,
+    #                                  EvalToolDHondt.ARG_LEARNING_RATE_VIEWS: lrView})
+    eTool:AEvalTool = EvalToolDHondtBanditVotes({})
     # simulation of portfolio
     simulator:Simulator = Simulator(batchID, SimulationST, argsSimulationDict, dataset, behavioursDF)
-    simulator.simulate([pDescr], [model], [evalTool], [HistoryHierDF(pDescr.getPortfolioID())])
+    simulator.simulate([pDescr], [model], [eTool], [HistoryHierDF(pDescr.getPortfolioID())])
 
 
 if __name__ == "__main__":
-    os.chdir("..")
 
     # Simulation ML
 #    test01()  # FuzzyDHondtDirectOptimize

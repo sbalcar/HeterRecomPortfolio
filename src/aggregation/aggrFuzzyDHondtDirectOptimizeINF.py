@@ -2,6 +2,7 @@
 
 import numpy as np
 import pandas as pd
+import math
 
 from typing import List
 from typing import Dict #class
@@ -22,6 +23,7 @@ from history.aHistory import AHistory #class
 class AggrFuzzyDHondtDirectOptimizeINF(AggrFuzzyDHondtDirectOptimize):
 
     ARG_SELECTOR:str = "selector"
+    ARG_DISCOUNT_FACTOR:str = "discFactor"
     ARG_PENALTY_TOOL:str = "penaltyTool"
 
     def __init__(self, history:AHistory, argumentsDict:Dict[str,object]):
@@ -35,6 +37,14 @@ class AggrFuzzyDHondtDirectOptimizeINF(AggrFuzzyDHondtDirectOptimize):
 
         self._selector = argumentsDict[self.ARG_SELECTOR]
         self._penaltyTool = argumentsDict[self.ARG_PENALTY_TOOL]
+        
+        if argumentsDict.get(self.ARG_DISCOUNT_FACTOR) == "DCG":
+            self._discFactor = "DCG"
+        elif argumentsDict.get(self.ARG_DISCOUNT_FACTOR) == "PowerLaw":
+            self._discFactor = "PowerLaw"
+        else:
+            self._discFactor = "uniform"
+
 
 
     def update(self, ratingsUpdateDF:DataFrame, argumentsDict:Dict[str,object]):

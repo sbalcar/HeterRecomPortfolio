@@ -6,7 +6,7 @@ import pandas as pd
 
 from numpy.random import beta
 from typing import List
-from typing import Dict #class
+from typing import Dict  # class
 
 from pandas.core.frame import DataFrame  # class
 from pandas.core.series import Series  # class
@@ -23,9 +23,9 @@ from userBehaviourDescription.userBehaviourDescription import UserBehaviourDescr
 
 class AggrFuzzyDHondtDirectOptimize(AAgregation):
 
-    ARG_SELECTOR:str = "selector"
+    ARG_SELECTOR: str = "selector"
 
-    def __init__(self, history:AHistory, argumentsDict:Dict[str,object]):
+    def __init__(self, history: AHistory, argumentsDict: Dict[str, object]):
         if not isinstance(history, AHistory):
             raise ValueError("Argument history isn't type AHistory.")
         if type(argumentsDict) is not dict:
@@ -34,14 +34,13 @@ class AggrFuzzyDHondtDirectOptimize(AAgregation):
         self._history = history
         self._selector = argumentsDict[self.ARG_SELECTOR]
 
-
-    def update(self, ratingsUpdateDF:DataFrame, argumentsDict:Dict[str,object]):
+    def update(self, ratingsUpdateDF: DataFrame, argumentsDict: Dict[str, object]):
         pass
-
 
     # methodsResultDict:{String:pd.Series(rating:float[], itemID:int[])},
     # modelDF:pd.DataFrame[numberOfVotes:int], numberOfItems:int
-    def run(self, methodsResultDict:Dict, modelDF:DataFrame, userID:int, numberOfItems:int, argumentsDict:Dict[str,object]={}):
+    def run(self, methodsResultDict: Dict, modelDF: DataFrame, userID: int, numberOfItems: int,
+            argumentsDict: Dict[str, object] = {}):
 
         # testing types of parameters
         if type(methodsResultDict) is not dict:
@@ -62,23 +61,23 @@ class AggrFuzzyDHondtDirectOptimize(AAgregation):
             raise ValueError("Argument numberOfItems must be positive value.")
         if type(argumentsDict) is not dict:
             raise ValueError("Argument argumentsDict isn't type dict.")
-        #print(methodsResultDict)
+        # print(methodsResultDict)
         candidatesOfMethods = [np.array(list(cI.keys())) for cI in methodsResultDict.values()]
-        #print(candidatesOfMethods)
-        
+        # print(candidatesOfMethods)
+
         uniqueCandidatesI: List[int] = list(set(np.concatenate(candidatesOfMethods)))
-        uniqueCandidatesI: list(map(int, uniqueCandidatesI)) #failsafe - in some cases it returns float
-        
-        #print("UniqueCandidatesI: ", uniqueCandidatesI)
+        uniqueCandidatesI: list(map(int, uniqueCandidatesI))  # failsafe - in some cases it returns float
+
+        # print("UniqueCandidatesI: ", uniqueCandidatesI)
 
         # sum of preference the elected candidates have for each party
         electedOfPartyDictI: dict[str, float] = {mI: 0.0 for mI in modelDF.index}
-        #print("ElectedForPartyI: ", electedOfPartyDictI)
+        # print("ElectedForPartyI: ", electedOfPartyDictI)
 
         # votes number of parties
         votesOfPartiesDictI: dict[str, float] = {mI: modelDF.votes.loc[mI] for mI in modelDF.index}
         totalVotes = modelDF["votes"].sum()
-        #print("VotesOfPartiesDictI: ", votesOfPartiesDictI, totalVotes)
+        # print("VotesOfPartiesDictI: ", votesOfPartiesDictI, totalVotes)
 
         recommendedItemIDs: List[int] = []
 
@@ -115,7 +114,7 @@ class AggrFuzzyDHondtDirectOptimize(AAgregation):
                         parityIDK])  # only account the amount of votes that does not exceed proportional representation
 
                 actVotesOfCandidatesDictI[candidateIDJ] = votesOfCandidateJ
-            #print(actVotesOfCandidatesDictI)
+            # print(actVotesOfCandidatesDictI)
 
             # select candidate with highest number of votes
             # selectedCandidateI:int = AggrDHont.selectorOfTheMostVotedItem(actVotesOfCandidatesDictI)
@@ -128,15 +127,15 @@ class AggrFuzzyDHondtDirectOptimize(AAgregation):
             try:
                 uniqueCandidatesI.remove(selectedCandidateI)
             except:
-                print("Cannot remove"+ str(selectedCandidateI) +" from "+ str(uniqueCandidatesI) )
-                print("candidate votes")                        
+                print("Cannot remove" + str(selectedCandidateI) + " from " + str(uniqueCandidatesI))
+                print("candidate votes")
                 print(actVotesOfCandidatesDictI)
-                #exit(1)
+                # exit(1)
 
             # updating number of elected candidates of parties
             electedOfPartyDictI: dict = {
-            partyIDI: electedOfPartyDictI[partyIDI] + methodsResultDict[partyIDI].get(selectedCandidateI, 0) for
-            partyIDI in electedOfPartyDictI.keys()}
+                partyIDI: electedOfPartyDictI[partyIDI] + methodsResultDict[partyIDI].get(selectedCandidateI, 0) for
+                partyIDI in electedOfPartyDictI.keys()}
             totalSelectedCandidatesVotes = np.sum(list(electedOfPartyDictI.values()))
             # print("electedOfPartyDictI: ", electedOfPartyDictI, totalSelectedCandidatesVotes)
 
@@ -145,8 +144,9 @@ class AggrFuzzyDHondtDirectOptimize(AAgregation):
 
     # methodsResultDict:{String:Series(rating:float[], itemID:int[])},
     # modelDF:DataFrame<(methodID:str, votes:int)>, numberOfItems:int
-    def runWithResponsibility(self, methodsResultDict:Dict, modelDF:DataFrame, userID:int, numberOfItems:int, argumentsDict:Dict[str,object]={}):
-        #print(argumentsDict["pageType"])
+    def runWithResponsibility(self, methodsResultDict: Dict, modelDF: DataFrame, userID: int, numberOfItems: int,
+                              argumentsDict: Dict[str, object] = {}):
+        # print(argumentsDict["pageType"])
         # testing types of parameters
         if type(methodsResultDict) is not dict:
             raise ValueError("Type of methodsResultDict isn't dict.")
