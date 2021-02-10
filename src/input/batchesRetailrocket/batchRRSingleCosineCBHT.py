@@ -30,46 +30,22 @@ from history.historyHierDF import HistoryHierDF #class
 
 import pandas as pd
 from input.inputABatchDefinition import InputABatchDefinition
-from input.aBatchST import ABatchST #class
-from input.batchesML1m.batchMLSingleBPRMFHT import BatchMLSingleBPRMFHT #class
+from input.aBatchRR import ABatchRR #class
+
 from input.batchesML1m.batchMLSingleCosineCBHT import BatchMLSingleCosineCBHT #class
 
 from configuration.configuration import Configuration #class
 
 
-class BatchSTSingleCosineCBHT(ABatchST):
-
-    cbDataPaths: List[str] = [Configuration.cbSTDataFileWithPathTFIDF, Configuration.cbSTDataFileWithPathOHE]
-    userProfileStrategies: List[str] = ["mean", "max", "weightedMean"]
-    userProfileSizes: List[int] = [-1, 1, 3, 5, 7, 10]
+class BatchRRSingleCosineCBHT(ABatchRR):
 
     @classmethod
     def getParameters(cls):
-
-        aDict:Dict[str,object] = {}
-        for cbDataPathI in cls.cbDataPaths:
-            for userProfileStrategyI in cls.userProfileStrategies:
-                for userProfileSizeI in cls.userProfileSizes:
-
-                    cbDataPathStrI:str = ""
-                    if cbDataPathI == Configuration.cbSTDataFileWithPathTFIDF:
-                        cbDataPathStrI = "TFIDF"
-                    elif cbDataPathI == Configuration.cbSTDataFileWithPathOHE:
-                        cbDataPathStrI = "OHE"
-                    else:
-                        print("error")
-
-                    keyI:str = "cbd" + str(cbDataPathStrI) + "ups" + str(userProfileStrategyI) +\
-                               "ups" + str(userProfileSizeI)
-
-                    rCBI: ARecommender = RecommenderDescription(RecommenderCosineCB, {
-                        RecommenderCosineCB.ARG_CB_DATA_PATH: cbDataPathI,
-                        RecommenderCosineCB.ARG_USER_PROFILE_SIZE: userProfileSizeI,
-                        RecommenderCosineCB.ARG_USER_PROFILE_STRATEGY: userProfileStrategyI})
-
-                    aDict[keyI] = rCBI
-        return aDict
-
+        oldValue:List[str] = BatchMLSingleCosineCBHT.cbDataPaths
+        BatchMLSingleCosineCBHT.cbDataPaths:List[str] = [Configuration.cbRRDataFileWithPathOHE]
+        paramsDict:Dict[str, object] = BatchMLSingleCosineCBHT.getParameters()
+        BatchMLSingleCosineCBHT.cbDataPaths = oldValue
+        return paramsDict
 
     def run(self, batchID: str, jobID: str):
         divisionDatasetPercentualSize: int
@@ -81,8 +57,7 @@ class BatchSTSingleCosineCBHT(ABatchST):
         recommenderID:str = jobID
 
         pDescr:APortfolioDescription = Portfolio1MethDescription(recommenderID.title(), recommenderID, rDescr)
-
-        simulator:Simulator = InputSimulatorDefinition.exportSimulatorSlantour(
+        simulator:Simulator = InputSimulatorDefinition.exportSimulatorRetailRocket(
             batchID, divisionDatasetPercentualSize, uBehaviour, repetition)
         simulator.simulate([pDescr], [DataFrame()], [EToolDoNothing({})], [HistoryHierDF(pDescr.getPortfolioID())])
 
@@ -92,4 +67,4 @@ if __name__ == "__main__":
     os.chdir("..")
     print(os.getcwd())
 
-    BatchSTSingleCosineCBHT.generateAllBatches()
+    BatchRRSingleCosineCBHT.generateAllBatches()

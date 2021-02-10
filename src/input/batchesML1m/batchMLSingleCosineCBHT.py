@@ -50,9 +50,9 @@ class BatchMLSingleCosineCBHT(ABatchML):
                 for userProfileSizeI in cls.userProfileSizes:
 
                     cbDataPathStrI:str = ""
-                    if cbDataPathI == Configuration.cbML1MDataFileWithPathTFIDF:
+                    if "TFIDF" in cbDataPathI:
                         cbDataPathStrI = "TFIDF"
-                    elif cbDataPathI == Configuration.cbML1MDataFileWithPathOHE:
+                    elif "OHE" in cbDataPathI or "simMatrixRR.npz" in cbDataPathI:
                         cbDataPathStrI = "OHE"
                     else:
                         print("error")

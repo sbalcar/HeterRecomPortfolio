@@ -39,6 +39,7 @@ from input.batchesML1m.batchMLSingleVMContextKNNHT import BatchMLVMContextKNNHT 
 from input.batchesRetailrocket.batchRRSingle import BatchRRSingle #class
 from input.batchesRetailrocket.batchRRSingleW2VHT import BatchRRSingleW2VHT #class
 from input.batchesRetailrocket.batchRRSingleVMContextKNNHT import BatchRRVMContextKNNHT #class
+from input.batchesRetailrocket.batchRRSingleCosineCBHT import BatchRRSingleCosineCBHT #class
 
 from input.batchesSlanTour.batchSTFuzzyDHondtDirectOptimizeThompsonSampling import BatchSTFuzzyDHondtDirectOptimizeThompsonSampling #class
 from input.batchesSlanTour.batchSTFuzzyDHondtDirectOptimizeThompsonSamplingINF import BatchSTFuzzyDHondtDirectOptimizeThompsonSamplingINF #class
@@ -95,6 +96,7 @@ def generateAllBatches():
     # RR
     BatchRRSingle.generateAllBatches()
     BatchRRSingleW2VHT.generateAllBatches()
+    BatchRRSingleCosineCBHT.generateAllBatches()
 
     #ST
     BatchSTContextDHondtINF.generateAllBatches()
@@ -175,12 +177,12 @@ def generateBatchesJournal():
 #    BatchMLFuzzyDHondtThompsonSampling.generateAllBatches()
 #    BatchMLContextDHondt.generateAllBatches()
 
-    BatchMLFuzzyDHondtDirectOptimize.lrClicks:List[float] = [0.03]
-    BatchMLFuzzyDHondtDirectOptimize.lrViewDivisors:List[float] = [250]
-    BatchMLFuzzyDHondtDirectOptimize.selectorIds = [
-        BatchMLFuzzyDHondtDirectOptimize.SLCTR_FIXED,
-        BatchMLFuzzyDHondtDirectOptimize.SLCTR_ROULETTE1, BatchMLFuzzyDHondtDirectOptimize.SLCTR_ROULETTE2]
-    BatchMLFuzzyDHondtDirectOptimize.generateAllBatches()
+#    BatchMLFuzzyDHondtDirectOptimize.lrClicks:List[float] = [0.03]
+#    BatchMLFuzzyDHondtDirectOptimize.lrViewDivisors:List[float] = [250]
+#    BatchMLFuzzyDHondtDirectOptimize.selectorIds = [
+#        BatchMLFuzzyDHondtDirectOptimize.SLCTR_FIXED,
+#        BatchMLFuzzyDHondtDirectOptimize.SLCTR_ROULETTE1, BatchMLFuzzyDHondtDirectOptimize.SLCTR_ROULETTE2]
+#    BatchMLFuzzyDHondtDirectOptimize.generateAllBatches()
 
 #    BatchMLFuzzyDHondtDirectOptimizeThompsonSampling.generateAllBatches()
 
@@ -195,6 +197,7 @@ def generateBatchesJournal():
 #    BatchRRSingle.generateAllBatches()
 #    BatchRRSingleW2VHT.generateAllBatches()
 #    BatchRRVMContextKNNHT.generateAllBatches()
+    BatchRRSingleCosineCBHT.generateAllBatches()
 
 
     # ST #############################################################################
@@ -211,7 +214,7 @@ def generateBatchesJournal():
 #    BatchSTDHondtThompsonSampling.generateAllBatches()
 #    BatchSTContextDHondt.generateAllBatches()
 
-    BatchSTFuzzyDHondtDirectOptimize.generateAllBatches()
+#    BatchSTFuzzyDHondtDirectOptimize.generateAllBatches()
 
 #    BatchSTFuzzyDHondtDirectOptimizeThompsonSampling.generateAllBatches()
 
