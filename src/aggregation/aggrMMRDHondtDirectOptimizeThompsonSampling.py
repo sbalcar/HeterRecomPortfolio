@@ -24,7 +24,8 @@ from datasets.datasetRetailrocket import DatasetRetailRocket  # lass
 from datasets.datasetST import DatasetST  #class
 
 
-class AggrMMRWeightedAVG(AggrWeightedAVG):
+
+class AggrMMRDHondtDirectOptimizeThompsonSampling(AggrDHondtDirectOptimizeThompsonSampling):
 
     ARG_SELECTOR:str = "selector"
     ARG_PENALTY_TOOL:str = "penaltyTool"
@@ -40,6 +41,7 @@ class AggrMMRWeightedAVG(AggrWeightedAVG):
 
         self._selector = argumentsDict[self.ARG_SELECTOR]
         self._lastRecommendedPerUser = {}
+
 
     def train(self, history:AHistory, dataset:ADataset):
         self.toolMMR = ToolMMR()   
