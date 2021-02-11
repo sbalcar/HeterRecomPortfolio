@@ -109,8 +109,8 @@ def filter():
     jobFiles:List[str] = [jobIdI for jobIdI in selectedFiles]
     print("Chybejici: " + str(len(jobFiles)) + " / " + str(len(iJobIds)))
 
-    #for jobFileI in jobFiles:
-    #    print("cp " + jobFileI.replace("FuzzyDHondt","BatchMLFuzzyDHondt") + ".txt ../chybi/")
+    for jobFileI in jobFiles:
+        print("cp " + jobFileI.replace("FuzzyDHondt","BatchMLFuzzyDHondt") + ".txt ../chybi/")
 
 def rename():
     dir:str = "/home/stepan/aaa/stDiv80Ulinear0109R2_"

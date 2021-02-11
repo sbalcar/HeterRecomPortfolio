@@ -56,7 +56,7 @@ class BatchMLFuzzyDHondt(ABatchML):
         aDict[BatchMLFuzzyDHondt.SLCTR_ROULETTE2] = selectorRoulette3
         aDict[BatchMLFuzzyDHondt.SLCTR_FIXED] = selectorFixed
 
-        aSubDict:Dict[str,object] = {selIdI: aDict[selIdI] for selIdI in aDict.keys() if selIdI in cls.selectorIds}
+        aSubDict:Dict[str,object] = {selIdI: aDict[selIdI] for selIdI in aDict.keys() if selIdI in cls.selectorIDs}
         return aSubDict
 
     @classmethod
