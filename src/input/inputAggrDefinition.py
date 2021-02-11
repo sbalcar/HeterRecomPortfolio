@@ -18,6 +18,7 @@ from aggregation.aggrContextFuzzyDHondtDirectOptimizeINF import AggrContextFuzzy
 from aggregation.aggrRandomKfromN import AggrRandomKfromN #class
 from aggregation.aggrRandomRecsSwitching import AggrRandomRecsSwitching #class
 from aggregation.aggrDHondtDirectOptimizeThompsonSampling import AggrDHondtDirectOptimizeThompsonSampling #class
+from aggregation.aggrMMRDHondtDirectOptimizeThompsonSampling import AggrMMRDHondtDirectOptimizeThompsonSampling #class
 
 from aggregation.negImplFeedback.aPenalization import APenalization #class
 from aggregation.negImplFeedback.penalUsingFiltering import PenalUsingFiltering #class
@@ -108,6 +109,12 @@ class InputAggrDefinition:
                             AggrFuzzyDHondtINF.ARG_PENALTY_TOOL: nImplFeedback,
                             AggrDHondtDirectOptimizeThompsonSamplingINF.ARG_DISCOUNT_FACTOR:discountFactor})
 
+    @staticmethod
+    def exportADescDHondtDirectOptimizeThompsonSamplingMMR(selector:ADHondtSelector,
+                            discountFactor=AggrDHondtDirectOptimizeThompsonSampling.DISCFACTOR_UNIFORM):
+        return AggregationDescription(AggrMMRDHondtDirectOptimizeThompsonSampling, {
+                            AggrDHondtDirectOptimizeThompsonSampling.ARG_SELECTOR:selector,
+                            AggrDHondtDirectOptimizeThompsonSampling.ARG_DISCOUNT_FACTOR:discountFactor})
 
 
     @staticmethod
