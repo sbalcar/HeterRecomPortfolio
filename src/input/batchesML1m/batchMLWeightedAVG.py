@@ -17,7 +17,7 @@ from aggregationDescription.aggregationDescription import AggregationDescription
 from input.inputAggrDefinition import InputAggrDefinition  # class
 from input.modelDefinition import ModelDefinition
 
-from input.inputRecomSTDefinition import InputRecomSTDefinition #class
+from input.inputRecomMLDefinition import InputRecomMLDefinition #class
 
 from aggregation.operators.aDHondtSelector import ADHondtSelector #class
 from aggregation.operators.rouletteWheelSelector import RouletteWheelSelector #class
@@ -64,7 +64,7 @@ class BatchMLWeightedAVG(ABatchML):
 
         eTool:AEvalTool = self.getParameters()[jobID]
 
-        rIDs, rDescs = InputRecomSTDefinition.exportPairOfRecomIdsAndRecomDescrs()
+        rIDs, rDescs = InputRecomMLDefinition.exportPairOfRecomIdsAndRecomDescrs()
 
         aDescWeightedAVG:AggregationDescription = InputAggrDefinition.exportADescWeightedAVG()
 
@@ -73,7 +73,7 @@ class BatchMLWeightedAVG(ABatchML):
 
         model:DataFrame = ModelDefinition.createDHontModel(pDescr.getRecommendersIDs())
 
-        simulator:Simulator = InputSimulatorDefinition.exportSimulatorSlantour(
+        simulator:Simulator = InputSimulatorDefinition.exportSimulatorML1M(
                 batchID, divisionDatasetPercentualSize, uBehaviour, repetition)
         simulator.simulate([pDescr], [model], [eTool], [HistoryHierDF(pDescr.getPortfolioID())])
 
@@ -84,4 +84,5 @@ if __name__ == "__main__":
     os.chdir("..")
     os.chdir("..")
     print(os.getcwd())
+
     BatchMLWeightedAVG.generateAllBatches()

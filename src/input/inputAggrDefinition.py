@@ -3,6 +3,7 @@
 from aggregationDescription.aggregationDescription import AggregationDescription #class
 
 from aggregation.aggrWeightedAVG import AggrWeightedAVG #class
+from aggregation.aggrMMRWeightedAVG import AggrMMRWeightedAVG #class
 from aggregation.aggrBanditTS import AggrBanditTS #class
 from aggregation.aggrFuzzyDHondt import AggrFuzzyDHondt #class
 from aggregation.aggrDHondtThompsonSampling import AggrDHondtThompsonSampling #class
@@ -36,6 +37,11 @@ class InputAggrDefinition:
     @staticmethod
     def exportADescWeightedAVG():
         return AggregationDescription(AggrWeightedAVG, {
+                            })
+
+    @staticmethod
+    def exportADescWeightedAVGMMR():
+        return AggregationDescription(AggrMMRWeightedAVG, {
                             })
 
 

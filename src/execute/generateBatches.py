@@ -21,6 +21,8 @@ from input.batchesML1m.batchMLFuzzyDHondtDirectOptimize import BatchMLFuzzyDHond
 from input.batchesML1m.batchMLFuzzyDHondtDirectOptimizeINF import BatchMLFuzzyDHondtDirectOptimizeINF #class
 
 from input.batchesML1m.batchMLWeightedAVG import BatchMLWeightedAVG #class
+from input.batchesML1m.batchMLWeightedAVGMMR import BatchMLWeightedAVGMMR #class
+
 from input.batchesML1m.batchMLRandomRecsSwitching import BatchMLRandomRecsSwitching #class
 from input.batchesML1m.batchMLRandomKfromN import BatchMLRandomKfromN #class
 
@@ -52,6 +54,7 @@ from input.batchesSlanTour.batchSTFuzzyDHondtDirectOptimize import BatchSTFuzzyD
 from input.batchesSlanTour.batchSTFuzzyDHondtINF import BatchSTFuzzyDHondtINF #class
 from input.batchesSlanTour.batchSTFuzzyDHondt import BatchSTFuzzyDHondt #class
 from input.batchesSlanTour.batchSTWeightedAVG import BatchSTWeightedAVG #class
+from input.batchesSlanTour.batchSTWeightedAVGMMR import BatchSTWeightedAVGMMR #class
 from input.batchesSlanTour.batchSTBanditTS import BatchSTBanditTS #class
 from input.batchesSlanTour.batchSTRandomRecsSwitching import BatchSTRandomRecsSwitching #class
 from input.batchesSlanTour.batchSTRandomKfromN import BatchSTRandomKfromN #class
@@ -81,6 +84,7 @@ def generateAllBatches():
     BatchMLContextDHondt.generateAllBatches()
 
     BatchMLWeightedAVG.generateAllBatches()
+    BatchMLWeightedAVGMMR.generateAllBatches()
 
     BatchMLRandomRecsSwitching.generateAllBatches()
     BatchMLRandomKfromN.generateAllBatches()
@@ -169,6 +173,8 @@ def generateBatchesJournal():
     BatchMLWeightedAVG.lrViewDivisors:List[float] = [250]
     BatchMLWeightedAVG.generateAllBatches()
 
+    BatchMLWeightedAVGMMR.generateAllBatches()
+
     BatchMLRandomRecsSwitching.generateAllBatches()
 
     BatchMLRandomKfromN.generateAllBatches()
@@ -213,6 +219,7 @@ def generateBatchesJournal():
 
     BatchSTBanditTS.generateAllBatches()  # only Fixed selector
     BatchSTWeightedAVG.generateAllBatches()
+    BatchSTWeightedAVGMMR.generateAllBatches()
 
     BatchSTRandomRecsSwitching.generateAllBatches()
     BatchSTRandomKfromN.generateAllBatches()

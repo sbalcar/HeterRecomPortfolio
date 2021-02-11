@@ -24,6 +24,7 @@ from input.batchesML1m.batchMLSingle import BatchMLSingle #class
 from input.batchesML1m.batchMLSingleINF import BatchMLSingleINF #class
 from input.batchesML1m.batchMLBanditTS import BatchMLBanditTS #class
 from input.batchesML1m.batchMLWeightedAVG import BatchMLWeightedAVG #class
+from input.batchesML1m.batchMLWeightedAVGMMR import BatchMLWeightedAVGMMR #class
 from input.batchesML1m.batchMLRandomRecsSwitching import BatchMLRandomRecsSwitching #class
 from input.batchesML1m.batchMLRandomKfromN import BatchMLRandomKfromN #class
 
@@ -49,6 +50,7 @@ from input.batchesSlanTour.batchSTFuzzyDHondtDirectOptimize import BatchSTFuzzyD
 from input.batchesSlanTour.batchSTFuzzyDHondt import BatchSTFuzzyDHondt #class
 from input.batchesSlanTour.batchSTFuzzyDHondtINF import BatchSTFuzzyDHondtINF #class
 from input.batchesSlanTour.batchSTWeightedAVG import BatchSTWeightedAVG #class
+from input.batchesSlanTour.batchSTWeightedAVGMMR import BatchSTWeightedAVGMMR #class
 from input.batchesSlanTour.batchSTBanditTS import BatchSTBanditTS #class
 from input.batchesSlanTour.batchSTRandomRecsSwitching import BatchSTRandomRecsSwitching #class
 from input.batchesSlanTour.batchSTRandomKfromN import BatchSTRandomKfromN #class

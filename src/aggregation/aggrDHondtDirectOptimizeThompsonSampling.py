@@ -26,6 +26,12 @@ from aggregation.operators.aDHondtSelector import ADHondtSelector #class
 class AggrDHondtDirectOptimizeThompsonSampling(AAgregation):
 
     ARG_SELECTOR:str = "selector"
+    ARG_DISCOUNT_FACTOR:str = "discFactor"
+    ARG_SELECTOR:str = "selector"
+
+    DISCFACTOR_DCG:str = "DCG"
+    DISCFACTOR_POWERLAW:str = "PowerLaw"
+    DISCFACTOR_UNIFORM:str = "Uniform"
 
     def __init__(self, history:AHistory, argumentsDict:dict):
         if not isinstance(history, AHistory):
