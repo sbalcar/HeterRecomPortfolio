@@ -53,6 +53,8 @@ class Portfolio1Aggr(APortfolio):
         if not isinstance(history, AHistory):
             raise ValueError("Argument history isn't type AHistory.")
 
+        self._aggregation.train(history, dataset)
+
         recommenderI:ARecommender
         for recommenderI in self._recommenders:
             recommenderI.train(history, dataset)

@@ -5,6 +5,7 @@ from typing import Dict #class
 from pandas.core.frame import DataFrame #class
 from pandas.core.series import Series #class
 
+from datasets.aDataset import ADataset #class
 from history.aHistory import AHistory #class
 from abc import ABC, abstractmethod
 
@@ -17,6 +18,9 @@ class AAgregation(ABC):
     @abstractmethod
     def __init__(self, aHistory:AHistory, argumentsDict:Dict[str,object]):
        raise Exception("AAgregation is abstract class, can't be instanced")
+
+    def train(self, history:AHistory, dataset:ADataset):
+        pass
 
     @abstractmethod
     def update(self, ratingsUpdateDF:DataFrame, argumentsDict:Dict[str,object]):
