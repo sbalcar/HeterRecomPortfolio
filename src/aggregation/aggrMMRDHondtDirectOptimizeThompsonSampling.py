@@ -30,6 +30,10 @@ class AggrMMRDHondtDirectOptimizeThompsonSampling(AggrDHondtDirectOptimizeThomps
     ARG_SELECTOR:str = "selector"
     ARG_PENALTY_TOOL:str = "penaltyTool"
 
+    #ARG_USE_DIVERSITY:str = "useDiversity"
+    ARG_MMR_LAMBDA:str = "MMRLambda"
+
+
     def __init__(self, history:AHistory, argumentsDict:dict):
         if not isinstance(history, AHistory):
             raise ValueError("Argument history isn't type AHistory.")
@@ -42,6 +46,7 @@ class AggrMMRDHondtDirectOptimizeThompsonSampling(AggrDHondtDirectOptimizeThomps
         self._selector = argumentsDict[self.ARG_SELECTOR]
         self._lastRecommendedPerUser = {}
 
+        self._MMR_lambda = argumentsDict.get(self.ARG_MMR_LAMBDA)
 
     def train(self, history:AHistory, dataset:ADataset):
         self.toolMMR = ToolMMR()   
@@ -79,7 +84,7 @@ class AggrMMRDHondtDirectOptimizeThompsonSampling(AggrDHondtDirectOptimizeThomps
         items = super().runWithScore(methodsResultDict, modelDF, userID, numberOfItems=numberOfItems*5, argumentsDict=argumentsDict)
 
         previousRecs = self._lastRecommendedPerUser.get(userID, [])
-        results = self.toolMMR.mmr_sorted_with_prefix(0.5, items, previousRecs, numberOfItems)
+        results = self.toolMMR.mmr_sorted_with_prefix(self._MMR_lambda, items, previousRecs, numberOfItems)
         selectedItems = results.index.tolist()
         self._lastRecommendedPerUser[userID] = selectedItems
     

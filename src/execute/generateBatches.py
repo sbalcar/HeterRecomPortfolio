@@ -239,6 +239,8 @@ def generateBatchesJournal():
 
     BatchSTFuzzyDHondtDirectOptimizeThompsonSamplingMMR.generateAllBatches()
 
+    AggrContextFuzzyDHondtDirectOptimize
+
     # INF
     BatchSTFuzzyDHondtDirectOptimizeThompsonSamplingINF.generateSelectedBatches([
         jobIdST01, jobIdST02, jobIdST03, jobIdST04, jobIdST05, jobIdST06, jobIdST07, jobIdST08])

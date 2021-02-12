@@ -114,8 +114,8 @@ class InputAggrDefinition:
                             discountFactor=AggrDHondtDirectOptimizeThompsonSampling.DISCFACTOR_UNIFORM):
         return AggregationDescription(AggrMMRDHondtDirectOptimizeThompsonSampling, {
                             AggrDHondtDirectOptimizeThompsonSampling.ARG_SELECTOR:selector,
-                            AggrDHondtDirectOptimizeThompsonSampling.ARG_DISCOUNT_FACTOR:discountFactor})
-
+                            AggrDHondtDirectOptimizeThompsonSampling.ARG_DISCOUNT_FACTOR:discountFactor,
+                            AggrMMRDHondtDirectOptimizeThompsonSampling.ARG_MMR_LAMBDA:0.5})
 
     @staticmethod
     def exportADescDContextHondt(selector:ADHondtSelector, eTool:AEvalTool):

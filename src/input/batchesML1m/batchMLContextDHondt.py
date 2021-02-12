@@ -97,4 +97,5 @@ if __name__ == "__main__":
    os.chdir("..")
    os.chdir("..")
    print(os.getcwd())
+
    BatchMLContextDHondt.generateAllBatches()
