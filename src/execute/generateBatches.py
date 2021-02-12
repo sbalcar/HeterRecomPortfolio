@@ -26,6 +26,8 @@ from input.batchesML1m.batchMLWeightedAVGMMR import BatchMLWeightedAVGMMR #class
 from input.batchesML1m.batchMLRandomRecsSwitching import BatchMLRandomRecsSwitching #class
 from input.batchesML1m.batchMLRandomKfromN import BatchMLRandomKfromN #class
 
+from input.batchesML1m.batchMLContextFuzzyDHondtDirectOptimize import BatchMLContextFuzzyDHondtDirectOptimize #class
+
 from input.batchesML1m.batchMLFuzzyDHondtDirectOptimizeThompsonSampling import BatchMLFuzzyDHondtDirectOptimizeThompsonSampling #class
 from input.batchesML1m.batchMLFuzzyDHondtDirectOptimizeThompsonSamplingINF import BatchMLFuzzyDHondtDirectOptimizeThompsonSamplingINF #class
 from input.batchesML1m.batchMLFuzzyDHondtDirectOptimizeThompsonSamplingMMR import BatchMLFuzzyDHondtDirectOptimizeThompsonSamplingMMR #class
@@ -53,6 +55,8 @@ from input.batchesSlanTour.batchSTDHondtThompsonSampling import BatchSTDHondtTho
 from input.batchesSlanTour.batchSTFuzzyDHondtDirectOptimizeThompsonSamplingMMR import BatchSTFuzzyDHondtDirectOptimizeThompsonSamplingMMR #class
 from input.batchesSlanTour.batchSTDHondtThompsonSamplingINF import BatchSTDHondtThompsonSamplingINF #class
 from input.batchesSlanTour.batchSTFuzzyDHondtDirectOptimize import BatchSTFuzzyDHondtDirectOptimize #class
+from input.batchesSlanTour.batchSTContextFuzzyDHondtDirectOptimize import BatchSTContextFuzzyDHondtDirectOptimize #class
+
 from input.batchesSlanTour.batchSTFuzzyDHondtINF import BatchSTFuzzyDHondtINF #class
 from input.batchesSlanTour.batchSTFuzzyDHondt import BatchSTFuzzyDHondt #class
 from input.batchesSlanTour.batchSTWeightedAVG import BatchSTWeightedAVG #class
@@ -202,6 +206,9 @@ def generateBatchesJournal():
 
     BatchMLFuzzyDHondtDirectOptimizeThompsonSamplingMMR.generateAllBatches()
 
+    BatchMLContextFuzzyDHondtDirectOptimize.selectorIDs:List[str] = [BatchMLFuzzyDHondt.SLCTR_FIXED]
+    BatchMLContextFuzzyDHondtDirectOptimize.generateAllBatches()
+
     # INF
     BatchMLFuzzyDHondtDirectOptimizeThompsonSamplingINF.selectorIDs = [BatchMLFuzzyDHondt.SLCTR_FIXED]
     BatchMLFuzzyDHondtDirectOptimizeThompsonSamplingINF.generateSelectedBatches([
@@ -233,13 +240,15 @@ def generateBatchesJournal():
     BatchSTDHondtThompsonSampling.generateAllBatches()
     BatchSTContextDHondt.generateAllBatches()
 
+    BatchMLContextFuzzyDHondtDirectOptimize.selectorIDs:List[str] = [BatchMLFuzzyDHondt.SLCTR_FIXED]
+    BatchSTContextFuzzyDHondtDirectOptimize.generateAllBatches()
+
     BatchSTFuzzyDHondtDirectOptimize.generateAllBatches()
 
     BatchSTFuzzyDHondtDirectOptimizeThompsonSampling.generateAllBatches()
 
     BatchSTFuzzyDHondtDirectOptimizeThompsonSamplingMMR.generateAllBatches()
 
-    AggrContextFuzzyDHondtDirectOptimize
 
     # INF
     BatchSTFuzzyDHondtDirectOptimizeThompsonSamplingINF.generateSelectedBatches([

@@ -45,7 +45,7 @@ class BatchMLFuzzyDHondt(ABatchML):
     selectorIDs:List[str] = [SLCTR_ROULETTE1, SLCTR_ROULETTE2, SLCTR_FIXED]
 
     @classmethod
-    def getSelectorParameters(cls):
+    def getAllSelectors(cls):
 
         selectorRoulette1:ADHondtSelector = RouletteWheelSelector({RouletteWheelSelector.ARG_EXPONENT:1})
         selectorRoulette3:ADHondtSelector = RouletteWheelSelector({RouletteWheelSelector.ARG_EXPONENT:3})
@@ -55,6 +55,12 @@ class BatchMLFuzzyDHondt(ABatchML):
         aDict[BatchMLFuzzyDHondt.SLCTR_ROULETTE1] = selectorRoulette1
         aDict[BatchMLFuzzyDHondt.SLCTR_ROULETTE2] = selectorRoulette3
         aDict[BatchMLFuzzyDHondt.SLCTR_FIXED] = selectorFixed
+
+        return aDict
+
+    @classmethod
+    def getSelectorParameters(cls):
+        aDict:Dict[str,object] = cls.getAllSelectors()
 
         aSubDict:Dict[str,object] = {selIdI: aDict[selIdI] for selIdI in aDict.keys() if selIdI in cls.selectorIDs}
         return aSubDict

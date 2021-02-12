@@ -113,9 +113,13 @@ class InputRecomMLDefinition:
 
         rIDsVMCKNN:List[str] = [recom + cls.VMC_KNN25.title()]
         rDescsVMCKNN:List[RecommenderDescription] = [cls.exportRDescVMContextKNNk25()]
+        #rIDsVMCKNN:List[str] = []
+        #rDescsVMCKNN:List[RecommenderDescription] = []
 
         rIDsW2V:List[str] = [recom + cls.W2VweightedMeanups3.title(), recom + cls.W2VweightedMeanups7.title()]
         rDescsW2V:List[RecommenderDescription] = [cls.exportRDescW2Vtpositivei50000ws1vs32upsweightedMeanups3(), cls.exportRDescW2Vtpositivei50000ws1vs64upsweightedMeanups7()]
+        #rIDsW2V: List[str] = []
+        #rDescsW2V: List[RecommenderDescription] = []
 
         rIDsCB:List[str] = [recom + cls.COSINECBcbdOHEupsweightedMeanups3.title(), recom + cls.COSINECBcbdOHEupsmaxups1.title()]
         rDescsCB:List[RecommenderDescription] = [cls.exportRDescCosineCBcbdOHEupsweightedMeanups3(), cls.exportRDescCosineCBcbdOHEupsmaxups1()]

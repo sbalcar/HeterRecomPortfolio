@@ -12,16 +12,12 @@ from aggregation.aggrFuzzyDHondtDirectOptimizeINF import AggrFuzzyDHondtDirectOp
 from aggregation.mixinContextAggregation import MixinContextAggregation # class
 from aggregation.aAggregation import AAgregation # class
 
-from history.aHistory import AHistory #class
-
-
 class AggrContextFuzzyDHondtDirectOptimizeINF(MixinContextAggregation, AggrFuzzyDHondtDirectOptimizeINF, AAgregation):
-
-    def __init__(self, history:AHistory, argumentsDict:Dict[str,object]):
+    def __init__(self, history, argumentsDict:dict):
         AggrFuzzyDHondtDirectOptimizeINF.__init__(self, history, argumentsDict)
         MixinContextAggregation.__init__(self, history, argumentsDict)
 
-    def run(self, methodsResultDict:dict, modelDF:DataFrame, userID:int, numberOfItems:int = 20, argumentsDict:Dict[str,object]={}):
+    def run(self, methodsResultDict: dict, modelDF: DataFrame, userID: int, numberOfItems: int = 20, argumentsDict:Dict[str,object]={}):
         itemsWithResposibilityOfRecommenders: List[int, np.Series[int, str]] = \
             super().run(methodsResultDict, modelDF, userID, numberOfItems, argumentsDict=argumentsDict)
         return itemsWithResposibilityOfRecommenders

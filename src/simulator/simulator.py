@@ -29,8 +29,8 @@ class Simulator:
         if type(behavioursDF) is not DataFrame:
             raise ValueError("Argument behavioursDF isn't type DataFrame.")
 
-        argumentsDict[ASequentialSimulation.ARG_MODE_PROTECT_OLD_RESULTS] = True
-        argumentsDict[ASequentialSimulation.ARG_MODE_OVERWRITE_OLD_RESULTS] = False
+        argumentsDict[ASequentialSimulation.ARG_MODE_PROTECT_OLD_RESULTS] = False
+        argumentsDict[ASequentialSimulation.ARG_MODE_OVERWRITE_OLD_RESULTS] = True
         argumentsDict[ASequentialSimulation.ARG_MODE_OVERWRITE_EMPTY_RESULTS] = False
 
         self._simulation:ASequentialSimulation = simulatorClass(

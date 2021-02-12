@@ -1,61 +1,65 @@
 #!/usr/bin/python3
 
 import os
+from typing import List #class
+from typing import Dict #class
 
-from typing import List
+from datasets.aDataset import ADataset #class
+from datasets.datasetML import DatasetML #class
+from datasets.datasetRetailrocket import DatasetRetailRocket #class
+from datasets.datasetST import DatasetST #class
+
+from datasets.ml.ratings import Ratings #class
+from datasets.ml.items import Items #class
+from datasets.ml.users import Users #class
+from datasets.ml.behavioursML import BehavioursML #class
+from datasets.retailrocket.behavioursRR import BehavioursRR #class
+from datasets.slantour.behavioursST import BehavioursST #class
 
 from pandas.core.frame import DataFrame #class
+
+from simulator.simulator import Simulator #class
 
 from portfolioDescription.portfolio1AggrDescription import Portfolio1AggrDescription #class
 
 from evaluationTool.aEvalTool import AEvalTool #class
-from evaluationTool.evalToolDHondt import EvalToolDHondt #class
 from evaluationTool.evalToolContext import EvalToolContext #class
 
 from aggregationDescription.aggregationDescription import AggregationDescription #class
 
-from input.inputAggrDefinition import InputAggrDefinition  #class
+from input.inputAggrDefinition import InputAggrDefinition  # class
 from input.modelDefinition import ModelDefinition
 
 from input.inputRecomSTDefinition import InputRecomSTDefinition #class
 
-from input.batchesML1m.batchMLFuzzyDHondt import BatchMLFuzzyDHondt #class
+from aggregation.operators.aDHondtSelector import ADHondtSelector #class
+from aggregation.operators.rouletteWheelSelector import RouletteWheelSelector #class
+from aggregation.operators.theMostVotedItemSelector import TheMostVotedItemSelector #class
 
 from aggregation.negImplFeedback.aPenalization import APenalization #class
 
-from aggregation.operators.aDHondtSelector import ADHondtSelector #class
-from aggregation.negImplFeedback.penalUsingFiltering import PenalUsingFiltering #class
-from aggregation.negImplFeedback.penalUsingProbability import PenalUsingProbability #class
-
-from input.batchesML1m.batchMLFuzzyDHondt import BatchMLFuzzyDHondt #class
-
 from input.inputABatchDefinition import InputABatchDefinition
-from input.batchesML1m.batchMLBanditTS import BatchMLBanditTS #class
 from input.aBatchST import ABatchST #class
+from input.batchesML1m.batchMLFuzzyDHondtThompsonSamplingINF import BatchMLFuzzyDHondtThompsonSamplingINF #class
 
 from input.inputSimulatorDefinition import InputSimulatorDefinition #class
 
-from input.inputAggrDefinition import PenalizationToolDefinition #class
-
 from simulator.simulator import Simulator #class
 
-from history.aHistory import AHistory #class
-from history.historyDF import HistoryDF #class
 from history.historyHierDF import HistoryHierDF #class
+from input.batchesML1m.batchMLFuzzyDHondt import BatchMLFuzzyDHondt #class
+from input.batchesML1m.batchMLContextFuzzyDHondtDirectOptimize import BatchMLContextFuzzyDHondtDirectOptimize #class
 
-from datasets.aDataset import ADataset #class
-from datasets.datasetST import DatasetST #class
-from datasets.ml.users import Users #class
-from datasets.ml.items import Items #class
-from datasets.ml.ratings import Ratings #class
+from history.aHistory import AHistory #class
 
 
-class BatchSTContextDHondt(ABatchST):
+class BatchSTContextFuzzyDHondtDirectOptimize(ABatchST):
 
-    @staticmethod
-    def getParameters():
-        return BatchMLBanditTS.getParameters()
+    selectorIDs:List[str] = BatchMLFuzzyDHondt.selectorIDs
 
+    @classmethod
+    def getParameters(cls):
+        return BatchMLContextFuzzyDHondtDirectOptimize.getParameters()
 
     def run(self, batchID:str, jobID:str):
 
@@ -66,15 +70,11 @@ class BatchSTContextDHondt(ABatchST):
 
         selector:ADHondtSelector = self.getParameters()[jobID]
 
-        portfolioID:str = "ContextDHondt" + jobID
-
-        history:AHistory = HistoryHierDF(portfolioID)
-
         dataset:ADataset = DatasetST.readDatasets()
         events = dataset.eventsDF
         serials = dataset.serialsDF
 
-        historyDF: AHistory = HistoryDF("test01")
+        historyDF:AHistory = HistoryHierDF("test01")
 
         # Init evalTool
         evalTool:AEvalTool = EvalToolContext({
@@ -85,23 +85,24 @@ class BatchSTContextDHondt(ABatchST):
 
         rIDs, rDescs = InputRecomSTDefinition.exportPairOfRecomIdsAndRecomDescrs()
 
-        aDescContextDHont:AggregationDescription = InputAggrDefinition.exportADescDContextHondt(selector, evalTool)
+        aDescDHont:AggregationDescription = InputAggrDefinition.exportADescContextFuzzyDHondtDirectOptimize(selector, evalTool)
 
         pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
-            portfolioID, rIDs, rDescs, aDescContextDHont)
+            "ContextFDHondtDirectOptimize" + jobID, rIDs, rDescs, aDescDHont)
 
         model:DataFrame = ModelDefinition.createDHontModel(pDescr.getRecommendersIDs())
 
         simulator:Simulator = InputSimulatorDefinition.exportSimulatorSlantour(
                 batchID, divisionDatasetPercentualSize, uBehaviour, repetition)
-        simulator.simulate([pDescr], [model], [evalTool], [history])
+        simulator.simulate([pDescr], [model], [evalTool], [HistoryHierDF(pDescr.getPortfolioID())])
 
 
 
 
 if __name__ == "__main__":
-   os.chdir("..")
-   os.chdir("..")
-   print(os.getcwd())
+    os.chdir("..")
+    os.chdir("..")
+    print(os.getcwd())
 
-   BatchSTContextDHondt.generateAllBatches()
+    BatchSTContextFuzzyDHondtDirectOptimize.generateAllBatches()
+    #BatchSTContextFuzzyDHondtDirectOptimize().run("stDiv90Ulinear0109R1", "Fixed")
