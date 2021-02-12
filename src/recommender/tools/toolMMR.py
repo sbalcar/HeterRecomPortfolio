@@ -51,6 +51,23 @@ class ToolMMR():
             print("miss")
             return 0
 
+    def mmr_sorted_with_prefix(self, lambda_:float, results, prefix, length:int):
+        selected = pd.Series(dtype=np.float64)
+        prefix = set(prefix)
+        docs = set(results.index)
+        while (len(selected) < len(docs)) and (len(selected) < length):
+            remaining = docs - set(selected.index)
+            mmr_score = lambda x: lambda_ * results[x] - (1 - lambda_) * max(
+                [self._objects_similarity(x, y) for y in set(selected.index).union(prefix) - {x}] or [
+                    0])  # TODO: self.mmr_objects_similarity
+            next_selected = self._argmax(remaining, mmr_score)
+            mmrVal = lambda_ + (lambda_ * results[next_selected] - (1 - lambda_) * max(
+                [self._objects_similarity(next_selected, y) for y in set(selected.index).union(prefix) - {next_selected}] or [0]))
+            selected = selected.append(pd.Series(mmrVal, index=[next_selected]))
+            # selected[next_selected] = mmrVal
+
+        return selected
+
     def mmr_sorted(self, lambda_:float, results, length:int):
         """Sort a list of docs by Maximal marginal relevance
         Performs maximal marginal relevance sorting on a set of
