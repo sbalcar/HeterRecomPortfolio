@@ -77,4 +77,5 @@ if __name__ == "__main__":
     os.chdir("..")
     print(os.getcwd())
 
-    BatchSTFuzzyDHondtDirectOptimizeThompsonSamplingMMR.generateAllBatches()
+    #BatchSTFuzzyDHondtDirectOptimizeThompsonSamplingMMR.generateAllBatches()
+    BatchSTFuzzyDHondtDirectOptimizeThompsonSamplingMMR().run("stDiv90Ulinear0109R1", "FixedDCG")

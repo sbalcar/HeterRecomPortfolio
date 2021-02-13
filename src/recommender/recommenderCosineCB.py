@@ -232,6 +232,7 @@ class RecommenderCosineCB(ARecommender):
 
 
         if self._useMMR:
+            print(results.iloc[0:numberOfItems*5])
             resultList = self._toolMMR.mmr_sorted(self._MMR_lambda, results.iloc[0:numberOfItems*5], numberOfItems)
         else:
             resultList = results.iloc[0:numberOfItems]

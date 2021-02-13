@@ -61,9 +61,7 @@ class BatchMLContextFuzzyDHondtDirectOptimize(ABatchML):
     def getParameters(cls):
 
         aDict:Dict[str,object] = BatchMLFuzzyDHondt.getAllSelectors()
-
         aSubDict:Dict[str,object] = {selIdI: aDict[selIdI] for selIdI in aDict.keys() if selIdI in cls.selectorIDs}
-
         return aSubDict
 
     def run(self, batchID:str, jobID:str):

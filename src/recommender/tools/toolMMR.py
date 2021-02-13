@@ -69,6 +69,7 @@ class ToolMMR():
         return selected
 
     def mmr_sorted(self, lambda_:float, results, length:int):
+        print("lambda_: " + str(lambda_))
         """Sort a list of docs by Maximal marginal relevance
         Performs maximal marginal relevance sorting on a set of
         documents as described by Carbonell and Goldstein (1998)
