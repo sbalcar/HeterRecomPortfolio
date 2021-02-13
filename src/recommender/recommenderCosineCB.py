@@ -230,20 +230,20 @@ class RecommenderCosineCB(ARecommender):
             print(type(results))
         results.sort_values(ascending=False, inplace=True)
 
-
-        if self._useMMR:
-            print(results.iloc[0:numberOfItems*5])
-            resultList = self._toolMMR.mmr_sorted(self._MMR_lambda, results.iloc[0:numberOfItems*5], numberOfItems)
-        else:
-            resultList = results.iloc[0:numberOfItems]
-
-
         if argumentsDict.get(self.ARG_ALLOWED_ITEMIDS) is not None:
             # ARG_ALLOWED_ITEMIDS contains a list of allowed IDs
             # TODO check type of ARG_ALLOWED_ITEMIDS, should be list
             # reducedList = self._sortedTheMostCommon.loc[self._sortedTheMostCommon.index.intersection(argumentsDict[self.ARG_ALLOWED_ITEMIDS])]
             results = results.loc[results.index.intersection(argumentsDict[self.ARG_ALLOWED_ITEMIDS])]
-        resultList = results.iloc[0:numberOfItems]
+            
+
+        if self._useMMR:
+            #print(results.iloc[0:numberOfItems*5])
+            resultList = self._toolMMR.mmr_sorted(self._MMR_lambda, results.iloc[0:numberOfItems*5], numberOfItems)
+        else:
+            resultList = results.iloc[0:numberOfItems]            
+            
+        #resultList = results.iloc[0:numberOfItems]
 
         # normalize scores into the unit vector (for aggregation purposes)
         # !!! tohle je zasadni a je potreba provest normalizaci u vsech recommenderu - teda i pro most popular!
