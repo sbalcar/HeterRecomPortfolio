@@ -83,7 +83,7 @@ class AggrRandomKfromN(AAgregation):
         results = methodsResultDictI[recommenderID] #pd.Series
         results.sort_values(ascending=False,inplace=True)
                     
-        if self.lastUsersRecommender.get(userID) is None:
+        if self.lastUsersRecommender.get(userID) is None or len(results) < numberOfItems:
             if self.DEBUG:
                 print("Main vetev")
             #repeated recommendation, use different recommender  
