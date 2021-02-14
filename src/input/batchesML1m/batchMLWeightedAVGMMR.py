@@ -49,7 +49,7 @@ class BatchMLWeightedAVGMMR(ABatchML):
         divisionDatasetPercentualSize, uBehaviour, repetition = \
         InputABatchDefinition.getBatchParameters(self.datasetID)[batchID]
 
-        eTool: AEvalTool = self.getParameters()[jobID]
+        eTool:AEvalTool = self.getParameters()[jobID]
 
         rIDs, rDescs = InputRecomMLDefinition.exportPairOfRecomIdsAndRecomDescrs()
 
@@ -58,7 +58,7 @@ class BatchMLWeightedAVGMMR(ABatchML):
         pDescr: Portfolio1AggrDescription = Portfolio1AggrDescription(
             "WAVGMMR" + jobID, rIDs, rDescs, aDescWeightedAVG)
 
-        model: DataFrame = ModelDefinition.createDHontModel(pDescr.getRecommendersIDs())
+        model:DataFrame = ModelDefinition.createDHontModel(pDescr.getRecommendersIDs())
 
         simulator: Simulator = InputSimulatorDefinition.exportSimulatorML1M(
             batchID, divisionDatasetPercentualSize, uBehaviour, repetition)
