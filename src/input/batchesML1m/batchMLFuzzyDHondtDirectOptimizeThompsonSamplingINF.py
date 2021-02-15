@@ -49,14 +49,13 @@ class BatchMLFuzzyDHondtDirectOptimizeThompsonSamplingINF(ABatchML):
 
         aDict:Dict[str,object] = {}
         for selectorIDH in cls.selectorIDs:
-            for discFactorI in cls.discFactors:
-                for nImplFeedbackI in cls.negativeImplFeedback:
-                    keyIJ:str = str(selectorIDH) + discFactorI + nImplFeedbackI
+            for nImplFeedbackI in cls.negativeImplFeedback:
+                keyIJ:str = str(selectorIDH) + nImplFeedbackI
 
-                    nImplFeedback:APenalization = BatchMLFuzzyDHondtThompsonSamplingINF().getPenalFncs()[nImplFeedbackI]
-                    selectorH:ADHondtSelector = BatchMLFuzzyDHondt().getSelectorParameters()[selectorIDH]
+                nImplFeedback:APenalization = BatchMLFuzzyDHondtThompsonSamplingINF().getPenalFncs()[nImplFeedbackI]
+                selectorH:ADHondtSelector = BatchMLFuzzyDHondt().getSelectorParameters()[selectorIDH]
 
-                    aDict[keyIJ] = (selectorH, discFactorI, nImplFeedback)
+                aDict[keyIJ] = (selectorH, nImplFeedback)
         return aDict
 
     def run(self, batchID:str, jobID:str):
@@ -66,7 +65,7 @@ class BatchMLFuzzyDHondtDirectOptimizeThompsonSamplingINF(ABatchML):
         repetition:int
         divisionDatasetPercentualSize, uBehaviour, repetition = InputABatchDefinition.getBatchParameters(self.datasetID)[batchID]
 
-        selector, discFactor, nImplFeedback = self.getParameters()[jobID]
+        selector, nImplFeedback = self.getParameters()[jobID]
 
         eTool:AEvalTool = EvalToolDHondtBanditVotes({})
 
@@ -75,7 +74,7 @@ class BatchMLFuzzyDHondtDirectOptimizeThompsonSamplingINF(ABatchML):
         aDescDHont:AggregationDescription = InputAggrDefinition.exportADescDHondtDirectOptimizeThompsonSamplingINF(selector, nImplFeedback, discFactor)
 
         pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
-            "FDHondtDirectOptimizeThompsonSamplingINF" + jobID, rIDs, rDescs, aDescDHont)
+            "FDHondtDirectOptimizeThompsonSamplingINF" + jobID.replace("Uniform",""), rIDs, rDescs, aDescDHont)
 
         model:DataFrame = ModelDefinition.createDHondtBanditsVotesModel(pDescr.getRecommendersIDs())
 

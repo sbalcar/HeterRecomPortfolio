@@ -168,7 +168,7 @@ def generateBatchesJournal():
 
 
     # ML #############################################################################
-    BatchMLSingle.generateAllBatches()
+#    BatchMLSingle.generateAllBatches()
 
 #    BatchMLFuzzyDHondt.lrClicks:List[float] = [0.03]
 #    BatchMLFuzzyDHondt.lrViewDivisors:List[float] = [250]
@@ -204,14 +204,15 @@ def generateBatchesJournal():
 #    BatchMLFuzzyDHondtDirectOptimizeThompsonSampling.selectorIDs = [BatchMLFuzzyDHondt.SLCTR_FIXED]
 #    BatchMLFuzzyDHondtDirectOptimizeThompsonSampling.generateAllBatches()
 #
+#    BatchMLFuzzyDHondtDirectOptimizeThompsonSamplingMMR.selectorIDs = [BatchMLFuzzyDHondt.SLCTR_FIXED]
 #    BatchMLFuzzyDHondtDirectOptimizeThompsonSamplingMMR.generateAllBatches()
 #
-    BatchMLContextFuzzyDHondtDirectOptimize.generateAllBatches()
+#    BatchMLContextFuzzyDHondtDirectOptimize.generateAllBatches()
 #
 #    # INF
-#    BatchMLFuzzyDHondtDirectOptimizeThompsonSamplingINF.selectorIDs = [BatchMLFuzzyDHondt.SLCTR_FIXED]
-#    BatchMLFuzzyDHondtDirectOptimizeThompsonSamplingINF.generateSelectedBatches([
-#        jobIdML01, jobIdML02, jobIdML03, jobIdML04, jobIdML05, jobIdML06, jobIdML07, jobIdML08])
+    BatchMLFuzzyDHondtDirectOptimizeThompsonSamplingINF.selectorIDs = [BatchMLFuzzyDHondt.SLCTR_FIXED]
+    BatchMLFuzzyDHondtDirectOptimizeThompsonSamplingINF.generateSelectedBatches([
+        jobIdML01, jobIdML02, jobIdML03, jobIdML04, jobIdML05, jobIdML06, jobIdML07, jobIdML08])
 #
 #    BatchMLContextDHondtINF.generateSelectedBatches([
 #        jobIdML01, jobIdML02, jobIdML03, jobIdML04, jobIdML05, jobIdML06, jobIdML07, jobIdML08])
@@ -239,13 +240,13 @@ def generateBatchesJournal():
 #    BatchSTDHondtThompsonSampling.generateAllBatches()
 #    BatchSTContextDHondt.generateAllBatches()
 #
-    BatchSTContextFuzzyDHondtDirectOptimize.generateAllBatches()
+#    BatchSTContextFuzzyDHondtDirectOptimize.generateAllBatches()
 #
 #    BatchSTFuzzyDHondtDirectOptimize.generateAllBatches()
 #
 #    BatchSTFuzzyDHondtDirectOptimizeThompsonSampling.generateAllBatches()
 #
-#####    BatchSTFuzzyDHondtDirectOptimizeThompsonSamplingMMR.generateAllBatches()
+#    BatchSTFuzzyDHondtDirectOptimizeThompsonSamplingMMR.generateAllBatches()
 #
 #
     # INF
