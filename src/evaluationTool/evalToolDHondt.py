@@ -36,8 +36,8 @@ class EvalToolDHondt(AEvalTool):
         if type(rItemIDsWithResponsibility) is not list:
             print(rItemIDsWithResponsibility)
             raise ValueError("Argument rItemIDsWithResponsibility isn't type list.")
-        if type(clickedItemID) is not int and type(clickedItemID) is not np.int64:
-            raise ValueError("Argument clickedItemID isn't type int.")
+        #if type(clickedItemID) is not int and type(clickedItemID) is not np.int64:
+        #    raise ValueError("Argument clickedItemID isn't type int.")
         if type(portfolioModel) is not DataFrame:
             raise ValueError("Argument pModelDF isn't type DataFrame.")
         if list(portfolioModel.columns) != ['votes']:

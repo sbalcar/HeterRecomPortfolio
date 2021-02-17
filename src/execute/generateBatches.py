@@ -201,8 +201,8 @@ def generateBatchesJournal():
 #        BatchMLFuzzyDHondtDirectOptimize.SLCTR_ROULETTE1, BatchMLFuzzyDHondtDirectOptimize.SLCTR_ROULETTE2]
 #    BatchMLFuzzyDHondtDirectOptimize.generateAllBatches()
 #
-#    BatchMLFuzzyDHondtDirectOptimizeThompsonSampling.selectorIDs = [BatchMLFuzzyDHondt.SLCTR_FIXED]
-#    BatchMLFuzzyDHondtDirectOptimizeThompsonSampling.generateAllBatches()
+    BatchMLFuzzyDHondtDirectOptimizeThompsonSampling.selectorIDs = [BatchMLFuzzyDHondt.SLCTR_FIXED]
+    BatchMLFuzzyDHondtDirectOptimizeThompsonSampling.generateAllBatches()
 #
 #    BatchMLFuzzyDHondtDirectOptimizeThompsonSamplingMMR.selectorIDs = [BatchMLFuzzyDHondt.SLCTR_FIXED]
 #    BatchMLFuzzyDHondtDirectOptimizeThompsonSamplingMMR.generateAllBatches()
@@ -210,9 +210,9 @@ def generateBatchesJournal():
 #    BatchMLContextFuzzyDHondtDirectOptimize.generateAllBatches()
 #
 #    # INF
-    BatchMLFuzzyDHondtDirectOptimizeThompsonSamplingINF.selectorIDs = [BatchMLFuzzyDHondt.SLCTR_FIXED]
-    BatchMLFuzzyDHondtDirectOptimizeThompsonSamplingINF.generateSelectedBatches([
-        jobIdML01, jobIdML02, jobIdML03, jobIdML04, jobIdML05, jobIdML06, jobIdML07, jobIdML08])
+#    BatchMLFuzzyDHondtDirectOptimizeThompsonSamplingINF.selectorIDs = [BatchMLFuzzyDHondt.SLCTR_FIXED]
+#    BatchMLFuzzyDHondtDirectOptimizeThompsonSamplingINF.generateSelectedBatches([
+#        jobIdML01, jobIdML02, jobIdML03, jobIdML04, jobIdML05, jobIdML06, jobIdML07, jobIdML08])
 #
 #    BatchMLContextDHondtINF.generateSelectedBatches([
 #        jobIdML01, jobIdML02, jobIdML03, jobIdML04, jobIdML05, jobIdML06, jobIdML07, jobIdML08])

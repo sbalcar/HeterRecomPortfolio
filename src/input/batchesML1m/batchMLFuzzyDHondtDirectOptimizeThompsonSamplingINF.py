@@ -71,7 +71,7 @@ class BatchMLFuzzyDHondtDirectOptimizeThompsonSamplingINF(ABatchML):
 
         rIDs, rDescs = InputRecomMLDefinition.exportPairOfRecomIdsAndRecomDescrs()
 
-        aDescDHont:AggregationDescription = InputAggrDefinition.exportADescDHondtDirectOptimizeThompsonSamplingINF(selector, nImplFeedback, discFactor)
+        aDescDHont:AggregationDescription = InputAggrDefinition.exportADescDHondtDirectOptimizeThompsonSamplingINF(selector, nImplFeedback)
 
         pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
             "FDHondtDirectOptimizeThompsonSamplingINF" + jobID.replace("Uniform",""), rIDs, rDescs, aDescDHont)
