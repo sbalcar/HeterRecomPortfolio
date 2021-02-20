@@ -95,7 +95,7 @@ class Portfolio1Aggr(APortfolio):
 
            resultOfRecommendationI:List[int] = recomI.recommend(
                userID, numberOfItems=numberOfRecomItems, argumentsDict=arguments2Dict)
-           resultOfRecommendationI = [int(rI) for rI in resultOfRecommendationI if rI != None]
+           resultOfRecommendationI = resultOfRecommendationI.loc[resultOfRecommendationI.index.dropna()]
            resultsOfBaseRecommendersDict[recomIdI] = resultOfRecommendationI
 
 
