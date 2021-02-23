@@ -79,6 +79,7 @@ class BatchMLContextDHondtINF(ABatchML):
         divisionDatasetPercentualSize, uBehaviour, repetition = InputABatchDefinition.getBatchParameters(self.datasetID)[batchID]
 
         selector:ADHondtSelector
+        negativeImplFeedback:APenalization
         selector, negativeImplFeedback = self.getParameters()[jobID]
 
         portfolioID:str = "ContextDHondtINF" + jobID

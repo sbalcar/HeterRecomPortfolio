@@ -139,7 +139,7 @@ class InputAggrDefinition:
                             AggrContextFuzzyDHondtDirectOptimize.ARG_EVAL_TOOL:eTool})
 
     @staticmethod
-    def exportADescDContextHondtDirectOptimizeINF(selector:ADHondtSelector, nImplFeedback:APenalization, eTool:AEvalTool):
+    def exportADescContextFuzzyDHondtDirectOptimizeINF(selector:ADHondtSelector, nImplFeedback:APenalization, eTool:AEvalTool):
         return AggregationDescription(AggrContextFuzzyDHondtDirectOptimizeINF, {
                             AggrContextFuzzyDHondtINF.ARG_SELECTOR:selector,
                             AggrContextFuzzyDHondtINF.ARG_EVAL_TOOL:eTool,
