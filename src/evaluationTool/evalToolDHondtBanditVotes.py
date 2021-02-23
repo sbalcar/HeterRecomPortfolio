@@ -1,11 +1,12 @@
 #!/usr/bin/python3
 
-from typing import List
+from typing import List #class
 from typing import Dict #class
 
 from evaluationTool.aEvalTool import AEvalTool #class
 
 from pandas.core.frame import DataFrame #class
+from pandas.core.frame import Series #class
 
 import numpy as np
 
@@ -17,8 +18,8 @@ class EvalToolDHondtBanditVotes(AEvalTool):
     def click(self, rItemIDsWithResponsibility:List, clickedItemID:int, portfolioModel:DataFrame, argumentsDict:Dict[str,object]):
         if type(rItemIDsWithResponsibility) is not list:
             raise ValueError("Argument rItemIDsWithResponsibility isn't type list.")
-        if type(clickedItemID) is not int and type(clickedItemID) is not np.int64:
-            raise ValueError("Argument clickedItemID isn't type int.")
+        #if type(clickedItemID) is not int and type(clickedItemID) is not np.int64:
+        #    raise ValueError("Argument clickedItemID isn't type int.")
         if type(portfolioModel) is not DataFrame:
             raise ValueError("Argument pModelDF isn't type DataFrame.")
         if list(portfolioModel.columns) != ['r', 'n', 'alpha0', 'beta0']:

@@ -21,8 +21,8 @@ class EToolDoNothing(AEvalTool):
         if type(rItemIDsWithResponsibility) is not Series and \
                 type(rItemIDsWithResponsibility) is not list:
             raise ValueError("Argument rItemIDsWithResponsibility isn't type Series / list.")
-        if type(clickedItemID) is not int and type(clickedItemID) is not np.int64:
-            raise ValueError("Argument clickedItemID isn't type int.")
+        #if type(clickedItemID) is not int and type(clickedItemID) is not np.int64:
+        #    raise ValueError("Argument clickedItemID isn't type int.")
         if type(portfolioModel) is not DataFrame:
             raise ValueError("Argument portfolioModel isn't type DataFrame.")
         if type(argumentsDict) is not dict:
