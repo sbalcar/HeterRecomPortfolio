@@ -34,9 +34,9 @@ from input.batchesRetailrocket.batchRRSingleW2VHT import BatchRRSingleW2VHT #cla
 
 from input.batchesSlanTour.batchSTContextDHondtINF import BatchSTContextDHondtINF #class
 from input.batchesSlanTour.batchSTContextDHondt import BatchSTContextDHondt #class
-from input.batchesSlanTour.batchSTDHondtThompsonSamplingINF import BatchSTDHondtThompsonSamplingINF #class
-from input.batchesSlanTour.batchSTDHondtThompsonSampling import BatchSTDHondtThompsonSampling #class
-from input.batchesSlanTour.batchSTDHondtThompsonSamplingINF import BatchSTDHondtThompsonSamplingINF #class
+from input.batchesSlanTour.batchSTFuzzyDHondtThompsonSamplingINF import BatchSTDHondtThompsonSamplingINF #class
+from input.batchesSlanTour.batchSTFuzzyDHondtThompsonSampling import BatchSTDHondtThompsonSampling #class
+from input.batchesSlanTour.batchSTFuzzyDHondtThompsonSamplingINF import BatchSTDHondtThompsonSamplingINF #class
 from input.batchesSlanTour.batchSTFuzzyDHondtDirectOptimize import BatchSTFuzzyDHondtDirectOptimize #class
 from input.batchesSlanTour.batchSTFuzzyDHondt import BatchSTFuzzyDHondt #class
 from input.batchesSlanTour.batchSTFuzzyDHondtINF import BatchSTFuzzyDHondtINF #class

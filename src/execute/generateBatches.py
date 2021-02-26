@@ -33,6 +33,8 @@ from input.batchesML1m.batchMLFuzzyDHondtDirectOptimizeThompsonSampling import B
 from input.batchesML1m.batchMLFuzzyDHondtDirectOptimizeThompsonSamplingINF import BatchMLFuzzyDHondtDirectOptimizeThompsonSamplingINF #class
 from input.batchesML1m.batchMLFuzzyDHondtDirectOptimizeThompsonSamplingMMR import BatchMLFuzzyDHondtDirectOptimizeThompsonSamplingMMR #class
 
+from input.batchesML1m.batchMLFuzzyDHondtThompsonSamplingINF import BatchMLFuzzyDHondtThompsonSamplingINF #class
+
 from input.batchesML1m.batchMLSingle import BatchMLSingle #class
 from input.batchesML1m.batchMLSingleINF import BatchMLSingleINF #class
 
@@ -53,9 +55,9 @@ from input.batchesSlanTour.batchSTContextFuzzyDHondtDirectOptimizeINF import Bat
 
 from input.batchesSlanTour.batchSTContextDHondt import BatchSTContextDHondt #class
 from input.batchesSlanTour.batchSTContextDHondtINF import BatchSTContextDHondtINF #class
-from input.batchesSlanTour.batchSTDHondtThompsonSampling import BatchSTDHondtThompsonSampling #class
+from input.batchesSlanTour.batchSTFuzzyDHondtThompsonSampling import BatchSTDHondtThompsonSampling #class
 from input.batchesSlanTour.batchSTFuzzyDHondtDirectOptimizeThompsonSamplingMMR import BatchSTFuzzyDHondtDirectOptimizeThompsonSamplingMMR #class
-from input.batchesSlanTour.batchSTDHondtThompsonSamplingINF import BatchSTDHondtThompsonSamplingINF #class
+from input.batchesSlanTour.batchSTFuzzyDHondtThompsonSamplingINF import BatchSTDHondtThompsonSamplingINF #class
 from input.batchesSlanTour.batchSTFuzzyDHondtDirectOptimize import BatchSTFuzzyDHondtDirectOptimize #class
 from input.batchesSlanTour.batchSTContextFuzzyDHondtDirectOptimize import BatchSTContextFuzzyDHondtDirectOptimize #class
 
@@ -223,7 +225,7 @@ def generateBatchesJournal():
 #    BatchMLContextDHondtINF.generateSelectedBatches([
 #        jobIdML01, jobIdML02, jobIdML03, jobIdML04, jobIdML05, jobIdML06, jobIdML07, jobIdML08])
 #
-    BatchMLContextFuzzyDHondtDirectOptimizeINF.generateSelectedBatches([
+    BatchMLFuzzyDHondtThompsonSamplingINF.generateSelectedBatches([
         jobIdML01, jobIdML02, jobIdML03, jobIdML04, jobIdML05, jobIdML06, jobIdML07, jobIdML08])
 #
 #
@@ -266,9 +268,11 @@ def generateBatchesJournal():
 #    BatchSTContextDHondtINF.generateSelectedBatches([
 #        jobIdST01, jobIdST02, jobIdST03, jobIdST04, jobIdST05, jobIdST06, jobIdST07, jobIdST08])
 
-    BatchSTContextFuzzyDHondtDirectOptimizeINF.generateSelectedBatches([
-        jobIdST01, jobIdST02, jobIdST03, jobIdST04, jobIdST05, jobIdST06, jobIdST07, jobIdST08])
+#    BatchSTContextFuzzyDHondtDirectOptimizeINF.generateSelectedBatches([
+#        jobIdST01, jobIdST02, jobIdST03, jobIdST04, jobIdST05, jobIdST06, jobIdST07, jobIdST08])
 
+    BatchSTDHondtThompsonSamplingINF.generateSelectedBatches([
+        jobIdST01, jobIdST02, jobIdST03, jobIdST04, jobIdST05, jobIdST06, jobIdST07, jobIdST08])
 
 def generateBatches():
 
