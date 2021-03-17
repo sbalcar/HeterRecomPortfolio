@@ -225,6 +225,9 @@ def generateBatchesJournal():
 #    BatchMLContextDHondtINF.generateSelectedBatches([
 #        jobIdML01, jobIdML02, jobIdML03, jobIdML04, jobIdML05, jobIdML06, jobIdML07, jobIdML08])
 #
+#    BatchMLContextFuzzyDHondtDirectOptimizeINF.generateSelectedBatches([
+#        jobIdML01, jobIdML02, jobIdML03, jobIdML04, jobIdML05, jobIdML06, jobIdML07, jobIdML08])
+
     BatchMLFuzzyDHondtThompsonSamplingINF.generateSelectedBatches([
         jobIdML01, jobIdML02, jobIdML03, jobIdML04, jobIdML05, jobIdML06, jobIdML07, jobIdML08])
 #

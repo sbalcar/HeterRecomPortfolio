@@ -47,13 +47,13 @@ class BatchSTFuzzyDHondtDirectOptimizeThompsonSamplingINF(ABatchST):
         repetition:int
         divisionDatasetPercentualSize, uBehaviour, repetition = InputABatchDefinition.getBatchParameters(self.datasetID)[batchID]
 
-        selector, discFactor, nImplFeedback = self.getParameters()[jobID]
+        selector, nImplFeedback = self.getParameters()[jobID]
 
         eTool:AEvalTool = EvalToolDHondtBanditVotes({})
 
         rIDs, rDescs = InputRecomSTDefinition.exportPairOfRecomIdsAndRecomDescrs()
 
-        aDescDHont:AggregationDescription = InputAggrDefinition.exportADescDHondtDirectOptimizeThompsonSamplingINF(selector, nImplFeedback, discFactor)
+        aDescDHont:AggregationDescription = InputAggrDefinition.exportADescDHondtDirectOptimizeThompsonSamplingINF(selector, nImplFeedback)
 
         pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
             "FDHondtDirectOptimizeThompsonSamplingINF" + jobID, rIDs, rDescs, aDescDHont)
