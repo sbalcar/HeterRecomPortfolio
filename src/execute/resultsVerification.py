@@ -15,10 +15,30 @@ import random
 import numpy as np
 
 from typing import List
+from batch.batch import Batch #class
 
+from execute.generateBatches import getBatchesJournal #function
 
 def verificationJournal():
-    print("aaa")
+    print("Verification Journal")
+
+    batchesDef:List = getBatchesJournal()
+
+    batches:List[Batch] = []
+    for batcheDefI in batchesDef:
+        batches.extend(batcheDefI.getAllBatches())
+
+    print("Batches: " + str(len(batches)))
+    for batchI in batches:
+        #print(batchI)
+        if (not batchI.exists()):
+            print(batchI.batchID)
+            print(batchI.jobID)
+            print("KO")
+
+
+def resultsVerification():
+    verificationJournal()
 
 
 if __name__ == "__main__":
@@ -28,4 +48,4 @@ if __name__ == "__main__":
 
   os.chdir("..")
 
-  verificationJournal()
+  resultsVerification()

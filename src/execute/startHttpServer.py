@@ -13,28 +13,28 @@ from typing import Dict
 
 from pandas import DataFrame
 
-from input.batchesML1m.batchMLBanditTS import BatchMLBanditTS #class
-from input.batchesML1m.batchMLFuzzyDHondt import BatchMLFuzzyDHondt #class
-from input.batchesML1m.batchMLFuzzyDHondtThompsonSampling import BatchMLFuzzyDHondtThompsonSampling #class
-from input.batchesML1m.batchMLFuzzyDHondtINF import BatchMLFuzzyDHondtINF #class
-from input.batchesML1m.batchMLFuzzyDHondtThompsonSamplingINF import BatchMLFuzzyDHondtThompsonSamplingINF #class
-from input.batchesML1m.batchMLFuzzyDHondtDirectOptimize import BatchMLFuzzyDHondtDirectOptimize #class
-from input.batchesML1m.batchMLFuzzyDHondtDirectOptimizeINF import BatchMLFuzzyDHondtDirectOptimizeINF #class
-from input.batchesML1m.batchMLSingle import BatchMLSingle #class
-from input.batchesML1m.batchMLSingleINF import BatchMLSingleINF #class
-from input.batchesRetailrocket.batchRRSingle import BatchRRSingle #class
+from batchDefinition.ml1m.batchDefMLBanditTS import BatchDefMLBanditTS #class
+from batchDefinition.ml1m.batchDefMLFuzzyDHondt import BatchDefMLFuzzyDHondt #class
+from batchDefinition.ml1m.batchDefMLFuzzyDHondtThompsonSampling import BatchDefMLFuzzyDHondtThompsonSampling #class
+from batchDefinition.ml1m.batchDefMLFuzzyDHondtINF import BatchMLFuzzyDHondtINF #class
+from batchDefinition.ml1m.batchDefMLFuzzyDHondtThompsonSamplingINF import BatchDefMLFuzzyDHondtThompsonSamplingINF #class
+from batchDefinition.ml1m.batchDefMLFuzzyDHondtDirectOptimize import BatchDefMLFuzzyDHondtDirectOptimize #class
+from batchDefinition.ml1m.batchDefMLFuzzyDHondtDirectOptimizeINF import BatchDefMLFuzzyDHondtDirectOptimizeINF #class
+from batchDefinition.ml1m.batchDefMLSingle import BatchDefMLSingle #class
+from batchDefinition.ml1m.batchDefMLSingleINF import BatchDefMLSingleINF #class
+from batchDefinition.retailrocket.batchDefRRSingle import BatchDefRRSingle #class
 
-from input.batchesML1m.batchMLSingleBPRMFHT import BatchMLSingleBPRMFHT #class
-from input.batchesML1m.batchMLSingleW2VHT import BatchMLSingleW2VHT #class
-from input.batchesML1m.batchMLSingleCosineCBHT import BatchMLSingleCosineCBHT #class
+from batchDefinition.ml1m.batchDefMLSingleBPRMFHT import BatchDefMLSingleBPRMFHT #class
+from batchDefinition.ml1m.batchDefMLSingleW2VHT import BatchDefMLSingleW2VHT #class
+from batchDefinition.ml1m.batchDefMLSingleCosineCBHT import BatchDefMLSingleCosineCBHT #class
 
-from input.batchesRetailrocket.batchRRSingle import BatchRRSingle #class
-from input.batchesRetailrocket.batchRRSingleW2VHT import BatchRRSingleW2VHT #class
+from batchDefinition.retailrocket.batchDefRRSingle import BatchDefRRSingle #class
+from batchDefinition.retailrocket.batchDefRRSingleW2VHT import BatchDefRRSingleW2VHT #class
 
-from input.batchesSlanTour.batchSTSingle import BatchSTSingle #class
-from input.batchesSlanTour.batchSTSingleBPRMFHT import BatchSTSingleBPRMFHT #class
-from input.batchesSlanTour.batchSTSingleW2VHT import BatchSTSingleW2VHT #class
-from input.batchesSlanTour.batchSTSingleCosineCBHT import BatchSTSingleCosineCBHT #class
+from batchDefinition.slanTour.batchDefSTSingle import BatchDefSTSingle #class
+from batchDefinition.slanTour.batchDefSTSingleBPRMFHT import BatchDefSTSingleBPRMFHT #class
+from batchDefinition.slanTour.batchDefSTSingleW2VHT import BatchDefSTSingleW2VHT #class
+from batchDefinition.slanTour.batchDefSTSingleCosineCBHT import BatchDefSTSingleCosineCBHT #class
 
 from history.aHistory import AHistory #class
 from history.historyDF import HistoryDF #class
@@ -66,9 +66,9 @@ from evaluationTool.evalToolContext import EvalToolContext  # class
 from httpServer.httpServer import HeterRecomHTTPHandler #class
 from http.server import BaseHTTPRequestHandler, HTTPServer
 
-from input.inputAggrDefinition import InputAggrDefinition  # class
-from input.inputRecomSTDefinition import InputRecomSTDefinition #class
-from input.modelDefinition import ModelDefinition
+from batchDefinition.inputAggrDefinition import InputAggrDefinition  # class
+from batchDefinition.inputRecomSTDefinition import InputRecomSTDefinition #class
+from batchDefinition.modelDefinition import ModelDefinition
 
 from aggregationDescription.aggregationDescription import AggregationDescription #class
 
@@ -80,9 +80,9 @@ from aggregation.operators.theMostVotedItemSelector import TheMostVotedItemSelec
 
 from aggregation.negImplFeedback.aPenalization import APenalization #class
 
-from input.inputAggrDefinition import PenalizationToolDefinition #class
+from batchDefinition.inputAggrDefinition import PenalizationToolDefinition #class
 
-from input.inputSimulatorDefinition import InputSimulatorDefinition #class
+from batchDefinition.inputSimulatorDefinition import InputSimulatorDefinition #class
 
 
 def startHttpServer():

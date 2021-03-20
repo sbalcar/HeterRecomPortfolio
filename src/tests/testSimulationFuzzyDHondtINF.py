@@ -47,10 +47,10 @@ from input.modelDefinition import ModelDefinition
 from input.inputRecomMLDefinition import InputRecomMLDefinition #class
 from input.inputRecomSTDefinition import InputRecomSTDefinition #class
 
-from input.batchesML1m.batchMLBanditTS import BatchMLBanditTS #class
+from input.batchesML1m.batchDefMLBanditTS import BatchDefMLBanditTS #class
 
 from input.inputABatchDefinition import InputABatchDefinition
-from input.aBatchST import ABatchST #class
+from input.aBatchDefinitionST import ABatchDefinitionST #class
 
 from aggregation.aggrFuzzyDHondt import AggrFuzzyDHondt #class
 from aggregation.operators.aDHondtSelector import ADHondtSelector #class

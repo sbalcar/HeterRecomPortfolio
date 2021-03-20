@@ -63,11 +63,11 @@ class RecommenderVMContextKNN(ARecommender):
     normalize : bool
         Normalize the scores in the end.
     session_key : string
-        Header of the session ID column in the input file. (default: 'SessionId')
+        Header of the session ID column in the batchDefinition file. (default: 'SessionId')
     item_key : string
-        Header of the item ID column in the input file. (default: 'ItemId')
+        Header of the item ID column in the batchDefinition file. (default: 'ItemId')
     time_key : string
-        Header of the timestamp column in the input file. (default: 'Time')
+        Header of the timestamp column in the batchDefinition file. (default: 'Time')
     '''
 
     def __init__(self, jobID:str, argumentsDict:Dict[str,object]):

@@ -6,139 +6,186 @@ import numpy as np
 
 from typing import List #class
 
-from input.batchesML1m.batchMLBanditTS import BatchMLBanditTS #class
+from batchDefinition.aBatchDefinition import ABatchDefinition #class
+from batchDefinition.ml1m.batchDefMLBanditTS import BatchDefMLBanditTS #class
 
-from input.batchesML1m.batchMLContextDHondt import BatchMLContextDHondt #class
-from input.batchesML1m.batchMLContextDHondtINF import BatchMLContextDHondtINF #class
+from batchDefinition.ml1m.batchDefMLContextDHondt import BatchDefMLContextDHondt #class
+from batchDefinition.ml1m.batchDefMLContextDHondtINF import BatchDefMLContextDHondtINF #class
 
-from input.batchesML1m.batchMLFuzzyDHondtThompsonSampling import BatchMLFuzzyDHondtThompsonSampling #class
-from input.batchesML1m.batchMLFuzzyDHondtThompsonSamplingINF import BatchMLFuzzyDHondtThompsonSamplingINF #class
+from batchDefinition.ml1m.batchDefMLFuzzyDHondtThompsonSampling import BatchDefMLFuzzyDHondtThompsonSampling #class
+from batchDefinition.ml1m.batchDefMLFuzzyDHondtThompsonSamplingINF import BatchDefMLFuzzyDHondtThompsonSamplingINF #class
 
-from input.batchesML1m.batchMLFuzzyDHondt import BatchMLFuzzyDHondt #class
-from input.batchesML1m.batchMLFuzzyDHondtINF import BatchMLFuzzyDHondtINF #class
+from batchDefinition.ml1m.batchDefMLFuzzyDHondt import BatchDefMLFuzzyDHondt #class
+from batchDefinition.ml1m.batchDefMLFuzzyDHondtINF import BatchMLFuzzyDHondtINF #class
 
-from input.batchesML1m.batchMLFuzzyDHondtDirectOptimize import BatchMLFuzzyDHondtDirectOptimize #class
-from input.batchesML1m.batchMLFuzzyDHondtDirectOptimizeINF import BatchMLFuzzyDHondtDirectOptimizeINF #class
+from batchDefinition.ml1m.batchDefMLFuzzyDHondtDirectOptimize import BatchDefMLFuzzyDHondtDirectOptimize #class
+from batchDefinition.ml1m.batchDefMLFuzzyDHondtDirectOptimizeINF import BatchDefMLFuzzyDHondtDirectOptimizeINF #class
 
-from input.batchesML1m.batchMLWeightedAVG import BatchMLWeightedAVG #class
-from input.batchesML1m.batchMLWeightedAVGMMR import BatchMLWeightedAVGMMR #class
+from batchDefinition.ml1m.batchDefMLWeightedAVG import BatchDefMLWeightedAVG #class
+from batchDefinition.ml1m.batchDefMLWeightedAVGMMR import BatchDefMLWeightedAVGMMR #class
 
-from input.batchesML1m.batchMLRandomRecsSwitching import BatchMLRandomRecsSwitching #class
-from input.batchesML1m.batchMLRandomKfromN import BatchMLRandomKfromN #class
+from batchDefinition.ml1m.batchDefMLRandomRecsSwitching import BatchDefMLRandomRecsSwitching #class
+from batchDefinition.ml1m.batchDefMLRandomKfromN import BatchDefMLRandomKfromN #class
 
-from input.batchesML1m.batchMLContextFuzzyDHondtDirectOptimize import BatchMLContextFuzzyDHondtDirectOptimize #class
-from input.batchesML1m.batchMLContextFuzzyDHondtDirectOptimizeINF import BatchMLContextFuzzyDHondtDirectOptimizeINF #class
+from batchDefinition.ml1m.batchDefMLContextFuzzyDHondtDirectOptimize import BatchDefMLContextFuzzyDHondtDirectOptimize #class
+from batchDefinition.ml1m.batchDefMLContextFuzzyDHondtDirectOptimizeINF import BatchDefMLContextFuzzyDHondtDirectOptimizeINF #class
 
-from input.batchesML1m.batchMLFuzzyDHondtDirectOptimizeThompsonSampling import BatchMLFuzzyDHondtDirectOptimizeThompsonSampling #class
-from input.batchesML1m.batchMLFuzzyDHondtDirectOptimizeThompsonSamplingINF import BatchMLFuzzyDHondtDirectOptimizeThompsonSamplingINF #class
-from input.batchesML1m.batchMLFuzzyDHondtDirectOptimizeThompsonSamplingMMR import BatchMLFuzzyDHondtDirectOptimizeThompsonSamplingMMR #class
+from batchDefinition.ml1m.batchDefMLFuzzyDHondtDirectOptimizeThompsonSampling import BatchDefMLFuzzyDHondtDirectOptimizeThompsonSampling #class
+from batchDefinition.ml1m.batchDefMLFuzzyDHondtDirectOptimizeThompsonSamplingINF import BatchDefMLFuzzyDHondtDirectOptimizeThompsonSamplingINF #class
+from batchDefinition.ml1m.batchDefMLFuzzyDHondtDirectOptimizeThompsonSamplingMMR import BatchDefMLFuzzyDHondtDirectOptimizeThompsonSamplingMMR #class
 
-from input.batchesML1m.batchMLFuzzyDHondtThompsonSamplingINF import BatchMLFuzzyDHondtThompsonSamplingINF #class
+from batchDefinition.ml1m.batchDefMLFuzzyDHondtThompsonSamplingINF import BatchDefMLFuzzyDHondtThompsonSamplingINF #class
 
-from input.batchesML1m.batchMLSingle import BatchMLSingle #class
-from input.batchesML1m.batchMLSingleINF import BatchMLSingleINF #class
+from batchDefinition.ml1m.batchDefMLSingle import BatchDefMLSingle #class
+from batchDefinition.ml1m.batchDefMLSingleINF import BatchDefMLSingleINF #class
 
-from input.batchesML1m.batchMLSingleBPRMFHT import BatchMLSingleBPRMFHT #class
-from input.batchesML1m.batchMLSingleW2VHT import BatchMLSingleW2VHT #class
-from input.batchesML1m.batchMLSingleCosineCBHT import BatchMLSingleCosineCBHT #class
-from input.batchesML1m.batchMLSingleBPRMFHT import BatchMLSingleBPRMFHT  #class
-from input.batchesML1m.batchMLSingleVMContextKNNHT import BatchMLVMContextKNNHT #class
+from batchDefinition.ml1m.batchDefMLSingleBPRMFHT import BatchDefMLSingleBPRMFHT #class
+from batchDefinition.ml1m.batchDefMLSingleW2VHT import BatchDefMLSingleW2VHT #class
+from batchDefinition.ml1m.batchDefMLSingleCosineCBHT import BatchDefMLSingleCosineCBHT #class
+from batchDefinition.ml1m.batchDefMLSingleBPRMFHT import BatchDefMLSingleBPRMFHT  #class
+from batchDefinition.ml1m.batchDefMLSingleVMContextKNNHT import BatchDefMLSingleVMContextKNNHT #class
 
-from input.batchesRetailrocket.batchRRSingle import BatchRRSingle #class
-from input.batchesRetailrocket.batchRRSingleW2VHT import BatchRRSingleW2VHT #class
-from input.batchesRetailrocket.batchRRSingleVMContextKNNHT import BatchRRVMContextKNNHT #class
-from input.batchesRetailrocket.batchRRSingleCosineCBHT import BatchRRSingleCosineCBHT #class
+from batchDefinition.retailrocket.batchDefRRSingle import BatchDefRRSingle #class
+from batchDefinition.retailrocket.batchDefRRSingleW2VHT import BatchDefRRSingleW2VHT #class
+from batchDefinition.retailrocket.batchDefRRSingleVMContextKNNHT import BatchDefRRSingleVMContextKNNHT #class
+from batchDefinition.retailrocket.batchDefRRSingleCosineCBHT import BatchDefRRSingleCosineCBHT #class
 
-from input.batchesSlanTour.batchSTFuzzyDHondtDirectOptimizeThompsonSampling import BatchSTFuzzyDHondtDirectOptimizeThompsonSampling #class
-from input.batchesSlanTour.batchSTFuzzyDHondtDirectOptimizeThompsonSamplingINF import BatchSTFuzzyDHondtDirectOptimizeThompsonSamplingINF #class
-from input.batchesSlanTour.batchSTContextFuzzyDHondtDirectOptimizeINF import BatchSTContextFuzzyDHondtDirectOptimizeINF #class
+from batchDefinition.slanTour.batchDefSTFuzzyDHondtDirectOptimizeThompsonSampling import BatchDefSTFuzzyDHondtDirectOptimizeThompsonSampling #class
+from batchDefinition.slanTour.batchDefSTFuzzyDHondtDirectOptimizeThompsonSamplingINF import BatchDefSTFuzzyDHondtDirectOptimizeThompsonSamplingINF #class
+from batchDefinition.slanTour.batchDefSTContextFuzzyDHondtDirectOptimizeINF import BatchDefSTContextFuzzyDHondtDirectOptimizeINF #class
 
-from input.batchesSlanTour.batchSTContextDHondt import BatchSTContextDHondt #class
-from input.batchesSlanTour.batchSTContextDHondtINF import BatchSTContextDHondtINF #class
-from input.batchesSlanTour.batchSTFuzzyDHondtThompsonSampling import BatchSTDHondtThompsonSampling #class
-from input.batchesSlanTour.batchSTFuzzyDHondtDirectOptimizeThompsonSamplingMMR import BatchSTFuzzyDHondtDirectOptimizeThompsonSamplingMMR #class
-from input.batchesSlanTour.batchSTFuzzyDHondtThompsonSamplingINF import BatchSTDHondtThompsonSamplingINF #class
-from input.batchesSlanTour.batchSTFuzzyDHondtDirectOptimize import BatchSTFuzzyDHondtDirectOptimize #class
-from input.batchesSlanTour.batchSTContextFuzzyDHondtDirectOptimize import BatchSTContextFuzzyDHondtDirectOptimize #class
+from batchDefinition.slanTour.batchDefSTContextDHondt import BatchDefSTContextDHondt #class
+from batchDefinition.slanTour.batchDefSTContextDHondtINF import BatchDefSTContextDHondtINF #class
+from batchDefinition.slanTour.batchDefSTFuzzyDHondtThompsonSampling import BatchDefSTFuzzyDHondtThompsonSampling #class
+from batchDefinition.slanTour.batchDefSTFuzzyDHondtDirectOptimizeThompsonSamplingMMR import BatchDefSTFuzzyDHondtDirectOptimizeThompsonSamplingMMR #class
+from batchDefinition.slanTour.batchDefSTFuzzyDHondtThompsonSamplingINF import BatchDefSTDFuzzyHondtThompsonSamplingINF #class
+from batchDefinition.slanTour.batchDefSTFuzzyDHondtDirectOptimize import BatchDefSTFuzzyDHondtDirectOptimize #class
+from batchDefinition.slanTour.batchDefSTContextFuzzyDHondtDirectOptimize import BatchDefSTContextFuzzyDHondtDirectOptimize #class
 
-from input.batchesSlanTour.batchSTFuzzyDHondtINF import BatchSTFuzzyDHondtINF #class
-from input.batchesSlanTour.batchSTFuzzyDHondt import BatchSTFuzzyDHondt #class
-from input.batchesSlanTour.batchSTWeightedAVG import BatchSTWeightedAVG #class
-from input.batchesSlanTour.batchSTWeightedAVGMMR import BatchSTWeightedAVGMMR #class
-from input.batchesSlanTour.batchSTBanditTS import BatchSTBanditTS #class
-from input.batchesSlanTour.batchSTRandomRecsSwitching import BatchSTRandomRecsSwitching #class
-from input.batchesSlanTour.batchSTRandomKfromN import BatchSTRandomKfromN #class
+from batchDefinition.slanTour.batchDefSTFuzzyDHondtINF import BatchDefSTFuzzyDHondtINF #class
+from batchDefinition.slanTour.batchDefSTFuzzyDHondt import BatchDefSTFuzzyDHondt #class
+from batchDefinition.slanTour.batchDefSTWeightedAVG import BatchDefSTWeightedAVG #class
+from batchDefinition.slanTour.batchDefSTWeightedAVGMMR import BatchDefSTWeightedAVGMMR #class
+from batchDefinition.slanTour.batchDefSTBanditTS import BatchDefSTBanditTS #class
+from batchDefinition.slanTour.batchDefSTRandomRecsSwitching import BatchDefSTRandomRecsSwitching #class
+from batchDefinition.slanTour.batchDefSTRandomKfromN import BatchDefSTRandomKfromN #class
 
-from input.batchesSlanTour.batchSTSingleVMContextKNNHT import BatchSTVMContextKNNHT #class
-from input.batchesSlanTour.batchSTSingleBPRMFHT import BatchSTSingleBPRMFHT #class
-from input.batchesSlanTour.batchSTSingle import BatchSTSingle #class
-from input.batchesSlanTour.batchSTSingleW2VHT import BatchSTSingleW2VHT #class
-from input.batchesSlanTour.batchSTSingleCosineCBHT import BatchSTSingleCosineCBHT #class
+from batchDefinition.slanTour.batchDefSTSingleVMContextKNNHT import BatchDefSTSingleVMContextKNNHT #class
+from batchDefinition.slanTour.batchDefSTSingleBPRMFHT import BatchDefSTSingleBPRMFHT #class
+from batchDefinition.slanTour.batchDefSTSingle import BatchDefSTSingle #class
+from batchDefinition.slanTour.batchDefSTSingleW2VHT import BatchDefSTSingleW2VHT #class
+from batchDefinition.slanTour.batchDefSTSingleCosineCBHT import BatchDefSTSingleCosineCBHT #class
 
 
-def generateAllBatches():
-    print("Generate Batches")
+def getAllBatches():
+    print("Get All Batches")
+
+    batchesDef:List[ABatchDefinition] = []
 
     # ML
-    BatchMLBanditTS.generateAllBatches()
+    batchDefMLBanditTS = BatchDefMLBanditTS()
+    batchDefMLFuzzyDHondt = BatchDefMLFuzzyDHondt()
+    batchMLFuzzyDHondtINF = BatchMLFuzzyDHondtINF()
+    batchDefMLFuzzyDHondtThompsonSampling = BatchDefMLFuzzyDHondtThompsonSampling()
+    batchDefMLFuzzyDHondtThompsonSamplingINF = BatchDefMLFuzzyDHondtThompsonSamplingINF()
 
-    BatchMLFuzzyDHondt.generateAllBatches()
-    BatchMLFuzzyDHondtINF.generateAllBatches()
+    batchDefMLFuzzyDHondtDirectOptimize = BatchDefMLFuzzyDHondtDirectOptimize()
+    batchDefMLFuzzyDHondtDirectOptimizeINF = BatchDefMLFuzzyDHondtDirectOptimizeINF()
 
-    BatchMLFuzzyDHondtThompsonSampling.generateAllBatches()
-    BatchMLFuzzyDHondtThompsonSamplingINF.generateAllBatches()
+    batchDefMLContextDHondt = BatchDefMLContextDHondt()
 
-    BatchMLFuzzyDHondtDirectOptimize.generateAllBatches()
-    BatchMLFuzzyDHondtDirectOptimizeINF.generateAllBatches()
+    batchDefMLWeightedAVG = BatchDefMLWeightedAVG()
+    batchDefMLWeightedAVGMMR = BatchDefMLWeightedAVGMMR()
 
-    BatchMLContextDHondt.generateAllBatches()
+    batchDefMLRandomRecsSwitching = BatchDefMLRandomRecsSwitching()
+    batchDefMLRandomKfromN = BatchDefMLRandomKfromN()
 
-    BatchMLWeightedAVG.generateAllBatches()
-    BatchMLWeightedAVGMMR.generateAllBatches()
+    batchDefMLSingle = BatchDefMLSingle()
+    batchDefMLSingleINF = BatchDefMLSingleINF()
 
-    BatchMLRandomRecsSwitching.generateAllBatches()
-    BatchMLRandomKfromN.generateAllBatches()
+    batchDefMLSingleBPRMFHT = BatchDefMLSingleBPRMFHT()
+    batchDefMLSingleW2VHT = BatchDefMLSingleW2VHT()
+    batchDefMLSingleCosineCBHT = BatchDefMLSingleCosineCBHT()
+    batchDefMLSingleVMContextKNNHT = BatchDefMLSingleVMContextKNNHT()
 
-    BatchMLSingle.generateAllBatches()
-    BatchMLSingleINF.generateAllBatches()
+    batchDefMLContextFuzzyDHondtDirectOptimize = BatchDefMLContextFuzzyDHondtDirectOptimize()
 
-    BatchMLSingleBPRMFHT.generateAllBatches()
-    BatchMLSingleW2VHT.generateAllBatches()
-    BatchMLSingleCosineCBHT.generateAllBatches()
-    BatchMLVMContextKNNHT.generateAllBatches()
 
-    BatchMLContextFuzzyDHondtDirectOptimize.generateAllBatches()
-
+    batchesDef.append(batchDefMLBanditTS)
+    batchesDef.append(batchDefMLFuzzyDHondt)
+    batchesDef.append(batchMLFuzzyDHondtINF)
+    batchesDef.append(batchDefMLFuzzyDHondtThompsonSampling)
+    batchesDef.append(batchDefMLFuzzyDHondtThompsonSamplingINF)
+    batchesDef.append(batchDefMLFuzzyDHondtDirectOptimize)
+    batchesDef.append(batchDefMLFuzzyDHondtDirectOptimizeINF)
+    batchesDef.append(batchDefMLContextDHondt)
+    batchesDef.append(batchDefMLWeightedAVG)
+    batchesDef.append(batchDefMLWeightedAVGMMR)
+    batchesDef.append(batchDefMLRandomRecsSwitching)
+    batchesDef.append(batchDefMLRandomKfromN)
+    batchesDef.append(batchDefMLSingle)
+    batchesDef.append(batchDefMLSingleINF)
+    batchesDef.append(batchDefMLSingleBPRMFHT)
+    batchesDef.append(batchDefMLSingleW2VHT)
+    batchesDef.append(batchDefMLSingleCosineCBHT)
+    batchesDef.append(batchDefMLSingleVMContextKNNHT)
+    batchesDef.append(batchDefMLContextFuzzyDHondtDirectOptimize)
 
     # RR
-    BatchRRSingle.generateAllBatches()
-    BatchRRSingleW2VHT.generateAllBatches()
-    BatchRRSingleCosineCBHT.generateAllBatches()
+    batchDefRRSingle = BatchDefRRSingle()
+    batchDefRRSingleW2VHT = BatchDefRRSingleW2VHT()
+    batchDefRRSingleCosineCBHT = BatchDefRRSingleCosineCBHT()
+
+    batchesDef.append(batchDefRRSingle)
+    batchesDef.append(batchDefRRSingleW2VHT)
+    batchesDef.append(batchDefRRSingleCosineCBHT)
+
 
     #ST
-    BatchSTContextDHondtINF.generateAllBatches()
-    BatchSTContextDHondt.generateAllBatches()
-    BatchSTDHondtThompsonSampling.generateAllBatches()
-    BatchSTDHondtThompsonSamplingINF.generateAllBatches()
-    BatchSTFuzzyDHondtDirectOptimize.generateAllBatches()
-    BatchSTFuzzyDHondt.generateAllBatches()
-    BatchSTFuzzyDHondtINF.generateAllBatches()
-    BatchSTWeightedAVG.generateAllBatches()
-    BatchSTBanditTS.generateAllBatches()
-    BatchSTRandomRecsSwitching.generateAllBatches()
-    BatchSTRandomKfromN.generateAllBatches()
+    batchDefSTContextDHondtINF = BatchDefSTContextDHondtINF()
+    batchDefSTContextDHondt = BatchDefSTContextDHondt()
+    batchDefSTFuzzyDHondtThompsonSampling = BatchDefSTFuzzyDHondtThompsonSampling()
+    batchDefSTDFuzzyHondtThompsonSamplingINF = BatchDefSTDFuzzyHondtThompsonSamplingINF()
+    batchDefSTFuzzyDHondtDirectOptimize = BatchDefSTFuzzyDHondtDirectOptimize()
+    batchDefSTFuzzyDHondt = BatchDefSTFuzzyDHondt()
+    batchDefSTFuzzyDHondtINF = BatchDefSTFuzzyDHondtINF()
+    batchDefSTWeightedAVG = BatchDefSTWeightedAVG()
+    batchDefSTBanditTS = BatchDefSTBanditTS()
+    batchDefSTRandomRecsSwitching = BatchDefSTRandomRecsSwitching()
+    batchDefSTRandomKfromN = BatchDefSTRandomKfromN()
 
-    BatchSTSingle.generateAllBatches()
-    BatchSTSingleBPRMFHT.generateAllBatches()
-    BatchSTSingleW2VHT.generateAllBatches()
-    BatchSTSingleCosineCBHT.generateAllBatches()
-    BatchSTVMContextKNNHT.generateAllBatches()
+    batchDefSTSingle = BatchDefSTSingle()
+    batchDefSTSingleBPRMFHT = BatchDefSTSingleBPRMFHT()
+    batchDefSTSingleW2VHT = BatchDefSTSingleW2VHT()
+    batchDefSTSingleCosineCBHT = BatchDefSTSingleCosineCBHT()
+    batchDefSTSingleVMContextKNNHT = BatchDefSTSingleVMContextKNNHT()
 
-    BatchSTContextFuzzyDHondtDirectOptimize.generateAllBatches()
+    batchDefSTContextFuzzyDHondtDirectOptimize = BatchDefSTContextFuzzyDHondtDirectOptimize()
 
 
-def generateBatchesJournal():
-    print("Generate Batches")
+    batchesDef.append(batchDefSTContextDHondtINF)
+    batchesDef.append(batchDefSTContextDHondt)
+    batchesDef.append(batchDefSTFuzzyDHondtThompsonSampling)
+    batchesDef.append(batchDefSTDFuzzyHondtThompsonSamplingINF)
+    batchesDef.append(batchDefSTFuzzyDHondtDirectOptimize)
+    batchesDef.append(batchDefSTFuzzyDHondt)
+    batchesDef.append(batchDefSTFuzzyDHondtINF)
+    batchesDef.append(batchDefSTWeightedAVG)
+    batchesDef.append(batchDefSTBanditTS)
+    batchesDef.append(batchDefSTRandomRecsSwitching)
+    batchesDef.append(batchDefSTRandomKfromN)
+    batchesDef.append(batchDefSTSingle)
+    batchesDef.append(batchDefSTSingleBPRMFHT)
+    batchesDef.append(batchDefSTSingleW2VHT)
+    batchesDef.append(batchDefSTSingleCosineCBHT)
+    batchesDef.append(batchDefSTSingleVMContextKNNHT)
+    batchesDef.append(batchDefSTContextFuzzyDHondtDirectOptimize)
+
+    return batchesDef
+
+
+def getBatchesJournal():
+    print("Get Journal Batches")
 
     jobIdML01:str = "FixedReduceOLin07500HLin07500"
     jobIdML02:str = "FixedReduceOLin10075HLin0500"
@@ -161,130 +208,194 @@ def generateBatchesJournal():
     jobIdST07:str = "FixedReduceProbOLin1000HLin1005"
     jobIdST08:str = "FixedReduceProbOLin1005HLin1005"
 
-
-    #BatchMLFuzzyDHondtINF.lrClicks:List[float] = [0.03]
-    #BatchMLFuzzyDHondtINF.lrViewDivisors:List[float] = [250]
-    #BatchMLFuzzyDHondt.selectorIds = [BatchMLFuzzyDHondt.SLCTR_FIXED]
-    #BatchSTFuzzyDHondtINF.generateSelectedBatches([jobIdST01.replace("Reduce", "Clk003ViewDivisor250Reduce"),
-    #                                               jobIdST02.replace("Reduce", "Clk003ViewDivisor250Reduce"),
-    #                                               jobIdST03.replace("Reduce", "Clk003ViewDivisor250Reduce"),
-    #                                               jobIdST04.replace("Reduce", "Clk003ViewDivisor250Reduce"),
-    #                                               jobIdST05.replace("Reduce", "Clk003ViewDivisor250Reduce"),
-    #                                               jobIdST06.replace("Reduce", "Clk003ViewDivisor250Reduce"),
-    #                                               jobIdST07.replace("Reduce", "Clk003ViewDivisor250Reduce"),
-    #                                               jobIdST08.replace("Reduce", "Clk003ViewDivisor250Reduce")])
-
+    batchesDef:List[ABatchDefinition] = []
 
     # ML #############################################################################
-#    BatchMLSingle.generateAllBatches()
+    batchDefMLSingle = BatchDefMLSingle()
 #
-#    BatchMLFuzzyDHondt.lrClicks:List[float] = [0.03]
-#    BatchMLFuzzyDHondt.lrViewDivisors:List[float] = [250]
-#    BatchMLFuzzyDHondt.selectorIDs = [BatchMLFuzzyDHondt.SLCTR_FIXED]
-#    BatchMLBanditTS.generateAllBatches()
+    batchDefMLBanditTS = BatchDefMLBanditTS()
+    batchDefMLBanditTS.selectorIDs = [BatchDefMLFuzzyDHondt.SLCTR_FIXED]
 #
-#    BatchMLWeightedAVG.lrClicks:List[float] = [0.03]
-#    BatchMLWeightedAVG.lrViewDivisors:List[float] = [250]
-#    BatchMLWeightedAVG.generateAllBatches()
+    batchDefMLWeightedAVG = BatchDefMLWeightedAVG()
+    batchDefMLWeightedAVG.lrClicks:List[float] = [0.03]
+    batchDefMLWeightedAVG.lrViewDivisors:List[float] = [250]
 #
-#    BatchMLWeightedAVGMMR.generateAllBatches()
-#
-#    BatchMLRandomRecsSwitching.generateAllBatches()
-#
-#    BatchMLRandomKfromN.generateAllBatches()
-#
-#    BatchMLFuzzyDHondt.lrClicks:List[float] = [0.03]
-#    BatchMLFuzzyDHondt.lrViewDivisors:List[float] = [250]
-#    BatchMLFuzzyDHondt.selectorIDs:List[str] = [BatchMLFuzzyDHondt.SLCTR_FIXED]
-#    BatchMLFuzzyDHondt.generateAllBatches()
-#
-#    BatchMLFuzzyDHondtThompsonSampling.generateAllBatches()
-#
-#    BatchMLContextDHondt.generateAllBatches()
-#
-#    BatchMLFuzzyDHondtDirectOptimize.lrClicks:List[float] = [0.03]
-#    BatchMLFuzzyDHondtDirectOptimize.lrViewDivisors:List[float] = [250]
-#    BatchMLFuzzyDHondtDirectOptimize.selectorIds = [
-#        BatchMLFuzzyDHondtDirectOptimize.SLCTR_FIXED,
-#        BatchMLFuzzyDHondtDirectOptimize.SLCTR_ROULETTE1, BatchMLFuzzyDHondtDirectOptimize.SLCTR_ROULETTE2]
-#    BatchMLFuzzyDHondtDirectOptimize.generateAllBatches()
-#
-#    BatchMLFuzzyDHondtDirectOptimizeThompsonSampling.selectorIDs = [BatchMLFuzzyDHondt.SLCTR_FIXED]
-#    BatchMLFuzzyDHondtDirectOptimizeThompsonSampling.generateAllBatches()
-#
-#    BatchMLFuzzyDHondtDirectOptimizeThompsonSamplingMMR.selectorIDs = [BatchMLFuzzyDHondt.SLCTR_FIXED]
-#    BatchMLFuzzyDHondtDirectOptimizeThompsonSamplingMMR.generateAllBatches()
-#
-#    BatchMLContextFuzzyDHondtDirectOptimize.generateAllBatches()
-#
-#    # INF
-#    BatchMLFuzzyDHondtDirectOptimizeThompsonSamplingINF.selectorIDs = [BatchMLFuzzyDHondt.SLCTR_FIXED]
-#    BatchMLFuzzyDHondtDirectOptimizeThompsonSamplingINF.generateSelectedBatches([
-#        jobIdML01, jobIdML02, jobIdML03, jobIdML04, jobIdML05, jobIdML06, jobIdML07, jobIdML08])
-#
-#    BatchMLContextDHondtINF.generateSelectedBatches([
-#        jobIdML01, jobIdML02, jobIdML03, jobIdML04, jobIdML05, jobIdML06, jobIdML07, jobIdML08])
-#
-#    BatchMLContextFuzzyDHondtDirectOptimizeINF.generateSelectedBatches([
-#        jobIdML01, jobIdML02, jobIdML03, jobIdML04, jobIdML05, jobIdML06, jobIdML07, jobIdML08])
+    batchDefMLWeightedAVGMMR = BatchDefMLWeightedAVGMMR()
+    batchDefMLWeightedAVGMMR.lrClicks:List[float] = [0.03]
+    batchDefMLWeightedAVGMMR.lrViewDivisors:List[float] = [250]
 
-    BatchMLFuzzyDHondtThompsonSamplingINF.generateSelectedBatches([
-        jobIdML01, jobIdML02, jobIdML03, jobIdML04, jobIdML05, jobIdML06, jobIdML07, jobIdML08])
 #
+    batchDefMLRandomRecsSwitching = BatchDefMLRandomRecsSwitching()
 #
+    batchDefMLRandomKfromN = BatchDefMLRandomKfromN()
+#
+    batchDefMLFuzzyDHondt = BatchDefMLFuzzyDHondt()
+    batchDefMLFuzzyDHondt.lrClicks:List[float] = [0.03]
+    batchDefMLFuzzyDHondt.lrViewDivisors:List[float] = [250]
+    batchDefMLFuzzyDHondt.selectorIDs:List[str] = [BatchDefMLFuzzyDHondt.SLCTR_FIXED]
+
+#
+    batchDefMLFuzzyDHondtThompsonSampling = BatchDefMLFuzzyDHondtThompsonSampling()
+#
+    batchDefMLContextDHondt = BatchDefMLContextDHondt()
+    batchDefMLContextDHondt.selectorIDs:List[str] = [BatchDefMLFuzzyDHondt.SLCTR_FIXED]
+#
+    batchDefMLFuzzyDHondtDirectOptimize = BatchDefMLFuzzyDHondtDirectOptimize()
+    batchDefMLFuzzyDHondtDirectOptimize.lrClicks:List[float] = [0.03]
+    batchDefMLFuzzyDHondtDirectOptimize.lrViewDivisors:List[float] = [250]
+    batchDefMLFuzzyDHondtDirectOptimize.selectorIds = [
+        BatchDefMLFuzzyDHondtDirectOptimize.SLCTR_FIXED,
+        BatchDefMLFuzzyDHondtDirectOptimize.SLCTR_ROULETTE1, BatchDefMLFuzzyDHondtDirectOptimize.SLCTR_ROULETTE2]
+#
+    batchDefMLFuzzyDHondtDirectOptimizeThompsonSampling = BatchDefMLFuzzyDHondtDirectOptimizeThompsonSampling()
+    batchDefMLFuzzyDHondtDirectOptimizeThompsonSampling.selectorIDs = [BatchDefMLFuzzyDHondt.SLCTR_FIXED]
+#
+    batchDefMLFuzzyDHondtDirectOptimizeThompsonSamplingMMR = BatchDefMLFuzzyDHondtDirectOptimizeThompsonSamplingMMR()
+    batchDefMLFuzzyDHondtDirectOptimizeThompsonSamplingMMR.selectorIDs = [BatchDefMLFuzzyDHondt.SLCTR_FIXED]
+#
+    batchDefMLContextFuzzyDHondtDirectOptimize = BatchDefMLContextFuzzyDHondtDirectOptimize()
+
+#
+    # INF
+    batchDefMLFuzzyDHondtDirectOptimizeThompsonSamplingINF = BatchDefMLFuzzyDHondtDirectOptimizeThompsonSamplingINF()
+    batchDefMLFuzzyDHondtDirectOptimizeThompsonSamplingINF.selectorIDs = [BatchDefMLFuzzyDHondt.SLCTR_FIXED]
+    batchDefMLFuzzyDHondtDirectOptimizeThompsonSamplingINF.jobIDs = [
+        jobIdML01, jobIdML02, jobIdML03, jobIdML04, jobIdML05, jobIdML06, jobIdML07, jobIdML08]
+#
+    batchDefMLContextDHondtINF = BatchDefMLContextDHondtINF()
+    batchDefMLContextDHondtINF.jobIDs = [
+        jobIdML01, jobIdML02, jobIdML03, jobIdML04, jobIdML05, jobIdML06, jobIdML07, jobIdML08]
+#
+    batchDefMLContextFuzzyDHondtDirectOptimizeINF = BatchDefMLContextFuzzyDHondtDirectOptimizeINF()
+    batchDefMLContextFuzzyDHondtDirectOptimizeINF.jobIDs = [
+        jobIdML01, jobIdML02, jobIdML03, jobIdML04, jobIdML05, jobIdML06, jobIdML07, jobIdML08]
+
+    batchDefMLFuzzyDHondtThompsonSamplingINF = BatchDefMLFuzzyDHondtThompsonSamplingINF()
+    batchDefMLFuzzyDHondtThompsonSamplingINF.jobIDs = [
+        jobIdML01, jobIdML02, jobIdML03, jobIdML04, jobIdML05, jobIdML06, jobIdML07, jobIdML08]
+#
+    batchesDef.append(batchDefMLSingle)
+    batchesDef.append(batchDefMLBanditTS)
+    batchesDef.append(batchDefMLWeightedAVG)
+    batchesDef.append(batchDefMLWeightedAVGMMR)
+    batchesDef.append(batchDefMLWeightedAVGMMR)
+    batchesDef.append(batchDefMLRandomRecsSwitching)
+    batchesDef.append(batchDefMLRandomKfromN)
+    batchesDef.append(batchDefMLFuzzyDHondt)
+    batchesDef.append(batchDefMLFuzzyDHondtThompsonSampling)
+    batchesDef.append(batchDefMLContextDHondt)
+    batchesDef.append(batchDefMLFuzzyDHondtDirectOptimize)
+    batchesDef.append(batchDefMLFuzzyDHondtDirectOptimizeThompsonSampling)
+    batchesDef.append(batchDefMLFuzzyDHondtDirectOptimizeThompsonSamplingMMR)
+    batchesDef.append(batchDefMLContextFuzzyDHondtDirectOptimize)
+
+    batchesDef.append(batchDefMLFuzzyDHondtDirectOptimizeThompsonSamplingINF)
+    batchesDef.append(batchDefMLContextDHondtINF)
+    batchesDef.append(batchDefMLContextFuzzyDHondtDirectOptimizeINF)
+    batchesDef.append(batchDefMLFuzzyDHondtThompsonSamplingINF)
+
     # RR #############################################################################
-#    BatchRRSingle.generateAllBatches()
-#    BatchRRSingleW2VHT.generateAllBatches()
-#    BatchRRVMContextKNNHT.generateAllBatches()
-#    BatchRRSingleCosineCBHT.generateAllBatches()
+    batchDefRRSingle = BatchDefRRSingle()
+    batchDefRRSingleW2VHT = BatchDefRRSingleW2VHT()
+    batchDefRRSingleVMContextKNNHT = BatchDefRRSingleVMContextKNNHT()
+    batchDefRRSingleCosineCBHT = BatchDefRRSingleCosineCBHT()
+
+    batchesDef.append(batchDefRRSingle)
+    batchesDef.append(batchDefRRSingleW2VHT)
+    batchesDef.append(batchDefRRSingleVMContextKNNHT)
+    batchesDef.append(batchDefRRSingleCosineCBHT)
 
 
     # ST #############################################################################
-#    BatchSTSingle.generateAllBatches()
+    batchDefSTSingle = BatchDefSTSingle()
 #
-#    BatchSTBanditTS.generateAllBatches()  # only Fixed selector
-#    BatchSTWeightedAVG.generateAllBatches()
-#    BatchSTWeightedAVGMMR.generateAllBatches()
+    batchDefSTBanditTS = BatchDefSTBanditTS()
+    batchDefSTBanditTS.selectorIDs = [BatchDefMLFuzzyDHondt.SLCTR_FIXED]
+
+    batchDefSTWeightedAVG = BatchDefSTWeightedAVG()
+    batchDefSTWeightedAVG.lrClicks:List[float] = [0.03]
+    batchDefSTWeightedAVG.lrViewDivisors:List[float] = [250]
 #
-#    BatchSTRandomRecsSwitching.generateAllBatches()
-#    BatchSTRandomKfromN.generateAllBatches()
+    batchDefSTRandomRecsSwitching = BatchDefSTRandomRecsSwitching()
+    batchDefSTRandomKfromN = BatchDefSTRandomKfromN()
 #
-#    BatchSTFuzzyDHondt.generateAllBatches()
+    batchDefSTFuzzyDHondt = BatchDefSTFuzzyDHondt()
 #
-#    BatchSTDHondtThompsonSampling.generateAllBatches()
-#    BatchSTContextDHondt.generateAllBatches()
+    batchDefSTFuzzyDHondtThompsonSampling = BatchDefSTFuzzyDHondtThompsonSampling()
+    batchDefSTContextDHondt = BatchDefSTContextDHondt()
+    batchDefSTContextDHondt.selectorIDs:List[str] = [BatchDefMLFuzzyDHondt.SLCTR_FIXED]
 #
-#    BatchSTContextFuzzyDHondtDirectOptimize.generateAllBatches()
+    batchDefSTContextFuzzyDHondtDirectOptimize = BatchDefSTContextFuzzyDHondtDirectOptimize()
 #
-#    BatchSTFuzzyDHondtDirectOptimize.generateAllBatches()
+    batchDefSTFuzzyDHondtDirectOptimize = BatchDefSTFuzzyDHondtDirectOptimize()
+    batchDefSTFuzzyDHondtDirectOptimize.lrClicks:List[float] = [0.03]
+    batchDefSTFuzzyDHondtDirectOptimize.lrViewDivisors:List[float] = [250]
+    batchDefSTFuzzyDHondtDirectOptimize.selectorIDs = [
+        BatchDefMLFuzzyDHondtDirectOptimize.SLCTR_FIXED,
+        BatchDefMLFuzzyDHondtDirectOptimize.SLCTR_ROULETTE1, BatchDefMLFuzzyDHondtDirectOptimize.SLCTR_ROULETTE2]
 #
-#    BatchSTFuzzyDHondtDirectOptimizeThompsonSampling.generateAllBatches()
+    batchDefSTFuzzyDHondtDirectOptimizeThompsonSampling = BatchDefSTFuzzyDHondtDirectOptimizeThompsonSampling()
+    batchDefSTFuzzyDHondtDirectOptimizeThompsonSampling.selectorIDs = [BatchDefMLFuzzyDHondt.SLCTR_FIXED]
 #
-#    BatchSTFuzzyDHondtDirectOptimizeThompsonSamplingMMR.generateAllBatches()
-#
+    batchDefSTFuzzyDHondtDirectOptimizeThompsonSamplingMMR = BatchDefSTFuzzyDHondtDirectOptimizeThompsonSamplingMMR()
+    batchDefSTFuzzyDHondtDirectOptimizeThompsonSamplingMMR.selectorIDs = [BatchDefMLFuzzyDHondt.SLCTR_FIXED]
+
 #
     # INF
-#    BatchSTFuzzyDHondtDirectOptimizeThompsonSamplingINF.generateAllBatches()
-#    BatchSTFuzzyDHondtDirectOptimizeThompsonSamplingINF.generateSelectedBatches([
-#        jobIdST01, jobIdST02, jobIdST03, jobIdST04, jobIdST05, jobIdST06, jobIdST07, jobIdST08])
+    batchDefSTFuzzyDHondtDirectOptimizeThompsonSamplingINF = BatchDefSTFuzzyDHondtDirectOptimizeThompsonSamplingINF()
+    batchDefSTFuzzyDHondtDirectOptimizeThompsonSamplingINF.selectorIDs = [BatchDefMLFuzzyDHondt.SLCTR_FIXED]
+    batchDefSTFuzzyDHondtDirectOptimizeThompsonSamplingINF.jobIDs = [
+        jobIdST01, jobIdST02, jobIdST03, jobIdST04, jobIdST05, jobIdST06, jobIdST07, jobIdST08]
 
-#    BatchSTContextDHondtINF.generateSelectedBatches([
-#        jobIdST01, jobIdST02, jobIdST03, jobIdST04, jobIdST05, jobIdST06, jobIdST07, jobIdST08])
+    batchDefSTContextDHondtINF = BatchDefSTContextDHondtINF()
+    batchDefSTContextDHondtINF.jobIDs = [
+        jobIdST01, jobIdST02, jobIdST03, jobIdST04, jobIdST05, jobIdST06, jobIdST07, jobIdST08]
 
-#    BatchSTContextFuzzyDHondtDirectOptimizeINF.generateSelectedBatches([
-#        jobIdST01, jobIdST02, jobIdST03, jobIdST04, jobIdST05, jobIdST06, jobIdST07, jobIdST08])
+    batchDefSTContextFuzzyDHondtDirectOptimizeINF = BatchDefSTContextFuzzyDHondtDirectOptimizeINF()
+    batchDefSTContextFuzzyDHondtDirectOptimizeINF.jobIDs = [
+        jobIdST01, jobIdST02, jobIdST03, jobIdST04, jobIdST05, jobIdST06, jobIdST07, jobIdST08]
 
-    BatchSTDHondtThompsonSamplingINF.generateSelectedBatches([
-        jobIdST01, jobIdST02, jobIdST03, jobIdST04, jobIdST05, jobIdST06, jobIdST07, jobIdST08])
+    batchDefSTDFuzzyHondtThompsonSamplingINF = BatchDefSTDFuzzyHondtThompsonSamplingINF()
+    batchDefSTDFuzzyHondtThompsonSamplingINF.jobIDs = [
+        jobIdST01, jobIdST02, jobIdST03, jobIdST04, jobIdST05, jobIdST06, jobIdST07, jobIdST08]
+
+
+
+    batchesDef.append(batchDefSTSingle)
+    batchesDef.append(batchDefSTBanditTS)
+    batchesDef.append(batchDefSTWeightedAVG)
+    batchesDef.append(batchDefSTRandomRecsSwitching)
+    batchesDef.append(batchDefSTRandomKfromN)
+    batchesDef.append(batchDefSTFuzzyDHondt)
+
+    batchesDef.append(batchDefSTFuzzyDHondtThompsonSampling)
+    batchesDef.append(batchDefSTContextDHondt)
+    batchesDef.append(batchDefSTContextFuzzyDHondtDirectOptimize)
+
+    batchesDef.append(batchDefSTFuzzyDHondtDirectOptimize)
+    batchesDef.append(batchDefSTFuzzyDHondtDirectOptimizeThompsonSampling)
+    batchesDef.append(batchDefSTFuzzyDHondtDirectOptimizeThompsonSamplingMMR)
+
+    batchesDef.append(batchDefSTFuzzyDHondtDirectOptimizeThompsonSamplingINF)
+    batchesDef.append(batchDefSTContextDHondtINF)
+    batchesDef.append(batchDefSTContextFuzzyDHondtDirectOptimizeINF)
+    batchesDef.append(batchDefSTDFuzzyHondtThompsonSamplingINF)
+
+    return batchesDef
+
 
 def generateBatches():
+    print("Generate Batches")
 
     np.random.seed(42)
     random.seed(42)
 
-    #generateAllBatches()
-    generateBatchesJournal()
+    #batchesDef: List = getAllBatches()
+    batchesDef:List = getBatchesJournal()
 
+
+    for batchDefI in batchesDef:
+        batchDefI.generateAllBatches()
 
 
 
@@ -293,5 +404,4 @@ if __name__ == "__main__":
   os.chdir("..")
   print(os.getcwd())
 
-  #generateBatches()
-  generateBatchesJournal()
+  generateBatches()

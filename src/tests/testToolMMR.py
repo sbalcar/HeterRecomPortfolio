@@ -42,7 +42,7 @@ from history.historyHierDF import HistoryHierDF #class
 
 import pandas as pd
 from input.inputABatchDefinition import InputABatchDefinition
-from input.aBatchML import ABatchML #class
+from input.aBatchDefinitionML import ABatchDefinitionML #class
 
 from userBehaviourDescription.userBehaviourDescription import observationalPowerLawFnc #function
 from userBehaviourDescription.userBehaviourDescription import observationalLinearProbabilityFnc #function

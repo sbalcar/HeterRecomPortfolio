@@ -49,7 +49,7 @@ from recommender.recommenderTheMostPopular import RecommenderTheMostPopular #cla
 
 import pandas as pd
 from input.inputABatchDefinition import InputABatchDefinition
-from input.aBatchML import ABatchML #class
+from input.aBatchDefinitionML import ABatchDefinitionML #class
 
 import pandas as pd
 from numpy.random import randint
