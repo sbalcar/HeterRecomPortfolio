@@ -75,7 +75,7 @@ class BatchDefMLFuzzyDHondt(ABatchDefinitionML):
                     lrViewIJK:float = lrClickJ / lrViewDivisorK
                     eToolIJK:AEvalTool = EvalToolDHondt({EvalToolDHondt.ARG_LEARNING_RATE_CLICKS: lrClickJ,
                                                       EvalToolDHondt.ARG_LEARNING_RATE_VIEWS: lrViewIJK})
-                    selectorIJK:ADHondtSelector = BatchDefMLFuzzyDHondt().getSelectorParameters()[selectorIDI]
+                    selectorIJK:ADHondtSelector = self.getSelectorParameters()[selectorIDI]
                     aDict[keyIJ] = (selectorIJK, eToolIJK)
         return aDict
 
