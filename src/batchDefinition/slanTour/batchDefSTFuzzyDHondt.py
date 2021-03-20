@@ -41,7 +41,11 @@ class BatchDefSTFuzzyDHondt(ABatchDefinitionST):
         return "FDHondt"
 
     def getParameters(self):
-        return BatchDefMLFuzzyDHondt().getParameters()
+        batchDefMLFuzzyDHondt = BatchDefMLFuzzyDHondt()
+        batchDefMLFuzzyDHondt.lrClicks:List[float] = self.lrClicks
+        batchDefMLFuzzyDHondt.lrViewDivisors:List[float] = self.lrViewDivisors
+        batchDefMLFuzzyDHondt.selectorIDs:List[str] = self.selectorIDs
+        return batchDefMLFuzzyDHondt.getParameters()
 
 
     def run(self, batchID:str, jobID:str):

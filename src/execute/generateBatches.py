@@ -255,6 +255,10 @@ def getBatchesJournal():
     batchDefSTRandomKfromN = BatchDefSTRandomKfromN()
 #
     batchDefSTFuzzyDHondt = BatchDefSTFuzzyDHondt()
+    batchDefSTFuzzyDHondt.lrClicks:List[float] = [0.03]
+    batchDefSTFuzzyDHondt.lrViewDivisors:List[float] = [250]
+    batchDefSTFuzzyDHondt.selectorIDs:List[str] = [BatchDefMLFuzzyDHondt.SLCTR_FIXED]
+
 #
     batchDefSTFuzzyDHondtThompsonSampling = BatchDefSTFuzzyDHondtThompsonSampling()
     batchDefSTContextDHondt = BatchDefSTContextDHondt()
