@@ -7,9 +7,15 @@ from typing import List
 from abc import ABC, abstractmethod
 
 from batchDefinition.inputABatchDefinition import InputABatchDefinition
-from batch.batch import Batch #class
+
+#from batch.batch import Batch #class
+import batch.batch
 
 class ABatchDefinition(ABC):
+
+    @abstractmethod
+    def getBatchName(self):
+        pass
 
     @abstractmethod
     def getParameters(self):
@@ -21,7 +27,7 @@ class ABatchDefinition(ABC):
 
     def generateAllBatches(self):
 
-        batches:List[Batch] = self.getAllBatches()
+        batches:List[batch.batch.Batch] = self.getAllBatches()
 
         for batchI in batches:
             self.__writeToFile(batchI.batchDefinitionClass, batchI.batchID, batchI.jobID)
@@ -33,11 +39,11 @@ class ABatchDefinition(ABC):
         if hasattr(self, 'jobIDs'):
             jobIDs = self.jobIDs
 
-        batches:List[Batch] = []
+        batches:List[batch.batch.Batch] = []
 
         for batchIDI in batchIDs:
             for jobIDJ in jobIDs:
-                batches.append(Batch(self.__class__.__name__, batchIDI, jobIDJ))
+                batches.append(batch.batch.Batch(self.__class__.__name__, batchIDI, jobIDJ))
 
         return batches
 

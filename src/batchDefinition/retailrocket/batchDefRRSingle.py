@@ -31,8 +31,10 @@ from batchDefinition.aBatchDefinitionRR import ABatchDefinitionRR #class
 
 class BatchDefRRSingle(ABatchDefinitionRR):
 
-    @staticmethod
-    def getParameters():
+    def getBatchName(self):
+        return "Single"
+    
+    def getParameters(self):
 
         aDict:dict = {}
         aDict[InputRecomMLDefinition.THE_MOST_POPULAR] = InputRecomMLDefinition.THE_MOST_POPULAR

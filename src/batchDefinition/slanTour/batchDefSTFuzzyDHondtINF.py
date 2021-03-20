@@ -38,9 +38,11 @@ from batchDefinition.ml1m.batchDefMLFuzzyDHondtINF import BatchMLFuzzyDHondtINF 
 
 class BatchDefSTFuzzyDHondtINF(ABatchDefinitionST):
 
-    @staticmethod
-    def getParameters():
-        return BatchMLFuzzyDHondtINF.getParameters()
+    def getBatchName(self):
+        return "FuzzyDHondtINF"
+
+    def getParameters(self):
+        return BatchMLFuzzyDHondtINF().getParameters()
 
 
     def run(self, batchID:str, jobID:str):
@@ -58,7 +60,7 @@ class BatchDefSTFuzzyDHondtINF(ABatchDefinitionST):
         aDescDHontINF:AggregationDescription = InputAggrDefinition.exportADescDHondtINF(selector, nImplFeedback)
 
         pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
-            "FuzzyDHondtINF" + jobID, rIDs, rDescs, aDescDHontINF)
+            self.getBatchName() + jobID, rIDs, rDescs, aDescDHontINF)
 
         model:DataFrame = ModelDefinition.createDHontModel(pDescr.getRecommendersIDs())
 

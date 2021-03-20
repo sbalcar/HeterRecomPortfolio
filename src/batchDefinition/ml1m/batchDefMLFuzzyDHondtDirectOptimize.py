@@ -44,6 +44,9 @@ class BatchDefMLFuzzyDHondtDirectOptimize(ABatchDefinitionML):
     lrViewDivisors: List[float] = [250, 500, 1000]
     selectorIds: List[str] = [SLCTR_ROULETTE1, SLCTR_ROULETTE2, SLCTR_FIXED]
 
+    def getBatchName(self):
+        return "FDHondtDirectOptimize"
+
     def getSelectorParameters(self):
 
         selectorRoulette1:ADHondtSelector = RouletteWheelSelector({RouletteWheelSelector.ARG_EXPONENT:1})
@@ -88,7 +91,7 @@ class BatchDefMLFuzzyDHondtDirectOptimize(ABatchDefinitionML):
         aDescDHont:AggregationDescription = InputAggrDefinition.exportADescDHondtDirectOptimize(selector)
 
         pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
-            "FDHondtDirectOptimize" + jobID, rIDs, rDescs, aDescDHont)
+            self.getBatchName() + jobID, rIDs, rDescs, aDescDHont)
 
         model:DataFrame = ModelDefinition.createDHontModel(pDescr.getRecommendersIDs())
 

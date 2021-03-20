@@ -44,6 +44,9 @@ class BatchDefMLFuzzyDHondt(ABatchDefinitionML):
     lrViewDivisors:List[float] = [250, 500, 1000]
     selectorIDs:List[str] = [SLCTR_ROULETTE1, SLCTR_ROULETTE2, SLCTR_FIXED]
 
+    def getBatchName(self):
+        return "FDHondt"
+
     def getAllSelectors(self):
 
         selectorRoulette1:ADHondtSelector = RouletteWheelSelector({RouletteWheelSelector.ARG_EXPONENT:1})
@@ -92,7 +95,7 @@ class BatchDefMLFuzzyDHondt(ABatchDefinitionML):
         aDescDHont:AggregationDescription = InputAggrDefinition.exportADescDHondt(selector)
 
         pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
-            "FDHondt" + jobID, rIDs, rDescs, aDescDHont)
+            self.getBatchName() + jobID, rIDs, rDescs, aDescDHont)
 
         model:DataFrame = ModelDefinition.createDHontModel(pDescr.getRecommendersIDs())
 

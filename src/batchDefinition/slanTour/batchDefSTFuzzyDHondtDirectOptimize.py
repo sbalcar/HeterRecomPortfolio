@@ -42,6 +42,9 @@ class BatchDefSTFuzzyDHondtDirectOptimize(ABatchDefinitionST):
     SLCTR_ROULETTE2:str = BatchDefMLFuzzyDHondtDirectOptimize.SLCTR_ROULETTE2
     SLCTR_FIXED:str = BatchDefMLFuzzyDHondtDirectOptimize.SLCTR_FIXED
 
+    def getBatchName(self):
+        return "FDHondtDirectOptimize"
+    
     def getParameters(self):
         batchDefMLFuzzyDHondtDirectOptimize = BatchDefMLFuzzyDHondtDirectOptimize()
         batchDefMLFuzzyDHondtDirectOptimize.lrClicks:List[float] = self.lrClicks
@@ -65,7 +68,7 @@ class BatchDefSTFuzzyDHondtDirectOptimize(ABatchDefinitionST):
         aDescDHont:AggregationDescription = InputAggrDefinition.exportADescDHondtDirectOptimize(selector)
 
         pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
-            "FDHondtDirectOptimize" + jobID, rIDs, rDescs, aDescDHont)
+            self.getBatchName() + jobID, rIDs, rDescs, aDescDHont)
 
         model:DataFrame = ModelDefinition.createDHontModel(pDescr.getRecommendersIDs())
 

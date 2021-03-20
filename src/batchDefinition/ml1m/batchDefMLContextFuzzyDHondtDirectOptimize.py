@@ -57,6 +57,9 @@ class BatchDefMLContextFuzzyDHondtDirectOptimize(ABatchDefinitionML):
 
     selectorIDs:List[str] = BatchDefMLFuzzyDHondt.selectorIDs
 
+    def getBatchName(self):
+        return "ContextFDHondtDirectOptimize"
+
     def getParameters(self):
         batchDefMLFuzzyDHondt = BatchDefMLFuzzyDHondt()
         aDict:Dict[str,object] = batchDefMLFuzzyDHondt.getAllSelectors()
@@ -89,7 +92,7 @@ class BatchDefMLContextFuzzyDHondtDirectOptimize(ABatchDefinitionML):
         aDescDHont:AggregationDescription = InputAggrDefinition.exportADescContextFuzzyDHondtDirectOptimize(selector, eTool)
 
         pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
-            "ContextFDHondtDirectOptimize" + jobID, rIDs, rDescs, aDescDHont)
+            self.getBatchName() + jobID, rIDs, rDescs, aDescDHont)
 
         model:DataFrame = ModelDefinition.createDHontModel(pDescr.getRecommendersIDs())
 

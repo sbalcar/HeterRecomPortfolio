@@ -38,8 +38,10 @@ from batchDefinition.ml1m.batchDefMLFuzzyDHondtINF import BatchMLFuzzyDHondtINF 
 
 class BatchDefSTRandomKfromN(ABatchDefinitionST):
 
-    @staticmethod
-    def getParameters():
+    def getBatchName(self):
+        return "RandomKfromN"
+        
+    def getParameters(self):
         return {"":""}
 
 
@@ -58,7 +60,7 @@ class BatchDefSTRandomKfromN(ABatchDefinitionST):
         aDescRandomKfromN:AggregationDescription = InputAggrDefinition.exportADescRandomKfromN(mainMethodID)
 
         pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
-            "RandomKfromN" + jobID, rIDs, rDescs, aDescRandomKfromN)
+            self.getBatchName() + jobID, rIDs, rDescs, aDescRandomKfromN)
 
         model:DataFrame = DataFrame()
 

@@ -36,6 +36,9 @@ from history.historyHierDF import HistoryHierDF #class
 
 class BatchDefSTFuzzyDHondtDirectOptimizeThompsonSamplingINF(ABatchDefinitionST):
 
+    def getBatchName(self):
+        return "FDHondtDirectOptimizeThompsonSamplingINF"
+    
     def getParameters(self):
         return BatchDefMLFuzzyDHondtDirectOptimizeThompsonSamplingINF().getParameters()
 
@@ -55,7 +58,7 @@ class BatchDefSTFuzzyDHondtDirectOptimizeThompsonSamplingINF(ABatchDefinitionST)
         aDescDHont:AggregationDescription = InputAggrDefinition.exportADescDHondtDirectOptimizeThompsonSamplingINF(selector, nImplFeedback)
 
         pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
-            "FDHondtDirectOptimizeThompsonSamplingINF" + jobID, rIDs, rDescs, aDescDHont)
+            self.getBatchName() + jobID, rIDs, rDescs, aDescDHont)
 
         model:DataFrame = ModelDefinition.createDHondtBanditsVotesModel(pDescr.getRecommendersIDs())
 

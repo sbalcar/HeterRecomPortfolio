@@ -35,8 +35,10 @@ from aggregationDescription.aggregationDescription import AggregationDescription
 
 class BatchDefMLRandomKfromN(ABatchDefinitionML):
 
-    @staticmethod
-    def getParameters():
+    def getBatchName(self):
+        return "RandomKfromN"
+    
+    def getParameters(self):
         return {"": ""}
 
 
@@ -55,7 +57,7 @@ class BatchDefMLRandomKfromN(ABatchDefinitionML):
         aDescRandomKfromN:AggregationDescription = InputAggrDefinition.exportADescRandomKfromN(mainMethodID)
 
         pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
-            "RandomKfromN" + jobID, rIDs, rDescs, aDescRandomKfromN)
+            self.getBatchName() + jobID, rIDs, rDescs, aDescRandomKfromN)
 
         model:DataFrame = DataFrame()
 

@@ -34,8 +34,10 @@ from aggregationDescription.aggregationDescription import AggregationDescription
 
 class BatchDefMLRandomRecsSwitching(ABatchDefinitionML):
 
-    @staticmethod
-    def getParameters():
+    def getBatchName(self):
+        return "RandomRecsSwitching"
+
+    def getParameters(self):
         return {"": ""}
 
 
@@ -54,7 +56,7 @@ class BatchDefMLRandomRecsSwitching(ABatchDefinitionML):
         aDescRandomRecsSwitching:AggregationDescription = InputAggrDefinition.exportADescRandomRecsSwitching(mainMethodID)
 
         pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
-            "RandomRecsSwitching" + jobID, rIDs, rDescs, aDescRandomRecsSwitching)
+            self.getBatchName() + jobID, rIDs, rDescs, aDescRandomRecsSwitching)
 
         model:DataFrame = DataFrame()
 

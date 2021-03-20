@@ -41,6 +41,9 @@ class BatchDefMLSingleCosineCBHT(ABatchDefinitionML):
     userProfileStrategies:List[str] = ["mean", "max", "weightedMean"]
     userProfileSizes:List[int] = [-1, 1, 3, 5, 7, 10]
 
+    def getBatchName(self):
+        return "SingleCosineCBHT"
+
     @classmethod
     def getParameters(cls):
 

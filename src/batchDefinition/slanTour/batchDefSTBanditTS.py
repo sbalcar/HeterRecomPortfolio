@@ -33,6 +33,9 @@ from history.historyHierDF import HistoryHierDF #class
 
 class BatchDefSTBanditTS(ABatchDefinitionST):
 
+    def getBatchName(self):
+        return "BanditTS"
+    
     def getParameters(self):
         batchDefMLBanditTS = BatchDefMLBanditTS()
         batchDefMLBanditTS.selectorIDs = self.selectorIDs
@@ -50,7 +53,7 @@ class BatchDefSTBanditTS(ABatchDefinitionST):
         rIDs, rDescs = InputRecomSTDefinition.exportPairOfRecomIdsAndRecomDescrs()
 
         pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
-            "BanditTS" + jobID, rIDs, rDescs, InputAggrDefinition.exportADescBanditTS(selector))
+            self.getBatchName() + jobID, rIDs, rDescs, InputAggrDefinition.exportADescBanditTS(selector))
 
         eTool:AEvalTool = EvalToolBanditTS({})
         model:DataFrame = ModelDefinition.createBanditModel(pDescr.getRecommendersIDs())

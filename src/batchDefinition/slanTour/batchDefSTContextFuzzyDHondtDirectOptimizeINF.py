@@ -54,9 +54,11 @@ from history.aHistory import AHistory #class
 
 class BatchDefSTContextFuzzyDHondtDirectOptimizeINF(ABatchDefinitionST):
 
-    @classmethod
-    def getParameters(cls):
-        return BatchDefSTContextDHondtINF.getParameters()
+    def getBatchName(self):
+        return "ContextFDHondtDirectOptimizeINF"
+
+    def getParameters(self):
+        return BatchDefSTContextDHondtINF().getParameters()
 
 
     def run(self, batchID:str, jobID:str):
@@ -88,7 +90,7 @@ class BatchDefSTContextFuzzyDHondtDirectOptimizeINF(ABatchDefinitionST):
         aDescDHont:AggregationDescription = InputAggrDefinition.exportADescContextFuzzyDHondtDirectOptimizeINF(selector, nImplFeedback, evalTool)
 
         pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
-            "ContextFDHondtDirectOptimizeINF" + jobID, rIDs, rDescs, aDescDHont)
+            self.getBatchName() + jobID, rIDs, rDescs, aDescDHont)
 
         model:DataFrame = ModelDefinition.createDHontModel(pDescr.getRecommendersIDs())
 

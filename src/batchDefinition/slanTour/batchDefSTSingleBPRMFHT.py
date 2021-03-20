@@ -36,9 +36,11 @@ from configuration.configuration import Configuration #class
 
 
 class BatchDefSTSingleBPRMFHT(ABatchDefinitionST):
-
-    @staticmethod
-    def getParameters():
+    
+    def getBatchName(self):
+        return "SingleBPRMFHT"
+    
+    def getParameters(self):
 
         return BatchDefMLSingleBPRMFHT.getParameters()
 

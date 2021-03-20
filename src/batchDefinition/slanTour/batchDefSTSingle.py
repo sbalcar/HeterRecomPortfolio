@@ -34,8 +34,10 @@ from batchDefinition.aBatchDefinitionST import ABatchDefinitionST #class
 
 class BatchDefSTSingle(ABatchDefinitionST):
 
-    @staticmethod
-    def getParameters():
+    def getBatchName(self):
+        return "Single"
+    
+    def getParameters(self):
 
         rIDs, rDescr = InputRecomSTDefinition.exportPairOfRecomIdsAndRecomDescrs()
 
@@ -65,7 +67,7 @@ class BatchDefSTSingle(ABatchDefinitionST):
         rDescr:str = self.getParameters()[jobID]
         recommenderID:str = jobID
 
-        pDescr:APortfolioDescription = Portfolio1MethDescription("Single" + recommenderID.title(), recommenderID, rDescr)
+        pDescr:APortfolioDescription = Portfolio1MethDescription(self.getBatchName() + recommenderID.title(), recommenderID, rDescr)
 
         simulator:Simulator = InputSimulatorDefinition.exportSimulatorSlantour(
                 batchID, divisionDatasetPercentualSize, uBehaviour, repetition)

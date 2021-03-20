@@ -47,6 +47,9 @@ class BatchDefMLFuzzyDHondtDirectOptimizeThompsonSampling(ABatchDefinitionML):
                              AggrDHondtDirectOptimizeThompsonSampling.DISCFACTOR_POWERLAW,
                              AggrDHondtDirectOptimizeThompsonSampling.DISCFACTOR_UNIFORM]
 
+    def getBatchName(self):
+        return "FDHondtDirectOptimizeThompsonSampling"
+
     def getParameters(self):
 
         aDict:Dict[str,object] = {}
@@ -73,7 +76,7 @@ class BatchDefMLFuzzyDHondtDirectOptimizeThompsonSampling(ABatchDefinitionML):
         aDescDHont:AggregationDescription = InputAggrDefinition.exportADescDHondtDirectOptimizeThompsonSampling(selector, discFactor)
 
         pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
-            "FDHondtDirectOptimizeThompsonSampling" + jobID, rIDs, rDescs, aDescDHont)
+            self.getBatchName() + jobID, rIDs, rDescs, aDescDHont)
 
         model:DataFrame = ModelDefinition.createDHondtBanditsVotesModel(pDescr.getRecommendersIDs())
 

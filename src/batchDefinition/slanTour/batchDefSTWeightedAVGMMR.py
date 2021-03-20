@@ -36,9 +36,11 @@ from history.historyHierDF import HistoryHierDF  # class
 
 class BatchDefSTWeightedAVGMMR(ABatchDefinitionST):
 
-    @staticmethod
-    def getParameters():
-        return BatchDefMLWeightedAVGMMR.getParameters()
+    def getBatchName(self):
+        return "WAVGMMR"
+
+    def getParameters(self):
+        return BatchDefMLWeightedAVGMMR().getParameters()
 
     def run(self, batchID: str, jobID: str):
         divisionDatasetPercentualSize: int
@@ -54,7 +56,7 @@ class BatchDefSTWeightedAVGMMR(ABatchDefinitionST):
         aDescWeightedAVG:AggregationDescription = InputAggrDefinition.exportADescWeightedAVGMMR()
 
         pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
-            "WAVGMMR" + jobID, rIDs, rDescs, aDescWeightedAVG)
+            self.getBatchName() + jobID, rIDs, rDescs, aDescWeightedAVG)
 
         model:DataFrame = ModelDefinition.createDHontModel(pDescr.getRecommendersIDs())
 

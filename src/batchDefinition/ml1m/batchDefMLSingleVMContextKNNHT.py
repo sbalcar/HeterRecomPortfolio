@@ -37,6 +37,9 @@ class BatchDefMLSingleVMContextKNNHT(ABatchDefinitionML):
 
     ks:List[int] = [25, 50, 75]
 
+    def getBatchName(self):
+        return "SingleVMContextKNNHT"
+
     @classmethod
     def getParameters(cls):
 

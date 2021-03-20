@@ -52,6 +52,9 @@ from datasets.ml.ratings import Ratings #class
 
 class BatchDefSTContextDHondt(ABatchDefinitionST):
 
+    def getBatchName(self):
+        return "ContextDHondt"
+    
     def getParameters(self):
         batchDefMLBanditTS = BatchDefMLBanditTS()
         batchDefMLBanditTS.selectorIDs = self.selectorIDs
@@ -67,7 +70,7 @@ class BatchDefSTContextDHondt(ABatchDefinitionST):
 
         selector:ADHondtSelector = self.getParameters()[jobID]
 
-        portfolioID:str = "ContextDHondt" + jobID
+        portfolioID:str = self.getBatchName() + jobID
 
         history:AHistory = HistoryHierDF(portfolioID)
 

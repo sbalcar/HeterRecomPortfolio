@@ -41,6 +41,9 @@ class BatchDefSTFuzzyDHondtDirectOptimizeThompsonSampling(ABatchDefinitionST):
     SLCTR_ROULETTE2:str = BatchDefMLFuzzyDHondtDirectOptimizeThompsonSampling.SLCTR_ROULETTE2
     SLCTR_FIXED:str = BatchDefMLFuzzyDHondtDirectOptimizeThompsonSampling.SLCTR_FIXED
 
+    def getBatchName(self):
+        return "FDHondtDirectOptimizeThompsonSampling"
+
     def getParameters(self):
         batchDefMLFuzzyDHondtDirectOptimizeThompsonSampling = BatchDefMLFuzzyDHondtDirectOptimizeThompsonSampling()
         batchDefMLFuzzyDHondtDirectOptimizeThompsonSampling.selectorIDs = self.selectorIDs
@@ -63,7 +66,7 @@ class BatchDefSTFuzzyDHondtDirectOptimizeThompsonSampling(ABatchDefinitionST):
         aDescDHont:AggregationDescription = InputAggrDefinition.exportADescDHondtDirectOptimizeThompsonSampling(selector, discFactor)
 
         pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
-            "FDHondtDirectOptimizeThompsonSampling" + jobID, rIDs, rDescs, aDescDHont)
+            self.getBatchName() + jobID, rIDs, rDescs, aDescDHont)
 
         model:DataFrame = ModelDefinition.createDHondtBanditsVotesModel(pDescr.getRecommendersIDs())
 

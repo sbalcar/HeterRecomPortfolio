@@ -37,6 +37,9 @@ from batchDefinition.ml1m.batchDefMLWeightedAVG import BatchDefMLWeightedAVG #cl
 
 class BatchDefMLWeightedAVGMMR(ABatchDefinitionML):
 
+    def getBatchName(self):
+        return "WAVGMMR"
+
     def getParameters(self):
         batchDefMLWeightedAVG = BatchDefMLWeightedAVG()
         batchDefMLWeightedAVG.lrClicks:List[float] = self.lrClicks

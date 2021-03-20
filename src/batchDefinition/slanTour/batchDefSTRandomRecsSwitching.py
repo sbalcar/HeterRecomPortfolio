@@ -38,8 +38,10 @@ from batchDefinition.ml1m.batchDefMLFuzzyDHondtINF import BatchMLFuzzyDHondtINF 
 
 class BatchDefSTRandomRecsSwitching(ABatchDefinitionST):
 
-    @staticmethod
-    def getParameters():
+    def getBatchName(self):
+        return "RandomRecsSwitching"
+    
+    def getParameters(self):
         return {"":""}
 
 
@@ -58,7 +60,7 @@ class BatchDefSTRandomRecsSwitching(ABatchDefinitionST):
         aDescRandomRecsSwitching:AggregationDescription = InputAggrDefinition.exportADescRandomRecsSwitching(mainMethodID)
 
         pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
-            "RandomRecsSwitching" + jobID, rIDs, rDescs, aDescRandomRecsSwitching)
+            self.getBatchName() + jobID, rIDs, rDescs, aDescRandomRecsSwitching)
 
         model:DataFrame = DataFrame()
 

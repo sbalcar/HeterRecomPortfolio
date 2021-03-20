@@ -48,6 +48,9 @@ from aggregation.negImplFeedback.penalUsingReduceRelevance import penaltyLinear 
 
 class BatchDefMLFuzzyDHondtThompsonSamplingINF(ABatchDefinitionML):
 
+    def getBatchName(self):
+        return "FuzzyDHondtThompsonSamplingINF"
+    
     @classmethod
     def getParamsForLinerFncs(cls):
         a:List[int,int] = [(1.0, i) for i in [0.75, 0.5, 0.25, 0.0]]
@@ -169,7 +172,7 @@ class BatchDefMLFuzzyDHondtThompsonSamplingINF(ABatchDefinitionML):
         aDescNegDHontThompsonSamplingI:AggregationDescription = InputAggrDefinition.exportADescDHondtThompsonSamplingINF(selector, nImplFeedback)
 
         pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
-            "FuzzyDHondtThompsonSamplingINF" + jobID, rIDs, rDescs, aDescNegDHontThompsonSamplingI)
+            self.getBatchName() + jobID, rIDs, rDescs, aDescNegDHontThompsonSamplingI)
 
         model:DataFrame = ModelDefinition.createDHondtBanditsVotesModel(pDescr.getRecommendersIDs())
 

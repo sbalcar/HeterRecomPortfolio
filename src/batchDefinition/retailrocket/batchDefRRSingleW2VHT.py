@@ -39,8 +39,10 @@ from configuration.configuration import Configuration #class
 
 class BatchDefRRSingleW2VHT(ABatchDefinitionRR):
 
-    @classmethod
-    def getParameters(cls):
+    def getBatchName(self):
+        return "Single"
+    
+    def getParameters(self):
         oldValue:List[str] = BatchDefMLSingleW2VHT.trainVariants
         BatchDefMLSingleW2VHT.trainVariants = ["all"]
         paramsDict:Dict[str, object] = BatchDefMLSingleW2VHT.getParameters()

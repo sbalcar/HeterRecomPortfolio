@@ -44,6 +44,9 @@ class BatchDefMLSingleW2VHT(ABatchDefinitionML):
     userProfileStrategies:List[str] = ["mean", "max", "weightedMean"]
     userProfileSizes:List[int] = [-1, 1, 3, 5, 7, 10]
 
+    def getBatchName(self):
+        return "SingleW2VHT"
+
     @classmethod
     def getParameters(cls):
 

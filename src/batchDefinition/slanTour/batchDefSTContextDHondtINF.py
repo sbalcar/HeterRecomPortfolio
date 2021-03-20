@@ -54,9 +54,11 @@ from datasets.ml.ratings import Ratings #class
 
 class BatchDefSTContextDHondtINF(ABatchDefinitionST):
 
-    @staticmethod
-    def getParameters():
-        return BatchDefMLContextDHondtINF.getParameters()
+    def getBatchName(self):
+        return "ContextDHondtINF"
+
+    def getParameters(self):
+        return BatchDefMLContextDHondtINF().getParameters()
 
 
     def run(self, batchID:str, jobID:str):
@@ -69,7 +71,7 @@ class BatchDefSTContextDHondtINF(ABatchDefinitionST):
         selector:ADHondtSelector
         selector, negativeImplFeedback = self.getParameters()[jobID]
 
-        portfolioID:str = "ContextDHondtINF" + jobID
+        portfolioID:str = self.getBatchName() + jobID
 
         history:AHistory = HistoryHierDF(portfolioID)
 

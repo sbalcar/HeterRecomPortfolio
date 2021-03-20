@@ -39,6 +39,9 @@ from configuration.configuration import Configuration #class
 
 class BatchDefRRSingleCosineCBHT(ABatchDefinitionRR):
 
+    def getBatchName(self):
+        return "Single"
+
     @classmethod
     def getParameters(cls):
         oldValue:List[str] = BatchDefMLSingleCosineCBHT.cbDataPaths

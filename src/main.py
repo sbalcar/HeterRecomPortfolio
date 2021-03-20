@@ -13,6 +13,10 @@ from execute.generateBehaviour import generateBehaviour #function
 from execute.startHttpServer import startHttpServer #function
 from execute.resultsVerification import resultsVerification #function
 
+from batch.batch import Batch #class
+from batchDefinition.aBatchDefinition import ABatchDefinition #class
+
+
 def main2():
 
   start = time.time()

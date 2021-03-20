@@ -40,10 +40,11 @@ from history.historyHierDF import HistoryHierDF #class
 
 class BatchDefMLFuzzyDHondtDirectOptimizeINF(ABatchDefinitionML):
 
-    @staticmethod
-    def getParameters():
-        return BatchDefMLFuzzyDHondtThompsonSamplingINF().getParameters()
+    def getBatchName(self):
+        return "FuzzyDHondtDirectOptimizeINF"
 
+    def getParameters(self):
+        return BatchDefMLFuzzyDHondtThompsonSamplingINF().getParameters()
 
     def run(self, batchID:str, jobID:str):
 
@@ -62,7 +63,7 @@ class BatchDefMLFuzzyDHondtDirectOptimizeINF(ABatchDefinitionML):
         aDescFuzzyHontDirectOptimizeINF:AggregationDescription = InputAggrDefinition.exportADescDFuzzyHondtDirectOptimizeINF(selector, nImplFeedback)
 
         pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
-            "FuzzyDHondtDirectOptimizeINF" + jobID, rIDs, rDescs, aDescFuzzyHontDirectOptimizeINF)
+            self.getBatchName() + jobID, rIDs, rDescs, aDescFuzzyHontDirectOptimizeINF)
 
         model:DataFrame = ModelDefinition.createDHontModel(pDescr.getRecommendersIDs())
 

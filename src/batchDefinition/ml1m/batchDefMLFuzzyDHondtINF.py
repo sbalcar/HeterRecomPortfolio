@@ -44,6 +44,9 @@ class BatchMLFuzzyDHondtINF(ABatchDefinitionML):
     lrClicks:List[float] = [0.2, 0.1, 0.03, 0.005]
     lrViewDivisors:List[float] = [250, 500, 1000]
 
+    def getBatchName(self):
+        return "FDHondtINF"
+
     @staticmethod
     def getNegativeImplFeedbackParameters_():
 
@@ -112,7 +115,7 @@ class BatchMLFuzzyDHondtINF(ABatchDefinitionML):
         aDescNegDHont:AggregationDescription = InputAggrDefinition.exportADescDHondtINF(selector, nImplFeedback)
 
         pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
-            "FDHondtINF" + jobID, rIDs, rDescs, aDescNegDHont)
+            self.getBatchName() + jobID, rIDs, rDescs, aDescNegDHont)
 
         model:DataFrame = ModelDefinition.createDHontModel(pDescr.getRecommendersIDs())
 

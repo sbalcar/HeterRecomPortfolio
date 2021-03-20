@@ -37,6 +37,9 @@ from batchDefinition.ml1m.batchDefMLFuzzyDHondt import BatchDefMLFuzzyDHondt #cl
 
 class BatchDefSTFuzzyDHondt(ABatchDefinitionST):
 
+    def getBatchName(self):
+        return "FDHondt"
+
     def getParameters(self):
         return BatchDefMLFuzzyDHondt().getParameters()
 
@@ -56,7 +59,7 @@ class BatchDefSTFuzzyDHondt(ABatchDefinitionST):
         aDescDHont:AggregationDescription = InputAggrDefinition.exportADescDHondt(selector)
 
         pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
-            "FDHondt" + jobID, rIDs, rDescs, aDescDHont)
+            self.getBatchName() + jobID, rIDs, rDescs, aDescDHont)
 
         model:DataFrame = ModelDefinition.createDHontModel(pDescr.getRecommendersIDs())
 

@@ -33,9 +33,11 @@ from history.historyHierDF import HistoryHierDF #class
 
 class BatchDefSTFuzzyDHondtThompsonSampling(ABatchDefinitionST):
 
-    @staticmethod
-    def getParameters():
-        return BatchDefMLFuzzyDHondtThompsonSampling.getParameters()
+    def getBatchName(self):
+        return "DHondtThompsonSampling"
+    
+    def getParameters(self):
+        return BatchDefMLFuzzyDHondtThompsonSampling().getParameters()
 
     def run(self, batchID:str, jobID:str):
 
@@ -53,7 +55,7 @@ class BatchDefSTFuzzyDHondtThompsonSampling(ABatchDefinitionST):
         aDescDHontThompsonSamplingI:AggregationDescription = InputAggrDefinition.exportADescDHondtThompsonSampling(selector)
 
         pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
-            "DHondtThompsonSampling" + jobID, rIDs, rDescs, aDescDHontThompsonSamplingI)
+            self.getBatchName() + jobID, rIDs, rDescs, aDescDHontThompsonSamplingI)
 
         model:DataFrame = ModelDefinition.createDHondtBanditsVotesModel(pDescr.getRecommendersIDs())
 

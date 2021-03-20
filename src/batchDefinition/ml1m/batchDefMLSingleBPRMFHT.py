@@ -42,13 +42,15 @@ class BatchDefMLSingleBPRMFHT(ABatchDefinitionML):
     learningRates:List[int] = [0.1, 0.03, 0.01, 0.003]
     regularizations:List[int] = [0.1, 0.03, 0.01, 0.003]
 
-    @classmethod
-    def getParameters(cls):
+    def getBatchName(self):
+        return "SingleBPRMFHT"
+
+    def getParameters(self):
         aDict:Dict[str,object] = {}
-        for factorI in cls.factors:
-            for iterationI in cls.iterations:
-                for learningRateI in cls.learningRates:
-                    for regularizationI in cls.regularizations:
+        for factorI in self.factors:
+            for iterationI in self.iterations:
+                for learningRateI in self.learningRates:
+                    for regularizationI in self.regularizations:
                         keyI:str = "f" + str(factorI) + "i" + str(iterationI) +\
                                    "lr" + str(learningRateI).replace('.', '') + "r" + str(regularizationI).replace('.', '')
 

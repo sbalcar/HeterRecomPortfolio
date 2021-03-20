@@ -38,6 +38,9 @@ from batchDefinition.ml1m.batchDefMLFuzzyDHondt import BatchDefMLFuzzyDHondt #cl
 
 class BatchDefSTWeightedAVG(ABatchDefinitionST):
 
+    def getBatchName(self):
+        return "WAVG"
+
     def getParameters(self):
         batchDefMLWeightedAVG = BatchDefMLWeightedAVG()
         batchDefMLWeightedAVG.lrClicks: List[float] = [0.03]
@@ -59,7 +62,7 @@ class BatchDefSTWeightedAVG(ABatchDefinitionST):
         aDescWeightedAVG:AggregationDescription = InputAggrDefinition.exportADescWeightedAVG()
 
         pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
-            "WAVG" + jobID, rIDs, rDescs, aDescWeightedAVG)
+            self.getBatchName() + jobID, rIDs, rDescs, aDescWeightedAVG)
 
         model:DataFrame = ModelDefinition.createDHontModel(pDescr.getRecommendersIDs())
 

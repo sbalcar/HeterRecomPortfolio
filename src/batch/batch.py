@@ -6,16 +6,6 @@ from typing import List #class
 from typing import Dict #class
 
 from configuration.configuration import Configuration #class
-from pandas.core.frame import DataFrame #class
-
-from evaluationTool.aEvalTool import AEvalTool #class
-
-from portfolioDescription.aPortfolioDescription import APortfolioDescription #class
-
-from simulator.simulator import Simulator #class
-
-from history.aHistory import AHistory #class
-
 
 
 class Batch:
@@ -30,9 +20,14 @@ class Batch:
 
 
     def exists(self):
-        job:str = str(self.batchDefinitionClass) + self.jobID
+        #print(str(self.batchDefinitionClass))
+        from execute.generateBatches import getBatchInstance  # class
+        aa = getBatchInstance(self.batchDefinitionClass)
+        job:str = str(aa.getBatchName()) + self.jobID
 
-        fname:str = Configuration.resultsDirectory + os.sep + self.batchID + os.sep + job + ".txt"
+        fname:str = Configuration.resultsDirectory + os.sep + self.batchID + os.sep + "computation-" + job + ".txt"
+        #print(fname)
+
         return os.path.isfile(fname)
 
 

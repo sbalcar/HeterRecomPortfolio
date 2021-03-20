@@ -37,8 +37,10 @@ from batchDefinition.ml1m.batchDefMLSingleVMContextKNNHT import BatchDefMLSingle
 
 class BatchDefRRSingleVMContextKNNHT(ABatchDefinitionRR):
 
-    @classmethod
-    def getParameters(cls):
+    def getBatchName(self):
+        return "Single"
+    
+    def getParameters(self):
         return BatchDefMLSingleVMContextKNNHT.getParameters()
 
 

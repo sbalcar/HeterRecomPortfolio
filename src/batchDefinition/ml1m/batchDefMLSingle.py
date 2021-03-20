@@ -32,8 +32,10 @@ from batchDefinition.aBatchDefinitionML import ABatchDefinitionML #class
 
 class BatchDefMLSingle(ABatchDefinitionML):
 
-    @classmethod
-    def getParameters(cls):
+    def getBatchName(self):
+        return "Single"
+
+    def getParameters(self):
 
         rIDs, rDescr = InputRecomMLDefinition.exportPairOfRecomIdsAndRecomDescrs()
 
@@ -64,7 +66,7 @@ class BatchDefMLSingle(ABatchDefinitionML):
         rDescr:str = self.getParameters()[jobID]
         recommenderID:str = jobID
 
-        pDescr:APortfolioDescription = Portfolio1MethDescription("Single" + recommenderID.title(), recommenderID, rDescr)
+        pDescr:APortfolioDescription = Portfolio1MethDescription(self.getBatchName() + recommenderID.title(), recommenderID, rDescr)
 
         simulator:Simulator = InputSimulatorDefinition.exportSimulatorML1M(
                 batchID, divisionDatasetPercentualSize, uBehaviour, repetition)

@@ -56,9 +56,11 @@ from batchDefinition.ml1m.batchDefMLFuzzyDHondt import BatchDefMLFuzzyDHondt #cl
 
 class BatchDefMLContextFuzzyDHondtDirectOptimizeINF(ABatchDefinitionML):
 
-    @classmethod
-    def getParameters(cls):
-        return BatchDefMLContextDHondtINF.getParameters()
+    def getBatchName(self):
+        return "ContextFDHondtDirectOptimizeINF"
+
+    def getParameters(self):
+        return BatchDefMLContextDHondtINF().getParameters()
 
     def run(self, batchID:str, jobID:str):
 
@@ -87,7 +89,7 @@ class BatchDefMLContextFuzzyDHondtDirectOptimizeINF(ABatchDefinitionML):
         aDescDHont:AggregationDescription = InputAggrDefinition.exportADescContextFuzzyDHondtDirectOptimizeINF(selector, nImplFeedback, eTool)
 
         pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
-            "ContextFDHondtDirectOptimizeINF" + jobID, rIDs, rDescs, aDescDHont)
+            self.getBatchName() + jobID, rIDs, rDescs, aDescDHont)
 
         model:DataFrame = ModelDefinition.createDHontModel(pDescr.getRecommendersIDs())
 

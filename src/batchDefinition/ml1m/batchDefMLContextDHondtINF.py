@@ -54,8 +54,10 @@ from datasets.ml.ratings import Ratings #class
 
 class BatchDefMLContextDHondtINF(ABatchDefinitionML):
 
-    @staticmethod
-    def getParameters():
+    def getBatchName(self):
+        return "ContextDHondtINF"
+    
+    def getParameters(self):
         negativeImplFeedbackDict:Dict[str,object] = BatchMLFuzzyDHondtINF.getNegativeImplFeedbackParameters()
         selectorDict:Dict[str,object] = BatchDefMLFuzzyDHondt().getSelectorParameters()
 
@@ -82,7 +84,7 @@ class BatchDefMLContextDHondtINF(ABatchDefinitionML):
         negativeImplFeedback:APenalization
         selector, negativeImplFeedback = self.getParameters()[jobID]
 
-        portfolioID:str = "ContextDHondtINF" + jobID
+        portfolioID:str = self.getBatchName() + jobID
 
         history:AHistory = HistoryHierDF(portfolioID)
 

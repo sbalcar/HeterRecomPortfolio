@@ -35,10 +35,11 @@ from batchDefinition.ml1m.batchDefMLSingleVMContextKNNHT import BatchDefMLSingle
 
 class BatchDefSTSingleVMContextKNNHT(ABatchDefinitionST):
 
-    @staticmethod
-    def getParameters():
-        return BatchDefMLSingleVMContextKNNHT.getParameters()
-
+    def getBatchName(self):
+        return "SingleVMContextKNNHT"
+    
+    def getParameters(self):
+        return BatchDefMLSingleVMContextKNNHT().getParameters()
 
 
     def run(self, batchID:str, jobID:str):

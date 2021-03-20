@@ -35,6 +35,9 @@ from history.historyHierDF import HistoryHierDF #class
 
 class BatchDefMLSingleINF(ABatchDefinitionML):
 
+    def getBatchName(self):
+        return "SingleINF"
+
     @staticmethod
     def getParameters():
 

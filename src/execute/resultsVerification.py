@@ -7,24 +7,23 @@ import os
 import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
-# sphinx_gallery_thumbnail_number = 2
-
-from configuration.configuration import Configuration #class
 
 import random
 import numpy as np
 
 from typing import List
-from batch.batch import Batch #class
+import batch.batch
 
 from execute.generateBatches import getBatchesJournal #function
+
+
 
 def verificationJournal():
     print("Verification Journal")
 
     batchesDef:List = getBatchesJournal()
 
-    batches:List[Batch] = []
+    batches:List[batch.batch.Batch] = []
     for batcheDefI in batchesDef:
         batches.extend(batcheDefI.getAllBatches())
 
@@ -32,9 +31,12 @@ def verificationJournal():
     for batchI in batches:
         #print(batchI)
         if (not batchI.exists()):
-            print(batchI.batchID)
-            print(batchI.jobID)
-            print("KO")
+            pass
+            #print("KO")
+            #print(batchI.batchID)
+            #print(batchI.jobID)
+        else:
+            print("OK")
 
 
 def resultsVerification():
