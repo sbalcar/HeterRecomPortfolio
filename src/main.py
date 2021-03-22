@@ -30,6 +30,7 @@ def main2():
 
 
 if __name__ == "__main__":
+  #generateBatches()
 
   if len(sys.argv) == 2 and sys.argv[1] == "-generateBatches":
       generateBatches()

@@ -19,7 +19,7 @@ class Batch:
         self.batchDefinitionClass.run(self.batchID, self.jobID)
 
 
-    def exists(self):
+    def getFileName(self):
         #print(str(self.batchDefinitionClass))
         from execute.generateBatches import getBatchInstance  # class
         aa = getBatchInstance(self.batchDefinitionClass)
@@ -28,7 +28,7 @@ class Batch:
         fname:str = Configuration.resultsDirectory + os.sep + self.batchID + os.sep + "computation-" + job + ".txt"
         #print(fname)
 
-        return os.path.isfile(fname)
+        return fname
 
 
 

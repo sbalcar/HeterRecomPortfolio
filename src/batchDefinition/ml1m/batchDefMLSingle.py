@@ -33,7 +33,7 @@ from batchDefinition.aBatchDefinitionML import ABatchDefinitionML #class
 class BatchDefMLSingle(ABatchDefinitionML):
 
     def getBatchName(self):
-        return "Single"
+        return ""
 
     def getParameters(self):
 

@@ -18,6 +18,9 @@ from execute.generateBatches import getBatchesJournal #function
 
 
 
+def resultsVerification():
+    verificationJournal()
+
 def verificationJournal():
     print("Verification Journal")
 
@@ -30,24 +33,20 @@ def verificationJournal():
     print("Batches: " + str(len(batches)))
     for batchI in batches:
         #print(batchI)
-        if (not batchI.exists()):
+        if (not os.path.isfile(batchI.getFileName())):
             pass
-            #print("KO")
+            print("KO")
             #print(batchI.batchID)
             #print(batchI.jobID)
         else:
-            print("OK")
-
-
-def resultsVerification():
-    verificationJournal()
+            pass
+            #print("OK")
 
 
 if __name__ == "__main__":
+    np.random.seed(42)
+    random.seed(42)
 
-  np.random.seed(42)
-  random.seed(42)
+    os.chdir("..")
 
-  os.chdir("..")
-
-  resultsVerification()
+    resultsVerification()

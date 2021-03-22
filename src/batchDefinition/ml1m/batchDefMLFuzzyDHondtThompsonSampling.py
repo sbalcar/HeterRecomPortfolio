@@ -34,14 +34,15 @@ from history.historyHierDF import HistoryHierDF #class
 
 class BatchDefMLFuzzyDHondtThompsonSampling(ABatchDefinitionML):
 
+    selectorIDs:List[str] = [BatchDefMLFuzzyDHondt.SLCTR_FIXED]
+
     def getBatchName(self):
         return "FuzzyDHondtThompsonSampling"
     
     def getParameters(self):
-        selectorIDs:List[str] = BatchDefMLFuzzyDHondt().getSelectorParameters().keys()
 
         aDict:dict = {}
-        for selectorIDI in selectorIDs:
+        for selectorIDI in self.selectorIDs:
             keyIJ:str = str(selectorIDI)
             eTool:AEvalTool = EvalToolDHondtBanditVotes({})
             selectorIJK:ADHondtSelector = BatchDefMLFuzzyDHondt().getSelectorParameters()[selectorIDI]

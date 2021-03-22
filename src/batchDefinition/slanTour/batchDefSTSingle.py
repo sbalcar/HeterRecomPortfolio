@@ -35,7 +35,7 @@ from batchDefinition.aBatchDefinitionST import ABatchDefinitionST #class
 class BatchDefSTSingle(ABatchDefinitionST):
 
     def getBatchName(self):
-        return "Single"
+        return ""
     
     def getParameters(self):
 
