@@ -42,7 +42,7 @@ class BatchDefMLFuzzyDHondtDirectOptimizeThompsonSamplingINF(ABatchDefinitionML)
 
     selectorIDs:List[str] = BatchDefMLFuzzyDHondt.selectorIDs
     negativeImplFeedback:List[str] = BatchDefMLFuzzyDHondtThompsonSamplingINF().getPenalFncs().keys()
-    discFactors:List[str] = BatchDefMLFuzzyDHondtDirectOptimizeThompsonSampling.discFactors
+    #discFactors:List[str] = BatchDefMLFuzzyDHondtDirectOptimizeThompsonSampling.discFactors
 
     def getBatchName(self):
         return "FDHondtDirectOptimizeThompsonSamplingINF"

@@ -28,6 +28,8 @@ from batchDefinition.inputABatchDefinition import InputABatchDefinition
 from batchDefinition.aBatchDefinitionML import ABatchDefinitionML #class
 from batchDefinition.ml1m.batchDefMLFuzzyDHondtDirectOptimizeThompsonSampling import BatchDefMLFuzzyDHondtDirectOptimizeThompsonSampling #class
 
+from batchDefinition.ml1m.batchDefMLFuzzyDHondt import BatchDefMLFuzzyDHondt #class
+
 from batchDefinition.inputSimulatorDefinition import InputSimulatorDefinition #class
 
 from simulator.simulator import Simulator #class
@@ -41,13 +43,24 @@ class BatchDefMLFuzzyDHondtDirectOptimizeThompsonSamplingMMR(ABatchDefinitionML)
     SLCTR_ROULETTE2:str = BatchDefMLFuzzyDHondtDirectOptimizeThompsonSampling.SLCTR_ROULETTE2
     SLCTR_FIXED:str = BatchDefMLFuzzyDHondtDirectOptimizeThompsonSampling.SLCTR_FIXED
 
+
+    selectorIDs:List[str] = BatchDefMLFuzzyDHondt.selectorIDs
+    discFactors:List[str] = [AggrDHondtDirectOptimizeThompsonSampling.DISCFACTOR_DCG,
+                             AggrDHondtDirectOptimizeThompsonSampling.DISCFACTOR_POWERLAW]
+
     def getBatchName(self):
         return "FDHondtDirectOptimizeThompsonSamplingMMR"
 
     def getParameters(self):
-        batchDefMLFuzzyDHondtDirectOptimizeThompsonSampling = BatchDefMLFuzzyDHondtDirectOptimizeThompsonSampling()
-        batchDefMLFuzzyDHondtDirectOptimizeThompsonSampling.selectorIDs = self.selectorIDs
-        return batchDefMLFuzzyDHondtDirectOptimizeThompsonSampling.getParameters()
+
+        aDict:Dict[str,object] = {}
+        for selectorIDI in self.selectorIDs:
+            for discFactorsI in self.discFactors:
+                keyIJ:str = str(selectorIDI) + discFactorsI
+                selectorIJK:ADHondtSelector = BatchDefMLFuzzyDHondt().getSelectorParameters()[selectorIDI]
+                aDict[keyIJ] = (selectorIJK, discFactorsI)
+        return aDict
+
 
     def run(self, batchID:str, jobID:str):
 

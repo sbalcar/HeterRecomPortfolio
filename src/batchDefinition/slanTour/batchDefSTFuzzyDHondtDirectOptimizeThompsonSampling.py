@@ -33,6 +33,7 @@ from simulator.simulator import Simulator #class
 from history.historyHierDF import HistoryHierDF #class
 
 from batchDefinition.ml1m.batchDefMLFuzzyDHondtDirectOptimizeThompsonSampling import BatchDefMLFuzzyDHondtDirectOptimizeThompsonSampling #class
+from batchDefinition.ml1m.batchDefMLFuzzyDHondt import BatchDefMLFuzzyDHondt #class
 
 
 class BatchDefSTFuzzyDHondtDirectOptimizeThompsonSampling(ABatchDefinitionST):
@@ -40,6 +41,8 @@ class BatchDefSTFuzzyDHondtDirectOptimizeThompsonSampling(ABatchDefinitionST):
     SLCTR_ROULETTE1:str = BatchDefMLFuzzyDHondtDirectOptimizeThompsonSampling.SLCTR_ROULETTE1
     SLCTR_ROULETTE2:str = BatchDefMLFuzzyDHondtDirectOptimizeThompsonSampling.SLCTR_ROULETTE2
     SLCTR_FIXED:str = BatchDefMLFuzzyDHondtDirectOptimizeThompsonSampling.SLCTR_FIXED
+
+    selectorIDs:List[str] = BatchDefMLFuzzyDHondt.selectorIDs
 
     def getBatchName(self):
         return "FDHondtDirectOptimizeThompsonSampling"

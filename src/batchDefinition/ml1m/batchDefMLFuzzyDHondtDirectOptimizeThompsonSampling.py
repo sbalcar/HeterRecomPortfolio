@@ -43,22 +43,14 @@ class BatchDefMLFuzzyDHondtDirectOptimizeThompsonSampling(ABatchDefinitionML):
     SLCTR_FIXED:str = "Fixed"
 
     selectorIDs:List[str] = BatchDefMLFuzzyDHondt.selectorIDs
-    discFactors:List[str] = [AggrDHondtDirectOptimizeThompsonSampling.DISCFACTOR_DCG,
-                             AggrDHondtDirectOptimizeThompsonSampling.DISCFACTOR_POWERLAW,
-                             AggrDHondtDirectOptimizeThompsonSampling.DISCFACTOR_UNIFORM]
 
     def getBatchName(self):
         return "FDHondtDirectOptimizeThompsonSampling"
 
     def getParameters(self):
-
-        aDict:Dict[str,object] = {}
-        for selectorIDI in self.selectorIDs:
-            for discFactorsI in self.discFactors:
-                keyIJ:str = str(selectorIDI) + discFactorsI
-                selectorIJK:ADHondtSelector = BatchDefMLFuzzyDHondt().getSelectorParameters()[selectorIDI]
-                aDict[keyIJ] = (selectorIJK, discFactorsI)
-        return aDict
+        batchDefMLFuzzyDHondt = BatchDefMLFuzzyDHondt()
+        batchDefMLFuzzyDHondt.selectorIDs = self.selectorIDs
+        return batchDefMLFuzzyDHondt.getSelectorParameters()
 
     def run(self, batchID:str, jobID:str):
 

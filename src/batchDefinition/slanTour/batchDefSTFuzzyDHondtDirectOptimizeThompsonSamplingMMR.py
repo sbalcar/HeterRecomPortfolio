@@ -34,6 +34,8 @@ from history.historyHierDF import HistoryHierDF #class
 
 from batchDefinition.ml1m.batchDefMLFuzzyDHondtDirectOptimizeThompsonSamplingMMR import BatchDefMLFuzzyDHondtDirectOptimizeThompsonSamplingMMR #class
 
+from aggregation.aggrDHondtDirectOptimizeThompsonSampling import AggrDHondtDirectOptimizeThompsonSampling #class
+
 
 class BatchDefSTFuzzyDHondtDirectOptimizeThompsonSamplingMMR(ABatchDefinitionST):
 
@@ -41,12 +43,16 @@ class BatchDefSTFuzzyDHondtDirectOptimizeThompsonSamplingMMR(ABatchDefinitionST)
     SLCTR_ROULETTE2:str = BatchDefMLFuzzyDHondtDirectOptimizeThompsonSamplingMMR.SLCTR_ROULETTE2
     SLCTR_FIXED:str = BatchDefMLFuzzyDHondtDirectOptimizeThompsonSamplingMMR.SLCTR_FIXED
 
+    discFactors:List[str] = [AggrDHondtDirectOptimizeThompsonSampling.DISCFACTOR_DCG,
+                              AggrDHondtDirectOptimizeThompsonSampling.DISCFACTOR_POWERLAW]
+
     def getBatchName(self):
         return "FDHondtDirectOptimizeThompsonSamplingMMR"
 
     def getParameters(self):
         batchDefMLFuzzyDHondtDirectOptimizeThompsonSamplingMMR = BatchDefMLFuzzyDHondtDirectOptimizeThompsonSamplingMMR()
         batchDefMLFuzzyDHondtDirectOptimizeThompsonSamplingMMR.selectorIDs = self.selectorIDs
+        batchDefMLFuzzyDHondtDirectOptimizeThompsonSamplingMMR.discFactors = self.discFactors
         return batchDefMLFuzzyDHondtDirectOptimizeThompsonSamplingMMR.getParameters()
 
 

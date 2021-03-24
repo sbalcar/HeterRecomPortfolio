@@ -47,8 +47,12 @@ from datasets.ml.users import Users #class
 from datasets.ml.items import Items #class
 from datasets.ml.ratings import Ratings #class
 
+from batchDefinition.ml1m.batchDefMLFuzzyDHondtDirectOptimize import BatchDefMLFuzzyDHondtDirectOptimize #class
+
 
 class BatchDefMLContextDHondt(ABatchDefinitionML):
+
+    selectorIDs = [BatchDefMLFuzzyDHondtDirectOptimize.SLCTR_FIXED]
 
     def getBatchName(self):
         return "ContextDHondt"

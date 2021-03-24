@@ -33,14 +33,33 @@ def verificationJournal():
     print("Batches: " + str(len(batches)))
     for batchI in batches:
         #print(batchI)
-        if (not os.path.isfile(batchI.getFileName())):
+        if not os.path.isfile(batchI.getFileName()):
             pass
-            print("KO")
-            #print(batchI.batchID)
-            #print(batchI.jobID)
+            print("KO  " + batchI.getFileName())
         else:
             pass
             #print("OK")
+            results = readTheLastComputationResult(batchI.getFileName())
+            if int(results[0]) != 54400 and int(results[0]) != 9100:
+                print(results[0] + "  " + batchI.batchID + "/" + results[1] + "  " + results[2])
+
+
+def readTheLastComputationResult(fileName:str):
+    with open(fileName, 'r') as f:
+        lines = f.readlines()
+        iterationLine = lines[-3]
+        methods = lines[-2]
+        lastLine = lines[-1]
+
+    iterationLine = iterationLine.replace('RatingI: ', '')
+    iterationLine = iterationLine[:iterationLine.index(' /')]
+
+    lastLine = lastLine.replace("Evaluations: [{'clicks': ", "")
+    lastLine = lastLine.replace("}]\n", "")
+
+    methods = methods.replace("PortfolioIds: ['", "").replace("']\n", "")
+
+    return (iterationLine, methods, lastLine)
 
 
 if __name__ == "__main__":
