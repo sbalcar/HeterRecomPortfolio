@@ -49,6 +49,8 @@ class BatchDefSTFuzzyDHondtDirectOptimizeThompsonSampling(ABatchDefinitionST):
 
     def getParameters(self):
         batchDefMLFuzzyDHondtDirectOptimizeThompsonSampling = BatchDefMLFuzzyDHondtDirectOptimizeThompsonSampling()
+        batchDefMLFuzzyDHondtDirectOptimizeThompsonSampling.lrClicks:List[float] = self.lrClicks
+        batchDefMLFuzzyDHondtDirectOptimizeThompsonSampling.lrViewDivisors:List[float] = self.lrViewDivisors
         batchDefMLFuzzyDHondtDirectOptimizeThompsonSampling.selectorIDs = self.selectorIDs
         return batchDefMLFuzzyDHondtDirectOptimizeThompsonSampling.getParameters()
 
