@@ -42,6 +42,9 @@ class BatchDefSTFuzzyDHondtDirectOptimizeThompsonSampling(ABatchDefinitionST):
     SLCTR_ROULETTE2:str = BatchDefMLFuzzyDHondtDirectOptimizeThompsonSampling.SLCTR_ROULETTE2
     SLCTR_FIXED:str = BatchDefMLFuzzyDHondtDirectOptimizeThompsonSampling.SLCTR_FIXED
 
+    lrClicks:List[float] = [0.03]
+    lrViewDivisors:List[float] = [250]
+
     selectorIDs:List[str] = BatchDefMLFuzzyDHondt.selectorIDs
 
     def getBatchName(self):

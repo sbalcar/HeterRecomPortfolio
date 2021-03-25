@@ -34,6 +34,7 @@ from history.historyHierDF import HistoryHierDF #class
 
 from batchDefinition.ml1m.batchDefMLFuzzyDHondtDirectOptimize import BatchDefMLFuzzyDHondtDirectOptimize #clas
 
+from batchDefinition.ml1m.batchDefMLFuzzyDHondt import BatchDefMLFuzzyDHondt #class
 
 
 class BatchDefSTFuzzyDHondtDirectOptimize(ABatchDefinitionST):
@@ -41,6 +42,11 @@ class BatchDefSTFuzzyDHondtDirectOptimize(ABatchDefinitionST):
     SLCTR_ROULETTE1:str = BatchDefMLFuzzyDHondtDirectOptimize.SLCTR_ROULETTE1
     SLCTR_ROULETTE2:str = BatchDefMLFuzzyDHondtDirectOptimize.SLCTR_ROULETTE2
     SLCTR_FIXED:str = BatchDefMLFuzzyDHondtDirectOptimize.SLCTR_FIXED
+
+    lrClicks:List[float] = [0.03]
+    lrViewDivisors:List[float] = [250]
+
+    selectorIDs:List[str] = BatchDefMLFuzzyDHondt.selectorIDs
 
     def getBatchName(self):
         return "FDHondtDirectOptimize"
