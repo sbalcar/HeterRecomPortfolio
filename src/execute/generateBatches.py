@@ -349,6 +349,7 @@ def getBatchesJournal():
     batchDefSTFuzzyDHondtDirectOptimizeThompsonSamplingMMR = BatchDefSTFuzzyDHondtDirectOptimizeThompsonSamplingMMR()
     batchDefSTFuzzyDHondtDirectOptimizeThompsonSamplingMMR.selectorIDs = [BatchDefMLFuzzyDHondt.SLCTR_FIXED]
 
+
 #
     # INF
     batchDefSTFuzzyDHondtDirectOptimizeThompsonSamplingINF = BatchDefSTFuzzyDHondtDirectOptimizeThompsonSamplingINF()
@@ -393,6 +394,18 @@ def getBatchesJournal():
     return batchesDef
 
 
+def getBatchesJournal2():
+    print("Get Journal Batches 2")
+
+    batchesDef:List[ABatchDefinition] = []
+
+    # ML #############################################################################
+    batchDefRRSingle = BatchDefRRSingle()
+
+    batchesDef.append(batchDefRRSingle)
+    return batchesDef
+
+
 def generateBatches():
     print("Generate Batches")
 
@@ -400,8 +413,8 @@ def generateBatches():
     random.seed(42)
 
     #batchesDef: List = getAllBatches()
-    batchesDef:List = getBatchesJournal()
-
+    #batchesDef:List = getBatchesJournal()
+    batchesDef:List = getBatchesJournal2()
 
     for batchDefI in batchesDef:
         batchDefI.generateAllBatches()
