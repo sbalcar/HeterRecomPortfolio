@@ -60,14 +60,15 @@ class Events:
     def readFromFile():
         eventsFile: str = ".." + os.sep + "datasets" + os.sep + "slantour" + os.sep + "new_implicit_events.csv"
 
-#        eventsDF: DataFrame = pd.read_csv(eventsFile, sep=',', usecols=range(35), header=0, encoding="ISO-8859-1",
-#                                          engine='python')
+        #eventsDF: DataFrame = pd.read_csv(eventsFile, sep=',', usecols=range(35), header=0, encoding="ISO-8859-1", engine='python')
+        #eventsDF: DataFrame = pd.read_csv(eventsFile, sep=',', usecols=[1, 2, 3, 5, 14], header=0, encoding="ISO-8859-1", engine='python')
 
-        eventsDF: DataFrame = pd.read_csv(eventsFile, sep=',', usecols=[1, 2, 3, 5, 14], header=0,
-                                          encoding="ISO-8859-1", engine='python')
+        eventsDF: DataFrame = pd.read_csv(eventsFile, sep=',', usecols=[0, 1, 2, 3], header=0, encoding="ISO-8859-1", low_memory=False)
+        eventsDF.columns = [Events.COL_TIME_STAMP, Events.COL_VISITOR_ID, Events.COL_EVENT, Events.COL_ITEM_ID]
 
-        eventsDF[Events.COL_USER_ID] = eventsDF[Events.COL_USER_ID].astype(int)
-        eventsDF[Events.COL_OBJECT_ID] = eventsDF[Events.COL_OBJECT_ID].astype(int)
-        eventsDF[Events.COL_SESSION_ID] = eventsDF[Events.COL_SESSION_ID].astype(int)
+
+        #eventsDF[Events.COL_USER_ID] = eventsDF[Events.COL_USER_ID].astype(int)
+        #eventsDF[Events.COL_OBJECT_ID] = eventsDF[Events.COL_OBJECT_ID].astype(int)
+        #eventsDF[Events.COL_SESSION_ID] = eventsDF[Events.COL_SESSION_ID].astype(int)
 
         return eventsDF

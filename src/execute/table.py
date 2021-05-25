@@ -121,14 +121,13 @@ def generateTables():
 
     batchDefClasses: List[str] = [BatchDefSTSingle,
 
-#        BatchDefSTBanditTS, BatchDefSTWeightedAVG, BatchDefSTWeightedAVGMMR,
+        #BatchDefSTBanditTS, BatchDefSTWeightedAVG, BatchDefSTWeightedAVGMMR,
         BatchDefSTBanditTS, BatchDefSTWeightedAVG,
         BatchDefSTRandomRecsSwitching, BatchDefSTRandomKfromN, BatchDefSTFuzzyDHondt,
-        BatchDefSTFuzzyDHondtThompsonSampling, BatchDefSTContextDHondt, BatchDefSTFuzzyDHondtDirectOptimize,
-
+        #BatchDefSTFuzzyDHondtThompsonSampling, BatchDefSTContextDHondt, BatchDefSTFuzzyDHondtDirectOptimize,
         BatchDefSTFuzzyDHondtThompsonSampling, BatchDefSTContextDHondt,
+        #BatchDefSTFuzzyDHondtDirectOptimizeThompsonSampling, BatchDefSTFuzzyDHondtDirectOptimizeThompsonSamplingMMR,
         BatchDefSTContextFuzzyDHondtDirectOptimize,
-#        BatchDefSTFuzzyDHondtDirectOptimizeThompsonSampling, BatchDefSTFuzzyDHondtDirectOptimizeThompsonSamplingMMR,
 
         BatchDefSTFuzzyDHondtDirectOptimizeThompsonSamplingINF, BatchDefSTContextDHondtINF,
         BatchDefSTContextFuzzyDHondtDirectOptimizeINF, BatchDefSTDFuzzyHondtThompsonSamplingINF]

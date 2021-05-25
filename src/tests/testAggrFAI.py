@@ -34,17 +34,17 @@ def test01():
     }
     # print(methodsResultDict)
 
-    aggr: AggrFAI = AggrFAI(HistoryDF(""), {})
+    aggr:AggrFAI = AggrFAI(HistoryDF(""), {})
 
-    userID: int = 101
-    itemIDs: List[tuple] = aggr.runWithResponsibility(methodsResultDict, {}, userID, N)
+    userID:int = 101
+    itemIDs:List[tuple] = aggr.runWithResponsibility(methodsResultDict, {}, userID, N)
     print(itemIDs)
 
-    itemIDs: List[tuple] = aggr.runWithResponsibility(methodsResultDict, {}, userID, N)
+    itemIDs:List[tuple] = aggr.runWithResponsibility(methodsResultDict, {}, userID, N)
     print(itemIDs)
 
-    userID: int = 102
-    itemIDs: List[tuple] = aggr.runWithResponsibility(methodsResultDict, {}, userID, N)
+    userID:int = 102
+    itemIDs:List[tuple] = aggr.runWithResponsibility(methodsResultDict, {}, userID, N)
     print(itemIDs)
 
 

@@ -4,6 +4,7 @@ from aggregationDescription.aggregationDescription import AggregationDescription
 
 from aggregation.aggrWeightedAVG import AggrWeightedAVG #class
 from aggregation.aggrMMRWeightedAVG import AggrMMRWeightedAVG #class
+from aggregation.aggrFAI import AggrFAI #class
 from aggregation.aggrBanditTS import AggrBanditTS #class
 from aggregation.aggrFuzzyDHondt import AggrFuzzyDHondt #class
 from aggregation.aggrDHondtThompsonSampling import AggrDHondtThompsonSampling #class
@@ -47,6 +48,10 @@ class InputAggrDefinition:
         return AggregationDescription(AggrMMRWeightedAVG, {
                             })
 
+    @staticmethod
+    def exportADescFAI():
+        return AggregationDescription(AggrFAI, {
+                            })
 
     @staticmethod
     def exportADescBanditTS(selector:ADHondtSelector):

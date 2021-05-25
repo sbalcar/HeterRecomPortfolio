@@ -3,12 +3,11 @@
 import os
 
 from typing import List
+from typing import Dict
 
 from pandas.core.frame import DataFrame #class
 
 from portfolioDescription.portfolio1MethDescription import Portfolio1MethDescription #class
-
-from batchDefinition.inputRecomMLDefinition import InputRecomMLDefinition #class
 
 from portfolioDescription.aPortfolioDescription import APortfolioDescription #class
 
@@ -27,6 +26,7 @@ from batchDefinition.aBatchDefinition import ABatchDefinition #class
 from batchDefinition.inputABatchDefinition import InputABatchDefinition
 
 from batchDefinition.aBatchDefinitionRR import ABatchDefinitionRR #class
+from batchDefinition.inputRecomRRDefinition import InputRecomRRDefinition #class
 
 
 class BatchDefRRSingle(ABatchDefinitionRR):
@@ -36,9 +36,9 @@ class BatchDefRRSingle(ABatchDefinitionRR):
     
     def getParameters(self):
 
-        aDict:dict = {}
-        aDict[InputRecomMLDefinition.THE_MOST_POPULAR] = InputRecomMLDefinition.THE_MOST_POPULAR
-        aDict[InputRecomMLDefinition.BPRMFf100i10lr0003r01] = InputRecomMLDefinition.BPRMFf100i10lr0003r01
+        aDict:Dict[str,str] = {}
+        aDict[InputRecomRRDefinition.THE_MOST_POPULAR] = InputRecomRRDefinition.THE_MOST_POPULAR
+        aDict[InputRecomRRDefinition.KNN] = InputRecomRRDefinition.KNN
 
         return aDict
 
@@ -52,7 +52,7 @@ class BatchDefRRSingle(ABatchDefinitionRR):
 
         recommenderID:str = self.getParameters()[jobID]
 
-        rDescr:RecommenderDescription = InputRecomMLDefinition.exportInputRecomDefinition(recommenderID)
+        rDescr:RecommenderDescription = InputRecomRRDefinition.exportInputRecomDefinition(recommenderID)
 
         pDescr:APortfolioDescription = Portfolio1MethDescription(recommenderID.title(), recommenderID, rDescr)
 
@@ -66,4 +66,8 @@ if __name__ == "__main__":
    os.chdir("..")
    os.chdir("..")
    print(os.getcwd())
-   BatchDefRRSingle.generateAllBatches()
+
+   #BatchDefRRSingle().generateAllBatches()
+
+   #BatchDefRRSingle().run("rrDiv90Ulinear0109R1", "TheMostPopular")
+   BatchDefRRSingle().run('rrDiv90Ulinear0109R1', 'KNN')

@@ -117,7 +117,7 @@ $ ./generateBatches.sh
 ```
 
 #### Run input batches
-The systems in each run takes one file (Batch instance) from the input directory, deletes it and runs it.
+The systems in each run takes one file (TaskDefinition instance) from the input directory, deletes it and runs it.
 
 ```sh
 $ cp -r batches/* inputs/
@@ -139,11 +139,11 @@ $ ./run.sh
 - after that is necessary to create corresponding descriptive child class of [APortfolioDescription](src/portfolioDescription/aPortfolioDescription.py)
 - it's necessary to extends child classes of [ASequentialSimulator](src/simulation/aSequentialSimulation.py) with capability to process this new portfolio architecture
 
-#### How to add new input Batch definition:
-- create new child class of [ABatch](src/input/aBatch.py)
+#### How to add new input TaskDefinition definition:
+- create new child class of [ABatchDefinition](src/input/aBatchDefinition.py)
 - we recommend adding a call to this class' function generateBatches into file [generateBatches](src/execute/generateBatches.py)
 
 #### How to add new dataset:
-- adding the new dataset requires changing child class of [ARecommender](src/recommender/aRecommender.py), adding new [batches](src/input/aBatch.py) and update of [simulation](src/simulation/aSequentialSimulation.py)
+- adding the new dataset requires changing child class of [ARecommender](src/recommender/aRecommender.py), adding new [batches](src/input/aBatchDefinition.py) and update of [simulation](src/simulation/aSequentialSimulation.py)
 
 

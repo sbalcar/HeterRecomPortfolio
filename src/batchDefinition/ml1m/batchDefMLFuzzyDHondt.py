@@ -37,12 +37,12 @@ from history.historyHierDF import HistoryHierDF #class
 class BatchDefMLFuzzyDHondt(ABatchDefinitionML):
 
     SLCTR_ROULETTE1:str = "Roulette1"
-    SLCTR_ROULETTE2:str = "Roulette3"
+    SLCTR_ROULETTE3:str = "Roulette3"
     SLCTR_FIXED:str = "Fixed"
 
     lrClicks:List[float] = [0.2, 0.1, 0.03, 0.005]
     lrViewDivisors:List[float] = [250, 500, 1000]
-    selectorIDs:List[str] = [SLCTR_ROULETTE1, SLCTR_ROULETTE2, SLCTR_FIXED]
+    selectorIDs:List[str] = [SLCTR_ROULETTE1, SLCTR_ROULETTE3, SLCTR_FIXED]
 
     def getBatchName(self):
         return "FDHondt"
@@ -55,7 +55,7 @@ class BatchDefMLFuzzyDHondt(ABatchDefinitionML):
 
         aDict:Dict[str,object] = {}
         aDict[BatchDefMLFuzzyDHondt.SLCTR_ROULETTE1] = selectorRoulette1
-        aDict[BatchDefMLFuzzyDHondt.SLCTR_ROULETTE2] = selectorRoulette3
+        aDict[BatchDefMLFuzzyDHondt.SLCTR_ROULETTE3] = selectorRoulette3
         aDict[BatchDefMLFuzzyDHondt.SLCTR_FIXED] = selectorFixed
 
         return aDict

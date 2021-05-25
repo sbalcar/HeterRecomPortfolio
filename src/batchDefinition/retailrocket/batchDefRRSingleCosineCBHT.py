@@ -9,8 +9,6 @@ from pandas.core.frame import DataFrame #class
 
 from portfolioDescription.portfolio1MethDescription import Portfolio1MethDescription #class
 
-from batchDefinition.inputRecomMLDefinition import InputRecomMLDefinition #class
-
 from portfolioDescription.aPortfolioDescription import APortfolioDescription #class
 
 from evaluationTool.evalToolDoNothing import EToolDoNothing #class
@@ -70,4 +68,6 @@ if __name__ == "__main__":
     os.chdir("..")
     print(os.getcwd())
 
-    BatchDefRRSingleCosineCBHT.generateAllBatches()
+    #BatchDefRRSingleCosineCBHT().generateAllBatches()
+
+    BatchDefRRSingleCosineCBHT().run('rrDiv90Ulinear0109R1', 'cbdOHEupsmaxups1')

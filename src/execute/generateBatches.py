@@ -23,6 +23,7 @@ from batchDefinition.ml1m.batchDefMLFuzzyDHondtDirectOptimizeINF import BatchDef
 
 from batchDefinition.ml1m.batchDefMLWeightedAVG import BatchDefMLWeightedAVG #class
 from batchDefinition.ml1m.batchDefMLWeightedAVGMMR import BatchDefMLWeightedAVGMMR #class
+from batchDefinition.ml1m.batchDefMLFAI import BatchDefMLFAI #cass
 
 from batchDefinition.ml1m.batchDefMLRandomRecsSwitching import BatchDefMLRandomRecsSwitching #class
 from batchDefinition.ml1m.batchDefMLRandomKfromN import BatchDefMLRandomKfromN #class
@@ -66,6 +67,8 @@ from batchDefinition.slanTour.batchDefSTFuzzyDHondtINF import BatchDefSTFuzzyDHo
 from batchDefinition.slanTour.batchDefSTFuzzyDHondt import BatchDefSTFuzzyDHondt #class
 from batchDefinition.slanTour.batchDefSTWeightedAVG import BatchDefSTWeightedAVG #class
 from batchDefinition.slanTour.batchDefSTWeightedAVGMMR import BatchDefSTWeightedAVGMMR #class
+from batchDefinition.slanTour.batchDefSTFAI import BatchDefSTFAI #cass
+
 from batchDefinition.slanTour.batchDefSTBanditTS import BatchDefSTBanditTS #class
 from batchDefinition.slanTour.batchDefSTRandomRecsSwitching import BatchDefSTRandomRecsSwitching #class
 from batchDefinition.slanTour.batchDefSTRandomKfromN import BatchDefSTRandomKfromN #class
@@ -100,6 +103,7 @@ def getAllBatches():
 
     batchDefMLWeightedAVG = BatchDefMLWeightedAVG()
     batchDefMLWeightedAVGMMR = BatchDefMLWeightedAVGMMR()
+    batchDefMLFAI = BatchDefMLFAI()
 
     batchDefMLRandomRecsSwitching = BatchDefMLRandomRecsSwitching()
     batchDefMLRandomKfromN = BatchDefMLRandomKfromN()
@@ -125,6 +129,7 @@ def getAllBatches():
     batchesDef.append(batchDefMLContextDHondt)
     batchesDef.append(batchDefMLWeightedAVG)
     batchesDef.append(batchDefMLWeightedAVGMMR)
+    batchesDef.append(batchDefMLFAI)
     batchesDef.append(batchDefMLRandomRecsSwitching)
     batchesDef.append(batchDefMLRandomKfromN)
     batchesDef.append(batchDefMLSingle)
@@ -154,6 +159,8 @@ def getAllBatches():
     batchDefSTFuzzyDHondt = BatchDefSTFuzzyDHondt()
     batchDefSTFuzzyDHondtINF = BatchDefSTFuzzyDHondtINF()
     batchDefSTWeightedAVG = BatchDefSTWeightedAVG()
+    batchDefSTFAI = BatchDefSTFAI()
+
     batchDefSTBanditTS = BatchDefSTBanditTS()
     batchDefSTRandomRecsSwitching = BatchDefSTRandomRecsSwitching()
     batchDefSTRandomKfromN = BatchDefSTRandomKfromN()
@@ -175,6 +182,7 @@ def getAllBatches():
     batchesDef.append(batchDefSTFuzzyDHondt)
     batchesDef.append(batchDefSTFuzzyDHondtINF)
     batchesDef.append(batchDefSTWeightedAVG)
+    batchesDef.append(batchDefSTFAI)
     batchesDef.append(batchDefSTBanditTS)
     batchesDef.append(batchDefSTRandomRecsSwitching)
     batchesDef.append(batchDefSTRandomKfromN)
@@ -228,6 +236,7 @@ def getBatchesJournal():
     batchDefMLWeightedAVGMMR.lrClicks:List[float] = [0.03]
     batchDefMLWeightedAVGMMR.lrViewDivisors:List[float] = [250]
 
+    batchDefMLFAI = BatchDefMLFAI()
 #
     batchDefMLRandomRecsSwitching = BatchDefMLRandomRecsSwitching()
 #
@@ -284,6 +293,7 @@ def getBatchesJournal():
     batchesDef.append(batchDefMLWeightedAVG)
     batchesDef.append(batchDefMLWeightedAVGMMR)
     batchesDef.append(batchDefMLWeightedAVGMMR)
+    batchesDef.append(batchDefMLFAI)
     batchesDef.append(batchDefMLRandomRecsSwitching)
     batchesDef.append(batchDefMLRandomKfromN)
     batchesDef.append(batchDefMLFuzzyDHondt)
@@ -320,6 +330,9 @@ def getBatchesJournal():
     batchDefSTWeightedAVG = BatchDefSTWeightedAVG()
     batchDefSTWeightedAVG.lrClicks:List[float] = [0.03]
     batchDefSTWeightedAVG.lrViewDivisors:List[float] = [250]
+
+    batchDefSTFAI = BatchDefSTFAI()
+
 #
     batchDefSTRandomRecsSwitching = BatchDefSTRandomRecsSwitching()
     batchDefSTRandomKfromN = BatchDefSTRandomKfromN()
@@ -374,6 +387,7 @@ def getBatchesJournal():
     batchesDef.append(batchDefSTSingle)
     batchesDef.append(batchDefSTBanditTS)
     batchesDef.append(batchDefSTWeightedAVG)
+    batchesDef.append(batchDefSTFAI)
     batchesDef.append(batchDefSTRandomRecsSwitching)
     batchesDef.append(batchDefSTRandomKfromN)
     batchesDef.append(batchDefSTFuzzyDHondt)
@@ -413,8 +427,8 @@ def generateBatches():
     random.seed(42)
 
     #batchesDef: List = getAllBatches()
-    #batchesDef:List = getBatchesJournal()
-    batchesDef:List = getBatchesJournal2()
+    batchesDef:List = getBatchesJournal()
+    #batchesDef:List = getBatchesJournal2()
 
     for batchDefI in batchesDef:
         batchDefI.generateAllBatches()

@@ -54,8 +54,8 @@ class AggrFAI(AAgregation):
 
     # methodsResultDict:{String:Series(rating:float[], itemID:int[])},
     # modelDF:DataFrame<(methodID:str, votes:int)>, numberOfItems:int
-    def runWithResponsibility(self, methodsResultDict: dict, modelDF: DataFrame, userID: int, numberOfItems: int,
-                              argumentsDict: Dict[str, object] = {}):
+    def runWithResponsibility(self, methodsResultDict:dict, modelDF:DataFrame, userID:int, numberOfItems:int,
+                              argumentsDict:Dict[str, object] = {}):
         # print("userID: " + str(userID))
 
         if type(methodsResultDict) is not dict:
@@ -67,8 +67,8 @@ class AggrFAI(AAgregation):
         if type(argumentsDict) is not dict:
             raise ValueError("Argument argumentsDict isn't type dict.")
 
-        methodsResultDictI: dict = methodsResultDict
-        methodsParamsDFI: DataFrame = modelDF
+        methodsResultDictI:dict = methodsResultDict
+        methodsParamsDFI:DataFrame = modelDF
 
         availableRecommenders = [i for i in methodsResultDictI.keys() if len(methodsResultDictI[i]) > 0]
         availableRecommenders = np.random.permutation(availableRecommenders)

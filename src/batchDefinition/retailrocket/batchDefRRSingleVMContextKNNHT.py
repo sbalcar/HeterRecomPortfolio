@@ -71,4 +71,6 @@ if __name__ == "__main__":
    os.chdir("..")
    #print(os.getcwd())
 
-   BatchDefRRSingleVMContextKNNHT.generateAllBatches()
+   #BatchDefRRSingleVMContextKNNHT().generateAllBatches()
+
+   BatchDefRRSingleVMContextKNNHT().run('rrDiv90Ulinear0109R1', 'K25')

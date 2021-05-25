@@ -2,7 +2,7 @@
 
 import os
 
-from typing import List #class
+from typing import List
 from typing import Dict #class
 
 from pandas.core.frame import DataFrame #class
@@ -10,7 +10,8 @@ from pandas.core.frame import DataFrame #class
 from portfolioDescription.portfolio1AggrDescription import Portfolio1AggrDescription #class
 
 from evaluationTool.aEvalTool import AEvalTool #class
-from evaluationTool.evalToolDHondtBanditVotes import EvalToolDHondtBanditVotes #class
+from evaluationTool.evalToolDHondt import EvalToolDHondt #class
+from evaluationTool.evalToolDoNothing import EToolDoNothing #class
 
 from aggregationDescription.aggregationDescription import AggregationDescription #class
 
@@ -32,28 +33,16 @@ from simulator.simulator import Simulator #class
 
 from history.historyHierDF import HistoryHierDF #class
 
-from batchDefinition.ml1m.batchDefMLFuzzyDHondtDirectOptimizeThompsonSampling import BatchDefMLFuzzyDHondtDirectOptimizeThompsonSampling #class
 from batchDefinition.ml1m.batchDefMLFuzzyDHondt import BatchDefMLFuzzyDHondt #class
 
 
-class BatchDefSTFuzzyDHondtDirectOptimizeThompsonSampling(ABatchDefinitionST):
-
-    SLCTR_ROULETTE1:str = BatchDefMLFuzzyDHondtDirectOptimizeThompsonSampling.SLCTR_ROULETTE1
-    SLCTR_ROULETTE2:str = BatchDefMLFuzzyDHondtDirectOptimizeThompsonSampling.SLCTR_ROULETTE2
-    SLCTR_FIXED:str = BatchDefMLFuzzyDHondtDirectOptimizeThompsonSampling.SLCTR_FIXED
-
-    lrClicks:List[float] = [0.03]
-    lrViewDivisors:List[float] = [250]
-
-    selectorIDs:List[str] = BatchDefMLFuzzyDHondt.selectorIDs
+class BatchDefSTFAI(ABatchDefinitionST):
 
     def getBatchName(self):
-        return "FDHondtDirectOptimizeThompsonSampling"
+        return "FAI"
 
     def getParameters(self):
-        batchDefMLFuzzyDHondtDirectOptimizeThompsonSampling = BatchDefMLFuzzyDHondtDirectOptimizeThompsonSampling()
-        batchDefMLFuzzyDHondtDirectOptimizeThompsonSampling.selectorIDs = self.selectorIDs
-        return batchDefMLFuzzyDHondtDirectOptimizeThompsonSampling.getParameters()
+        return {"":""}
 
 
     def run(self, batchID:str, jobID:str):
@@ -63,22 +52,21 @@ class BatchDefSTFuzzyDHondtDirectOptimizeThompsonSampling(ABatchDefinitionST):
         repetition:int
         divisionDatasetPercentualSize, uBehaviour, repetition = InputABatchDefinition.getBatchParameters(self.datasetID)[batchID]
 
-        selector = self.getParameters()[jobID]
-
-        eTool:AEvalTool = EvalToolDHondtBanditVotes({})
+        eTool:AEvalTool = EToolDoNothing({})
 
         rIDs, rDescs = InputRecomSTDefinition.exportPairOfRecomIdsAndRecomDescrs()
 
-        aDescDHont:AggregationDescription = InputAggrDefinition.exportADescDHondtDirectOptimizeThompsonSampling(selector)
+        aDescWeightedFAI:AggregationDescription = InputAggrDefinition.exportADescFAI()
 
         pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
-            self.getBatchName() + jobID, rIDs, rDescs, aDescDHont)
+            "FAI" + jobID, rIDs, rDescs, aDescWeightedFAI)
 
-        model:DataFrame = ModelDefinition.createDHondtBanditsVotesModel(pDescr.getRecommendersIDs())
+        model:DataFrame = ModelDefinition.createDHontModel(pDescr.getRecommendersIDs())
 
         simulator:Simulator = InputSimulatorDefinition.exportSimulatorSlantour(
                 batchID, divisionDatasetPercentualSize, uBehaviour, repetition)
         simulator.simulate([pDescr], [model], [eTool], [HistoryHierDF(pDescr.getPortfolioID())])
+
 
 
 
@@ -87,4 +75,4 @@ if __name__ == "__main__":
     os.chdir("..")
     print(os.getcwd())
 
-    BatchDefSTFuzzyDHondtDirectOptimizeThompsonSampling.generateAllBatches()
+    BatchDefSTFAI().generateAllBatches()

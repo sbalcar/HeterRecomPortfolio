@@ -12,6 +12,7 @@ from typing import List
 
 from batchDefinition.ml1m.batchDefMLFuzzyDHondtDirectOptimizeThompsonSamplingMMR import BatchDefMLFuzzyDHondtDirectOptimizeThompsonSamplingMMR #class
 from batchDefinition.ml1m.batchDefMLFuzzyDHondtDirectOptimizeThompsonSamplingINF import BatchDefMLFuzzyDHondtDirectOptimizeThompsonSamplingINF #class
+from batchDefinition.ml1m.batchDefMLFAI import BatchDefMLFAI #class
 from batchDefinition.ml1m.batchDefMLFuzzyDHondtDirectOptimizeThompsonSampling import BatchDefMLFuzzyDHondtDirectOptimizeThompsonSampling #class
 from batchDefinition.ml1m.batchDefMLContextDHondtINF import BatchDefMLContextDHondtINF #class
 from batchDefinition.ml1m.batchDefMLContextFuzzyDHondtDirectOptimize import BatchDefMLContextFuzzyDHondtDirectOptimize #class
@@ -58,6 +59,7 @@ from batchDefinition.slanTour.batchDefSTFuzzyDHondt import BatchDefSTFuzzyDHondt
 from batchDefinition.slanTour.batchDefSTFuzzyDHondtINF import BatchDefSTFuzzyDHondtINF #class
 from batchDefinition.slanTour.batchDefSTWeightedAVG import BatchDefSTWeightedAVG #class
 from batchDefinition.slanTour.batchDefSTWeightedAVGMMR import BatchDefSTWeightedAVGMMR #class
+from batchDefinition.slanTour.batchDefSTFAI import BatchDefSTFAI #cass
 from batchDefinition.slanTour.batchDefSTBanditTS import BatchDefSTBanditTS #class
 from batchDefinition.slanTour.batchDefSTRandomRecsSwitching import BatchDefSTRandomRecsSwitching #class
 from batchDefinition.slanTour.batchDefSTRandomKfromN import BatchDefSTRandomKfromN #class
