@@ -41,6 +41,9 @@ class BatchDefSTFuzzyDHondtDirectOptimize(ABatchDefinitionST):
 
     SLCTR_ROULETTE1:str = BatchDefMLFuzzyDHondtDirectOptimize.SLCTR_ROULETTE1
     SLCTR_ROULETTE2:str = BatchDefMLFuzzyDHondtDirectOptimize.SLCTR_ROULETTE2
+    SLCTR_ROULETTE3:str = BatchDefMLFuzzyDHondtDirectOptimize.SLCTR_ROULETTE3
+    SLCTR_ROULETTE4:str = BatchDefMLFuzzyDHondtDirectOptimize.SLCTR_ROULETTE4
+    SLCTR_ROULETTE5:str = BatchDefMLFuzzyDHondtDirectOptimize.SLCTR_ROULETTE5
     SLCTR_FIXED:str = BatchDefMLFuzzyDHondtDirectOptimize.SLCTR_FIXED
 
     lrClicks:List[float] = [0.03]

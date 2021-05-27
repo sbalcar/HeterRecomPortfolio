@@ -258,8 +258,9 @@ def getBatchesJournal():
     batchDefMLFuzzyDHondtDirectOptimize.lrClicks:List[float] = [0.03]
     batchDefMLFuzzyDHondtDirectOptimize.lrViewDivisors:List[float] = [250]
     batchDefMLFuzzyDHondtDirectOptimize.selectorIds = [
-        BatchDefMLFuzzyDHondtDirectOptimize.SLCTR_FIXED,
-        BatchDefMLFuzzyDHondtDirectOptimize.SLCTR_ROULETTE1, BatchDefMLFuzzyDHondtDirectOptimize.SLCTR_ROULETTE2]
+        BatchDefMLFuzzyDHondtDirectOptimize.SLCTR_FIXED, BatchDefMLFuzzyDHondtDirectOptimize.SLCTR_ROULETTE1,
+        BatchDefMLFuzzyDHondtDirectOptimize.SLCTR_ROULETTE2, BatchDefMLFuzzyDHondtDirectOptimize.SLCTR_ROULETTE3,
+        BatchDefMLFuzzyDHondtDirectOptimize.SLCTR_ROULETTE4, BatchDefMLFuzzyDHondtDirectOptimize.SLCTR_ROULETTE5]
 #
     batchDefMLFuzzyDHondtDirectOptimizeThompsonSampling = BatchDefMLFuzzyDHondtDirectOptimizeThompsonSampling()
     batchDefMLFuzzyDHondtDirectOptimizeThompsonSampling.selectorIDs = [BatchDefMLFuzzyDHondt.SLCTR_FIXED]
@@ -353,8 +354,9 @@ def getBatchesJournal():
     batchDefSTFuzzyDHondtDirectOptimize.lrClicks:List[float] = [0.03]
     batchDefSTFuzzyDHondtDirectOptimize.lrViewDivisors:List[float] = [250]
     batchDefSTFuzzyDHondtDirectOptimize.selectorIDs = [
-        BatchDefMLFuzzyDHondtDirectOptimize.SLCTR_FIXED,
-        BatchDefMLFuzzyDHondtDirectOptimize.SLCTR_ROULETTE1, BatchDefMLFuzzyDHondtDirectOptimize.SLCTR_ROULETTE2]
+        BatchDefMLFuzzyDHondtDirectOptimize.SLCTR_FIXED, BatchDefMLFuzzyDHondtDirectOptimize.SLCTR_ROULETTE1,
+        BatchDefMLFuzzyDHondtDirectOptimize.SLCTR_ROULETTE2, BatchDefMLFuzzyDHondtDirectOptimize.SLCTR_ROULETTE3,
+        BatchDefMLFuzzyDHondtDirectOptimize.SLCTR_ROULETTE4, BatchDefMLFuzzyDHondtDirectOptimize.SLCTR_ROULETTE5]
 #
     batchDefSTFuzzyDHondtDirectOptimizeThompsonSampling = BatchDefSTFuzzyDHondtDirectOptimizeThompsonSampling()
     batchDefSTFuzzyDHondtDirectOptimizeThompsonSampling.selectorIDs = [BatchDefMLFuzzyDHondt.SLCTR_FIXED]
