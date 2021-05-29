@@ -22,7 +22,7 @@ import numpy as np
 
 class RecommenderTheMostPopular(ARecommender):
 
-    def __init__(self, jobID:str, argumentsDict:Dict[str,object]):
+    def __init__(self, batchID:str, argumentsDict:Dict[str,object]):
         if type(argumentsDict) is not dict:
             raise ValueError("Argument argumentsDict is not type dict.")
 

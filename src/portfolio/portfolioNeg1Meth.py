@@ -20,9 +20,13 @@ from portfolio.portfolio1Meth import Portfolio1Meth #class
 
 class PortfolioNeg1Meth(Portfolio1Meth):
 
-   def __init__(self, recommender:ARecommender, recomID:str, recomDesc:RecommenderDescription,
+   def __init__(self, batchID:str, portfolioID:str, recommender:ARecommender, recomID:str, recomDesc:RecommenderDescription,
                 penaltyTool:APenalization):
 
+       if type(batchID) is not str:
+           raise ValueError("Argument batchID isn't type str.")
+       if type(portfolioID) is not str:
+          raise ValueError("Argument portfolioID isn't type str.")
        if not isinstance(recommender, ARecommender):
            raise ValueError("Argument recommender isn't type ARecommender.")
        if type(recomID) is not str:
@@ -32,6 +36,8 @@ class PortfolioNeg1Meth(Portfolio1Meth):
        if not isinstance(penaltyTool, APenalization):
           raise ValueError("Argument penaltyTool isn't type APenalization.")
 
+       self._batchID = batchID
+       self._portfolioID:str = portfolioID
        self._recommender:ARecommender = recommender
        self._recomID:str = recomID
        self._recomDesc:RecommenderDescription = recomDesc

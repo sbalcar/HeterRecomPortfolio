@@ -1,5 +1,7 @@
 #!/usr/bin/python3
 
+from history.aHistory import AHistory #class
+
 
 class APortfolioDescription:
 
@@ -9,5 +11,5 @@ class APortfolioDescription:
     def getPortfolioID(self):
         pass
 
-    def exportPortfolio(self):
+    def exportPortfolio(self, batchID:str, jobID:str, history:AHistory):
         pass

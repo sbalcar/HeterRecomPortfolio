@@ -9,18 +9,23 @@ from aggregation.aAggregation import AAgregation #class
 
 from recommender.aRecommender import ARecommender #class
 
+from aggregation.negImplFeedback.aPenalization import APenalization #class
+from evaluationTool.evalToolContext import EvalToolContext #class
+
 from history.aHistory import AHistory #class
 from abc import ABC, abstractmethod
 
 
 class APortfolio(ABC):
 
+    ARG_ITEM_ID:str = EvalToolContext.ARG_ITEM_ID
     ARG_NUMBER_OF_RECOMM_ITEMS:str = "numberOfRecomItems"
     ARG_NUMBER_OF_AGGR_ITEMS:str = "numberOfAggrItems"
 
 
     @abstractmethod
-    def __init__(self, recommIDs: List[str], recommenders: List[ARecommender], agregation:AAgregation):
+    def __init__(self, recommIDs:List[str], recommenders:List[ARecommender],
+                 agregation:AAgregation):
         raise Exception("APortfolio is abstract class, can't be instanced")
 
     @abstractmethod

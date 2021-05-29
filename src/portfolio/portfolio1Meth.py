@@ -19,7 +19,12 @@ from portfolio.aPortfolio import APortfolio #class
 
 class Portfolio1Meth(APortfolio):
 
-   def __init__(self, recommender:ARecommender, recomID:str, recomDesc:RecommenderDescription):
+   def __init__(self, batchID:str, portfolioID:str, recommender:ARecommender, recomID:str, recomDesc:RecommenderDescription):
+
+       if type(batchID) is not str:
+           raise ValueError("Argument batchID isn't type str.")
+       if type(portfolioID) is not str:
+          raise ValueError("Argument portfolioID isn't type str.")
        if not isinstance(recommender, ARecommender):
            raise ValueError("Argument recommender isn't type ARecommender.")
        if type(recomID) is not str:
@@ -27,6 +32,8 @@ class Portfolio1Meth(APortfolio):
        if type(recomDesc) is not RecommenderDescription:
           raise ValueError("Argument recomDesc isn't type RecommenderDescription.")
 
+       self._batchID:str = batchID
+       self._portfolioID:str = portfolioID
        self._recommender:ARecommender = recommender
        self._recomID:str = recomID
        self._recomDesc:RecommenderDescription = recomDesc

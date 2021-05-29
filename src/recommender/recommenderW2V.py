@@ -28,6 +28,7 @@ from datasets.ml.ratings import Ratings  #class
 from history.aHistory import AHistory #class
 
 
+
 class RecommenderW2V(ARecommender):
 
     # mandatory argument
@@ -43,10 +44,10 @@ class RecommenderW2V(ARecommender):
     DEBUG_MODE = False
 
     # ratingsSum:Dataframe<(userId:int, movieId:int, ratings:int, timestamp:int)>
-    def __init__(self, jobID:str, argumentsDict:Dict[str,object]):
+    def __init__(self, batchID:str, argumentsDict:Dict[str,object]):
         if type(argumentsDict) is not dict:
             raise ValueError("Argument argumentsDict is not type dict.")
-        self._jobID:str = jobID
+        self._batchID:str = batchID
         self._arguments:dict = argumentsDict
 
         self.trainVariant:str = self._arguments[self.ARG_TRAIN_VARIANT]

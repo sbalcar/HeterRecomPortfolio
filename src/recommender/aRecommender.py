@@ -15,7 +15,7 @@ class ARecommender(ABC):
     ARG_ALLOWED_ITEMIDS:str = "allowedItemIDs"
 
     @abstractmethod
-    def __init__(self, jobID:str, argumentsDict:Dict[str,object]):
+    def __init__(self, batchID:str, argumentsDict:Dict[str,object]):
         raise Exception("ARecommender is abstract class, can't be instanced")
 
     @abstractmethod

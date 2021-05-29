@@ -39,9 +39,9 @@ class Portfolio1AggrDescription(APortfolioDescription):
        if type(aggrDescr) is not AggregationDescription :
           raise ValueError("Type of argument aggrDescr isn't AggregationDescription.")
 
-       self._recommIDs:list[str] = recommIDs;
-       self._recommDescrs:list[RecommenderDescription] = recommDescrs;
-       self._aggrDescr:AggregationDescription = aggrDescr;
+       self._recommIDs:List[str] = recommIDs
+       self._recommDescrs:List[RecommenderDescription] = recommDescrs
+       self._aggrDescr:AggregationDescription = aggrDescr
 
     def getPortfolioID(self):
        return self._portfolioID
@@ -57,9 +57,9 @@ class Portfolio1AggrDescription(APortfolioDescription):
 
 
 
-    def exportPortfolio(self, jobID:str, history:AHistory):
-       if type(jobID) is not str:
-          raise ValueError("Type of argument jobID isn't str.")
+    def exportPortfolio(self, batchID:str, history:AHistory):
+       if type(batchID) is not str:
+          raise ValueError("Type of argument batchID isn't str.")
        if not isinstance(history, AHistory):
           raise ValueError("Type of argument history isn't AHistory.")
 
@@ -67,10 +67,10 @@ class Portfolio1AggrDescription(APortfolioDescription):
 
        recommDescrI:RecommenderDescription
        for recommDescrI in self._recommDescrs:
-          recommenderI:ARecommender = recommDescrI.exportRecommender(jobID)
+          recommenderI:ARecommender = recommDescrI.exportRecommender(batchID)
           recommenders.append(recommenderI)
 
        # aggregation:Aggregation
        aggregation = self._aggrDescr.exportAggregation(history)
 
-       return Portfolio1Aggr(recommenders, self._recommIDs, self._recommDescrs, aggregation)
+       return Portfolio1Aggr(batchID, self.getPortfolioID(), recommenders, self._recommIDs, self._recommDescrs, aggregation)

@@ -32,11 +32,11 @@ class RecommenderItemBasedKNN(ARecommender):
 
     ARG_K:str = "k"
 
-    def __init__(self, jobID:str, argumentsDict:Dict[str,str]):
+    def __init__(self, batchID:str, argumentsDict:Dict[str,str]):
         if type(argumentsDict) is not dict:
             raise ValueError("Argument argumentsDict is not type dict.")
 
-        self._jobID:str = jobID
+        self._batchID:str = batchID
         self._argumentsDict:Dict[str,str] = argumentsDict
         self._KNNs:DataFrame = None
         self._distances = None
@@ -219,7 +219,7 @@ class RecommenderItemBasedKNN(ARecommender):
         rItemIDs = rItemIDs[:numberOfItems]
         rRatings = rRatings[:numberOfItems]
 
-        if self._jobID == 'test' and type(self._trainDataset) is DatasetML:
+        if self._batchID == 'test' and type(self._trainDataset) is DatasetML:
             print("Last visited film:")
             itemsDF:DataFrame = self._trainDataset.itemsDF
             print(itemsDF[itemsDF['movieId'] == lastRatedItemFromUser])

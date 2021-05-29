@@ -70,10 +70,10 @@ class RecommenderVMContextKNN(ARecommender):
         Header of the timestamp column in the batchDefinition file. (default: 'Time')
     '''
 
-    def __init__(self, jobID:str, argumentsDict:Dict[str,object]):
+    def __init__(self, batchID:str, argumentsDict:Dict[str,object]):
         if type(argumentsDict) is not dict:
             raise ValueError("Argument argumentsDict is not type dict.")
-        self._jobID = jobID
+        self._batchID = batchID
         self._argumentsDict:Dict[str,object] = argumentsDict
         if argumentsDict.get(self.ARG_K) is None:
             argumentsDict[self.ARG_K] = 50 #default val

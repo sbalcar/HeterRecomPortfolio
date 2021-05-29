@@ -35,11 +35,13 @@ class PortfolioNeg1MethDescription(APortfolioDescription):
     def getPortfolioID(self):
         return self._portfolioID
 
-    def exportPortfolio(self, jobID:str, history:AHistory):
-        if type(jobID) is not str:
+    def exportPortfolio(self, batchID:str, history:AHistory):
+        if type(batchID) is not str:
+            raise ValueError("Type of argument batchID isn't str.")
+        if type(batchID) is not str:
             raise ValueError("Type of argument jobID isn't str.")
         if not isinstance(history, AHistory):
             raise ValueError("Type of argument history isn't AHistory.")
 
-        recommender:ARecommender = self._recommDescr.exportRecommender(jobID)
-        return PortfolioNeg1Meth(recommender, self._portfolioID, self._recommDescr, self._nImplFeedback)
+        recommender:ARecommender = self._recommDescr.exportRecommender(batchID)
+        return PortfolioNeg1Meth(batchID, self.getPortfolioID(), recommender, self._portfolioID, self._recommDescr, self._nImplFeedback)

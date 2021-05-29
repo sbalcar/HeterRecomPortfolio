@@ -15,6 +15,6 @@ class RecommenderDescription:
     def getArguments(self):
         return self._argumentsDict
 
-    def exportRecommender(self, jobID:str):
-        return self._recommenderClass(jobID, self._argumentsDict)
+    def exportRecommender(self, batchID:str):
+        return self._recommenderClass(batchID, self._argumentsDict)
 

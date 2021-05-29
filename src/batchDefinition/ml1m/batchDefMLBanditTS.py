@@ -37,6 +37,8 @@ class BatchDefMLBanditTS(ABatchDefinitionML):
     SLCTR_ROULETTE3:str = BatchDefMLFuzzyDHondt.SLCTR_ROULETTE3
     SLCTR_FIXED:str = BatchDefMLFuzzyDHondt.SLCTR_FIXED
 
+    selectorIDs:List[str] = [SLCTR_ROULETTE1, SLCTR_ROULETTE3, SLCTR_FIXED]
+
     def getBatchName(self):
         return "BanditTS"
 
