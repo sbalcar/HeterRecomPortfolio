@@ -31,6 +31,7 @@ import pandas as pd
 class RecommenderItemBasedKNN(ARecommender):
 
     ARG_K:str = "k"
+    ARG_UPDATE_THRESHOLD:str = "updateThreshold"
 
     def __init__(self, batchID:str, argumentsDict:Dict[str,str]):
         if type(argumentsDict) is not dict:
@@ -38,10 +39,15 @@ class RecommenderItemBasedKNN(ARecommender):
 
         self._batchID:str = batchID
         self._argumentsDict:Dict[str,str] = argumentsDict
+
+        self._counter:int = 0
+        self._k = argumentsDict[self.ARG_K]
+        self._update_threshold:int = argumentsDict[self.ARG_UPDATE_THRESHOLD]
+
         self._KNNs:DataFrame = None
         self._distances = None
         self._sparseRatings:lil_matrix = None
-        self._modelKNN:NearestNeighbors = NearestNeighbors(metric='cosine', algorithm='brute', n_neighbors=20, n_jobs=-1)
+        self._modelKNN:NearestNeighbors = NearestNeighbors(metric='cosine', algorithm='brute', n_neighbors=self._k, n_jobs=-1)
 
         self._userIdToUserIndexDict:Dict[int, int] = {}
         self._userIndexToUserIdDict:Dict[int, int] = {}
@@ -50,8 +56,6 @@ class RecommenderItemBasedKNN(ARecommender):
         self._itemIndexToItemIdDict:Dict[int, int] = {}
 
         self._lastRatedItemPerUser:DataFrame = None
-        self.counter:int = 0
-        self.update_threshold:int = 5
 
     def train(self, history:AHistory, dataset:ADataset):
         if not isinstance(history, AHistory):
@@ -68,8 +72,9 @@ class RecommenderItemBasedKNN(ARecommender):
             from datasets.retailrocket.events import Events #class
             COL_USERID:str = Events.COL_VISITOR_ID
             COL_ITEMID:str = Events.COL_ITEM_ID
-            trainEvents2DF:DataFrame = dataset.eventsDF[[Events.COL_VISITOR_ID, Events.COL_ITEM_ID]]
-            trainRatingsDF:DatasetST = trainEvents2DF.drop_duplicates()
+            trainEvents2DF:DataFrame = dataset.eventsDF
+            trainEvents2VIDF:DataFrame = dataset.eventsDF[[Events.COL_VISITOR_ID, Events.COL_ITEM_ID]]
+            trainRatingsDF:DatasetST = trainEvents2VIDF.drop_duplicates()
         elif type(dataset) is DatasetST:
             from datasets.slantour.events import Events  # class
             COL_USERID:str = Events.COL_USER_ID
@@ -95,7 +100,7 @@ class RecommenderItemBasedKNN(ARecommender):
 
         self._modelKNN.fit(sparseRatingsCSR)
 
-        self._distances, self.KNNs = self._modelKNN.kneighbors(n_neighbors=100)
+        self._distances, self.KNNs = self._modelKNN.kneighbors(n_neighbors=self._k)
 
         self._sparseRatings = sparseRatingsCSR.tolil()
 
@@ -108,9 +113,9 @@ class RecommenderItemBasedKNN(ARecommender):
 
         elif type(dataset) is DatasetRetailRocket:
             from datasets.retailrocket.events import Events #class
-            self._lastRatedItemPerUser = trainRatingsDF.loc[trainRatingsDF[Events.COL_EVENT] == "transaction"]\
+            self._lastRatedItemPerUser = trainEvents2DF.loc[trainEvents2DF[Events.COL_EVENT] == "transaction"]\
                 .sort_values(Events.COL_TIME_STAMP)\
-                .groupby(Events.COL_VISITOR_ID).tail(1).set_index(Events.COL_VISITOR_ID)[[Events.COL_VISITOR_ID, Events.COL_ITEM_ID]]
+                .groupby(Events.COL_VISITOR_ID).tail(1)[[Events.COL_VISITOR_ID, Events.COL_ITEM_ID]].set_index(Events.COL_VISITOR_ID)
 
         elif type(dataset) is DatasetST:
             from datasets.slantour.events import Events  # class
@@ -160,14 +165,14 @@ class RecommenderItemBasedKNN(ARecommender):
         if rating > 3:
             self._lastRatedItemPerUser.loc[userID] = [itemID]
 
-        if self.counter > self.update_threshold:
+        if self._counter > self._update_threshold:
             print("update model")
             sparseRatingsCSR: csr_matrix = self._sparseRatings.tocsr()
             self._modelKNN.fit(sparseRatingsCSR)
             self._distances, self.KNNs = self._modelKNN.kneighbors(n_neighbors=100)
-            self.counter = 0
+            self._counter = 0
         else:
-            self.counter += 1
+            self._counter += 1
 
 
     def recommend(self, userID: int, numberOfItems:int, argumentsDict:Dict[str,object]):

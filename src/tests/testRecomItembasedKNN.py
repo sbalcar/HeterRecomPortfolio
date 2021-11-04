@@ -133,7 +133,8 @@ def test11():
     print("Running RecommenderItemBasedKNN RR:")
 
     from datasets.retailrocket.events import Events  # class
-    eventsDF:DataFrame = Events.readFromFile()
+    #eventsDF:DataFrame = Events.readFromFile()
+    eventsDF:DataFrame = Events.readFromFileWithFilter(minEventCount=50)
 
     dataset:ADataset = DatasetRetailRocket("test", eventsDF, DataFrame(), DataFrame())
 
@@ -145,7 +146,8 @@ def test11():
     print(uDF)
     rec.update(uDF, {})
 
-    recommendation = rec.recommend(1, 20, {})
+    recommendation = rec.recommend(1093035, 20, {})
+    print("Recommendation:")
     print(recommendation)
 
     print("================== END OF TEST 04 ======================\n\n\n\n\n")

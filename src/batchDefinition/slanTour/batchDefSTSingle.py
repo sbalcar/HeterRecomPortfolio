@@ -62,7 +62,7 @@ class BatchDefSTSingle(ABatchDefinitionST):
         divisionDatasetPercentualSize:int
         uBehaviour:str
         repetition:int
-        divisionDatasetPercentualSize, uBehaviour, repetition = InputABatchDefinition.getBatchParameters(self.datasetID)[batchID]
+        divisionDatasetPercentualSize, uBehaviour, repetition = InputABatchDefinition().getBatchParameters(self.datasetID)[batchID]
 
         rDescr:str = self.getParameters()[jobID]
         recommenderID:str = jobID
@@ -80,4 +80,4 @@ if __name__ == "__main__":
    os.chdir("..")
    #print(os.getcwd())
 
-   BatchDefSTSingle.generateAllBatches()
+   BatchDefSTSingle.generateAllBatches(InputABatchDefinition())

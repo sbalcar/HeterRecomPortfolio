@@ -227,6 +227,7 @@ class ASequentialSimulation(ABC):
         print("currentItemID: " + str(currentItemID))
         print("repetition: " + str(repetition))
 
+
         uObservationStrI:str = testBehaviourDict[repetition].loc[currentDFIndex][COL_BEHAVIOUR]
         uObservation:List[bool] = BehavioursML.convertToListOfBoolean(uObservationStrI)
         #uObservation: List[bool] = [True]*20

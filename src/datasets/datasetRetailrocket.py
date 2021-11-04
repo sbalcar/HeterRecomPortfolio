@@ -35,6 +35,16 @@ class DatasetRetailRocket(ADataset):
         return DatasetRetailRocket("rrDivAll", eventsDF, categoryTreeDF, itemPropertiesDF)
 
 
+    @staticmethod
+    def readDatasetsWithFilter(minEventCount:int):
+
+        eventsDF:DataFrame = Events.readFromFileWithFilter(minEventCount=minEventCount)
+        categoryTreeDF:DataFrame = CategoryTree.readFromFile()
+        itemPropertiesDF:DataFrame = ItemProperties.readFromFile()
+
+        return DatasetRetailRocket("rrDivAll", eventsDF, categoryTreeDF, itemPropertiesDF)
+
+
 
     def getTheMostSold(self):
 

@@ -51,7 +51,7 @@ class BatchDefMLFuzzyDHondtDirectOptimizeINF(ABatchDefinitionML):
         divisionDatasetPercentualSize:int
         uBehaviour:str
         repetition:int
-        divisionDatasetPercentualSize, uBehaviour, repetition = InputABatchDefinition.getBatchParameters(self.datasetID)[batchID]
+        divisionDatasetPercentualSize, uBehaviour, repetition = InputABatchDefinition().getBatchParameters(self.datasetID)[batchID]
 
         selector, nImplFeedback = self.getParameters()[jobID]
 

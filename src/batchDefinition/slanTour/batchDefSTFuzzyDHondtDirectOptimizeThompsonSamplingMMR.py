@@ -61,7 +61,7 @@ class BatchDefSTFuzzyDHondtDirectOptimizeThompsonSamplingMMR(ABatchDefinitionST)
         divisionDatasetPercentualSize:int
         uBehaviour:str
         repetition:int
-        divisionDatasetPercentualSize, uBehaviour, repetition = InputABatchDefinition.getBatchParameters(self.datasetID)[batchID]
+        divisionDatasetPercentualSize, uBehaviour, repetition = InputABatchDefinition().getBatchParameters(self.datasetID)[batchID]
 
         selector, discFactor = self.getParameters()[jobID]
 
@@ -87,5 +87,5 @@ if __name__ == "__main__":
     os.chdir("..")
     print(os.getcwd())
 
-    #BatchSTFuzzyDHondtDirectOptimizeThompsonSamplingMMR.generateAllBatches()
+    #BatchDefSTFuzzyDHondtDirectOptimizeThompsonSamplingMMR.generateAllBatches(InputABatchDefinition())
     BatchDefSTFuzzyDHondtDirectOptimizeThompsonSamplingMMR().run("stDiv90Ulinear0109R1", "FixedDCG")

@@ -32,6 +32,7 @@ from history.aHistory import AHistory #class
 class RecommenderW2V(ARecommender):
 
     # mandatory argument
+    ARG_LEARNING_RATE:str = "learningRate"
     ARG_TRAIN_VARIANT:str = "trainVariant"
     ARG_VECTOR_SIZE:str = "vectorSize"
     ARG_WINDOW_SIZE:str = "windowSize"
@@ -50,6 +51,7 @@ class RecommenderW2V(ARecommender):
         self._batchID:str = batchID
         self._arguments:dict = argumentsDict
 
+        self.learningRate:str = self._arguments[self.ARG_LEARNING_RATE]
         self.trainVariant:str = self._arguments[self.ARG_TRAIN_VARIANT]
         self.vectorSize:int = self._arguments[self.ARG_VECTOR_SIZE]
         self.windowSize:int = self._arguments[self.ARG_WINDOW_SIZE]
@@ -98,22 +100,23 @@ class RecommenderW2V(ARecommender):
         # t_sequences.set_index(Ratings.COL_USERID, inplace=True)
         w2vTrainData:List[str] = t_sequences.values.tolist()
 
+        lr:float = self.learningRate
         e:int = self.vectorSize #64
         w:int = self.windowSize #3
         i:int = self.iterations #100000
 
         #datasetId = "ml1mDiv90"
-        self.model = self.__load_obj("model", dataset.datasetID, self.trainVariant, e, w, i)
-        self.dictionary = self.__load_obj("dictionary", dataset.datasetID, self.trainVariant, e, w, i)
-        self.rev_dict = self.__load_obj("rev_dict", dataset.datasetID, self.trainVariant, e, w, i)
+        self.model = self.__load_obj("model", dataset.datasetID, self.trainVariant, lr, e, w, i)
+        self.dictionary = self.__load_obj("dictionary", dataset.datasetID, self.trainVariant, lr, e, w, i)
+        self.rev_dict = self.__load_obj("rev_dict", dataset.datasetID, self.trainVariant, lr, e, w, i)
 
         if self.model is None or self.dictionary is None or self.rev_dict is None:
-            model, rev_dict, dictionary = word2vec.word2vecRun(w, e, i, w2vTrainData)
+            model, rev_dict, dictionary = word2vec.word2vecRun(lr, w, e, i, w2vTrainData)
             dictionary = dict([((int(i), j) if i != "RARE" else (-1, j)) for i, j in dictionary.items()])
             rev_dict = dict(zip(dictionary.values(), dictionary.keys()))
-            self.__save_obj(model, "model", dataset.datasetID, self.trainVariant, e, w, i )
-            self.__save_obj(dictionary, "dictionary", dataset.datasetID, self.trainVariant, e, w, i)
-            self.__save_obj(rev_dict, "rev_dict", dataset.datasetID, self.trainVariant, e, w, i)
+            self.__save_obj(model, "model", dataset.datasetID, self.trainVariant, lr, e, w, i )
+            self.__save_obj(dictionary, "dictionary", dataset.datasetID, self.trainVariant, lr, e, w, i)
+            self.__save_obj(rev_dict, "rev_dict", dataset.datasetID, self.trainVariant, lr, e, w, i)
             self.model = model
             self.dictionary = dictionary
             self.rev_dict = rev_dict
@@ -196,7 +199,9 @@ class RecommenderW2V(ARecommender):
         
         #adding currently viewed item (if any) into the user profile
         itemID = argumentsDict.get("itemID", 0)
-        if itemID > 0:
+        #print(itemID)
+        #print(type(itemID))
+        if str(itemID) == "0":
            userTrainData.append(itemID)
         
         w2vObjects, weights, aggregation = self.__resolveUserProfile(userProfileStrategy, userProfileSize, userTrainData)
@@ -204,6 +209,10 @@ class RecommenderW2V(ARecommender):
         # provedu agregaci dle zvolené metody
         if len(w2vObjects) > 0:
             embeds = self.model[w2vObjects]
+            #print("embeds--------------------------------------------")
+            #print(embeds)
+            #print("model---------------------------------------------")
+            #print(self.model)
             results = 1 - pairwise_distances(embeds, self.model, metric="cosine")
 
             weights = np.asarray(weights).reshape((-1, 1))
@@ -236,14 +245,14 @@ class RecommenderW2V(ARecommender):
 
         return pd.Series([], index=[])
 
-    def __save_obj(self, obj, name:str, datasetId:str, trainVariant:str, e:int, w:int, i:int):
-        fileName:str = Configuration.modelDirectory + os.sep + name + "_{0}_{1}_{2}_{3}_{4}".format(datasetId, trainVariant, e, w, i)+ '.pkl'
+    def __save_obj(self, obj, name:str, datasetId:str, trainVariant:str, lr:float, e:int, w:int, i:int):
+        fileName:str = Configuration.modelDirectory + os.sep + name + "_{0}_{1}_{2}_{3}_{4}_{5}".format(datasetId, trainVariant, str(lr).replace(".", ""), e, w, i)+ '.pkl'
         print("saveObject: " + str(fileName))
         with open(fileName, 'wb') as f:
             pickle.dump(obj, f)
 
-    def __load_obj(self, name:str, datasetId:str, trainVariant:str, e:int, w:int, i:int):
-        fileName:str = Configuration.modelDirectory + os.sep + name + "_{0}_{1}_{2}_{3}_{4}".format(datasetId, trainVariant, e, w, i)+ '.pkl'
+    def __load_obj(self, name:str, datasetId:str, trainVariant:str, lr:float, e:int, w:int, i:int):
+        fileName:str = Configuration.modelDirectory + os.sep + name + "_{0}_{1}_{2}_{3}_{4}_{5}".format(datasetId, trainVariant, str(lr).replace(".", ""), e, w, i)+ '.pkl'
         print("loadObject: " + str(fileName))
         if not os.path.isfile(fileName):
             return None

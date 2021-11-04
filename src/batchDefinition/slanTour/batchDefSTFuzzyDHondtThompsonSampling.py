@@ -44,7 +44,7 @@ class BatchDefSTFuzzyDHondtThompsonSampling(ABatchDefinitionST):
         divisionDatasetPercentualSize:int
         uBehaviour:str
         repetition:int
-        divisionDatasetPercentualSize, uBehaviour, repetition = InputABatchDefinition.getBatchParameters(self.datasetID)[batchID]
+        divisionDatasetPercentualSize, uBehaviour, repetition = InputABatchDefinition().getBatchParameters(self.datasetID)[batchID]
 
 
         #eTool:AEvalTool
@@ -70,4 +70,5 @@ if __name__ == "__main__":
     os.chdir("..")
     os.chdir("..")
     print(os.getcwd())
-    BatchDefSTFuzzyDHondtThompsonSampling.generateAllBatches()
+
+    BatchDefSTFuzzyDHondtThompsonSampling.generateAllBatches(InputABatchDefinition())

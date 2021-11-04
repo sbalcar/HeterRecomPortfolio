@@ -94,7 +94,7 @@ class BatchDefMLFuzzyDHondt(ABatchDefinitionML):
         divisionDatasetPercentualSize:int
         uBehaviour:str
         repetition:int
-        divisionDatasetPercentualSize, uBehaviour, repetition = InputABatchDefinition.getBatchParameters(self.datasetID)[batchID]
+        divisionDatasetPercentualSize, uBehaviour, repetition = InputABatchDefinition().getBatchParameters(self.datasetID)[batchID]
 
         #eTool:AEvalTool
         selector, eTool = self.getParameters()[jobID]
@@ -119,4 +119,5 @@ if __name__ == "__main__":
     os.chdir("..")
     os.chdir("..")
     print(os.getcwd())
-    BatchDefMLFuzzyDHondt.generateAllBatches()
+
+    BatchDefMLFuzzyDHondt.generateAllBatches(InputABatchDefinition())

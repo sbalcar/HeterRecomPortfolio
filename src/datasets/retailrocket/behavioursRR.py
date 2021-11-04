@@ -82,9 +82,9 @@ class BehavioursRR:
       #print("General")
       BehavioursRR.__generateGeneralBehaviourrRR(behavioursDF, numberOfItems, countOfRepetitions, uBehavDesc)
 
-      print(behavioursDF.head(10))
+      #print(behavioursDF.head(10))
       del behavioursDF['index']
-      print(behavioursDF.head(10))
+      #print(behavioursDF.head(10))
 
       behavioursDF.to_csv(behaviourFile, sep='\t', index=False)
 
@@ -114,5 +114,12 @@ class BehavioursRR:
     behavioursDF:DataFrame = pd.read_csv(behavioursFile, sep='\t', header=0, encoding="ISO-8859-1")
     behavioursDF.columns = [BehavioursRR.COL_USERID, BehavioursRR.COL_ITEMID, BehavioursRR.COL_REPETITION,
                             BehavioursRR.COL_BEHAVIOUR]
+
+ #   for i, bI in behavioursDF.iterrows():
+ #       #print(bI[BehavioursRR.COL_BEHAVIOUR])
+ #       a = BehavioursML.convertToListOfBoolean(bI[BehavioursRR.COL_BEHAVIOUR])
+ #       print(a)
+ #       behavioursDF.loc[i, BehavioursRR.COL_BEHAVIOUR] = a
+
 
     return behavioursDF

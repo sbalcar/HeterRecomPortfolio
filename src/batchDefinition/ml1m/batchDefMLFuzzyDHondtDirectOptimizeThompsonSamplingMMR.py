@@ -67,7 +67,7 @@ class BatchDefMLFuzzyDHondtDirectOptimizeThompsonSamplingMMR(ABatchDefinitionML)
         divisionDatasetPercentualSize:int
         uBehaviour:str
         repetition:int
-        divisionDatasetPercentualSize, uBehaviour, repetition = InputABatchDefinition.getBatchParameters(self.datasetID)[batchID]
+        divisionDatasetPercentualSize, uBehaviour, repetition = InputABatchDefinition().getBatchParameters(self.datasetID)[batchID]
 
         selector, discFactor = self.getParameters()[jobID]
 
@@ -93,4 +93,4 @@ if __name__ == "__main__":
     os.chdir("..")
     print(os.getcwd())
 
-    BatchDefMLFuzzyDHondtDirectOptimizeThompsonSamplingMMR.generateAllBatches()
+    BatchDefMLFuzzyDHondtDirectOptimizeThompsonSamplingMMR.generateAllBatches(InputABatchDefinition())

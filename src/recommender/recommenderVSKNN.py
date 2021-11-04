@@ -129,26 +129,34 @@ class RecommenderVMContextKNN(ARecommender):
         self._trainDataset = dataset
         
         if type(dataset) is DatasetML:
+            self.session_key = Ratings.COL_USERID
+            self.item_key = Ratings.COL_MOVIEID
+            self.time_key = Ratings.COL_TIMESTAMP
+            self.user_key = Ratings.COL_USERID
             # ratingsSum:Dataframe<(userId:int, movieId:int, ratings:int, timestamp:int)>
             dataset.ratingsDF.sort_values(by=Ratings.COL_USERID,inplace=True)
             ratingsDF:DataFrame = dataset.ratingsDF.loc[dataset.ratingsDF[Ratings.COL_RATING] >= 4]
-            self.user_key = Ratings.COL_USERID
 
         elif type(dataset) is DatasetRetailRocket:
             from datasets.retailrocket.events import Events  # class
-            pass
+            self.session_key = Events.COL_VISITOR_ID
+            self.item_key = Events.COL_ITEM_ID
+            self.time_key = Events.COL_TIME_STAMP
+            self.user_key =  Events.COL_VISITOR_ID
+            dataset.eventsDF.sort_values(by=Events.COL_VISITOR_ID, inplace=True)
+            ratingsDF:DataFrame = dataset.eventsDF
 
         elif type(dataset) is DatasetST:
             from datasets.slantour.events import Events  # class
-                 
-            dataset.eventsDF["timestamp"] = dataset.eventsDF[Events.COL_START_DATE_TIME].apply(lambda t:  pd.Timestamp(t).timestamp())
-            dataset.eventsDF["sID"] = dataset.eventsDF[Events.COL_USER_ID]*10000 + dataset.eventsDF[Events.COL_SESSION_ID]
-            dataset.eventsDF.sort_values(by="sID",inplace=True)
-            ratingsDF:DataFrame = dataset.eventsDF.loc[dataset.eventsDF[Events.COL_OBJECT_ID] > 0]  
             self.session_key = 'sID'
             self.item_key = Events.COL_OBJECT_ID
             self.user_key = Events.COL_USER_ID
             self.time_key = 'timestamp'
+            dataset.eventsDF[self.time_key] = dataset.eventsDF[Events.COL_START_DATE_TIME].apply(lambda t:  pd.Timestamp(t).timestamp())
+            dataset.eventsDF[self.session_key] = dataset.eventsDF[Events.COL_USER_ID]*10000 + dataset.eventsDF[Events.COL_SESSION_ID]
+            dataset.eventsDF.sort_values(by="sID",inplace=True)
+            ratingsDF:DataFrame = dataset.eventsDF.loc[dataset.eventsDF[Events.COL_OBJECT_ID] > 0]  
+
 
         
         self.run_train(ratingsDF, dataset)        
@@ -159,7 +167,7 @@ class RecommenderVMContextKNN(ARecommender):
         index_session = train.columns.get_loc(self.session_key)
         index_item = train.columns.get_loc(self.item_key)
         index_time = train.columns.get_loc(self.time_key)
-        ratingsTrainDF: DataFrame = ratingsDF
+        ratingsTrainDF:DataFrame = ratingsDF
         session = -1
         session_items = set()
         time = -1
@@ -229,7 +237,6 @@ class RecommenderVMContextKNN(ARecommender):
         if type(ratingsUpdateDF) is not DataFrame:
             raise ValueError("Argument ratingsTrainDF isn't type DataFrame.")
 
-
            
         if type(self._trainDataset) is DatasetML:
             row = ratingsUpdateDF.iloc[0]
@@ -240,14 +247,18 @@ class RecommenderVMContextKNN(ARecommender):
 
         elif type(self._trainDataset) is DatasetRetailRocket:
             from datasets.retailrocket.events import Events  # class
-            return
+            row = ratingsUpdateDF.iloc[0]
+            event:str = row[Events.COL_EVENT]
+            if event == Events.EVENT_VIEW:
+                return
+            self._trainDataset.eventsDF = self._trainDataset.eventsDF.append(row, ignore_index=True)
 
         elif type(self._trainDataset) is DatasetST:
             from datasets.slantour.events import Events  # class
             ratingsUpdateDF["timestamp"] = ratingsUpdateDF[Events.COL_START_DATE_TIME].apply(lambda t:  pd.Timestamp(t).timestamp())
             ratingsUpdateDF["sID"] = ratingsUpdateDF[Events.COL_USER_ID]*10000 + ratingsUpdateDF[Events.COL_SESSION_ID]
 
-            row: DataFrame = ratingsUpdateDF.iloc[0]
+            row:DataFrame = ratingsUpdateDF.iloc[0]
             self._trainDataset.eventsDF = self._trainDataset.eventsDF.append(row, ignore_index=True)   
         
         train = ratingsUpdateDF
@@ -278,6 +289,9 @@ class RecommenderVMContextKNN(ARecommender):
             usersData = self._trainDataset.ratingsDF.loc[self._trainDataset.ratingsDF[self.user_key] == userID]
         elif type(self._trainDataset) is DatasetST:
             usersData = self._trainDataset.eventsDF.loc[self._trainDataset.eventsDF[self.user_key] == userID]
+        elif type(self._trainDataset) is DatasetRetailRocket:
+            usersData = self._trainDataset.eventsDF.loc[self._trainDataset.eventsDF[self.user_key] == userID]
+
 
         if len(usersData) == 0:
             return Series([], index=[])

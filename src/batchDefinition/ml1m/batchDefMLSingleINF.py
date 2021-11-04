@@ -61,7 +61,7 @@ class BatchDefMLSingleINF(ABatchDefinitionML):
         divisionDatasetPercentualSize:int
         uBehaviour:str
         repetition:int
-        divisionDatasetPercentualSize, uBehaviour, repetition = InputABatchDefinition.getBatchParameters(self.datasetID)[batchID]
+        divisionDatasetPercentualSize, uBehaviour, repetition = InputABatchDefinition().getBatchParameters(self.datasetID)[batchID]
 
         datasetID:str = "ml1m" + "Div" + str(divisionDatasetPercentualSize)
 
@@ -84,4 +84,5 @@ if __name__ == "__main__":
    os.chdir("..")
    os.chdir("..")
    print(os.getcwd())
-   BatchDefMLSingle.generateAllBatches()
+   
+   BatchDefMLSingle.generateAllBatches(InputABatchDefinition())

@@ -41,7 +41,7 @@ def test01():
     trainDataset:ADataset = DatasetML("test", ratingsDFTrain, pd.DataFrame(), filmsDF)
 
     # train recommender
-    rec:ARecommender = VMContextKNN("test", {})
+    rec:ARecommender = RecommenderVMContextKNN("test", {})
     start = time.time()
     rec.train(HistoryDF("test01"), trainDataset)
     end = time.time()
@@ -82,7 +82,7 @@ def test02():
     trainDataset:ADataset = DatasetML("test", ratingsDFTrain, pd.DataFrame(), filmsDF)
 
     # train recommender
-    rec:ARecommender = VMContextKNN("test", {})
+    rec:ARecommender = RecommenderVMContextKNN("test", {})
     start = time.time()
     rec.train(HistoryDF("test02"), trainDataset)
     end = time.time()
@@ -139,9 +139,42 @@ def test03():
     print(type(r))
     print(r)
 
+    print("================== END OF TEST 03 ======================\n\n\n\n\n")
+
+
+
+def test04():
+    print("Test 04")
+
+    print("Running RecommenderVSKNN RR:")
+
+
+    from datasets.retailrocket.events import Events  # class
+    #eventsDF:DataFrame = Events.readFromFile()
+    eventsDF:DataFrame = Events.readFromFileWithFilter(minEventCount=50)
+
+    dataset:ADataset = DatasetRetailRocket("test", eventsDF, DataFrame(), DataFrame())
+
+    rec:ARecommender = RecommenderVMContextKNN("test", {})
+    print("train")
+    rec.train(HistoryDF("test"), dataset)
+
+    uDF:DataFrame = DataFrame([eventsDF.iloc[9000]])
+    print(uDF)
+    rec.update(uDF, {})
+
+    recommendation = rec.recommend(1093035, 20, {})
+    print("Recommendation:")
+    print(recommendation)
+
+    print("================== END OF TEST 04 ======================\n\n\n\n\n")
+
+
+
 if __name__ == "__main__":
-    #os.chdir("..")
+    os.chdir("..")
 
     #test01()
     #test02()
-    test03()
+    #test03()
+    test04()

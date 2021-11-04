@@ -52,7 +52,7 @@ class RecommenderCosineCB(ARecommender):
             sparseMat = sparseMat.transpose()
             itemIDs = np.load(self.cbDataPath.replace("simMatrixRR.npz", "itemsRR.npy"))
             # self.cbData = pd.SparseDataFrame(sparseMat, columns=itemIDs , index=itemIDs)¨#alternativa pro pandas <= 1.0
-            self.cbData = pd.DataFrame.sparse.from_spmatrix(sparseMat, columns=itemIDs, index=itemIDs)
+            self.cbData:DataFrame = pd.DataFrame.sparse.from_spmatrix(sparseMat, columns=itemIDs, index=itemIDs)
 
         else:
             self.dfCBFeatures = pd.read_csv(self.cbDataPath, sep=",", header=0, index_col=0)
@@ -60,7 +60,7 @@ class RecommenderCosineCB(ARecommender):
             # print(self.dfCBFeatures)
             dfCBSim = 1 - pairwise_distances(self.dfCBFeatures, metric="cosine")
             np.fill_diagonal(dfCBSim, 0.0)
-            self.cbData: DataFrame = DataFrame(data=dfCBSim, index=self.dfCBFeatures.index,
+            self.cbData:DataFrame = DataFrame(data=dfCBSim, index=self.dfCBFeatures.index,
                                                columns=self.dfCBFeatures.index)
             self.cbData = self.cbData.transpose()
         self.userProfiles: dict = {}
@@ -98,10 +98,10 @@ class RecommenderCosineCB(ARecommender):
             COL_ITEMID:str = Events.COL_OBJECT_ID
             ratingsDF:DataFrame = dataset.eventsDF
 
-        self.ratingsGroupDF: DataFrame = ratingsDF.groupby(COL_USERID)[COL_ITEMID]
+        self.ratingsGroupDF:DataFrame = ratingsDF.groupby(COL_USERID)[COL_ITEMID]
         # userProfileDF:DataFrame[userID:int, itemIDs:List[int]]
-        userProfileDF: DataFrame = self.ratingsGroupDF.aggregate(lambda x: list(x))
-        self.userProfiles: dict = userProfileDF.to_dict()
+        userProfileDF:DataFrame = self.ratingsGroupDF.aggregate(lambda x: list(x))
+        self.userProfiles:dict = userProfileDF.to_dict()
         s = ""
 
 
@@ -173,7 +173,7 @@ class RecommenderCosineCB(ARecommender):
 
         return ([], [], "")
 
-    def recommend(self, userID: int, numberOfItems: int, argumentsDict: Dict[str, object]):
+    def recommend(self, userID:int, numberOfItems:int, argumentsDict:Dict[str, object]):
         # print("userID: " + str(userID))
         if type(userID) is not int and type(userID) is not np.int64:
             raise ValueError("Argument userID isn't type int.")
@@ -182,18 +182,18 @@ class RecommenderCosineCB(ARecommender):
         if type(argumentsDict) is not dict:
             raise ValueError("Argument argumentsDict isn't type dict.")
 
-        userProfileStrategy: str = argumentsDict[self.ARG_USER_PROFILE_STRATEGY]
-        userProfileSize: str = argumentsDict[self.ARG_USER_PROFILE_SIZE]
+        userProfileStrategy:str = argumentsDict[self.ARG_USER_PROFILE_STRATEGY]
+        userProfileSize:str = argumentsDict[self.ARG_USER_PROFILE_SIZE]
 
-        userTrainData: List[int] = self.userProfiles.get(userID, [])
+        userTrainData:List[int] = self.userProfiles.get(userID, [])
 
         # adding currently viewed item (if any) into the user profile
         itemID = argumentsDict.get("itemID", 0)
         if itemID > 0:
             userTrainData.append(itemID)
 
-        objectIDs: List[int]
-        weights: List[float]
+        objectIDs:List[int]
+        weights:List[float]
         objectIDs, weights, aggregation = self.resolveUserProfile(userProfileStrategy, userProfileSize, userTrainData)
 
         self._objectIDs = objectIDs

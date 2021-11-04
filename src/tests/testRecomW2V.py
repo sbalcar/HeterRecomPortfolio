@@ -69,7 +69,7 @@ def test02():
 
     print("Running RecommenderW2V RR:")
 
-    dataset:DatasetRetailRocket = DatasetRetailRocket.readDatasets()
+    dataset:DatasetRetailRocket = DatasetRetailRocket.readDatasetsWithFilter(minEventCount=50)
 
     trainDataset:DatasetRetailRocket = dataset
 
@@ -85,13 +85,15 @@ def test02():
         RecommenderW2V.ARG_WINDOW_SIZE: 5}
     rec: ARecommender = RecommenderW2V("RecommenderW2V", argsDict)
 
-    rec.train(HistoryDF("test03"), trainDataset)
+    rec.train(HistoryDF("test02"), trainDataset)
 
-    uDF:DataFrame = DataFrame([eventsDF.iloc[9000]])
-    print(uDF)
+    uDF:DataFrame = DataFrame([eventsDF.iloc[900]])
+#    print(str(eventsDF.tail(10)))
+#    print(str(type(uDF)))
     rec.update(uDF, {})
 
-    r:Series = rec.recommend(23, 50, {})
+    r:Series = rec.recommend(1093035, 50, argsDict)
+    print("Recommendation:")
     print(r)
 
 
@@ -131,9 +133,10 @@ def test03():
 
 
 if __name__ == "__main__":
+    os.chdir("..")
+    print(os.getcwd())
 
 
-
-#    test01()
-#    test02()
-    test03()
+    #test01()
+    test02()
+    #test03()

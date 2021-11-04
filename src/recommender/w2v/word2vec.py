@@ -14,7 +14,7 @@
 #  context-target pairs:
 #    ("hat", "the"), ("hat", "cat"), ("hat", "in"), ("hat", "the")
 
-def word2vecRun(window_size = 3, embedding_size = 64, generations = 100000, texts = []):
+def word2vecRun(learningRate:float, window_size = 3, embedding_size = 64, generations = 100000, texts = []):
     import tensorflow.compat.v1 as tf
     #import tensorflow as tf
     tf.disable_v2_behavior()
@@ -38,8 +38,6 @@ def word2vecRun(window_size = 3, embedding_size = 64, generations = 100000, text
     #generations:int = 200000
     #generations:int = 400000
     #generations:int = 450000
-
-    model_learning_rate = 0.01
 
     #embedding_size = 64   # Word embedding size
     #doc_embedding_size = 64   # Document embedding size
@@ -103,7 +101,7 @@ def word2vecRun(window_size = 3, embedding_size = 64, generations = 100000, text
             num_classes = vocabulary_size))
 
     # Create optimizer
-    optimizer = tf.train.GradientDescentOptimizer(learning_rate=1.0).minimize(loss)
+    optimizer = tf.train.GradientDescentOptimizer(learningRate).minimize(loss)
 
     # Cosine similarity between words
     norm = tf.sqrt(tf.reduce_sum(tf.square(embeddings), 1, keep_dims=True))

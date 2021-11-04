@@ -46,7 +46,7 @@ class BatchDefMLRandomRecsSwitching(ABatchDefinitionML):
         divisionDatasetPercentualSize:int
         uBehaviour:str
         repetition:int
-        divisionDatasetPercentualSize, uBehaviour, repetition = InputABatchDefinition.getBatchParameters(self.datasetID)[batchID]
+        divisionDatasetPercentualSize, uBehaviour, repetition = InputABatchDefinition().getBatchParameters(self.datasetID)[batchID]
 
         eTool:AEvalTool = EToolDoNothing({})
 
@@ -71,4 +71,4 @@ if __name__ == "__main__":
     os.chdir("..")
     print(os.getcwd())
 
-    BatchDefMLRandomRecsSwitching.generateAllBatches()
+    BatchDefMLRandomRecsSwitching.generateAllBatches(InputABatchDefinition())

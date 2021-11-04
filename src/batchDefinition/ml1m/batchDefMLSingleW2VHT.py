@@ -37,6 +37,7 @@ from configuration.configuration import Configuration #class
 
 class BatchDefMLSingleW2VHT(ABatchDefinitionML):
 
+    learningRates:List[int] = [1.0]
     trainVariants:List[str] = ["positive"]
     iterations:List[int] = [50000, 100000, 200000]
     windowSizes:List[int] = [5, 3, 1]
@@ -52,25 +53,28 @@ class BatchDefMLSingleW2VHT(ABatchDefinitionML):
 
         aDict:Dict[str,object] = {}
         for trainVariantI in cls.trainVariants:
-            for iterationI in cls.iterations:
-                for windowSizeI in cls.windowSizes:
-                    for vectorSizeI in cls.vectorSizes:
-                        for userProfileStrategyI in cls.userProfileStrategies:
-                            for userProfileSizeI in cls.userProfileSizes:
+            for learningRateI in cls.learningRates:
+                for iterationI in cls.iterations:
+                    for windowSizeI in cls.windowSizes:
+                        for vectorSizeI in cls.vectorSizes:
+                            for userProfileStrategyI in cls.userProfileStrategies:
+                                for userProfileSizeI in cls.userProfileSizes:
 
-                                keyI:str = "t" + str(trainVariantI) + "i" + str(iterationI) +\
-                                            "ws" + str(windowSizeI) + "vs" + str(vectorSizeI) +\
-                                            "ups" + userProfileStrategyI + "ups" + str(userProfileSizeI)
+                                    keyI:str = "t" + str(trainVariantI) + "lr" + str(learningRateI).replace(".", "") +\
+                                                "i" + str(iterationI) +\
+                                                "ws" + str(windowSizeI) + "vs" + str(vectorSizeI) +\
+                                                "ups" + userProfileStrategyI + "ups" + str(userProfileSizeI)
 
-                                rW2V:ARecommender = RecommenderDescription(RecommenderW2V, {
-                                    RecommenderW2V.ARG_ITERATIONS: iterationI,
-                                    RecommenderW2V.ARG_TRAIN_VARIANT: trainVariantI,
-                                    RecommenderW2V.ARG_USER_PROFILE_SIZE: userProfileSizeI,
-                                    RecommenderW2V.ARG_USER_PROFILE_STRATEGY: userProfileStrategyI,
-                                    RecommenderW2V.ARG_VECTOR_SIZE: vectorSizeI,
-                                    RecommenderW2V.ARG_WINDOW_SIZE: windowSizeI})
+                                    rW2V:ARecommender = RecommenderDescription(RecommenderW2V, {
+                                        RecommenderW2V.ARG_LEARNING_RATE: learningRateI,
+                                        RecommenderW2V.ARG_ITERATIONS: iterationI,
+                                        RecommenderW2V.ARG_TRAIN_VARIANT: trainVariantI,
+                                        RecommenderW2V.ARG_USER_PROFILE_SIZE: userProfileSizeI,
+                                        RecommenderW2V.ARG_USER_PROFILE_STRATEGY: userProfileStrategyI,
+                                        RecommenderW2V.ARG_VECTOR_SIZE: vectorSizeI,
+                                        RecommenderW2V.ARG_WINDOW_SIZE: windowSizeI})
 
-                                aDict[keyI] = rW2V
+                                    aDict[keyI] = rW2V
         return aDict
 
 
@@ -78,7 +82,7 @@ class BatchDefMLSingleW2VHT(ABatchDefinitionML):
         divisionDatasetPercentualSize: int
         uBehaviour: str
         repetition: int
-        divisionDatasetPercentualSize, uBehaviour, repetition = InputABatchDefinition.getBatchParameters(self.datasetID)[batchID]
+        divisionDatasetPercentualSize, uBehaviour, repetition = InputABatchDefinition().getBatchParameters(self.datasetID)[batchID]
 
         rDescr:RecommenderDescription = self.getParameters()[jobID]
         recommenderID:str = jobID
@@ -95,4 +99,4 @@ if __name__ == "__main__":
     os.chdir("..")
     print(os.getcwd())
 
-    BatchDefMLSingleW2VHT.generateAllBatches()
+    BatchDefMLSingleW2VHT.generateAllBatches(InputABatchDefinition())

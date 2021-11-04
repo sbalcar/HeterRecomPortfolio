@@ -67,12 +67,22 @@ class SimulationRR(ASequentialSimulation):
 
         # create behaviour dictionary of DataFrame indexed by recomRepetition
         recomRepetitionCountInDataset:int = behaviourDF[BehavioursRR.COL_REPETITION].max() +1
+        #print("count: " + str(recomRepetitionCountInDataset))
+        #print(behaviourDF.head(10))
+        #print(behaviourDF.tail(10))
+        #print("events:      " + str(len(eventsDF)))
+        #print("behaviours: " + str(len(behaviourDF)))
+        #print("max behaviours: " + str(max(behaviourDF.index)))
+        #print("recomRepetitionCount: " + str(recomRepetitionCount))
+        #print("range: " + str(range(recomRepetitionCount)))
 
         testRepeatedBehaviourDict:dict = {}
         bIndexes:List[int] = list([recomRepetitionCountInDataset*i for i in testEventsDF.index])
         for repetitionI in range(recomRepetitionCount):
             # indexes of behaviour
             indexes:List[int] = [vI+repetitionI for vI in bIndexes]
+
+            # indexes
             behaviourDFI:DataFrame = DataFrame(behaviourDF.take(indexes).values.tolist(),
                         index=testEventsDF.index, columns=behaviourDF.keys())
             testRepeatedBehaviourDict[repetitionI] = behaviourDFI
@@ -126,8 +136,10 @@ class SimulationRR(ASequentialSimulation):
             currentSessionIdI:int = None
             currentPageTypeI:object = None
 
-            windowOfItemIDsI:int = model.getNextRelevantItemIDsExceptItemIDs(currentDFIndexI,
+            windowOfItemIDsI:List[int] = model.getNextRelevantItemIDsExceptItemIDs(currentDFIndexI,
                                                                              self._clickedItems[currentUserIdI], self._windowSize)
+            windowOfItemIDsI:List[int] = [int(itemIdI) for itemIdI in windowOfItemIDsI]
+
             portfolioI:APortfolio
             for portfolioI in portfolios:
 

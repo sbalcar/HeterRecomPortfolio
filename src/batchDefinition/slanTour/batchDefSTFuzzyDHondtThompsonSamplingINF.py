@@ -60,7 +60,7 @@ class BatchDefSTDFuzzyHondtThompsonSamplingINF(ABatchDefinitionST):
         divisionDatasetPercentualSize:int
         uBehaviour:str
         repetition:int
-        divisionDatasetPercentualSize, uBehaviour, repetition = InputABatchDefinition.getBatchParameters(self.datasetID)[batchID]
+        divisionDatasetPercentualSize, uBehaviour, repetition = InputABatchDefinition().getBatchParameters(self.datasetID)[batchID]
 
         selector, nImplFeedback = self.getParameters()[jobID]
 
@@ -85,4 +85,4 @@ if __name__ == "__main__":
     os.chdir("..")
     os.chdir("..")
 
-    BatchDefSTDFuzzyHondtThompsonSamplingINF.generateAllBatches()
+    BatchDefSTDFuzzyHondtThompsonSamplingINF.generateAllBatches(InputABatchDefinition())

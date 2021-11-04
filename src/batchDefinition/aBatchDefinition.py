@@ -25,15 +25,15 @@ class ABatchDefinition(ABC):
     def run(self, batchID:str, jobID:str):
         pass
 
-    def generateAllBatches(self):
+    def generateAllBatches(self, iBatchDef:InputABatchDefinition):
 
-        batches:List[batch.batch.Batch] = self.getAllBatches()
+        batches:List[batch.batch.Batch] = self.getAllBatches(iBatchDef)
 
         for batchI in batches:
             self.__writeToFile(batchI.batchDefinitionClass, batchI.batchID, batchI.jobID)
 
-    def getAllBatches(self):
-        batchIDs:List[str] = InputABatchDefinition.getBatchParameters(self.datasetID).keys()
+    def getAllBatches(self, iBatchDef:InputABatchDefinition):
+        batchIDs:List[str] = iBatchDef.getBatchParameters(self.datasetID).keys()
 
         jobIDs:List[str] = list(self.getParameters().keys())
         if hasattr(self, 'jobIDs'):

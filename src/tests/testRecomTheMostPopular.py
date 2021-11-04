@@ -61,7 +61,8 @@ def test02():
     print("Running RecommenderTheMostPopular RR:")
 
     from datasets.retailrocket.events import Events  # class
-    eventsDF:DataFrame = Events.readFromFile()
+    #eventsDF:DataFrame = Events.readFromFile()
+    eventsDF:DataFrame = Events.readFromFileWithFilter(minEventCount=50)
 
     dataset:ADataset = DatasetRetailRocket("test", eventsDF, DataFrame(), DataFrame())
 
@@ -69,6 +70,7 @@ def test02():
     rec.train(HistoryDF("test"), dataset)
 
     recommendation = rec.recommend(1, 20, {})
+    print("Recommendation:")
     print(recommendation)
 
 

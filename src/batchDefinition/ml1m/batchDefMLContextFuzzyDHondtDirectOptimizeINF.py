@@ -67,7 +67,7 @@ class BatchDefMLContextFuzzyDHondtDirectOptimizeINF(ABatchDefinitionML):
         divisionDatasetPercentualSize:int
         uBehaviour:str
         repetition:int
-        divisionDatasetPercentualSize, uBehaviour, repetition = InputABatchDefinition.getBatchParameters(self.datasetID)[batchID]
+        divisionDatasetPercentualSize, uBehaviour, repetition = InputABatchDefinition().getBatchParameters(self.datasetID)[batchID]
 
         selector:ADHondtSelector
         nImplFeedback:APenalization
@@ -104,6 +104,6 @@ if __name__ == "__main__":
     os.chdir("..")
     print(os.getcwd())
 
-    BatchDefMLContextFuzzyDHondtDirectOptimizeINF.generateAllBatches()
+    BatchDefMLContextFuzzyDHondtDirectOptimizeINF.generateAllBatches(InputABatchDefinition())
 
     #BatchMLContextFuzzyDHondtDirectOptimizeINF().run("ml1mDiv90Ulinear0109R1", "Fixed")

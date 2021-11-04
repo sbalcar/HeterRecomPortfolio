@@ -47,7 +47,7 @@ class BatchDefRRBanditTS(ABatchDefinitionRR):
         uBehaviour:str
         repetition:int
         divisionDatasetPercentualSize, uBehaviour, repetition = \
-        InputABatchDefinition.getBatchParameters(self.datasetID)[batchID]
+            InputABatchDefinition().getBatchParameters(self.datasetID)[batchID]
 
         selector:ADHondtSelector = self.getParameters()[jobID]
 
@@ -69,5 +69,5 @@ if __name__ == "__main__":
     os.chdir("..")
     print(os.getcwd())
 
-    #BatchDefRRBanditTS().generateAllBatches()
-    BatchDefRRBanditTS().run('rrDiv90Ulinear0109R1', 'Fixed')
+    BatchDefRRBanditTS().generateAllBatches(InputABatchDefinition())
+    #BatchDefRRBanditTS().run('rrDiv90Ulinear0109R1', 'Fixed')

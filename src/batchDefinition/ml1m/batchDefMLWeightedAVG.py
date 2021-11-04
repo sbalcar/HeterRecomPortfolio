@@ -62,7 +62,7 @@ class BatchDefMLWeightedAVG(ABatchDefinitionML):
         divisionDatasetPercentualSize:int
         uBehaviour:str
         repetition:int
-        divisionDatasetPercentualSize, uBehaviour, repetition = InputABatchDefinition.getBatchParameters(self.datasetID)[batchID]
+        divisionDatasetPercentualSize, uBehaviour, repetition = InputABatchDefinition().getBatchParameters(self.datasetID)[batchID]
 
         eTool:AEvalTool = self.getParameters()[jobID]
 
@@ -87,4 +87,4 @@ if __name__ == "__main__":
     os.chdir("..")
     print(os.getcwd())
 
-    BatchDefMLWeightedAVG.generateAllBatches()
+    BatchDefMLWeightedAVG.generateAllBatches(InputABatchDefinition())

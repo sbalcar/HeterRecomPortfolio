@@ -47,7 +47,7 @@ class BatchDefSTWeightedAVGMMR(ABatchDefinitionST):
         uBehaviour: str
         repetition: int
         divisionDatasetPercentualSize, uBehaviour, repetition = \
-        InputABatchDefinition.getBatchParameters(self.datasetID)[batchID]
+            InputABatchDefinition().getBatchParameters(self.datasetID)[batchID]
 
         eTool:AEvalTool = self.getParameters()[jobID]
 
@@ -70,4 +70,4 @@ if __name__ == "__main__":
     os.chdir("..")
     print(os.getcwd())
 
-    BatchDefSTWeightedAVGMMR.generateAllBatches()
+    BatchDefSTWeightedAVGMMR.generateAllBatches(InputABatchDefinition())

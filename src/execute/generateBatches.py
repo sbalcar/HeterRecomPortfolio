@@ -6,6 +6,8 @@ import numpy as np
 
 from typing import List #class
 
+from batchDefinition.inputABatchDefinition import InputABatchDefinition #class
+
 from batchDefinition.aBatchDefinition import ABatchDefinition #class
 from batchDefinition.ml1m.batchDefMLBanditTS import BatchDefMLBanditTS #class
 
@@ -50,6 +52,8 @@ from batchDefinition.retailrocket.batchDefRRSingle import BatchDefRRSingle #clas
 from batchDefinition.retailrocket.batchDefRRSingleW2VHT import BatchDefRRSingleW2VHT #class
 from batchDefinition.retailrocket.batchDefRRSingleVMContextKNNHT import BatchDefRRSingleVMContextKNNHT #class
 from batchDefinition.retailrocket.batchDefRRSingleCosineCBHT import BatchDefRRSingleCosineCBHT #class
+from batchDefinition.retailrocket.batchDefRRBanditTS import BatchDefRRBanditTS #class
+from batchDefinition.retailrocket.batchDefRRFuzzyDHondt import BatchDefRRFuzzyDHondt #class
 
 from batchDefinition.slanTour.batchDefSTFuzzyDHondtDirectOptimizeThompsonSampling import BatchDefSTFuzzyDHondtDirectOptimizeThompsonSampling #class
 from batchDefinition.slanTour.batchDefSTFuzzyDHondtDirectOptimizeThompsonSamplingINF import BatchDefSTFuzzyDHondtDirectOptimizeThompsonSamplingINF #class
@@ -422,18 +426,79 @@ def getBatchesJournal2():
     return batchesDef
 
 
+def getBatchesChinaHP():
+    print("Get China Batches HP")
+
+    batchesDef: List[ABatchDefinition] = []
+
+    # RR #############################################################################
+    batchDefRRSingle = BatchDefRRSingle()
+    #
+    batchDefRRSingleW2VHT = BatchDefRRSingleW2VHT()
+    batchDefRRSingleVMContextKNNHT = BatchDefRRSingleVMContextKNNHT()
+    #
+    batchesDef.append(batchDefRRSingle)
+    batchesDef.append(batchDefRRSingleW2VHT)
+    batchesDef.append(batchDefRRSingleVMContextKNNHT)
+
+    return batchesDef
+
+
+def getBatchesChina():
+    print("Get China Batches")
+
+    batchesDef:List[ABatchDefinition] = []
+
+    # RR #############################################################################
+    batchDefRRSingle = BatchDefRRSingle()
+    #
+    batchDefRRSingleW2VHT = BatchDefRRSingleW2VHT()
+    #
+    batchDefRRBanditTS = BatchDefRRBanditTS()
+    batchDefRRBanditTS.selectorIDs = [BatchDefMLFuzzyDHondt.SLCTR_FIXED]
+    #
+    batchDefRRFuzzyDHondt = BatchDefRRFuzzyDHondt()
+    batchDefRRFuzzyDHondt.lrClicks:List[float] = [0.03]
+    batchDefRRFuzzyDHondt.lrViewDivisors:List[float] = [250]
+    batchDefRRFuzzyDHondt.selectorIDs:List[str] = [BatchDefMLFuzzyDHondt.SLCTR_FIXED]
+
+    #
+    batchesDef.append(batchDefRRSingle)
+    batchesDef.append(batchDefRRSingleW2VHT)
+    batchesDef.append(batchDefRRBanditTS)
+    batchesDef.append(batchDefRRFuzzyDHondt)
+
+    return batchesDef
+
+
+
 def generateBatches():
     print("Generate Batches")
 
     np.random.seed(42)
     random.seed(42)
 
-    #batchesDef: List = getAllBatches()
-    batchesDef:List = getBatchesJournal()
+    iBatchHPDef = InputABatchDefinition()
+    iBatchHPDef.divisionsDatasetPercentualSize = [80]
+
+    batchesHPDef:List = []
+    batchesHPDef:List = getBatchesChinaHP()
+
+    for batchDefI in batchesHPDef:
+        batchDefI.generateAllBatches(iBatchHPDef)
+
+
+    iBatchDef = InputABatchDefinition()
+    iBatchDef.divisionsDatasetPercentualSize = [90]
+
+    batchesDef:List = []
+    #batchesDef:List = getAllBatches()
+    #batchesDef:List = getBatchesJournal()
     #batchesDef:List = getBatchesJournal2()
+    batchesDef:List = getBatchesChina()
 
     for batchDefI in batchesDef:
-        batchDefI.generateAllBatches()
+        batchDefI.generateAllBatches(iBatchDef)
 
 
 

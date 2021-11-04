@@ -78,7 +78,7 @@ class BatchDefSTSingleCosineCBHT(ABatchDefinitionST):
         divisionDatasetPercentualSize: int
         uBehaviour: str
         repetition: int
-        divisionDatasetPercentualSize, uBehaviour, repetition = InputABatchDefinition.getBatchParameters(self.datasetID)[batchID]
+        divisionDatasetPercentualSize, uBehaviour, repetition = InputABatchDefinition().getBatchParameters(self.datasetID)[batchID]
 
         rDescr:RecommenderDescription = self.getParameters()[jobID]
         recommenderID:str = jobID
@@ -95,4 +95,4 @@ if __name__ == "__main__":
     os.chdir("..")
     print(os.getcwd())
 
-    BatchDefSTSingleCosineCBHT.generateAllBatches()
+    BatchDefSTSingleCosineCBHT.generateAllBatches(InputABatchDefinition())

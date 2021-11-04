@@ -49,11 +49,11 @@ class BatchDefRRSingleVMContextKNNHT(ABatchDefinitionRR):
         divisionDatasetPercentualSize:int
         uBehaviour:str
         repetition:int
-        divisionDatasetPercentualSize, uBehaviour, repetition = InputABatchDefinition.getBatchParameters(self.datasetID)[batchID]
+        divisionDatasetPercentualSize, uBehaviour, repetition = InputABatchDefinition().getBatchParameters(self.datasetID)[batchID]
 
         kI:str = self.getParameters()[jobID]
 
-        recommenderID:str = "RecommendervmContextKNN" + "K" + str(kI)
+        recommenderID:str = "vmContextKNN" + "K" + str(kI)
 
         rVMCtKNN:RecommenderDescription = RecommenderDescription(RecommenderVMContextKNN, {
                     RecommenderVMContextKNN.ARG_K: kI})
@@ -71,6 +71,6 @@ if __name__ == "__main__":
    os.chdir("..")
    #print(os.getcwd())
 
-   #BatchDefRRSingleVMContextKNNHT().generateAllBatches()
+   BatchDefRRSingleVMContextKNNHT().generateAllBatches(InputABatchDefinition())
 
    BatchDefRRSingleVMContextKNNHT().run('rrDiv90Ulinear0109R1', 'K25')

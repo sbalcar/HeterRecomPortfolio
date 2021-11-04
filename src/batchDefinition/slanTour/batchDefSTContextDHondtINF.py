@@ -66,7 +66,7 @@ class BatchDefSTContextDHondtINF(ABatchDefinitionST):
         divisionDatasetPercentualSize:int
         uBehaviour:str
         repetition:int
-        divisionDatasetPercentualSize, uBehaviour, repetition = InputABatchDefinition.getBatchParameters(self.datasetID)[batchID]
+        divisionDatasetPercentualSize, uBehaviour, repetition = InputABatchDefinition().getBatchParameters(self.datasetID)[batchID]
 
         selector:ADHondtSelector
         selector, negativeImplFeedback = self.getParameters()[jobID]
@@ -108,4 +108,6 @@ if __name__ == "__main__":
    os.chdir("..")
    os.chdir("..")
    print(os.getcwd())
-   BatchDefSTContextDHondtINF.generateAllBatches()
+   
+   BatchDefSTContextDHondtINF.generateAllBatches(InputABatchDefinition())
+   

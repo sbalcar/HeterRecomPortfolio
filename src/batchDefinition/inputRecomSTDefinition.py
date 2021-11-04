@@ -64,8 +64,9 @@ class InputRecomSTDefinition:
     @staticmethod
     def exportRDescW2Vtalli100000ws1vs32upsmaxups1():
         return RecommenderDescription(RecommenderW2V, {
-                RecommenderW2V.ARG_ITERATIONS: 100000,
                 RecommenderW2V.ARG_TRAIN_VARIANT: "all",
+                RecommenderW2V.ARG_ITERATIONS: 100000,
+                RecommenderW2V.ARG_LEARNING_RATE: 1.0,
                 RecommenderW2V.ARG_USER_PROFILE_SIZE: 1,
                 RecommenderW2V.ARG_USER_PROFILE_STRATEGY: "max",
                 RecommenderW2V.ARG_VECTOR_SIZE: 32,
@@ -74,8 +75,9 @@ class InputRecomSTDefinition:
     @staticmethod
     def exportRDescW2talli200000ws1vs64upsweightedMeanups5():
         return RecommenderDescription(RecommenderW2V, {
-                RecommenderW2V.ARG_ITERATIONS: 200000,
                 RecommenderW2V.ARG_TRAIN_VARIANT: "all",
+                RecommenderW2V.ARG_ITERATIONS: 200000,
+                RecommenderW2V.ARG_LEARNING_RATE: 1.0,
                 RecommenderW2V.ARG_USER_PROFILE_SIZE: 5,
                 RecommenderW2V.ARG_USER_PROFILE_STRATEGY: "weightedMean",
                 RecommenderW2V.ARG_VECTOR_SIZE: 64,

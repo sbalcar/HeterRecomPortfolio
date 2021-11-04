@@ -52,10 +52,10 @@ class BatchDefRRSingleCosineCBHT(ABatchDefinitionRR):
         divisionDatasetPercentualSize: int
         uBehaviour: str
         repetition: int
-        divisionDatasetPercentualSize, uBehaviour, repetition = InputABatchDefinition.getBatchParameters(self.datasetID)[batchID]
+        divisionDatasetPercentualSize, uBehaviour, repetition = InputABatchDefinition().getBatchParameters(self.datasetID)[batchID]
 
         rDescr:RecommenderDescription = self.getParameters()[jobID]
-        recommenderID:str = jobID
+        recommenderID:str = "CosineCB" + jobID
 
         pDescr:APortfolioDescription = Portfolio1MethDescription(recommenderID.title(), recommenderID, rDescr)
         simulator:Simulator = InputSimulatorDefinition.exportSimulatorRetailRocket(
@@ -68,6 +68,6 @@ if __name__ == "__main__":
     os.chdir("..")
     print(os.getcwd())
 
-    #BatchDefRRSingleCosineCBHT().generateAllBatches()
+    #BatchDefRRSingleCosineCBHT().generateAllBatches(InputABatchDefinition())
 
     BatchDefRRSingleCosineCBHT().run('rrDiv90Ulinear0109R1', 'cbdOHEupsmaxups1')

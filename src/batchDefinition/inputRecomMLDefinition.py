@@ -65,8 +65,9 @@ class InputRecomMLDefinition:
     @staticmethod
     def exportRDescW2Vtpositivei50000ws1vs32upsweightedMeanups3():
         return RecommenderDescription(RecommenderW2V, {
-                RecommenderW2V.ARG_ITERATIONS: 50000,
                 RecommenderW2V.ARG_TRAIN_VARIANT:"positive",
+                RecommenderW2V.ARG_ITERATIONS: 50000,
+                RecommenderW2V.ARG_LEARNING_RATE: 1.0,
                 RecommenderW2V.ARG_USER_PROFILE_SIZE: 3,
                 RecommenderW2V.ARG_USER_PROFILE_STRATEGY:"weightedMean",
                 RecommenderW2V.ARG_VECTOR_SIZE: 32,
@@ -76,8 +77,9 @@ class InputRecomMLDefinition:
     @staticmethod
     def exportRDescW2Vtpositivei50000ws1vs64upsweightedMeanups7():
         return RecommenderDescription(RecommenderW2V, {
-                RecommenderW2V.ARG_ITERATIONS: 50000,
                 RecommenderW2V.ARG_TRAIN_VARIANT:"positive",
+                RecommenderW2V.ARG_ITERATIONS: 50000,
+                RecommenderW2V.ARG_LEARNING_RATE: 1.0,
                 RecommenderW2V.ARG_USER_PROFILE_SIZE: 7,
                 RecommenderW2V.ARG_USER_PROFILE_STRATEGY:"weightedMean",
                 RecommenderW2V.ARG_VECTOR_SIZE: 64,

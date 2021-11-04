@@ -12,8 +12,6 @@ from datasets.ml.ratings import Ratings #class
 from datasets.ml.behavioursML import BehavioursML #class
 from datasets.retailrocket.behavioursRR import BehavioursRR #class
 from datasets.slantour.behavioursST import BehavioursST #class
-
-
 from datasets.datasetST import DatasetST #class
 
 from pandas.core.frame import DataFrame #class
@@ -30,15 +28,17 @@ from pandas.core.frame import DataFrame #class
 from portfolio.aPortfolio import APortfolio #class
 from portfolioDescription.portfolio1MethDescription import Portfolio1MethDescription #class
 
-from input.inputRecomMLDefinition import InputRecomMLDefinition #class
+from batchDefinition.inputRecomMLDefinition import InputRecomMLDefinition #class
+from batchDefinition.inputSimulatorDefinition import InputSimulatorDefinition #class
+from batchDefinition.inputABatchDefinition import InputABatchDefinition
+from batchDefinition.aBatchDefinitionML import ABatchDefinitionML #class
+from batchDefinition.inputRecomRRDefinition import InputRecomRRDefinition #class
 
 from portfolioDescription.aPortfolioDescription import APortfolioDescription #class
 
 from evaluationTool.evalToolDoNothing import EToolDoNothing #class
 
 from recommenderDescription.recommenderDescription import RecommenderDescription #class
-
-from input.inputSimulatorDefinition import InputSimulatorDefinition #class
 
 from history.aHistory import AHistory #class
 from history.historyHierDF import HistoryHierDF #class
@@ -48,10 +48,7 @@ from recommender.aRecommender import ARecommender #class
 from recommender.recommenderTheMostPopular import RecommenderTheMostPopular #class
 
 import pandas as pd
-from input.inputABatchDefinition import InputABatchDefinition
-from input.aBatchDefinitionML import ABatchDefinitionML #class
 
-import pandas as pd
 from numpy.random import randint
 
 
@@ -142,7 +139,57 @@ def test01():
     simulator.simulate([pDescr], [DataFrame()], [EToolDoNothing({})], HistoryHierDF)
 
 
+
+
+def test02():
+    print("Test 02")
+
+    rDescr:RecommenderDescription = InputRecomRRDefinition.exportRDescTheMostPopular()
+    recommenderID:str = InputRecomRRDefinition.THE_MOST_POPULAR
+
+    rDescr:RecommenderDescription = InputRecomRRDefinition.exportRDescKNN()
+    recommenderID:str = InputRecomRRDefinition.KNN
+
+    rDescr:RecommenderDescription = InputRecomRRDefinition.exportRDescBPRMF()
+    recommenderID:str = InputRecomRRDefinition.BPRMF
+
+    rDescr:RecommenderDescription = InputRecomRRDefinition.exportRDescVMContextKNN()
+    recommenderID:str = InputRecomRRDefinition.VMC_KNN
+
+    rDescr:RecommenderDescription = InputRecomRRDefinition.exportRDescCosineCB()
+    recommenderID:str = InputRecomRRDefinition.COSINECB
+
+    rDescr:RecommenderDescription = InputRecomRRDefinition.exportRDescW2V()
+    recommenderID:str = InputRecomRRDefinition.W2V
+
+
+    pDescr:Portfolio1MethDescription = Portfolio1MethDescription(recommenderID.title(), recommenderID, rDescr)
+
+    dataset:ADataset = DatasetRetailRocket.readDatasetsWithFilter(minEventCount=50)
+
+    behavioursDF:DataFrame = BehavioursRR.readFromFileRR(BehavioursRR.getFile("static08"))
+
+    history:AHistory = HistoryDF("test")
+    p:APortfolio = pDescr.exportPortfolio("jobID", history)
+    p.train(history, dataset)
+
+
+    argsSimulationDict:Dict[str,str] = {SimulationRR.ARG_WINDOW_SIZE: 50,
+                                SimulationRR.ARG_RECOM_REPETITION_COUNT: 1,
+                                SimulationRR.ARG_NUMBER_OF_RECOMM_ITEMS: 100,
+                                SimulationRR.ARG_NUMBER_OF_AGGR_ITEMS: InputSimulatorDefinition.numberOfAggrItems,
+                                SimulationRR.ARG_DIV_DATASET_PERC_SIZE: 90,
+                                SimulationRR.ARG_HISTORY_LENGTH: 10}
+
+    # simulation of portfolio
+    simulator:Simulator = Simulator("test", SimulationRR, argsSimulationDict, dataset, behavioursDF)
+    simulator.simulate([pDescr], [DataFrame()], [EToolDoNothing({})], [HistoryHierDF("a")])
+
+
+
+
 if __name__ == "__main__":
     os.chdir("..")
 
-    test01()
+    #test01()
+    test02()

@@ -17,14 +17,14 @@ from aggregationDescription.aggregationDescription import AggregationDescription
 from batchDefinition.inputAggrDefinition import InputAggrDefinition  # class
 from batchDefinition.modelDefinition import ModelDefinition
 
-from batchDefinition.inputRecomMLDefinition import InputRecomMLDefinition  # class
+from batchDefinition.inputRecomRRDefinition import InputRecomRRDefinition  # class
 
 from aggregation.operators.aDHondtSelector import ADHondtSelector  # class
 from aggregation.operators.rouletteWheelSelector import RouletteWheelSelector  # class
 from aggregation.operators.theMostVotedItemSelector import TheMostVotedItemSelector  # class
 
 from batchDefinition.inputABatchDefinition import InputABatchDefinition
-from batchDefinition.aBatchDefinitionML import ABatchDefinitionML  # class
+from batchDefinition.aBatchDefinitionRR import ABatchDefinitionRR  # class
 
 from batchDefinition.inputSimulatorDefinition import InputSimulatorDefinition  # class
 
@@ -32,40 +32,46 @@ from simulator.simulator import Simulator  # class
 
 from history.historyHierDF import HistoryHierDF  # class
 
-from batchDefinition.ml1m.batchDefMLWeightedAVG import BatchDefMLWeightedAVG #class
+from batchDefinition.ml1m.batchDefMLFuzzyDHondt import BatchDefMLFuzzyDHondt  # class
 
 
-class BatchDefMLWeightedAVGMMR(ABatchDefinitionML):
+class BatchDefRRFuzzyDHondt(ABatchDefinitionRR):
+
+    lrClicks:List[float] = BatchDefMLFuzzyDHondt.lrClicks
+    lrViewDivisors:List[float] = BatchDefMLFuzzyDHondt.lrViewDivisors
+    selectorIDs:List[str] = BatchDefMLFuzzyDHondt.selectorIDs
+
 
     def getBatchName(self):
-        return "WAVGMMR"
+        return "FDHondt"
 
     def getParameters(self):
-        batchDefMLWeightedAVG = BatchDefMLWeightedAVG()
-        batchDefMLWeightedAVG.lrClicks:List[float] = self.lrClicks
-        batchDefMLWeightedAVG.lrViewDivisors:List[float] = self.lrViewDivisors
-        return batchDefMLWeightedAVG.getParameters()
+        batchDefMLFuzzyDHondt = BatchDefMLFuzzyDHondt()
+        batchDefMLFuzzyDHondt.lrClicks:List[float] = self.lrClicks
+        batchDefMLFuzzyDHondt.lrViewDivisors:List[float] = self.lrViewDivisors
+        batchDefMLFuzzyDHondt.selectorIDs:List[str] = self.selectorIDs
+        return batchDefMLFuzzyDHondt.getParameters()
 
     def run(self, batchID: str, jobID: str):
-
         divisionDatasetPercentualSize: int
         uBehaviour: str
         repetition: int
         divisionDatasetPercentualSize, uBehaviour, repetition = \
             InputABatchDefinition().getBatchParameters(self.datasetID)[batchID]
 
-        eTool:AEvalTool = self.getParameters()[jobID]
+        # eTool:AEvalTool
+        selector, eTool = self.getParameters()[jobID]
 
-        rIDs, rDescs = InputRecomMLDefinition.exportPairOfRecomIdsAndRecomDescrs()
+        rIDs, rDescs = InputRecomRRDefinition.exportPairOfRecomIdsAndRecomDescrs()
 
-        aDescWeightedAVG:AggregationDescription = InputAggrDefinition.exportADescWeightedAVGMMR()
+        aDescDHont:AggregationDescription = InputAggrDefinition.exportADescDHondt(selector)
 
-        pDescr: Portfolio1AggrDescription = Portfolio1AggrDescription(
-            "WAVGMMR" + jobID, rIDs, rDescs, aDescWeightedAVG)
+        pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
+            self.getBatchName() + jobID, rIDs, rDescs, aDescDHont)
 
         model:DataFrame = ModelDefinition.createDHontModel(pDescr.getRecommendersIDs())
 
-        simulator: Simulator = InputSimulatorDefinition.exportSimulatorML1M(
+        simulator: Simulator = InputSimulatorDefinition.exportSimulatorRetailRocket(
             batchID, divisionDatasetPercentualSize, uBehaviour, repetition)
         simulator.simulate([pDescr], [model], [eTool], [HistoryHierDF(pDescr.getPortfolioID())])
 
@@ -75,4 +81,4 @@ if __name__ == "__main__":
     os.chdir("..")
     print(os.getcwd())
 
-    BatchDefMLWeightedAVG.generateAllBatches(InputABatchDefinition())
+    BatchDefRRFuzzyDHondt().generateAllBatches(InputABatchDefinition())

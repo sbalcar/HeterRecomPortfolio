@@ -48,7 +48,7 @@ class BatchDefRRSingle(ABatchDefinitionRR):
         divisionDatasetPercentualSize:int
         uBehaviour:str
         repetition:int
-        divisionDatasetPercentualSize, uBehaviour, repetition = InputABatchDefinition.getBatchParameters(self.datasetID)[batchID]
+        divisionDatasetPercentualSize, uBehaviour, repetition = InputABatchDefinition().getBatchParameters(self.datasetID)[batchID]
 
         recommenderID:str = self.getParameters()[jobID]
 
@@ -67,7 +67,7 @@ if __name__ == "__main__":
    os.chdir("..")
    print(os.getcwd())
 
-   #BatchDefRRSingle().generateAllBatches()
+   BatchDefRRSingle().generateAllBatches(InputABatchDefinition())
 
    #BatchDefRRSingle().run("rrDiv90Ulinear0109R1", "TheMostPopular")
-   BatchDefRRSingle().run('rrDiv90Ulinear0109R1', 'KNN')
+   #BatchDefRRSingle().run('rrDiv90Ulinear0109R1', 'KNN')

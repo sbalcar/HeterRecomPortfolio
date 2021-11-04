@@ -17,9 +17,13 @@ from configuration.configuration import Configuration #class
 class InputRecomRRDefinition:
 
     # RR methods
-    THE_MOST_POPULAR :str = "TheMostPopular"
-    KNN :str = "KNN"
-    #VMC_KNN25 :str = "VMContextKNN25"
+    THE_MOST_POPULAR:str = "TheMostPopular"
+    KNN:str = "KNN"
+    BPRMF:str = "BPRMF"
+    VMC_KNN:str = "VMContextKNN"
+
+    COSINECB:str = "CosineCB"
+    W2V:str = "W2V"
 
     #W2VweightedMeanups3 :str = "W2Vtpositivei50000ws1vs32upsweightedMeanups3"
     #W2VweightedMeanups7 :str = "W2Vtpositivei50000ws1vs64upsweightedMeanups7"
@@ -38,8 +42,40 @@ class InputRecomRRDefinition:
 
     @staticmethod
     def exportRDescKNN():
-        return RecommenderDescription(RecommenderItemBasedKNN,
-                                      {})
+        return RecommenderDescription(RecommenderItemBasedKNN, {
+                RecommenderItemBasedKNN.ARG_K:25,
+                RecommenderItemBasedKNN.ARG_UPDATE_THRESHOLD:500})
+
+    @staticmethod
+    def exportRDescBPRMF():
+        return RecommenderDescription(RecommenderBPRMF, {
+                RecommenderBPRMF.ARG_FACTORS: 20,
+                RecommenderBPRMF.ARG_ITERATIONS: 50,
+                RecommenderBPRMF.ARG_LEARNINGRATE: 0.003,
+                RecommenderBPRMF.ARG_REGULARIZATION: 0.003})
+
+    @staticmethod
+    def exportRDescVMContextKNN():
+        return RecommenderDescription(RecommenderVMContextKNN,{
+                RecommenderVMContextKNN.ARG_K:25})
+
+    @staticmethod
+    def exportRDescCosineCB():
+        return RecommenderDescription(RecommenderCosineCB, {
+                RecommenderCosineCB.ARG_CB_DATA_PATH:"../data/simMatrixRR.npz",
+                RecommenderCosineCB.ARG_USER_PROFILE_SIZE: 3,
+                RecommenderCosineCB.ARG_USER_PROFILE_STRATEGY:"weightedMean"})
+
+    @staticmethod
+    def exportRDescW2V():
+        return RecommenderDescription(RecommenderW2V, {
+                RecommenderW2V.ARG_ITERATIONS: 50000,
+                RecommenderW2V.ARG_TRAIN_VARIANT:"all",
+                RecommenderW2V.ARG_USER_PROFILE_SIZE: 3,
+                RecommenderW2V.ARG_USER_PROFILE_STRATEGY:"weightedMean",
+                RecommenderW2V.ARG_VECTOR_SIZE: 32,
+                RecommenderW2V.ARG_WINDOW_SIZE: 1})
+
 
 
     @classmethod
@@ -53,27 +89,20 @@ class InputRecomRRDefinition:
         rIDsKNN:List[str] = [recom + cls.KNN.title()]
         rDescsKNN:List[RecommenderDescription] = [cls.exportRDescKNN()]
 
-#        rIDsVMCKNN:List[str] = [recom + cls.VMC_KNN25.title()]
-#        rDescsVMCKNN:List[RecommenderDescription] = [cls.exportRDescVMContextKNNk25()]
-        #rIDsVMCKNN:List[str] = []
-        #rDescsVMCKNN:List[RecommenderDescription] = []
+        rIDsVMCKNN:List[str] = [recom + cls.VMC_KNN.title()]
+        rDescsVMCKNN:List[RecommenderDescription] = [cls.exportRDescVMContextKNN()]
 
-#        rIDsW2V:List[str] = [recom + cls.W2VweightedMeanups3.title(), recom + cls.W2VweightedMeanups7.title()]
-#        rDescsW2V:List[RecommenderDescription] = [cls.exportRDescW2Vtpositivei50000ws1vs32upsweightedMeanups3(), cls.exportRDescW2Vtpositivei50000ws1vs64upsweightedMeanups7()]
-        #rIDsW2V: List[str] = []
-        #rDescsW2V: List[RecommenderDescription] = []
+        rIDsBPRMF:List[str] = [recom + cls.BPRMF.title()]
+        rDescsBPRMF:List[RecommenderDescription] = [cls.exportRDescBPRMF()]
 
-#        rIDsCB:List[str] = [recom + cls.COSINECBcbdOHEupsweightedMeanups3.title(), recom + cls.COSINECBcbdOHEupsmaxups1.title()]
-#        rDescsCB:List[RecommenderDescription] = [cls.exportRDescCosineCBcbdOHEupsweightedMeanups3(), cls.exportRDescCosineCBcbdOHEupsmaxups1()]
+        rIDsW2V:List[str] = [recom + cls.W2V.title()]
+        rDescsW2V:List[RecommenderDescription] = [cls.exportRDescW2V()]
 
-#        rIDsBPRMF:List[str] = [recom + cls.BPRMFf100i10lr0003r01.title(), recom + cls.BPRMFf20i20lr0003r01.title()]
-#        rDescsBPRMF:List[RecommenderDescription] = [cls.exportRDescBPRMFf100i10lr0003r01(), cls.exportRDescBPRMFf20i20lr0003r01()]
+        rIDsCB:List[str] = [recom + cls.COSINECB.title()]
+        rDescsCB:List[RecommenderDescription] = [cls.exportRDescCosineCB()]
 
-#        rIDs:List[str] = rIDsPop + rIDsKNN + rIDsVMCKNN + rIDsW2V + rIDsCB + rIDsBPRMF
-#        rDescs:List[RecommenderDescription] = rDescsPop + rDescsKNN + rDescsVMCKNN + rDescsW2V + rDescsCB + rDescsBPRMF
-
-        rIDs:List[str] = rIDsPop + rIDsKNN
-        rDescs:List[RecommenderDescription] = rDescsPop + rDescsKNN
+        rIDs:List[str] = rIDsPop + rIDsKNN + rIDsVMCKNN + rIDsBPRMF + rIDsW2V + rIDsCB
+        rDescs:List[RecommenderDescription] = rDescsPop + rDescsKNN + rDescsVMCKNN + rDescsBPRMF + rDescsW2V + rDescsCB
 
         return (rIDs, rDescs)
 
@@ -84,3 +113,11 @@ class InputRecomRRDefinition:
             return InputRecomRRDefinition.exportRDescTheMostPopular()
         elif recommenderID == InputRecomRRDefinition.KNN:
             return InputRecomRRDefinition.exportRDescKNN()
+        elif recommenderID == InputRecomRRDefinition.VMC_KNN:
+            return InputRecomRRDefinition.exportRDescVMContextKNN()
+        elif recommenderID == InputRecomRRDefinition.BPRMF:
+            return InputRecomRRDefinition.exportRDescBPRMF()
+        elif recommenderID == InputRecomRRDefinition.W2V:
+            return InputRecomRRDefinition.exportRDescW2V()
+        elif recommenderID == InputRecomRRDefinition.COSINECB:
+            return InputRecomRRDefinition.exportRDescCosineCB()

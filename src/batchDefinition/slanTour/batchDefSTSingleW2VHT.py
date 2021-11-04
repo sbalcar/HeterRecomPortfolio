@@ -53,7 +53,7 @@ class BatchDefSTSingleW2VHT(ABatchDefinitionST):
         divisionDatasetPercentualSize: int
         uBehaviour: str
         repetition: int
-        divisionDatasetPercentualSize, uBehaviour, repetition = InputABatchDefinition.getBatchParameters(self.datasetID)[batchID]
+        divisionDatasetPercentualSize, uBehaviour, repetition = InputABatchDefinition().getBatchParameters(self.datasetID)[batchID]
 
         rDescr:RecommenderDescription = self.getParameters()[jobID]
         recommenderID:str = jobID
@@ -70,4 +70,4 @@ if __name__ == "__main__":
     os.chdir("..")
     print(os.getcwd())
 
-    BatchDefSTSingleW2VHT.generateAllBatches()
+    BatchDefSTSingleW2VHT.generateAllBatches(InputABatchDefinition())

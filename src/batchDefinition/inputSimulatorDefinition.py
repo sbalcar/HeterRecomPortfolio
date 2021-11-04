@@ -58,7 +58,7 @@ class InputSimulatorDefinition:
                                    SimulationML.ARG_HISTORY_LENGTH: 10}
 
         # dataset reading
-        dataset:ADataset = DatasetRetailRocket.readDatasets()
+        dataset:ADataset = DatasetRetailRocket.readDatasetsWithFilter(minEventCount=50)
 
         behaviourFile:str = BehavioursRR.getFile(uBehaviourID)
         behavioursDF:DataFrame = BehavioursRR.readFromFileRR(behaviourFile)

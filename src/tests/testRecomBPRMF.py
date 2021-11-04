@@ -106,7 +106,7 @@ def test03():
 
     print("Running Recommender BPRMF on RR:")
 
-    dataset:DatasetRetailRocket = DatasetRetailRocket.readDatasets()
+    dataset:DatasetRetailRocket = DatasetRetailRocket.readDatasetsWithFilter(minEventCount=50)
 
     trainDataset:DatasetRetailRocket = dataset
 
@@ -124,7 +124,8 @@ def test03():
     print(uDF)
     rec.update(uDF, {})
 
-    r:Series = rec.recommend(23, 50, {})
+    r:Series = rec.recommend(1093035, 50, {})
+    print("Recommendation:")
     print(r)
 
 
@@ -218,6 +219,6 @@ if __name__ == "__main__":
 
 #    test01()
 #    test02()
-#    test03()
-    test04()
+    test03()
+#    test04()
 #    test05()
