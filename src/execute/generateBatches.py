@@ -434,12 +434,14 @@ def getBatchesChinaHP():
     # RR #############################################################################
     batchDefRRSingle = BatchDefRRSingle()
     #
-    batchDefRRSingleW2VHT = BatchDefRRSingleW2VHT()
+    batchDefRRSingleCosineCBHT = BatchDefRRSingleCosineCBHT()
     batchDefRRSingleVMContextKNNHT = BatchDefRRSingleVMContextKNNHT()
+    batchDefRRSingleW2VHT = BatchDefRRSingleW2VHT()
     #
     batchesDef.append(batchDefRRSingle)
-    batchesDef.append(batchDefRRSingleW2VHT)
+    batchesDef.append(batchDefRRSingleCosineCBHT)
     batchesDef.append(batchDefRRSingleVMContextKNNHT)
+    batchesDef.append(batchDefRRSingleW2VHT)
 
     return batchesDef
 

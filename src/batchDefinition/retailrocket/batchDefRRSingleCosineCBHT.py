@@ -68,6 +68,6 @@ if __name__ == "__main__":
     os.chdir("..")
     print(os.getcwd())
 
-    #BatchDefRRSingleCosineCBHT().generateAllBatches(InputABatchDefinition())
+    BatchDefRRSingleCosineCBHT().generateAllBatches(InputABatchDefinition())
 
-    BatchDefRRSingleCosineCBHT().run('rrDiv90Ulinear0109R1', 'cbdOHEupsmaxups1')
+    #BatchDefRRSingleCosineCBHT().run('rrDiv90Ulinear0109R1', 'cbdOHEupsmaxups1')
