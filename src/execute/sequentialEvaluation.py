@@ -40,6 +40,7 @@ from batchDefinition.ml1m.batchDefMLSingleVMContextKNNHT import BatchDefMLSingle
 
 from batchDefinition.retailrocket.batchDefRRSingle import BatchDefRRSingle #class
 from batchDefinition.retailrocket.batchDefRRSingleW2VHT import BatchDefRRSingleW2VHT #class
+from batchDefinition.retailrocket.batchDefRRSingleBPRMFHT import BatchDefRRSingleBPRMFHT #class
 from batchDefinition.retailrocket.batchDefRRSingleVMContextKNNHT import BatchDefRRSingleVMContextKNNHT #class
 from batchDefinition.retailrocket.batchDefRRSingleCosineCBHT import BatchDefRRSingleCosineCBHT #class
 from batchDefinition.retailrocket.batchDefRRBanditTS import BatchDefRRBanditTS #class

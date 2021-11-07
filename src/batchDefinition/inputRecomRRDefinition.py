@@ -57,14 +57,14 @@ class InputRecomRRDefinition:
     @staticmethod
     def exportRDescVMContextKNN():
         return RecommenderDescription(RecommenderVMContextKNN,{
-                RecommenderVMContextKNN.ARG_K:25})
+                RecommenderVMContextKNN.ARG_K:50})
 
     @staticmethod
     def exportRDescCosineCB():
         return RecommenderDescription(RecommenderCosineCB, {
                 RecommenderCosineCB.ARG_CB_DATA_PATH:"../data/simMatrixRR.npz",
-                RecommenderCosineCB.ARG_USER_PROFILE_SIZE: 3,
-                RecommenderCosineCB.ARG_USER_PROFILE_STRATEGY:"weightedMean"})
+                RecommenderCosineCB.ARG_USER_PROFILE_SIZE: 1,
+                RecommenderCosineCB.ARG_USER_PROFILE_STRATEGY:"max"})
 
     @staticmethod
     def exportRDescW2V():

@@ -49,9 +49,10 @@ from batchDefinition.ml1m.batchDefMLSingleBPRMFHT import BatchDefMLSingleBPRMFHT
 from batchDefinition.ml1m.batchDefMLSingleVMContextKNNHT import BatchDefMLSingleVMContextKNNHT #class
 
 from batchDefinition.retailrocket.batchDefRRSingle import BatchDefRRSingle #class
-from batchDefinition.retailrocket.batchDefRRSingleW2VHT import BatchDefRRSingleW2VHT #class
-from batchDefinition.retailrocket.batchDefRRSingleVMContextKNNHT import BatchDefRRSingleVMContextKNNHT #class
+from batchDefinition.retailrocket.batchDefRRSingleBPRMFHT import BatchDefRRSingleBPRMFHT #class
 from batchDefinition.retailrocket.batchDefRRSingleCosineCBHT import BatchDefRRSingleCosineCBHT #class
+from batchDefinition.retailrocket.batchDefRRSingleVMContextKNNHT import BatchDefRRSingleVMContextKNNHT #class
+from batchDefinition.retailrocket.batchDefRRSingleW2VHT import BatchDefRRSingleW2VHT #class
 from batchDefinition.retailrocket.batchDefRRBanditTS import BatchDefRRBanditTS #class
 from batchDefinition.retailrocket.batchDefRRFuzzyDHondt import BatchDefRRFuzzyDHondt #class
 
@@ -434,11 +435,13 @@ def getBatchesChinaHP():
     # RR #############################################################################
     batchDefRRSingle = BatchDefRRSingle()
     #
+    batchDefRRSingleBPRMFHT = BatchDefRRSingleBPRMFHT()
     batchDefRRSingleCosineCBHT = BatchDefRRSingleCosineCBHT()
     batchDefRRSingleVMContextKNNHT = BatchDefRRSingleVMContextKNNHT()
     batchDefRRSingleW2VHT = BatchDefRRSingleW2VHT()
     #
     batchesDef.append(batchDefRRSingle)
+    batchesDef.append(batchDefRRSingleBPRMFHT)
     batchesDef.append(batchDefRRSingleCosineCBHT)
     batchesDef.append(batchDefRRSingleVMContextKNNHT)
     batchesDef.append(batchDefRRSingleW2VHT)
