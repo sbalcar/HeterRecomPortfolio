@@ -32,7 +32,8 @@ from history.historyHierDF import HistoryHierDF  # class
 
 class BatchDefRRBanditTS(ABatchDefinitionRR):
 
-    selectorIDs = [BatchDefMLFuzzyDHondt.SLCTR_FIXED]
+    selectorIDs = [BatchDefMLFuzzyDHondt.SLCTR_FIXED, BatchDefMLFuzzyDHondt.SLCTR_ROULETTE1,
+                   BatchDefMLFuzzyDHondt.SLCTR_ROULETTE2, BatchDefMLFuzzyDHondt.SLCTR_ROULETTE5]
 
     def getBatchName(self):
         return "BanditTS"

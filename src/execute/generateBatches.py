@@ -457,21 +457,18 @@ def getBatchesChina():
     # RR #############################################################################
     batchDefRRSingle = BatchDefRRSingle()
     #
-    batchDefRRSingleW2VHT = BatchDefRRSingleW2VHT()
-    #
     batchDefRRBanditTS = BatchDefRRBanditTS()
-    batchDefRRBanditTS.selectorIDs = [BatchDefMLFuzzyDHondt.SLCTR_FIXED]
+    #batchDefRRBanditTS.selectorIDs = [BatchDefMLFuzzyDHondt.SLCTR_FIXED]
     #
     batchDefRRFuzzyDHondt = BatchDefRRFuzzyDHondt()
-    batchDefRRFuzzyDHondt.lrClicks:List[float] = [0.03]
-    batchDefRRFuzzyDHondt.lrViewDivisors:List[float] = [250]
-    batchDefRRFuzzyDHondt.selectorIDs:List[str] = [BatchDefMLFuzzyDHondt.SLCTR_FIXED]
+    #batchDefRRFuzzyDHondt.lrClicks:List[float] = [0.03]
+    #batchDefRRFuzzyDHondt.lrViewDivisors:List[float] = [250]
+    #batchDefRRFuzzyDHondt.selectorIDs:List[str] = [BatchDefMLFuzzyDHondt.SLCTR_FIXED]
 
     #
-    batchesDef.append(batchDefRRSingle)
-    batchesDef.append(batchDefRRSingleW2VHT)
+    #batchesDef.append(batchDefRRSingle)
     batchesDef.append(batchDefRRBanditTS)
-    batchesDef.append(batchDefRRFuzzyDHondt)
+    #batchesDef.append(batchDefRRFuzzyDHondt)
 
     return batchesDef
 

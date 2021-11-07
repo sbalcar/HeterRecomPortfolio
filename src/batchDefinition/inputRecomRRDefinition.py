@@ -49,10 +49,10 @@ class InputRecomRRDefinition:
     @staticmethod
     def exportRDescBPRMF():
         return RecommenderDescription(RecommenderBPRMF, {
-                RecommenderBPRMF.ARG_FACTORS: 20,
+                RecommenderBPRMF.ARG_FACTORS: 100,
                 RecommenderBPRMF.ARG_ITERATIONS: 50,
-                RecommenderBPRMF.ARG_LEARNINGRATE: 0.003,
-                RecommenderBPRMF.ARG_REGULARIZATION: 0.003})
+                RecommenderBPRMF.ARG_LEARNINGRATE: 0.1,
+                RecommenderBPRMF.ARG_REGULARIZATION: 0.01})
 
     @staticmethod
     def exportRDescVMContextKNN():
@@ -69,12 +69,13 @@ class InputRecomRRDefinition:
     @staticmethod
     def exportRDescW2V():
         return RecommenderDescription(RecommenderW2V, {
-                RecommenderW2V.ARG_ITERATIONS: 50000,
+                RecommenderW2V.ARG_LEARNING_RATE: 0.6,
+                RecommenderW2V.ARG_ITERATIONS: 100000,
                 RecommenderW2V.ARG_TRAIN_VARIANT:"all",
                 RecommenderW2V.ARG_USER_PROFILE_SIZE: 3,
                 RecommenderW2V.ARG_USER_PROFILE_STRATEGY:"weightedMean",
-                RecommenderW2V.ARG_VECTOR_SIZE: 32,
-                RecommenderW2V.ARG_WINDOW_SIZE: 1})
+                RecommenderW2V.ARG_VECTOR_SIZE: 64,
+                RecommenderW2V.ARG_WINDOW_SIZE: 3})
 
 
 
