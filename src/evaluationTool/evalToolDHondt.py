@@ -97,7 +97,7 @@ class EvalToolDHondt(AEvalTool):
         aggrItemIDsWithRespDF.set_index("itemId", inplace=True)
 
         #TODO
-        #EvalToolDHont.linearNormalizingPortfolioModelDHont(portfolioModel)
+        #EvalToolDHondt.linearNormalizingPortfolioModelDHont(portfolioModel)
 
         # responsibilityDict:dict[methodID:str, votes:float]
         # iterate over all recommended items, penalize their methods
@@ -111,7 +111,6 @@ class EvalToolDHondt(AEvalTool):
                 relevance_this:float = responsibilityDict.get(methodIdI)
                 relevance_others:float = sumMethodsVotes - relevance_this
                 update_step:float = -1 * self.learningRateViews * (relevance_this - relevance_others)
-                #print("update_step: " + str(update_step))
 
                 portfolioModel.loc[methodIdI] = portfolioModel.loc[methodIdI] + update_step
 
