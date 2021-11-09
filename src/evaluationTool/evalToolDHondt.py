@@ -105,14 +105,14 @@ class EvalToolDHondt(AEvalTool):
             responsibilityDict:dict[str,float] = responsibilityI["responsibility"]
 
             # increment portfolio model
-            sumMethodsVotes:float = portfolioModel.sum()
+            sumMethodsVotes:float = portfolioModel.sum().loc['votes']
             methodIdI:str
             for methodIdI in responsibilityDict.keys():
                 relevance_this:float = responsibilityDict.get(methodIdI)
                 relevance_others:float = sumMethodsVotes - relevance_this
                 update_step:float = self.learningRateViews * (relevance_this - relevance_others)
 
-                portfolioModel.loc[methodIdI] = portfolioModel.loc[methodIdI] - update_step
+                portfolioModel.loc[methodIdI, 'votes'] = portfolioModel.loc[methodIdI, 'votes'] - update_step
 
                 # Apply constraints on maximal and minimal volumes of votes
                 if portfolioModel.loc[methodIdI, 'votes'] < self.minVotesConst:
