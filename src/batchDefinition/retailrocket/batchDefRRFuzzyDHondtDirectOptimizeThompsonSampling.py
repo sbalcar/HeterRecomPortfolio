@@ -17,7 +17,7 @@ from aggregationDescription.aggregationDescription import AggregationDescription
 from batchDefinition.inputAggrDefinition import InputAggrDefinition  # class
 from batchDefinition.modelDefinition import ModelDefinition
 
-from batchDefinition.inputRecomMLDefinition import InputRecomMLDefinition #class
+from batchDefinition.inputRecomRRDefinition import InputRecomRRDefinition #class
 
 from aggregation.operators.aDHondtSelector import ADHondtSelector #class
 from aggregation.operators.rouletteWheelSelector import RouletteWheelSelector #class
@@ -25,9 +25,8 @@ from aggregation.operators.theMostVotedItemSelector import TheMostVotedItemSelec
 from aggregation.aggrDHondtDirectOptimizeThompsonSampling import AggrDHondtDirectOptimizeThompsonSampling #class
 
 from batchDefinition.inputABatchDefinition import InputABatchDefinition
-from batchDefinition.aBatchDefinitionML import ABatchDefinitionML #class
-from batchDefinition.ml1m.batchDefMLFuzzyDHondtThompsonSampling import BatchDefMLFuzzyDHondtThompsonSampling #class
-from batchDefinition.ml1m.batchDefMLFuzzyDHondt import BatchDefMLFuzzyDHondt #class
+from batchDefinition.aBatchDefinitionRR import ABatchDefinitionRR #class
+from batchDefinition.ml1m.batchDefMLFuzzyDHondtDirectOptimizeThompsonSampling import BatchDefMLFuzzyDHondtDirectOptimizeThompsonSampling #class
 
 from batchDefinition.inputSimulatorDefinition import InputSimulatorDefinition #class
 
@@ -36,21 +35,14 @@ from simulator.simulator import Simulator #class
 from history.historyHierDF import HistoryHierDF #class
 
 
-class BatchDefMLFuzzyDHondtDirectOptimizeThompsonSampling(ABatchDefinitionML):
-
-    SLCTR_ROULETTE1:str = "Roulette1"
-    SLCTR_ROULETTE2:str = "Roulette3"
-    SLCTR_FIXED:str = "Fixed"
-
-    selectorIDs:List[str] = BatchDefMLFuzzyDHondt.selectorIDs
+class BatchDefRRFuzzyDHondtDirectOptimizeThompsonSampling(ABatchDefinitionRR):
 
     def getBatchName(self):
         return "FDHondtDirectOptimizeThompsonSampling"
 
     def getParameters(self):
-        batchDefMLFuzzyDHondt = BatchDefMLFuzzyDHondt()
-        batchDefMLFuzzyDHondt.selectorIDs = self.selectorIDs
-        return batchDefMLFuzzyDHondt.getSelectorParameters()
+        batchDefMLFuzzyDHondtDirectOptimizeThompsonSampling = BatchDefMLFuzzyDHondtDirectOptimizeThompsonSampling()
+        return batchDefMLFuzzyDHondtDirectOptimizeThompsonSampling.getParameters()
 
     def run(self, batchID:str, jobID:str):
 
@@ -63,7 +55,7 @@ class BatchDefMLFuzzyDHondtDirectOptimizeThompsonSampling(ABatchDefinitionML):
 
         eTool:AEvalTool = EvalToolDHondtBanditVotes({})
 
-        rIDs, rDescs = InputRecomMLDefinition.exportPairOfRecomIdsAndRecomDescrs()
+        rIDs, rDescs = InputRecomRRDefinition.exportPairOfRecomIdsAndRecomDescrs()
 
         aDescDHont:AggregationDescription = InputAggrDefinition.exportADescDHondtDirectOptimizeThompsonSampling(selector)
 
@@ -72,7 +64,7 @@ class BatchDefMLFuzzyDHondtDirectOptimizeThompsonSampling(ABatchDefinitionML):
 
         model:DataFrame = ModelDefinition.createDHondtBanditsVotesModel(pDescr.getRecommendersIDs())
 
-        simulator:Simulator = InputSimulatorDefinition.exportSimulatorML1M(
+        simulator:Simulator = InputSimulatorDefinition.exportSimulatorRetailRocket(
                 batchID, divisionDatasetPercentualSize, uBehaviour, repetition)
         simulator.simulate([pDescr], [model], [eTool], [HistoryHierDF(pDescr.getPortfolioID())])
 
@@ -83,4 +75,4 @@ if __name__ == "__main__":
     os.chdir("..")
     print(os.getcwd())
 
-    BatchDefMLFuzzyDHondtDirectOptimizeThompsonSampling().generateAllBatches(InputABatchDefinition())
+    BatchDefRRFuzzyDHondtDirectOptimizeThompsonSampling().generateAllBatches(InputABatchDefinition())
