@@ -26,7 +26,7 @@ from batchDefinition.ml1m.batchDefMLFuzzyDHondtThompsonSampling import BatchDefM
 from batchDefinition.ml1m.batchDefMLFuzzyDHondtThompsonSamplingINF import BatchDefMLFuzzyDHondtThompsonSamplingINF #class
 
 from batchDefinition.ml1m.batchDefMLFuzzyDHondt import BatchDefMLFuzzyDHondt #class
-from batchDefinition.ml1m.batchDefMLFuzzyDHondtINF import BatchMLFuzzyDHondtINF #class
+from batchDefinition.ml1m.batchDefMLFuzzyDHondtINF import BatchDefMLFuzzyDHondtINF #class
 
 from batchDefinition.ml1m.batchDefMLFuzzyDHondtDirectOptimize import BatchDefMLFuzzyDHondtDirectOptimize #class
 from batchDefinition.ml1m.batchDefMLFuzzyDHondtDirectOptimizeINF import BatchDefMLFuzzyDHondtDirectOptimizeINF #class

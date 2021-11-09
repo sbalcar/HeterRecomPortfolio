@@ -33,7 +33,7 @@ from simulator.simulator import Simulator #class
 from history.historyHierDF import HistoryHierDF #class
 
 from batchDefinition.ml1m.batchDefMLFuzzyDHondt import BatchDefMLFuzzyDHondt #class
-from batchDefinition.ml1m.batchDefMLFuzzyDHondtINF import BatchMLFuzzyDHondtINF #class
+from batchDefinition.ml1m.batchDefMLFuzzyDHondtINF import BatchDefMLFuzzyDHondtINF #class
 
 
 class BatchDefSTRandomRecsSwitching(ABatchDefinitionST):

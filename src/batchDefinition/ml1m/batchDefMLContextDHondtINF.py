@@ -29,7 +29,7 @@ from aggregation.negImplFeedback.penalUsingFiltering import PenalUsingFiltering 
 from aggregation.negImplFeedback.penalUsingProbability import PenalUsingProbability #class
 
 from batchDefinition.ml1m.batchDefMLFuzzyDHondt import BatchDefMLFuzzyDHondt #class
-from batchDefinition.ml1m.batchDefMLFuzzyDHondtINF import BatchMLFuzzyDHondtINF #class
+from batchDefinition.ml1m.batchDefMLFuzzyDHondtINF import BatchDefMLFuzzyDHondtINF #class
 
 from batchDefinition.inputABatchDefinition import InputABatchDefinition
 from batchDefinition.ml1m.batchDefMLBanditTS import BatchDefMLBanditTS #class
@@ -58,7 +58,7 @@ class BatchDefMLContextDHondtINF(ABatchDefinitionML):
         return "ContextDHondtINF"
     
     def getParameters(self):
-        negativeImplFeedbackDict:Dict[str,object] = BatchMLFuzzyDHondtINF.getNegativeImplFeedbackParameters()
+        negativeImplFeedbackDict:Dict[str,object] = BatchDefMLFuzzyDHondtINF.getNegativeImplFeedbackParameters()
         selectorDict:Dict[str,object] = BatchDefMLFuzzyDHondt().getSelectorParameters()
 
         aDict:Dict[str,object] = {}

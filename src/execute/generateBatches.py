@@ -18,7 +18,7 @@ from batchDefinition.ml1m.batchDefMLFuzzyDHondtThompsonSampling import BatchDefM
 from batchDefinition.ml1m.batchDefMLFuzzyDHondtThompsonSamplingINF import BatchDefMLFuzzyDHondtThompsonSamplingINF #class
 
 from batchDefinition.ml1m.batchDefMLFuzzyDHondt import BatchDefMLFuzzyDHondt #class
-from batchDefinition.ml1m.batchDefMLFuzzyDHondtINF import BatchMLFuzzyDHondtINF #class
+from batchDefinition.ml1m.batchDefMLFuzzyDHondtINF import BatchDefMLFuzzyDHondtINF #class
 
 from batchDefinition.ml1m.batchDefMLFuzzyDHondtDirectOptimize import BatchDefMLFuzzyDHondtDirectOptimize #class
 from batchDefinition.ml1m.batchDefMLFuzzyDHondtDirectOptimizeINF import BatchDefMLFuzzyDHondtDirectOptimizeINF #class
@@ -57,6 +57,7 @@ from batchDefinition.retailrocket.batchDefRRBanditTS import BatchDefRRBanditTS #
 from batchDefinition.retailrocket.batchDefRRFuzzyDHondt import BatchDefRRFuzzyDHondt #class
 from batchDefinition.retailrocket.batchDefRRFAI import BatchDefRRFAI #class
 from batchDefinition.retailrocket.batchDefRRFuzzyDHondtDirectOptimizeThompsonSampling import BatchDefRRFuzzyDHondtDirectOptimizeThompsonSampling #class
+from batchDefinition.retailrocket.batchRRFuzzyDHondtINF import BatchRRFuzzyDHondtINF #class
 
 from batchDefinition.slanTour.batchDefSTFuzzyDHondtDirectOptimizeThompsonSampling import BatchDefSTFuzzyDHondtDirectOptimizeThompsonSampling #class
 from batchDefinition.slanTour.batchDefSTFuzzyDHondtDirectOptimizeThompsonSamplingINF import BatchDefSTFuzzyDHondtDirectOptimizeThompsonSamplingINF #class
@@ -99,7 +100,7 @@ def getAllBatches():
     # ML
     batchDefMLBanditTS = BatchDefMLBanditTS()
     batchDefMLFuzzyDHondt = BatchDefMLFuzzyDHondt()
-    batchMLFuzzyDHondtINF = BatchMLFuzzyDHondtINF()
+    batchMLFuzzyDHondtINF = BatchDefMLFuzzyDHondtINF()
     batchDefMLFuzzyDHondtThompsonSampling = BatchDefMLFuzzyDHondtThompsonSampling()
     batchDefMLFuzzyDHondtThompsonSamplingINF = BatchDefMLFuzzyDHondtThompsonSamplingINF()
 
@@ -471,11 +472,14 @@ def getBatchesChina():
     #
     batchDefRRFuzzyDHondtDirectOptimizeThompsonSampling = BatchDefRRFuzzyDHondtDirectOptimizeThompsonSampling()
     #
+    batchDefRRFuzzyDHondtINF = BatchRRFuzzyDHondtINF()
+    #
     #batchesDef.append(batchDefRRSingle)
     batchesDef.append(batchDefRRBanditTS)
     batchesDef.append(batchDefRRFuzzyDHondt)
     batchesDef.append(batchDefRRFAI)
     batchesDef.append(batchDefRRFuzzyDHondtDirectOptimizeThompsonSampling)
+    batchesDef.append(batchDefRRFuzzyDHondtINF)
 
     return batchesDef
 

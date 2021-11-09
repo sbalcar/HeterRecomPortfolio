@@ -20,7 +20,7 @@ from batchDefinition.modelDefinition import ModelDefinition
 from batchDefinition.inputRecomSTDefinition import InputRecomSTDefinition #class
 
 from batchDefinition.ml1m.batchDefMLFuzzyDHondt import BatchDefMLFuzzyDHondt #class
-from batchDefinition.ml1m.batchDefMLFuzzyDHondtINF import BatchMLFuzzyDHondtINF #class
+from batchDefinition.ml1m.batchDefMLFuzzyDHondtINF import BatchDefMLFuzzyDHondtINF #class
 from batchDefinition.ml1m.batchDefMLFuzzyDHondtThompsonSamplingINF import BatchDefMLFuzzyDHondtThompsonSamplingINF #class
 from aggregation.negImplFeedback.aPenalization import APenalization #class
 

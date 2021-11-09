@@ -39,7 +39,7 @@ from simulator.simulator import Simulator #class
 from history.historyHierDF import HistoryHierDF #class
 
 
-class BatchMLFuzzyDHondtINF(ABatchDefinitionML):
+class BatchDefMLFuzzyDHondtINF(ABatchDefinitionML):
 
     lrClicks:List[float] = [0.2, 0.1, 0.03, 0.005]
     lrViewDivisors:List[float] = [250, 500, 1000]
@@ -130,4 +130,5 @@ if __name__ == "__main__":
    os.chdir("..")
    os.chdir("..")
    print(os.getcwd())
-   BatchMLFuzzyDHondtINF.generateAllBatches(InputABatchDefinition())
+
+   BatchDefMLFuzzyDHondtINF().generateAllBatches(InputABatchDefinition())

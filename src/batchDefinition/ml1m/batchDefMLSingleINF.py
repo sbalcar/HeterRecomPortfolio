@@ -20,7 +20,7 @@ from batchDefinition.inputABatchDefinition import InputABatchDefinition
 
 from batchDefinition.aBatchDefinitionML import ABatchDefinitionML #class
 from batchDefinition.ml1m.batchDefMLSingle import BatchDefMLSingle #class
-from batchDefinition.ml1m.batchDefMLFuzzyDHondtINF import BatchMLFuzzyDHondtINF #class
+from batchDefinition.ml1m.batchDefMLFuzzyDHondtINF import BatchDefMLFuzzyDHondtINF #class
 
 from aggregation.negImplFeedback.aPenalization import APenalization #class
 
@@ -42,7 +42,7 @@ class BatchDefMLSingleINF(ABatchDefinitionML):
     def getParameters():
 
         recommenderIDs:List[str] = BatchDefMLSingle().getParameters().keys()
-        negativeImplFeedback:List[str] = BatchMLFuzzyDHondtINF().getNegativeImplFeedbackParameters().keys()
+        negativeImplFeedback:List[str] = BatchDefMLFuzzyDHondtINF().getNegativeImplFeedbackParameters().keys()
 
         aDict:dict = {}
         for recommenderIDKeyI in recommenderIDs:
@@ -50,7 +50,7 @@ class BatchDefMLSingleINF(ABatchDefinitionML):
                 keyIJ:str = str(recommenderIDKeyI) + "INF" + nImplFeedbackI
 
                 recommenderID:str = BatchDefMLSingle().getParameters()[recommenderIDKeyI]
-                nImplFeedback:APenalization = BatchMLFuzzyDHondtINF().getNegativeImplFeedbackParameters()[nImplFeedbackI]
+                nImplFeedback:APenalization = BatchDefMLFuzzyDHondtINF().getNegativeImplFeedbackParameters()[nImplFeedbackI]
 
                 aDict[keyIJ] = (recommenderID, nImplFeedback)
         return aDict
