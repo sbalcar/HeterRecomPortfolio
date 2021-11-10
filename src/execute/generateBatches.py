@@ -57,6 +57,7 @@ from batchDefinition.retailrocket.batchDefRRBanditTS import BatchDefRRBanditTS #
 from batchDefinition.retailrocket.batchDefRRFuzzyDHondt import BatchDefRRFuzzyDHondt #class
 from batchDefinition.retailrocket.batchDefRRFAI import BatchDefRRFAI #class
 from batchDefinition.retailrocket.batchDefRRFuzzyDHondtDirectOptimizeThompsonSampling import BatchDefRRFuzzyDHondtDirectOptimizeThompsonSampling #class
+from batchDefinition.retailrocket.batchDefRRFuzzyDHondtDirectOptimizeThompsonSamplingINF import BatchDefRRFuzzyDHondtDirectOptimizeThompsonSamplingINF #class
 from batchDefinition.retailrocket.batchRRFuzzyDHondtINF import BatchRRFuzzyDHondtINF #class
 
 from batchDefinition.slanTour.batchDefSTFuzzyDHondtDirectOptimizeThompsonSampling import BatchDefSTFuzzyDHondtDirectOptimizeThompsonSampling #class
@@ -474,12 +475,15 @@ def getBatchesChina():
     #
     batchDefRRFuzzyDHondtINF = BatchRRFuzzyDHondtINF()
     #
+    batchDefRRFuzzyDHondtDirectOptimizeThompsonSamplingINF = BatchDefRRFuzzyDHondtDirectOptimizeThompsonSamplingINF()
+
     #batchesDef.append(batchDefRRSingle)
-    batchesDef.append(batchDefRRBanditTS)
-    batchesDef.append(batchDefRRFuzzyDHondt)
-    batchesDef.append(batchDefRRFAI)
-    batchesDef.append(batchDefRRFuzzyDHondtDirectOptimizeThompsonSampling)
-    batchesDef.append(batchDefRRFuzzyDHondtINF)
+    #batchesDef.append(batchDefRRBanditTS)
+    #batchesDef.append(batchDefRRFuzzyDHondt)
+    #batchesDef.append(batchDefRRFAI)
+    #batchesDef.append(batchDefRRFuzzyDHondtDirectOptimizeThompsonSampling)
+    #batchesDef.append(batchDefRRFuzzyDHondtINF)
+    batchesDef.append(batchDefRRFuzzyDHondtDirectOptimizeThompsonSamplingINF)
 
     return batchesDef
 
