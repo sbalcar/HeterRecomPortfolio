@@ -106,16 +106,16 @@ class AggrDHondtDirectOptimizeThompsonSampling(AAgregation):
                 return recommendedItemIDs[:numberOfItems]
 
             # coumputing of votes of remaining candidates
-            actVotesOfCandidatesDictI: dict[
+            actVotesOfCandidatesDictI:dict[
                 int, int] = {}  # calculates the proportonal improvement of the output if this candidate is included
-            candidateIDJ: int
+            candidateIDJ:int
             for candidateIDJ in uniqueCandidatesI:
-                votesOfCandidateJ: float = 0.0
+                votesOfCandidateJ:float = 0.0
 
-                candidateVotesPerParty: dict[str, float] = {mI: methodsResultDict[mI].get(candidateIDJ, 0) for mI in
+                candidateVotesPerParty:dict[str, float] = {mI: methodsResultDict[mI].get(candidateIDJ, 0) for mI in
                                                             modelDF.index}
-                candidateTotalVotes: float = np.sum(list(candidateVotesPerParty.values()))
-                totalVotesPlusProspected: float = totalSelectedCandidatesVotes + candidateTotalVotes
+                candidateTotalVotes:float = np.sum(list(candidateVotesPerParty.values()))
+                totalVotesPlusProspected:float = totalSelectedCandidatesVotes + candidateTotalVotes
 
                 for parityIDK in modelDF.index:
                     # get the fraction of under-representation for the party

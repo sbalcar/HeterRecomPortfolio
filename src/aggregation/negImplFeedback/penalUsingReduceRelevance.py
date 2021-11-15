@@ -107,6 +107,9 @@ class PenalUsingReduceRelevance(APenalization):
         return normalizedNewMethodsResultSrs
         # return Series<(rating:int, itemID:int)>
 
+    def getPenaltiesOfItemIDs(self, userID:int, history:AHistory):
+        return self.__getPenaltiesOfItemIDs(userID, None, history)
+
     def __getPenaltiesOfItemIDs(self, userID:int, itemIDs:List[int], history:AHistory):
         prevRecomendations:List[tuple] = history.getPreviousRecomOfUser(userID, self._lengthOfHistory)
         i:int = len(prevRecomendations)   #self._lengthOfHistory#

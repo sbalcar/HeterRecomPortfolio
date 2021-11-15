@@ -52,6 +52,9 @@ class EvalToolBanditTS(AEvalTool):
         if type(argumentsDict) is not dict:
             raise ValueError("Argument argumentsDict isn't type dict.")
 
+        print(rItemIDsWithResponsibility)
+        print(portfolioModel)
+
         # increment by the number of objects
         for itemIdI,methodIdI in rItemIDsWithResponsibility:
             portfolioModel.loc[methodIdI]['n'] += 1

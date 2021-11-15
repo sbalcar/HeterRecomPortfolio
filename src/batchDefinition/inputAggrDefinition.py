@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 from aggregationDescription.aggregationDescription import AggregationDescription #class
+from portfolioDescription.portfolioHierDescription import PortfolioHierDescription #class
 
 from aggregation.aggrWeightedAVG import AggrWeightedAVG #class
 from aggregation.aggrMMRWeightedAVG import AggrMMRWeightedAVG #class
@@ -162,6 +163,7 @@ class InputAggrDefinition:
     def exportADescRandomRecsSwitching(mainMethodID:str):
         return AggregationDescription(AggrRandomRecsSwitching, {
             AggrRandomRecsSwitching.ARG_MAIN_METHOD: mainMethodID})
+
 
 
 class PenalizationToolDefinition:

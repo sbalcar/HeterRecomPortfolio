@@ -60,8 +60,8 @@ class Portfolio1Aggr(APortfolio):
     def train(self, history:AHistory, dataset:ADataset):
         if not isinstance(history, AHistory):
             raise ValueError("Argument history isn't type AHistory.")
-        if not isinstance(history, AHistory):
-            raise ValueError("Argument history isn't type AHistory.")
+        if not isinstance(dataset, ADataset):
+            raise ValueError("Argument dataset isn't type ADataset.")
 
         self._aggregation.train(history, dataset)
 

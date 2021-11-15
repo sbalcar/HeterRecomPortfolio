@@ -18,7 +18,7 @@ class HistoryDF(AHistory):
     USER_ID = "userID"
     ITEM_ID = "itemID"
     POSITION = "position"
-    OBSERVATION = "observation"
+    #OBSERVATION = "observation"
     CLICKED = "clicked"
     TIMESTAMP = "timestamp"
 
@@ -29,7 +29,7 @@ class HistoryDF(AHistory):
 
         historyData:pd.DataFrame = []
         self._historyDF:pd.DataFrame = pd.DataFrame(historyData, columns=[
-            self.USER_ID, self.ITEM_ID, self.POSITION, self.OBSERVATION, self.CLICKED, self.TIMESTAMP])
+            self.USER_ID, self.ITEM_ID, self.POSITION, self.CLICKED, self.TIMESTAMP])
 
 
     def insertRecommendation(self, userID:int, itemID:int, position:int, clicked:bool, timestamp=datetime.datetime.now()):
@@ -45,7 +45,7 @@ class HistoryDF(AHistory):
 
         result:List[tuple] = []
         for indexI, rowI  in uDF.tail(limit).iterrows():
-            result.append((indexI, rowI[self.USER_ID], rowI[self.ITEM_ID], rowI[self.POSITION], rowI[self.OBSERVATION], rowI[self.CLICKED], rowI[self.TIMESTAMP]))
+            result.append((indexI, rowI[self.USER_ID], rowI[self.ITEM_ID], rowI[self.POSITION], rowI[self.CLICKED], rowI[self.TIMESTAMP]))
 
         return result
 
@@ -57,7 +57,7 @@ class HistoryDF(AHistory):
 
         result: List[tuple] = []
         for indexI, rowI in uiDF.tail(limit).iterrows():
-            result.append((indexI, rowI[self.USER_ID], rowI[self.ITEM_ID], rowI[self.POSITION], rowI[self.OBSERVATION],
+            result.append((indexI, rowI[self.USER_ID], rowI[self.ITEM_ID], rowI[self.POSITION],
                            rowI[self.CLICKED], rowI[self.TIMESTAMP]))
 
         return result
