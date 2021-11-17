@@ -43,7 +43,7 @@ from aggregation.negImplFeedback.penalUsingFiltering import PenalUsingFiltering 
 from aggregation.negImplFeedback.penalUsingProbability import PenalUsingProbability #class
 
 from recommender.recommenderTheMostPopular import RecommenderTheMostPopular #class
-
+from recommender.recommenderRepeatedPurchase import RecommenderRepeatedPurchase #class
 
 class BatchDefRRHierD21(ABatchDefinitionRR):
 
@@ -64,8 +64,11 @@ class BatchDefRRHierD21(ABatchDefinitionRR):
         divisionDatasetPercentualSize, uBehaviour, repetition = \
             InputABatchDefinition().getBatchParameters(self.datasetID)[batchID]
 
-        recommenderID:str = "TheMostPopular"
-        pRDescr: RecommenderDescription = RecommenderDescription(RecommenderTheMostPopular, {})
+        #recommenderID:str = "TheMostPopular"
+        #pRDescr: RecommenderDescription = RecommenderDescription(RecommenderTheMostPopular, {})
+
+        recommenderID:str = "RepeatedPurchase"
+        pRDescr:RecommenderDescription = RecommenderDescription(RecommenderRepeatedPurchase, {})
 
         selector:ADHondtSelector = self.getParameters()[jobID]
         aDescDHont:AggregationDescription = InputAggrDefinition.exportADescDHondtDirectOptimizeThompsonSampling(

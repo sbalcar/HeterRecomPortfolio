@@ -157,8 +157,8 @@ def test03():
     """
 
 if __name__ == "__main__":
-#    os.chdir("..")
+    os.chdir("..")
 
     #test01()
-    test03()
-    #test02()
+    #test03()
+    test02()

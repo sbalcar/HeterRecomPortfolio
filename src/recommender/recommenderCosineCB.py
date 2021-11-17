@@ -3,6 +3,8 @@ import numpy as np
 import scipy.sparse
 
 from pandas.core.frame import DataFrame  #class
+from pandas.core.frame import Series  #class
+
 
 from typing import List
 from typing import Dict
@@ -111,7 +113,7 @@ class RecommenderCosineCB(ARecommender):
             self._toolMMR.init(dataset)
 
 
-    def update(self, ratingsUpdateDF: DataFrame, argumentsDict: Dict[str, object]):
+    def update(self, ratingsUpdateDF:DataFrame, argumentsDict: Dict[str, object]):
         if type(ratingsUpdateDF) is not DataFrame:
             raise ValueError("Argument ratingsTrainDF isn't type DataFrame.")
         if type(argumentsDict) is not dict:
@@ -235,19 +237,17 @@ class RecommenderCosineCB(ARecommender):
             # TODO check type of ARG_ALLOWED_ITEMIDS, should be list
             # reducedList = self._sortedTheMostCommon.loc[self._sortedTheMostCommon.index.intersection(argumentsDict[self.ARG_ALLOWED_ITEMIDS])]
             results = results.loc[results.index.intersection(argumentsDict[self.ARG_ALLOWED_ITEMIDS])]
-            
 
+        resultSer:Series
         if self._useMMR:
             #print(results.iloc[0:numberOfItems*5])
-            resultList = self._toolMMR.mmr_sorted(self._MMR_lambda, results.iloc[0:numberOfItems*5], numberOfItems)
+            resultSer = self._toolMMR.mmr_sorted(self._MMR_lambda, results.iloc[0:numberOfItems*5], numberOfItems)
         else:
-            resultList = results.iloc[0:numberOfItems]            
-            
-        #resultList = results.iloc[0:numberOfItems]
+            resultSer = results.iloc[0:numberOfItems]
 
         # normalize scores into the unit vector (for aggregation purposes)
         # !!! tohle je zasadni a je potreba provest normalizaci u vsech recommenderu - teda i pro most popular!
-        finalScores = resultList.values
+        finalScores = resultSer.values
         finalScores = normalize(np.expand_dims(finalScores, axis=0))[0, :]
 
-        return pd.Series(finalScores.tolist(), index=list(resultList.index))
+        return pd.Series(finalScores.tolist(), index=list(resultSer.index))
