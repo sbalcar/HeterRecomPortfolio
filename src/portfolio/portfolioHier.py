@@ -115,14 +115,17 @@ class PortfolioHier(APortfolio):
         #aggrBanditsResp = countAggrDHondtResponsibility(dict(recomItemIDsWithRspAggr1), portFolioModel)
         aggrBanditsRespSer:Series = Series(dict(aggrBanditsResp))
 
-        recomItemIDsNegative:Series = Series(self._penaltyTool.getPenaltiesOfItemIDs(userID, self._history))
+        recomItemIDsNegativeSer:Series = Series(self._penaltyTool.getPenaltiesOfItemIDs(userID, self._history))
+        if len(recomItemIDsNegativeSer) > 0:
+            finalNegScores = normalize(np.expand_dims(recomItemIDsNegativeSer.values, axis=0))[0, :]
+            recomItemIDsNegativeSer:Series = Series(finalNegScores.tolist(), index=recomItemIDsNegativeSer.index)
         #print(a)
 
         #recomItemIDsNegative = normalize(np.expand_dims(recomItemIDsNegative, axis=0))[0, :]
 
         inputItemIDsDict:dict = {"input1":recomItemIDsWithRspR1Ser,
                                  "input2":aggrBanditsRespSer,
-                                 "negative":recomItemIDsNegative}
+                                 "negative":recomItemIDsNegativeSer}
 
         aggItemIDsWithRelevanceSer:Series = self._aggrHier.runWithResponsibility(inputItemIDsDict, DataFrame(), userID, numberOfItems, argumentsDict)
 

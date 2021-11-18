@@ -62,7 +62,7 @@ class AggrD21(AAgregation):
     # modelDF:DataFrame<(methodID:str, votes:int)>, numberOfItems:int
     def runWithResponsibility(self, inputItemIDsDict:dict, modelDF:DataFrame, userID:int, numberOfItems:int,
                               argumentsDict:Dict[str, object] = {}):
-
+        print(inputItemIDsDict)
         if type(inputItemIDsDict) is not dict:
             raise ValueError("Argument inputItemIDsDict isn't type dict.")
         if type(numberOfItems) is not int:
@@ -72,9 +72,13 @@ class AggrD21(AAgregation):
         if type(argumentsDict) is not dict:
             raise ValueError("Argument argumentsDict isn't type dict.")
 
+        if float('nan') in inputItemIDsDict["input2"].keys():
+            inputItemIDsDict["input2"].pop(float('nan'))
+
         inputItemIDs1:List[int] = list(inputItemIDsDict["input1"].keys())
         inputItemIDs2:List[int] = list(inputItemIDsDict["input2"].keys())
         negativeItemIDs:List[int] = list(inputItemIDsDict["negative"].keys())
+
         allItemIDs:List[int] = list(set(inputItemIDs1 + inputItemIDs2 + negativeItemIDs))
         allItemIDs = [int(x) for x in allItemIDs]
 
@@ -83,18 +87,20 @@ class AggrD21(AAgregation):
         df = pd.DataFrame(zipped, columns=['rInput1', 'rInput2', 'rNegative', 'rSum'], index=allItemIDs)
 
         for itemId1I, r1 in inputItemIDsDict["input1"].items():
-            df.loc[itemId1I, 'rInput1'] = r1
+            df.loc[int(itemId1I), 'rInput1'] = r1
+        counter = numberOfItems
         for itemId2I, r2 in inputItemIDsDict["input2"].items():
-            df.loc[itemId2I, 'rInput2'] = r2
+            df.loc[int(itemId2I), 'rInput2'] = r2 + counter* 0.001 /numberOfItems
+            counter = counter -1
         for itemId3I, r3 in inputItemIDsDict["negative"].items():
-            df.loc[itemId3I, 'rNegative'] = r3
+            df.loc[int(itemId3I), 'rNegative'] = r3
 
         for rowI in df.iterrows():
-            itemIdI:int = rowI[0]
+            itemIdI:int = int(rowI[0])
             valsI = rowI[1]
-            df.loc[itemIdI, 'rSum'] = valsI['rInput1'] + valsI['rInput2']
-            if df.loc[itemIdI, 'rSum'] > self._ratingThresholdForNeg:
-                df.loc[itemIdI, 'rSum'] -= valsI['rNegative']
+            df.loc[itemIdI, 'rSum'] = 0.1*valsI['rInput1'] + valsI['rInput2'] -valsI['rNegative']
+            #if df.loc[itemIdI, 'rSum'] > self._ratingThresholdForNeg:
+            #    df.loc[itemIdI, 'rSum'] -= valsI['rNegative']
 
         #df = df[df['rSum'] > 0.0]
         df = df.sort_values('rSum', ascending=False)

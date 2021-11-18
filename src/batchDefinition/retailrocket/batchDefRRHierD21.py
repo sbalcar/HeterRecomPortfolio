@@ -64,22 +64,22 @@ class BatchDefRRHierD21(ABatchDefinitionRR):
         divisionDatasetPercentualSize, uBehaviour, repetition = \
             InputABatchDefinition().getBatchParameters(self.datasetID)[batchID]
 
-        #recommenderID:str = "TheMostPopular"
-        #pRDescr: RecommenderDescription = RecommenderDescription(RecommenderTheMostPopular, {})
+        recommenderTheMPopID:str = "TheMostPopular"
+        pRTheMPopDescr: RecommenderDescription = RecommenderDescription(RecommenderTheMostPopular, {})
 
-        recommenderID:str = "RepeatedPurchase"
-        pRDescr:RecommenderDescription = RecommenderDescription(RecommenderRepeatedPurchase, {})
+        recommenderRPID:str = "RepeatedPurchase"
+        pRecRPDescr:RecommenderDescription = RecommenderDescription(RecommenderRepeatedPurchase, {})
 
         selector:ADHondtSelector = self.getParameters()[jobID]
-        aDescDHont:AggregationDescription = InputAggrDefinition.exportADescDHondtDirectOptimizeThompsonSampling(
-            selector)
-        aDescDHont:AggregationDescription = InputAggrDefinition.exportADescFAI()
+        aDescDHont:AggregationDescription = InputAggrDefinition.exportADescDHondtDirectOptimizeThompsonSampling(selector)
+        aDescDHont:AggregationDescription = InputAggrDefinition.exportADescBanditTS(selector)
+        #aDescDHont:AggregationDescription = InputAggrDefinition.exportADescFAI()
 
         rIDs:List[str]
         rDescs:List[AggregationDescription]
         rIDs, rDescs = InputRecomRRDefinition.exportPairOfRecomIdsAndRecomDescrs()
-        #rIDs = [recommenderID]
-        #rDescs = [pRDescr]
+        #rIDs = [recommenderTheMPopID]
+        #rDescs = [pRTheMPopDescr]
 
         p1AggrDescrID:str = "p1AggrDescrID"
         p1AggrDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(p1AggrDescrID, rIDs, rDescs, aDescDHont)
@@ -94,13 +94,13 @@ class BatchDefRRHierD21(ABatchDefinitionRR):
                                     {AggrD21.ARG_RATING_THRESHOLD_FOR_NEG: 0.0})
 
         pHierDescr:PortfolioHierDescription = PortfolioHierDescription("pHierDescr",
-                                        recommenderID, pRDescr, p1AggrDescrID,
+                                        recommenderRPID, pRecRPDescr, p1AggrDescrID,
                                         p1AggrDescr,
                                         aHierDescr,
                                         pProbTool)
 
-        #eTool:AEvalTool = EvalToolBanditTS({})
-        eTool:AEvalTool = EToolDoNothing({})
+        eTool:AEvalTool = EvalToolBanditTS({})
+        #eTool:AEvalTool = EToolDoNothing({})
         #model:DataFrame = ModelDefinition.createDHontModel(p1AggrDescr.getRecommendersIDs())
         model:DataFrame = ModelDefinition.createBanditModel(p1AggrDescr.getRecommendersIDs())
 

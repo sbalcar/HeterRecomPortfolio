@@ -62,7 +62,6 @@ class RecommenderRepeatedPurchase(ARecommender):
                 eventsOfUserIDF = eventsDF.loc[eventsDF[Events.COL_VISITOR_ID] == userIdI]
                 eventsAddTrOfUserIDF:DataFrame = eventsOfUserIDF.loc[eventsOfUserIDF[Events.COL_EVENT].isin([Events.EVENT_TRANSACTION, Events.EVENT_ADDTOCART])]
                 itemIDsI:List[int] = eventsAddTrOfUserIDF[Events.COL_ITEM_ID].tolist()
-
                 self.itemsAddTraIdOfUsersDict[userIdI] = itemIDsI
 
             # the most often repeatedly bought items
@@ -86,10 +85,12 @@ class RecommenderRepeatedPurchase(ARecommender):
         row = ratingsUpdateDF.iloc[0]
         userID:int = row[Events.COL_VISITOR_ID]
         itemID:int = row[Events.COL_ITEM_ID]
+        event:int = row[Events.COL_EVENT]
 
-        if not userID in self.itemsAddTraIdOfUsersDict.keys():
-            self.itemsAddTraIdOfUsersDict[userID] = []
-        self.itemsAddTraIdOfUsersDict[userID].append(itemID)
+        if event == Events.EVENT_ADDTOCART or event == Events.EVENT_TRANSACTION:
+            if not userID in self.itemsAddTraIdOfUsersDict.keys():
+                self.itemsAddTraIdOfUsersDict[userID] = []
+            self.itemsAddTraIdOfUsersDict[userID].append(itemID)
 
     def recommend(self, userID: int, numberOfItems: int, argumentsDict: Dict[str, object]):
         if type(argumentsDict) is not dict:

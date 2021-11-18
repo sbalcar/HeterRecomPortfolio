@@ -9,10 +9,13 @@ from numpy.random import beta
 from typing import List
 
 from pandas.core.frame import DataFrame  # class
+from pandas.core.frame import Series # class
 
 from aggregation.aAggregation import AAgregation  # class
 
 from batchDefinition.modelDefinition import ModelDefinition
+
+from sklearn.preprocessing import normalize
 
 
 # methodsResultDict:{String:Series(rating:float[], itemID:int[])},
@@ -25,7 +28,14 @@ def countAggrBanditsResponsibility(methodsResult:List[tuple], modelDF:DataFrame)
         wIJ:float = modelDF.loc[methodIdI, 'r'] / modelDF.loc[methodIdI, 'n']
         result.append((itemIdI,wIJ))
 
-    return result
+    itemsIDs:List[int] = [x[0] for x in result]
+    scores:List[float] = [x[1] for x in result]
+    resultSer:Series = Series(scores, index=itemsIDs)
+
+    finalScores = normalize(np.expand_dims(resultSer.values, axis=0))[0, :]
+    resultNorm:List[tuple] = zip(resultSer.index, finalScores.tolist())
+
+    return resultNorm
 
 
 

@@ -39,7 +39,7 @@ def test01():
     eventsDF:DataFrame = Events.readFromFileWithFilter(minEventCount=50)
     #print(eventsDF)
 
-    userID:int = 1
+    userID:int = 904351
 
     trainSer = pd.Series([1433221523348, userID, Events.EVENT_ADDTOCART, 350688, "Nan"], index=[Events.COL_TIME_STAMP, Events.COL_VISITOR_ID, Events.COL_EVENT, Events.COL_ITEM_ID, Events.EVENT_TRANSACTION])
     trainDF = pd.DataFrame([trainSer])

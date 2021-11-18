@@ -66,6 +66,9 @@ def test01():
     itemIDs:List[tuple] = aggr.run(methodsResultDict, modelDF, userID, N)
     print("itemIDs:" + str(itemIDs))    
 
+    #a = aggr.runWithResponsibility(methodsResultDict, modelDF, userID, N)
+    #print(a)
+
 if __name__ == '__main__':
 
 

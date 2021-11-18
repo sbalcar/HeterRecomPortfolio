@@ -97,7 +97,7 @@ class AggrFuzzyDHondtINF(AggrFuzzyDHondt):
         if type(argumentsDict) is not dict:
             raise ValueError("Argument argumentsDict isn't type dict.")
 
-        methodsResultNewDict: dict[str, pd.Series] = self._penaltyTool.runPenalization(
+        methodsResultNewDict:dict[str, pd.Series] = self._penaltyTool.runPenalization(
                 userID, methodsResultDict, self._history)
 
         itemsWithResposibilityOfRecommenders:List[int,Series[int,str]] = super().runWithResponsibility(
