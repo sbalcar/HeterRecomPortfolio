@@ -38,7 +38,9 @@ class HistoryHierDF(AHistory):
             self._historyDict[userID] = uHistoryDF
 
         newRow:dict = {self.ITEM_ID:itemID, self.POSITION:position, self.CLICKED:clicked, self.TIMESTAMP:timestamp}
-        self._historyDict[userID] = self._historyDict[userID].append(newRow, ignore_index=True)
+        newRowSer:Series = pd.Series(newRow)
+
+        self._historyDict[userID] = pd.concat([self._historyDict[userID], pd.DataFrame([newRowSer])])
 
 
     def getPreviousRecomOfUser(self, userID:int, limit:int=100):
