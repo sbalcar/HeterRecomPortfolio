@@ -43,7 +43,7 @@ class AggrFuzzyDHondtINF(AggrFuzzyDHondt):
         # testing types of parameters
         if type(methodsResultDict) is not dict:
             raise ValueError("Type of methodsResultDict isn't dict.")
-        if type(modelDF) is not DataFrame:
+        if not isinstance(modelDF, DataFrame):
             raise ValueError("Type of methodsParamsDF isn't DataFrame.")
         if list(modelDF.columns) != ['votes']:
             raise ValueError("Argument methodsParamsDF doen't contain rights columns.")
@@ -80,7 +80,7 @@ class AggrFuzzyDHondtINF(AggrFuzzyDHondt):
         for methI in methodsResultDict.values():
             if type(methI) is not pd.Series:
                 raise ValueError("Type of methodsParamsDF doen't contain Series.")
-        if type(modelDF) is not DataFrame:
+        if not isinstance(modelDF, DataFrame):
             raise ValueError("Type of methodsParamsDF isn't DataFrame.")
         if list(modelDF.columns) != ['votes']:
             raise ValueError("Argument methodsParamsDF doen't contain rights columns.")

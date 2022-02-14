@@ -12,8 +12,10 @@ from pandas.core.frame import DataFrame #class
 from pandas.core.series import Series #class
 
 from aggregation.aAggregation import AAgregation #class
-from aggregation.tools.responsibilityDHont import countDHontResponsibility #function
 from aggregation.operators.rouletteWheelSelector import RouletteWheelSelector #class
+
+from portfolioModel.pModelDHondt import PModelDHondt #class
+from portfolioModel.pModelDHondtPersonalised import PModelDHondtPersonalised #class
 
 from history.aHistory import AHistory #class
 from abc import ABC, abstractmethod
@@ -46,26 +48,26 @@ class AggrFuzzyDHondt(AAgregation):
       # testing types of parameters
       if type(methodsResultDict) is not dict:
           raise ValueError("Type of methodsResultDict isn't dict.")
-      if type(modelDF) is not DataFrame:
+      if (not isinstance(modelDF, PModelDHondt)) and (not isinstance(modelDF, PModelDHondtPersonalised)):
           raise ValueError("Type of methodsParamsDF isn't DataFrame.")
-      if list(modelDF.columns) != ['votes']:
-          raise ValueError("Argument methodsParamsDF doen't contain rights columns.")
       if type(numberOfItems) is not int:
           raise ValueError("Type of numberOfItems isn't int.")
 
-      if sorted([mI for mI in modelDF.index]) != sorted([mI for mI in methodsResultDict.keys()]):
-        raise ValueError("Arguments methodsResultDict and methodsParamsDF have to define the same methods.")
-      for mI in methodsResultDict.keys():
-          if modelDF.loc[mI] is None:
-              raise ValueError("Argument modelDF contains in ome method an empty list of items.")
+      #if sorted([mI for mI in modelDF.index]) != sorted([mI for mI in methodsResultDict.keys()]):
+      #  raise ValueError("Arguments methodsResultDict and methodsParamsDF have to define the same methods.")
+      #for mI in methodsResultDict.keys():
+      #    if modelDF.loc[mI] is None:
+      #        raise ValueError("Argument modelDF contains in ome method an empty list of items.")
       if numberOfItems < 0:
         raise ValueError("Argument numberOfItems must be positive value.")
       if type(argumentsDict) is not dict:
         raise ValueError("Argument argumentsDict isn't type dict.")
 
-      candidatesOfMethods:np.asarray[str] = np.asarray([cI.keys() for cI in methodsResultDict.values()])
+      candidatesOfMethods:np.asarray[str] = np.asarray([cI.keys() for cI in methodsResultDict.values()], dtype=object)
       uniqueCandidatesI:List[int] = list(set(np.concatenate(candidatesOfMethods)))
       #print("UniqueCandidatesI: ", uniqueCandidatesI)
+
+      modelDF = modelDF.getModel(userID)
 
       # numbers of elected candidates of parties
       electedOfPartyDictI:dict[str,int] = {mI:1 for mI in modelDF.index}
@@ -131,18 +133,26 @@ class AggrFuzzyDHondt(AAgregation):
         for methI in methodsResultDict.values():
             if type(methI) is not pd.Series:
                 raise ValueError("Type of methodsParamsDF doen't contain Series.")
-        if type(modelDF) is not DataFrame:
+        if (not isinstance(modelDF, PModelDHondt)) and (not isinstance(modelDF, PModelDHondtPersonalised)):
             raise ValueError("Type of methodsParamsDF isn't DataFrame.")
-        if list(modelDF.columns) != ['votes']:
-            raise ValueError("Argument methodsParamsDF doen't contain rights columns.")
+
+#        if not isinstance(modelDF, DataFrame):
+#            raise ValueError("Type of methodsParamsDF isn't DataFrame.")
+#        if list(modelDF.columns) != ['votes']:
+#            print("columns: " + str(modelDF.columns))
+#            print("aaaaaaaaaaaaaaaaaaaaaaa")
+#            print("userID: " + str(userID))
+#            print("aaaaaaaaaaaaaaaaaaaaaaa")
+#            print(modelDF.head(10))
+#            raise ValueError("Argument methodsParamsDF doen't contain rights columns.")
         if type(numberOfItems) is not int:
             raise ValueError("Type of numberOfItems isn't int.")
 
-        if sorted([mI for mI in modelDF.index]) != sorted([mI for mI in methodsResultDict.keys()]):
-            raise ValueError("Arguments methodsResultDict and methodsParamsDF have to define the same methods.")
-        for mI in methodsResultDict.keys():
-            if modelDF.loc[mI] is None:
-                raise ValueError("Argument modelDF contains in ome method an empty list of items.")
+#        if sorted([mI for mI in modelDF.index]) != sorted([mI for mI in methodsResultDict.keys()]):
+#            raise ValueError("Arguments methodsResultDict and methodsParamsDF have to define the same methods.")
+#        for mI in methodsResultDict.keys():
+#            if modelDF.loc[mI] is None:
+#                raise ValueError("Argument modelDF contains in ome method an empty list of items.")
         if numberOfItems < 0:
             raise ValueError("Argument numberOfItems must be positive value.")
         if type(argumentsDict) is not dict:
@@ -151,8 +161,8 @@ class AggrFuzzyDHondt(AAgregation):
         aggregatedItemIDs:List[int] = self.run(methodsResultDict, modelDF, userID, numberOfItems, argumentsDict)
 
 
-        itemsWithResposibilityOfRecommenders:List[int,np.Series[int,str]] = countDHontResponsibility(
-            aggregatedItemIDs, methodsResultDict, modelDF, numberOfItems)
+        itemsWithResposibilityOfRecommenders:List[int,np.Series[int,str]] = modelDF.countResponsibility(
+            userID, aggregatedItemIDs, methodsResultDict, numberOfItems)
 
         # list<(itemID:int, Series<(rating:int, methodID:str)>)>
         return itemsWithResposibilityOfRecommenders

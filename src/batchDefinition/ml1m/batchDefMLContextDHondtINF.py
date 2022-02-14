@@ -16,7 +16,6 @@ from evaluationTool.evalToolContext import EvalToolContext #class
 from aggregationDescription.aggregationDescription import AggregationDescription #class
 
 from batchDefinition.inputAggrDefinition import InputAggrDefinition  #class
-from batchDefinition.modelDefinition import ModelDefinition
 
 from batchDefinition.inputRecomMLDefinition import InputRecomMLDefinition #class
 
@@ -50,6 +49,10 @@ from datasets.datasetML import DatasetML #class
 from datasets.ml.users import Users #class
 from datasets.ml.items import Items #class
 from datasets.ml.ratings import Ratings #class
+
+from portfolioModel.pModelBandit import PModelBandit #class
+from portfolioModel.pModelDHondtBanditsVotes import PModelDHondtBanditsVotes #class
+from portfolioModel.pModelDHondt import PModelDHondt #class
 
 
 class BatchDefMLContextDHondtINF(ABatchDefinitionML):
@@ -106,7 +109,7 @@ class BatchDefMLContextDHondtINF(ABatchDefinitionML):
         pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
             portfolioID, rIDs, rDescs, aDescContextDHont)
 
-        model:DataFrame = ModelDefinition.createDHontModel(pDescr.getRecommendersIDs())
+        model:DataFrame = PModelDHondt(pDescr.getRecommendersIDs())
 
         simulator:Simulator = InputSimulatorDefinition.exportSimulatorML1M(
                 batchID, divisionDatasetPercentualSize, uBehaviour, repetition)

@@ -15,7 +15,6 @@ from evaluationTool.evalToolDoNothing import EToolDoNothing #class
 from aggregationDescription.aggregationDescription import AggregationDescription #class
 
 from batchDefinition.inputAggrDefinition import InputAggrDefinition  # class
-from batchDefinition.modelDefinition import ModelDefinition
 
 from batchDefinition.inputRecomSTDefinition import InputRecomSTDefinition #class
 

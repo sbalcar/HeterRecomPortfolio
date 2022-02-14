@@ -60,11 +60,13 @@ class Events:
     def readFromFile():
         eventsFile: str = ".." + os.sep + "datasets" + os.sep + "slantour" + os.sep + "new_implicit_events.csv"
 
-        #eventsDF: DataFrame = pd.read_csv(eventsFile, sep=',', usecols=range(35), header=0, encoding="ISO-8859-1", engine='python')
-        #eventsDF: DataFrame = pd.read_csv(eventsFile, sep=',', usecols=[1, 2, 3, 5, 14], header=0, encoding="ISO-8859-1", engine='python')
+        #eventsDF:DataFrame = pd.read_csv(eventsFile, sep=',', usecols=range(35), header=0, encoding="ISO-8859-1", engine='python')
+        eventsDF:DataFrame = pd.read_csv(eventsFile, sep=',', usecols=[1, 2, 3, 5, 14], header=0, encoding="ISO-8859-1", engine='python')
+        eventsDF.columns = [Events.COL_USER_ID, Events.COL_OBJECT_ID, Events.COL_SESSION_ID, Events.COL_PAGE_TYPE, Events.COL_START_DATE_TIME]
 
-        eventsDF: DataFrame = pd.read_csv(eventsFile, sep=',', usecols=[0, 1, 2, 3], header=0, encoding="ISO-8859-1", low_memory=False)
-        eventsDF.columns = [Events.COL_TIME_STAMP, Events.COL_VISITOR_ID, Events.COL_EVENT, Events.COL_ITEM_ID]
+
+        #eventsDF:DataFrame = pd.read_csv(eventsFile, sep=',', usecols=[0, 1, 2, 3], header=0, encoding="ISO-8859-1", low_memory=False)
+        #eventsDF.columns = [Events.COL_VISIT_ID, Events.COL_USER_ID, Events.COL_OBJECT_ID, Events.COL_SESSION_ID]
 
 
         #eventsDF[Events.COL_USER_ID] = eventsDF[Events.COL_USER_ID].astype(int)

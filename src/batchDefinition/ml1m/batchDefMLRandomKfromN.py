@@ -12,7 +12,6 @@ from evaluationTool.aEvalTool import AEvalTool #class
 from evaluationTool.evalToolDoNothing import EToolDoNothing #class
 
 from batchDefinition.inputAggrDefinition import InputAggrDefinition  # class
-from batchDefinition.modelDefinition import ModelDefinition
 
 from batchDefinition.inputRecomMLDefinition import InputRecomMLDefinition #class
 

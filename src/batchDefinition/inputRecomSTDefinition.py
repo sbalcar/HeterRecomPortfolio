@@ -39,8 +39,9 @@ class InputRecomSTDefinition:
 
     @staticmethod
     def exportRDescKNN():
-        return RecommenderDescription(RecommenderItemBasedKNN,
-                {})
+        return RecommenderDescription(RecommenderItemBasedKNN,{
+            RecommenderItemBasedKNN.ARG_K:25,
+            RecommenderItemBasedKNN.ARG_UPDATE_THRESHOLD:500})
 
     @staticmethod
     def exportRDescVMContextKNN():

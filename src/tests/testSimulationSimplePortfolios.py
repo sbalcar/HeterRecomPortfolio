@@ -27,8 +27,8 @@ from pandas.core.frame import DataFrame #class
 
 from portfolioDescription.portfolio1MethDescription import Portfolio1MethDescription #class
 
-from input.inputRecomMLDefinition import InputRecomMLDefinition #class
-from input.inputRecomSTDefinition import InputRecomSTDefinition #class
+from batchDefinition.inputRecomMLDefinition import InputRecomMLDefinition #class
+from batchDefinition.inputRecomSTDefinition import InputRecomSTDefinition #class
 
 from portfolioDescription.aPortfolioDescription import APortfolioDescription #class
 
@@ -36,13 +36,13 @@ from evaluationTool.evalToolDoNothing import EToolDoNothing #class
 
 from recommenderDescription.recommenderDescription import RecommenderDescription #class
 
-from input.inputSimulatorDefinition import InputSimulatorDefinition #class
+from batchDefinition.inputSimulatorDefinition import InputSimulatorDefinition #class
 
 from history.historyHierDF import HistoryHierDF #class
 
 import pandas as pd
-from input.inputABatchDefinition import InputABatchDefinition
-from input.aBatchDefinitionML import ABatchDefinitionML #class
+from batchDefinition.inputABatchDefinition import InputABatchDefinition
+from batchDefinition.aBatchDefinitionML import ABatchDefinitionML #class
 
 
 

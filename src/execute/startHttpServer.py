@@ -68,7 +68,6 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 
 from batchDefinition.inputAggrDefinition import InputAggrDefinition  # class
 from batchDefinition.inputRecomSTDefinition import InputRecomSTDefinition #class
-from batchDefinition.modelDefinition import ModelDefinition
 
 from aggregationDescription.aggregationDescription import AggregationDescription #class
 
@@ -83,6 +82,10 @@ from aggregation.negImplFeedback.aPenalization import APenalization #class
 from batchDefinition.inputAggrDefinition import PenalizationToolDefinition #class
 
 from batchDefinition.inputSimulatorDefinition import InputSimulatorDefinition #class
+
+from portfolioModel.pModelBandit import PModelBandit #class
+from portfolioModel.pModelDHondtBanditsVotes import PModelDHondtBanditsVotes #class
+from portfolioModel.pModelDHondt import PModelDHondt #class
 
 
 def startHttpServer():
@@ -183,7 +186,7 @@ def getBanditTS():
   port:APortfolio = pDescr.exportPortfolio(taskID, history)
   port.train(history, dataset)
 
-  model:DataFrame = ModelDefinition.createBanditModel(pDescr.getRecommendersIDs())
+  model:DataFrame = PModelBandit(pDescr.getRecommendersIDs())
   evalTool:AEvalTool = EvalToolBanditTS({})
 
   return (taskID, port, model, evalTool, history)
@@ -210,7 +213,7 @@ def getFuzzyDHont():
   port:APortfolio = pDescr.exportPortfolio(taskID, history)
   port.train(history, dataset)
 
-  model:DataFrame = ModelDefinition.createDHontModel(pDescr.getRecommendersIDs())
+  model:DataFrame = PModelDHondt(pDescr.getRecommendersIDs())
 
   evalTool:AEvalTool = EvalToolDHondt({EvalToolDHondt.ARG_LEARNING_RATE_CLICKS: 0.03,
                                         EvalToolDHondt.ARG_LEARNING_RATE_VIEWS: 0.03 / 500})
@@ -241,7 +244,7 @@ def getFuzzyDHontThompsonSamplingINF():
   port:APortfolio = pDescr.exportPortfolio(taskID, history)
   port.train(history, dataset)
 
-  model:DataFrame = ModelDefinition.createDHondtBanditsVotesModel(pDescr.getRecommendersIDs())
+  model:DataFrame = PModelDHondtBanditsVotes(pDescr.getRecommendersIDs())
 
   evalTool:AEvalTool = EvalToolDHondtBanditVotes({})
 
@@ -263,7 +266,7 @@ def getFuzzyDHontThompsonSamplingDirectOptimizeINF():
   dataset:ADataset = DatasetST.readDatasets()
   port:APortfolio = pDescr.exportPortfolio(taskID, history)
   port.train(history, dataset)
-  model:DataFrame = ModelDefinition.createDHondtBanditsVotesModel(pDescr.getRecommendersIDs())
+  model:DataFrame = PModelDHondtBanditsVotes(pDescr.getRecommendersIDs())
   evalTool:AEvalTool = EvalToolDHondtBanditVotes({})
 
   return (taskID, port, model, evalTool, history)
@@ -293,7 +296,7 @@ def getFuzzyDHontINF():
   port:APortfolio = pDescr.exportPortfolio(taskID, history)
   port.train(history, dataset)
 
-  model:DataFrame = ModelDefinition.createDHontModel(pDescr.getRecommendersIDs())
+  model:DataFrame = PModelDHondt(pDescr.getRecommendersIDs())
 
   evalTool:AEvalTool = EvalToolDHondt({EvalToolDHondt.ARG_LEARNING_RATE_CLICKS: 0.03,
                                         EvalToolDHondt.ARG_LEARNING_RATE_VIEWS: 0.03 / 500})
@@ -334,7 +337,7 @@ def getContextFuzzyDHondt():
   port:APortfolio = pDescr.exportPortfolio(taskID, history)
   port.train(history, dataset)
 
-  model:DataFrame = ModelDefinition.createDHontModel(pDescr.getRecommendersIDs())
+  model:DataFrame = PModelDHondt(pDescr.getRecommendersIDs())
 
   return (taskID, port, model, evalTool, history)
 
@@ -369,7 +372,7 @@ def getContextFuzzyDHondtINF():
   port:APortfolio = pDescr.exportPortfolio(taskID, history)
   port.train(history, dataset)
 
-  model:DataFrame = ModelDefinition.createDHontModel(pDescr.getRecommendersIDs())
+  model:DataFrame = PModelDHondt(pDescr.getRecommendersIDs())
 
   return (taskID, port, model, evalTool, history)
 
@@ -404,7 +407,7 @@ def getContextFuzzyDHondtDirectOptimizeINF():
   port:APortfolio = pDescr.exportPortfolio(taskID, history)
   port.train(history, dataset)
 
-  model:DataFrame = ModelDefinition.createDHontModel(pDescr.getRecommendersIDs())
+  model:DataFrame = PModelDHondt(pDescr.getRecommendersIDs())
 
   return (taskID, port, model, evalTool, history)
 

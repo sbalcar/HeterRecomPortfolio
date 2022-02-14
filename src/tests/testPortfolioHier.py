@@ -51,6 +51,11 @@ from aggregationDescription.aggregationDescription import AggregationDescription
 
 from aggregation.aggrD21 import AggrD21 #class
 
+from portfolioModel.pModelBandit import PModelBandit #class
+from portfolioModel.pModelDHondtBanditsVotes import PModelDHondtBanditsVotes #class
+from portfolioModel.pModelDHondt import PModelDHondt #class
+
+
 def test01():
     print("Test 01")
 
@@ -92,7 +97,7 @@ def test01():
 
     p:APortfolio = pHierDescr.exportPortfolio("test", history)
 
-    portFolioModel:DataFrame = ModelDefinition.createDHondtBanditsVotesModel(p1AggrDescr.getRecommendersIDs())
+    portFolioModel:DataFrame = PModelDHondtBanditsVotes(p1AggrDescr.getRecommendersIDs())
 
 
     p.train(history, dataset)

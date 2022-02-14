@@ -45,7 +45,7 @@ def test01():
     portfolioModel:DataFrame = pd.DataFrame(portfolioModelData, columns=["methodID","votes"])
     portfolioModel.set_index("methodID", inplace=True)
 
-    sumMethodsVotes: float = portfolioModel["votes"].sum()
+    sumMethodsVotes:float = portfolioModel["votes"].sum()
     for methodIdI in portfolioModel.index:
         portfolioModel.loc[methodIdI, "votes"] = portfolioModel.loc[methodIdI, "votes"] / sumMethodsVotes
 

@@ -3,7 +3,7 @@ from abc import abstractmethod
 from typing import List #class
 from typing import Dict #class
 
-from datasets.ml.behavioursML import BehavioursML
+from datasets.ml.behavioursML import BehavioursML #class
 
 
 class InputABatchDefinition:

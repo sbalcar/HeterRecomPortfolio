@@ -134,26 +134,25 @@ class EvalToolContext(AEvalTool):
         self.items.set_index('id_serial', inplace=True)
         return self.items
 
-    def _onehotItemsGenresML(self, items: DataFrame):
+    def _onehotItemsGenresML(self, items:DataFrame):
         one_hot_encoding = items["Genres"].str.get_dummies(sep='|')
         one_hot_encoding.drop(one_hot_encoding.columns[0], axis=1, inplace=True)
         tmp = items.drop(['Genres'], axis=1, inplace=False)
         return pd.concat([tmp, one_hot_encoding], axis=1)
 
-    def click(self, rItemIDsWithResponsibility:List, clickedItemID:int, portfolioModel:DataFrame, argumentsDict:Dict[str,object]):
+    def click(self, userID:int, rItemIDsWithResponsibility:List, clickedItemID:int, portfolioModel:DataFrame, argumentsDict:Dict[str,object]):
+        if type(userID) is not int and type(userID) is not np.int64:
+            raise ValueError("Argument userID isn't type int.")
         if type(rItemIDsWithResponsibility) is not list:
             raise ValueError("Argument rItemIDsWithResponsibility isn't type list.")
         #if type(clickedItemID) is not int and type(clickedItemID) is not np.int64:
         #    raise ValueError("Argument clickedItemID isn't type int.")
-        if type(portfolioModel) is not DataFrame:
+        if not isinstance(portfolioModel, DataFrame):
             raise ValueError("Argument pModelDF isn't type DataFrame.")
         if list(portfolioModel.columns) != ['votes']:
             raise ValueError("Argument pModelDF doen't contain rights columns.")
         if type(argumentsDict) is not dict:
             raise ValueError("Argument argumentsDict isn't type dict.")
-
-        # get userID from dict
-        userID = argumentsDict[self.ARG_USER_ID]
 
         # compute context for selected user
         self._context = self.calculateContext(userID, argumentsDict)
@@ -294,17 +293,17 @@ class EvalToolContext(AEvalTool):
 
         return result
 
-    def displayed(self, rItemIDsWithResponsibility:List, portfolioModel:DataFrame, argumentsDict:Dict[str,object]):
+    def displayed(self, userID:int, rItemIDsWithResponsibility:List, portfolioModel:DataFrame, argumentsDict:Dict[str,object]):
+        if type(userID) is not int and type(userID) is not np.int64:
+            raise ValueError("Argument userID isn't type int.")
         if type(rItemIDsWithResponsibility) is not list:
             raise ValueError("Argument rItemIDsWithResponsibility isn't type list.")
-        if type(portfolioModel) is not DataFrame:
+        if not isinstance(portfolioModel, DataFrame):
             raise ValueError("Argument pModelDF isn't type DataFrame.")
         if list(portfolioModel.columns) != ['votes']:
             raise ValueError("Argument pModelDF doen't contain rights columns.")
         if type(argumentsDict) is not dict:
             raise ValueError("Argument argumentsDict isn't type dict.")
-
-        userID = argumentsDict[self.ARG_USER_ID]
 
         # recompute context - previous user doesn't have to be the same as current
         # TODO: Performace improvement: check if user changed -> do not recompute context if not?

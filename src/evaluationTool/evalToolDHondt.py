@@ -32,13 +32,15 @@ class EvalToolDHondt(AEvalTool):
         #print("learningRateViews: " + str(self.learningRateViews))
 
 
-    def click(self, rItemIDsWithResponsibility:List, clickedItemID:int, portfolioModel:DataFrame, argumentsDict:Dict[str,object]):
+    def click(self, userID:int, rItemIDsWithResponsibility:List, clickedItemID:int, portfolioModel:DataFrame, argumentsDict:Dict[str,object]):
+        if type(userID) is not int and type(userID) is not np.int64:
+            raise ValueError("Argument userID isn't type int.")
         if type(rItemIDsWithResponsibility) is not list:
             print(rItemIDsWithResponsibility)
             raise ValueError("Argument rItemIDsWithResponsibility isn't type list.")
         #if type(clickedItemID) is not int and type(clickedItemID) is not np.int64:
         #    raise ValueError("Argument clickedItemID isn't type int.")
-        if type(portfolioModel) is not DataFrame:
+        if not isinstance(portfolioModel, DataFrame):
             raise ValueError("Argument pModelDF isn't type DataFrame.")
         if list(portfolioModel.columns) != ['votes']:
             raise ValueError("Argument pModelDF doen't contain rights columns.")
@@ -77,16 +79,19 @@ class EvalToolDHondt(AEvalTool):
                 portfolioModel.loc[methodIdI, 'votes'] = self.maxVotesConst
 
          # linearly normalizing to unit sum of votes
-        EvalToolDHondt.linearNormalizingPortfolioModelDHont(portfolioModel)
+        #EvalToolDHondt.linearNormalizingPortfolioModelDHont(portfolioModel)
+        portfolioModel.linearNormalizing()
 
         print("HOP")
         print("clickedItemID: " + str(clickedItemID))
         print(portfolioModel)
 
-    def displayed(self, rItemIDsWithResponsibility:List, portfolioModel:DataFrame, argumentsDict:Dict[str,object]):
+    def displayed(self, userID:int, rItemIDsWithResponsibility:List, portfolioModel:DataFrame, argumentsDict:Dict[str,object]):
+        if type(userID) is not int and type(userID) is not np.int64:
+            raise ValueError("Argument userID isn't type int.")
         if type(rItemIDsWithResponsibility) is not list:
             raise ValueError("Argument rItemIDsWithResponsibility isn't type list.")
-        if type(portfolioModel) is not DataFrame:
+        if not isinstance(portfolioModel, DataFrame):
             raise ValueError("Argument pModelDF isn't type DataFrame.")
         if list(portfolioModel.columns) != ['votes']:
             raise ValueError("Argument pModelDF doen't contain rights columns.")
@@ -97,7 +102,8 @@ class EvalToolDHondt(AEvalTool):
         aggrItemIDsWithRespDF.set_index("itemId", inplace=True)
 
         #TODO
-        #EvalToolDHondt.linearNormalizingPortfolioModelDHont(portfolioModel)
+        #portfolioModel.linearNormalizing()
+
 
         # responsibilityDict:dict[methodID:str, votes:float]
         # iterate over all recommended items, penalize their methods
@@ -121,13 +127,6 @@ class EvalToolDHondt(AEvalTool):
                     portfolioModel.loc[methodIdI, 'votes'] = self.maxVotesConst
 
         # linearly normalizing to unit sum of votes
-        EvalToolDHondt.linearNormalizingPortfolioModelDHont(portfolioModel)
+        portfolioModel.linearNormalizing()
 
 
-
-    @staticmethod
-    def linearNormalizingPortfolioModelDHont(portfolioModelDHont:DataFrame):
-        # linearly normalizing to unit sum of votes
-        sumMethodsVotes:float = portfolioModelDHont["votes"].sum()
-        for methodIdI in portfolioModelDHont.index:
-            portfolioModelDHont.loc[methodIdI, "votes"] = portfolioModelDHont.loc[methodIdI, "votes"] / sumMethodsVotes

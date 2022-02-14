@@ -11,6 +11,7 @@ from portfolioDescription.portfolio1AggrDescription import Portfolio1AggrDescrip
 
 from evaluationTool.aEvalTool import AEvalTool  # class
 from evaluationTool.evalToolDHondt import EvalToolDHondt  # class
+from evaluationTool.evalToolDHondtPersonal import EToolDHondtPersonal #class
 
 from aggregationDescription.aggregationDescription import AggregationDescription  # class
 
@@ -36,9 +37,10 @@ from batchDefinition.ml1m.batchDefMLFuzzyDHondt import BatchDefMLFuzzyDHondt  # 
 from portfolioModel.pModelBandit import PModelBandit #class
 from portfolioModel.pModelDHondtBanditsVotes import PModelDHondtBanditsVotes #class
 from portfolioModel.pModelDHondt import PModelDHondt #class
+from portfolioModel.pModelDHondtPersonalised import PModelDHondtPersonalised #class
 
 
-class BatchDefRRFuzzyDHondt(ABatchDefinitionRR):
+class BatchDefRRPersonalFuzzyDHondt(ABatchDefinitionRR):
 
     lrClicks:List[float] = BatchDefMLFuzzyDHondt.lrClicks
     lrViewDivisors:List[float] = BatchDefMLFuzzyDHondt.lrViewDivisors
@@ -46,14 +48,22 @@ class BatchDefRRFuzzyDHondt(ABatchDefinitionRR):
 
 
     def getBatchName(self):
-        return "FDHondt"
+        return "PersonalFDHondt"
+
 
     def getParameters(self):
-        batchDefMLFuzzyDHondt = BatchDefMLFuzzyDHondt()
-        batchDefMLFuzzyDHondt.lrClicks:List[float] = self.lrClicks
-        batchDefMLFuzzyDHondt.lrViewDivisors:List[float] = self.lrViewDivisors
-        batchDefMLFuzzyDHondt.selectorIDs:List[str] = self.selectorIDs
-        return batchDefMLFuzzyDHondt.getParameters()
+        aDict:Dict[str,object] = {}
+        for selectorIDI in self.selectorIDs:
+            for lrClickJ in self.lrClicks:
+                for lrViewDivisorK in self.lrViewDivisors:
+                    keyIJ:str = selectorIDI + "Clk" + str(lrClickJ).replace(".", "") + "ViewDivisor" + str(lrViewDivisorK).replace(".", "")
+                    lrViewIJK:float = lrClickJ / lrViewDivisorK
+                    eToolIJK:AEvalTool = EToolDHondtPersonal({EvalToolDHondt.ARG_LEARNING_RATE_CLICKS: lrClickJ,
+                                                      EvalToolDHondt.ARG_LEARNING_RATE_VIEWS: lrViewIJK})
+                    selectorIJK:ADHondtSelector = BatchDefMLFuzzyDHondt().getAllSelectors()[selectorIDI]
+                    aDict[keyIJ] = (selectorIJK, eToolIJK)
+        return aDict
+
 
     def run(self, batchID: str, jobID: str):
         divisionDatasetPercentualSize: int
@@ -72,7 +82,7 @@ class BatchDefRRFuzzyDHondt(ABatchDefinitionRR):
         pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
             self.getBatchName() + jobID, rIDs, rDescs, aDescDHont)
 
-        model:DataFrame = PModelDHondt(pDescr.getRecommendersIDs())
+        model:DataFrame = PModelDHondtPersonalised(pDescr.getRecommendersIDs())
 
         simulator: Simulator = InputSimulatorDefinition.exportSimulatorRetailRocket(
             batchID, divisionDatasetPercentualSize, uBehaviour, repetition)
@@ -84,4 +94,4 @@ if __name__ == "__main__":
     os.chdir("..")
     print(os.getcwd())
 
-    BatchDefRRFuzzyDHondt().generateAllBatches(InputABatchDefinition())
+    BatchDefRRPersonalFuzzyDHondt().generateAllBatches(InputABatchDefinition())

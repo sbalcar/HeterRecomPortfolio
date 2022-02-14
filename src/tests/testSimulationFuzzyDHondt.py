@@ -37,25 +37,24 @@ from evaluationTool.aEvalTool import AEvalTool #class
 
 from recommenderDescription.recommenderDescription import RecommenderDescription #class
 
-from input.inputSimulatorDefinition import InputSimulatorDefinition #class
+from batchDefinition.inputSimulatorDefinition import InputSimulatorDefinition #class
 
-from input.inputRecomMLDefinition import InputRecomMLDefinition #class
-from input.inputRecomSTDefinition import InputRecomSTDefinition #class
+from batchDefinition.inputRecomMLDefinition import InputRecomMLDefinition #class
+from batchDefinition.inputRecomSTDefinition import InputRecomSTDefinition #class
 
-from input.inputAggrDefinition import InputAggrDefinition  # class
-from input.modelDefinition import ModelDefinition
+from batchDefinition.inputAggrDefinition import InputAggrDefinition  # class
 
-from input.inputRecomMLDefinition import InputRecomMLDefinition #class
-from input.inputRecomSTDefinition import InputRecomSTDefinition #class
+from batchDefinition.inputRecomMLDefinition import InputRecomMLDefinition #class
+from batchDefinition.inputRecomSTDefinition import InputRecomSTDefinition #class
 
-from input.batchesML1m.batchDefMLBanditTS import BatchDefMLBanditTS #class
+#from batchDefinition.batchesML1m.batchDefMLBanditTS import BatchDefMLBanditTS #class
 
-from input.inputABatchDefinition import InputABatchDefinition
-from input.aBatchDefinitionST import ABatchDefinitionST #class
+from batchDefinition.inputABatchDefinition import InputABatchDefinition
+from batchDefinition.aBatchDefinitionST import ABatchDefinitionST #class
 
 from aggregation.aggrFuzzyDHondt import AggrFuzzyDHondt #class
 from aggregation.operators.aDHondtSelector import ADHondtSelector #class
-from input.inputSimulatorDefinition import InputSimulatorDefinition #class
+from batchDefinition.inputSimulatorDefinition import InputSimulatorDefinition #class
 
 from simulator.simulator import Simulator #class
 
@@ -72,6 +71,9 @@ from userBehaviourDescription.userBehaviourDescription import UserBehaviourDescr
 from userBehaviourDescription.userBehaviourDescription import observationalStaticProbabilityFnc #function
 from userBehaviourDescription.userBehaviourDescription import observationalLinearProbabilityFnc #function
 
+from portfolioModel.pModelBandit import PModelBandit #class
+from portfolioModel.pModelDHondtBanditsVotes import PModelDHondtBanditsVotes #class
+from portfolioModel.pModelDHondt import PModelDHondt #class
 
 
 argsSimulationDict:Dict[str,object] = {SimulationST.ARG_WINDOW_SIZE: 5,
@@ -101,7 +103,7 @@ def test01():
     behaviourFile:str = BehavioursML.getFile(BehavioursML.BHVR_LINEAR0109)
     behavioursDF:DataFrame = BehavioursML.readFromFileMl1m(behaviourFile)
 
-    model:DataFrame = ModelDefinition.createDHontModel(pDescr.getRecommendersIDs())
+    model:DataFrame = PModelDHondt(pDescr.getRecommendersIDs())
 
     lrClick:float = 0.03
     lrView:float = lrClick / 500
@@ -132,7 +134,7 @@ def test21():
     behaviourFile:str = BehavioursST.getFile(BehavioursST.BHVR_LINEAR0109)
     behavioursDF:DataFrame = BehavioursST.readFromFileST(behaviourFile)
 
-    model:DataFrame = ModelDefinition.createDHontModel(pDescr.getRecommendersIDs())
+    model:DataFrame = PModelDHondt(pDescr.getRecommendersIDs())
     print(model)
 
     lrClick:float = 0.1
@@ -149,7 +151,7 @@ if __name__ == "__main__":
     os.chdir("..")
 
     # Simulation ML
-#    test01()  # BanditsTS
+    #test01()  # BanditsTS
 
     # Simulation ST
     test21()  # BanditsTS

@@ -16,7 +16,6 @@ from evaluationTool.evalToolDoNothing import EToolDoNothing #class
 from aggregationDescription.aggregationDescription import AggregationDescription #class
 
 from batchDefinition.inputAggrDefinition import InputAggrDefinition  # class
-from batchDefinition.modelDefinition import ModelDefinition
 
 from batchDefinition.inputRecomMLDefinition import InputRecomMLDefinition #class
 
@@ -34,6 +33,10 @@ from simulator.simulator import Simulator #class
 from history.historyHierDF import HistoryHierDF #class
 
 from batchDefinition.ml1m.batchDefMLFuzzyDHondt import BatchDefMLFuzzyDHondt #class
+
+from portfolioModel.pModelBandit import PModelBandit #class
+from portfolioModel.pModelDHondtBanditsVotes import PModelDHondtBanditsVotes #class
+from portfolioModel.pModelDHondt import PModelDHondt #class
 
 
 class BatchDefMLFAI(ABatchDefinitionML):
@@ -61,7 +64,7 @@ class BatchDefMLFAI(ABatchDefinitionML):
         pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
             "FAI" + jobID, rIDs, rDescs, aDescWeightedFAI)
 
-        model:DataFrame = ModelDefinition.createDHontModel(pDescr.getRecommendersIDs())
+        model:DataFrame = PModelDHondt(pDescr.getRecommendersIDs())
 
         simulator:Simulator = InputSimulatorDefinition.exportSimulatorML1M(
                 batchID, divisionDatasetPercentualSize, uBehaviour, repetition)

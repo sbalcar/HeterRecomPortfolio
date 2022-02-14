@@ -12,7 +12,6 @@ from pandas.core.frame import DataFrame #class
 from pandas.core.series import Series #class
 
 from aggregation.aAggregation import AAgregation #class
-from aggregation.tools.responsibilityDHont import countDHontResponsibility #function
 from aggregation.operators.rouletteWheelSelector import RouletteWheelSelector #class
 
 from history.aHistory import AHistory #class

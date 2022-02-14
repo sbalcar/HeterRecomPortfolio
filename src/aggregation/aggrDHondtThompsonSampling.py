@@ -12,7 +12,6 @@ from pandas.core.frame import DataFrame #class
 from pandas.core.series import Series #class
 
 from aggregation.aAggregation import AAgregation #class
-from aggregation.tools.responsibilityDHont import countDHontResponsibility #function
 from aggregation.operators.rouletteWheelSelector import RouletteWheelSelector #class
 
 from history.aHistory import AHistory #class
@@ -48,7 +47,7 @@ class AggrDHondtThompsonSampling(AAgregation):
       # testing types of parameters
       if type(methodsResultDict) is not dict:
           raise ValueError("Type of methodsResultDict isn't dict.")
-      if type(modelDF) is not DataFrame:
+      if not isinstance(modelDF, DataFrame):
           raise ValueError("Type of methodsParamsDF isn't DataFrame.")
       if list(modelDF.columns) != ['r', 'n', 'alpha0', 'beta0']:
           raise ValueError("Argument methodsParamsDF doesn't contain rights columns.")
@@ -136,7 +135,7 @@ class AggrDHondtThompsonSampling(AAgregation):
         for methI in methodsResultDict.values():
             if type(methI) is not pd.Series:
                 raise ValueError("Type of methodsParamsDF doen't contain Series.")
-        if type(modelDF) is not DataFrame:
+        if not isinstance(modelDF, DataFrame):
             raise ValueError("Type of methodsParamsDF isn't DataFrame.")
         if list(modelDF.columns) !=  ['r', 'n', 'alpha0', 'beta0']:
             print(modelDF.columns)

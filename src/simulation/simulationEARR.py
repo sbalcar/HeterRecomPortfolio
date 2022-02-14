@@ -1,6 +1,4 @@
 #!/usr/bin/python3
-import os
-from configuration.configuration import Configuration #class
 
 from typing import List
 from typing import Dict
@@ -29,7 +27,7 @@ from portfolio.aPortfolio import APortfolio #class
 from simulation.tools.modelOfIndexes import ModelOfIndexes #class
 
 
-class SimulationRR(ASequentialSimulation):
+class SimulationEARR(ASequentialSimulation):
 
     _ratingClass = Events
     _behaviourClass = BehavioursRR
@@ -115,13 +113,6 @@ class SimulationRR(ASequentialSimulation):
 
         evaluations:List[dict] = [{} for i in range(len(portfolios))]
 
-        # opening stat file
-        dir:str = Configuration.resultsDirectory + os.sep + self._batchID
-        fileNameStat:str = dir + os.sep + "stat.txt"
-        if os.path.exists(fileNameStat):
-            os.remove(fileNameStat)
-        fileStat = open(fileNameStat, "a")
-
         counterI:int = 0
 
         currentDFIndexI:int
@@ -131,9 +122,6 @@ class SimulationRR(ASequentialSimulation):
             counterI += 1
             if counterI  % 100 == 0:
                 print("EventI: " + str(counterI) + " / " + str(testRatingsDF.shape[0]))
-                fileStat.write("status: " + str(round(counterI / testRatingsDF.shape[0] * 100,2)) + " procent\n")
-                fileStat.flush()
-
                 print("PortfolioIds: " + str(portIds))
                 print("Evaluations: " + str(evaluations))
 

@@ -15,7 +15,6 @@ from evaluationTool.evalToolDHondt import EvalToolDHondt #class
 from aggregationDescription.aggregationDescription import AggregationDescription #class
 
 from batchDefinition.inputAggrDefinition import InputAggrDefinition  #class
-from batchDefinition.modelDefinition import ModelDefinition
 
 from batchDefinition.inputRecomSTDefinition import InputRecomSTDefinition #class
 
@@ -43,6 +42,10 @@ from aggregation.negImplFeedback.penalUsingReduceRelevance import PenalUsingRedu
 from aggregation.negImplFeedback.penalUsingProbability import PenalUsingProbability #class
 from aggregation.negImplFeedback.penalUsingReduceRelevance import penaltyStatic #function
 from aggregation.negImplFeedback.penalUsingReduceRelevance import penaltyLinear #function
+
+from portfolioModel.pModelBandit import PModelBandit #class
+from portfolioModel.pModelDHondtBanditsVotes import PModelDHondtBanditsVotes #class
+from portfolioModel.pModelDHondt import PModelDHondt #class
 
 
 
@@ -73,7 +76,7 @@ class BatchDefSTDFuzzyHondtThompsonSamplingINF(ABatchDefinitionST):
         pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
             self.getBatchName() + jobID, rIDs, rDescs, aDescNegDHontThompsonSamplingI)
 
-        model:DataFrame = ModelDefinition.createDHondtBanditsVotesModel(pDescr.getRecommendersIDs())
+        model:DataFrame = PModelDHondtBanditsVotes(pDescr.getRecommendersIDs())
 
         simulator:Simulator = InputSimulatorDefinition.exportSimulatorSlantour(
                 batchID, divisionDatasetPercentualSize, uBehaviour, repetition)

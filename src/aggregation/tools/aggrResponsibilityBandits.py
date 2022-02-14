@@ -13,7 +13,9 @@ from pandas.core.frame import Series # class
 
 from aggregation.aAggregation import AAgregation  # class
 
-from batchDefinition.modelDefinition import ModelDefinition
+from portfolioModel.pModelBandit import PModelBandit #class
+from portfolioModel.pModelDHondtBanditsVotes import PModelDHondtBanditsVotes #class
+from portfolioModel.pModelDHondt import PModelDHondt #class
 
 from sklearn.preprocessing import normalize
 
@@ -49,7 +51,7 @@ if __name__ == "__main__":
     modelDF:DataFrame = pd.DataFrame(modelData, columns=["methodID", "r", "n", "alpha0", "beta0"])
     modelDF.set_index("methodID", inplace=True)
 
-    modelDF:DataFrame = ModelDefinition.createBanditModel(['metoda1', 'metoda2', 'metoda3'])
+    modelDF:DataFrame = PModelBandit(['metoda1', 'metoda2', 'metoda3'])
 
     print("Model:")
     print(modelDF)

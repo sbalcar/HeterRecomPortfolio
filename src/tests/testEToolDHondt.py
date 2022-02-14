@@ -11,8 +11,9 @@ import pandas as pd
 from evaluationTool.aEvalTool import AEvalTool #class
 from evaluationTool.evalToolDHondt import EvalToolDHondt #class
 
-from input.inputRecomSTDefinition import InputRecomSTDefinition #class
-from input.modelDefinition import ModelDefinition
+from batchDefinition.inputRecomSTDefinition import InputRecomSTDefinition #class
+
+from portfolioModel.pModelDHondt import PModelDHondt #class
 
 
 def test01():
@@ -73,8 +74,10 @@ def test02():
 
     rIDs, rDescr = InputRecomSTDefinition.exportPairOfRecomIdsAndRecomDescrs()
 
-    model:DataFrame = ModelDefinition.createDHontModel(rIDs)
+    model:DataFrame = PModelDHondt(rIDs)
     print(model)
+
+    userID:int = 1
 
     rItemIDsWithResponsibility:List[(int, Dict)] = [(1,
             {rIDs[0]:0.05, rIDs[1]:0.05, rIDs[2]:0.05, rIDs[3]:0.05,
@@ -84,10 +87,10 @@ def test02():
     lrClick:float = 0.03
     lrView:float = lrClick / 500
     evalTool:AEvalTool = EvalToolDHondt({EvalToolDHondt.ARG_LEARNING_RATE_CLICKS:lrClick, EvalToolDHondt.ARG_LEARNING_RATE_VIEWS:lrView})
-    evalTool.click(rItemIDsWithResponsibility, 1, model, {})
+    evalTool.click(userID, rItemIDsWithResponsibility, 1, model, {})
 
     for i in range(555):
-        evalTool.displayed(rItemIDsWithResponsibility, model, {})
+        evalTool.displayed(userID, rItemIDsWithResponsibility, model, {})
 
     print(model)
 

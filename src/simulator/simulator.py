@@ -48,7 +48,7 @@ class Simulator:
         if type(portModels) is not list:
             raise ValueError("Argument portModels isn't type list.")
         for portModI in portModels:
-            if type(portModI) is not DataFrame:
+            if not isinstance(portModI, DataFrame):
                raise ValueError("Argument portModels don't contain DataFrame.")
 
         if type(eTools) is not list:

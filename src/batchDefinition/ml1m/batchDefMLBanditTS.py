@@ -12,7 +12,6 @@ from evaluationTool.aEvalTool import AEvalTool #class
 from evaluationTool.evalToolBanditTS import EvalToolBanditTS #class
 
 from batchDefinition.inputAggrDefinition import InputAggrDefinition  # class
-from batchDefinition.modelDefinition import ModelDefinition
 
 from batchDefinition.inputRecomMLDefinition import InputRecomMLDefinition #class
 
@@ -30,6 +29,11 @@ from simulator.simulator import Simulator #class
 from history.historyHierDF import HistoryHierDF #class
 
 from batchDefinition.ml1m.batchDefMLFuzzyDHondt import BatchDefMLFuzzyDHondt #class
+
+from portfolioModel.pModelBandit import PModelBandit #class
+from portfolioModel.pModelDHondtBanditsVotes import PModelDHondtBanditsVotes #class
+from portfolioModel.pModelDHondt import PModelDHondt #class
+
 
 class BatchDefMLBanditTS(ABatchDefinitionML):
 
@@ -63,7 +67,7 @@ class BatchDefMLBanditTS(ABatchDefinitionML):
             self.getBatchName() + jobID, rIDs, rDescs, InputAggrDefinition.exportADescBanditTS(selector))
 
         eTool:AEvalTool = EvalToolBanditTS({})
-        model:DataFrame = ModelDefinition.createBanditModel(pDescr.getRecommendersIDs())
+        model:DataFrame = PModelBandit(pDescr.getRecommendersIDs())
 
         simulator:Simulator = InputSimulatorDefinition.exportSimulatorML1M(
                 batchID, divisionDatasetPercentualSize, uBehaviour, repetition)

@@ -15,7 +15,6 @@ from evaluationTool.evalToolDHondtBanditVotes import EvalToolDHondtBanditVotes #
 from aggregationDescription.aggregationDescription import AggregationDescription #class
 
 from batchDefinition.inputAggrDefinition import InputAggrDefinition  # class
-from batchDefinition.modelDefinition import ModelDefinition
 
 from batchDefinition.inputRecomMLDefinition import InputRecomMLDefinition #class
 
@@ -36,6 +35,10 @@ from simulator.simulator import Simulator #class
 from history.historyHierDF import HistoryHierDF #class
 from batchDefinition.ml1m.batchDefMLFuzzyDHondt import BatchDefMLFuzzyDHondt #class
 from batchDefinition.ml1m.batchDefMLFuzzyDHondtDirectOptimizeThompsonSampling import BatchDefMLFuzzyDHondtDirectOptimizeThompsonSampling #class
+
+from portfolioModel.pModelBandit import PModelBandit #class
+from portfolioModel.pModelDHondtBanditsVotes import PModelDHondtBanditsVotes #class
+from portfolioModel.pModelDHondt import PModelDHondt #class
 
 
 class BatchDefMLFuzzyDHondtDirectOptimizeThompsonSamplingINF(ABatchDefinitionML):
@@ -78,7 +81,7 @@ class BatchDefMLFuzzyDHondtDirectOptimizeThompsonSamplingINF(ABatchDefinitionML)
         pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
             self.getBatchName() + jobID.replace("Uniform",""), rIDs, rDescs, aDescDHont)
 
-        model:DataFrame = ModelDefinition.createDHondtBanditsVotesModel(pDescr.getRecommendersIDs())
+        model:DataFrame = PModelDHondtBanditsVotes(pDescr.getRecommendersIDs())
 
         simulator:Simulator = InputSimulatorDefinition.exportSimulatorML1M(
                 batchID, divisionDatasetPercentualSize, uBehaviour, repetition)

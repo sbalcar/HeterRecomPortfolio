@@ -61,6 +61,8 @@ from batchDefinition.retailrocket.batchDefRRFuzzyDHondtDirectOptimizeThompsonSam
 from batchDefinition.retailrocket.batchRRFuzzyDHondtINF import BatchRRFuzzyDHondtINF #class
 from batchDefinition.retailrocket.batchDefRRHierD21 import BatchDefRRHierD21 #class
 
+from batchDefinition.retailrocket.batchDefRRPersonalFuzzzyDHont import BatchDefRRPersonalFuzzyDHondt #class
+
 from batchDefinition.slanTour.batchDefSTFuzzyDHondtDirectOptimizeThompsonSampling import BatchDefSTFuzzyDHondtDirectOptimizeThompsonSampling #class
 from batchDefinition.slanTour.batchDefSTFuzzyDHondtDirectOptimizeThompsonSamplingINF import BatchDefSTFuzzyDHondtDirectOptimizeThompsonSamplingINF #class
 from batchDefinition.slanTour.batchDefSTContextFuzzyDHondtDirectOptimizeINF import BatchDefSTContextFuzzyDHondtDirectOptimizeINF #class
@@ -88,6 +90,8 @@ from batchDefinition.slanTour.batchDefSTSingleBPRMFHT import BatchDefSTSingleBPR
 from batchDefinition.slanTour.batchDefSTSingle import BatchDefSTSingle #class
 from batchDefinition.slanTour.batchDefSTSingleW2VHT import BatchDefSTSingleW2VHT #class
 from batchDefinition.slanTour.batchDefSTSingleCosineCBHT import BatchDefSTSingleCosineCBHT #class
+
+from datasets.ml.behavioursML import BehavioursML #class
 
 
 def getBatchInstance(batchStr):
@@ -395,7 +399,6 @@ def getBatchesJournal():
         jobIdST01, jobIdST02, jobIdST03, jobIdST04, jobIdST05, jobIdST06, jobIdST07, jobIdST08]
 
 
-
     batchesDef.append(batchDefSTSingle)
     batchesDef.append(batchDefSTBanditTS)
     batchesDef.append(batchDefSTWeightedAVG)
@@ -432,8 +435,8 @@ def getBatchesJournal2():
     return batchesDef
 
 
-def getBatchesChinaHP():
-    print("Get China Batches HP")
+def getBatchesICCAIHP():
+    print("Get ICCAI Batches HP")
 
     batchesDef: List[ABatchDefinition] = []
 
@@ -454,8 +457,8 @@ def getBatchesChinaHP():
     return batchesDef
 
 
-def getBatchesChina():
-    print("Get China Batches")
+def getBatchesICCAI():
+    print("Get ICCAI Batches")
 
     batchesDef:List[ABatchDefinition] = []
 
@@ -492,6 +495,26 @@ def getBatchesChina():
     return batchesDef
 
 
+def getBatchesUSA():
+    print("Get USA Batches")
+
+    batchDefRRFuzzyDHondt = BatchDefRRFuzzyDHondt()
+    batchDefRRFuzzyDHondt.lrClicks:List[float] = [0.03]
+    batchDefRRFuzzyDHondt.lrViewDivisors:List[float] = [250]
+    batchDefRRFuzzyDHondt.selectorIDs:List[str] = [BatchDefMLFuzzyDHondt.SLCTR_FIXED]
+
+    batchDefRRPersonalFuzzyDHondt = BatchDefRRPersonalFuzzyDHondt()
+    batchDefRRPersonalFuzzyDHondt.lrClicks: List[float] = [0.03]
+    batchDefRRPersonalFuzzyDHondt.lrViewDivisors:List[float] = [250]
+    batchDefRRPersonalFuzzyDHondt.selectorIDs = [BatchDefMLFuzzyDHondt.SLCTR_ROULETTE3]
+
+    batchesDef:List[ABatchDefinition] = []
+
+    batchesDef.append(batchDefRRFuzzyDHondt)
+    batchesDef.append(batchDefRRPersonalFuzzyDHondt)
+
+    return batchesDef
+
 
 def generateBatches():
     print("Generate Batches")
@@ -501,9 +524,11 @@ def generateBatches():
 
     iBatchHPDef = InputABatchDefinition()
     iBatchHPDef.divisionsDatasetPercentualSize = [80]
+    iBatchHPDef.uBehaviours = [BehavioursML.BHVR_LINEAR0109]
+    iBatchHPDef.repetitions = [1]
 
     batchesHPDef:List = []
-    batchesHPDef:List = getBatchesChinaHP()
+    #batchesHPDef:List = getBatchesICCAIHP()
 
     for batchDefI in batchesHPDef:
         batchDefI.generateAllBatches(iBatchHPDef)
@@ -511,12 +536,15 @@ def generateBatches():
 
     iBatchDef = InputABatchDefinition()
     iBatchDef.divisionsDatasetPercentualSize = [90]
+    iBatchDef.uBehaviours = [BehavioursML.BHVR_LINEAR0109]
+    iBatchDef.repetitions = [1]
 
     batchesDef:List = []
     #batchesDef:List = getAllBatches()
     #batchesDef:List = getBatchesJournal()
     #batchesDef:List = getBatchesJournal2()
-    batchesDef:List = getBatchesChina()
+    #batchesDef:List = getBatchesICCAI()
+    batchesDef:List = getBatchesUSA()
 
     for batchDefI in batchesDef:
         batchDefI.generateAllBatches(iBatchDef)

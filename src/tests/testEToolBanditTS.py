@@ -34,23 +34,24 @@ def test01():
     evaluationDict:dict = {}
 
     print("Clicked:")
+    userID:int = 1
 
     evalTool:AEvalTool = EvalToolBanditTS({})
-    evalTool.click(rItemIDsWithResponsibility, 1, portfolioModelDF, evaluationDict)
+    evalTool.click(userID, rItemIDsWithResponsibility, 1, portfolioModelDF, evaluationDict)
     print()
 
     print("Clicked:")
-    evalTool.click(rItemIDsWithResponsibility, 32, portfolioModelDF, evaluationDict)
+    evalTool.click(userID, rItemIDsWithResponsibility, 32, portfolioModelDF, evaluationDict)
     print()
 
     print("Clicked:")
-    evalTool.click(rItemIDsWithResponsibility, 6, portfolioModelDF, evaluationDict)
+    evalTool.click(userID, rItemIDsWithResponsibility, 6, portfolioModelDF, evaluationDict)
     print()
 
     print("Displayed:")
     rItemIDsWithResponsibility1:List[tuple] = [(1, 'metoda1'), (32, 'metoda1'), (2, 'metoda1'), (8, 'metoda1')]
     for i in [0,1,2]:
-        evalTool.displayed(rItemIDsWithResponsibility1, portfolioModelDF, evaluationDict)
+        evalTool.displayed(userID, rItemIDsWithResponsibility1, portfolioModelDF, evaluationDict)
         print(portfolioModelDF)
 
 

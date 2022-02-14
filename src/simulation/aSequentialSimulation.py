@@ -94,7 +94,7 @@ class ASequentialSimulation(ABC):
         if type(portFolioModels) is not list:
             raise ValueError("Argument portFolioModels isn't type list.")
         for portFolioModelI in portFolioModels:
-            if type(portFolioModelI) is not pd.DataFrame:
+            if not isinstance(portFolioModelI, pd.DataFrame):
                raise ValueError("Argument portFolioModels don't contain pd.DataFrame.")
 
         if type(evaluatonTools) is not list:
@@ -133,7 +133,7 @@ class ASequentialSimulation(ABC):
                 os.remove(fileName)
             self.portModelTimeEvolutionFiles[portfolioDescI.getPortfolioID()] = open(fileName, "a")
 
-        # opening files for portfolio model time evolution
+        # opening files for history of recomendation
         self.historyOfRecommendationFiles:dict = {}
         for portfolioDescI in portfolioDescs:
             fileName:str = dir + os.sep + "historyOfRecommendation-" + portfolioDescI.getPortfolioID() + ".txt"
@@ -163,6 +163,7 @@ class ASequentialSimulation(ABC):
             trainDataset, testRatingsDF, testRelevantRatingsDF, testBehaviourDict = self.divideDataset(
                 self._dataset, self._behaviourDF, percentualSizeI, testDatasetPercentualSize, self._recomRepetitionCount)
 
+
             evaluationI = self.runPortfolioDesc(portfolioDescs, portFolioModels, evaluatonTools,
                                                 histories, trainDataset, testRatingsDF, testRelevantRatingsDF, testBehaviourDict)
             evaluations.append(evaluationI)
@@ -177,6 +178,7 @@ class ASequentialSimulation(ABC):
         #hOfRecommDictI:File
         for hOfRecommDictI in self.historyOfRecommendationFiles.values():
             hOfRecommDictI.close()
+
 
         #evalFileName:File
         evalFileName:str = Configuration.resultsDirectory + os.sep + self._batchID + os.sep + "evaluation.txt"
@@ -260,7 +262,6 @@ class ASequentialSimulation(ABC):
         args:Dict[str, object] = {APortfolio.ARG_NUMBER_OF_RECOMM_ITEMS:self._numberOfRecommItems,
                                   Portfolio1Aggr.ARG_NUMBER_OF_AGGR_ITEMS:self._numberOfAggrItems,
                                   EvalToolContext.ARG_PAGE_TYPE:currentPageType,
-                                  EvalToolContext.ARG_USER_ID: userID,
                                   EvalToolContext.ARG_ITEM_ID:currentItemID,
                                   EvalToolContext.ARG_SENIORITY:sessionID}
 
@@ -268,7 +269,7 @@ class ASequentialSimulation(ABC):
         rItemIDsWithResponsibility:List[tuple[int, Series[int, str]]]
         rItemIDs, rItemIDsWithResponsibility = portfolio.recommend(userID, portfolioModel, args)
 
-        evaluatonTool.displayed(rItemIDsWithResponsibility, portfolioModel, args)
+        evaluatonTool.displayed(userID, rItemIDsWithResponsibility, portfolioModel, args)
 
         candidatesToClick:List[int] = [itemIDI for itemIDI, observedI in zip(rItemIDs, uObservation[:len(rItemIDs)]) if observedI]
         clickedItemIDs:List[int] = list(set(candidatesToClick) & set(windowOfItemIDsI))
@@ -285,7 +286,7 @@ class ASequentialSimulation(ABC):
         for clickedNewItemIdI in clickedNewItemIDs:
             evaluationDict[AEvalTool.CLICKS] = evaluationDict.get(AEvalTool.CLICKS, 0) + 1
 
-            evaluatonTool.click(rItemIDsWithResponsibility, clickedNewItemIdI, portfolioModel, args)
+            evaluatonTool.click(userID, rItemIDsWithResponsibility, clickedNewItemIdI, portfolioModel, args)
 
             self._clickedItems[userID].append(clickedNewItemIdI)
 
@@ -293,7 +294,7 @@ class ASequentialSimulation(ABC):
         # store port model time evolution to file
         self.portModelTimeEvolutionFiles[portId].write("currentItemID: " + str(currentItemID) + "\n")
         self.portModelTimeEvolutionFiles[portId].write("userID: " + str(userID) + "\n")
-        self.portModelTimeEvolutionFiles[portId].write(str(portfolioModel) + "\n\n")
+        self.portModelTimeEvolutionFiles[portId].write(str(portfolioModel.to_json()) + "\n\n")
 
         # store history of recommendations to file
         self.historyOfRecommendationFiles[portfolioDesc.getPortfolioID()].write("userID: " + str(userID) + "\n")

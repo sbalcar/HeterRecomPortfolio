@@ -13,7 +13,6 @@ from evaluationTool.evalToolBanditTS import EvalToolBanditTS  # class
 from evaluationTool.evalToolDoNothing import EToolDoNothing  # class
 
 from batchDefinition.inputAggrDefinition import InputAggrDefinition  # class
-from batchDefinition.modelDefinition import ModelDefinition
 
 from batchDefinition.inputRecomRRDefinition import InputRecomRRDefinition  # class
 
@@ -44,6 +43,11 @@ from aggregation.negImplFeedback.penalUsingProbability import PenalUsingProbabil
 
 from recommender.recommenderTheMostPopular import RecommenderTheMostPopular #class
 from recommender.recommenderRepeatedPurchase import RecommenderRepeatedPurchase #class
+
+from portfolioModel.pModelBandit import PModelBandit #class
+from portfolioModel.pModelDHondtBanditsVotes import PModelDHondtBanditsVotes #class
+from portfolioModel.pModelDHondt import PModelDHondt #class
+
 
 class BatchDefRRHierD21(ABatchDefinitionRR):
 
@@ -101,8 +105,8 @@ class BatchDefRRHierD21(ABatchDefinitionRR):
 
         eTool:AEvalTool = EvalToolBanditTS({})
         #eTool:AEvalTool = EToolDoNothing({})
-        #model:DataFrame = ModelDefinition.createDHontModel(p1AggrDescr.getRecommendersIDs())
-        model:DataFrame = ModelDefinition.createBanditModel(p1AggrDescr.getRecommendersIDs())
+        #model:DataFrame = PModelDHont(p1AggrDescr.getRecommendersIDs())
+        model:DataFrame = PModelBandit(p1AggrDescr.getRecommendersIDs())
 
         simulator:Simulator = InputSimulatorDefinition.exportSimulatorRetailRocket(
             batchID, divisionDatasetPercentualSize, uBehaviour, repetition)

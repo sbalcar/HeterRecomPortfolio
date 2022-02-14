@@ -99,7 +99,7 @@ class Portfolio1Aggr(APortfolio):
         #print("userID: " + str(userID))
         if type(userID) is not int and type(userID) is not np.int64:
             raise ValueError("Argument userID isn't type int.")
-        if type(portFolioModel) is not DataFrame:
+        if not isinstance(portFolioModel, DataFrame):
             raise ValueError("Argument portFolioModel isn't type DataFrame.")
         if type(argumentsDict) is not dict:
             raise ValueError("Argument argumentsDict isn't type dict.")
