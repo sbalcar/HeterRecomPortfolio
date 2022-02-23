@@ -9,7 +9,7 @@ import os
 from pandas.core.frame import DataFrame #class
 
 from datasets.aDataset import ADataset #class
-from datasets.datasetRetailrocket import DatasetRetailRocket #class
+from datasets.datasetRetailRocket import DatasetRetailRocket #class
 
 from datasets.retailrocket.events import Events #class
 

@@ -14,7 +14,7 @@ from sklearn.preprocessing import normalize
 
 from datasets.aDataset import ADataset #class
 from datasets.datasetML import DatasetML #class
-from datasets.datasetRetailrocket import DatasetRetailRocket #class
+from datasets.datasetRetailRocket import DatasetRetailRocket #class
 from datasets.datasetST import DatasetST #class
 
 

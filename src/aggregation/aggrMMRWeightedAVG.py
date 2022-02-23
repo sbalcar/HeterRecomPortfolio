@@ -20,7 +20,7 @@ from recommender.tools.toolMMR import ToolMMR #class
 
 from datasets.aDataset import ADataset  #class
 from datasets.datasetML import DatasetML  #class
-from datasets.datasetRetailrocket import DatasetRetailRocket  # lass
+from datasets.datasetRetailRocket import DatasetRetailRocket  # lass
 from datasets.datasetST import DatasetST  #class
 
 

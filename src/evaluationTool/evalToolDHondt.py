@@ -9,6 +9,9 @@ from pandas.core.frame import DataFrame #class
 
 import numpy as np
 
+from aggregation.tools.aggrResponsibilityDHondt import normalizationOfDHondtResponsibility #function
+
+
 class EvalToolDHondt(AEvalTool):
     #learningRateClicks:float = 0.1
     #learningRateViews:float = (0.1 / 500)
@@ -48,12 +51,12 @@ class EvalToolDHondt(AEvalTool):
             raise ValueError("Argument argumentsDict isn't type dict.")
         print(rItemIDsWithResponsibility)
 
-        aggrItemIDsWithRespDF:DataFrame = DataFrame(rItemIDsWithResponsibility, columns=["itemId", "responsibility"])
+        rItemIDsWithResponsibilityNorm = normalizationOfDHondtResponsibility(rItemIDsWithResponsibility)
+
+        aggrItemIDsWithRespDF:DataFrame = DataFrame(rItemIDsWithResponsibilityNorm, columns=["itemId", "responsibility"])
         aggrItemIDsWithRespDF.set_index("itemId", inplace=True)
 
         #EvalToolDHont.linearNormalizingPortfolioModelDHont(portfolioModel)
-
-        #evaluationDict[AEvalTool.CLICKS] = evaluationDict.get(AEvalTool.CLICKS, 0) + 1
 
         # responsibilityDict:dict[methodID:str, votes:float]
         responsibilityDict:dict[str, float] = aggrItemIDsWithRespDF.loc[clickedItemID]["responsibility"]
@@ -86,6 +89,7 @@ class EvalToolDHondt(AEvalTool):
         print("clickedItemID: " + str(clickedItemID))
         print(portfolioModel)
 
+
     def displayed(self, userID:int, rItemIDsWithResponsibility:List, portfolioModel:DataFrame, argumentsDict:Dict[str,object]):
         if type(userID) is not int and type(userID) is not np.int64:
             raise ValueError("Argument userID isn't type int.")
@@ -98,7 +102,9 @@ class EvalToolDHondt(AEvalTool):
         if type(argumentsDict) is not dict:
             raise ValueError("Argument argumentsDict isn't type dict.")
 
-        aggrItemIDsWithRespDF:DataFrame = DataFrame(rItemIDsWithResponsibility, columns=["itemId", "responsibility"])
+        rItemIDsWithResponsibilityNorm = normalizationOfDHondtResponsibility(rItemIDsWithResponsibility)
+
+        aggrItemIDsWithRespDF:DataFrame = DataFrame(rItemIDsWithResponsibilityNorm, columns=["itemId", "responsibility"])
         aggrItemIDsWithRespDF.set_index("itemId", inplace=True)
 
         #TODO

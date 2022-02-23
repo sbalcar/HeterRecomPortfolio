@@ -16,6 +16,8 @@ from aggregation.operators.rouletteWheelSelector import RouletteWheelSelector #c
 
 from portfolioModel.pModelDHondt import PModelDHondt #class
 from portfolioModel.pModelDHondtPersonalised import PModelDHondtPersonalised #class
+from portfolioModel.pModelDHondtPersonalisedStat import PModelDHondtPersonalisedStat #class
+
 
 from history.aHistory import AHistory #class
 from abc import ABC, abstractmethod
@@ -48,7 +50,9 @@ class AggrFuzzyDHondt(AAgregation):
       # testing types of parameters
       if type(methodsResultDict) is not dict:
           raise ValueError("Type of methodsResultDict isn't dict.")
-      if (not isinstance(modelDF, PModelDHondt)) and (not isinstance(modelDF, PModelDHondtPersonalised)):
+      if (not isinstance(modelDF, PModelDHondt)) and (not isinstance(modelDF, PModelDHondtPersonalised))\
+              and (not isinstance(modelDF, PModelDHondtPersonalisedStat)):
+
           raise ValueError("Type of methodsParamsDF isn't DataFrame.")
       if type(numberOfItems) is not int:
           raise ValueError("Type of numberOfItems isn't int.")
@@ -133,7 +137,8 @@ class AggrFuzzyDHondt(AAgregation):
         for methI in methodsResultDict.values():
             if type(methI) is not pd.Series:
                 raise ValueError("Type of methodsParamsDF doen't contain Series.")
-        if (not isinstance(modelDF, PModelDHondt)) and (not isinstance(modelDF, PModelDHondtPersonalised)):
+        if (not isinstance(modelDF, PModelDHondt)) and (not isinstance(modelDF, PModelDHondtPersonalised))\
+                and  (not isinstance(modelDF, PModelDHondtPersonalisedStat)):
             raise ValueError("Type of methodsParamsDF isn't DataFrame.")
 
 #        if not isinstance(modelDF, DataFrame):

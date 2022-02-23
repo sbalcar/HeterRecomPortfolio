@@ -214,7 +214,8 @@ class ASequentialSimulation(ABC):
 
     def simulateRecommendations(self, portfolios:List[APortfolio], portfolioDescs:List[APortfolioDescription],
                                   portFolioModels:List[DataFrame], evaluatonTools:List[AEvalTool], histories:List[AHistory],
-                                  evaluations:List[dict], currentDFIndex:int, userID:int, sessionID:int, repetition:int,
+                                  evaluations:List[dict], currentDFIndex:int, counterI:int, counterMax:int,
+                                  userID:int, sessionID:int, repetition:int,
                                   testRatingsDF:DataFrame, testBehaviourDict:Dict[int, DataFrame], windowOfItemIDsI:List[int],
                                   currentPageType:object):
 
@@ -243,13 +244,15 @@ class ASequentialSimulation(ABC):
                 portfolios, portfolioDescs, portFolioModels, evaluatonTools, histories, evaluations):
 
             self.simulateRecommendation(portfolioI, portfolioDescI, portFolioModelI, evaluatonToolI, historyI,
-                                        evaluationI, currentDFIndex, testRatingsDF, uObservation, userID,
+                                        evaluationI, currentDFIndex, counterI, counterMax,
+                                        testRatingsDF, uObservation, userID,
                                         sessionID, windowOfItemIDsI, currentPageType)
 
 
     def simulateRecommendation(self, portfolio:APortfolio, portfolioDesc:APortfolioDescription, portfolioModel:DataFrame,
                                  evaluatonTool:AEvalTool, history:AHistory, evaluationDict:Dict[str,object],
-                                 currentDFIndex:int, testRatingsDF:DataFrame, uObservation:List[bool], userID:int,
+                                 currentDFIndex:int, counterI:int, counterMax:int,
+                                 testRatingsDF:DataFrame, uObservation:List[bool], userID:int,
                                  sessionID:int, windowOfItemIDsI:List[int], currentPageType:object):
 
         from datasets.slantour.events import Events #class
@@ -292,6 +295,7 @@ class ASequentialSimulation(ABC):
 
 
         # store port model time evolution to file
+        self.portModelTimeEvolutionFiles[portId].write(str(counterI) + " / " + str(counterMax) + "\n")
         self.portModelTimeEvolutionFiles[portId].write("currentItemID: " + str(currentItemID) + "\n")
         self.portModelTimeEvolutionFiles[portId].write("userID: " + str(userID) + "\n")
         self.portModelTimeEvolutionFiles[portId].write(str(portfolioModel.to_json()) + "\n\n")

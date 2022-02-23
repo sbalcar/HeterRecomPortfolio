@@ -14,7 +14,7 @@ from history.aHistory import AHistory #class
 from history.historyDF import HistoryDF #class
 
 from datasets.aDataset import ADataset #class
-from datasets.datasetRetailrocket import DatasetRetailRocket #class
+from datasets.datasetRetailRocket import DatasetRetailRocket #class
 
 from recommender.aRecommender import ARecommender #class
 from recommender.recommenderTheMostPopular import RecommenderTheMostPopular #class
@@ -32,7 +32,6 @@ from portfolioDescription.portfolio1AggrDescription import Portfolio1AggrDescrip
 from recommenderDescription.recommenderDescription import RecommenderDescription #class
 
 from batchDefinition.inputAggrDefinition import InputAggrDefinition #class
-from batchDefinition.modelDefinition import ModelDefinition
 
 from aggregationDescription.aggregationDescription import AggregationDescription #class
 from batchDefinition.inputRecomRRDefinition import InputRecomRRDefinition  # class

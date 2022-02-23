@@ -46,6 +46,7 @@ class InputRecomRRDefinition:
                 RecommenderItemBasedKNN.ARG_K:25,
                 RecommenderItemBasedKNN.ARG_UPDATE_THRESHOLD:500})
 
+
     @staticmethod
     def exportRDescBPRMF():
         return RecommenderDescription(RecommenderBPRMF, {
@@ -53,6 +54,7 @@ class InputRecomRRDefinition:
                 RecommenderBPRMF.ARG_ITERATIONS: 50,
                 RecommenderBPRMF.ARG_LEARNINGRATE: 0.1,
                 RecommenderBPRMF.ARG_REGULARIZATION: 0.01})
+
 
     @staticmethod
     def exportRDescVMContextKNN():

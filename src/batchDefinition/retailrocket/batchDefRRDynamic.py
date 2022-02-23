@@ -11,7 +11,7 @@ from portfolioDescription.portfolio1AggrDescription import Portfolio1AggrDescrip
 
 from evaluationTool.aEvalTool import AEvalTool  # class
 from evaluationTool.evalToolDHondt import EvalToolDHondt  # class
-from evaluationTool.evalToolDHondtPersonal import EToolDHondtPersonal #class
+from evaluationTool.evalToolDHondtPersonal import EvalToolDHondtPersonal #class
 
 from aggregationDescription.aggregationDescription import AggregationDescription  # class
 
@@ -38,9 +38,17 @@ from portfolioModel.pModelBandit import PModelBandit #class
 from portfolioModel.pModelDHondtBanditsVotes import PModelDHondtBanditsVotes #class
 from portfolioModel.pModelDHondt import PModelDHondt #class
 from portfolioModel.pModelDHondtPersonalised import PModelDHondtPersonalised #class
+from portfolioModel.pModelDHondtPersonalisedStat import PModelDHondtPersonalisedStat #class
+
+from recommenderDescription.recommenderDescription import RecommenderDescription #class
+
+from portfolioDescription.aPortfolioDescription import APortfolioDescription #class
+from portfolioDescription.portfolioDynamicDescription import PortfolioDynamicDescription #class
+
+from recommender.recommenderTheMostPopular import RecommenderTheMostPopular #class
 
 
-class BatchDefRRPersonalFuzzyDHondt(ABatchDefinitionRR):
+class BatchDefRRDynamic(ABatchDefinitionRR):
 
     lrClicks:List[float] = BatchDefMLFuzzyDHondt.lrClicks
     lrViewDivisors:List[float] = BatchDefMLFuzzyDHondt.lrViewDivisors
@@ -48,7 +56,7 @@ class BatchDefRRPersonalFuzzyDHondt(ABatchDefinitionRR):
 
 
     def getBatchName(self):
-        return "PersonalFDHondt"
+        return "DynamicFDHondtPersStat"
 
 
     def getParameters(self):
@@ -58,8 +66,8 @@ class BatchDefRRPersonalFuzzyDHondt(ABatchDefinitionRR):
                 for lrViewDivisorK in self.lrViewDivisors:
                     keyIJ:str = selectorIDI + "Clk" + str(lrClickJ).replace(".", "") + "ViewDivisor" + str(lrViewDivisorK).replace(".", "")
                     lrViewIJK:float = lrClickJ / lrViewDivisorK
-                    eToolIJK:AEvalTool = EToolDHondtPersonal({EvalToolDHondt.ARG_LEARNING_RATE_CLICKS: lrClickJ,
-                                                      EvalToolDHondt.ARG_LEARNING_RATE_VIEWS: lrViewIJK})
+                    eToolIJK:AEvalTool = EvalToolDHondtPersonal({EvalToolDHondt.ARG_LEARNING_RATE_CLICKS: lrClickJ,
+                                                                 EvalToolDHondt.ARG_LEARNING_RATE_VIEWS: lrViewIJK})
                     selectorIJK:ADHondtSelector = BatchDefMLFuzzyDHondt().getAllSelectors()[selectorIDI]
                     aDict[keyIJ] = (selectorIJK, eToolIJK)
         return aDict
@@ -75,16 +83,21 @@ class BatchDefRRPersonalFuzzyDHondt(ABatchDefinitionRR):
         # eTool:AEvalTool
         selector, eTool = self.getParameters()[jobID]
 
+
         rIDs, rDescs = InputRecomRRDefinition.exportPairOfRecomIdsAndRecomDescrs()
 
-        aDescDHont:AggregationDescription = InputAggrDefinition.exportADescDHondt(selector)
+        p1AggrDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
+            "FDHont" + jobID, rIDs, rDescs, InputAggrDefinition.exportADescDHondt(selector))
 
-        pDescr:Portfolio1AggrDescription = Portfolio1AggrDescription(
-            self.getBatchName() + jobID, rIDs, rDescs, aDescDHont)
+        recommenderID: str = "TheMostPopular"
+        rDescr:RecommenderDescription = RecommenderDescription(RecommenderTheMostPopular, {})
 
-        model:DataFrame = PModelDHondtPersonalised(pDescr.getRecommendersIDs())
+        pDescr:APortfolioDescription = PortfolioDynamicDescription(
+            "Dynamic" + "FDHontPersStat" + jobID, recommenderID, rDescr, "FDHondt", p1AggrDescr)
 
-        simulator: Simulator = InputSimulatorDefinition.exportSimulatorRetailRocket(
+        model:DataFrame = PModelDHondtPersonalisedStat(p1AggrDescr.getRecommendersIDs())
+
+        simulator:Simulator = InputSimulatorDefinition.exportSimulatorRetailRocket(
             batchID, divisionDatasetPercentualSize, uBehaviour, repetition)
         simulator.simulate([pDescr], [model], [eTool], [HistoryHierDF(pDescr.getPortfolioID())])
 
@@ -94,4 +107,4 @@ if __name__ == "__main__":
     os.chdir("..")
     print(os.getcwd())
 
-    BatchDefRRPersonalFuzzyDHondt().generateAllBatches(InputABatchDefinition())
+    BatchDefRRDynamic().generateAllBatches(InputABatchDefinition())

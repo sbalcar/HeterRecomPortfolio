@@ -143,8 +143,8 @@ class SimulationML(ASequentialSimulation):
             repetitionI:int
             for repetitionI in range(self._recomRepetitionCount):
                 self.simulateRecommendations(portfolios, portfolioDescs, portFolioModels, evaluatonTools,
-                                             histories, evaluations, currentDFIndexI, currentUserIdI,
-                                             currentSessionIdI, repetitionI,
+                                             histories, evaluations, currentDFIndexI, counterI, testRatingsDF.shape[0],
+                                             currentUserIdI, currentSessionIdI, repetitionI,
                                              testRatingsDF, testBehaviourDict, windowOfItemIDsI, currentPageTypeI)
 
         return evaluations

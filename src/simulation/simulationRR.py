@@ -6,7 +6,7 @@ from typing import List
 from typing import Dict
 
 from datasets.aDataset import ADataset #class
-from datasets.datasetRetailrocket import DatasetRetailRocket #class
+from datasets.datasetRetailRocket import DatasetRetailRocket #class
 
 from datasets.retailrocket.events import Events #class
 
@@ -117,7 +117,7 @@ class SimulationRR(ASequentialSimulation):
 
         # opening stat file
         dir:str = Configuration.resultsDirectory + os.sep + self._batchID
-        fileNameStat:str = dir + os.sep + "stat.txt"
+        fileNameStat:str = dir + os.sep + "status-" + portfolioDescs[0].getPortfolioID() + ".txt"
         if os.path.exists(fileNameStat):
             os.remove(fileNameStat)
         fileStat = open(fileNameStat, "a")
@@ -161,8 +161,8 @@ class SimulationRR(ASequentialSimulation):
             repetitionI:int
             for repetitionI in range(self._recomRepetitionCount):
                 self.simulateRecommendations(portfolios, portfolioDescs, portFolioModels, evaluatonTools,
-                                             histories, evaluations, currentDFIndexI, currentUserIdI,
-                                             currentSessionIdI, repetitionI,
+                                             histories, evaluations, currentDFIndexI, counterI, testRatingsDF.shape[0],
+                                             currentUserIdI, currentSessionIdI, repetitionI,
                                              testRatingsDF, testBehaviourDict, windowOfItemIDsI, currentPageTypeI)
 
         return evaluations

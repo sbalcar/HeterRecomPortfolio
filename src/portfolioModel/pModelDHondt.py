@@ -71,3 +71,73 @@ class PModelDHondt(pd.DataFrame):
 
         # list<(itemID:int, Series<(rating:int, methodID:str)>)>
         return selectedCandidate[:numberOfItems]
+
+    @staticmethod
+    def getEqualResponsibilityForAll(itemIDs:List[int], methodIDs:List[str]):
+
+        result:List[tuple] = []
+        for itemIDI in itemIDs:
+            respI:dict = dict([(methodIDI,1.0) for methodIDI in methodIDs])
+            result.append((itemIDI, respI))
+
+        return result
+
+    def getMethodIDs(self):
+        return self.index
+
+    @classmethod
+    def readModel(cls, fileName:str, counterI:int):
+
+        f = open(fileName, "r")
+        lines:List[str] = f.readlines()
+
+        for rowIndexI in range(0, len(lines)):
+            if lines[rowIndexI].startswith(str(counterI) + " / "):
+                modelStr:str = lines[rowIndexI+3]
+                model:DataFrame = pd.read_json(modelStr)
+                model.__class__ = PModelDHondt
+                return model
+
+        return None
+
+
+
+import matplotlib.pyplot as plt
+import numpy as np
+from scipy import stats
+
+
+
+if __name__ == "__main__":
+
+    os.chdir("..")
+    os.chdir("..")
+
+    print(os.getcwd())
+
+    fileName:str = "results/rrDiv90Ulinear0109R1/portfModelTimeEvolution-FDHondtFixedClk003ViewDivisor250.txt"
+    modelDF:DataFrame = PModelDHondt.readModel(fileName, 3989)
+
+
+    xLen = 15000
+    yLen = 6
+
+    xNew = range(xLen)
+    yNew = [[-10] * xLen for _ in range(yLen)]
+
+    for xI in range(xLen):
+        modelDF:DataFrame = PModelDHondt.readModel(fileName, xI+1)
+        for yJ in range(yLen):
+            valueIJ:float = float(modelDF.iloc[yJ][PModelDHondt.COL_VOTES])
+            #print(str(valueIJ))
+            yNew[yJ][xI] = valueIJ
+
+    print(yNew)
+    x = np.arange(1990, 2020)  # (N,) array-like
+    y = [np.random.randint(0, 5, size=30) for _ in range(5)]  # (M, N) array-like
+
+
+    fig, ax = plt.subplots(figsize=(15, 7))
+    ax.stackplot(xNew, yNew);
+    plt.legend(modelDF.getMethodIDs())
+    plt.show()

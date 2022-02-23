@@ -9,10 +9,16 @@ from evaluationTool.evalToolDHondt import EvalToolDHondt #class
 from pandas.core.frame import DataFrame  # class
 from pandas.core.series import Series #class
 
+from aggregation.tools.aggrResponsibilityDHondt import normalizationOfDHondtResponsibility #function
+from portfolioModel.pModelDHondtPersonalisedStat import PModelDHondtPersonalisedStat #class
+
 import numpy as np
 
 
-class EToolDHondtPersonal(AEvalTool):
+class EvalToolDHondtPersonal(AEvalTool):
+
+    ARG_LEARNING_RATE_CLICKS:str = "learningRateClicks"
+    ARG_LEARNING_RATE_VIEWS:str = "learningRateViews"
 
     def __init__(self, argumentsDict:Dict[str,object]):
         if type(argumentsDict) is not dict:
@@ -35,11 +41,18 @@ class EToolDHondtPersonal(AEvalTool):
         if type(argumentsDict) is not dict:
             raise ValueError("Argument argumentsDict isn't type dict.")
 
-        portfolioModelPer:DataFrame = portfolioModel.getModel(userID)
+        rItemIDsWithResponsibilityNorm = normalizationOfDHondtResponsibility(rItemIDsWithResponsibility)
 
-        self.et.click(userID, rItemIDsWithResponsibility, clickedItemID, portfolioModelPer, argumentsDict)
+        portfolioModelPer:DataFrame = portfolioModel.getModel(userID)
+        if isinstance(portfolioModel, PModelDHondtPersonalisedStat):
+            portfolioModel.incrementClick(userID)
+        #print(portfolioModelPer)
+
+        self.et.click(userID, rItemIDsWithResponsibilityNorm, clickedItemID, portfolioModelPer, argumentsDict)
+        #print(portfolioModelPer)
 
         print("HOP")
+        print("userID: " + str(userID))
         print("clickedItemID: " + str(clickedItemID))
 
 
@@ -54,6 +67,9 @@ class EToolDHondtPersonal(AEvalTool):
         if type(argumentsDict) is not dict:
             raise ValueError("Argument argumentsDict isn't type dict.")
 
+        print(rItemIDsWithResponsibility)
+        rItemIDsWithResponsibilityNorm = normalizationOfDHondtResponsibility(rItemIDsWithResponsibility)
+
         portfolioModelPer:DataFrame = portfolioModel.getModel(userID)
 
-        self.et.displayed(userID, rItemIDsWithResponsibility, portfolioModelPer, argumentsDict)
+        self.et.displayed(userID, rItemIDsWithResponsibilityNorm, portfolioModelPer, argumentsDict)

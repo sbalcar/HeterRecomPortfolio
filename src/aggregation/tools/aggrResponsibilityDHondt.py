@@ -29,9 +29,9 @@ def countAggrDHondtResponsibility(methodsResult:List[tuple], modelDF:DataFrame):
     result:List[tuple] = []
     for itemIdI, responsDictI in methodsResult:
         weightedRelevances:List[float] = []
-        print(responsDictI)
+        #print(responsDictI)
         for methIdKeyJ in responsDictI:
-            print(methIdKeyJ)
+            #print(methIdKeyJ)
             wIJ: float = modelDF.loc[methIdKeyJ, 'votes'] / numberOfVotes
             weightedRelevances.append(responsDictI[methIdKeyJ] * wIJ)
 
@@ -44,22 +44,14 @@ def countAggrDHondtResponsibility(methodsResult:List[tuple], modelDF:DataFrame):
 
 
 
-if __name__ == "__main__":
-    os.chdir("..")
+def normalizationOfDHondtResponsibility(rItemIdsWitRespons:List[tuple]):
+    result:List[tuple] = []
 
-    rItemIdsWitResponsDict = [(11, {'metoda1': 0.7, 'metoda2': 0.5, 'metoda3': 0.1}),
-                        (21, {'metoda1': 0.7, 'metoda2': 0.1, 'metoda3': 0.5})]
-    print(rItemIdsWitResponsDict)
+    for itemIDI, resposDistI in rItemIdsWitRespons:
+        sumOfAll:float = sum(resposDistI.values())
+        resposDistJ = {}
+        for methodI, resposibilityI in resposDistI.items():
+            resposDistJ[methodI] = resposibilityI / sumOfAll
+        result.append((itemIDI, resposDistJ))
 
-    # methods parametes
-    portfolioModelData:List[tuple] = [['metoda1',100], ['metoda2',80], ['metoda3',60]]
-    modelDF:DataFrame = pd.DataFrame(portfolioModelData, columns=["methodID","votes"])
-    modelDF.set_index("methodID", inplace=True)
-
-    print("Model:")
-    print(modelDF)
-    print("")
-
-    result:List[tuple] = countAggrDHondtResponsibility(rItemIdsWitResponsDict, modelDF)
-    print("Result:")
-    print(result)
+    return result

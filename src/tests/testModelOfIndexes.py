@@ -5,7 +5,7 @@ from typing import List
 
 from datasets.aDataset import ADataset #class
 from datasets.datasetML import DatasetML #class
-from datasets.datasetRetailrocket import DatasetRetailRocket #class
+from datasets.datasetRetailRocket import DatasetRetailRocket #class
 
 from datasets.ml.ratings import Ratings #class
 from datasets.ml.behavioursML import BehavioursML #class

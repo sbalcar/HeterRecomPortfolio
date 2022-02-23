@@ -13,7 +13,7 @@ from typing import Dict
 
 from datasets.aDataset import ADataset #class
 from datasets.datasetML import DatasetML #class
-from datasets.datasetRetailrocket import DatasetRetailRocket #class
+from datasets.datasetRetailRocket import DatasetRetailRocket #class
 from datasets.datasetST import DatasetST #class
 
 from recommender.w2v import word2vec

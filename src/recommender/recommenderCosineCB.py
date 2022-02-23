@@ -15,7 +15,7 @@ from recommender.aRecommender import ARecommender  #class
 
 from datasets.aDataset import ADataset  #class
 from datasets.datasetML import DatasetML  #class
-from datasets.datasetRetailrocket import DatasetRetailRocket  # lass
+from datasets.datasetRetailRocket import DatasetRetailRocket  # lass
 from datasets.datasetST import DatasetST  #class
 
 from datasets.ml.ratings import Ratings  #class

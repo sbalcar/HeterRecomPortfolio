@@ -61,7 +61,10 @@ from batchDefinition.retailrocket.batchDefRRFuzzyDHondtDirectOptimizeThompsonSam
 from batchDefinition.retailrocket.batchRRFuzzyDHondtINF import BatchRRFuzzyDHondtINF #class
 from batchDefinition.retailrocket.batchDefRRHierD21 import BatchDefRRHierD21 #class
 
-from batchDefinition.retailrocket.batchDefRRPersonalFuzzzyDHont import BatchDefRRPersonalFuzzyDHondt #class
+from batchDefinition.retailrocket.batchDefRRPersonalFuzzzyDHondt import BatchDefRRPersonalFuzzyDHondt #class
+from batchDefinition.retailrocket.batchDefRRPersonalStatFuzzzyDHondt import BatchDefRRPersonalStatFuzzyDHondt #class
+from batchDefinition.retailrocket.batchDefRRDynamic import BatchDefRRDynamic #class
+
 
 from batchDefinition.slanTour.batchDefSTFuzzyDHondtDirectOptimizeThompsonSampling import BatchDefSTFuzzyDHondtDirectOptimizeThompsonSampling #class
 from batchDefinition.slanTour.batchDefSTFuzzyDHondtDirectOptimizeThompsonSamplingINF import BatchDefSTFuzzyDHondtDirectOptimizeThompsonSamplingINF #class
@@ -92,6 +95,7 @@ from batchDefinition.slanTour.batchDefSTSingleW2VHT import BatchDefSTSingleW2VHT
 from batchDefinition.slanTour.batchDefSTSingleCosineCBHT import BatchDefSTSingleCosineCBHT #class
 
 from datasets.ml.behavioursML import BehavioursML #class
+
 
 
 def getBatchInstance(batchStr):
@@ -504,14 +508,26 @@ def getBatchesUSA():
     batchDefRRFuzzyDHondt.selectorIDs:List[str] = [BatchDefMLFuzzyDHondt.SLCTR_FIXED]
 
     batchDefRRPersonalFuzzyDHondt = BatchDefRRPersonalFuzzyDHondt()
-    batchDefRRPersonalFuzzyDHondt.lrClicks: List[float] = [0.03]
-    batchDefRRPersonalFuzzyDHondt.lrViewDivisors:List[float] = [250]
-    batchDefRRPersonalFuzzyDHondt.selectorIDs = [BatchDefMLFuzzyDHondt.SLCTR_ROULETTE3]
+    batchDefRRPersonalFuzzyDHondt.lrClicks: List[float] = [0.2]
+    batchDefRRPersonalFuzzyDHondt.lrViewDivisors:List[float] = [1000]
+    batchDefRRPersonalFuzzyDHondt.selectorIDs = [BatchDefMLFuzzyDHondt.SLCTR_FIXED]
+
+    batchDefRRPersonalStatFuzzyDHondt = BatchDefRRPersonalStatFuzzyDHondt()
+    batchDefRRPersonalStatFuzzyDHondt.lrClicks: List[float] = [0.03]
+    batchDefRRPersonalStatFuzzyDHondt.lrViewDivisors:List[float] = [250]
+    batchDefRRPersonalStatFuzzyDHondt.selectorIDs = [BatchDefMLFuzzyDHondt.SLCTR_FIXED]
+
+    batchDefRRDynamic = BatchDefRRDynamic()
+    batchDefRRDynamic.lrClicks: List[float] = [0.03]
+    batchDefRRDynamic.lrViewDivisors:List[float] = [250]
+    batchDefRRDynamic.selectorIDs = [BatchDefMLFuzzyDHondt.SLCTR_FIXED]
 
     batchesDef:List[ABatchDefinition] = []
 
     batchesDef.append(batchDefRRFuzzyDHondt)
     batchesDef.append(batchDefRRPersonalFuzzyDHondt)
+    batchesDef.append(batchDefRRPersonalStatFuzzyDHondt)
+    batchesDef.append(batchDefRRDynamic)
 
     return batchesDef
 
