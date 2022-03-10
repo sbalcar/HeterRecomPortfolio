@@ -20,7 +20,7 @@ from recommender.recommenderTheMostPopular import RecommenderTheMostPopular #cla
 from recommender.recommenderCosineCB import RecommenderCosineCB #class
 from recommender.recommenderW2V import RecommenderW2V #class
 from recommender.recommenderItemBasedKNN import RecommenderItemBasedKNN #class
-from recommender.recommenderBPRMF import RecommenderBPRMF #class
+from recommender.recommenderBPRMFImplicit import RecommenderBPRMFImplicit #class
 
 from portfolio.aPortfolio import APortfolio #class
 

@@ -72,6 +72,8 @@ class RecommenderW2V(ARecommender):
             raise ValueError("Argument history isn't type AHistory.")
         if not isinstance(dataset, ADataset):
             raise ValueError("Argument dataset isn't type ADataset.")
+
+        print("Train: " + str(RecommenderW2V))
         self._trainDataset = dataset
 
         if type(dataset) is DatasetML:

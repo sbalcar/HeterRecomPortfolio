@@ -20,7 +20,7 @@ from recommenderDescription.recommenderDescription import RecommenderDescription
 from recommender.aRecommender import ARecommender #class
 from recommender.recommenderW2V import RecommenderW2V #class
 from recommender.recommenderCosineCB import RecommenderCosineCB #class
-from recommender.recommenderBPRMF import RecommenderBPRMF #class
+from recommender.recommenderBPRMFImplicit import RecommenderBPRMFImplicit #class
 
 from batchDefinition.inputSimulatorDefinition import InputSimulatorDefinition #class
 

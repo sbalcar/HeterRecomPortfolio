@@ -150,8 +150,8 @@ def test02():
     rDescr:RecommenderDescription = InputRecomRRDefinition.exportRDescKNN()
     recommenderID:str = InputRecomRRDefinition.KNN
 
-    rDescr:RecommenderDescription = InputRecomRRDefinition.exportRDescBPRMF()
-    recommenderID:str = InputRecomRRDefinition.BPRMF
+    rDescr:RecommenderDescription = InputRecomRRDefinition.exportRDescBPRMFIMPL()
+    recommenderID:str = InputRecomRRDefinition.BPRMFIMPL
 
     rDescr:RecommenderDescription = InputRecomRRDefinition.exportRDescVMContextKNN()
     recommenderID:str = InputRecomRRDefinition.VMC_KNN

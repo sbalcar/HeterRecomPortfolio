@@ -20,7 +20,7 @@ from recommenderDescription.recommenderDescription import RecommenderDescription
 from recommender.aRecommender import ARecommender #class
 from recommender.recommenderW2V import RecommenderW2V #class
 from recommender.recommenderCosineCB import RecommenderCosineCB #class
-from recommender.recommenderBPRMF import RecommenderBPRMF #class
+from recommender.recommenderBPRMFImplicit import RecommenderBPRMFImplicit #class
 
 from batchDefinition.inputSimulatorDefinition import InputSimulatorDefinition #class
 
@@ -54,11 +54,11 @@ class BatchDefMLSingleBPRMFHT(ABatchDefinitionML):
                         keyI:str = "f" + str(factorI) + "i" + str(iterationI) +\
                                    "lr" + str(learningRateI).replace('.', '') + "r" + str(regularizationI).replace('.', '')
 
-                        rBPRMFI:ARecommender = RecommenderDescription(RecommenderBPRMF, {
-                            RecommenderBPRMF.ARG_FACTORS: factorI,
-                            RecommenderBPRMF.ARG_ITERATIONS: iterationI,
-                            RecommenderBPRMF.ARG_LEARNINGRATE: learningRateI,
-                            RecommenderBPRMF.ARG_REGULARIZATION: regularizationI})
+                        rBPRMFI:ARecommender = RecommenderDescription(RecommenderBPRMFImplicit, {
+                            RecommenderBPRMFImplicit.ARG_FACTORS: factorI,
+                            RecommenderBPRMFImplicit.ARG_ITERATIONS: iterationI,
+                            RecommenderBPRMFImplicit.ARG_LEARNINGRATE: learningRateI,
+                            RecommenderBPRMFImplicit.ARG_REGULARIZATION: regularizationI})
 
                         aDict[keyI] = rBPRMFI
         return aDict

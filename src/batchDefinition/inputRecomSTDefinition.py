@@ -11,6 +11,7 @@ from recommender.recommenderCosineCB import RecommenderCosineCB #class
 from recommender.recommenderW2V import RecommenderW2V #class
 from recommender.recommenderItemBasedKNN import RecommenderItemBasedKNN #class
 from recommender.recommenderVSKNN import RecommenderVMContextKNN #class
+from recommender.recommenderBPRMFImplicit import RecommenderBPRMFImplicit #class
 from recommender.recommenderBPRMF import RecommenderBPRMF #class
 
 from configuration.configuration import Configuration #class
@@ -28,8 +29,10 @@ class InputRecomSTDefinition:
     W2V_ALL100000WS1VS32_MAX1:str = "w2vtalli100000ws1vs32upsmaxups1"   # the best
     W2V_ALL200000WS1VS64_WEIGHTEDMEAN5:str = "w2vtalli200000ws1vs64upsweightedMeanups5"  # the second best
 
-    BPRMF_F50I20LR01R003:str = "bpmMFf50i20lr01r003"   # the best
-    BPRMF_F50I20LR01R001:str = "bpmMFf20i50lr01r001"   # the second best
+    BPRMFIMPL_F50I20LR01R003:str = "bpmMFIMPLf50i20lr01r003"   # the best
+    BPRMFIMPL_F50I20LR01R001:str = "bpmMFIMPLf20i50lr01r001"   # the second best
+
+    BPRMF:str = "bpmMF"
 
 
     @staticmethod
@@ -85,21 +88,31 @@ class InputRecomSTDefinition:
                 RecommenderW2V.ARG_WINDOW_SIZE: 1})
 
     @staticmethod
-    def exportRDescBPRMFf50i20lr01r003():
-        return RecommenderDescription(RecommenderBPRMF, {
-                RecommenderBPRMF.ARG_FACTORS: 20,
-                RecommenderBPRMF.ARG_ITERATIONS: 50,
-                RecommenderBPRMF.ARG_LEARNINGRATE: 0.1,
-                RecommenderBPRMF.ARG_REGULARIZATION: 0.03})
+    def exportRDescBPRMFIMPLf50i20lr01r003():
+        return RecommenderDescription(RecommenderBPRMFImplicit, {
+                RecommenderBPRMFImplicit.ARG_FACTORS: 20,
+                RecommenderBPRMFImplicit.ARG_ITERATIONS: 50,
+                RecommenderBPRMFImplicit.ARG_LEARNINGRATE: 0.1,
+                RecommenderBPRMFImplicit.ARG_REGULARIZATION: 0.03})
 
     @staticmethod
-    def exportRDescBPRMFf20i50lr01r001():
-        return RecommenderDescription(RecommenderBPRMF, {
-                RecommenderBPRMF.ARG_FACTORS: 20,
-                RecommenderBPRMF.ARG_ITERATIONS: 50,
-                RecommenderBPRMF.ARG_LEARNINGRATE: 0.1,
-                RecommenderBPRMF.ARG_REGULARIZATION: 0.01})
+    def exportRDescBPRMFIMPLf20i50lr01r001():
+        return RecommenderDescription(RecommenderBPRMFImplicit, {
+                RecommenderBPRMFImplicit.ARG_FACTORS: 20,
+                RecommenderBPRMFImplicit.ARG_ITERATIONS: 50,
+                RecommenderBPRMFImplicit.ARG_LEARNINGRATE: 0.1,
+                RecommenderBPRMFImplicit.ARG_REGULARIZATION: 0.01})
 
+    @staticmethod
+    def exportRDescBPRMF():
+        return RecommenderDescription(RecommenderBPRMF, {
+            RecommenderBPRMF.ARG_EPOCHS: 2,
+            RecommenderBPRMF.ARG_FACTORS: 100,
+            RecommenderBPRMF.ARG_LEARNINGRATE: 0.2,
+            RecommenderBPRMF.ARG_UREGULARIZATION: 0.0025,
+            RecommenderBPRMF.ARG_BREGULARIZATION: 0,
+            RecommenderBPRMF.ARG_PIREGULARIZATION: 0.0025,
+            RecommenderBPRMF.ARG_NIREGULARIZATION: 0.00025})
 
     @classmethod
     def exportPairOfRecomIdsAndRecomDescrs(cls):
@@ -118,8 +131,11 @@ class InputRecomSTDefinition:
         #rDescsVMCKNN:List[RecommenderDescription] = []
 
 
-        rIDsBPRMF:List[str] = [recom + cls.BPRMF_F50I20LR01R003.title(), recom + cls.BPRMF_F50I20LR01R001.title()]
-        rDescsBPRMF:List[RecommenderDescription] = [cls.exportRDescBPRMFf50i20lr01r003(), cls.exportRDescBPRMFf20i50lr01r001()]
+        #rIDsBPRMF:List[str] = [recom + cls.BPRMFIMPL_F50I20LR01R003.title(), recom + cls.BPRMFIMPL_F50I20LR01R001.title()]
+        #rDescsBPRMF:List[RecommenderDescription] = [cls.exportRDescBPRMFIMPLf50i20lr01r003(), cls.exportRDescBPRMFIMPLf20i50lr01r001()]
+        rIDsBPRMF:List[str] = [recom + cls.BPRMF.title()]
+        rDescsBPRMF:List[RecommenderDescription] = [cls.exportRDescBPRMF()]
+
 
         rIDsCOSCB:List[str] = [recom + cls.COS_CB_OHE_MEAN1.title(), recom + cls.COS_CB_OHE_WEIGHTEDMEAN5.title()]
         rDescsCOSCB:List[RecommenderDescription] = [cls.exportRDescCosineCBcbdOHEupsmeanups1(), cls.exportRDescCosineCBcbdOHEupsweightedMeanups5()]
@@ -163,7 +179,7 @@ class InputRecomSTDefinition:
         elif recommenderID == cls.W2V_ALL200000WS1VS64_WEIGHTEDMEAN5:
             return cls.exportRDescW2talli200000ws1vs64upsweightedMeanups5()
         elif recommenderID == cls.BPRMF_F50I20LR01R003:
-            return cls.exportRDescBPRMFf50i20lr01r003()
+            return cls.exportRDescBPRMFIMPLf50i20lr01r003()
         elif recommenderID == cls.BPRMF_F50I20LR01R001:
-            return cls.exportRDescBPRMFf20i50lr01r001()
+            return cls.exportRDescBPRMFIMPLf20i50lr01r001()
 

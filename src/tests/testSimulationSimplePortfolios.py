@@ -190,10 +190,10 @@ def test05():
 
     print("Simulation: ML MF")
 
-    rDescr:RecommenderDescription = InputRecomMLDefinition.exportRDescBPRMFf100i10lr0003r01()
+    rDescr:RecommenderDescription = InputRecomMLDefinition.exportRDescBPRMFIMPLf100i10lr0003r01()
 
-    pDescr:APortfolioDescription = Portfolio1MethDescription(InputRecomMLDefinition.BPRMFf100i10lr0003r01.title(),
-                                                             InputRecomMLDefinition.BPRMFf100i10lr0003r01, rDescr)
+    pDescr:APortfolioDescription = Portfolio1MethDescription(InputRecomMLDefinition.BPRMFIMPLf100i10lr0003r01.title(),
+                                                             InputRecomMLDefinition.BPRMFIMPLf100i10lr0003r01, rDescr)
 
 
     batchID:str = "ml1mDiv90Ulinear0109R1"
@@ -326,10 +326,10 @@ def test25():
 
     print("Simulation: ST MF")
 
-    rDescr:RecommenderDescription = InputRecomMLDefinition.exportRDescBPRMFf100i10lr0003r01()
+    rDescr:RecommenderDescription = InputRecomMLDefinition.exportRDescBPRMFIMPLf100i10lr0003r01()
 
-    pDescr:APortfolioDescription = Portfolio1MethDescription(InputRecomMLDefinition.BPRMFf100i10lr0003r01.title(),
-                                                             InputRecomMLDefinition.BPRMFf100i10lr0003r01, rDescr)
+    pDescr:APortfolioDescription = Portfolio1MethDescription(InputRecomMLDefinition.BPRMFIMPLf100i10lr0003r01.title(),
+                                                             InputRecomMLDefinition.BPRMFIMPLf100i10lr0003r01, rDescr)
 
     batchID:str = "slantourDiv90Ulinear0109R1"
     dataset:DatasetST = DatasetST.readDatasets()

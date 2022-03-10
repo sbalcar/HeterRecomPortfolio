@@ -78,6 +78,8 @@ class RecommenderCosineCB(ARecommender):
             raise ValueError("Argument history isn't type AHistory.")
         if not isinstance(dataset, ADataset):
             raise ValueError("Argument dataset isn't type ADataset.")
+
+        print("Train: " + str(RecommenderCosineCB))
         self._trainDataset = dataset
 
         if type(dataset) is DatasetML:

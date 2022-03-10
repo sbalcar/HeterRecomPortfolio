@@ -2,7 +2,7 @@
 
 import os
 
-from typing import List
+from typing import List # class
 from typing import Dict  # class
 
 from pandas.core.frame import DataFrame  # class

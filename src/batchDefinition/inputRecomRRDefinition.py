@@ -9,6 +9,7 @@ from recommender.recommenderCosineCB import RecommenderCosineCB #class
 from recommender.recommenderW2V import RecommenderW2V #class
 from recommender.recommenderItemBasedKNN import RecommenderItemBasedKNN #class
 from recommender.recommenderVSKNN import RecommenderVMContextKNN #class
+from recommender.recommenderBPRMFImplicit import RecommenderBPRMFImplicit #class
 from recommender.recommenderBPRMF import RecommenderBPRMF #class
 
 from configuration.configuration import Configuration #class
@@ -19,6 +20,8 @@ class InputRecomRRDefinition:
     # RR methods
     THE_MOST_POPULAR:str = "TheMostPopular"
     KNN:str = "KNN"
+
+    BPRMFIMPL:str = "BPRMFIMPL"
     BPRMF:str = "BPRMF"
     VMC_KNN:str = "VMContextKNN"
 
@@ -48,13 +51,23 @@ class InputRecomRRDefinition:
 
 
     @staticmethod
+    def exportRDescBPRMFIMPL():
+        return RecommenderDescription(RecommenderBPRMFImplicit, {
+                RecommenderBPRMFImplicit.ARG_FACTORS: 100,
+                RecommenderBPRMFImplicit.ARG_ITERATIONS: 50,
+                RecommenderBPRMFImplicit.ARG_LEARNINGRATE: 0.1,
+                RecommenderBPRMFImplicit.ARG_REGULARIZATION: 0.01})
+
+    @staticmethod
     def exportRDescBPRMF():
         return RecommenderDescription(RecommenderBPRMF, {
-                RecommenderBPRMF.ARG_FACTORS: 100,
-                RecommenderBPRMF.ARG_ITERATIONS: 50,
-                RecommenderBPRMF.ARG_LEARNINGRATE: 0.1,
-                RecommenderBPRMF.ARG_REGULARIZATION: 0.01})
-
+            RecommenderBPRMF.ARG_EPOCHS: 20,
+            RecommenderBPRMF.ARG_FACTORS: 100,
+            RecommenderBPRMF.ARG_LEARNINGRATE: 0.05,
+            RecommenderBPRMF.ARG_UREGULARIZATION: 0.0025,
+            RecommenderBPRMF.ARG_BREGULARIZATION: 0,
+            RecommenderBPRMF.ARG_PIREGULARIZATION: 0.0025,
+            RecommenderBPRMF.ARG_NIREGULARIZATION: 0.00025})
 
     @staticmethod
     def exportRDescVMContextKNN():
@@ -95,6 +108,8 @@ class InputRecomRRDefinition:
         rIDsVMCKNN:List[str] = [recom + cls.VMC_KNN.title()]
         rDescsVMCKNN:List[RecommenderDescription] = [cls.exportRDescVMContextKNN()]
 
+        #rIDsBPRMF:List[str] = [recom + cls.BPRMFIMPL.title()]
+        #rDescsBPRMF:List[RecommenderDescription] = [cls.exportRDescBPRMFIMPL()]
         rIDsBPRMF:List[str] = [recom + cls.BPRMF.title()]
         rDescsBPRMF:List[RecommenderDescription] = [cls.exportRDescBPRMF()]
 
@@ -118,8 +133,8 @@ class InputRecomRRDefinition:
             return InputRecomRRDefinition.exportRDescKNN()
         elif recommenderID == InputRecomRRDefinition.VMC_KNN:
             return InputRecomRRDefinition.exportRDescVMContextKNN()
-        elif recommenderID == InputRecomRRDefinition.BPRMF:
-            return InputRecomRRDefinition.exportRDescBPRMF()
+        elif recommenderID == InputRecomRRDefinition.BPRMFIMPL:
+            return InputRecomRRDefinition.exportRDescBPRMFIMPL()
         elif recommenderID == InputRecomRRDefinition.W2V:
             return InputRecomRRDefinition.exportRDescW2V()
         elif recommenderID == InputRecomRRDefinition.COSINECB:

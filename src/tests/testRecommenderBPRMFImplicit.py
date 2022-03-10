@@ -23,7 +23,7 @@ from datasets.ml.users import Users #class
 from history.historyDF import HistoryDF #class
 
 from recommender.aRecommender import ARecommender #class
-from recommender.recommenderBPRMF import RecommenderBPRMF #class
+from recommender.recommenderBPRMFImplicit import RecommenderBPRMFImplicit #class
 
 import pandas as pd
 
@@ -39,11 +39,11 @@ def test01():
     trainDataset:DatasetML = DatasetML("test", dataset.ratingsDF.iloc[0:499965], dataset.usersDF, dataset.itemsDF)
 
     # train recommender
-    rec:ARecommender = RecommenderBPRMF("test",{
-                    RecommenderBPRMF.ARG_FACTORS: 20,
-                    RecommenderBPRMF.ARG_ITERATIONS: 50,
-                    RecommenderBPRMF.ARG_LEARNINGRATE: 0.003,
-                    RecommenderBPRMF.ARG_REGULARIZATION: 0.003})
+    rec:ARecommender = RecommenderBPRMFImplicit("test", {
+                    RecommenderBPRMFImplicit.ARG_FACTORS: 20,
+                    RecommenderBPRMFImplicit.ARG_ITERATIONS: 50,
+                    RecommenderBPRMFImplicit.ARG_LEARNINGRATE: 0.003,
+                    RecommenderBPRMFImplicit.ARG_REGULARIZATION: 0.003})
 
     rec.train(HistoryDF("test01"), trainDataset)
 
@@ -86,11 +86,11 @@ def test02():
     print(dataset.ratingsDF.iloc[655924:655926])
 
     # train recommender
-    rec:ARecommender = RecommenderBPRMF("test",{
-                    RecommenderBPRMF.ARG_FACTORS: 20,
-                    RecommenderBPRMF.ARG_ITERATIONS: 50,
-                    RecommenderBPRMF.ARG_LEARNINGRATE: 0.003,
-                    RecommenderBPRMF.ARG_REGULARIZATION: 0.003})
+    rec:ARecommender = RecommenderBPRMFImplicit("test", {
+                    RecommenderBPRMFImplicit.ARG_FACTORS: 20,
+                    RecommenderBPRMFImplicit.ARG_ITERATIONS: 50,
+                    RecommenderBPRMFImplicit.ARG_LEARNINGRATE: 0.003,
+                    RecommenderBPRMFImplicit.ARG_REGULARIZATION: 0.003})
     rec.train(HistoryDF("test02"), trainDataset)
 
     # get recommendations:
@@ -113,11 +113,11 @@ def test03():
     eventsDF:DataFrame = dataset.eventsDF
 
     # train recommender
-    rec:ARecommender = RecommenderBPRMF("test",{
-                    RecommenderBPRMF.ARG_FACTORS: 20,
-                    RecommenderBPRMF.ARG_ITERATIONS: 50,
-                    RecommenderBPRMF.ARG_LEARNINGRATE: 0.003,
-                    RecommenderBPRMF.ARG_REGULARIZATION: 0.003})
+    rec:ARecommender = RecommenderBPRMFImplicit("test", {
+                    RecommenderBPRMFImplicit.ARG_FACTORS: 20,
+                    RecommenderBPRMFImplicit.ARG_ITERATIONS: 50,
+                    RecommenderBPRMFImplicit.ARG_LEARNINGRATE: 0.003,
+                    RecommenderBPRMFImplicit.ARG_REGULARIZATION: 0.003})
     rec.train(HistoryDF("test03"), trainDataset)
 
     uDF:DataFrame = DataFrame([eventsDF.iloc[9000]])
@@ -148,11 +148,11 @@ def test04():
     print("iIDMax: " + str(iIDMax))
 
     # train recommender
-    rec:ARecommender = RecommenderBPRMF("test",{
-                    RecommenderBPRMF.ARG_FACTORS: 20,
-                    RecommenderBPRMF.ARG_ITERATIONS: 50,
-                    RecommenderBPRMF.ARG_LEARNINGRATE: 0.003,
-                    RecommenderBPRMF.ARG_REGULARIZATION: 0.003})
+    rec:ARecommender = RecommenderBPRMFImplicit("test", {
+                    RecommenderBPRMFImplicit.ARG_FACTORS: 20,
+                    RecommenderBPRMFImplicit.ARG_ITERATIONS: 50,
+                    RecommenderBPRMFImplicit.ARG_LEARNINGRATE: 0.003,
+                    RecommenderBPRMFImplicit.ARG_REGULARIZATION: 0.003})
     rec.train(HistoryDF("test04"), trainDataset)
 
     uDF1:DataFrame = DataFrame([eventsDF.iloc[9000]])
@@ -211,6 +211,7 @@ def test05():
     itemFeaturesMatrixLIL = sparseRatingsCSR.tolil()
     print(type(itemFeaturesMatrixLIL))
     print(sparseRatingsCSR.toarray())
+
 
 
 

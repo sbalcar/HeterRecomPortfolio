@@ -16,7 +16,7 @@ from datasets.retailrocket.events import Events #class
 from recommender.aRecommender import ARecommender #class
 from recommender.recommenderTheMostPopular import RecommenderTheMostPopular #class
 from recommender.recommenderItemBasedKNN import RecommenderItemBasedKNN #class
-from recommender.recommenderBPRMF import RecommenderBPRMF #class
+from recommender.recommenderBPRMFImplicit import RecommenderBPRMFImplicit #class
 from recommender.recommenderVSKNN import RecommenderVMContextKNN #class
 
 from batchDefinition.inputRecomRRDefinition import InputRecomRRDefinition #class
@@ -72,7 +72,7 @@ if __name__ == "__main__":
 
     rDscrTheMostPopular:RecommenderDescription = InputRecomRRDefinition.exportRDescTheMostPopular()
     rDscrItemBasedKNN:RecommenderDescription = InputRecomRRDefinition.exportRDescKNN()
-    rDscrBPRMF:RecommenderDescription = InputRecomRRDefinition.exportRDescBPRMF()
+    rDscrBPRMF:RecommenderDescription = InputRecomRRDefinition.exportRDescBPRMFIMPL()
     rDscrVMContextKNN:RecommenderDescription = InputRecomRRDefinition.exportRDescVMContextKNN()
     rDscrCosineCB:RecommenderDescription = InputRecomRRDefinition.exportRDescCosineCB()
     rDscrW2V:RecommenderDescription = InputRecomRRDefinition.exportRDescW2V()

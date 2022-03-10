@@ -61,3 +61,27 @@ class DatasetRetailRocket(ADataset):
         #print(sortedAsceventsTransCountDF)
 
         return sortedAsceventsTransCountDF
+
+
+    def divideDataset(self, divisionDatasetPercentualSize:int, sortByTimestapmt=True):
+
+        # create train Dataset
+        eventsToSplitDF:DataFrame = self.eventsDF
+
+        if sortByTimestapmt:
+            eventsToSplitDF = eventsToSplitDF.sort_values(by=Events.COL_TIME_STAMP)
+
+        numberOfRatings:int = eventsToSplitDF.shape[0]
+        trainSize:int = (int)(numberOfRatings * divisionDatasetPercentualSize / 100)
+
+        trainRatingsDF:DataFrame = eventsToSplitDF[0:trainSize]
+
+        trainDatasetID:str = self.datasetID + "Div0-" + str(divisionDatasetPercentualSize)
+        trainDataset:ADataset = DatasetRetailRocket(trainDatasetID, trainRatingsDF, self.categoryTreeDF, self.itemPropertiesDF)
+
+        testRatingsDF:DataFrame = eventsToSplitDF[trainSize:]
+
+        testDatasetID:str = self.datasetID + "Div" + str(divisionDatasetPercentualSize) + "-100"
+        testDataset:ADataset = DatasetRetailRocket(testDatasetID, testRatingsDF, self.categoryTreeDF, self.itemPropertiesDF)
+
+        return (trainDataset, testDataset)

@@ -46,3 +46,27 @@ class DatasetST(ADataset):
         #print(sortedAsceventsTransCountDF)
 
         return sortedAsceventsTransCountDF
+
+
+    def divideDataset(self, divisionDatasetPercentualSize:int, sortByTimestapmt=True):
+
+        # create train Dataset
+        eventsToSplitDF:DataFrame = self.eventsDF
+
+        #if sortByTimestapmt:
+        #    eventsToSplitDF = eventsToSplitDF.sort_values(by=Events.COL)
+
+        numberOfRatings:int = eventsToSplitDF.shape[0]
+        trainSize:int = (int)(numberOfRatings * divisionDatasetPercentualSize / 100)
+
+        trainEventsDF:DataFrame = eventsToSplitDF[0:trainSize]
+
+        trainDatasetID:str = self.datasetID + "Div0-" + str(divisionDatasetPercentualSize)
+        trainDataset:ADataset = DatasetST(trainDatasetID, trainEventsDF, self.serialsDF)
+
+        testEventsDF:DataFrame = eventsToSplitDF[trainSize:]
+
+        testDatasetID:str = self.datasetID + "Div" + str(divisionDatasetPercentualSize) + "-100"
+        testDataset:ADataset = DatasetST(testDatasetID, testEventsDF, self.serialsDF)
+
+        return (trainDataset, testDataset)

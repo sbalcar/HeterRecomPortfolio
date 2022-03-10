@@ -50,3 +50,27 @@ class DatasetML(ADataset):
         #print(sortedAscRatings5CountDF)
 
         return sortedAscRatings5CountDF
+
+
+    def divideDataset(self, divisionDatasetPercentualSize:int, sortByTimestapmt=True):
+
+        # create train Dataset
+        ratingsToSplitDF:DataFrame = self.ratingsDF
+
+        if sortByTimestapmt:
+            ratingsToSplitDF = ratingsToSplitDF.sort_values(by=Ratings.COL_TIMESTAMP)
+
+        numberOfRatings:int = ratingsToSplitDF.shape[0]
+        trainSize:int = (int)(numberOfRatings * divisionDatasetPercentualSize / 100)
+
+        trainRatingsDF:DataFrame = ratingsToSplitDF[0:trainSize]
+
+        trainDatasetID:str = self.datasetID + "Div0-" + str(divisionDatasetPercentualSize)
+        trainDataset:ADataset = DatasetML(trainDatasetID, trainRatingsDF, self.usersDF, self.itemsDF)
+
+        testRatingsDF:DataFrame = ratingsToSplitDF[trainSize:]
+
+        testDatasetID:str = self.datasetID + "Div" + str(divisionDatasetPercentualSize) + "-100"
+        testDataset:ADataset = DatasetML(testDatasetID, testRatingsDF, self.usersDF, self.itemsDF)
+
+        return (trainDataset, testDataset)

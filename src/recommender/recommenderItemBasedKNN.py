@@ -62,6 +62,8 @@ class RecommenderItemBasedKNN(ARecommender):
             raise ValueError("Argument history isn't type AHistory.")
         if not isinstance(dataset, ADataset):
             raise ValueError("Argument dataset isn't type ADataset.")
+
+        print("Train: " + str(RecommenderItemBasedKNN))
         self._trainDataset = dataset
 
         if type(dataset) is DatasetML:
@@ -169,7 +171,7 @@ class RecommenderItemBasedKNN(ARecommender):
             print("update model")
             sparseRatingsCSR: csr_matrix = self._sparseRatings.tocsr()
             self._modelKNN.fit(sparseRatingsCSR)
-            self._distances, self.KNNs = self._modelKNN.kneighbors(n_neighbors=100)
+            self._distances, self.KNNs = self._modelKNN.kneighbors(n_neighbors=self._k)
             self._counter = 0
         else:
             self._counter += 1
