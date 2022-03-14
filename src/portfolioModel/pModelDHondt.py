@@ -100,6 +100,25 @@ class PModelDHondt(pd.DataFrame):
 
         return None
 
+    @classmethod
+    def sumModels(cls, pModel1, pModel2):
+        print("")
+        methodIdsThis:List[str] = list(pModel1.getMethodIDs())
+        methodIdsThis.sort()
+        methodIdsExtr:List[str] = list(pModel2.getMethodIDs())
+        methodIdsExtr.sort()
+
+        if not methodIdsThis == methodIdsExtr:
+            print("chyba")
+
+        valuesNew:List[float] = pModel1[cls.COL_VOTES] + pModel2[cls.COL_VOTES]
+        data:List[tuple] = list(zip(methodIdsThis, valuesNew))
+
+        df = pd.DataFrame(data, columns = [cls.COL_METHOD_ID, cls.COL_VOTES])
+        df.set_index(PModelDHondt.COL_METHOD_ID, inplace=True)
+        df.__class__ = PModelDHondt
+
+        return df
 
 
 import matplotlib.pyplot as plt

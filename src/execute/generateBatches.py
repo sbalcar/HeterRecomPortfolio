@@ -58,12 +58,13 @@ from batchDefinition.retailrocket.batchDefRRFuzzyDHondt import BatchDefRRFuzzyDH
 from batchDefinition.retailrocket.batchDefRRFAI import BatchDefRRFAI #class
 from batchDefinition.retailrocket.batchDefRRFuzzyDHondtDirectOptimizeThompsonSampling import BatchDefRRFuzzyDHondtDirectOptimizeThompsonSampling #class
 from batchDefinition.retailrocket.batchDefRRFuzzyDHondtDirectOptimizeThompsonSamplingINF import BatchDefRRFuzzyDHondtDirectOptimizeThompsonSamplingINF #class
-from batchDefinition.retailrocket.batchRRFuzzyDHondtINF import BatchRRFuzzyDHondtINF #class
+from batchDefinition.retailrocket.batchDefRRFuzzyDHondtINF import BatchDefRRFuzzyDHondtINF #class
 from batchDefinition.retailrocket.batchDefRRHierD21 import BatchDefRRHierD21 #class
 
 from batchDefinition.retailrocket.batchDefRRPersonalFuzzzyDHondt import BatchDefRRPersonalFuzzyDHondt #class
 from batchDefinition.retailrocket.batchDefRRPersonalStatFuzzzyDHondt import BatchDefRRPersonalStatFuzzyDHondt #class
 from batchDefinition.retailrocket.batchDefRRDynamic import BatchDefRRDynamic #class
+from batchDefinition.retailrocket.batchDefRRHybrid import BatchDefRRHybrid #class
 
 
 from batchDefinition.slanTour.batchDefSTFuzzyDHondtDirectOptimizeThompsonSampling import BatchDefSTFuzzyDHondtDirectOptimizeThompsonSampling #class
@@ -481,7 +482,7 @@ def getBatchesICCAI():
     #
     batchDefRRFuzzyDHondtDirectOptimizeThompsonSampling = BatchDefRRFuzzyDHondtDirectOptimizeThompsonSampling()
     #
-    batchDefRRFuzzyDHondtINF = BatchRRFuzzyDHondtINF()
+    batchDefRRFuzzyDHondtINF = BatchDefRRFuzzyDHondtINF()
     #
     batchDefRRFuzzyDHondtDirectOptimizeThompsonSamplingINF = BatchDefRRFuzzyDHondtDirectOptimizeThompsonSamplingINF()
 
@@ -522,12 +523,18 @@ def getBatchesUSA():
     batchDefRRDynamic.lrViewDivisors:List[float] = [250]
     batchDefRRDynamic.selectorIDs = [BatchDefMLFuzzyDHondt.SLCTR_FIXED]
 
+    batchDefRRHybrid = BatchDefRRHybrid()
+    batchDefRRHybrid.lrClicks: List[float] = [0.03]
+    batchDefRRHybrid.lrViewDivisors:List[float] = [250]
+    batchDefRRHybrid.selectorIDs = [BatchDefMLFuzzyDHondt.SLCTR_FIXED]
+
     batchesDef:List[ABatchDefinition] = []
 
     batchesDef.append(batchDefRRFuzzyDHondt)
     batchesDef.append(batchDefRRPersonalFuzzyDHondt)
     batchesDef.append(batchDefRRPersonalStatFuzzyDHondt)
     batchesDef.append(batchDefRRDynamic)
+    batchesDef.append(batchDefRRHybrid)
 
     return batchesDef
 

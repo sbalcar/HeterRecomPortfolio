@@ -20,6 +20,7 @@ class EvalToolDHondt(AEvalTool):
 
     ARG_LEARNING_RATE_CLICKS:str = "learningRateClicks"
     ARG_LEARNING_RATE_VIEWS:str = "learningRateViews"
+    ARG_VERBOSE:str = "verbose"
 
 
     def __init__(self, argsDict:dict):
@@ -28,6 +29,7 @@ class EvalToolDHondt(AEvalTool):
 
         self.learningRateClicks:float = argsDict[EvalToolDHondt.ARG_LEARNING_RATE_CLICKS]
         self.learningRateViews:float = argsDict[EvalToolDHondt.ARG_LEARNING_RATE_VIEWS]
+        self.verbose:float = argsDict.get(EvalToolDHondt.ARG_VERBOSE, True)
         self.maxVotesConst:float = 0.99
         self.minVotesConst:float = 0.01
 
@@ -49,7 +51,8 @@ class EvalToolDHondt(AEvalTool):
             raise ValueError("Argument pModelDF doen't contain rights columns.")
         if type(argumentsDict) is not dict:
             raise ValueError("Argument argumentsDict isn't type dict.")
-        print(rItemIDsWithResponsibility)
+        if self.verbose:
+            print(rItemIDsWithResponsibility)
 
         rItemIDsWithResponsibilityNorm = normalizationOfDHondtResponsibility(rItemIDsWithResponsibility)
 
@@ -68,7 +71,8 @@ class EvalToolDHondt(AEvalTool):
             relevance_this = responsibilityDict[methodIdI]
             relevance_others = sumMethodsVotes - relevance_this
             update_step = self.learningRateClicks * (relevance_this - relevance_others)
-            print("update_step: " + str(update_step))
+            if self.verbose:
+                print("update_step: " + str(update_step))
             # elif action == "storeViews":
             #    update_step = -1 * learningRateViews * (relevance_this - relevance_others)
             #    pos_step = 0
@@ -85,9 +89,10 @@ class EvalToolDHondt(AEvalTool):
         #EvalToolDHondt.linearNormalizingPortfolioModelDHont(portfolioModel)
         portfolioModel.linearNormalizing()
 
-        print("HOP")
-        print("clickedItemID: " + str(clickedItemID))
-        print(portfolioModel)
+        if self.verbose:
+            print("HOP")
+            print("clickedItemID: " + str(clickedItemID))
+            print(portfolioModel)
 
 
     def displayed(self, userID:int, rItemIDsWithResponsibility:List, portfolioModel:DataFrame, argumentsDict:Dict[str,object]):

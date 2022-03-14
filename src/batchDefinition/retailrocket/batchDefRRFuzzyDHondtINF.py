@@ -44,7 +44,7 @@ from portfolioModel.pModelDHondtBanditsVotes import PModelDHondtBanditsVotes #cl
 from portfolioModel.pModelDHondt import PModelDHondt #class
 
 
-class BatchRRFuzzyDHondtINF(ABatchDefinitionRR):
+class BatchDefRRFuzzyDHondtINF(ABatchDefinitionRR):
 
     def getBatchName(self):
         return "FDHondtINF"
@@ -86,4 +86,4 @@ if __name__ == "__main__":
    os.chdir("..")
    print(os.getcwd())
 
-   BatchRRFuzzyDHondtINF().generateAllBatches(InputABatchDefinition())
+   BatchDefRRFuzzyDHondtINF().generateAllBatches(InputABatchDefinition())
