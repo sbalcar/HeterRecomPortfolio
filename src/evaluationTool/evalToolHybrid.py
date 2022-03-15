@@ -9,17 +9,23 @@ from pandas.core.frame import DataFrame  # class
 from pandas.core.series import Series #class
 
 from evaluationTool.evalToolDHondt import EvalToolDHondt #class
+from evaluationTool.evalToolDHondtPersonal import EvalToolDHondtPersonal #class
 
 import numpy as np
 
 
 class EToolHybrid(AEvalTool):
 
-    def __init__(self, argumentsDict:Dict[str,object]):
+    def __init__(self, evalToolMGlobal:AEvalTool, evalToolMPerson:AEvalTool, argumentsDict:Dict[str,object]):
+        if not isinstance(evalToolMGlobal, AEvalTool):
+            raise ValueError("Argument evalToolMGlobal isn't type AEvalTool.")
+        if not isinstance(evalToolMPerson, AEvalTool):
+            raise ValueError("Argument evalToolMPerson isn't type AEvalTool.")
         if type(argumentsDict) is not dict:
             raise ValueError("Argument argumentsDict isn't type dict.")
 
-        self._evalToolDHondt:EvalToolDHondt = EvalToolDHondt(argumentsDict)
+        self._evalToolMGlobal:EvalToolDHondt = evalToolMGlobal
+        self._evalToolMPerson:EvalToolDHondt = evalToolMPerson
 
     def click(self, userID:int, rItemIDsWithResponsibility:List, clickedItemID:int, portfolioModel:DataFrame, argumentsDict:Dict[str,object]):
         if type(userID) is not int and type(userID) is not np.int64:
@@ -37,8 +43,8 @@ class EToolHybrid(AEvalTool):
         mGlobal:DataFrame = portfolioModel.getModelGlobal()
         mPerson:DataFrame = portfolioModel.getModelPerson(userID)
 
-        self._evalToolDHondt.click(userID, rItemIDsWithResponsibility, clickedItemID, mGlobal, argumentsDict)
-        self._evalToolDHondt.click(userID, rItemIDsWithResponsibility, clickedItemID, mPerson, argumentsDict)
+        self._evalToolMGlobal.click(userID, rItemIDsWithResponsibility, clickedItemID, mGlobal, argumentsDict)
+        self._evalToolMPerson.click(userID, rItemIDsWithResponsibility, clickedItemID, mPerson, argumentsDict)
 
         print("HOP")
         print("clickedItemID: " + str(clickedItemID))
@@ -57,5 +63,5 @@ class EToolHybrid(AEvalTool):
         mGlobal:DataFrame = portfolioModel.getModelGlobal()
         mPerson:DataFrame = portfolioModel.getModelPerson(userID)
 
-        self._evalToolDHondt.displayed(userID, rItemIDsWithResponsibility, mGlobal, argumentsDict)
-        self._evalToolDHondt.displayed(userID, rItemIDsWithResponsibility, mPerson, argumentsDict)
+        self._evalToolMGlobal.displayed(userID, rItemIDsWithResponsibility, mGlobal, argumentsDict)
+        self._evalToolMPerson.displayed(userID, rItemIDsWithResponsibility, mPerson, argumentsDict)

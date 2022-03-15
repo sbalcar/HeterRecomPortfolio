@@ -524,9 +524,12 @@ def getBatchesUSA():
     batchDefRRDynamic.selectorIDs = [BatchDefMLFuzzyDHondt.SLCTR_FIXED]
 
     batchDefRRHybrid = BatchDefRRHybrid()
-    batchDefRRHybrid.lrClicks: List[float] = [0.03]
-    batchDefRRHybrid.lrViewDivisors:List[float] = [250]
+    batchDefRRHybrid.mGlobalLrClicks:List[float] = [0.03]
+    batchDefRRHybrid.mGlobalLrViewDivisors:List[float] = [250]
+    batchDefRRHybrid.mPersonLrClicks: List[float] = [0.3]
+    batchDefRRHybrid.mPersonLrViewDivisors: List[float] = [2500]
     batchDefRRHybrid.selectorIDs = [BatchDefMLFuzzyDHondt.SLCTR_FIXED]
+
 
     batchesDef:List[ABatchDefinition] = []
 

@@ -27,8 +27,8 @@ class PModelHybrid(DataFrame):
         if not isinstance(mPerson, DataFrame):
             raise ValueError("Argument mPerson isn't type DataFrame.")
 
-        modelDHontData = [[self.ROW_MODEL_GLOBAL, mGlobal],[self.ROW_MODEL_PERSON, mPerson]]
-        super(PModelHybrid, self).__init__(modelDHontData, columns=[self.COL_MODELID, self.COL_MODEL])
+        modelHybridData = [[self.ROW_MODEL_GLOBAL, mGlobal],[self.ROW_MODEL_PERSON, mPerson]]
+        super(PModelHybrid, self).__init__(modelHybridData, columns=[self.COL_MODELID, self.COL_MODEL])
         self.set_index(self.COL_MODELID, inplace=True)
 
 
@@ -43,7 +43,11 @@ class PModelHybrid(DataFrame):
     def getModel(self, userID:int):
 
         mGlobal:DataFrame = self.getModelGlobal()
+        mGlobal.linearNormalizing()
+#        if 1 == 1:
+#            return mGlobal
         mPerson:DataFrame = self.getModelPerson(userID)
+        mPerson.linearNormalizing()
 
         rPModel:DataFrame = PModelDHondt.sumModels(mGlobal, mPerson)
         rPModel.linearNormalizing()

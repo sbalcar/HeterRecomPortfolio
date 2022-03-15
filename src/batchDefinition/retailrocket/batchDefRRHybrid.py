@@ -12,6 +12,7 @@ from portfolioDescription.portfolio1AggrDescription import Portfolio1AggrDescrip
 from evaluationTool.aEvalTool import AEvalTool  # class
 from evaluationTool.evalToolDHondt import EvalToolDHondt  # class
 from evaluationTool.evalToolHybrid import EToolHybrid  # class
+from evaluationTool.evalToolDHondtPersonal import EvalToolDHondtPersonal #class
 
 from aggregationDescription.aggregationDescription import AggregationDescription  # class
 
@@ -39,13 +40,16 @@ from portfolioModel.pModelDHondtBanditsVotes import PModelDHondtBanditsVotes #cl
 from portfolioModel.pModelDHondt import PModelDHondt #class
 from portfolioModel.pModelDHondtPersonalised import PModelDHondtPersonalised #class
 from portfolioModel.pModelHybrid import PModelHybrid #class
+from portfolioModel.pModelDHondtPersonalisedStat import PModelDHondtPersonalisedStat #class
 
 
 
 class BatchDefRRHybrid(ABatchDefinitionRR):
 
-    lrClicks:List[float] = BatchDefMLFuzzyDHondt.lrClicks
-    lrViewDivisors:List[float] = BatchDefMLFuzzyDHondt.lrViewDivisors
+    mGlobalLrClicks:List[float] = BatchDefMLFuzzyDHondt.lrClicks
+    mGlobalLrViewDivisors:List[float] = BatchDefMLFuzzyDHondt.lrViewDivisors
+    mPersonLrClicks: List[float] = BatchDefMLFuzzyDHondt.lrClicks + [0.3]
+    mPersonLrViewDivisors: List[float] = BatchDefMLFuzzyDHondt.lrViewDivisors + [2500]
     selectorIDs:List[str] = BatchDefMLFuzzyDHondt.selectorIDs
 
 
@@ -55,14 +59,25 @@ class BatchDefRRHybrid(ABatchDefinitionRR):
     def getParameters(self):
         aDict:Dict[str,object] = {}
         for selectorIDI in self.selectorIDs:
-            for lrClickJ in self.lrClicks:
-                for lrViewDivisorK in self.lrViewDivisors:
-                    keyIJ:str = selectorIDI + "Clk" + str(lrClickJ).replace(".", "") + "ViewDivisor" + str(lrViewDivisorK).replace(".", "")
-                    lrViewIJK:float = lrClickJ / lrViewDivisorK
-                    eToolIJK:AEvalTool = EToolHybrid({EvalToolDHondt.ARG_LEARNING_RATE_CLICKS: lrClickJ,
-                                                      EvalToolDHondt.ARG_LEARNING_RATE_VIEWS: lrViewIJK})
-                    selectorIJK:ADHondtSelector = BatchDefMLFuzzyDHondt().getSelectorParameters()[selectorIDI]
-                    aDict[keyIJ] = (selectorIJK, eToolIJK)
+            for gLrClickJ in self.mGlobalLrClicks:
+                for gLrViewDivisorK in self.mGlobalLrViewDivisors:
+                    for pLrClickL in self.mPersonLrClicks:
+                        for pLrViewDivisorM in self.mPersonLrViewDivisors:
+
+                            gjk:str = "Clk" + str(gLrClickJ).replace(".", "") + "ViewDivisor" + str(gLrViewDivisorK).replace(".", "")
+                            pjk:str = "Clk" + str(pLrClickL).replace(".", "") + "ViewDivisor" + str(pLrViewDivisorM).replace(".", "")
+                            keyIJ:str = selectorIDI + gjk + pjk
+                            lrViewJK:float = gLrClickJ / gLrViewDivisorK
+                            lrViewLM:float = pLrClickL / pLrViewDivisorM
+                            evalToolMGlobal:EvalToolDHondt = EvalToolDHondt({
+                                        EvalToolDHondt.ARG_LEARNING_RATE_CLICKS: gLrClickJ,
+                                        EvalToolDHondt.ARG_LEARNING_RATE_VIEWS: lrViewJK})
+                            evalToolMPerson:EvalToolDHondt = EvalToolDHondtPersonal({
+                                        EvalToolDHondt.ARG_LEARNING_RATE_CLICKS: pLrClickL,
+                                        EvalToolDHondt.ARG_LEARNING_RATE_VIEWS: lrViewLM})
+                            eToolIJK:AEvalTool = EToolHybrid(evalToolMGlobal, evalToolMPerson, {})
+                            selectorIJK:ADHondtSelector = BatchDefMLFuzzyDHondt().getSelectorParameters()[selectorIDI]
+                            aDict[keyIJ] = (selectorIJK, eToolIJK)
         return aDict
 
 
@@ -84,7 +99,7 @@ class BatchDefRRHybrid(ABatchDefinitionRR):
             self.getBatchName() + jobID, rIDs, rDescs, aDescDHont)
 
         rIds:List[str] = pDescr.getRecommendersIDs()
-        model:DataFrame = PModelHybrid(PModelDHondt(rIds), PModelDHondtPersonalised(rIds))
+        model:DataFrame = PModelHybrid(PModelDHondt(rIds), PModelDHondtPersonalisedStat(rIds))
 
         simulator: Simulator = InputSimulatorDefinition.exportSimulatorRetailRocket(
             batchID, divisionDatasetPercentualSize, uBehaviour, repetition)
