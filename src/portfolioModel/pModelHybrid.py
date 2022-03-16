@@ -11,6 +11,7 @@ from evaluationTool.evalToolDHondt import EvalToolDHondt
 from portfolioModel.pModelDHondt import PModelDHondt #class
 from portfolioModel.pModelDHondtPersonalisedStat import PModelDHondtPersonalisedStat #class
 from batchDefinition.inputRecomRRDefinition import InputRecomRRDefinition #class
+from simulation.aSequentialSimulation import ASequentialSimulation #class
 
 
 class PModelHybrid(DataFrame):
@@ -40,27 +41,39 @@ class PModelHybrid(DataFrame):
         return mP.getModel(userID)
 
 
-    def getModel(self, userID:int):
+    def getModel(self, userID:int, argsDict:dict):
+
+        status:float = argsDict[ASequentialSimulation.ARG_STATUS]
+        print("status: " + str(status))
 
         mGlobal:DataFrame = self.getModelGlobal()
         mGlobal.linearNormalizing()
+        #print("GLOBAL:")
+        #print(mGlobal.head(10))
+        mGlobal = PModelDHondt.multiplyModel(mGlobal, 1.0 - status)
 #        if 1 == 1:
 #            return mGlobal
         mPerson:DataFrame = self.getModelPerson(userID)
         mPerson.linearNormalizing()
-
+        mPerson = PModelDHondt.multiplyModel(mPerson, status)
+#        if 1 == 1:
+#            return mPerson
         rPModel:DataFrame = PModelDHondt.sumModels(mGlobal, mPerson)
         rPModel.linearNormalizing()
 
+        #print("VYSLEDNY:")
+        #print(rPModel.head(10))
+
         return rPModel
 
-    def countResponsibility(self, userID:int, aggregatedItemIDs:List[int], methodsResultDict:dict, numberOfItems:int = 20, votes = None):
+    def countResponsibility(self, userID:int, aggregatedItemIDs:List[int], methodsResultDict:dict,
+                            numberOfItems:int = 20, argsDict:dict={}):
 
         #print("userID: " + str(userID))
-        model:DataFrame = self.getModel(userID)
+        model:DataFrame = self.getModel(userID, argsDict)
         #print("model: " + str(model.head(10)))
 
-        return model.countResponsibility(userID, aggregatedItemIDs, methodsResultDict, numberOfItems, votes)
+        return model.countResponsibility(userID, aggregatedItemIDs, methodsResultDict, numberOfItems, None)
 
 
     def incrementClick(self, userID):

@@ -27,7 +27,7 @@ def test02():
 
     #portfolioModel1.linearNormalizing()
 
-    portfolioModelData2:List[tuple] = [['metoda1',0], ['metoda2',20], ['metoda3',40]]
+    portfolioModelData2:List[tuple] = [['metoda2',20], ['metoda3',40], ['metoda1',0]]
     portfolioModel2:DataFrame = pd.DataFrame(portfolioModelData2, columns=["methodID","votes"])
     portfolioModel2.set_index("methodID", inplace=True)
     portfolioModel2.__class__ = PModelDHondt
@@ -43,8 +43,24 @@ def test02():
     print(rModel)
 
 
+def test03():
+    print("Test 03")
+
+    # methods parametes
+    portfolioModelData1:List[tuple] = [['metoda1',100], ['metoda2',80], ['metoda3',60]]
+    portfolioModel1:DataFrame = pd.DataFrame(portfolioModelData1, columns=["methodID","votes"])
+    portfolioModel1.set_index("methodID", inplace=True)
+    portfolioModel1.__class__ = PModelDHondt
+
+    #portfolioModel1.linearNormalizing()
+
+    rModel = PModelDHondt.multiplyModel(portfolioModel1, 0.2)
+    print(rModel)
+
+
 if __name__ == "__main__":
     os.chdir("..")
 
     #test01()
     test02()
+    #test03()

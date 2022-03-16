@@ -111,7 +111,7 @@ class PModelDHondt(pd.DataFrame):
         if not methodIdsThis == methodIdsExtr:
             print("chyba")
 
-        valuesNew:List[float] = pModel1[cls.COL_VOTES] + pModel2[cls.COL_VOTES]
+        valuesNew:List[float] = pModel1.loc[methodIdsThis, cls.COL_VOTES] + pModel2.loc[methodIdsThis, cls.COL_VOTES]
         data:List[tuple] = list(zip(methodIdsThis, valuesNew))
 
         df = pd.DataFrame(data, columns = [cls.COL_METHOD_ID, cls.COL_VOTES])
@@ -120,6 +120,17 @@ class PModelDHondt(pd.DataFrame):
 
         return df
 
+    @classmethod
+    def multiplyModel(cls, pModel1, value:float):
+        valuesNew: List[float] = pModel1[cls.COL_VOTES] * value
+        methodIdsThis:List[str] = pModel1.getMethodIDs()
+        data:List[tuple] = list(zip(methodIdsThis, valuesNew))
+
+        df = pd.DataFrame(data, columns = [cls.COL_METHOD_ID, cls.COL_VOTES])
+        df.set_index(PModelDHondt.COL_METHOD_ID, inplace=True)
+        df.__class__ = PModelDHondt
+
+        return df
 
 import matplotlib.pyplot as plt
 import numpy as np

@@ -149,7 +149,7 @@ class SimulationRR(ASequentialSimulation):
             currentPageTypeI:object = None
 
             windowOfItemIDsI:List[int] = model.getNextRelevantItemIDsExceptItemIDs(currentDFIndexI,
-                                                                             self._clickedItems[currentUserIdI], self._windowSize)
+                                        self._clickedItems[currentUserIdI], self._windowSize)
             windowOfItemIDsI:List[int] = [int(itemIdI) for itemIdI in windowOfItemIDsI]
 
             portfolioI:APortfolio

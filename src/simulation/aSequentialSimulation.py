@@ -31,7 +31,7 @@ from evaluationTool.evalToolContext import EvalToolContext #class
 
 class ASequentialSimulation(ABC):
 
-
+    # input arguments
     ARG_WINDOW_SIZE:str = "windowSize"
     ARG_RECOM_REPETITION_COUNT:str = "recomRepetitionCount"
     ARG_NUMBER_OF_RECOMM_ITEMS:str = "numberOfRecomItems"
@@ -45,6 +45,9 @@ class ASequentialSimulation(ABC):
     ARG_MODE_PROTECT_OLD_RESULTS:str = "protectOldResults"
     ARG_MODE_OVERWRITE_OLD_RESULTS:str = "overwriteOldResults"
     ARG_MODE_OVERWRITE_EMPTY_RESULTS:str = "overwriteEmptyResults"
+
+    # output arguments
+    ARG_STATUS:str = "status"
 
 
     def __init__(self, batchID:str, dataset:ADataset, behaviourDF:DataFrame, argumentsDict:dict):
@@ -270,9 +273,12 @@ class ASequentialSimulation(ABC):
 
         rItemIDs:List[int]
         rItemIDsWithResponsibility:List[tuple[int, Series[int, str]]]
-        rItemIDs, rItemIDsWithResponsibility = portfolio.recommend(userID, portfolioModel, args)
+        rItemIDs, rItemIDsWithResponsibility = portfolio.recommend(userID, portfolioModel,
+                                args | {self.ARG_STATUS:counterI/counterMax})
 
-        evaluatonTool.displayed(userID, rItemIDsWithResponsibility, portfolioModel, args)
+
+        evaluatonTool.displayed(userID, rItemIDsWithResponsibility, portfolioModel,
+                                args | {self.ARG_STATUS:counterI/counterMax})
 
         candidatesToClick:List[int] = [itemIDI for itemIDI, observedI in zip(rItemIDs, uObservation[:len(rItemIDs)]) if observedI]
         clickedItemIDs:List[int] = list(set(candidatesToClick) & set(windowOfItemIDsI))
@@ -289,7 +295,8 @@ class ASequentialSimulation(ABC):
         for clickedNewItemIdI in clickedNewItemIDs:
             evaluationDict[AEvalTool.CLICKS] = evaluationDict.get(AEvalTool.CLICKS, 0) + 1
 
-            evaluatonTool.click(userID, rItemIDsWithResponsibility, clickedNewItemIdI, portfolioModel, args)
+            evaluatonTool.click(userID, rItemIDsWithResponsibility, clickedNewItemIdI, portfolioModel,
+                                args | {self.ARG_STATUS:counterI/counterMax})
 
             self._clickedItems[userID].append(clickedNewItemIdI)
 

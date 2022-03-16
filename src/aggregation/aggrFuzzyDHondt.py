@@ -72,7 +72,7 @@ class AggrFuzzyDHondt(AAgregation):
       uniqueCandidatesI:List[int] = list(set(np.concatenate(candidatesOfMethods)))
       #print("UniqueCandidatesI: ", uniqueCandidatesI)
 
-      modelDF = modelDF.getModel(userID)
+      modelDF = modelDF.getModel(userID, argumentsDict)
 
       # numbers of elected candidates of parties
       electedOfPartyDictI:dict[str,int] = {mI:1 for mI in modelDF.index}
@@ -169,7 +169,7 @@ class AggrFuzzyDHondt(AAgregation):
 
 
         itemsWithResposibilityOfRecommenders:List[int,np.Series[int,str]] = modelDF.countResponsibility(
-            userID, aggregatedItemIDs, methodsResultDict, numberOfItems)
+            userID, aggregatedItemIDs, methodsResultDict, numberOfItems, argumentsDict)
 
         # list<(itemID:int, Series<(rating:int, methodID:str)>)>
         return itemsWithResposibilityOfRecommenders

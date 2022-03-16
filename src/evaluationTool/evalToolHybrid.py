@@ -11,6 +11,7 @@ from pandas.core.series import Series #class
 from evaluationTool.evalToolDHondt import EvalToolDHondt #class
 from evaluationTool.evalToolDHondtPersonal import EvalToolDHondtPersonal #class
 
+from simulation.aSequentialSimulation import ASequentialSimulation #class
 import numpy as np
 
 
@@ -40,6 +41,8 @@ class EToolHybrid(AEvalTool):
         if type(argumentsDict) is not dict:
             raise ValueError("Argument argumentsDict isn't type dict.")
 
+        status:float = argumentsDict[ASequentialSimulation.ARG_STATUS]
+
         mGlobal:DataFrame = portfolioModel.getModelGlobal()
         mPerson:DataFrame = portfolioModel.getModelPerson(userID)
 
@@ -59,6 +62,8 @@ class EToolHybrid(AEvalTool):
             raise ValueError("Argument portfolioModel isn't type DataFrame.")
         if type(argumentsDict) is not dict:
             raise ValueError("Argument argumentsDict isn't type dict.")
+
+        status:float = argumentsDict[ASequentialSimulation.ARG_STATUS]
 
         mGlobal:DataFrame = portfolioModel.getModelGlobal()
         mPerson:DataFrame = portfolioModel.getModelPerson(userID)
