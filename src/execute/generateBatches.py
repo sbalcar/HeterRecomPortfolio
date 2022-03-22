@@ -540,8 +540,8 @@ def getBatchesUSA():
     batchDefRRFuzzyDHondt.selectorIDs:List[str] = [BatchDefMLFuzzyDHondt.SLCTR_FIXED]
 
     batchDefRRPersonalFuzzyDHondt = BatchDefRRPersonalFuzzyDHondt()
-    batchDefRRPersonalFuzzyDHondt.lrClicks: List[float] = [0.2]
-    batchDefRRPersonalFuzzyDHondt.lrViewDivisors:List[float] = [1000]
+    batchDefRRPersonalFuzzyDHondt.lrClicks: List[float] = [0.03]
+    batchDefRRPersonalFuzzyDHondt.lrViewDivisors:List[float] = [250]
     batchDefRRPersonalFuzzyDHondt.selectorIDs = [BatchDefMLFuzzyDHondt.SLCTR_FIXED]
 
     batchDefRRPersonalStatFuzzyDHondt = BatchDefRRPersonalStatFuzzyDHondt()
@@ -576,8 +576,8 @@ def getBatchesUSA():
     batchDefSTFuzzyDHondt.selectorIDs:List[str] = [BatchDefMLFuzzyDHondt.SLCTR_FIXED]
 
     batchDefSTPersonalFuzzyDHondt = BatchDefSTPersonalFuzzyDHondt()
-    batchDefSTPersonalFuzzyDHondt.lrClicks: List[float] = [0.2]
-    batchDefSTPersonalFuzzyDHondt.lrViewDivisors:List[float] = [1000]
+    batchDefSTPersonalFuzzyDHondt.lrClicks: List[float] = [0.03]
+    batchDefSTPersonalFuzzyDHondt.lrViewDivisors:List[float] = [250]
     batchDefSTPersonalFuzzyDHondt.selectorIDs = [BatchDefMLFuzzyDHondt.SLCTR_FIXED]
 
     batchDefSTHybrid = BatchDefSTHybrid()
