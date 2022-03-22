@@ -37,6 +37,7 @@ from batchDefinition.ml1m.batchDefMLSingleW2VHT import BatchDefMLSingleW2VHT #cl
 from batchDefinition.ml1m.batchDefMLSingleCosineCBHT import BatchDefMLSingleCosineCBHT #class
 from batchDefinition.ml1m.batchDefMLSingleBPRMFHT import BatchDefMLSingleBPRMFHT  #class
 from batchDefinition.ml1m.batchDefMLSingleVMContextKNNHT import BatchDefMLSingleVMContextKNNHT #class
+from batchDefinition.ml1m.batchDefMLHybrid import BatchDefMLHybrid #class
 
 from batchDefinition.retailrocket.batchDefRRSingle import BatchDefRRSingle #class
 from batchDefinition.retailrocket.batchDefRRSingleW2VHT import BatchDefRRSingleW2VHT #class
@@ -82,6 +83,8 @@ from batchDefinition.slanTour.batchDefSTSingle import BatchDefSTSingle #class
 from batchDefinition.slanTour.batchDefSTSingleBPRMFHT import BatchDefSTSingleBPRMFHT #class
 from batchDefinition.slanTour.batchDefSTSingleW2VHT import BatchDefSTSingleW2VHT #class
 from batchDefinition.slanTour.batchDefSTSingleCosineCBHT import BatchDefSTSingleCosineCBHT #class
+from batchDefinition.slanTour.batchDefSTPersonalFuzzyDHondt import BatchDefSTPersonalFuzzyDHondt  # class
+from batchDefinition.slanTour.batchDefSTHybrid import BatchDefSTHybrid #class
 
 
 def sequentialEvaluation():

@@ -48,6 +48,9 @@ from batchDefinition.ml1m.batchDefMLSingleCosineCBHT import BatchDefMLSingleCosi
 from batchDefinition.ml1m.batchDefMLSingleBPRMFHT import BatchDefMLSingleBPRMFHT  #class
 from batchDefinition.ml1m.batchDefMLSingleVMContextKNNHT import BatchDefMLSingleVMContextKNNHT #class
 
+from batchDefinition.ml1m.batchDefMLPersonalFuzzyDHondt import BatchDefMLFuzzyDHondt #class
+from batchDefinition.ml1m.batchDefMLHybrid import BatchDefMLHybrid #class
+
 from batchDefinition.retailrocket.batchDefRRSingle import BatchDefRRSingle #class
 from batchDefinition.retailrocket.batchDefRRSingleBPRMFHT import BatchDefRRSingleBPRMFHT #class
 from batchDefinition.retailrocket.batchDefRRSingleCosineCBHT import BatchDefRRSingleCosineCBHT #class
@@ -94,6 +97,8 @@ from batchDefinition.slanTour.batchDefSTSingleBPRMFHT import BatchDefSTSingleBPR
 from batchDefinition.slanTour.batchDefSTSingle import BatchDefSTSingle #class
 from batchDefinition.slanTour.batchDefSTSingleW2VHT import BatchDefSTSingleW2VHT #class
 from batchDefinition.slanTour.batchDefSTSingleCosineCBHT import BatchDefSTSingleCosineCBHT #class
+from batchDefinition.slanTour.batchDefSTPersonalFuzzyDHondt import BatchDefSTPersonalFuzzyDHondt #class
+from batchDefinition.slanTour.batchDefSTHybrid import BatchDefSTHybrid #class
 
 from datasets.ml.behavioursML import BehavioursML #class
 
@@ -503,6 +508,32 @@ def getBatchesICCAI():
 def getBatchesUSA():
     print("Get USA Batches")
 
+    # dataset ML
+    batchDefMLFuzzyDHondt = BatchDefMLFuzzyDHondt()
+    batchDefMLFuzzyDHondt.lrClicks:List[float] = [0.03]
+    batchDefMLFuzzyDHondt.lrViewDivisors:List[float] = [250]
+    batchDefMLFuzzyDHondt.selectorIDs:List[str] = [BatchDefMLFuzzyDHondt.SLCTR_FIXED]
+
+    batchDefMLPersonalFuzzyDHondt = BatchDefMLFuzzyDHondt()
+    batchDefMLPersonalFuzzyDHondt.lrClicks: List[float] = [0.2]
+    batchDefMLPersonalFuzzyDHondt.lrViewDivisors:List[float] = [1000]
+    batchDefMLPersonalFuzzyDHondt.selectorIDs = [BatchDefMLFuzzyDHondt.SLCTR_FIXED]
+
+    batchDefMLHybrid = BatchDefMLHybrid()
+    batchDefMLHybrid.mGlobalLrClicks:List[float] = [0.03]
+    batchDefMLHybrid.mGlobalLrViewDivisors:List[float] = [250]
+    batchDefMLHybrid.mPersonLrClicks: List[float] = [0.03]
+    batchDefMLHybrid.mPersonLrViewDivisors: List[float] = [250]
+    batchDefMLHybrid.selectorIDs = [BatchDefMLFuzzyDHondt.SLCTR_FIXED]
+
+
+    batchesDefML:List[ABatchDefinition] = []
+    batchesDefML.append(batchDefMLFuzzyDHondt)
+    batchesDefML.append(batchDefMLPersonalFuzzyDHondt)
+    batchesDefML.append(batchDefMLHybrid)
+
+
+    # dataset RR
     batchDefRRFuzzyDHondt = BatchDefRRFuzzyDHondt()
     batchDefRRFuzzyDHondt.lrClicks:List[float] = [0.03]
     batchDefRRFuzzyDHondt.lrViewDivisors:List[float] = [250]
@@ -518,10 +549,10 @@ def getBatchesUSA():
     batchDefRRPersonalStatFuzzyDHondt.lrViewDivisors:List[float] = [250]
     batchDefRRPersonalStatFuzzyDHondt.selectorIDs = [BatchDefMLFuzzyDHondt.SLCTR_FIXED]
 
-    batchDefRRDynamic = BatchDefRRDynamic()
-    batchDefRRDynamic.lrClicks: List[float] = [0.03]
-    batchDefRRDynamic.lrViewDivisors:List[float] = [250]
-    batchDefRRDynamic.selectorIDs = [BatchDefMLFuzzyDHondt.SLCTR_FIXED]
+    #batchDefRRDynamic = BatchDefRRDynamic()
+    #batchDefRRDynamic.lrClicks: List[float] = [0.03]
+    #batchDefRRDynamic.lrViewDivisors:List[float] = [250]
+    #batchDefRRDynamic.selectorIDs = [BatchDefMLFuzzyDHondt.SLCTR_FIXED]
 
     batchDefRRHybrid = BatchDefRRHybrid()
     batchDefRRHybrid.mGlobalLrClicks:List[float] = [0.03]
@@ -530,16 +561,38 @@ def getBatchesUSA():
     batchDefRRHybrid.mPersonLrViewDivisors: List[float] = [250]
     batchDefRRHybrid.selectorIDs = [BatchDefMLFuzzyDHondt.SLCTR_FIXED]
 
+    batchesDefRR:List[ABatchDefinition] = []
+    batchesDefRR.append(batchDefRRFuzzyDHondt)
+    batchesDefRR.append(batchDefRRPersonalFuzzyDHondt)
+    batchesDefRR.append(batchDefRRPersonalStatFuzzyDHondt)
+    #batchesDefRR.append(batchDefRRDynamic)
+    batchesDefRR.append(batchDefRRHybrid)
 
-    batchesDef:List[ABatchDefinition] = []
 
-    batchesDef.append(batchDefRRFuzzyDHondt)
-    batchesDef.append(batchDefRRPersonalFuzzyDHondt)
-    batchesDef.append(batchDefRRPersonalStatFuzzyDHondt)
-    batchesDef.append(batchDefRRDynamic)
-    batchesDef.append(batchDefRRHybrid)
+    # dataset ST
+    batchDefSTFuzzyDHondt = BatchDefSTFuzzyDHondt()
+    batchDefSTFuzzyDHondt.lrClicks:List[float] = [0.03]
+    batchDefSTFuzzyDHondt.lrViewDivisors:List[float] = [250]
+    batchDefSTFuzzyDHondt.selectorIDs:List[str] = [BatchDefMLFuzzyDHondt.SLCTR_FIXED]
 
-    return batchesDef
+    batchDefSTPersonalFuzzyDHondt = BatchDefSTPersonalFuzzyDHondt()
+    batchDefSTPersonalFuzzyDHondt.lrClicks: List[float] = [0.2]
+    batchDefSTPersonalFuzzyDHondt.lrViewDivisors:List[float] = [1000]
+    batchDefSTPersonalFuzzyDHondt.selectorIDs = [BatchDefMLFuzzyDHondt.SLCTR_FIXED]
+
+    batchDefSTHybrid = BatchDefSTHybrid()
+    batchDefSTHybrid.mGlobalLrClicks:List[float] = [0.03]
+    batchDefSTHybrid.mGlobalLrViewDivisors:List[float] = [250]
+    batchDefSTHybrid.mPersonLrClicks: List[float] = [0.03]
+    batchDefSTHybrid.mPersonLrViewDivisors: List[float] = [250]
+    batchDefSTHybrid.selectorIDs = [BatchDefMLFuzzyDHondt.SLCTR_FIXED]
+
+    batchesDefST:List[ABatchDefinition] = []
+    batchesDefST.append(batchDefSTFuzzyDHondt)
+    batchesDefST.append(batchDefSTPersonalFuzzyDHondt)
+    batchesDefST.append(batchDefSTHybrid)
+
+    return batchesDefML + batchesDefRR + batchesDefST
 
 
 def generateBatches():

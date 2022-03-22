@@ -25,7 +25,7 @@ class PModelDHondtPersonalised(pd.DataFrame):
         super(PModelDHondtPersonalised, self).__init__(modelDHontData, columns=[PModelDHondtPersonalised.COL_USER_ID, PModelDHondtPersonalised.COL_MODEL])
         self.set_index(PModelDHondtPersonalised.COL_USER_ID, inplace=True)
 
-    def getModel(self, userID:int):
+    def getModel(self, userID:int, argsDict:dict={}):
         if not userID in self.index:
             print("index: " + str(self.index))
             print(self)

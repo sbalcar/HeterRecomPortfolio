@@ -35,7 +35,7 @@ class PModelDHondt(pd.DataFrame):
             portfolioModelDHondt.loc[methodIdI, PModelDHondt.COL_VOTES] = portfolioModelDHondt.loc[methodIdI, PModelDHondt.COL_VOTES] / sumMethodsVotes
 
 
-    def getModel(self, userID:int):
+    def getModel(self, userID:int, argsDict:dict={}):
         return self
 
     def countResponsibility(self, userID:int, aggregatedItemIDs:List[int], methodsResultDict:dict, numberOfItems:int = 20, votes = None):

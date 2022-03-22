@@ -40,6 +40,10 @@ from portfolioModel.pModelDHondt import PModelDHondt #class
 
 class BatchDefSTFuzzyDHondt(ABatchDefinitionST):
 
+    lrClicks:List[float] = BatchDefMLFuzzyDHondt.lrClicks
+    lrViewDivisors:List[float] = BatchDefMLFuzzyDHondt.lrViewDivisors
+    selectorIDs:List[str] = BatchDefMLFuzzyDHondt.selectorIDs
+
     def getBatchName(self):
         return "FDHondt"
 

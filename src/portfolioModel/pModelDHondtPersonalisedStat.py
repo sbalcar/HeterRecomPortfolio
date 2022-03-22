@@ -29,7 +29,7 @@ class PModelDHondtPersonalisedStat(pd.DataFrame):
                         PModelDHondtPersonalisedStat.COL_CLICK_COUNT, PModelDHondtPersonalisedStat.COL_MODEL])
         self.set_index(PModelDHondtPersonalisedStat.COL_USER_ID, inplace=True)
 
-    def getModel(self, userID:int):
+    def getModel(self, userID:int, argsDict:dict={}):
         if not userID in self.index:
             userIdWithMaxClicks:int = self[PModelDHondtPersonalisedStat.COL_CLICK_COUNT].idxmax()
             print("aaaaaaaaaaaaaa: " + str(userIdWithMaxClicks))
