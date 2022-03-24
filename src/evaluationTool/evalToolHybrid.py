@@ -46,6 +46,9 @@ class EToolHybrid(AEvalTool):
         mGlobal:DataFrame = portfolioModel.getModelGlobal()
         mPerson:DataFrame = portfolioModel.getModelPerson(userID)
 
+        portfolioModel.getModelPersonAllUsers().incrementClick(userID)
+
+
         self._evalToolMGlobal.click(userID, rItemIDsWithResponsibility, clickedItemID, mGlobal, argumentsDict)
         self._evalToolMPerson.click(userID, rItemIDsWithResponsibility, clickedItemID, mPerson, argumentsDict)
 

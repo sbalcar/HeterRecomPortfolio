@@ -66,10 +66,14 @@ class PModelDHondtPersonalisedStat(pd.DataFrame):
         model.loc[methodID][PModelDHondt.COL_VOTES] = value
 
 
-    def incrementClick(self, userID):
+    def incrementClick(self, userID:int):
         self.at[userID, PModelDHondtPersonalisedStat.COL_CLICK_COUNT] =\
                 self.loc[userID, PModelDHondtPersonalisedStat.COL_CLICK_COUNT] + 1
 
+    def getNumberOfClick(self, userID:int):
+        if not userID in self.index:
+            return 0
+        return self.at[userID, PModelDHondtPersonalisedStat.COL_CLICK_COUNT]
 
     @classmethod
     def readModel(cls, fileName:str, counterI:int):

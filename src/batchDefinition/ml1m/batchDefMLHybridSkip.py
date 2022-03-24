@@ -18,14 +18,15 @@ from aggregationDescription.aggregationDescription import AggregationDescription
 
 from batchDefinition.inputAggrDefinition import InputAggrDefinition  # class
 
-from batchDefinition.inputRecomRRDefinition import InputRecomRRDefinition  # class
+from batchDefinition.inputRecomMLDefinition import InputRecomMLDefinition  # class
 
 from aggregation.operators.aDHondtSelector import ADHondtSelector  # class
 from aggregation.operators.rouletteWheelSelector import RouletteWheelSelector  # class
 from aggregation.operators.theMostVotedItemSelector import TheMostVotedItemSelector  # class
 
 from batchDefinition.inputABatchDefinition import InputABatchDefinition
-from batchDefinition.aBatchDefinitionRR import ABatchDefinitionRR  # class
+from batchDefinition.aBatchDefinitionML import ABatchDefinitionML  # class
+from batchDefinition.ml1m.batchDefMLHybrid import BatchDefMLHybrid #class
 
 from batchDefinition.inputSimulatorDefinition import InputSimulatorDefinition  # class
 
@@ -44,7 +45,7 @@ from portfolioModel.pModelDHondtPersonalisedStat import PModelDHondtPersonalised
 
 
 
-class BatchDefRRHybrid(ABatchDefinitionRR):
+class BatchDefMLHybridSkip(ABatchDefinitionML):
 
     mGlobalLrClicks:List[float] = BatchDefMLFuzzyDHondt.lrClicks
     mGlobalLrViewDivisors:List[float] = BatchDefMLFuzzyDHondt.lrViewDivisors
@@ -52,48 +53,31 @@ class BatchDefRRHybrid(ABatchDefinitionRR):
     mPersonLrViewDivisors: List[float] = BatchDefMLFuzzyDHondt.lrViewDivisors
     selectorIDs:List[str] = BatchDefMLFuzzyDHondt.selectorIDs
 
-    mode:List[str] = ["none", "skip"]
-
 
     def getBatchName(self):
-        return "HybridFDHondt"
+        return "HybridFDHondtSkip"
 
     def getParameters(self):
-        aDict:Dict[str,object] = {}
-        for selectorIDI in self.selectorIDs:
-            for gLrClickJ in self.mGlobalLrClicks:
-                for gLrViewDivisorK in self.mGlobalLrViewDivisors:
-                    for pLrClickL in self.mPersonLrClicks:
-                        for pLrViewDivisorM in self.mPersonLrViewDivisors:
-
-                            gjk:str = "Clk" + str(gLrClickJ).replace(".", "") + "ViewDivisor" + str(gLrViewDivisorK).replace(".", "")
-                            pjk:str = "Clk" + str(pLrClickL).replace(".", "") + "ViewDivisor" + str(pLrViewDivisorM).replace(".", "")
-                            keyIJ:str = selectorIDI + gjk + pjk
-                            lrViewJK:float = gLrClickJ / gLrViewDivisorK
-                            lrViewLM:float = pLrClickL / pLrViewDivisorM
-                            evalToolMGlobal:EvalToolDHondt = EvalToolDHondt({
-                                        EvalToolDHondt.ARG_LEARNING_RATE_CLICKS: gLrClickJ,
-                                        EvalToolDHondt.ARG_LEARNING_RATE_VIEWS: lrViewJK})
-                            evalToolMPerson:EvalToolDHondt = EvalToolDHondtPersonal({
-                                        EvalToolDHondt.ARG_LEARNING_RATE_CLICKS: pLrClickL,
-                                        EvalToolDHondt.ARG_LEARNING_RATE_VIEWS: lrViewLM})
-                            eToolIJK:AEvalTool = EToolHybrid(evalToolMGlobal, evalToolMPerson, {})
-                            selectorIJK:ADHondtSelector = BatchDefMLFuzzyDHondt().getSelectorParameters()[selectorIDI]
-                            aDict[keyIJ] = (selectorIJK, eToolIJK)
-        return aDict
+        batchDefMLHybrid = BatchDefMLHybrid()
+        batchDefMLHybrid.mGlobalLrClicks = self.mGlobalLrClicks
+        batchDefMLHybrid.mGlobalLrViewDivisors = self.mGlobalLrViewDivisors
+        batchDefMLHybrid.mPersonLrClicks = self.mPersonLrClicks
+        batchDefMLHybrid.mPersonLrViewDivisors = self.mPersonLrViewDivisors
+        batchDefMLHybrid.selectorIDs = self.selectorIDs
+        return batchDefMLHybrid.getParameters()
 
 
     def run(self, batchID: str, jobID: str):
-        divisionDatasetPercentualSize: int
-        uBehaviour: str
-        repetition: int
+        divisionDatasetPercentualSize:int
+        uBehaviour:str
+        repetition:int
         divisionDatasetPercentualSize, uBehaviour, repetition = \
             InputABatchDefinition().getBatchParameters(self.datasetID)[batchID]
 
         # eTool:AEvalTool
         selector, eTool = self.getParameters()[jobID]
 
-        rIDs, rDescs = InputRecomRRDefinition.exportPairOfRecomIdsAndRecomDescrs()
+        rIDs, rDescs = InputRecomMLDefinition.exportPairOfRecomIdsAndRecomDescrs()
 
         aDescDHont:AggregationDescription = InputAggrDefinition.exportADescDHondt(selector)
 
@@ -101,9 +85,10 @@ class BatchDefRRHybrid(ABatchDefinitionRR):
             self.getBatchName() + jobID, rIDs, rDescs, aDescDHont)
 
         rIds:List[str] = pDescr.getRecommendersIDs()
-        model:DataFrame = PModelHybrid(PModelDHondt(rIds), PModelDHondtPersonalisedStat(rIds))
+        model:DataFrame = PModelHybrid(PModelDHondt(rIds), PModelDHondtPersonalisedStat(rIds),
+                                       {PModelHybrid.ARG_MODE_SKIP:True})
 
-        simulator: Simulator = InputSimulatorDefinition.exportSimulatorRetailRocket(
+        simulator:Simulator = InputSimulatorDefinition.exportSimulatorML1M(
             batchID, divisionDatasetPercentualSize, uBehaviour, repetition)
         simulator.simulate([pDescr], [model], [eTool], [HistoryHierDF(pDescr.getPortfolioID())])
 
@@ -113,4 +98,4 @@ if __name__ == "__main__":
     os.chdir("..")
     print(os.getcwd())
 
-    BatchDefRRHybrid().generateAllBatches(InputABatchDefinition())
+    BatchDefMLHybridSkip().generateAllBatches(InputABatchDefinition())

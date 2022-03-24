@@ -16,13 +16,15 @@ from simulation.aSequentialSimulation import ASequentialSimulation #class
 
 class PModelHybrid(DataFrame):
 
+    ARG_MODE_SKIP = "skip"
+
     COL_MODELID:str = "modelId"
     COL_MODEL:str = "model"
 
     ROW_MODEL_GLOBAL:str = "global"
     ROW_MODEL_PERSON:str = "person"
 
-    def __init__(self, mGlobal:DataFrame, mPerson:DataFrame):
+    def __init__(self, mGlobal:DataFrame, mPerson:DataFrame, argsDict:dict[str]):
         if not isinstance(mGlobal, DataFrame):
             raise ValueError("Argument mGlobal isn't type DataFrame.")
         if not isinstance(mPerson, DataFrame):
@@ -32,9 +34,14 @@ class PModelHybrid(DataFrame):
         super(PModelHybrid, self).__init__(modelHybridData, columns=[self.COL_MODELID, self.COL_MODEL])
         self.set_index(self.COL_MODELID, inplace=True)
 
+        self.modeSkip:bool = argsDict.get(self.ARG_MODE_SKIP, False)
 
     def getModelGlobal(self):
         return self.loc[self.ROW_MODEL_GLOBAL][self.COL_MODEL]
+
+    def getModelPersonAllUsers(self):
+        mP:DataFrame = self.loc[self.ROW_MODEL_PERSON][self.COL_MODEL]
+        return mP
 
     def getModelPerson(self, userID:int):
         mP:DataFrame = self.loc[self.ROW_MODEL_PERSON][self.COL_MODEL]
@@ -47,17 +54,23 @@ class PModelHybrid(DataFrame):
         print("status: " + str(status))
 
         mGlobal:DataFrame = self.getModelGlobal()
+
+        if self.modeSkip:
+            print("aaaaaaaaaaaaaaaaa")
+            numberOfClick:int = self.getModelPersonAllUsers().getNumberOfClick(userID)
+            print("numberOfClick: " + str(numberOfClick))
+            if numberOfClick < 3:
+                return mGlobal
+
         mGlobal.linearNormalizing()
         #print("GLOBAL:")
         #print(mGlobal.head(10))
         mGlobal = PModelDHondt.multiplyModel(mGlobal, 1.0 - status)
-#        if 1 == 1:
-#            return mGlobal
+
         mPerson:DataFrame = self.getModelPerson(userID)
         mPerson.linearNormalizing()
         mPerson = PModelDHondt.multiplyModel(mPerson, status)
-#        if 1 == 1:
-#            return mPerson
+
         rPModel:DataFrame = PModelDHondt.sumModels(mGlobal, mPerson)
         rPModel.linearNormalizing()
 
@@ -75,10 +88,9 @@ class PModelHybrid(DataFrame):
 
         return model.countResponsibility(userID, aggregatedItemIDs, methodsResultDict, numberOfItems, None)
 
-
     def incrementClick(self, userID):
-        self.at[userID, PModelDHondtPersonalisedStat.COL_CLICK_COUNT] =\
-                self.loc[userID, PModelDHondtPersonalisedStat.COL_CLICK_COUNT] + 1
+        model:DataFrame = self.getModelPerson(userID)
+        model.incrementClick(userID)
 
 
     @classmethod

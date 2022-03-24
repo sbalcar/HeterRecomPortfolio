@@ -37,7 +37,9 @@ from batchDefinition.ml1m.batchDefMLSingleW2VHT import BatchDefMLSingleW2VHT #cl
 from batchDefinition.ml1m.batchDefMLSingleCosineCBHT import BatchDefMLSingleCosineCBHT #class
 from batchDefinition.ml1m.batchDefMLSingleBPRMFHT import BatchDefMLSingleBPRMFHT  #class
 from batchDefinition.ml1m.batchDefMLSingleVMContextKNNHT import BatchDefMLSingleVMContextKNNHT #class
+from batchDefinition.ml1m.batchDefMLPersonalFuzzyDHondt import BatchDefMLPersonalFuzzyDHondt #class
 from batchDefinition.ml1m.batchDefMLHybrid import BatchDefMLHybrid #class
+from batchDefinition.ml1m.batchDefMLHybridSkip import BatchDefMLHybridSkip #class
 
 from batchDefinition.retailrocket.batchDefRRSingle import BatchDefRRSingle #class
 from batchDefinition.retailrocket.batchDefRRSingleW2VHT import BatchDefRRSingleW2VHT #class
@@ -55,6 +57,7 @@ from batchDefinition.retailrocket.batchDefRRPersonalFuzzzyDHondt import BatchDef
 from batchDefinition.retailrocket.batchDefRRPersonalStatFuzzzyDHondt import BatchDefRRPersonalStatFuzzyDHondt #class
 from batchDefinition.retailrocket.batchDefRRDynamic import BatchDefRRDynamic #class
 from batchDefinition.retailrocket.batchDefRRHybrid import BatchDefRRHybrid #class
+from batchDefinition.retailrocket.batchDefRRHybridSkip import BatchDefRRHybridSkip #class
 
 from batchDefinition.slanTour.batchDefSTFuzzyDHondtDirectOptimizeThompsonSamplingINF import BatchDefSTFuzzyDHondtDirectOptimizeThompsonSamplingINF #class
 from batchDefinition.slanTour.batchDefSTFuzzyDHondtDirectOptimizeThompsonSampling import BatchDefSTFuzzyDHondtDirectOptimizeThompsonSampling #class
@@ -85,6 +88,7 @@ from batchDefinition.slanTour.batchDefSTSingleW2VHT import BatchDefSTSingleW2VHT
 from batchDefinition.slanTour.batchDefSTSingleCosineCBHT import BatchDefSTSingleCosineCBHT #class
 from batchDefinition.slanTour.batchDefSTPersonalFuzzyDHondt import BatchDefSTPersonalFuzzyDHondt  # class
 from batchDefinition.slanTour.batchDefSTHybrid import BatchDefSTHybrid #class
+from batchDefinition.slanTour.batchDefSTHybridSkip import BatchDefSTHybridSkip #class
 
 
 def sequentialEvaluation():
