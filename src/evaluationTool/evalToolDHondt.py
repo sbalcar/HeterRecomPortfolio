@@ -20,7 +20,7 @@ class EvalToolDHondt(AEvalTool):
 
     ARG_LEARNING_RATE_CLICKS:str = "learningRateClicks"
     ARG_LEARNING_RATE_VIEWS:str = "learningRateViews"
-    ARG_NORMALIZATION_OF_RESPONSIBILITY = "normalizationOfResponsibility"
+    ARG_NORMALIZATION_OF_RESPONSIBILITY:str = "normalizationOfResponsibility"
 
     ARG_VERBOSE:str = "verbose"
 
