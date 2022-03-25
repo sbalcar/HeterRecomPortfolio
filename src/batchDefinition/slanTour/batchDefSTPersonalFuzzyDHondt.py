@@ -45,6 +45,7 @@ class BatchDefSTPersonalFuzzyDHondt(ABatchDefinitionST):
 
     lrClicks:List[float] = BatchDefMLFuzzyDHondt.lrClicks
     lrViewDivisors:List[float] = BatchDefMLFuzzyDHondt.lrViewDivisors
+    normOfRespons:List[bool] = BatchDefMLFuzzyDHondt.normOfRespons
     selectorIDs:List[str] = BatchDefMLFuzzyDHondt.selectorIDs
 
 
@@ -57,12 +58,16 @@ class BatchDefSTPersonalFuzzyDHondt(ABatchDefinitionST):
         for selectorIDI in self.selectorIDs:
             for lrClickJ in self.lrClicks:
                 for lrViewDivisorK in self.lrViewDivisors:
-                    keyIJ:str = selectorIDI + "Clk" + str(lrClickJ).replace(".", "") + "ViewDivisor" + str(lrViewDivisorK).replace(".", "")
-                    lrViewIJK:float = lrClickJ / lrViewDivisorK
-                    eToolIJK:AEvalTool = EvalToolDHondtPersonal({EvalToolDHondt.ARG_LEARNING_RATE_CLICKS: lrClickJ,
-                                                                 EvalToolDHondt.ARG_LEARNING_RATE_VIEWS: lrViewIJK})
-                    selectorIJK:ADHondtSelector = BatchDefMLFuzzyDHondt().getAllSelectors()[selectorIDI]
-                    aDict[keyIJ] = (selectorIJK, eToolIJK)
+                   for normOfResponsL in self.normOfRespons:
+
+                        keyIJ:str = selectorIDI + "Clk" + str(lrClickJ).replace(".", "") + "ViewDivisor" + str(lrViewDivisorK).replace(".", "") + "NR" + str(normOfResponsL)
+                        lrViewIJK:float = lrClickJ / lrViewDivisorK
+                        eToolIJK:AEvalTool = EvalToolDHondtPersonal({
+                                                EvalToolDHondtPersonal.ARG_LEARNING_RATE_CLICKS: lrClickJ,
+                                                EvalToolDHondtPersonal.ARG_LEARNING_RATE_VIEWS: lrViewIJK,
+                                                EvalToolDHondtPersonal.ARG_NORMALIZATION_OF_RESPONSIBILITY: normOfResponsL})
+                        selectorIJK:ADHondtSelector = BatchDefMLFuzzyDHondt().getAllSelectors()[selectorIDI]
+                        aDict[keyIJ] = (selectorIJK, eToolIJK)
         return aDict
 
 

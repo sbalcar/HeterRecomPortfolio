@@ -24,7 +24,7 @@ class PModelHybrid(DataFrame):
     ROW_MODEL_GLOBAL:str = "global"
     ROW_MODEL_PERSON:str = "person"
 
-    def __init__(self, mGlobal:DataFrame, mPerson:DataFrame, argsDict:dict[str]):
+    def __init__(self, mGlobal:DataFrame, mPerson:DataFrame, argsDict:dict[str]={}):
         if not isinstance(mGlobal, DataFrame):
             raise ValueError("Argument mGlobal isn't type DataFrame.")
         if not isinstance(mPerson, DataFrame):

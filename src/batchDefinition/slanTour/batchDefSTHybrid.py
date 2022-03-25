@@ -48,8 +48,10 @@ class BatchDefSTHybrid(ABatchDefinitionST):
 
     mGlobalLrClicks:List[float] = BatchDefMLFuzzyDHondt.lrClicks
     mGlobalLrViewDivisors:List[float] = BatchDefMLFuzzyDHondt.lrViewDivisors
+    mGlobalNormOfRespons:List[bool] = [[True, False]]
     mPersonLrClicks: List[float] = BatchDefMLFuzzyDHondt.lrClicks
     mPersonLrViewDivisors: List[float] = BatchDefMLFuzzyDHondt.lrViewDivisors
+    mPersonNormOfRespons:List[bool] = [[True, False]]
     selectorIDs:List[str] = BatchDefMLFuzzyDHondt.selectorIDs
 
 
@@ -61,24 +63,28 @@ class BatchDefSTHybrid(ABatchDefinitionST):
         for selectorIDI in self.selectorIDs:
             for gLrClickJ in self.mGlobalLrClicks:
                 for gLrViewDivisorK in self.mGlobalLrViewDivisors:
-                    for pLrClickL in self.mPersonLrClicks:
-                        for pLrViewDivisorM in self.mPersonLrViewDivisors:
+                    for gNormOfResponsL in self.mGlobalNormOfRespons:
+                        for pLrClickM in self.mPersonLrClicks:
+                            for pLrViewDivisorN in self.mPersonLrViewDivisors:
+                                for pLrViewDivisorO in self.mPersonNormOfRespons:
 
-                            gjk:str = "Clk" + str(gLrClickJ).replace(".", "") + "ViewDivisor" + str(gLrViewDivisorK).replace(".", "")
-                            pjk:str = "Clk" + str(pLrClickL).replace(".", "") + "ViewDivisor" + str(pLrViewDivisorM).replace(".", "")
-                            keyIJ:str = selectorIDI + gjk + pjk
-                            lrViewJK:float = gLrClickJ / gLrViewDivisorK
-                            lrViewLM:float = pLrClickL / pLrViewDivisorM
-                            evalToolMGlobal:EvalToolDHondt = EvalToolDHondt({
-                                        EvalToolDHondt.ARG_LEARNING_RATE_CLICKS: gLrClickJ,
-                                        EvalToolDHondt.ARG_LEARNING_RATE_VIEWS: lrViewJK})
-                            evalToolMPerson:EvalToolDHondt = EvalToolDHondtPersonal({
-                                        EvalToolDHondt.ARG_LEARNING_RATE_CLICKS: pLrClickL,
-                                        EvalToolDHondt.ARG_LEARNING_RATE_VIEWS: lrViewLM})
-                            eToolIJK:AEvalTool = EToolHybrid(evalToolMGlobal, evalToolMPerson, {})
-                            selectorIJK:ADHondtSelector = BatchDefMLFuzzyDHondt().getSelectorParameters()[selectorIDI]
-                            aDict[keyIJ] = (selectorIJK, eToolIJK)
-        return aDict
+                                    gjk:str = "Clk" + str(gLrClickJ).replace(".", "") + "ViewDivisor" + str(gLrViewDivisorK).replace(".", "") + "NR" + str(gNormOfResponsL)
+                                    pjk:str = "Clk" + str(pLrClickM).replace(".", "") + "ViewDivisor" + str(pLrViewDivisorN).replace(".", "") + "NR" + str(pLrViewDivisorO)
+                                    keyIJ:str = selectorIDI + gjk + pjk
+                                    lrViewJK:float = gLrClickJ / gLrViewDivisorK
+                                    lrViewLM:float = pLrClickM / pLrViewDivisorN
+                                    evalToolMGlobal:EvalToolDHondt = EvalToolDHondt({
+                                                EvalToolDHondt.ARG_LEARNING_RATE_CLICKS: gLrClickJ,
+                                                EvalToolDHondt.ARG_LEARNING_RATE_VIEWS: lrViewJK,
+                                                EvalToolDHondt.ARG_NORMALIZATION_OF_RESPONSIBILITY: gNormOfResponsL})
+                                    evalToolMPerson:EvalToolDHondt = EvalToolDHondtPersonal({
+                                                EvalToolDHondtPersonal.ARG_LEARNING_RATE_CLICKS: pLrClickM,
+                                                EvalToolDHondtPersonal.ARG_LEARNING_RATE_VIEWS: lrViewLM,
+                                                EvalToolDHondtPersonal.ARG_NORMALIZATION_OF_RESPONSIBILITY: True})
+                                    eToolIJK:AEvalTool = EToolHybrid(evalToolMGlobal, evalToolMPerson, {})
+                                    selectorIJK:ADHondtSelector = BatchDefMLFuzzyDHondt().getSelectorParameters()[selectorIDI]
+                                    aDict[keyIJ] = (selectorIJK, eToolIJK)
+            return aDict
 
 
     def run(self, batchID:str, jobID:str):

@@ -48,8 +48,10 @@ class BatchDefRRHybridSkip(ABatchDefinitionRR):
 
     mGlobalLrClicks:List[float] = BatchDefRRHybrid.mGlobalLrClicks
     mGlobalLrViewDivisors:List[float] = BatchDefRRHybrid.mGlobalLrViewDivisors
+    mGlobalNormOfRespons:List[bool] = BatchDefRRHybrid.mGlobalNormOfRespons
     mPersonLrClicks:List[float] = BatchDefRRHybrid.mPersonLrClicks
     mPersonLrViewDivisors:List[float] = BatchDefRRHybrid.mPersonLrViewDivisors
+    mPersonNormOfRespons:List[bool] = BatchDefRRHybrid.mPersonNormOfRespons
     selectorIDs:List[str] = BatchDefRRHybrid.selectorIDs
 
 
@@ -60,8 +62,10 @@ class BatchDefRRHybridSkip(ABatchDefinitionRR):
         batchDefRRHybrid = BatchDefRRHybrid()
         batchDefRRHybrid.mGlobalLrClicks = self.mGlobalLrClicks
         batchDefRRHybrid.mGlobalLrViewDivisors = self.mGlobalLrViewDivisors
+        batchDefRRHybrid.mGlobalNormOfRespons = self.mGlobalNormOfRespons
         batchDefRRHybrid.mPersonLrClicks = self.mPersonLrClicks
         batchDefRRHybrid.mPersonLrViewDivisors = self.mPersonLrViewDivisors
+        batchDefRRHybrid.mPersonNormOfRespons = self.mPersonNormOfRespons
         batchDefRRHybrid.selectorIDs = self.selectorIDs
         return batchDefRRHybrid.getParameters()
 

@@ -20,11 +20,15 @@ class EvalToolDHondtPersonal(AEvalTool):
     ARG_LEARNING_RATE_CLICKS:str = "learningRateClicks"
     ARG_LEARNING_RATE_VIEWS:str = "learningRateViews"
 
+    ARG_NORMALIZATION_OF_RESPONSIBILITY = "normalizationOfResponsibility"
+
     def __init__(self, argumentsDict:Dict[str,object]):
         if type(argumentsDict) is not dict:
             raise ValueError("Argument argumentsDict isn't type dict.")
 
         self.et:AEvalTool = EvalToolDHondt(argumentsDict)
+
+        self.normalizationOfResponsibility:bool = argumentsDict.get(self.ARG_NORMALIZATION_OF_RESPONSIBILITY, False)
 
 
 
@@ -41,14 +45,15 @@ class EvalToolDHondtPersonal(AEvalTool):
         if type(argumentsDict) is not dict:
             raise ValueError("Argument argumentsDict isn't type dict.")
 
-        rItemIDsWithResponsibilityNorm = normalizationOfDHondtResponsibility(rItemIDsWithResponsibility)
+        if self.normalizationOfResponsibility:
+            rItemIDsWithResponsibility = normalizationOfDHondtResponsibility(rItemIDsWithResponsibility)
 
         portfolioModelPer:DataFrame = portfolioModel.getModel(userID)
         if isinstance(portfolioModel, PModelDHondtPersonalisedStat):
             portfolioModel.incrementClick(userID)
         #print(portfolioModelPer)
 
-        self.et.click(userID, rItemIDsWithResponsibilityNorm, clickedItemID, portfolioModelPer, argumentsDict)
+        self.et.click(userID, rItemIDsWithResponsibility, clickedItemID, portfolioModelPer, argumentsDict)
         #print(portfolioModelPer)
 
         print("HOP")
@@ -67,7 +72,7 @@ class EvalToolDHondtPersonal(AEvalTool):
         if type(argumentsDict) is not dict:
             raise ValueError("Argument argumentsDict isn't type dict.")
 
-        print(rItemIDsWithResponsibility)
+        #print(rItemIDsWithResponsibility)
         rItemIDsWithResponsibilityNorm = normalizationOfDHondtResponsibility(rItemIDsWithResponsibility)
 
         portfolioModelPer:DataFrame = portfolioModel.getModel(userID)

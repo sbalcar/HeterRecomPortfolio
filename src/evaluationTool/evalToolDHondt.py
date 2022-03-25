@@ -20,6 +20,8 @@ class EvalToolDHondt(AEvalTool):
 
     ARG_LEARNING_RATE_CLICKS:str = "learningRateClicks"
     ARG_LEARNING_RATE_VIEWS:str = "learningRateViews"
+    ARG_NORMALIZATION_OF_RESPONSIBILITY = "normalizationOfResponsibility"
+
     ARG_VERBOSE:str = "verbose"
 
 
@@ -32,6 +34,8 @@ class EvalToolDHondt(AEvalTool):
         self.verbose:float = argsDict.get(EvalToolDHondt.ARG_VERBOSE, True)
         self.maxVotesConst:float = 0.99
         self.minVotesConst:float = 0.01
+
+        self.normalizationOfResponsibility:bool = argsDict.get(self.ARG_NORMALIZATION_OF_RESPONSIBILITY, False)
 
         #print("learningRateClicks: " + str(self.learningRateClicks))
         #print("learningRateViews: " + str(self.learningRateViews))
@@ -54,9 +58,10 @@ class EvalToolDHondt(AEvalTool):
         if self.verbose:
             print(rItemIDsWithResponsibility)
 
-        rItemIDsWithResponsibilityNorm = normalizationOfDHondtResponsibility(rItemIDsWithResponsibility)
+        if self.normalizationOfResponsibility:
+            rItemIDsWithResponsibility = normalizationOfDHondtResponsibility(rItemIDsWithResponsibility)
 
-        aggrItemIDsWithRespDF:DataFrame = DataFrame(rItemIDsWithResponsibilityNorm, columns=["itemId", "responsibility"])
+        aggrItemIDsWithRespDF:DataFrame = DataFrame(rItemIDsWithResponsibility, columns=["itemId", "responsibility"])
         aggrItemIDsWithRespDF.set_index("itemId", inplace=True)
 
         #EvalToolDHont.linearNormalizingPortfolioModelDHont(portfolioModel)
@@ -107,9 +112,10 @@ class EvalToolDHondt(AEvalTool):
         if type(argumentsDict) is not dict:
             raise ValueError("Argument argumentsDict isn't type dict.")
 
-        rItemIDsWithResponsibilityNorm = normalizationOfDHondtResponsibility(rItemIDsWithResponsibility)
+        if self.normalizationOfResponsibility:
+            rItemIDsWithResponsibility = normalizationOfDHondtResponsibility(rItemIDsWithResponsibility)
 
-        aggrItemIDsWithRespDF:DataFrame = DataFrame(rItemIDsWithResponsibilityNorm, columns=["itemId", "responsibility"])
+        aggrItemIDsWithRespDF:DataFrame = DataFrame(rItemIDsWithResponsibility, columns=["itemId", "responsibility"])
         aggrItemIDsWithRespDF.set_index("itemId", inplace=True)
 
         #TODO

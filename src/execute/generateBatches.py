@@ -525,15 +525,19 @@ def getBatchesUSA():
     batchDefMLHybrid = BatchDefMLHybrid()
     batchDefMLHybrid.mGlobalLrClicks:List[float] = [0.03]
     batchDefMLHybrid.mGlobalLrViewDivisors:List[float] = [250]
+    batchDefMLHybrid.mGlobalNormOfRespons:List[bool] = [True, False]
     batchDefMLHybrid.mPersonLrClicks: List[float] = [0.03]
     batchDefMLHybrid.mPersonLrViewDivisors: List[float] = [250]
+    batchDefMLHybrid.mPersonNormOfRespons:List[bool] = [True, False]
     batchDefMLHybrid.selectorIDs = [BatchDefMLFuzzyDHondt.SLCTR_FIXED]
 
     batchDefMLHybridSkip = BatchDefMLHybridSkip()
     batchDefMLHybridSkip.mGlobalLrClicks:List[float] = [0.03]
     batchDefMLHybridSkip.mGlobalLrViewDivisors:List[float] = [250]
+    batchDefMLHybridSkip.mGlobalNormOfRespons:List[bool] = [True, False]
     batchDefMLHybridSkip.mPersonLrClicks: List[float] = [0.03]
     batchDefMLHybridSkip.mPersonLrViewDivisors: List[float] = [250]
+    batchDefMLHybridSkip.mPersonNormOfRespons:List[bool] = [True, False]
     batchDefMLHybridSkip.selectorIDs = [BatchDefMLFuzzyDHondt.SLCTR_FIXED]
 
 
@@ -567,15 +571,19 @@ def getBatchesUSA():
     batchDefRRHybrid = BatchDefRRHybrid()
     batchDefRRHybrid.mGlobalLrClicks:List[float] = [0.03]
     batchDefRRHybrid.mGlobalLrViewDivisors:List[float] = [250]
+    batchDefRRHybrid.mGlobalNormOfRespons:List[bool] = [True, False]
     batchDefRRHybrid.mPersonLrClicks: List[float] = [0.03]
     batchDefRRHybrid.mPersonLrViewDivisors: List[float] = [250]
+    batchDefRRHybrid.mPersonNormOfRespons:List[bool] = [True, False]
     batchDefRRHybrid.selectorIDs = [BatchDefMLFuzzyDHondt.SLCTR_FIXED]
 
     batchDefRRHybridSkip = BatchDefRRHybridSkip()
     batchDefRRHybridSkip.mGlobalLrClicks:List[float] = [0.03]
     batchDefRRHybridSkip.mGlobalLrViewDivisors:List[float] = [250]
+    batchDefRRHybridSkip.mGlobalNormOfRespons:List[bool] = [True, False]
     batchDefRRHybridSkip.mPersonLrClicks: List[float] = [0.03]
     batchDefRRHybridSkip.mPersonLrViewDivisors: List[float] = [250]
+    batchDefRRHybridSkip.mPersonNormOfRespons:List[bool] = [True, False]
     batchDefRRHybridSkip.selectorIDs = [BatchDefMLFuzzyDHondt.SLCTR_FIXED]
 
     batchesDefRR:List[ABatchDefinition] = []
@@ -601,15 +609,19 @@ def getBatchesUSA():
     batchDefSTHybrid = BatchDefSTHybrid()
     batchDefSTHybrid.mGlobalLrClicks:List[float] = [0.03]
     batchDefSTHybrid.mGlobalLrViewDivisors:List[float] = [250]
+    batchDefSTHybrid.mGlobalNormOfRespons:List[bool] = [True, False]
     batchDefSTHybrid.mPersonLrClicks: List[float] = [0.03]
     batchDefSTHybrid.mPersonLrViewDivisors: List[float] = [250]
+    batchDefSTHybrid.mPersonNormOfRespons:List[bool] = [True, False]
     batchDefSTHybrid.selectorIDs = [BatchDefMLFuzzyDHondt.SLCTR_FIXED]
 
     batchDefSTHybridSkip = BatchDefSTHybridSkip()
     batchDefSTHybridSkip.mGlobalLrClicks:List[float] = [0.03]
     batchDefSTHybridSkip.mGlobalLrViewDivisors:List[float] = [250]
+    batchDefSTHybridSkip.mGlobalNormOfRespons:List[bool] = [True, False]
     batchDefSTHybridSkip.mPersonLrClicks: List[float] = [0.03]
     batchDefSTHybridSkip.mPersonLrViewDivisors: List[float] = [250]
+    batchDefSTHybridSkip.mPersonNormOfRespons:List[bool] = [True, False]
     batchDefSTHybridSkip.selectorIDs = [BatchDefMLFuzzyDHondt.SLCTR_FIXED]
 
     batchesDefST:List[ABatchDefinition] = []

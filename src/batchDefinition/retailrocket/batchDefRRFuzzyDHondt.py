@@ -42,8 +42,8 @@ class BatchDefRRFuzzyDHondt(ABatchDefinitionRR):
 
     lrClicks:List[float] = BatchDefMLFuzzyDHondt.lrClicks
     lrViewDivisors:List[float] = BatchDefMLFuzzyDHondt.lrViewDivisors
+    normOfRespons:List[bool] = [True, False]
     selectorIDs:List[str] = BatchDefMLFuzzyDHondt.selectorIDs
-
 
     def getBatchName(self):
         return "FDHondt"
@@ -52,6 +52,7 @@ class BatchDefRRFuzzyDHondt(ABatchDefinitionRR):
         batchDefMLFuzzyDHondt = BatchDefMLFuzzyDHondt()
         batchDefMLFuzzyDHondt.lrClicks:List[float] = self.lrClicks
         batchDefMLFuzzyDHondt.lrViewDivisors:List[float] = self.lrViewDivisors
+        batchDefMLFuzzyDHondt.normOfRespons:List[bool] = self.normOfRespons
         batchDefMLFuzzyDHondt.selectorIDs:List[str] = self.selectorIDs
         return batchDefMLFuzzyDHondt.getParameters()
 
