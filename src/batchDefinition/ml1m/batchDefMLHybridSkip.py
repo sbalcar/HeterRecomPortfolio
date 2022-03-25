@@ -49,8 +49,10 @@ class BatchDefMLHybridSkip(ABatchDefinitionML):
 
     mGlobalLrClicks:List[float] = BatchDefMLFuzzyDHondt.lrClicks
     mGlobalLrViewDivisors:List[float] = BatchDefMLFuzzyDHondt.lrViewDivisors
-    mPersonLrClicks: List[float] = BatchDefMLFuzzyDHondt.lrClicks
-    mPersonLrViewDivisors: List[float] = BatchDefMLFuzzyDHondt.lrViewDivisors
+    mGlobalNormOfRespons:List[bool] = [True, False]
+    mPersonLrClicks:List[float] = BatchDefMLFuzzyDHondt.lrClicks
+    mPersonLrViewDivisors:List[float] = BatchDefMLFuzzyDHondt.lrViewDivisors
+    mPersonNormOfRespons:List[bool] = [True, False]
     selectorIDs:List[str] = BatchDefMLFuzzyDHondt.selectorIDs
 
 
@@ -61,8 +63,10 @@ class BatchDefMLHybridSkip(ABatchDefinitionML):
         batchDefMLHybrid = BatchDefMLHybrid()
         batchDefMLHybrid.mGlobalLrClicks = self.mGlobalLrClicks
         batchDefMLHybrid.mGlobalLrViewDivisors = self.mGlobalLrViewDivisors
+        batchDefMLHybrid.mGlobalNormOfRespons = self.mGlobalNormOfRespons
         batchDefMLHybrid.mPersonLrClicks = self.mPersonLrClicks
         batchDefMLHybrid.mPersonLrViewDivisors = self.mPersonLrViewDivisors
+        batchDefMLHybrid.mPersonNormOfRespons = self.mPersonNormOfRespons
         batchDefMLHybrid.selectorIDs = self.selectorIDs
         return batchDefMLHybrid.getParameters()
 

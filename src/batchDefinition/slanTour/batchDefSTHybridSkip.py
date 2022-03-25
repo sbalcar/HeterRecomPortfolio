@@ -49,8 +49,10 @@ class BatchDefSTHybridSkip(ABatchDefinitionST):
 
     mGlobalLrClicks:List[float] = BatchDefMLFuzzyDHondt.lrClicks
     mGlobalLrViewDivisors:List[float] = BatchDefMLFuzzyDHondt.lrViewDivisors
+    mGlobalNormOfRespons:List[bool] = [[True, False]]
     mPersonLrClicks: List[float] = BatchDefMLFuzzyDHondt.lrClicks
     mPersonLrViewDivisors: List[float] = BatchDefMLFuzzyDHondt.lrViewDivisors
+    mPersonNormOfRespons:List[bool] = [[True, False]]
     selectorIDs:List[str] = BatchDefMLFuzzyDHondt.selectorIDs
 
 
@@ -62,8 +64,10 @@ class BatchDefSTHybridSkip(ABatchDefinitionST):
         batchDefSTHybrid = BatchDefSTHybrid()
         batchDefSTHybrid.mGlobalLrClicks = self.mGlobalLrClicks
         batchDefSTHybrid.mGlobalLrViewDivisors = self.mGlobalLrViewDivisors
+        batchDefSTHybrid.mGlobalNormOfRespons = self.mGlobalNormOfRespons
         batchDefSTHybrid.mPersonLrClicks = self.mPersonLrClicks
         batchDefSTHybrid.mPersonLrViewDivisors = self.mPersonLrViewDivisors
+        batchDefSTHybrid.mPersonNormOfRespons = self.mPersonNormOfRespons
         batchDefSTHybrid.selectorIDs = self.selectorIDs
         return batchDefSTHybrid.getParameters()
 
