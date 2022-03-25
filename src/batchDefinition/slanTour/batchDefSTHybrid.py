@@ -48,10 +48,10 @@ class BatchDefSTHybrid(ABatchDefinitionST):
 
     mGlobalLrClicks:List[float] = BatchDefMLFuzzyDHondt.lrClicks
     mGlobalLrViewDivisors:List[float] = BatchDefMLFuzzyDHondt.lrViewDivisors
-    mGlobalNormOfRespons:List[bool] = [[True, False]]
+    mGlobalNormOfRespons:List[bool] = BatchDefMLFuzzyDHondt.normOfRespons
     mPersonLrClicks: List[float] = BatchDefMLFuzzyDHondt.lrClicks
     mPersonLrViewDivisors: List[float] = BatchDefMLFuzzyDHondt.lrViewDivisors
-    mPersonNormOfRespons:List[bool] = [[True, False]]
+    mPersonNormOfRespons:List[bool] = BatchDefMLFuzzyDHondt.normOfRespons
     selectorIDs:List[str] = BatchDefMLFuzzyDHondt.selectorIDs
 
 
@@ -80,11 +80,11 @@ class BatchDefSTHybrid(ABatchDefinitionST):
                                     evalToolMPerson:EvalToolDHondt = EvalToolDHondtPersonal({
                                                 EvalToolDHondtPersonal.ARG_LEARNING_RATE_CLICKS: pLrClickM,
                                                 EvalToolDHondtPersonal.ARG_LEARNING_RATE_VIEWS: lrViewLM,
-                                                EvalToolDHondtPersonal.ARG_NORMALIZATION_OF_RESPONSIBILITY: True})
+                                                EvalToolDHondtPersonal.ARG_NORMALIZATION_OF_RESPONSIBILITY: pLrViewDivisorO})
                                     eToolIJK:AEvalTool = EToolHybrid(evalToolMGlobal, evalToolMPerson, {})
                                     selectorIJK:ADHondtSelector = BatchDefMLFuzzyDHondt().getSelectorParameters()[selectorIDI]
                                     aDict[keyIJ] = (selectorIJK, eToolIJK)
-            return aDict
+        return aDict
 
 
     def run(self, batchID:str, jobID:str):

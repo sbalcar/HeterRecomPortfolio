@@ -86,8 +86,10 @@ class BatchDefMLFuzzyDHondt(ABatchDefinitionML):
                     for lrViewDivisorK in self.lrViewDivisors:
                         keyIJ:str = selectorIDI + "Clk" + str(lrClickJ).replace(".", "") + "ViewDivisor" + str(lrViewDivisorK).replace(".", "") + "NR" + str(normOfResponsK)
                         lrViewIJK:float = lrClickJ / lrViewDivisorK
-                        eToolIJK:AEvalTool = EvalToolDHondt({EvalToolDHondt.ARG_LEARNING_RATE_CLICKS: lrClickJ,
-                                                          EvalToolDHondt.ARG_LEARNING_RATE_VIEWS: lrViewIJK})
+                        eToolIJK:AEvalTool = EvalToolDHondt({
+                                            EvalToolDHondt.ARG_LEARNING_RATE_CLICKS: lrClickJ,
+                                            EvalToolDHondt.ARG_LEARNING_RATE_VIEWS: lrViewIJK,
+                                            EvalToolDHondt.ARG_NORMALIZATION_OF_RESPONSIBILITY: normOfResponsK})
                         selectorIJK:ADHondtSelector = self.getSelectorParameters()[selectorIDI]
                         aDict[keyIJ] = (selectorIJK, eToolIJK)
         return aDict

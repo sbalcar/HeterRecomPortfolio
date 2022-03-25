@@ -113,6 +113,7 @@ class EvalToolDHondt(AEvalTool):
             raise ValueError("Argument argumentsDict isn't type dict.")
 
         if self.normalizationOfResponsibility:
+            print("NORM")
             rItemIDsWithResponsibility = normalizationOfDHondtResponsibility(rItemIDsWithResponsibility)
 
         aggrItemIDsWithRespDF:DataFrame = DataFrame(rItemIDsWithResponsibility, columns=["itemId", "responsibility"])

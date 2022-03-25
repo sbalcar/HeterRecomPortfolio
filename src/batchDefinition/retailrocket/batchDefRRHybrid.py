@@ -48,10 +48,10 @@ class BatchDefRRHybrid(ABatchDefinitionRR):
 
     mGlobalLrClicks:List[float] = BatchDefMLFuzzyDHondt.lrClicks
     mGlobalLrViewDivisors:List[float] = BatchDefMLFuzzyDHondt.lrViewDivisors
-    mGlobalNormOfRespons:List[bool] = [True, False]
+    mGlobalNormOfRespons:List[bool] = BatchDefMLFuzzyDHondt.normOfRespons
     mPersonLrClicks:List[float] = BatchDefMLFuzzyDHondt.lrClicks
     mPersonLrViewDivisors:List[float] = BatchDefMLFuzzyDHondt.lrViewDivisors
-    mPersonNormOfRespons:List[bool] = [True, False]
+    mPersonNormOfRespons:List[bool] = BatchDefMLFuzzyDHondt.normOfRespons
     selectorIDs:List[str] = BatchDefMLFuzzyDHondt.selectorIDs
 
 
