@@ -38,6 +38,7 @@ from batchDefinition.ml1m.batchDefMLSingleCosineCBHT import BatchDefMLSingleCosi
 from batchDefinition.ml1m.batchDefMLSingleBPRMFHT import BatchDefMLSingleBPRMFHT  #class
 from batchDefinition.ml1m.batchDefMLSingleVMContextKNNHT import BatchDefMLSingleVMContextKNNHT #class
 from batchDefinition.ml1m.batchDefMLPersonalFuzzyDHondt import BatchDefMLPersonalFuzzyDHondt #class
+from batchDefinition.ml1m.batchDefMLPersonalStatFuzzyDHondt import BatchDefMLPersonalStatFuzzyDHondt #class
 from batchDefinition.ml1m.batchDefMLHybrid import BatchDefMLHybrid #class
 from batchDefinition.ml1m.batchDefMLHybridSkip import BatchDefMLHybridSkip #class
 
@@ -58,6 +59,7 @@ from batchDefinition.retailrocket.batchDefRRPersonalStatFuzzzyDHondt import Batc
 from batchDefinition.retailrocket.batchDefRRDynamic import BatchDefRRDynamic #class
 from batchDefinition.retailrocket.batchDefRRHybrid import BatchDefRRHybrid #class
 from batchDefinition.retailrocket.batchDefRRHybridSkip import BatchDefRRHybridSkip #class
+
 
 from batchDefinition.slanTour.batchDefSTFuzzyDHondtDirectOptimizeThompsonSamplingINF import BatchDefSTFuzzyDHondtDirectOptimizeThompsonSamplingINF #class
 from batchDefinition.slanTour.batchDefSTFuzzyDHondtDirectOptimizeThompsonSampling import BatchDefSTFuzzyDHondtDirectOptimizeThompsonSampling #class
@@ -87,6 +89,7 @@ from batchDefinition.slanTour.batchDefSTSingleBPRMFHT import BatchDefSTSingleBPR
 from batchDefinition.slanTour.batchDefSTSingleW2VHT import BatchDefSTSingleW2VHT #class
 from batchDefinition.slanTour.batchDefSTSingleCosineCBHT import BatchDefSTSingleCosineCBHT #class
 from batchDefinition.slanTour.batchDefSTPersonalFuzzyDHondt import BatchDefSTPersonalFuzzyDHondt  # class
+from batchDefinition.slanTour.batchDefSTPersonalStatFuzzyDHondt import BatchDefSTPersonalStatFuzzyDHondt #class
 from batchDefinition.slanTour.batchDefSTHybrid import BatchDefSTHybrid #class
 from batchDefinition.slanTour.batchDefSTHybridSkip import BatchDefSTHybridSkip #class
 

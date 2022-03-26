@@ -49,6 +49,7 @@ from batchDefinition.ml1m.batchDefMLSingleBPRMFHT import BatchDefMLSingleBPRMFHT
 from batchDefinition.ml1m.batchDefMLSingleVMContextKNNHT import BatchDefMLSingleVMContextKNNHT #class
 
 from batchDefinition.ml1m.batchDefMLPersonalFuzzyDHondt import BatchDefMLPersonalFuzzyDHondt #class
+from batchDefinition.ml1m.batchDefMLPersonalStatFuzzyDHondt import BatchDefMLPersonalStatFuzzyDHondt #class
 from batchDefinition.ml1m.batchDefMLHybrid import BatchDefMLHybrid #class
 from batchDefinition.ml1m.batchDefMLHybridSkip import BatchDefMLHybridSkip #class
 
@@ -100,6 +101,7 @@ from batchDefinition.slanTour.batchDefSTSingle import BatchDefSTSingle #class
 from batchDefinition.slanTour.batchDefSTSingleW2VHT import BatchDefSTSingleW2VHT #class
 from batchDefinition.slanTour.batchDefSTSingleCosineCBHT import BatchDefSTSingleCosineCBHT #class
 from batchDefinition.slanTour.batchDefSTPersonalFuzzyDHondt import BatchDefSTPersonalFuzzyDHondt #class
+from batchDefinition.slanTour.batchDefSTPersonalStatFuzzyDHondt import BatchDefSTPersonalStatFuzzyDHondt #class
 from batchDefinition.slanTour.batchDefSTHybrid import BatchDefSTHybrid #class
 from batchDefinition.slanTour.batchDefSTHybridSkip import BatchDefSTHybridSkip #class
 
@@ -522,6 +524,12 @@ def getBatchesUSA():
     batchDefMLPersonalFuzzyDHondt.lrViewDivisors:List[float] = [1000]
     batchDefMLPersonalFuzzyDHondt.selectorIDs = [BatchDefMLFuzzyDHondt.SLCTR_FIXED]
 
+    batchDefMLPersonalStatFuzzyDHondt = BatchDefMLPersonalStatFuzzyDHondt()
+    batchDefMLPersonalStatFuzzyDHondt.lrClicks: List[float] = [0.2]
+    batchDefMLPersonalStatFuzzyDHondt.lrViewDivisors:List[float] = [1000]
+    batchDefMLPersonalStatFuzzyDHondt.selectorIDs = [BatchDefMLFuzzyDHondt.SLCTR_FIXED]
+
+
     batchDefMLHybrid = BatchDefMLHybrid()
     batchDefMLHybrid.mGlobalLrClicks:List[float] = [0.03]
     batchDefMLHybrid.mGlobalLrViewDivisors:List[float] = [250]
@@ -544,6 +552,7 @@ def getBatchesUSA():
     batchesDefML:List[ABatchDefinition] = []
     batchesDefML.append(batchDefMLFuzzyDHondt)
     batchesDefML.append(batchDefMLPersonalFuzzyDHondt)
+    batchesDefML.append(batchDefMLPersonalStatFuzzyDHondt)
     batchesDefML.append(batchDefMLHybrid)
     batchesDefML.append(batchDefMLHybridSkip)
 
@@ -606,6 +615,11 @@ def getBatchesUSA():
     batchDefSTPersonalFuzzyDHondt.lrViewDivisors:List[float] = [1000]
     batchDefSTPersonalFuzzyDHondt.selectorIDs = [BatchDefMLFuzzyDHondt.SLCTR_FIXED]
 
+    batchDefSTPersonalStatFuzzyDHondt = BatchDefSTPersonalStatFuzzyDHondt()
+    batchDefSTPersonalStatFuzzyDHondt.lrClicks: List[float] = [0.2]
+    batchDefSTPersonalStatFuzzyDHondt.lrViewDivisors:List[float] = [1000]
+    batchDefSTPersonalStatFuzzyDHondt.selectorIDs = [BatchDefMLFuzzyDHondt.SLCTR_FIXED]
+
     batchDefSTHybrid = BatchDefSTHybrid()
     batchDefSTHybrid.mGlobalLrClicks:List[float] = [0.03]
     batchDefSTHybrid.mGlobalLrViewDivisors:List[float] = [250]
@@ -627,6 +641,7 @@ def getBatchesUSA():
     batchesDefST:List[ABatchDefinition] = []
     batchesDefST.append(batchDefSTFuzzyDHondt)
     batchesDefST.append(batchDefSTPersonalFuzzyDHondt)
+    batchesDefST.append(batchDefSTPersonalStatFuzzyDHondt)
     batchesDefST.append(batchDefSTHybrid)
     batchesDefST.append(batchDefSTHybridSkip)
 

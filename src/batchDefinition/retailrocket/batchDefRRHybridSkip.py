@@ -87,8 +87,9 @@ class BatchDefRRHybridSkip(ABatchDefinitionRR):
             self.getBatchName() + jobID, rIDs, rDescs, aDescDHont)
 
         rIds:List[str] = pDescr.getRecommendersIDs()
-        model:DataFrame = PModelHybrid(PModelDHondt(rIds), PModelDHondtPersonalisedStat(rIds),
-                                       {PModelHybrid.ARG_MODE_SKIP:True})
+        model:DataFrame = PModelHybrid(PModelDHondt(rIds), PModelDHondtPersonalisedStat(rIds), {
+                                        PModelHybrid.ARG_MODE_SKIP:True,
+                                        PModelHybrid.ARG_SKIP_CLICK_THRESHOLD: 3})
 
         simulator:Simulator = InputSimulatorDefinition.exportSimulatorRetailRocket(
             batchID, divisionDatasetPercentualSize, uBehaviour, repetition)

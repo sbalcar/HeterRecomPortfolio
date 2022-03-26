@@ -16,7 +16,8 @@ from simulation.aSequentialSimulation import ASequentialSimulation #class
 
 class PModelHybrid(DataFrame):
 
-    ARG_MODE_SKIP = "skip"
+    ARG_MODE_SKIP:str = "skip"
+    ARG_SKIP_CLICK_THRESHOLD:str = "threshold"
 
     COL_MODELID:str = "modelId"
     COL_MODEL:str = "model"
@@ -35,6 +36,8 @@ class PModelHybrid(DataFrame):
         self.set_index(self.COL_MODELID, inplace=True)
 
         self.modeSkip:bool = argsDict.get(self.ARG_MODE_SKIP, False)
+        if self.modeSkip:
+            self.skipClickThreshold:int = argsDict[self.ARG_SKIP_CLICK_THRESHOLD]
 
     def getModelGlobal(self):
         return self.loc[self.ROW_MODEL_GLOBAL][self.COL_MODEL]
@@ -59,7 +62,7 @@ class PModelHybrid(DataFrame):
             print("aaaaaaaaaaaaaaaaa")
             numberOfClick:int = self.getModelPersonAllUsers().getNumberOfClick(userID)
             print("numberOfClick: " + str(numberOfClick))
-            if numberOfClick < 3:
+            if numberOfClick < self.skipClickThreshold:
                 return mGlobal
 
         mGlobal.linearNormalizing()

@@ -1,5 +1,7 @@
 #!/usr/bin/python3
 
+from typing import List
+
 from pandas.core.frame import DataFrame #class
 
 from datasets.aDataset import ADataset #class
@@ -29,6 +31,20 @@ class DatasetST(ADataset):
         serialsDF:DataFrame = Serials.readFromFile()
 
         return DatasetST("stDivAll", eventsDF, serialsDF)
+
+    @staticmethod
+    def readDatasetsSkipOutlierUsers(maxCountOfUserEvents:int):
+        # dataset reading
+        eventsDF:DataFrame = Events.readFromFile()
+        userIdsWithDuplicites:List[int] = eventsDF[Events.COL_USER_ID].tolist()
+        userIds:List[int] = list(set(userIdsWithDuplicites))
+        a = [userIdsWithDuplicites.count(userIdI) for userIdI in userIds]
+        print("MAX: " + str(max(a)))
+
+        serialsDF:DataFrame = Serials.readFromFile()
+
+        return DatasetST("stDivAll", eventsDF, serialsDF)
+
 
 
     def getTheMostSold(self):
