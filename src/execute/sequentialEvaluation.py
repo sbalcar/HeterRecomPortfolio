@@ -92,7 +92,8 @@ from batchDefinition.slanTour.batchDefSTPersonalFuzzyDHondt import BatchDefSTPer
 from batchDefinition.slanTour.batchDefSTPersonalStatFuzzyDHondt import BatchDefSTPersonalStatFuzzyDHondt #class
 from batchDefinition.slanTour.batchDefSTHybrid import BatchDefSTHybrid #class
 from batchDefinition.slanTour.batchDefSTHybridSkip import BatchDefSTHybridSkip #class
-
+from batchDefinition.slanTour.batchDefSTHybridStat import BatchDefSTHybridStat #class
+from batchDefinition.slanTour.batchDefSTHybridStatSkip import BatchDefSTHybridStatSkip #class
 
 def sequentialEvaluation():
 

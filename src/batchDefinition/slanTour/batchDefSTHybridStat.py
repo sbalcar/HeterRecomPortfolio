@@ -34,7 +34,7 @@ from simulator.simulator import Simulator  # class
 from history.historyHierDF import HistoryHierDF  # class
 
 from batchDefinition.ml1m.batchDefMLFuzzyDHondt import BatchDefMLFuzzyDHondt  # class
-from batchDefinition.slanTour.batchDefSTHybrid import BatchDefSTHybrid # class
+from batchDefinition.slanTour.batchDefSTHybrid import BatchDefSTHybrid #class
 
 from portfolioModel.pModelBandit import PModelBandit #class
 from portfolioModel.pModelDHondtBanditsVotes import PModelDHondtBanditsVotes #class
@@ -45,7 +45,7 @@ from portfolioModel.pModelDHondtPersonalisedStat import PModelDHondtPersonalised
 
 
 
-class BatchDefSTHybridSkip(ABatchDefinitionST):
+class BatchDefSTHybridStat(ABatchDefinitionST):
 
     mGlobalLrClicks:List[float] = BatchDefMLFuzzyDHondt.lrClicks
     mGlobalLrViewDivisors:List[float] = BatchDefMLFuzzyDHondt.lrViewDivisors
@@ -57,10 +57,9 @@ class BatchDefSTHybridSkip(ABatchDefinitionST):
 
 
     def getBatchName(self):
-        return "HybridFDHondtSkip"
+        return "HybridStatFDHondt"
 
     def getParameters(self):
-
         batchDefSTHybrid = BatchDefSTHybrid()
         batchDefSTHybrid.mGlobalLrClicks = self.mGlobalLrClicks
         batchDefSTHybrid.mGlobalLrViewDivisors = self.mGlobalLrViewDivisors
@@ -69,8 +68,8 @@ class BatchDefSTHybridSkip(ABatchDefinitionST):
         batchDefSTHybrid.mPersonLrViewDivisors = self.mPersonLrViewDivisors
         batchDefSTHybrid.mPersonNormOfRespons = self.mPersonNormOfRespons
         batchDefSTHybrid.selectorIDs = self.selectorIDs
-        return batchDefSTHybrid.getParameters()
 
+        return batchDefSTHybrid.getParameters()
 
 
     def run(self, batchID:str, jobID:str):
@@ -91,9 +90,7 @@ class BatchDefSTHybridSkip(ABatchDefinitionST):
             self.getBatchName() + jobID, rIDs, rDescs, aDescDHont)
 
         rIds:List[str] = pDescr.getRecommendersIDs()
-        model:DataFrame = PModelHybrid(PModelDHondt(rIds), PModelDHondtPersonalised(rIds), {
-                                            PModelHybrid.ARG_MODE_SKIP:True,
-                                            PModelHybrid.ARG_SKIP_CLICK_THRESHOLD: 3})
+        model:DataFrame = PModelHybrid(PModelDHondt(rIds), PModelDHondtPersonalisedStat(rIds))
 
         simulator:Simulator = InputSimulatorDefinition.exportSimulatorSlantour(
             batchID, divisionDatasetPercentualSize, uBehaviour, repetition)
@@ -105,4 +102,4 @@ if __name__ == "__main__":
     os.chdir("..")
     print(os.getcwd())
 
-    BatchDefSTHybridSkip().generateAllBatches(InputABatchDefinition())
+    BatchDefSTHybridStat().generateAllBatches(InputABatchDefinition())

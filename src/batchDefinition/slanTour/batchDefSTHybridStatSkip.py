@@ -34,7 +34,7 @@ from simulator.simulator import Simulator  # class
 from history.historyHierDF import HistoryHierDF  # class
 
 from batchDefinition.ml1m.batchDefMLFuzzyDHondt import BatchDefMLFuzzyDHondt  # class
-from batchDefinition.slanTour.batchDefSTHybrid import BatchDefSTHybrid # class
+from batchDefinition.slanTour.batchDefSTHybridStat import BatchDefSTHybridStat # class
 
 from portfolioModel.pModelBandit import PModelBandit #class
 from portfolioModel.pModelDHondtBanditsVotes import PModelDHondtBanditsVotes #class
@@ -45,7 +45,7 @@ from portfolioModel.pModelDHondtPersonalisedStat import PModelDHondtPersonalised
 
 
 
-class BatchDefSTHybridSkip(ABatchDefinitionST):
+class BatchDefSTHybridStatSkip(ABatchDefinitionST):
 
     mGlobalLrClicks:List[float] = BatchDefMLFuzzyDHondt.lrClicks
     mGlobalLrViewDivisors:List[float] = BatchDefMLFuzzyDHondt.lrViewDivisors
@@ -61,15 +61,15 @@ class BatchDefSTHybridSkip(ABatchDefinitionST):
 
     def getParameters(self):
 
-        batchDefSTHybrid = BatchDefSTHybrid()
-        batchDefSTHybrid.mGlobalLrClicks = self.mGlobalLrClicks
-        batchDefSTHybrid.mGlobalLrViewDivisors = self.mGlobalLrViewDivisors
-        batchDefSTHybrid.mGlobalNormOfRespons = self.mGlobalNormOfRespons
-        batchDefSTHybrid.mPersonLrClicks = self.mPersonLrClicks
-        batchDefSTHybrid.mPersonLrViewDivisors = self.mPersonLrViewDivisors
-        batchDefSTHybrid.mPersonNormOfRespons = self.mPersonNormOfRespons
-        batchDefSTHybrid.selectorIDs = self.selectorIDs
-        return batchDefSTHybrid.getParameters()
+        batchDefSTHybridStat = BatchDefSTHybridStat()
+        batchDefSTHybridStat.mGlobalLrClicks = self.mGlobalLrClicks
+        batchDefSTHybridStat.mGlobalLrViewDivisors = self.mGlobalLrViewDivisors
+        batchDefSTHybridStat.mGlobalNormOfRespons = self.mGlobalNormOfRespons
+        batchDefSTHybridStat.mPersonLrClicks = self.mPersonLrClicks
+        batchDefSTHybridStat.mPersonLrViewDivisors = self.mPersonLrViewDivisors
+        batchDefSTHybridStat.mPersonNormOfRespons = self.mPersonNormOfRespons
+        batchDefSTHybridStat.selectorIDs = self.selectorIDs
+        return batchDefSTHybridStat.getParameters()
 
 
 
@@ -91,7 +91,7 @@ class BatchDefSTHybridSkip(ABatchDefinitionST):
             self.getBatchName() + jobID, rIDs, rDescs, aDescDHont)
 
         rIds:List[str] = pDescr.getRecommendersIDs()
-        model:DataFrame = PModelHybrid(PModelDHondt(rIds), PModelDHondtPersonalised(rIds), {
+        model:DataFrame = PModelHybrid(PModelDHondt(rIds), PModelDHondtPersonalisedStat(rIds), {
                                             PModelHybrid.ARG_MODE_SKIP:True,
                                             PModelHybrid.ARG_SKIP_CLICK_THRESHOLD: 3})
 
@@ -105,4 +105,4 @@ if __name__ == "__main__":
     os.chdir("..")
     print(os.getcwd())
 
-    BatchDefSTHybridSkip().generateAllBatches(InputABatchDefinition())
+    BatchDefSTHybridStatSkip().generateAllBatches(InputABatchDefinition())

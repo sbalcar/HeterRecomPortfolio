@@ -105,7 +105,7 @@ class BatchDefSTHybrid(ABatchDefinitionST):
             self.getBatchName() + jobID, rIDs, rDescs, aDescDHont)
 
         rIds:List[str] = pDescr.getRecommendersIDs()
-        model:DataFrame = PModelHybrid(PModelDHondt(rIds), PModelDHondtPersonalisedStat(rIds))
+        model:DataFrame = PModelHybrid(PModelDHondt(rIds), PModelDHondtPersonalised(rIds))
 
         simulator:Simulator = InputSimulatorDefinition.exportSimulatorSlantour(
             batchID, divisionDatasetPercentualSize, uBehaviour, repetition)

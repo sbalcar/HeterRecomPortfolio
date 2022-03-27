@@ -104,7 +104,8 @@ from batchDefinition.slanTour.batchDefSTPersonalFuzzyDHondt import BatchDefSTPer
 from batchDefinition.slanTour.batchDefSTPersonalStatFuzzyDHondt import BatchDefSTPersonalStatFuzzyDHondt #class
 from batchDefinition.slanTour.batchDefSTHybrid import BatchDefSTHybrid #class
 from batchDefinition.slanTour.batchDefSTHybridSkip import BatchDefSTHybridSkip #class
-
+from batchDefinition.slanTour.batchDefSTHybridStat import BatchDefSTHybridStat #class
+from batchDefinition.slanTour.batchDefSTHybridStatSkip import BatchDefSTHybridStatSkip #class
 from datasets.ml.behavioursML import BehavioursML #class
 
 
@@ -638,12 +639,35 @@ def getBatchesUSA():
     batchDefSTHybridSkip.mPersonNormOfRespons:List[bool] = [True, False]
     batchDefSTHybridSkip.selectorIDs = [BatchDefMLFuzzyDHondt.SLCTR_FIXED]
 
+
+    batchDefSTHybridStat = BatchDefSTHybridStat()
+    batchDefSTHybridStat.mGlobalLrClicks:List[float] = [0.03]
+    batchDefSTHybridStat.mGlobalLrViewDivisors:List[float] = [250]
+    batchDefSTHybridStat.mGlobalNormOfRespons:List[bool] = [True, False]
+    batchDefSTHybridStat.mPersonLrClicks: List[float] = [0.03]
+    batchDefSTHybridStat.mPersonLrViewDivisors: List[float] = [250]
+    batchDefSTHybridStat.mPersonNormOfRespons:List[bool] = [True, False]
+    batchDefSTHybridStat.selectorIDs = [BatchDefMLFuzzyDHondt.SLCTR_FIXED]
+
+    batchDefSTHybridStatSkip = BatchDefSTHybridStatSkip()
+    batchDefSTHybridStatSkip.mGlobalLrClicks:List[float] = [0.03]
+    batchDefSTHybridStatSkip.mGlobalLrViewDivisors:List[float] = [250]
+    batchDefSTHybridStatSkip.mGlobalNormOfRespons:List[bool] = [True, False]
+    batchDefSTHybridStatSkip.mPersonLrClicks: List[float] = [0.03]
+    batchDefSTHybridStatSkip.mPersonLrViewDivisors: List[float] = [250]
+    batchDefSTHybridStatSkip.mPersonNormOfRespons:List[bool] = [True, False]
+    batchDefSTHybridStatSkip.selectorIDs = [BatchDefMLFuzzyDHondt.SLCTR_FIXED]
+
+
+
     batchesDefST:List[ABatchDefinition] = []
     batchesDefST.append(batchDefSTFuzzyDHondt)
     batchesDefST.append(batchDefSTPersonalFuzzyDHondt)
     batchesDefST.append(batchDefSTPersonalStatFuzzyDHondt)
     batchesDefST.append(batchDefSTHybrid)
     batchesDefST.append(batchDefSTHybridSkip)
+    batchesDefST.append(batchDefSTHybridStat)
+    batchesDefST.append(batchDefSTHybridStatSkip)
 
     return batchesDefML + batchesDefRR + batchesDefST
 
