@@ -12,6 +12,8 @@ from evaluationTool.evalToolDHondt import EvalToolDHondt #class
 from evaluationTool.evalToolDHondtPersonal import EvalToolDHondtPersonal #class
 
 from simulation.aSequentialSimulation import ASequentialSimulation #class
+from portfolioModel.pModelDHondtPersonalisedStat import PModelDHondtPersonalisedStat #class
+
 import numpy as np
 
 
@@ -46,7 +48,9 @@ class EToolHybrid(AEvalTool):
         mGlobal:DataFrame = portfolioModel.getModelGlobal()
         mPerson:DataFrame = portfolioModel.getModelPerson(userID)
 
-        portfolioModel.getModelPersonAllUsers().incrementClick(userID)
+        modelPersonAllUsers = portfolioModel.getModelPersonAllUsers()
+        if type(modelPersonAllUsers) is PModelDHondtPersonalisedStat:
+            modelPersonAllUsers.incrementClick(userID)
 
 
         self._evalToolMGlobal.click(userID, rItemIDsWithResponsibility, clickedItemID, mGlobal, argumentsDict)
