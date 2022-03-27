@@ -57,7 +57,7 @@ class BatchDefSTHybridStatSkip(ABatchDefinitionST):
 
 
     def getBatchName(self):
-        return "HybridFDHondtSkip"
+        return "HybridStatFDHondtSkip"
 
     def getParameters(self):
 
