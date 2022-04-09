@@ -9,6 +9,7 @@ from pandas import DataFrame
 from evaluationTool.evalToolDHondt import EvalToolDHondt
 
 from portfolioModel.pModelDHondt import PModelDHondt #class
+from portfolioModel.pModelDHondtPersonalised import PModelDHondtPersonalised #class
 from portfolioModel.pModelDHondtPersonalisedStat import PModelDHondtPersonalisedStat #class
 from batchDefinition.inputRecomRRDefinition import InputRecomRRDefinition #class
 from simulation.aSequentialSimulation import ASequentialSimulation #class
@@ -48,6 +49,8 @@ class PModelHybrid(DataFrame):
 
     def getModelPerson(self, userID:int):
         mP:DataFrame = self.loc[self.ROW_MODEL_PERSON][self.COL_MODEL]
+        print(type(mP))
+        #mP.__class__ = PModelDHondtPersonalisedStat
         return mP.getModel(userID)
 
 
@@ -118,3 +121,83 @@ class PModelHybrid(DataFrame):
         return model
 
 
+    @classmethod
+    def readModel(cls, fileName:str, counterI:int):
+
+        f = open(fileName, "r")
+        lines:List[str] = f.readlines()
+        #print(lines)
+
+        model = None
+        for rowIndexI in range(0, len(lines)):
+            if lines[rowIndexI].startswith(str(counterI) + " / "):
+                modelStr:str = lines[rowIndexI + 3]
+                model:DataFrame = pd.read_json(modelStr)
+                model.__class__ = PModelHybrid
+                print(modelStr)
+                break
+
+        if model is None:
+            print("Return None")
+            return None
+
+        for indexI in model.index:
+            model.loc[indexI][PModelHybrid.COL_MODEL] = DataFrame(model.loc[indexI][PModelHybrid.COL_MODEL])
+        return model
+
+
+if __name__ == "__main__":
+    os.chdir("..")
+    os.chdir("..")
+
+    #fileName:str = "results/ml1mDiv90Ustatic08R1/portfModelTimeEvolution-HybridFDHondtSkipFixedClk003ViewDivisor250NRTrueClk003ViewDivisor250NRTrue.txt"
+    #fileName:str = "results/rrDiv90Ustatic08R1/portfModelTimeEvolution-HybridFDHondtSkipFixedClk003ViewDivisor250NRTrueClk003ViewDivisor250NRTrue.txt"
+    fileName:str = "results/stDiv90Ustatic08R1/portfModelTimeEvolution-HybridStatFDHondtFixedClk003ViewDivisor250NRFalseClk003ViewDivisor250NRFalse.txt"
+
+    #model = PModelHybrid.readModel(fileName, 50000)
+    #model = PModelHybrid.readModel(fileName, 15000)
+    model = PModelHybrid.readModel(fileName, 150)
+    #print(type(model))
+
+    userIds = list(set(model.getModelPersonAllUsers().index.tolist()))
+    print("Users:")
+    print(userIds)
+
+    print("Global model:")
+    print(model.getModelGlobal())
+
+    userIdI = 3627575.0
+    r:List[str] = []
+    for userIdI in userIds:
+        model2Str = model.getModelPersonAllUsers().loc[str(userIdI), "model"]
+        #print(type(model2Str))
+        #print(model2Str)
+
+        modelPersI:DataFrame = DataFrame(model2Str)
+        #print(modelPersI)
+
+        methodIdI:str = str(modelPersI['votes'].idxmax())
+        #print("")
+        #print(methodIdI)
+        #print(model.getModelPerson(3565819.0))
+        r.append(methodIdI)
+
+    print("")
+
+    print("RecomBprmf")
+    print(r.count("RecomBprmf"))
+
+    print("RecomCosinecb")
+    print(r.count("RecomCosinecb"))
+
+    print("RecomKnn")
+    print(r.count("RecomKnn"))
+
+    print("RecomThemostpopular")
+    print(r.count("RecomThemostpopular"))
+
+    print("RecomVmcontextknn")
+    print(r.count("RecomVmcontextknn"))
+
+    print("RecomW2V")
+    print(r.count("RecomW2V"))

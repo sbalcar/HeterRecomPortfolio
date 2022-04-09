@@ -53,13 +53,13 @@ class BatchDefMLFuzzyDHondtINF(ABatchDefinitionML):
     @staticmethod
     def getNegativeImplFeedbackParameters_():
 
-        pToolOLin0802HLin1002:APenalization = PenalizationToolDefinition.exportPenaltyToolOLin0802HLin1002(InputSimulatorDefinition.numberOfAggrItems)
+        pToolOLin0802HLin1002:APenalization = PenalizationToolDefinition.exportPenaltyToolOLin0802HLin1002(InputSimulatorDefinition().numberOfAggrItems)
 
-        pToolOStat08HLin1002:APenalization = PenalizationToolDefinition.exportPenaltyToolOStat08HLin1002(InputSimulatorDefinition.numberOfAggrItems)
+        pToolOStat08HLin1002:APenalization = PenalizationToolDefinition.exportPenaltyToolOStat08HLin1002(InputSimulatorDefinition().numberOfAggrItems)
 
-        pProbToolOLin0802HLin1002:APenalization = PenalizationToolDefinition.exportProbPenaltyToolOStat08HLin1002(InputSimulatorDefinition.numberOfAggrItems)
+        pProbToolOLin0802HLin1002:APenalization = PenalizationToolDefinition.exportProbPenaltyToolOStat08HLin1002(InputSimulatorDefinition().numberOfAggrItems)
 
-        pProbToolOStat08HLin1002:APenalization = PenalizationToolDefinition.exportProbPenaltyToolOLin0802HLin1002(InputSimulatorDefinition.numberOfAggrItems)
+        pProbToolOStat08HLin1002:APenalization = PenalizationToolDefinition.exportProbPenaltyToolOLin0802HLin1002(InputSimulatorDefinition().numberOfAggrItems)
 
         pToolFilterBord3Lengt100:APenalization = PenalizationToolDefinition.exportPenaltyToolFiltering()
 
@@ -122,7 +122,7 @@ class BatchDefMLFuzzyDHondtINF(ABatchDefinitionML):
 
         model:DataFrame = PModelDHondt(pDescr.getRecommendersIDs())
 
-        simulator:Simulator = InputSimulatorDefinition.exportSimulatorML1M(
+        simulator:Simulator = InputSimulatorDefinition().exportSimulatorML1M(
                 batchID, divisionDatasetPercentualSize, uBehaviour, repetition)
         simulator.simulate([pDescr], [model], [eTool], [HistoryHierDF(pDescr.getPortfolioID())])
 

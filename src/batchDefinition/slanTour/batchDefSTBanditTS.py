@@ -61,7 +61,7 @@ class BatchDefSTBanditTS(ABatchDefinitionST):
         eTool:AEvalTool = EvalToolBanditTS({})
         model:DataFrame = PModelBandit(pDescr.getRecommendersIDs())
 
-        simulator:Simulator = InputSimulatorDefinition.exportSimulatorSlantour(
+        simulator:Simulator = InputSimulatorDefinition().exportSimulatorSlantour(
                 batchID, divisionDatasetPercentualSize, uBehaviour, repetition)
         simulator.simulate([pDescr], [model], [eTool], [HistoryHierDF(pDescr.getPortfolioID())])
 

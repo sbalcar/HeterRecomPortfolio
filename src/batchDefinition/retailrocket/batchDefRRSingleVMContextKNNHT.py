@@ -60,7 +60,7 @@ class BatchDefRRSingleVMContextKNNHT(ABatchDefinitionRR):
 
         pDescr:APortfolioDescription = Portfolio1MethDescription(recommenderID.title(), recommenderID, rVMCtKNN)
 
-        simulator:Simulator = InputSimulatorDefinition.exportSimulatorRetailRocket(
+        simulator:Simulator = InputSimulatorDefinition().exportSimulatorRetailRocket(
                 batchID, divisionDatasetPercentualSize, uBehaviour, repetition)
         simulator.simulate([pDescr], [DataFrame()], [EToolDoNothing({})], [HistoryHierDF(pDescr.getPortfolioID())])
 

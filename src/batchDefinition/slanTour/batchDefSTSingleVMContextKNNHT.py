@@ -58,7 +58,7 @@ class BatchDefSTSingleVMContextKNNHT(ABatchDefinitionST):
 
         pDescr:APortfolioDescription = Portfolio1MethDescription(recommenderID.title(), recommenderID, rVMCtKNN)
 
-        simulator:Simulator = InputSimulatorDefinition.exportSimulatorSlantour(
+        simulator:Simulator = InputSimulatorDefinition().exportSimulatorSlantour(
                 batchID, divisionDatasetPercentualSize, uBehaviour, repetition)
         simulator.simulate([pDescr], [DataFrame()], [EToolDoNothing({})], [HistoryHierDF(pDescr.getPortfolioID())])
 

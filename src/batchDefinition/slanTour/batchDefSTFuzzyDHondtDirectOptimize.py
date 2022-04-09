@@ -84,7 +84,7 @@ class BatchDefSTFuzzyDHondtDirectOptimize(ABatchDefinitionST):
 
         model:DataFrame = PModelDHondt(pDescr.getRecommendersIDs())
 
-        simulator:Simulator = InputSimulatorDefinition.exportSimulatorSlantour(
+        simulator:Simulator = InputSimulatorDefinition().exportSimulatorSlantour(
                 batchID, divisionDatasetPercentualSize, uBehaviour, repetition)
         simulator.simulate([pDescr], [model], [eTool], [HistoryHierDF(pDescr.getPortfolioID())])
 

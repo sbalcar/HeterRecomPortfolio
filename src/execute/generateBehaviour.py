@@ -20,7 +20,7 @@ def generateBehaviour():
    np.random.seed(42)
    random.seed(42)
 
-   countOfItems:int = 20
+   countOfItems:int = 100
    countOfRepetitions:int = 5
 
    uBehavStatic08Desc:UserBehaviourDescription = UserBehaviourDescription(observationalStaticProbabilityFnc, [0.8])
@@ -37,7 +37,7 @@ def generateBehaviour():
 #   BehavioursML.generateFileMl1m(countOfItems, countOfRepetitions, BehavioursML.BHVR_STATIC08, uBehavStatic08Desc)
 #   BehavioursML.generateFileMl1m(countOfItems, countOfRepetitions, BehavioursML.BHVR_STATIC06, uBehavStatic06Desc)
 #   BehavioursML.generateFileMl1m(countOfItems, countOfRepetitions, BehavioursML.BHVR_STATIC04, uBehavStatic04Desc)
-#   BehavioursML.generateFileMl1m(countOfItems, countOfRepetitions, BehavioursML.BHVR_STATIC02, uBehavStatic02Desc)
+   BehavioursML.generateFileMl1m(countOfItems, countOfRepetitions, BehavioursML.BHVR_STATIC02, uBehavStatic02Desc)
 
 #   BehavioursML.generateFileMl1m(countOfItems, countOfRepetitions, BehavioursML.BHVR_LINEAR0109, uBehavLinear0109Desc)
 #   BehavioursML.generateFileMl1m(countOfItems, countOfRepetitions, BehavioursML.BHVR_POWERLAW054MIN048, uBehavPowerlaw054min048)
@@ -45,7 +45,7 @@ def generateBehaviour():
    # RR
 #   BehavioursRR.generateFileRR(countOfItems, countOfRepetitions, BehavioursRR.BHVR_STATIC08, uBehavStatic08Desc)
 #   BehavioursRR.generateFileRR(countOfItems, countOfRepetitions, BehavioursRR.BHVR_STATIC06, uBehavStatic06Desc)
-   BehavioursRR.generateFileRR(countOfItems, countOfRepetitions, BehavioursRR.BHVR_STATIC04, uBehavStatic04Desc)
+#   BehavioursRR.generateFileRR(countOfItems, countOfRepetitions, BehavioursRR.BHVR_STATIC04, uBehavStatic04Desc)
 #   BehavioursRR.generateFileRR(countOfItems, countOfRepetitions, BehavioursRR.BHVR_STATIC02, uBehavStatic02Desc)
 
 #   BehavioursRR.generateFileRR(countOfItems, countOfRepetitions, BehavioursRR.BHVR_LINEAR0109, uBehavLinear0109Desc)

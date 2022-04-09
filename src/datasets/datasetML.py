@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 
+from typing import List #class
 from pandas.core.frame import DataFrame #class
 
 from datasets.aDataset import ADataset #class
@@ -37,19 +38,53 @@ class DatasetML(ADataset):
 
     def getTheMostPopular(self):
 
-        ratingsTrainDF:DataFrame = self.ratingsDF
+        ratingsDF:DataFrame = self.ratingsDF
 
         # ratingsSum:Dataframe<(userId:int, movieId:int, ratings:int, timestamp:int)>
-        ratings5DF:DataFrame = ratingsTrainDF.loc[ratingsTrainDF[Ratings.COL_RATING] >= 4]
+        ratings4DF:DataFrame = ratingsDF.loc[ratingsDF[Ratings.COL_RATING] >= 4]
 
         # ratingsSum:Dataframe<(movieId:int, ratings:int)>
-        ratings5SumDF:DataFrame = DataFrame(ratings5DF.groupby(Ratings.COL_MOVIEID)[Ratings.COL_RATING].count())
+        ratings4SumDF:DataFrame = DataFrame(ratings4DF.groupby(Ratings.COL_MOVIEID)[Ratings.COL_RATING].count())
 
         # sortedAscRatings5CountDF:Dataframe<(movieId:int, ratings:int)>
-        sortedAscRatings5CountDF:DataFrame = ratings5SumDF.sort_values(by=Ratings.COL_RATING, ascending=False)
+        sortedAscRatings4CountDF:DataFrame = ratings4SumDF.sort_values(by=Ratings.COL_RATING, ascending=False)
         #print(sortedAscRatings5CountDF)
 
-        return sortedAscRatings5CountDF
+        return sortedAscRatings4CountDF
+
+
+    def getTheMostPopularOfGenre(self, genre:str):
+
+        ratings4DF:DataFrame = self.ratingsDF.loc[self.ratingsDF[Ratings.COL_RATING] >= 4]
+        #print(ratings4DF.head())
+        itemIDs4Star:List[int] = ratings4DF[Items.COL_MOVIEID].tolist()
+        #print(itemIDs4Star)
+
+        itemsOfGenreDF:DataFrame = self.itemsDF[self.itemsDF[Items.COL_GENRES].str.contains(genre)]
+        itemIDsOfGenre:List[int] = itemsOfGenreDF[Items.COL_MOVIEID].tolist()
+        #print(itemIDsOfGenre)
+
+        def intersection(lst1, lst2):
+            lst3 = [value for value in lst1 if value in lst2]
+            return lst3
+
+        itemIDsOfGenre4Stars:List[int] = intersection(itemIDsOfGenre, itemIDs4Star)
+        #print(itemIDsOfGenre4Stars)
+
+
+        ratingsOfGenre4StarsDF:DataFrame = ratings4DF.loc[ratings4DF[Ratings.COL_MOVIEID].isin(itemIDsOfGenre4Stars)]
+        #print(ratingsOfGenre4StarsDF.head(10))
+
+        # ratingsSum:Dataframe<(movieId:int, ratings:int)>
+        ratings4SumDF:DataFrame = DataFrame(ratingsOfGenre4StarsDF.groupby(Ratings.COL_MOVIEID)[Ratings.COL_RATING].count())
+        #print(ratings4SumDF.head(10))
+
+
+        # sortedAscRatings5CountDF:Dataframe<(movieId:int, ratings:int)>
+        sortedAscRatings4CountDF:DataFrame = ratings4SumDF.sort_values(by=Ratings.COL_RATING, ascending=False)
+        #print(sortedAscRatings4CountDF)
+
+        return sortedAscRatings4CountDF
 
 
     def divideDataset(self, divisionDatasetPercentualSize:int, sortByTimestapmt=True):

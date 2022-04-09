@@ -75,7 +75,7 @@ class BatchDefRRFuzzyDHondt(ABatchDefinitionRR):
 
         model:DataFrame = PModelDHondt(pDescr.getRecommendersIDs())
 
-        simulator: Simulator = InputSimulatorDefinition.exportSimulatorRetailRocket(
+        simulator: Simulator = InputSimulatorDefinition().exportSimulatorRetailRocket(
             batchID, divisionDatasetPercentualSize, uBehaviour, repetition)
         simulator.simulate([pDescr], [model], [eTool], [HistoryHierDF(pDescr.getPortfolioID())])
 

@@ -11,8 +11,11 @@ from recommender.recommenderItemBasedKNN import RecommenderItemBasedKNN #class
 from recommender.recommenderVSKNN import RecommenderVMContextKNN #class
 from recommender.recommenderBPRMFImplicit import RecommenderBPRMFImplicit #class
 from recommender.recommenderBPRMF import RecommenderBPRMF #class
+from recommender.recommenderClusterBaserd import RecommenderClusterBased #class
 
 from configuration.configuration import Configuration #class
+
+from datasets.ml.items import Items #class
 
 
 class InputRecomMLDefinition:
@@ -115,6 +118,12 @@ class InputRecomMLDefinition:
                 RecommenderBPRMF.ARG_PIREGULARIZATION: 0.0025,
                 RecommenderBPRMF.ARG_NIREGULARIZATION: 0.00025})
 
+    @staticmethod
+    def exportRDescClusterBased(rNumericId:int):
+        return RecommenderDescription(RecommenderClusterBased, {
+                RecommenderClusterBased.ARG_RECOMMENDER_NUMERIC_ID: rNumericId})
+
+
 
     @classmethod
     def exportPairOfRecomIdsAndRecomDescrs(cls):
@@ -150,6 +159,24 @@ class InputRecomMLDefinition:
         rDescs:List[RecommenderDescription] = rDescsPop + rDescsKNN + rDescsVMCKNN + rDescsW2V + rDescsCB + rDescsBPRMF
 
         return (rIDs, rDescs)
+
+
+    @classmethod
+    def exportPairOfRecomIdsAndRecomDescrsCluster(cls):
+
+        recom:str = "Recom" + "Cluster"
+
+        rIds:List[str] = []
+        rDescs:List[RecommenderDescription] = []
+
+        for gIdI in range(0,len(Items.getAllGenres())):
+
+            genreI:str = Items.getAllGenres()[gIdI]
+
+            rIds.append(recom + genreI)
+            rDescs.append(cls.exportRDescClusterBased(gIdI))
+
+        return (rIds, rDescs)
 
 
     @staticmethod

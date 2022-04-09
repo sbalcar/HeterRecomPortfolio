@@ -114,7 +114,7 @@ class BehavioursML:
               if ubStatic08IJ is None: print("aaa")
               ubLinear0109IJ:List[bool] = uBehavLinear0109Desc.getBehaviour(numberOfItems)
 
-              strLinear0109IJ:str =  BehavioursML.__convertToString(ubLinear0109IJ)
+              strLinear0109IJ:str =  BehavioursML.convertToString(ubLinear0109IJ)
               #print(strLinear0109IJ)
               behavioursDF.at[indexJ, BehavioursML.COL_BEHAVIOUR] = strLinear0109IJ
 
@@ -140,7 +140,7 @@ class BehavioursML:
               ubLinear0109IJ:List[bool] = uBehavLinear0109Desc.getBehaviour(numberOfItems)
               if ubLinear0109IJ is None: print("aaa")
 
-              strStatic08IJ:str = BehavioursML.__convertToString(ubStatic08IJ)
+              strStatic08IJ:str = BehavioursML.convertToString(ubStatic08IJ)
               #print(strStatic08IJ)
 
               behavioursDF.at[indexJ, BehavioursML.COL_BEHAVIOUR] = strStatic08IJ

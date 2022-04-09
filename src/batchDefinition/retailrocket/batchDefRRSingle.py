@@ -56,7 +56,7 @@ class BatchDefRRSingle(ABatchDefinitionRR):
 
         pDescr:APortfolioDescription = Portfolio1MethDescription(recommenderID.title(), recommenderID, rDescr)
 
-        simulator:Simulator = InputSimulatorDefinition.exportSimulatorRetailRocket(
+        simulator:Simulator = InputSimulatorDefinition().exportSimulatorRetailRocket(
                 batchID, divisionDatasetPercentualSize, uBehaviour, repetition)
         simulator.simulate([pDescr], [DataFrame()], [EToolDoNothing({})], [HistoryHierDF(pDescr.getPortfolioID())])
 

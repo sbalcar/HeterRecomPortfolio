@@ -68,7 +68,7 @@ class BatchDefMLSingle(ABatchDefinitionML):
 
         pDescr:APortfolioDescription = Portfolio1MethDescription(self.getBatchName() + recommenderID.title(), recommenderID, rDescr)
 
-        simulator:Simulator = InputSimulatorDefinition.exportSimulatorML1M(
+        simulator:Simulator = InputSimulatorDefinition().exportSimulatorML1M(
                 batchID, divisionDatasetPercentualSize, uBehaviour, repetition)
         simulator.simulate([pDescr], [DataFrame()], [EToolDoNothing({})], [HistoryHierDF(pDescr.getPortfolioID())])
 

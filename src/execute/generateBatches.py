@@ -52,6 +52,7 @@ from batchDefinition.ml1m.batchDefMLPersonalFuzzyDHondt import BatchDefMLPersona
 from batchDefinition.ml1m.batchDefMLPersonalStatFuzzyDHondt import BatchDefMLPersonalStatFuzzyDHondt #class
 from batchDefinition.ml1m.batchDefMLHybrid import BatchDefMLHybrid #class
 from batchDefinition.ml1m.batchDefMLHybridSkip import BatchDefMLHybridSkip #class
+from batchDefinition.ml1m.batchDefMLCluster import BatchDefMLCluster #class
 
 from batchDefinition.retailrocket.batchDefRRSingle import BatchDefRRSingle #class
 from batchDefinition.retailrocket.batchDefRRSingleBPRMFHT import BatchDefRRSingleBPRMFHT #class
@@ -671,6 +672,18 @@ def getBatchesUSA():
 
     return batchesDefML + batchesDefRR + batchesDefST
 
+def getBatchesDB():
+    print("Get DB Batches")
+
+    batchDefMLPersonalFuzzyDHondt = BatchDefMLCluster()
+    #batchDefMLPersonalFuzzyDHondt.lrClicks: List[float] = [0.2, 0.1, 0.03, 0.005]
+    batchDefMLPersonalFuzzyDHondt.lrClicks: List[float] = [0.03]
+    #batchDefMLPersonalFuzzyDHondt.lrViewDivisors:List[float] = [250, 500, 1000]
+    batchDefMLPersonalFuzzyDHondt.lrViewDivisors:List[float] = [500]
+    batchDefMLPersonalFuzzyDHondt.selectorIDs = [BatchDefMLFuzzyDHondt.SLCTR_FIXED]
+
+    return [batchDefMLPersonalFuzzyDHondt]
+
 
 def generateBatches():
     print("Generate Batches")
@@ -700,7 +713,8 @@ def generateBatches():
     #batchesDef:List = getBatchesJournal()
     #batchesDef:List = getBatchesJournal2()
     #batchesDef:List = getBatchesICCAI()
-    batchesDef:List = getBatchesUSA()
+    #batchesDef:List = getBatchesUSA()
+    batchesDef:List = getBatchesDB()
 
     for batchDefI in batchesDef:
         batchDefI.generateAllBatches(iBatchDef)

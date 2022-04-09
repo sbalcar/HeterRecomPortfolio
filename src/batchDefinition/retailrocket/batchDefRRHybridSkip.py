@@ -91,7 +91,7 @@ class BatchDefRRHybridSkip(ABatchDefinitionRR):
                                         PModelHybrid.ARG_MODE_SKIP:True,
                                         PModelHybrid.ARG_SKIP_CLICK_THRESHOLD: 3})
 
-        simulator:Simulator = InputSimulatorDefinition.exportSimulatorRetailRocket(
+        simulator:Simulator = InputSimulatorDefinition().exportSimulatorRetailRocket(
             batchID, divisionDatasetPercentualSize, uBehaviour, repetition)
         simulator.simulate([pDescr], [model], [eTool], [HistoryHierDF(pDescr.getPortfolioID())])
 

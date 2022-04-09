@@ -90,9 +90,9 @@ class BatchDefRRHierD21(ABatchDefinitionRR):
 
 
         #pProbTool:APenalization = PenalizationToolDefinition.exportProbPenaltyToolOLin0802HLin1002(
-        #    InputSimulatorDefinition.numberOfAggrItems)
+        #    InputSimulatorDefinition().numberOfAggrItems)
         pProbTool:APenalization = PenalizationToolDefinition.exportPenaltyToolOStat08HLin1002(
-            InputSimulatorDefinition.numberOfAggrItems)
+            InputSimulatorDefinition().numberOfAggrItems)
 
         aHierDescr:AggregationDescription = AggregationDescription(AggrD21,
                                     {AggrD21.ARG_RATING_THRESHOLD_FOR_NEG: 0.0})
@@ -108,7 +108,7 @@ class BatchDefRRHierD21(ABatchDefinitionRR):
         #model:DataFrame = PModelDHont(p1AggrDescr.getRecommendersIDs())
         model:DataFrame = PModelBandit(p1AggrDescr.getRecommendersIDs())
 
-        simulator:Simulator = InputSimulatorDefinition.exportSimulatorRetailRocket(
+        simulator:Simulator = InputSimulatorDefinition().exportSimulatorRetailRocket(
             batchID, divisionDatasetPercentualSize, uBehaviour, repetition)
         simulator.simulate([pHierDescr], [model], [eTool], [HistoryHierDF(p1AggrDescr.getPortfolioID())])
 

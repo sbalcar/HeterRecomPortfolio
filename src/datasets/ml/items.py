@@ -15,17 +15,75 @@ class Items:
   # 1 | Toy Story(1995) | 01 - Jan - 1995 | | http: // us.imdb.com / M / title - exact?Toy % 20 Story % 20(1995) | 0 | 0 | 0 | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0
   # movie id | movie title | release date | video releas date | IMDb URL | unknown | Action | Adventure | Animation | Children's | Comedy | Crime | Documentary | Drama | Fantasy | Film-Noir | Horror | Musical | Mystery | Romance | Sci-Fi | Thriller | War | Western |'''
 
-  COL_MOVIEID = 'movieId'
-  COL_MOVIETITLE = 'movieTitle'
-  COL_RELEASEDATE = 'releaseDate'
-  COL_VIDEORELEASEDATE = 'videoReleaseDate'
-  COL_IMDbURL = 'IMDbURL'
+  COL_MOVIEID:str = 'movieId'
+  COL_MOVIETITLE:str = 'movieTitle'
+  COL_RELEASEDATE:str = 'releaseDate'
+  COL_VIDEORELEASEDATE:str = 'videoReleaseDate'
+  COL_IMDbURL:str = 'IMDbURL'
 
   # 1 m
   # MovieID::Title::Genres
 
-  COL_GENRES = 'Genres'
+  COL_GENRES:str = 'Genres'
 
+  GENRE_ACTION:str = "Action"
+  GENRE_ADVENTURE:str = "Adventure"
+  GENRE_ANIMATION:str = "Animation"
+  GENRE_CHILDRENS:str = "Children's"
+  GENRE_COMEDY:str = "Comedy"
+  GENRE_CRIME:str = "Crime"
+  GENRE_DOCUMENTARY:str = "Documentary"
+  GENRE_DRAMA:str = "Drama"
+  GENRE_FANTASY:str = "Fantasy"
+  GENRE_FILM_NOIR:str = "Film-Noir"
+  GENRE_HORROR:str = "Horror"
+  GENRE_MUSICAL:str = "Musical"
+  GENRE_MYSTERY:str = "Mystery"
+  GENRE_ROMANCE:str = "Romance"
+  GENRE_SCIFI:str = "Sci-Fi"
+  GENRE_THRILLER:str = "Thriller"
+  GENRE_WAR:str = "War"
+  GENRE_WESTERN:str = "Western"
+
+
+  @staticmethod
+  def getAllGenres():
+    return [
+      Items.GENRE_ACTION,
+      Items.GENRE_ADVENTURE,
+      Items.GENRE_ANIMATION,
+      Items.GENRE_CHILDRENS,
+      Items.GENRE_COMEDY,
+      Items.GENRE_CRIME,
+      Items.GENRE_DOCUMENTARY,
+      Items.GENRE_DRAMA,
+      Items.GENRE_FANTASY,
+      Items.GENRE_FILM_NOIR,
+      Items.GENRE_HORROR,
+      Items.GENRE_MUSICAL,
+      Items.GENRE_MYSTERY,
+      Items.GENRE_ROMANCE,
+      Items.GENRE_SCIFI,
+      Items.GENRE_THRILLER,
+      Items.GENRE_WAR,
+      Items.GENRE_WESTERN]
+
+  @staticmethod
+  def countA(ratingsDF:DataFrame, itemIds:List[int]):
+
+    genreCountDict:dict = {gI: 0 for gI in Items.getAllGenres()}
+
+    itemIdI:int
+    for itemIdI in itemIds:
+      rowI = ratingsDF[ratingsDF[Items.COL_MOVIEID] == itemIdI]
+      genresStrI:str = str(rowI.iloc[0][Items.COL_GENRES])
+      #print(genresStrI)
+
+      genresI:List[str] = genresStrI.split('|')
+      for genreJ in genresI:
+        genreCountDict[genreJ] += 1.0/len(genresI)
+
+    return genreCountDict
 
   @staticmethod
   def readFromFileMl100k():

@@ -41,6 +41,7 @@ from batchDefinition.ml1m.batchDefMLPersonalFuzzyDHondt import BatchDefMLPersona
 from batchDefinition.ml1m.batchDefMLPersonalStatFuzzyDHondt import BatchDefMLPersonalStatFuzzyDHondt #class
 from batchDefinition.ml1m.batchDefMLHybrid import BatchDefMLHybrid #class
 from batchDefinition.ml1m.batchDefMLHybridSkip import BatchDefMLHybridSkip #class
+from batchDefinition.ml1m.batchDefMLCluster import BatchDefMLCluster #class
 
 from batchDefinition.retailrocket.batchDefRRSingle import BatchDefRRSingle #class
 from batchDefinition.retailrocket.batchDefRRSingleW2VHT import BatchDefRRSingleW2VHT #class

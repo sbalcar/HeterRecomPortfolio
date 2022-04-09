@@ -23,15 +23,15 @@ from simulator.simulator import Simulator #class
 
 
 class InputSimulatorDefinition:
+
     numberOfAggrItems:int = 20
 
-    @staticmethod
-    def exportSimulatorML1M(batchID:str, divisionDatasetPercentualSize:int, uBehaviourID:str, repetition:int):
+    def exportSimulatorML1M(self, batchID:str, divisionDatasetPercentualSize:int, uBehaviourID:str, repetition:int):
 
         argsSimulationDict:dict = {SimulationML.ARG_WINDOW_SIZE: 5,
                                    SimulationML.ARG_RECOM_REPETITION_COUNT: repetition,
                                    SimulationML.ARG_NUMBER_OF_RECOMM_ITEMS: 100,
-                                   SimulationML.ARG_NUMBER_OF_AGGR_ITEMS: InputSimulatorDefinition.numberOfAggrItems,
+                                   SimulationML.ARG_NUMBER_OF_AGGR_ITEMS: self.numberOfAggrItems,
                                    SimulationML.ARG_DIV_DATASET_PERC_SIZE: divisionDatasetPercentualSize,
                                    SimulationML.ARG_HISTORY_LENGTH: 10}
 
@@ -48,12 +48,12 @@ class InputSimulatorDefinition:
 
 
     @staticmethod
-    def exportSimulatorRetailRocket(batchID:str, divisionDatasetPercentualSize:int, uBehaviourID:str, repetition:int):
+    def exportSimulatorRetailRocket(self, batchID:str, divisionDatasetPercentualSize:int, uBehaviourID:str, repetition:int):
 
         argsSimulationDict:dict = {SimulationML.ARG_WINDOW_SIZE: 5,
                                    SimulationML.ARG_RECOM_REPETITION_COUNT: repetition,
                                    SimulationML.ARG_NUMBER_OF_RECOMM_ITEMS: 100,
-                                   SimulationML.ARG_NUMBER_OF_AGGR_ITEMS: InputSimulatorDefinition.numberOfAggrItems,
+                                   SimulationML.ARG_NUMBER_OF_AGGR_ITEMS: self.numberOfAggrItems,
                                    SimulationML.ARG_DIV_DATASET_PERC_SIZE: divisionDatasetPercentualSize,
                                    SimulationML.ARG_HISTORY_LENGTH: 10}
 
@@ -70,12 +70,12 @@ class InputSimulatorDefinition:
 
 
     @staticmethod
-    def exportSimulatorSlantour(batchID:str, divisionDatasetPercentualSize:int, uBehaviourID:str, repetition:int):
+    def exportSimulatorSlantour(self, batchID:str, divisionDatasetPercentualSize:int, uBehaviourID:str, repetition:int):
 
         argsSimulationDict:dict = {SimulationML.ARG_WINDOW_SIZE: 5,
                                    SimulationML.ARG_RECOM_REPETITION_COUNT: repetition,
                                    SimulationML.ARG_NUMBER_OF_RECOMM_ITEMS: 100,
-                                   SimulationML.ARG_NUMBER_OF_AGGR_ITEMS: InputSimulatorDefinition.numberOfAggrItems,
+                                   SimulationML.ARG_NUMBER_OF_AGGR_ITEMS: self.numberOfAggrItems,
                                    SimulationML.ARG_DIV_DATASET_PERC_SIZE: divisionDatasetPercentualSize,
                                    SimulationML.ARG_HISTORY_LENGTH: 10}
 

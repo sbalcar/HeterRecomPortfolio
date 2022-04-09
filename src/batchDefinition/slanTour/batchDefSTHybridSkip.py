@@ -95,7 +95,7 @@ class BatchDefSTHybridSkip(ABatchDefinitionST):
                                             PModelHybrid.ARG_MODE_SKIP:True,
                                             PModelHybrid.ARG_SKIP_CLICK_THRESHOLD: 3})
 
-        simulator:Simulator = InputSimulatorDefinition.exportSimulatorSlantour(
+        simulator:Simulator = InputSimulatorDefinition().exportSimulatorSlantour(
             batchID, divisionDatasetPercentualSize, uBehaviour, repetition)
         simulator.simulate([pDescr], [model], [eTool], [HistoryHierDF(pDescr.getPortfolioID())])
 

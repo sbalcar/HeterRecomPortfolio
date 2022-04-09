@@ -60,7 +60,7 @@ class BatchDefMLRandomKfromN(ABatchDefinitionML):
 
         model:DataFrame = DataFrame()
 
-        simulator:Simulator = InputSimulatorDefinition.exportSimulatorML1M(
+        simulator:Simulator = InputSimulatorDefinition().exportSimulatorML1M(
                 batchID, divisionDatasetPercentualSize, uBehaviour, repetition)
         simulator.simulate([pDescr], [model], [eTool], [HistoryHierDF(pDescr.getPortfolioID())])
 

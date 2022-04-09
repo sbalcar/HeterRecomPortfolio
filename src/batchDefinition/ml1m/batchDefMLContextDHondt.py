@@ -96,7 +96,7 @@ class BatchDefMLContextDHondt(ABatchDefinitionML):
 
         model:DataFrame = PModelDHondt(pDescr.getRecommendersIDs())
 
-        simulator:Simulator = InputSimulatorDefinition.exportSimulatorML1M(
+        simulator:Simulator = InputSimulatorDefinition().exportSimulatorML1M(
                 batchID, divisionDatasetPercentualSize, uBehaviour, repetition)
         simulator.simulate([pDescr], [model], [eTool], [history])
 

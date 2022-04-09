@@ -27,9 +27,9 @@ class PModelDHondtPersonalised(pd.DataFrame):
 
     def getModel(self, userID:int, argsDict:dict={}):
         if not userID in self.index:
-            print("index: " + str(self.index))
-            print(self)
-            print("self.loc[None]: " + str(self.loc[float('nan')]))
+            #print("index: " + str(self.index))
+            #print(self)
+            #print("self.loc[None]: " + str(self.loc[float('nan')]))
             modelOfUserID:DataFrame = (self.loc[float('nan'), PModelDHondtPersonalised.COL_MODEL]).copy()
             modelOfUserID.__class__ = PModelDHondt
             self.loc[userID] = [modelOfUserID]
@@ -68,23 +68,29 @@ class PModelDHondtPersonalised(pd.DataFrame):
 
         f = open(fileName, "r")
         lines:List[str] = f.readlines()
+        #print(lines)
 
-        model:DataFrame = None
+        modelDF:DataFrame = None
         for rowIndexI in range(0, len(lines)):
             if lines[rowIndexI].startswith(str(counterI) + " / "):
                 modelStr:str = lines[rowIndexI+3]
-                model:DataFrame = pd.read_json(modelStr)
-                model.__class__ = PModelDHondtPersonalised
+                modelDF:DataFrame = pd.read_json(modelStr, convert_axes=False ,convert_dates=False)
+                modelDF.__class__ = PModelDHondtPersonalised
                 break
 
-        if model is None:
+        if modelDF is None:
+            print("Return None")
             return None
 
-        #model[PModelDHondtPersonalised.COL_MODEL] = DataFrame(model[PModelDHondtPersonalised.COL_MODEL])
-        #model[PModelDHondtPersonalised.COL_MODEL] = model[PModelDHondtPersonalised.COL_MODEL].astype(DataFrame)
-        for indexI in model.index:
-            model.loc[indexI][PModelDHondtPersonalised.COL_MODEL] = DataFrame(model.loc[indexI][PModelDHondtPersonalised.COL_MODEL])
-        return model
+        for indexI in modelDF.index:
+            modelI:dict = modelDF.loc[indexI][PModelDHondtPersonalised.COL_MODEL]
+            modelIDF:DataFrame = DataFrame(modelI)
+            modelDF.loc[indexI][PModelDHondtPersonalised.COL_MODEL] = modelIDF
+
+        modelDF.index = modelDF.index.astype(float)
+        return modelDF
+
+
 
 
 if __name__ == "__main__":
@@ -92,7 +98,10 @@ if __name__ == "__main__":
     os.chdir("..")
 
     fileName:str = "results/rrDiv90Ulinear0109R1/portfModelTimeEvolution-PersonalFDHondtFixedClk02ViewDivisor1000.txt"
+    fileName:str = "results/stDiv90Ustatic08R1/portfModelTimeEvolution-HybridStatFDHondtFixedClk003ViewDivisor250NRFalseClk003ViewDivisor250NRFalse.txt"
+
     modelDF:DataFrame = PModelDHondtPersonalised.readModel(fileName, 19200)
+    print(type(modelDF))
 
     vBprmf = []
     vCosinecb = []

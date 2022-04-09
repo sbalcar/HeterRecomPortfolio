@@ -107,7 +107,7 @@ class BatchDefMLHybrid(ABatchDefinitionML):
         rIds:List[str] = pDescr.getRecommendersIDs()
         model:DataFrame = PModelHybrid(PModelDHondt(rIds), PModelDHondtPersonalisedStat(rIds))
 
-        simulator: Simulator = InputSimulatorDefinition.exportSimulatorML1M(
+        simulator: Simulator = InputSimulatorDefinition().exportSimulatorML1M(
             batchID, divisionDatasetPercentualSize, uBehaviour, repetition)
         simulator.simulate([pDescr], [model], [eTool], [HistoryHierDF(pDescr.getPortfolioID())])
 
